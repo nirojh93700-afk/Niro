@@ -111,7 +111,7 @@ button{cursor:pointer}
 .card>h2,.card .ch{font-size:14px;font-weight:600;margin:0;padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
 .ch .grow{flex:1}
 .ch a,.lnk{color:var(--gold-ink);font-weight:500;font-size:12.5px;text-decoration:none;background:none;border:0;padding:0}
-.grid{display:grid;gap:18px}
+.grid{display:grid;gap:18px} .grid>*,.form>*,.fs>*,.set>*{min-width:0} .fld textarea{width:100%;box-sizing:border-box}
 .g2{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
@@ -302,6 +302,45 @@ td.r,th.r{text-align:right}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .toast .ico{color:var(--gold)}
 
+/* v2 : grille d'étiquettes, entonnoir, tri, tiroir à onglets, raccourcis clavier */
+.sheetgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:min(340px,100%);padding:12px;background:var(--sunk);border-radius:10px;border:1px solid var(--line)}
+.sheetgrid button{aspect-ratio:1;border:1px dashed var(--line-2);background:var(--surface);border-radius:6px;font-size:11px;color:var(--muted)}
+.sheetgrid button.used{background:var(--line);color:var(--faint);border-style:solid}
+.sheetgrid button.next{background:var(--gold-bg);border-color:var(--gold-2);color:var(--gold-ink);font-weight:600}
+.stars{color:var(--gold-2);letter-spacing:1px;white-space:nowrap}
+.funnel{display:flex;flex-direction:column;gap:10px;padding:16px}
+.funnel div{display:grid;grid-template-columns:minmax(120px,170px) 1fr 64px;gap:12px;align-items:center;font-size:13px}
+.funnel i{display:block;height:22px;border-radius:6px;background:var(--gold-2);min-width:4px}
+.upload{border:2px dashed var(--line-2);border-radius:12px;padding:26px;text-align:center;color:var(--muted);margin:14px;background:var(--surface)}
+th.sortable{cursor:pointer;user-select:none} th.sortable:hover{color:var(--ink)} th .arrow{opacity:.55;margin-left:3px}
+.dtabs{display:flex;gap:4px;padding:0 18px;border-bottom:1px solid var(--line);background:var(--surface)}
+.dtabs button{background:none;border:0;padding:10px 12px;color:var(--muted);font-weight:500;border-bottom:2px solid transparent;margin-bottom:-1px}
+.dtabs button.on{color:var(--ink);border-bottom-color:var(--gold)}
+.tl{list-style:none;margin:0;padding:4px 0 0 14px;border-left:2px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.tl li{position:relative;font-size:13px}.tl li::before{content:"";position:absolute;left:-19px;top:5px;width:8px;height:8px;border-radius:50%;background:var(--gold-2)}
+.tl small{display:block;color:var(--muted)}
+.confirm{display:flex;gap:8px;align-items:center;padding:10px 12px;background:var(--warn-bg);color:var(--warn);border-radius:10px;font-weight:600;flex-wrap:wrap}
+.shortcuts{position:fixed;inset:0;display:none;place-items:center;z-index:85}
+.shortcuts.on{display:grid}
+.shortcuts .box{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--pop);padding:18px 20px;width:min(440px,calc(100% - 32px))}
+.shortcuts h3{margin:0 0 12px;font-size:15px;display:flex;align-items:center}
+.shortcuts dl{display:grid;grid-template-columns:auto 1fr;gap:9px 14px;margin:0;font-size:13px}
+.shortcuts dt{text-align:right;white-space:nowrap}.shortcuts dd{margin:0;color:var(--muted)}
+.shortcuts .kbd{border-color:var(--line);color:var(--ink)}
+.pinbtn{color:var(--muted)} .pinbtn.on{color:var(--gold-ink)} .pinbtn.on .ico{fill:var(--gold)}
+.empty{padding:34px 16px;text-align:center;color:var(--muted)} .empty b{display:block;color:var(--ink);margin-bottom:4px}
+.crumb button{background:none;border:0;color:var(--muted);padding:0;font:inherit} .crumb button:hover{color:var(--ink);text-decoration:underline}
+.outil{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.outil .ic{width:40px;height:40px;border-radius:10px;background:var(--gold-bg);color:var(--gold-ink);display:grid;place-items:center;flex:none}
+.outil b{display:block} .outil span{color:var(--muted);font-size:12.5px}
+.frame{aspect-ratio:4/3;border:1px solid var(--line);border-radius:12px;background:var(--sunk);position:relative;overflow:hidden;max-width:100%}
+.frame img{width:100%;height:100%;object-fit:cover;opacity:.9}
+.frame .box{position:absolute;left:30%;top:26%;width:40%;height:40%;border:2px dashed var(--gold);border-radius:6px;background:rgba(201,162,75,.12)}
+.frame .box::after{content:"";position:absolute;right:-6px;bottom:-6px;width:12px;height:12px;border-radius:50%;background:var(--gold-2);border:2px solid var(--surface)}
+.rev{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+.rev:last-child{border-bottom:0} .rev .tx{flex:1;min-width:0} .rev p{margin:4px 0 6px;line-height:1.55}
+.rev .acts{gap:6px}
+
 /* onglets téléphone */
 .mtabs{display:none}
 
@@ -340,6 +379,7 @@ td.r,th.r{text-align:right}
   .search input{width:120px}
 }
 @media (max-width:560px){
+  .rev{flex-wrap:wrap} .rev .acts{flex-direction:row!important;width:100%;padding-left:42px}
   .kpis{grid-template-columns:1fr 1fr;gap:10px}
   .kpi .v{font-size:20px}
   .crumb span.hide-s{display:none}
@@ -356,7 +396,7 @@ td.r,th.r{text-align:right}
     </div>
     <button class="sfind" id="openPal" type="button"><svg class="ico"><use href="#i-search"/></svg><span>Rechercher…</span><kbd class="kbd">⌘K</kbd></button>
 
-    <div class="slabel"><span>Raccourcis</span><button type="button" id="editPins">Modifier</button></div>
+    <div class="slabel"><span>Raccourcis</span></div>
     <div class="pins" id="pins"></div>
 
     <div class="slabel"><span>Boutique</span></div>
@@ -395,6 +435,8 @@ td.r,th.r{text-align:right}
   <div class="ft"><span><kbd class="kbd">↑</kbd> <kbd class="kbd">↓</kbd> choisir</span><span><kbd class="kbd">Entrée</kbd> ouvrir</span><span><kbd class="kbd">G</kbd> puis <kbd class="kbd">C</kbd> Commandes</span></div>
 </div>
 <div class="toast" id="toast"><svg class="ico"><use href="#i-check"/></svg><span></span></div>
+<div class="shortcuts" id="shortcuts" role="dialog" aria-label="Raccourcis clavier"><div class="box"><h3>Raccourcis clavier<span class="grow" style="flex:1"></span><button class="ibtn" type="button" data-close aria-label="Fermer"><svg class="ico"><use href="#i-x"/></svg></button></h3>
+<dl><dt><kbd class="kbd">⌘K</kbd> / <kbd class="kbd">/</kbd></dt><dd>Rechercher un écran, une commande, une action</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">A</kbd></dt><dd>Aujourd'hui</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">C</kbd></dt><dd>Commandes</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">M</kbd></dt><dd>Messages</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">P</kbd></dt><dd>Produits</dd><dt><kbd class="kbd">G</kbd> puis <kbd class="kbd">F</kbd></dt><dd>Finances</dd><dt><kbd class="kbd">J</kbd> / <kbd class="kbd">K</kbd></dt><dd>Commande suivante / précédente (fiche ouverte)</dd><dt><kbd class="kbd">Échap</kbd></dt><dd>Fermer</dd><dt><kbd class="kbd">?</kbd></dt><dd>Cette aide</dd></dl></div></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
@@ -561,7 +603,7 @@ const MAILS = [
 ];
 
 /* ---------- état ---------- */
-const state = { sec: "accueil", tab: {}, sel: new Set(), view: "toutes", mail: 1, setTab: "general", pins: ["commandes:file", "commandes:etiquettes", "stock:materiel"], recents: ["catalogue:produits", "clients:crm", "finances:benefices"], open: { commandes: true } };
+const state = { sec: "accueil", tab: {}, sel: new Set(), sort: { key: "", dir: 1 }, dtab: "resume", confirm: "", view: "toutes", mail: 1, setTab: "general", pins: ["commandes:file", "commandes:etiquettes", "stock:materiel"], recents: ["catalogue:produits", "clients:crm", "finances:benefices"], open: { commandes: true } };
 try { const s = JSON.parse(localStorage.getItem("niv-gestion-maquette") || "{}"); if (Array.isArray(s.pins)) state.pins = s.pins; if (s.mini) document.getElementById("app").classList.add("mini"); } catch (e) {}
 const save = () => { try { localStorage.setItem("niv-gestion-maquette", JSON.stringify({ pins: state.pins, mini: document.getElementById("app").classList.contains("mini") })); } catch (e) {} };
 const secOf = (id) => SECTIONS.find((s) => s.id === id);
@@ -586,13 +628,21 @@ function renderSide() {
 }
 
 /* ---------- vues ---------- */
-function head(title, sub, acts = "") { return `<div class="ph"><div class="grow"><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ""}</div><div class="acts">${acts}</div></div>`; }
+function pinBtn() { const S = secOf(state.sec); if (!S) return ""; const k = S.id + ":" + tabOf(S); const on = state.pins.includes(k); return `<button class="btn sm ghost pinbtn ${on ? "on" : ""}" type="button" data-pin="${k}" title="${on ? "Retirer des raccourcis" : "Épingler dans les raccourcis"}">${I("pin")}${on ? "Épinglé" : "Épingler"}</button>`; }
+function head(title, sub, acts = "") { return `<div class="ph"><div class="grow"><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ""}</div><div class="acts">${acts}${pinBtn()}</div></div>`; }
+function dateFR() { const d = new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }); return d.charAt(0).toUpperCase() + d.slice(1); }
+function stars(n) { return `<span class="stars" aria-label="${n} sur 5">${"★".repeat(n)}${"☆".repeat(5 - n)}</span>`; }
+function tbl(cols, rows, opts = {}) { return `<div class="tw"><table><thead><tr>${cols.map((c) => `<th class="${c.r ? "r" : ""} ${c.m ? "hide-m" : ""}">${c.t}</th>`).join("")}</tr></thead><tbody>${rows.length ? rows.map((r) => `<tr ${opts.row ? opts.row(r) : ""}>${r.map((v, i) => `<td class="${cols[i].r ? "r num" : ""} ${cols[i].m ? "hide-m" : ""}">${v}</td>`).join("")}</tr>`).join("") : `<tr><td colspan="${cols.length}"><div class="empty"><b>${opts.vide || "Rien pour le moment"}</b>${opts.videSub || ""}</div></td></tr>`}</tbody></table></div>`; }
+function kpis(list) { return `<div class="kpis">${list.map(([l, v, d, c]) => `<div class="card kpi"><span class="l">${l}</span><span class="v num" style="${c ? `color:var(--${c})` : ""}">${v}</span>${d ? `<span class="d">${d}</span>` : ""}</div>`).join("")}</div>`; }
+function fs(h, p, body) { return `<div class="card fs"><div class="d"><h3>${h}</h3><p>${p}</p></div><div class="fields">${body}</div></div>`; }
+function tg(on, label, dirty) { return `<div class="row"><span>${label}</span><button type="button" class="tg ${on ? "on" : ""}" data-tg ${dirty ? "data-dirty" : ""} aria-label="${esc(label)}"></button></div>`; }
+function fld(id, label, val, small) { return `<div class="fld"><label for="${id}">${label}</label><input id="${id}" value="${esc(val)}" data-dirty>${small ? `<small>${small}</small>` : ""}</div>`; }
 function tabsBar(s) { return s.tabs.length > 1 ? `<div class="tabs" role="tablist">${s.tabs.map((t) => `<button class="tab ${tabOf(s) === t.id ? "on" : ""}" role="tab" type="button" data-go="${s.id}:${t.id}">${esc(t.t)}${t.badge ? `<span class="badge">${t.badge}</span>` : ""}</button>`).join("")}</div>` : ""; }
 function spark(pts) { const w = 160, h = 34, mx = Math.max(...pts), mn = Math.min(...pts); const xy = pts.map((v, i) => [i * w / (pts.length - 1), h - 3 - (v - mn) / ((mx - mn) || 1) * (h - 8)]); const l = xy.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" "); const e = xy[xy.length - 1]; return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path class="a" d="${l} L${w} ${h} L0 ${h}Z"/><path class="l" d="${l}"/><circle cx="${e[0]}" cy="${e[1]}" r="2.5"/></svg>`; }
 function img(k) { return IMG[k] ? `<img class="th" src="${IMG[k]}" alt="">` : `<span class="th"></span>`; }
 
 function vAccueil() {
-  return `${head("Bonjour, voici votre journée", "Jeudi 29 octobre · 7 commandes à traiter, dont 1 Express à graver en priorité.", `<div class="seg" role="group"><button type="button">Aujourd'hui</button><button type="button">7 jours</button><button class="on" type="button">Ce mois</button><button type="button">30 jours</button></div>`)}
+  return `${head("Bonjour, voici votre journée", `${dateFR()} · 7 commandes à traiter, dont 1 Express à graver en priorité.`, `<div class="seg" role="group"><button type="button">Aujourd'hui</button><button type="button">7 jours</button><button class="on" type="button">Ce mois</button><button type="button">30 jours</button></div>`)}
   <div class="kpis">
     ${[["Chiffre d'affaires", "1 842,60 €", "+18 % vs septembre", "up", [8, 9, 7, 11, 10, 13, 12, 15, 14, 17]], ["Commandes", "41", "+6 vs septembre", "up", [3, 4, 3, 5, 4, 6, 5, 6, 7, 8]], ["Panier moyen", "44,94 €", "+2,10 €", "up", [40, 42, 41, 43, 42, 44, 43, 45, 44, 45]], ["Bénéfice estimé", "968,20 €", "après achats, matériel et frais", "", [5, 6, 5, 7, 6, 8, 7, 9, 8, 10]]].map(([l, v, d, c, p]) => `<div class="card kpi"><span class="l">${l}</span><span class="v num">${v}</span><span class="d ${c}">${c ? "▲ " : ""}${d}</span>${spark(p)}</div>`).join("")}
   </div>
@@ -614,9 +664,11 @@ function vAccueil() {
   <div class="card"><div class="ch">Dernières commandes<span class="grow"></span><button class="lnk" type="button" data-go="commandes:file">Toutes les commandes</button></div>${ordersTable(ORDERS.slice(0, 5), false)}</div>`;
 }
 
+function sth(key, label, r) { const on = state.sort.key === key; return `<th class="sortable ${r ? "r" : ""}" data-sort="${key}">${label}<span class="arrow">${on ? (state.sort.dir > 0 ? "▲" : "▼") : "↕"}</span></th>`; }
+function sortRows(list) { const { key, dir } = state.sort; if (!key) return list; const ord = { prep: 0, grav: 1, exp: 2, liv: 3 }; return [...list].sort((a, b) => { const va = key === "st" ? ord[a.st] : a[key], vb = key === "st" ? ord[b.st] : b[key]; return (va > vb ? 1 : va < vb ? -1 : 0) * dir; }); }
 function ordersTable(list, checks) {
-  return `<div class="tw"><table><thead><tr>${checks ? `<th style="width:34px"><input type="checkbox" class="cb" id="all" aria-label="Tout cocher"></th>` : ""}<th>Commande</th><th>Cliente</th><th>Articles</th><th class="hide-m">Livraison</th><th>Statut</th><th class="r">Total</th></tr></thead><tbody>
-  ${list.map((o) => `<tr data-order="${o.ref}">${checks ? `<td><input type="checkbox" class="cb" data-sel="${o.ref}" ${state.sel.has(o.ref) ? "checked" : ""} aria-label="Cocher ${o.ref}"></td>` : ""}
+  return `<div class="tw"><table><thead><tr>${checks ? `<th style="width:34px"><input type="checkbox" class="cb" id="all" aria-label="Tout cocher"></th>` : ""}${sth("ref", "Commande")}${sth("nom", "Cliente")}<th>Articles</th><th class="hide-m">Livraison</th>${sth("st", "Statut")}${sth("total", "Total", true)}</tr></thead><tbody>
+  ${sortRows(list).map((o) => `<tr data-order="${o.ref}">${checks ? `<td><input type="checkbox" class="cb" data-sel="${o.ref}" ${state.sel.has(o.ref) ? "checked" : ""} aria-label="Cocher ${o.ref}"></td>` : ""}
     <td><span class="ref">${o.ref}</span><div class="sub2">${o.age}</div></td>
     <td><div class="who"><span class="av">${o.ini}</span>${esc(o.nom)}</div></td>
     <td><div class="who">${img(o.img)}<div style="min-width:0"><div>${esc(o.art)}</div><div class="sub2">${esc(o.det)}</div></div></div></td>
@@ -723,6 +775,7 @@ function vReglages(s, t) {
 
 function keepView(s, t) {
   const T = s.tabs.find((x) => x.id === t);
+  if (VUES[t]) { const v = VUES[t](); return `${head(esc(v.titre || T.t), v.sub || GARDE[t] || "", v.acts || "")}${tabsBar(s)}${v.body}`; }
   return `${head(esc(T.t), "")}${tabsBar(s)}
   <div class="card keep"><span class="pill p-exp" style="align-self:flex-start">Écran conservé</span><h3>${esc(T.t)}</h3><p>${esc(GARDE[t] || "")}</p><p class="sub2">Ancien nom dans le menu : « ${esc(T.old)} ». Tout son contenu reste, présenté avec le même cadre que les autres écrans : titre, sous-onglets, barre de filtres, tableaux et boutons identiques partout.</p>
   <div class="skel"><i style="width:60%"></i><i style="width:92%"></i><i style="width:84%"></i><i style="width:70%"></i></div></div>`;
@@ -747,6 +800,111 @@ function vPlan() {
   <div class="card pc"><h3>${I("alert")}À trancher par vous</h3><p>« Emballages » et « Matériel & emballages » restent deux onglets séparés dans Stock & achats. « Réglages produits » réunit les outils cristal, verres, carafe et couverts. Les textes de Gestion passent tous au « vous » : aujourd'hui certains écrans disent « tu », d'autres « vous ».</p></div>`;
 }
 
+
+/* ---------- v2 : les 28 autres écrans, dessinés avec le même cadre ---------- */
+const pill = (c, t) => `<span class="pill ${c}">${t}</span>`;
+const chip = (t) => `<span class="chip">${t}</span>`;
+const btn = (t, cls = "sm", extra = "") => `<button class="btn ${cls}" type="button" ${extra}>${t}</button>`;
+const tbar = (views, q) => `<div class="toolbar"><div class="views">${views.map((v, i) => `<button type="button" class="vchip ${i ? "" : "on"}">${v[0]}${v[1] !== undefined ? `<i>${v[1]}</i>` : ""}</button>`).join("")}</div>${q ? `<label class="search">${I("search")}<input placeholder="${q}"></label>` : ""}</div>`;
+const who = (ini, nom, sub) => `<div class="who"><span class="av">${ini}</span><div style="min-width:0"><div>${nom}</div>${sub ? `<div class="sub2">${sub}</div>` : ""}</div></div>`;
+const prod = (k, n, sub) => `<div class="who">${img(k)}<div style="min-width:0"><div>${n}</div>${sub ? `<div class="sub2">${sub}</div>` : ""}</div></div>`;
+
+const VUES = {
+  fiches: () => ({ sub: "Toutes les commandes, avec recherche et filtres. Une ligne ouvre la fiche complète en panneau, sans quitter la liste.",
+    acts: btn(I("print") + "Imprimer la sélection", "", 'data-toast="Fiches envoyées à l\'impression"'),
+    body: `<div class="card">${tbar([["Toutes", 41], ["Ce mois", 12], ["Livrées", 24], ["Annulées", 2], ["Avec message non lu", 1]], "Réf., cliente, e-mail, produit")}${ordersTable(ORDERS, true)}</div>` }),
+  atelier: () => ({ sub: "Pour chaque article à graver : le visuel exact tel que la cliente l'a vu, les réglages, le fichier prêt pour la machine.",
+    body: `${tbar([["À graver", 6], ["En gravure", 2], ["Sur devis", 1], ["Tout", 9]])}<div class="mgrid" style="padding:0">${ORDERS.filter((o) => o.st !== "liv" && o.st !== "exp").map((o) => `<div class="mcard">${IMG[o.img] ? `<img src="${IMG[o.img]}" alt="">` : ""}<div class="top2"><b><span class="ref">${o.ref}</span></b>${o.exp ? pill("p-bad", "Express") : pill(ST[o.st][0], ST[o.st][1])}</div><div>${esc(o.art)}</div><div class="engr"><div><span>Gravure</span><span>${esc(o.det)}</span></div><div><span>Écriture</span><span>Playfair</span></div><div><span>Face</span><span>Face avant, centrée</span></div></div><div class="acts">${btn("PNG")}${btn("SVG")}${btn("PDF à l'échelle")}</div><div class="acts">${btn("Conditionnement", "sm", `data-order="${o.ref}"`)}${btn("✗ Raté, à refaire", "sm ghost", 'data-toast="Raté noté, stock mis à jour"')}</div></div>`).join("")}</div>` }),
+  etiquettes: () => ({ sub: "Planches de 20 étiquettes 45 × 45 mm pour La Poste. Touchez les cases déjà utilisées : l'impression ira sur les suivantes.",
+    acts: btn(I("print") + "Imprimer la planche", "pri", 'data-toast="Planche envoyée à l\'impression"'),
+    body: `<div class="grid g2"><div class="card"><div class="ch">1 · Commandes à expédier par La Poste</div><ul class="todo">${ORDERS.filter((o) => o.st === "prep" || o.st === "grav").map((o) => `<li><input type="checkbox" class="cb" ${o.liv === "Lettre suivie" || o.liv === "Domicile" ? "checked" : "disabled"} aria-label="${o.ref}"><span class="tx"><b>${esc(o.nom)} · <span class="ref">${o.ref}</span></b><span>${o.liv === "Lettre suivie" ? "Lettre suivie" : o.liv === "Domicile" ? "Colis à domicile" : `${o.liv} : étiquette Boxtal, pas ici`}</span></span>${o.exp ? pill("p-bad", "Express") : ""}</li>`).join("")}</ul>
+      <div class="ch">2 · Expéditeur et style</div><div style="padding:14px;display:flex;flex-direction:column;gap:12px"><div class="seg"><button class="on" type="button">En bas de l'étiquette</button><button type="button">Étiquette à part</button><button type="button">Aucun</button></div><div class="seg"><button class="on" type="button">Simple</button><button type="button">Écrin</button><button type="button">Bandeau</button><button type="button">Sobre</button></div>${tg(false, "Ajouter le numéro de commande")}</div></div>
+      <div class="card"><div class="ch">3 · La feuille<span class="grow"></span><span class="sub2">4 cases déjà utilisées</span></div><div style="padding:14px;display:flex;flex-direction:column;gap:12px;align-items:flex-start"><div class="sheetgrid" id="sheet">${Array.from({ length: 20 }, (_, i) => `<button type="button" data-cell="${i}" class="${i < 4 ? "used" : i < 7 ? "next" : ""}">${i + 1}</button>`).join("")}</div><div class="sub2">Grisé = déjà décollée · doré = où vos 3 étiquettes vont s'imprimer</div><div class="acts">${btn("Feuille neuve", "sm", "data-sheet-new")}${btn("Décaler d'une case", "sm", "data-sheet-shift")}</div></div></div></div>` }),
+  devis: () => ({ sub: "Devis et factures. Un devis payé devient une commande, avec sa fiche atelier.",
+    acts: btn(I("plus") + "Nouveau devis", "pri", 'data-toast="Nouveau devis créé"'),
+    body: `<div class="card">${tbar([["Tous", 9], ["Envoyés", 2], ["Payés", 5], ["Brouillons", 1], ["Factures", 4]], "N°, client, objet")}${tbl([{ t: "N°" }, { t: "Client" }, { t: "Objet" }, { t: "Statut" }, { t: "Montant", r: true }, { t: "Envoyé le", m: true }],
+      [["<span class=ref>DEV-1531</span>", who("LB", "Le Bistrot du Port", "restaurant"), "24 verres à vin, logo gravé", pill("p-prep", "Envoyé"), eur(86), "27 oct."], ["<span class=ref>DEV-1532</span>", who("DE", "Doriane E."), "4 verres à vin 36 cl, visuel + date", pill("p-prep", "Envoyé"), eur(41.9), "28 oct."], ["<span class=ref>DEV-1527</span>", who("KM", "Kim M."), "2 flûtes, prénoms + date", pill("p-exp", "Payé · commande 3C6YB9JF"), eur(43.8), "19 oct."], ["<span class=ref>FAC-0088</span>", who("TG", "Thomas G."), "Facture de la commande 3H8WK4TV", pill("p-liv", "Facture"), eur(119.8), "27 oct."], ["<span class=ref>DEV-1533</span>", who("—", "À compléter"), "Carafe + 2 verres assortis", pill("p-liv", "Brouillon"), eur(94.7), "—"]])}</div>` }),
+  envois: () => ({ sub: "Écrire à une cliente, programmer un envoi à l'heure voulue, gérer les modèles. Tout part par le site, avec le bouton « Répondre ».",
+    body: `<div class="grid g2"><div class="form">${fs("Écrire à une cliente", "Le message part avec le gabarit de la marque et le bouton « Répondre à ce message ».", `${fld("e-to", "Adresse e-mail", "camille.r@exemple.fr")}${fld("e-sub", "Objet", "Votre verre à whisky gravé")}<div class="fld"><label for="e-body">Message</label><textarea id="e-body" style="min-height:120px;border:1px solid var(--line-2);border-radius:8px;padding:10px;background:var(--surface);resize:vertical;line-height:1.55">Bonjour,
+
+Merci pour votre message.</textarea></div><div class="acts">${btn(I("check") + "Envoyer", "pri", 'data-toast="Message envoyé"')}${btn("Programmer…", "", 'data-toast="Envoi programmé"')}</div>`)}</div>
+      <div class="form"><div class="card"><div class="ch">Envois programmés<span class="grow"></span>${chip("2 à venir")}</div>${tbl([{ t: "Quand" }, { t: "À" }, { t: "Objet" }, { t: "" }], [["ven. 31 oct. · 9 h 00", "aurore.c@exemple.fr", "Votre carafe et ses verres assortis", btn("Annuler", "sm ghost")], ["lun. 3 nov. · 10 h 00", "inscrites (125)", "✦ Nos idées cadeaux de Noël", btn("Relire", "sm")]])}</div>
+      <div class="card"><div class="ch">Modèles<span class="grow"></span><button class="lnk" type="button">+ Nouveau modèle</button></div><ul class="todo">${[["Colis expédié", "Votre commande est en route, avec le lien de suivi"], ["Avez-vous bien reçu ?", "Contrôle de réception, sans mention du transporteur"], ["Demande d'avis", "Après livraison confirmée seulement"], ["Photo illisible", "Demande d'une photo plus nette pour la gravure"]].map(([b, s]) => `<li class="t-gold"><span class="ic">${I("mail")}</span><span class="tx"><b>${b}</b><span>${s}</span></span>${btn("Utiliser", "sm")}</li>`).join("")}</ul></div></div></div>` }),
+  avis: () => ({ sub: "Les avis déposés par les clientes. Rien n'est publié sans votre clic. L'e-mail n'est visible qu'ici.",
+    acts: btn(I("plus") + "Ajouter un avis reçu ailleurs", "", 'data-toast="Avis ajouté"'),
+    body: `<div class="card">${tbar([["À valider", 1], ["Publiés", 18], ["Masqués", 1]])}${[[5, "Collier 3 Cœurs", "Sarah B.", "Magnifique, la gravure est très fine et le sac cadeau est parfait pour offrir.", "il y a 3 h", true, "✓ A commandé ce produit"], [5, "Carafe à whisky gravée", "Marc D.", "Offert à mon père, il a adoré. Gravure impeccable, emballage soigné.", "il y a 6 j", false, "✓ A commandé ce produit"], [4, "Cristal photo 3D vertical", "Nadia K.", "Très beau rendu, le socle LED change tout le soir.", "il y a 12 j", false, "✓ Cliente"]].map(([n, p, a, t, d, att, ver]) => `<div class="rev"><span class="av">${a.split(" ").map((x) => x[0]).join("")}</span><div class="tx"><div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap">${stars(n)}<b>${p}</b><span class="sub2">${a} · ${d}</span>${att ? pill("p-prep", "À valider") : pill("p-exp", "Publié")}</div><p>${t}</p><div class="sub2">${ver} · e-mail visible ici seulement</div></div><div class="acts" style="flex-direction:column">${att ? btn(I("check") + "Publier", "sm pri", 'data-toast="Avis publié"') : ""}${btn(att ? "Masquer" : "Retirer", "sm ghost", 'data-toast="Avis masqué"')}</div></div>`).join("")}</div>` }),
+  fidelite: () => ({ sub: "Cagnottes, cashback, parrainage et codes ambassadeurs.",
+    body: `${kpis([["Cagnottes actives", "23", "pour 184,20 € au total"], ["Cashback versé ce mois", "41,80 €", "sur 12 commandes"], ["Parrainages", "6", "2 ce mois"], ["Ambassadeurs", "3", "commissions à régler : 18 €", "warn"]])}
+      <div class="card"><div class="ch">Cagnottes</div>${tbar([["Toutes", 23], ["À créditer", 2], ["Utilisées", 9]], "Cliente")}${tbl([{ t: "Cliente" }, { t: "Solde", r: true }, { t: "Gagné", r: true }, { t: "Dépensé", r: true }, { t: "Dernier mouvement", m: true }], [[who("CR", "Camille R."), eur(8.2), eur(14.7), eur(6.5), "aujourd'hui"], [who("TG", "Thomas G."), eur(22.4), eur(22.4), eur(0), "il y a 2 j"], [who("NK", "Nadia K."), eur(3.9), eur(11.9), eur(8), "il y a 5 j"]])}</div>` }),
+  favoris: () => ({ sub: "Les créations les plus mises de côté par les clientes connectées. Lecture seule : aucun e-mail ne part d'ici.",
+    acts: btn("Exporter", "", 'data-toast="Export prêt"'),
+    body: `${kpis([["Favoris enregistrés", "212"], ["Clientes avec favoris", "67"], ["Création la plus gardée", "Collier 3 Cœurs"], ["Alertes de prix actives", "14"]])}
+      <div class="card"><div class="ch">Classement</div>${tbl([{ t: "Création" }, { t: "Favoris", r: true }, { t: "Alertes prix", r: true }, { t: "Prix", r: true }], [[prod("coeurs3", "Collier 3 Cœurs", "Bijoux"), "38", "6", eur(30.51)], [prod("cristal", "Cristal photo 3D vertical", "Cristal"), "27", "3", eur(39.9)], [prod("carafe", "Carafe à whisky gravée", "Verres & carafes"), "19", "2", eur(54.9)], [prod("whisky", "Verre à whisky gravé", "Verres & carafes"), "16", "1", eur(22.9)]])}</div>` }),
+  connexions: () => ({ sub: "Qui se connecte à son espace client. Conservé 90 jours. Une visite sans connexion est invisible.",
+    body: `${kpis([["Aujourd'hui", "4"], ["7 jours", "19"], ["Distinctes sur 30 j", "41"], ["Lien demandé sans suite", "3", "clientes qui hésitent", "warn"]])}
+      <div class="card">${tbar([["Toutes", 41], ["Lien sans suite", 3]], "Nom ou e-mail")}${tbl([{ t: "Cliente" }, { t: "Dernière ouverture" }, { t: "Ouvertures", r: true }, { t: "Commandes", r: true }, { t: "" }], [[who("CR", "Camille R.", "camille.r@exemple.fr"), "aujourd'hui, 10 h 05", "7", "2", btn("Dossier", "sm")], [who("SB", "Sarah B.", "sarah.b@exemple.fr"), pill("p-prep", "lien demandé, jamais ouvert"), "0", "1", btn("Dossier", "sm")], [who("LF", "Léo F."), "hier", "2", "1", btn("Dossier", "sm")]])}</div>` }),
+  restaurants: () => ({ sub: "Bars et restaurants démarchés pour la gravure de leur logo sur nos verres. Un seul bouton envoie vraiment.",
+    acts: btn("Envoyer aux établissements prêts (12)", "pri", 'data-toast="12 e-mails envoyés"'),
+    body: `${kpis([["Établissements", "366"], ["E-mails envoyés", "214"], ["Ont répondu", "9", "", "ok"], ["Adresses mortes", "3", "", "bad"]])}
+      <div class="card">${tbar([["Tous", 366], ["À contacter", 140], ["Prêts (vérifiés)", 12], ["Envoyés", 214], ["Ont répondu", 9], ["STOP", 2], ["Adresses mortes", 3]], "Nom, ville, e-mail")}${tbl([{ t: "Établissement" }, { t: "Ville", m: true }, { t: "Statut" }, { t: "Dernier échange", m: true }, { t: "" }], [[who("BP", "Le Bistrot du Port", "bar à cocktails"), "La Rochelle", pill("p-gold", "A répondu · nouveau"), "hier : demande de tarifs pour 24 verres", btn("Répondre", "sm pri", 'data-go="messages:boite"')], [who("CV", "Cave des Halles", "caviste"), "Lyon", pill("p-exp", "Envoyé"), "26 sept.", btn("Relancer", "sm")], [who("LR", "La Rotonde", "brasserie"), "Nantes", pill("p-liv", "À contacter · vérifié"), "—", btn("Écrire", "sm")], [who("BA", "Bar Allel", ""), "Marseille", pill("p-bad", "Adresse invalide"), "a rebondi", btn("Retirer", "sm ghost")]])}</div>` }),
+  visibilite: () => ({ sub: "Masquez un univers ou un rayon entier d'un geste : tous ses produits disparaissent du site. Réaffichez-le et tout revient.",
+    body: `<div class="card">${[["Bijoux", 32, true, ["Colliers", "Bracelets femme", "Bracelets homme"]], ["Cristal", 5, true, ["Blocs photo", "Cristaux déjà gravés"]], ["Verres & carafes", 8, true, ["Verres à vin", "Flûtes", "Whisky & cocktail", "Carafe"]], ["Bébé & Enfant", 18, true, ["Jeux en bois", "Repas & chambre"]], ["Mariage", 12, true, []], ["Maison", 7, false, ["Bougeoirs", "Supports téléphone"]], ["Marque-pages", 3, true, ["En bois", "En métal"]]].map(([u, n, on, rayons]) => `<div style="padding:12px 16px;border-bottom:1px solid var(--line)"><div class="row"><div><b>${u}</b> <span class="sub2">· ${n} produits${on ? "" : " · masqué depuis le 21 oct."}</span></div><button type="button" class="tg ${on ? "on" : ""}" data-tg aria-label="${u}"></button></div>${rayons.length ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">${rayons.map((r) => `<span class="chip">${r} <button type="button" class="tg on" data-tg aria-label="${r}" style="width:26px;height:16px;margin-left:4px"></button></span>`).join("")}</div>` : ""}</div>`).join("")}</div>` }),
+  categories: () => ({ sub: "L'ordre des univers dans le menu et des produits dans chaque rayon.",
+    acts: btn(I("check") + "Enregistrer l'ordre", "pri", 'data-toast="Ordre enregistré"'),
+    body: `<div class="card"><ul class="todo">${["Bijoux", "Cristal", "Verres & carafes", "Bébé & Enfant", "Marque-pages", "Mariage", "Maison", "Petits cadeaux"].map((u, i) => `<li><span class="ic" style="background:var(--sunk);color:var(--muted);font-weight:600">${i + 1}</span><span class="tx"><b>${u}</b><span>${[32, 5, 8, 18, 3, 12, 7, 13][i]} produits · ${[3, 2, 4, 2, 2, 1, 2, 1][i]} rayons</span></span><div class="acts">${btn("▲", "sm")}${btn("▼", "sm")}${btn("Ordre des produits", "sm ghost")}</div></li>`).join("")}</ul></div>` }),
+  gravure: () => ({ sub: "Les produits gravables, leurs champs et leurs suppléments. Chaque « +X € » écrit est un supplément vraiment payé.",
+    body: `<div class="card">${tbar([["Tous", 38], ["Verres", 7], ["Bijoux", 19], ["Cristal", 5], ["Bois", 7]], "Produit")}${tbl([{ t: "Produit" }, { t: "Champs de gravure" }, { t: "Suppléments" }, { t: "Contrôle" }], [[prod("whisky", "Verre à whisky gravé"), "photo · texte · date · décor · écriture · face / fond", "texte +3 € · face + fond +7 €", pill("p-exp", "✓ prix cohérents")], [prod("coeurs3", "Collier 3 Cœurs"), "recto · verso · écriture", "+3 € par texte", pill("p-exp", "✓")], [prod("cristal", "Cristal photo 3D vertical"), "photo · texte · place · socle", "texte +5 € · socle 14,90 / 19,90 €", pill("p-exp", "✓")], [prod("couverts", "Couverts enfant gravés"), "prénom · motif par couvert", "compris", pill("p-bad", "prix écrit ≠ payé")]])}</div>` }),
+  apercus: () => ({ sub: "Placez à la souris le cadre où la gravure se pose sur chaque photo. Les quatre outils sont réunis ici ; chaque enregistrement ne touche que son produit.",
+    body: `<div class="grid g2"><div class="form"><div class="card"><div class="ch">Produit à régler</div><div style="padding:12px;display:flex;flex-direction:column;gap:8px">${[["Cristaux (blocs, porte-clés, pyramide)", "8 cadres", "cristal"], ["Verres (vin, flûte, whisky, cocktail, tumbler)", "11 cadres · face et fond", "whisky"], ["Carafe", "2 cadres", "carafe"], ["Couverts enfant", "prénom + motif par couvert", "couverts"]].map(([n, s, k], i) => `<div class="outil" style="${i === 1 ? "border-color:var(--gold-2)" : ""}">${img(k)}<div style="flex:1;min-width:0"><b>${n}</b><span>${s}</span></div>${i === 1 ? pill("p-gold", "ouvert") : btn("Ouvrir", "sm")}</div>`).join("")}</div></div></div>
+      <div class="card"><div class="ch">Verre à whisky · face avant<span class="grow"></span>${chip("cadre : 42 × 38 %")}</div><div style="padding:14px;display:flex;flex-direction:column;gap:12px"><div class="frame">${IMG.whisky ? `<img src="${IMG.whisky}" alt="">` : ""}<div class="box"></div></div>${tg(true, "Utiliser ce cadre sur la fiche", true)}<div class="acts">${btn("Face avant", "sm pri")}${btn("Fond du verre", "sm")}${btn("Replacer au centre", "sm ghost")}</div></div></div></div>` }),
+  tailles: () => ({ sub: "Guide des tailles et des coûts des pièces en bois, pour fixer un prix juste.",
+    body: `<div class="card">${tbl([{ t: "Pièce" }, { t: "Taille conseillée" }, { t: "Bois" }, { t: "Coût matière", r: true }, { t: "Prix de vente", r: true }], [["Plaque de porte enfant", "20 × 12 cm", "tilleul 3 mm", eur(0.3), eur(29.99)], ["Numéro de table", "12 × 10 cm", "tilleul 3 mm", eur(0.15), eur(4.9)], ["Support téléphone", "15 × 9 cm", "bouleau 5 mm", eur(0.6), eur(19.9)], ["Puzzle à encastrer", "18,5 × 13,5 cm", "tilleul 3 mm", eur(0.35), eur(19.9)]])}<div style="padding:12px 16px" class="sub2">Base : une plaque A3 de tilleul 3 mm = 2,40 €.</div></div>` }),
+  sante: () => ({ sub: "Ce que la surveillance automatique a trouvé. Les points importants vous sont aussi envoyés par e-mail chaque semaine.",
+    body: `${kpis([["Produits en vente", "78"], ["Points importants", "2", "", "bad"], ["Points mineurs", "3", "", "warn"], ["Dernier passage", "aujourd'hui 6 h"]])}
+      <div class="card"><ul class="todo">${[["t-bad", "alert", "Couverts enfant gravés : prix écrit différent du prix payé", "La description dit « +3 € », le paiement ne facture rien", "catalogue:gravure", "Corriger"], ["t-bad", "alert", "Flûte à champagne : aucune photo gravée", "La fiche ne montre que des verres vierges", "catalogue:produits", "Voir la fiche"], ["t-warn", "box", "Carafe : stock bas (2)", "Seuil d'alerte : 3", "catalogue:produits", "Voir"], ["t-warn", "tag", "Marque-page métal : aucun guide de conseils ne le couvre", "", "catalogue:produits", "Voir"], ["t-info", "clock", "Noël allumé : dernière mise à jour des images il y a 1 j", "Rien à faire", "", ""]].map(([c, ic, b, s, go, a]) => `<li class="${c}"><span class="ic">${I(ic)}</span><span class="tx"><b>${b}</b>${s ? `<span>${s}</span>` : ""}</span>${a ? btn(a, "sm", `data-go="${go}"`) : ""}</li>`).join("")}</ul></div>` }),
+  emballages: () => ({ sub: "Les emballages proposés aux clientes sur les fiches bijoux : prix de vente, stock et attribution par produit.",
+    acts: btn(I("plus") + "Ajouter un emballage", "", 'data-toast="Emballage ajouté"'),
+    body: `<div class="card"><div class="toolbar"><div class="views"><span class="sub2">Visibles sur le site</span></div>${tg(true, "", true).replace('<div class="row">', '<div class="row" style="gap:6px">')}</div><div class="mgrid" style="padding-top:0">${[["m_sac", "Sac cadeau", 1.2, 89, "tous les bijoux"], ["m_carree", "Boîte carrée", 3, 98, "colliers, bracelets fins"], ["m_sacor", "Boîte allongée", 5, 99, "bracelets homme"], ["m_carton", "Pack Collier", 5.5, 99, "sac + boîte + microfibre"]].map(([k, n, p, s, pour]) => `<div class="mcard">${IMG[k] ? `<img src="${IMG[k]}" alt="">` : ""}<div class="top2"><b>${n}</b><b class="num">${eur(p)}</b></div><div class="sub2">Pour : ${pour}</div><div class="row sub2"><span class="num">${s} en stock</span>${btn("Modifier", "sm ghost")}</div></div>`).join("")}</div></div>` }),
+  achats: () => ({ sub: "Déposez une facture ou un reçu : l'agent lit les lignes, retrouve vos produits et propose les quantités. Vous corrigez, vous validez.",
+    body: `<div class="card"><div class="upload">${I("box")}<div style="margin-top:8px"><b>Déposez une facture ici</b> (PDF, photo, CSV)</div><div class="sub2">ou collez le texte de la commande</div>${btn("Choisir un fichier", "sm", 'style="margin-top:10px"')}</div></div>
+      <div class="card"><div class="ch">Historique<span class="grow"></span><button class="lnk" type="button">Exporter</button></div>${tbl([{ t: "Date" }, { t: "Fournisseur" }, { t: "Lignes" }, { t: "Montant", r: true }, { t: "Stock" }], [["23 oct.", "Alibaba · marque-pages", "8 produits + 3 boîtes", eur(315.41), pill("p-exp", "mis à jour")], ["17 oct.", "Temu · emballages de Noël", "6 articles", eur(48.6), pill("p-exp", "mis à jour")], ["11 oct.", "Metro · verres", "3 cartons", eur(74.36), pill("p-exp", "mis à jour")]])}</div>` }),
+  promos: () => ({ sub: "Les codes promo, leur usage et les codes personnels envoyés par l'offre gravure.",
+    acts: btn(I("plus") + "Nouveau code", "pri", 'data-toast="Code créé"') + btn("Nettoyer les codes expirés", "", 'data-toast="12 codes expirés retirés"'),
+    body: `<div class="card">${tbar([["Actifs", 14], ["Ouverts", 4], ["Personnels", 10], ["Expirés", 12]], "Code")}${tbl([{ t: "Code" }, { t: "Remise" }, { t: "Pour" }, { t: "Utilisé", r: true }, { t: "Valable" }, { t: "" }], [["<span class=ref>BIENVENUE10</span>", "−10 %", "nouvelles inscrites", "87", "sans fin", chip("ouvert")], ["<span class=ref>GRAVURE-A7K2</span>", "1 gravure offerte", "camille.r@exemple.fr", "0", "jusqu'au 14 nov.", chip("personnel")], ["<span class=ref>AMB-LEA</span>", "−10 %", "ambassadrice Léa", "12", "sans fin", chip("ouvert")], ["<span class=ref>CADEAU-K9P2M</span>", "solde 30,00 €", "carte cadeau", "0 / 1", "jusqu'au 10 oct. 2027", chip("carte cadeau")]])}</div>` }),
+  offre: () => ({ sub: "L'offre « gravure offerte » aux inscrites qui n'ont jamais commandé : un code personnel, 30 jours, une seule fois.",
+    body: `${kpis([["Codes envoyés", "53"], ["Utilisés", "7", "", "ok"], ["Se sont connectées", "19"], ["En attente d'envoi", "12", "inscrites de plus de 3 jours", "warn"]])}
+      <div class="card"><div class="ch">Réglage<span class="grow"></span>${pill("p-liv", "En pause")}</div><div style="padding:14px;display:flex;flex-direction:column;gap:12px">${tg(false, "Activer l'offre (les inscrites en attente sont servies aussitôt)", true)}<div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">${fld("og-code", "Préfixe du code", "GRAVURE")}${fld("og-jours", "Inscrites depuis au moins (jours)", "3")}</div></div></div>
+      <div class="card"><div class="ch">Suivi des codes</div>${tbar([["Tous", 53], ["Utilisés", 7], ["Connectées", 19], ["Jamais connectées", 34]])}${tbl([{ t: "Cliente" }, { t: "Code" }, { t: "Envoyé le", m: true }, { t: "Connectée ?" }, { t: "Statut" }], [[who("AT", "anais.t@exemple.fr"), "<span class=ref>GRAVURE-M4P9</span>", "20 sept.", pill("p-exp", "🔑 connectée le 22 sept. · 3 fois"), pill("p-exp", "utilisé · 22,41 €")], [who("—", "julie.p@exemple.fr"), "<span class=ref>GRAVURE-Q2W7</span>", "20 sept.", pill("p-prep", "lien demandé, jamais ouvert"), pill("p-liv", "non utilisé")], [who("—", "lea.m@exemple.fr"), "<span class=ref>GRAVURE-B8T3</span>", "25 sept.", chip("jamais connectée"), pill("p-liv", "non utilisé")]])}</div>` }),
+  marche: () => ({ sub: "Les prix pratiqués par les autres boutiques, produit par produit, pour placer vos tarifs.",
+    acts: btn("Lancer une recherche", "pri", 'data-toast="Recherche lancée"'),
+    body: `<div class="card">${tbar([["Tous", 24], ["Sous le marché", 3], ["Au niveau", 17], ["Au-dessus", 4]], "Produit")}${tbl([{ t: "Produit" }, { t: "Notre prix", r: true }, { t: "Marché" }, { t: "Position" }, { t: "Relevé le", m: true }], [[prod("whisky", "Verre à whisky gravé"), eur(22.9), "19,90 – 29,90 €", pill("p-exp", "au niveau"), "16 sept."], [prod("cordon", "Porte-clés cuir gravé"), eur(7.9), "12,95 – 13,90 €", pill("p-prep", "sous le marché"), "26 sept."], [prod("cristal", "Cristal photo 3D vertical"), eur(39.9), "39 – 169 €", pill("p-exp", "au niveau"), "26 sept."], [prod("savane", "Puzzle à encastrer"), eur(19.9), "20 – 55 €", pill("p-prep", "sous le marché"), "7 oct."]])}</div>` }),
+  ventes: () => ({ sub: "Les ventes par période et les créations les plus vendues.",
+    acts: `<div class="seg"><button type="button">Mois</button><button class="on" type="button">90 jours</button><button type="button">Année</button></div>`,
+    body: `${kpis([["Commandes", "121", "90 derniers jours"], ["Pièces vendues", "168"], ["Chiffre d'affaires", "5 214,30 €"], ["Panier moyen", "43,09 €"]])}
+      <div class="card"><div class="ch">Les plus vendus<span class="grow"></span><span class="sub2">en pièces, hors annulées</span></div>${tbl([{ t: "#" }, { t: "Création" }, { t: "Pièces", r: true }, { t: "CA", r: true }, { t: "Part" }], [[1, prod("coeurs3", "Collier 3 Cœurs"), "31", eur(945.81), `<div class="bar" style="width:120px"><i style="width:100%"></i></div>`], [2, prod("whisky", "Verre à whisky gravé"), "26", eur(702.4), `<div class="bar" style="width:120px"><i style="width:84%"></i></div>`], [3, prod("cristal", "Cristal photo 3D vertical"), "14", eur(1118.6), `<div class="bar" style="width:120px"><i style="width:45%"></i></div>`], [4, prod("carafe", "Carafe à whisky gravée"), "9", eur(494.1), `<div class="bar" style="width:120px"><i style="width:29%"></i></div>`], [5, prod("savane", "Puzzle Savane"), "8", eur(159.2), `<div class="bar" style="width:120px"><i style="width:26%"></i></div>`]])}</div>` }),
+  visiteurs: () => ({ sub: "Le trafic du site et l'entonnoir : qui vient, qui remplit un panier, qui paie.",
+    acts: `<div class="seg"><button type="button">7 jours</button><button class="on" type="button">30 jours</button></div>`,
+    body: `${kpis([["Visiteurs", "2 418", "+12 % vs 30 j précédents"], ["Pages vues", "9 702"], ["Depuis Instagram", "31 %"], ["Depuis Google", "44 %"]])}
+      <div class="card"><div class="ch">Entonnoir des 30 derniers jours</div><div class="funnel">${[["Visiteurs", 2418, 100], ["Ont rempli un panier", 212, 8.8], ["Sont allés au paiement", 96, 4], ["Ont acheté", 41, 1.7]].map(([l, n, p]) => `<div><span>${l}</span><i style="width:${Math.max(4, p)}%"></i><span class="num r">${n.toLocaleString("fr-FR")}</span></div>`).join("")}</div><div style="padding:0 16px 14px" class="sub2">Les clics sont fiables ; les ouvertures d'e-mails ne sont qu'un ordre de grandeur.</div></div>` }),
+  compta: () => ({ sub: "Export comptable, ventes encaissées et ajustement des stocks.",
+    acts: btn("Export Excel", "", 'data-toast="Export prêt"') + btn("Export CSV", "", 'data-toast="Export prêt"') + btn("PDF", "", 'data-toast="Export prêt"'),
+    body: `${kpis([["Encaissé en octobre", "1 842,60 €"], ["Frais Stripe", "37,90 €"], ["Remboursé", "0,00 €"], ["Déclaration URSSAF", "avant le 30 nov.", "", "warn"]])}
+      <div class="card"><div class="ch">Ajustements de stock récents</div>${tbl([{ t: "Date" }, { t: "Produit" }, { t: "Mouvement", r: true }, { t: "Motif" }], [["29 oct.", "Verre à vin 36 cl · À l'unité", "−1", "raté, à refaire (3F5LT1XC)"], ["27 oct.", "Marque-page bois pompon · Caramel", "+20", "réception Alibaba"], ["23 oct.", "Sac cadeau", "−1", "conditionnement 3J1ZP8DA"]])}</div>` }),
+  apparence: () => ({ sub: "Bandeaux, fenêtres, sections de l'accueil, mode vacances. Chaque réglage s'enregistre avec la barre du bas.",
+    body: `<div class="set"><nav class="setnav">${["Sections de l'accueil", "Bandeau & fenêtres", "Mode vacances", "Cadeau dans chaque colis", "Accès & état"].map((l, i) => `<button type="button" class="${i ? "" : "on"}">${l}</button>`).join("")}</nav><div class="form">
+      ${fs("Sections de l'accueil", "Cochez ce qui s'affiche. L'ordre des blocs ne change pas.", [["Dernières sorties", true], ["Bijoux sur photo", true], ["Verres & carafes", true], ["Bandeau Noël + sélection de Noël", true], ["Nos univers", true], ["Bandeau confiance", true], ["Mur de l'atelier", true]].map(([l, on]) => tg(on, l, true)).join(""))}
+      ${fs("Bandeau du haut", "Une phrase courte, visible sur toutes les pages.", `${tg(false, "Afficher le bandeau", true)}${fld("ap-band", "Texte", "Commandez avant le 10 décembre pour Noël")}`)}
+      ${fs("Mode vacances", "La boutique reste ouverte ; le délai est annoncé partout.", `${tg(false, "Activer", true)}<div class="grid" style="grid-template-columns:1fr 1fr;gap:12px">${fld("ap-d1", "Début", "")}${fld("ap-d2", "Fin", "")}</div>`)}
+      <div class="savebar" id="savebar" hidden><span>Modifications non enregistrées</span><div class="acts">${btn("Annuler", "", "data-cancel")}${btn("Enregistrer", "pri", "data-saveall")}</div></div></div></div>` }),
+  livraison: () => ({ sub: "Les tarifs de livraison, par poids et par mode. Les valeurs du code servent de repli si un champ est vide.",
+    acts: btn("Rétablir les tarifs du code", "", 'data-toast="Tarifs rétablis"'),
+    body: `<div class="grid g2"><div class="card"><div class="ch">Lettre suivie (bijoux)</div>${tbl([{ t: "Jusqu'à" }, { t: "Prix cliente", r: true }, { t: "Coût La Poste", r: true }], [["100 g", eur(4.9), eur(4.45)], ["250 g", eur(6.5), eur(5.77)], ["500 g", eur(8.9), eur(8.04)], ["1 kg", eur(10.9), eur(10.23)]])}<div style="padding:12px 16px">${tg(true, "Offerte dès 45 € de bijoux", true)}</div></div>
+      <div class="form"><div class="card"><div class="ch">Colis</div>${tbl([{ t: "Mode" }, { t: "Prix", r: true }, { t: "" }], [["Domicile", eur(6.9), ""], ["Point relais (Mondial Relay, Colissimo, UPS…)", eur(4.9), ""], ["Express Chronopost ≤ 2 kg", eur(14.9), pill("p-exp", "allumé")], ["Verres à domicile, 1 à 2 verres", eur(11.9), pill("p-prep", "à revoir ?")]])}<div style="padding:12px 16px">${tg(true, "Express Chronopost proposé au paiement", true)}${tg(true, "Verres et carafe : offerte dès 60 €", true)}</div></div></div></div>` }),
+  agents: () => ({ sub: "Vos assistants, chacun son rôle. Rien n'est envoyé ni appliqué sans votre clic. Pour leur parler : le bouton Assistant en haut.",
+    body: `<div class="mgrid" style="padding:0">${[["mail", "E-mail", "Lit la boîte, prépare une réponse à valider pour chaque message de cliente", true], ["star", "Avis", "Propose une réponse aux avis et repère ceux à publier", true], ["mega", "Newsletter", "Prépare la lettre du mois à partir des nouveautés", true], ["tag", "Catalogue", "Propose des corrections de fiches (prix, textes, stock) à confirmer", true], ["chart", "Rapport", "Résumé hebdomadaire des ventes, envoyé à vous seul", true], ["set", "Technicien", "Surveille le catalogue et signale les incohérences", true]].map(([ic, n, d, on]) => `<div class="mcard"><div class="top2"><b style="display:flex;gap:8px;align-items:center">${I(ic)}${n}</b><button type="button" class="tg ${on ? "on" : ""}" data-tg aria-label="${n}"></button></div><div class="sub2">${d}</div><div class="acts">${btn("Réglages", "sm")}${btn("Parler", "sm ghost", "data-ai")}</div></div>`).join("")}</div>
+      <div class="card"><div class="ch">Boîte mail surveillée<span class="grow"></span>${pill("p-exp", "dernier passage il y a 4 min")}</div><div style="padding:12px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="sub2">25 derniers e-mails lus · 3 réponses préparées aujourd'hui · Etsy ignoré</span><span class="grow" style="flex:1"></span>${btn("Vérifier maintenant", "sm", 'data-toast="Boîte vérifiée : rien de nouveau"')}</div></div>` }),
+};
+
 const VIEWS = { accueil: vAccueil, commandes: vCommandes, messages: vMessages, clients: vClients, catalogue: vCatalogue, stock: vStock, marketing: vMarketing, finances: vFinances, reglages: vReglages };
 
 function render() {
@@ -757,7 +915,7 @@ function render() {
     const s = secOf(state.sec); const t = tabOf(s);
     page.innerHTML = VIEWS[s.id](s, t);
     const T = s.tabs.find((x) => x.id === t);
-    crumb.innerHTML = s.tabs.length > 1 ? `<span class="hide-s">${esc(s.t)}</span><span class="hide-s">›</span><b>${esc(T.t)}</b>` : `<b>${esc(s.t)}</b>`;
+    crumb.innerHTML = s.tabs.length > 1 ? `<button type="button" class="hide-s" data-go="${s.id}">${esc(s.t)}</button><span class="hide-s">›</span><b>${esc(T.t)}</b>` : `<b>${esc(s.t)}</b>`;
   }
   renderSide();
   window.scrollTo(0, 0);
@@ -775,24 +933,31 @@ function go(key) {
 
 /* ---------- panneaux ---------- */
 const scrim = document.getElementById("scrim");
-function closeAll() { ["drawer", "sheet", "pal"].forEach((id) => document.getElementById(id).classList.remove("on")); scrim.classList.remove("on"); document.getElementById("bellPop").hidden = true; }
+function closeAll() { document.getElementById("shortcuts").classList.remove("on"); state.curOrder = ""; ["drawer", "sheet", "pal"].forEach((id) => document.getElementById(id).classList.remove("on")); scrim.classList.remove("on"); document.getElementById("bellPop").hidden = true; }
 function openSide(on) { document.getElementById("side").classList.toggle("on", on); scrim.classList.toggle("on", on); }
 
-function openOrder(ref) {
+function openOrder(ref, keepTab) {
   const o = ORDERS.find((x) => x.ref === ref) || ORDERS[0];
+  if (!keepTab) { state.dtab = "resume"; state.confirm = ""; }
+  state.curOrder = o.ref;
+  const idx = ORDERS.indexOf(o); const prev = ORDERS[idx - 1], next = ORDERS[idx + 1];
   const steps = ["Payée", "À préparer", "Gravure", "Expédiée", "Livrée"];
   const now = { prep: 1, grav: 2, exp: 3, liv: 4 }[o.st];
   const d = document.getElementById("drawer");
-  d.innerHTML = `<div class="dh"><h2><span class="ref">${o.ref}</span></h2><span class="pill ${ST[o.st][0]}">${ST[o.st][1]}</span><button class="ibtn" type="button" data-close aria-label="Fermer">${I("x")}</button></div>
-  <div class="db">
+  const T = state.dtab;
+  const resume = `
     ${o.exp ? `<div class="alertbox">${I("bolt")}Express Chronopost : à graver en priorité</div>` : ""}
     <ol class="steps">${steps.map((x, i) => `<li class="${i < now ? "done" : i === now ? "now" : ""}">${x}</li>`).join("")}</ol>
-    <div class="card"><div class="ch">À graver</div><div style="padding:14px;display:flex;gap:14px;align-items:flex-start">${IMG[o.img] ? `<img src="${IMG[o.img]}" alt="" style="width:88px;height:88px;border-radius:10px;object-fit:cover">` : ""}<div class="engr" style="flex:1;min-width:0"><div><span>Article</span><span>${esc(o.art)}</span></div><div><span>Gravure</span><span>${esc(o.det)}</span></div><div><span>Écriture</span><span>Playfair</span></div><div><span>Face</span><span>Face avant, centrée</span></div></div></div></div>
-    <div class="card"><div class="ch">Vendu en plus</div><div style="padding:12px 16px" class="sub2">${o.img === "coeurs3" ? "Sac cadeau · 1,20 €" : "Rien de plus"}</div></div>
-    <div class="grid" style="grid-template-columns:1fr 1fr;gap:14px"><div class="card" style="padding:14px"><h4 style="margin:0 0 6px;font-size:12px;color:var(--muted)">CLIENTE</h4><b>${esc(o.nom)}</b><div class="sub2">2 commandes · dossier complet</div></div><div class="card" style="padding:14px"><h4 style="margin:0 0 6px;font-size:12px;color:var(--muted)">LIVRAISON</h4><b>${o.liv}</b><div class="sub2">${o.exp ? "Chrono 18 · 14,90 €" : "Adresse vérifiée"}</div></div></div>
-    <div class="card"><div class="ch">Conditionnement<span class="grow"></span><span class="sub2">gain estimé ${eur(o.total * .48)}</span></div><div style="padding:12px 16px" class="sub2">Carton 25 × 20 × 15 · chips de calage · étiquette FRAGILE</div></div>
-    <div class="acts"><button class="btn pri" type="button" data-toast="Passée en gravure">${I("check")}Commencer la gravure</button><button class="btn" type="button" data-toast="Fiche envoyée à l'impression">${I("print")}Imprimer la fiche</button><button class="btn" type="button" data-go="commandes:etiquettes">Étiquette</button><button class="btn" type="button" data-toast="Raté noté, stock mis à jour">Raté, à refaire</button></div>
-  </div>`;
+    <div class="card"><div class="ch">À graver<span class="grow"></span><button class="lnk" type="button" data-toast="PNG, SVG et PDF téléchargés">Fichiers à graver</button></div><div style="padding:14px;display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">${IMG[o.img] ? `<img src="${IMG[o.img]}" alt="" style="width:88px;height:88px;border-radius:10px;object-fit:cover">` : ""}<div class="engr" style="flex:1;min-width:200px"><div><span>Article</span><span>${esc(o.art)}</span></div><div><span>Gravure</span><span>${esc(o.det)}</span></div><div><span>Écriture</span><span>Playfair</span></div><div><span>Face</span><span>Face avant, centrée</span></div></div></div></div>
+    <div class="card"><div class="ch">Vendu en plus</div><div style="padding:12px 16px" class="sub2">${o.img === "coeurs3" ? "📦 Sac cadeau · 1,20 €" : o.img === "cristal" ? "📦 Socle LED grand · 19,90 €" : "Rien de plus"}</div></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:14px"><div class="card" style="padding:14px"><h4 style="margin:0 0 6px;font-size:12px;color:var(--muted)">CLIENTE</h4><b>${esc(o.nom)}</b><div class="sub2">2 commandes · <button class="lnk" type="button" data-go="clients:crm">dossier</button></div></div><div class="card" style="padding:14px"><h4 style="margin:0 0 6px;font-size:12px;color:var(--muted)">LIVRAISON</h4><b>${o.liv}</b><div class="sub2">${o.exp ? "Chrono 18 · 14,90 €" : "Adresse vérifiée"}</div></div></div>
+    <div class="card"><div class="ch">Conditionnement<span class="grow"></span><span class="sub2">gain estimé ${eur(o.total * .48)}</span></div><div style="padding:12px 16px" class="sub2">Carton 25 × 20 × 15 · chips de calage · étiquette FRAGILE ${btn("Modifier", "sm ghost", 'data-toast="Fenêtre de conditionnement"')}</div></div>
+    ${state.confirm === "grav" ? `<div class="confirm">Passer ${o.ref} en gravure ?${btn("Oui, commencer", "sm pri", 'data-confirm-ok')}${btn("Non", "sm", 'data-confirm-no')}</div>` : `<div class="acts">${o.st === "prep" ? btn(I("check") + "Commencer la gravure", "pri", "data-confirm=\"grav\"") : o.st === "grav" ? btn(I("truck") + "Expédier avec un n° de suivi", "pri", 'data-toast="Expédiée, cliente prévenue"') : ""}${btn(I("print") + "Imprimer la fiche", "", 'data-toast="Fiche envoyée à l\'impression"')}${btn("Étiquette", "", 'data-go="commandes:etiquettes"')}${btn("Raté, à refaire", "", 'data-toast="Raté noté, stock mis à jour"')}</div>`}`;
+  const messages = `<div class="msgs" style="padding:0"><div class="msg"><small>${esc(o.nom)} · il y a 2 h</small>Bonjour, je vous renvoie la photo en meilleure qualité pour la gravure. Merci !</div><div class="msg me"><small>Niv Création · il y a 1 h</small>Bonjour, merci pour votre photo, elle est bien nette, nous l'utiliserons pour la gravure. Belle journée.</div></div><div class="draft"><div class="h">${I("mail")}Écrire à ${esc(o.nom)}</div><textarea id="dmsg" placeholder="Votre message part avec le bouton « Répondre à ce message »."></textarea><div class="acts">${btn(I("check") + "Envoyer", "pri", 'data-toast="Message envoyé"')}${btn("Envoyer un aperçu avant gravure", "", 'data-toast="Aperçu envoyé"')}</div></div>`;
+  const histo = `<ul class="tl">${[["Payée · Stripe", o.age], ["E-mail de confirmation envoyé à la cliente", o.age], ["Alerte 🛎️ reçue à l'atelier", o.age], ["Photo relue : aucune date dans l'image", "il y a 2 h"], [o.nom + " a répondu par le bouton « Répondre »", "il y a 2 h"], ["Réponse préparée par l'assistant, à valider", "il y a 2 h"]].map(([t, w]) => `<li>${t}<small>${w}</small></li>`).join("")}</ul>`;
+  d.innerHTML = `<div class="dh"><div style="display:flex;gap:4px">${btn(I("back"), "sm", `data-order="${prev ? prev.ref : o.ref}" ${prev ? "" : "disabled"} aria-label="Commande précédente"`)}${btn(I("arrow"), "sm", `data-order="${next ? next.ref : o.ref}" ${next ? "" : "disabled"} aria-label="Commande suivante"`)}</div><h2><span class="ref">${o.ref}</span> <span class="sub2" style="font-weight:400">· ${esc(o.nom)} · ${eur(o.total)}</span></h2><span class="pill ${ST[o.st][0]}">${ST[o.st][1]}</span><button class="ibtn" type="button" data-close aria-label="Fermer">${I("x")}</button></div>
+  <div class="dtabs">${[["resume", "Résumé"], ["messages", "Messages"], ["histo", "Historique"]].map(([k, l]) => `<button type="button" class="${T === k ? "on" : ""}" data-dtab="${k}">${l}${k === "messages" ? ' <span class="badge" style="height:16px;min-width:16px;font-size:10px">1</span>' : ""}</button>`).join("")}</div>
+  <div class="db">${T === "resume" ? resume : T === "messages" ? messages : histo}</div>`;
   d.classList.add("on"); scrim.classList.add("on");
 }
 
@@ -854,11 +1019,21 @@ document.addEventListener("click", (e) => {
   if (el("#aiBtn")) { closeAll(); openAssistant(); return; }
   if (el("#menuBtn")) { openSide(true); return; }
   if (el("#collapse")) { document.getElementById("app").classList.toggle("mini"); save(); return; }
-  if (el("#editPins")) { const k = state.sec + ":" + (secOf(state.sec) ? tabOf(secOf(state.sec)) : ""); if (label(k)) { state.pins = state.pins.includes(k) ? state.pins.filter((p) => p !== k) : [...state.pins, k].slice(-5); save(); renderSide(); toast(state.pins.includes(k) ? "Écran épinglé" : "Retiré des raccourcis"); } return; }
+  if ((x = el("[data-pin]"))) { const k = x.dataset.pin; state.pins = state.pins.includes(k) ? state.pins.filter((p) => p !== k) : [...state.pins, k].slice(-6); save(); render(); toast(state.pins.includes(k) ? "Écran épinglé dans les raccourcis" : "Retiré des raccourcis"); return; }
+  if ((x = el("[data-sort]"))) { const k = x.dataset.sort; state.sort = state.sort.key === k ? { key: k, dir: -state.sort.dir } : { key: k, dir: 1 }; render(); return; }
+  if ((x = el("[data-cell]"))) { x.classList.toggle("used"); x.classList.remove("next"); relabelSheet(); return; }
+  if (el("[data-sheet-new]")) { document.querySelectorAll("#sheet button").forEach((b) => b.classList.remove("used")); relabelSheet(); toast("Feuille neuve"); return; }
+  if (el("[data-sheet-shift]")) { const first = [...document.querySelectorAll("#sheet button")].find((b) => !b.classList.contains("used")); if (first) first.classList.add("used"); relabelSheet(); return; }
+  if ((x = el("[data-dtab]"))) { state.dtab = x.dataset.dtab; openOrder(state.curOrder, true); return; }
+  if ((x = el("[data-confirm]"))) { state.confirm = x.dataset.confirm; openOrder(state.curOrder, true); return; }
+  if (el("[data-confirm-no]")) { state.confirm = ""; openOrder(state.curOrder, true); return; }
+  if (el("[data-confirm-ok]")) { const o = ORDERS.find((q) => q.ref === state.curOrder); if (o) o.st = "grav"; state.confirm = ""; toast("Passée en gravure"); openOrder(state.curOrder, true); render(); return; }
+  if (el("[data-ai]")) { closeAll(); openAssistant(); return; }
   if (el("#bell")) { const p = document.getElementById("bellPop"); p.hidden = !p.hidden; if (!p.hidden) p.innerHTML = `<ul class="todo"><li class="t-bad"><span class="ic">${I("bolt")}</span><span class="tx"><b>Commande Express</b><span>3K7QX2LM · il y a 2 h</span></span></li><li class="t-gold"><span class="ic">${I("mail")}</span><span class="tx"><b>Camille R. a répondu</b><span>10 h 12</span></span></li><li class="t-warn"><span class="ic">${I("box")}</span><span class="tx"><b>Sac blanc et or presque épuisé</b><span>4 restants</span></span></li></ul>`; return; }
   if (el("#scrim")) { closeAll(); openSide(false); return; }
   const tr = el("tbody tr[data-order]"); if (tr && !el("input")) { openOrder(tr.dataset.order); return; }
 });
+function relabelSheet() { let n = 0; document.querySelectorAll("#sheet button").forEach((b) => { b.classList.remove("next"); if (!b.classList.contains("used") && n < 3) { b.classList.add("next"); n++; } }); }
 function dirty() { const b = document.getElementById("savebar"); if (b) { b.hidden = false; } }
 document.addEventListener("input", (e) => {
   if (e.target.id === "palIn") { palSel = 0; renderPal(); }
@@ -878,6 +1053,8 @@ document.addEventListener("keydown", (e) => {
   }
   if (typing) return;
   if (e.key === "/") { e.preventDefault(); openPal(); return; }
+  if (e.key === "?") { e.preventDefault(); const sh = document.getElementById("shortcuts"); sh.classList.toggle("on"); return; }
+  if (state.curOrder && document.getElementById("drawer").classList.contains("on") && (e.key === "j" || e.key === "k")) { const i = ORDERS.findIndex((q) => q.ref === state.curOrder); const n = ORDERS[i + (e.key === "j" ? 1 : -1)]; if (n) openOrder(n.ref); return; }
   if (e.key.toLowerCase() === "g") { keydown.g = Date.now(); return; }
   if (keydown.g && Date.now() - keydown.g < 900) { const m = { c: "commandes", m: "messages", p: "catalogue", a: "accueil", f: "finances", s: "stock" }[e.key.toLowerCase()]; keydown.g = 0; if (m) go(m); }
 });

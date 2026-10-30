@@ -513,5 +513,6 @@ En attente de SA décision :
   « nous vous enverrons un e-mail dès que votre colis sera parti, avec son numéro de suivi »). Promesse tenue par l'e-mail
   « expédiée » du site : passer la commande en « Expédiée » AVEC le numéro Mondial Relay.
 ## 🧭 Gestion moderne — MAQUETTE du 29/10/2026, ✅ ENREGISTRÉE telle quelle (version 1), en attente de son « applique »
+- 30/10 : v2 publiée (37 écrans dessinés, panneau à onglets, tri, épingle, aide clavier) — en attente de son avis ; v1 gardée dans l'historique.
 - https://claude.ai/artifact/9vB5Px2dAPAsQocvHLoTYp : 9 sections au lieu de 37 entrées, rien supprimé, recherche ⌘K, raccourcis,
   assistant en panneau, fiche commande en panneau. À trancher : le rangement, Emballages / Matériel séparés, tout au « vous ».

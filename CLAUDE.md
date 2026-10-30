@@ -1,5 +1,5 @@
-## 🧭 MAQUETTE « GESTION MODERNE » — ✅ ENREGISTRÉE TELLE QUELLE LE 29/10/2026 (« Enregistre la maquette », version 1) — RIEN en ligne
-> C'est CETTE version (artifact v1) à reproduire à l'identique le jour de l'« applique » ; ne pas la modifier sans sa demande (règle du 23/07).
+## 🧭 MAQUETTE « GESTION MODERNE » — v1 ENREGISTRÉE LE 29/10/2026, **v2 du 30/10 en attente de son avis** — RIEN en ligne
+> v1 enregistrée telle quelle (« Enregistre la maquette ») ; v2 = ses améliorations demandées le 30/10. Celle à reproduire au « applique » = celle qu'il validera.
 > Gérant : « analyse la page admin… il y a un peu de tout partout, tu supprimes rien… plus fluide, plus professionnel, moderne…
 > cherche comment font les grandes sociétés… fais-moi une maquette, toutes les catégories ».
 - **Artifact** https://claude.ai/artifact/9vB5Px2dAPAsQocvHLoTYp · gabarit `tools/maquettes/gestion-moderne.tpl.html` + générateur
@@ -21,6 +21,16 @@
   clientes, produits & stock, matériel, marketing, bénéfices (graphique), réglages. Les 28 autres sous-onglets montrent ce qu'ils
   gardent. Onglet « Ce qui change » = tableau des 37 écrans (ancien nom → nouvelle place). Données = exemples.
 - Vérifié Chromium 1280 / 390, clair et sombre : 0 débordement, 0 erreur JS, 37 sous-onglets rendus, recherche « etiq » → Étiquettes.
+- ✅ **v2 (30/10/2026, gérant : « regarde si tu peux améliorer des trucs comme je t'ai demandé »)** — même artifact, VERSION 2 (la v1
+  reste dans l'historique) : **les 37 écrans sont dessinés** (plus aucun « écran conservé » en squelette : atelier avec fichiers, étiquettes
+  avec la feuille 4 × 5 à cases touchables, devis, envois & modèles, avis à valider, fidélité, favoris, connexions, restaurants, visibilité
+  par univers / rayon, catégories & ordre, gravure, réglage des aperçus (4 outils réunis + cadre sur la photo), tailles, santé, emballages,
+  achats, codes promo, offre gravure avec « Connectée ? », étude de marché, ventes, visiteurs (entonnoir), compta, apparence, livraison,
+  agents) · **fiche commande en panneau à 3 onglets** (Résumé / Messages / Historique), flèches commande précédente / suivante (touches
+  J / K), **confirmation en ligne** avant « Commencer la gravure » (jamais de fenêtre système) · **tri des colonnes** (commande, cliente,
+  statut, total) · bouton **« Épingler »** sur chaque écran (remplace le « Modifier » du menu) · **aide clavier « ? »** · date du jour
+  calculée · fil d'Ariane cliquable · aucune liste vide sans message. Vérifié Chromium 1280 / 390 : 37 / 37 écrans, 0 débordement,
+  0 erreur JS, tri, cases de la feuille, épingle, onglets du panneau, J, « ? ». En attente de son avis.
 - **À trancher par lui** : le rangement proposé, garder « Emballages » et « Matériel » séparés, passer tout Gestion au « vous ».
   Au « applique » : `AdminShell.jsx` (NAV en 9 sections + sous-onglets, raccourcis, ⌘K déjà amorcé par `RechercheUniverselle`),
   les adresses actuelles /gestion/* gardées.
