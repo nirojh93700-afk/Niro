@@ -518,5 +518,6 @@ En attente de SA décision :
   matin, état du système, fil client + résumé IA, boîte triée, veille prix, rapprochement Stripe, tournée du jour, QR, liste de contrôle, vue date
   limite, journal + annuler, photo de la pièce, bandeau persistant, édition en ligne, voix, palette qui agit) — 41 écrans, en attente de son avis.
   ⛔ À la mise en ligne (règle du gérant du 30/10) : aucun réglage existant ne bouge (prix, cadres des aperçus, livraison, fêtes…), export avant / après.
+- 30/10 : **autre version de l'accueil (B, téléphone d'abord)** dans une page à part (`gestion-accueil-b.py`, bouton Version A / B) — il choisit A ou B.
 - https://claude.ai/artifact/9vB5Px2dAPAsQocvHLoTYp : 9 sections au lieu de 37 entrées, rien supprimé, recherche ⌘K, raccourcis,
   assistant en panneau, fiche commande en panneau. À trancher : le rangement, Emballages / Matériel séparés, tout au « vous ».

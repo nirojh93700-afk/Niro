@@ -54,6 +54,14 @@
   risquées · palette ⌘K avec **commandes rapides** confirmées (« Éteindre Noël », « Stock X = N » tapé) · assistant : contexte de l'écran +
   **micro** (dictée simulée). Onglet « Ce qui change » : tableau des 20 nouveautés + leur place. Vérifié Chromium 1280 / 390
   (`scratchpad/t-gm3.mjs`, 42 / 42 écrans, 0 débordement, 0 erreur JS, 40 vérifications d'interaction). En attente de son avis.
+- 🆕 **AUTRE VERSION DE L'ACCUEIL « AUJOURD'HUI » (30/10/2026, gérant : « ça fait trop bizarre sur le portable, garde cette version, montre-moi une
+  autre version, juste la page d'accueil »)** : la v3 n'est PAS modifiée. Page À PART `docs/maquettes/gestion-accueil-b.html` (ignorée par git),
+  générateur `tools/maquettes/gestion-accueil-b.py` (lit la page v3 générée et ajoute un bouton **Version A / Version B** sur l'accueil ; le reste
+  de la maquette est identique). **Version B = téléphone d'abord** : « Bonjour » + 4 pastilles (1 Express · 7 à traiter · 4 à valider · 2 à racheter),
+  bandeau « nouvelle commande » en une ligne, chiffres en cartes qui glissent, « À faire » = UN groupe à la fois (pavés Urgent · Aujourd'hui ·
+  Cette semaine · Surveillance · Tout), une seule grande action par ligne + menu « ··· » (Pourquoi · Ignorer avec motif · Plus tard), dernières
+  commandes en cartes (plus de tableau), résumé du matin, activité et chiffres du mois repliés. Vérifié Chromium 1280 / 390 (`scratchpad/t-hb.mjs`) :
+  0 débordement, 0 erreur, filtres, menu, ignorer + annuler, bascule A/B, autres écrans inchangés. En attente de son choix (A ou B).
   Au « applique » : `AdminShell.jsx` (NAV en 9 sections + sous-onglets, raccourcis, ⌘K déjà amorcé par `RechercheUniverselle`),
   les adresses actuelles /gestion/* gardées.
 - ⛔⛔ **RÈGLE DU GÉRANT POUR LA MISE EN LIGNE DE GESTION (30/10/2026 : « il faut pas que tu modifies tous les réglages qu'on a
