@@ -68,7 +68,7 @@ const GROUPES = [["urgent", "Urgent", "bad"], ["jour", "Aujourd'hui", ""], ["sem
 export default function AccueilB({
   orders = [], validOrders = [], pendingList = [], unreadMeta = [], quotes = [], pendingReviews = 0,
   salesGoal = 0, rows = [], adminKey = "", urssaf = null, photoProduit = () => "",
-  onTab = () => {}, onOpenOrder = () => {}, apresAFaire = null, children,
+  onTab = () => {}, onOpenOrder = () => {}, onRetires = () => {}, adminKeyRetirer = "", apresAFaire = null, children,
 }) {
   const now = Date.now();
   const [groupe, setGroupe] = useState("urgent");
@@ -129,6 +129,7 @@ export default function AccueilB({
     b: `${plur(pendingTard.length + unreadTard.length, "message")} attend${pendingTard.length + unreadTard.length > 1 ? "ent" : ""} depuis plus de 24 h`,
     s: liste([...pendingTard.map((p) => p.name || p.email || "Cliente"), ...unreadTard.map((u) => u.customerName || u.customerEmail || u.ref)]),
     a: "Relire", href: pendingTard.length ? "/gestion/assistant" : "/gestion/fiches",
+    retirer: { ids: pendingTard.map((p) => p.id), orderIds: unreadTard.map((u) => u.orderId) },
     why: "Une cliente sans réponse plus d'une journée s'inquiète. Les réponses préparées n'attendent que votre relecture." });
   if (bientot.length) add({ id: "bientot", g: "jour", c: "t-warn", ic: "orders",
     b: `${plur(bientot.length, "commande")} à expédier aujourd'hui ou demain`,
@@ -140,12 +141,14 @@ export default function AccueilB({
     b: `${plur(pendingFrais.length, "réponse")} de l'assistant à valider`,
     s: liste(pendingFrais.map((p) => p.name || p.email || "Cliente")),
     a: "Relire", href: "/gestion/assistant",
+    retirer: { ids: pendingFrais.map((p) => p.id), orderIds: [] },
     why: "L'assistant a lu chaque message et son dossier (commande, devis, échanges). Rien ne part sans vous." });
   const unreadFrais = unreadMeta.filter((u) => !unreadTard.includes(u));
   if (unreadFrais.length) add({ id: "unread", g: "jour", c: "t-gold", ic: "mail",
     b: `${plur(unreadFrais.length, "réponse")} de cliente${unreadFrais.length > 1 ? "s" : ""} à lire`,
     s: liste(unreadFrais.map((u) => `${u.customerName || u.customerEmail || "Cliente"} · ${u.ref || ""}`)),
     a: "Ouvrir la commande", onClick: () => onOpenOrder(unreadFrais[0].orderId),
+    retirer: { ids: [], orderIds: unreadFrais.map((u) => u.orderId) },
     why: "La cliente a répondu dans le fil de sa commande (bouton « Répondre » de l'e-mail)." });
   if (devis.n) add({ id: "devis", g: "jour", c: "t-info", ic: "euro",
     b: `${plur(devis.n, "devis")} en attente · ${formatEuro(devis.total)}`,
@@ -191,6 +194,23 @@ export default function AccueilB({
     const n = { ...later, [id]: new Date().toDateString() };
     setLater(n); setMenu("");
     try { localStorage.setItem(LATER, JSON.stringify(n)); } catch { /* stockage indisponible */ }
+  }
+  const [retrait, setRetrait] = useState("");
+  async function retirerPoint(it) {
+    const { ids = [], orderIds = [] } = it.retirer || {};
+    const n = ids.length + orderIds.length;
+    if (!n || !confirm(`Retirer ces ${n} message${n > 1 ? "s" : ""} de l'accueil ?\n\nRien n'est supprimé ni envoyé : ils restent dans chaque commande, le dossier de la cliente et la boîte mail.`)) return;
+    setRetrait(it.id);
+    const H = { "Content-Type": "application/json", "x-admin-key": adminKeyRetirer || adminKey };
+    try {
+      const [a, b] = await Promise.all([
+        ids.length ? fetch("/api/admin/pending-replies", { method: "POST", headers: H, body: JSON.stringify({ action: "traite", ids }) }) : null,
+        orderIds.length ? fetch("/api/admin/bat", { method: "POST", headers: H, body: JSON.stringify({ action: "lu", orderIds }) }) : null,
+      ]);
+      onRetires({ ids: a && a.ok ? ids : [], orderIds: b && b.ok ? orderIds : [] });
+      setMenu("");
+    } catch { /* le toast global signale l'échec */ }
+    finally { setRetrait(""); }
   }
   function vuUrg() { setUrgVu(true); try { sessionStorage.setItem("niv-accueil-urg", urg.id); } catch { /* idem */ } }
 
@@ -296,6 +316,7 @@ export default function AccueilB({
                   {menu === it.id ? (
                     <div className="hb-menu">
                       <button type="button" className="hb-btn sm" onClick={() => setPourquoi(pourquoi === it.id ? "" : it.id)}>Pourquoi c&apos;est là</button>
+                      {it.retirer ? <button type="button" className="hb-btn sm" disabled={retrait === it.id} onClick={() => retirerPoint(it)}>{retrait === it.id ? "…" : "🗑 Retirer ces messages"}</button> : null}
                       <button type="button" className="hb-btn sm ghost" onClick={() => plusTard(it.id)}>Plus tard (demain)</button>
                     </div>
                   ) : null}

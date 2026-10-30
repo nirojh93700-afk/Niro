@@ -1530,6 +1530,21 @@ export async function markBatRead(orderId) {
   return true;
 }
 
+// Plusieurs fils marqués lus d'un coup (bouton « Retirer » de l'accueil, 30/10/2026). Une seule écriture.
+// Ne supprime RIEN : les messages restent dans le fil de chaque commande.
+export async function markBatReadMany(orderIds) {
+  const ids = [...new Set((orderIds || []).map((x) => String(x || "").trim()).filter(Boolean))];
+  if (!ids.length) return 0;
+  const data = await getCatalogRaw(true);
+  let n = 0;
+  for (const id of ids) {
+    const th = (data.bat || {})[id];
+    if (th && th.clientUnread) { th.clientUnread = false; data.bat[id] = th; n++; }
+  }
+  if (n) await persistCatalog(data, ["bat"]);
+  return n;
+}
+
 // Journalise un e-mail ENVOYÉ à la cliente dans le fil de sa commande (suivi de
 // tous les messages). Léger : n'ajoute qu'une entrée « atelier » et NE TOUCHE PAS
 // au statut du BAT ni à la pastille « non lu » (ce n'est qu'un journal d'envoi).

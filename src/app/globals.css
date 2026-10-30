@@ -5413,3 +5413,6 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 @media (min-width: 1101px) { .hb-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; } .hb-kpi { flex: auto; } }
 @media (max-width: 1100px) { .hb-grid { grid-template-columns: 1fr; } }
 @media (max-width: 900px) { .hb-hero h1 { font-size: 1.45rem; } .hb-it .row2 .hb-btn { max-width: none; } }
+/* « Tout retirer » dans l'en-tête des messages à traiter (30/10/2026). */
+.dq-head-acts { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 720px) { .dq-msgs .dash-ph { flex-wrap: wrap; gap: 8px; } }

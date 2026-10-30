@@ -808,6 +808,11 @@ export default function GestionPage({ onglet = "" } = {}) {
   });
   const hasBlocStock = blocStockRows.some((b) => b.stock !== null);
   const blocMax = Math.max(1, ...blocStockRows.map((b) => b.stock || 0));
+  // Messages retirés de l'accueil (bouton « Retirer » / « Tout retirer ») : on les enlève de l'écran aussitôt.
+  const retirerMessages = ({ ids = [], orderIds = [] } = {}) => {
+    if (ids.length) { const s = new Set(ids); setPendingList((l) => l.filter((x) => !s.has(x.id))); setPendingReplies((n) => Math.max(0, n - ids.length)); }
+    if (orderIds.length) { const s = new Set(orderIds); setUnreadMeta((u) => u.filter((x) => !s.has(x.orderId))); setBatUnread((u) => u.filter((x) => !s.has(x))); }
+  };
   const ruptures = rows.filter((r) => typeof r.stock === "number" && r.stock === 0);
   const lowStock = rows.filter((r) => typeof r.stock === "number" && r.stock > 0 && r.stock <= 5);
 
@@ -853,6 +858,8 @@ export default function GestionPage({ onglet = "" } = {}) {
                 return { montant: caToDeclare, periode: `${MOIS[_prevMois.getMonth()]} ${_prevMois.getFullYear()}`, deadline: `${lastDay.getDate()} ${MOIS[lastDay.getMonth()]}`, daysLeft: Math.max(0, Math.ceil((lastDay - now) / 86400000)) };
               })()}
               onTab={(t) => setTab(t)}
+              adminKeyRetirer={key}
+              onRetires={retirerMessages}
               onOpenOrder={(orderId) => {
                 setTab("commandes");
                 setOpenOrders((prev) => new Set([...prev, orderId]));
@@ -866,6 +873,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                   unread={unreadMeta}
                   adminKey={key}
                   onClasse={(id) => { setPendingList((l) => l.filter((x) => x.id !== id)); setPendingReplies((n) => Math.max(0, n - 1)); }}
+                  onRetires={retirerMessages}
                   onOpenOrder={(orderId) => {
                     setTab("commandes");
                     setOpenOrders((prev) => new Set([...prev, orderId]));

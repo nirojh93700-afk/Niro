@@ -35,6 +35,12 @@ export async function POST(req) {
   try { body = await req.json(); } catch { /* corps vide */ }
   const action = String(body.action || "");
   const id = String(body.id || "");
+  // Plusieurs d'un coup (« Tout retirer » de l'accueil) : classées « traitées », rien n'est envoyé.
+  if (action === "traite" && Array.isArray(body.ids)) {
+    const ids = new Set(body.ids.map(String));
+    const n = await classerPendingSi((r) => ids.has(r.id), "traite");
+    return Response.json({ ok: true, classes: n });
+  }
   if (!["pub", "traite"].includes(action) || !id) return Response.json({ error: "Action inconnue." }, { status: 400 });
   const all = await listPendingReplies();
   const it = all.find((r) => r.id === id);

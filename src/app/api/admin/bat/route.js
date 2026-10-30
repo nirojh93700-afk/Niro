@@ -1,4 +1,4 @@
-import { isAdmin, getBatThread, batAtelierMessage, resetBatThread, batImportEmails, getGmailCreds, getBatThreadsMeta, markBatRead, logComm } from "@/lib/stock";
+import { isAdmin, getBatThread, batAtelierMessage, resetBatThread, batImportEmails, getGmailCreds, getBatThreadsMeta, markBatRead, markBatReadMany, logComm } from "@/lib/stock";
 import { sendEmail, batProofEmail, BRAND } from "@/lib/email";
 import { gmailAccessToken, gmailListFromSender, gmailListInboxIds, gmailGetMessage, gmailSendHtml } from "@/lib/gmail";
 import { getSiteOrder } from "@/lib/firebase";
@@ -118,6 +118,12 @@ export async function POST(req) {
   if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
+  // « Retirer » depuis l'accueil : la réponse de la cliente passe en « lue » (rien n'est supprimé ni envoyé).
+  if (body?.action === "lu") {
+    const ids = Array.isArray(body.orderIds) ? body.orderIds : [body.orderId];
+    const n = await markBatReadMany(ids);
+    return Response.json({ ok: true, lus: n });
+  }
   const orderId = String(body?.orderId || "").trim();
   const text = String(body?.text || "").trim();
   const image = String(body?.image || "").trim();

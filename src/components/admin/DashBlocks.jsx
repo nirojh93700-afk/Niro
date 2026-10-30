@@ -59,7 +59,7 @@ export function BandeauDelai({ vacation, adminKey, onRegler, onEteint }) {
 // préparé — « Pub » (l'expéditeur est ignoré pour toujours) et « Traité ».
 // L'agent classe aussi tout seul ce qui n'a plus rien à faire ici (côté serveur).
 const VISIBLES = 5;
-export function MessagesATraiter({ pending = [], unread = [], onOpenOrder, adminKey = "", onClasse }) {
+export function MessagesATraiter({ pending = [], unread = [], onOpenOrder, adminKey = "", onClasse, onRetires }) {
   const now = Date.now();
   const [tout, setTout] = useState(false);
   const [busy, setBusy] = useState("");
@@ -89,6 +89,7 @@ export function MessagesATraiter({ pending = [], unread = [], onOpenOrder, admin
         chip: ["réponse non lue", "rep"],
         at: Number(u.lastClientAt) || 0,
         action: { label: "Ouvrir la commande", onClick: () => onOpenOrder?.(u.orderId, u.ref) },
+        orderId: u.orderId,
       });
     }
     // Les plus anciennes en premier : c'est elles qui pressent.
@@ -109,6 +110,29 @@ export function MessagesATraiter({ pending = [], unread = [], onOpenOrder, admin
     finally { setBusy(""); }
   }
 
+  // « Retirer » (30/10/2026, gérant : « un bouton pour supprimer, ça fait trop sur la page d'accueil ») :
+  // enlève de l'accueil SANS rien effacer. Réponse préparée → classée « traitée » ; réponse de cliente →
+  // marquée « lue ». Les messages restent dans la commande, le dossier de la cliente et la boîte mail.
+  async function retirer(rs) {
+    const ids = rs.filter((r) => r.classable && r.id).map((r) => r.id);
+    const orderIds = rs.filter((r) => r.orderId).map((r) => r.orderId);
+    if (!ids.length && !orderIds.length) return;
+    setBusy(rs.length > 1 ? "tout" : rs[0].key);
+    const H = { "Content-Type": "application/json", "x-admin-key": adminKey };
+    try {
+      const [a, b] = await Promise.all([
+        ids.length ? fetch("/api/admin/pending-replies", { method: "POST", headers: H, body: JSON.stringify({ action: "traite", ids }) }) : null,
+        orderIds.length ? fetch("/api/admin/bat", { method: "POST", headers: H, body: JSON.stringify({ action: "lu", orderIds }) }) : null,
+      ]);
+      onRetires?.({ ids: a && a.ok ? ids : [], orderIds: b && b.ok ? orderIds : [] });
+    } catch { /* le toast global signale l'échec */ }
+    finally { setBusy(""); }
+  }
+  function toutRetirer() {
+    if (!confirm(`Retirer les ${lignes.length} messages de l'accueil ?\n\nRien n'est supprimé ni envoyé : ils restent dans chaque commande, le dossier de la cliente et la boîte mail.`)) return;
+    retirer(lignes);
+  }
+
   const visibles = tout ? lignes : lignes.slice(0, VISIBLES);
   const reste = lignes.length - visibles.length;
 
@@ -116,7 +140,10 @@ export function MessagesATraiter({ pending = [], unread = [], onOpenOrder, admin
     <div className="dash-panel dq-msgs">
       <div className="dash-ph">
         <h3>📬 Messages à traiter {lignes.length > 0 ? <span className="dq-count">{lignes.length}</span> : null}</h3>
-        <a href="/gestion/messages" style={{ background: "none", border: "none", font: "600 0.8rem system-ui", color: "var(--gold-dark)", textDecoration: "none" }}>Tous les messages →</a>
+        <span className="dq-head-acts">
+          {lignes.length > 0 ? <button type="button" className="dq-mini" disabled={busy === "tout"} onClick={toutRetirer} title="Retirer tous les messages de l'accueil (rien n'est supprimé)">{busy === "tout" ? "…" : "🗑 Tout retirer"}</button> : null}
+          <a href="/gestion/messages" style={{ background: "none", border: "none", font: "600 0.8rem system-ui", color: "var(--gold-dark)", textDecoration: "none" }}>Tous les messages →</a>
+        </span>
       </div>
       {lignes.length === 0 ? (
         <p className="dq-vide">Aucun message en attente — tout est traité.</p>
@@ -133,6 +160,8 @@ export function MessagesATraiter({ pending = [], unread = [], onOpenOrder, admin
                   <button type="button" className="dq-mini pub" disabled={busy === r.key} onClick={() => classer(r, "pub")} title="Pub ou notification : ne plus jamais afficher cet expéditeur">🚫 Pub</button>
                   <button type="button" className="dq-mini" disabled={busy === r.key} onClick={() => classer(r, "traite")} title="Déjà réglé : retirer de la liste">✓ Traité</button>
                 </>
+              ) : r.orderId ? (
+                <button type="button" className="dq-mini" disabled={busy === r.key} onClick={() => retirer([r])} title="Retirer de l'accueil (le message reste dans la commande)">🗑 Retirer</button>
               ) : null}
               {r.action.href
                 ? <a className={`dq-go${r.action.gold ? "" : " l"}`} href={r.action.href}>{r.action.label}</a>
