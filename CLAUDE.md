@@ -1,3 +1,29 @@
+## 🧭 MAQUETTE « GESTION MODERNE » — ✅ ENREGISTRÉE TELLE QUELLE LE 29/10/2026 (« Enregistre la maquette », version 1) — RIEN en ligne
+> C'est CETTE version (artifact v1) à reproduire à l'identique le jour de l'« applique » ; ne pas la modifier sans sa demande (règle du 23/07).
+> Gérant : « analyse la page admin… il y a un peu de tout partout, tu supprimes rien… plus fluide, plus professionnel, moderne…
+> cherche comment font les grandes sociétés… fais-moi une maquette, toutes les catégories ».
+- **Artifact** https://claude.ai/artifact/9vB5Px2dAPAsQocvHLoTYp · gabarit `tools/maquettes/gestion-moderne.tpl.html` + générateur
+  `tools/maquettes/gestion-moderne.py` (logo d'origine `public/logo-niv-creation.jpg` intact, vignettes produits/matériel) ·
+  sortie `docs/maquettes/gestion-moderne.html` (ignorée par git, se régénère).
+- **Constat** : 37 entrées dans 7 groupes, doublons d'idée (Emballages / Matériel & emballages · Messages / Boîte mail / Assistant ·
+  Réglages / Réglages produits · File / Fiches / Atelier), icônes en double (◎ ✦ ⚙), écrans qui disent « tu » et d'autres « vous ».
+- **Proposition (rien supprimé, 37 écrans → 9 sections avec sous-onglets)** : Aujourd'hui · Commandes (file, fiches, atelier,
+  étiquettes, devis) · Messages (boîte de réception, réponses à valider, envois & modèles) · Clients (clientes, avis, fidélité,
+  favoris, connexions, restaurants) · Catalogue (produits & stock, visibilité, catégories, gravure, réglage des aperçus, tailles,
+  santé) · Stock & achats (matériel, emballages vendus, achats & factures) · Marketing (newsletter, codes promo, offre gravure, étude
+  de marché) · Finances (bénéfices, ventes, visiteurs, inventaire & compta) · Réglages (boutique, apparence, livraison, agents).
+  Assistant = bouton en haut de chaque écran (panneau à droite, comme Shopify Sidekick 2026).
+- **Repris des grands back-offices** : accueil « À faire maintenant » classé par urgence (Etsy 2025) · recherche ⌘K / Ctrl+K / « / »
+  qui ouvre écrans, actions et commandes (Linear, Railway) · raccourcis épinglés + écrans récents (Stripe) · menu réductible à ses
+  icônes (Shopify 2026) · fiche commande en panneau à droite · vues enregistrées avec compteurs + actions groupées · barre
+  « Enregistrer » qui apparaît dès qu'un réglage change · 5 onglets en bas sur téléphone · icônes dessinées d'une seule famille.
+- Écrans dessinés en entier : Aujourd'hui, file de production + fiche en panneau, boîte de réception avec réponse préparée,
+  clientes, produits & stock, matériel, marketing, bénéfices (graphique), réglages. Les 28 autres sous-onglets montrent ce qu'ils
+  gardent. Onglet « Ce qui change » = tableau des 37 écrans (ancien nom → nouvelle place). Données = exemples.
+- Vérifié Chromium 1280 / 390, clair et sombre : 0 débordement, 0 erreur JS, 37 sous-onglets rendus, recherche « etiq » → Étiquettes.
+- **À trancher par lui** : le rangement proposé, garder « Emballages » et « Matériel » séparés, passer tout Gestion au « vous ».
+  Au « applique » : `AdminShell.jsx` (NAV en 9 sections + sous-onglets, raccourcis, ⌘K déjà amorcé par `RechercheUniverselle`),
+  les adresses actuelles /gestion/* gardées.
 ## 🎄 RUBRIQUE « FÊTES » DANS GESTION (NOËL D'ABORD) — ✅ MAQUETTE ENREGISTRÉE TELLE QUELLE LE 28/10/2026 (« enregistre la maquette », version 1) — RIEN en ligne
 > Gérant : « un nouveau truc pour Noël… des gravures vraiment pour Noël… des sacs, des boîtes pour Noël… que pour les verres, la carafe,
 > les supports téléphone, le cristal, tout ce qui est gravure, pas le mariage, pas les bijoux… dès que je décoche, tout ce qui a rapport

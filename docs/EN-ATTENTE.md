@@ -512,3 +512,6 @@ En attente de SA décision :
 - Elle a demandé une date de livraison : réponse partie par le site le 28/10 à 18 h 15 (fabrication 3 à 5 jours ouvrés,
   « nous vous enverrons un e-mail dès que votre colis sera parti, avec son numéro de suivi »). Promesse tenue par l'e-mail
   « expédiée » du site : passer la commande en « Expédiée » AVEC le numéro Mondial Relay.
+## 🧭 Gestion moderne — MAQUETTE du 29/10/2026, ✅ ENREGISTRÉE telle quelle (version 1), en attente de son « applique »
+- https://claude.ai/artifact/9vB5Px2dAPAsQocvHLoTYp : 9 sections au lieu de 37 entrées, rien supprimé, recherche ⌘K, raccourcis,
+  assistant en panneau, fiche commande en panneau. À trancher : le rangement, Emballages / Matériel séparés, tout au « vous ».
