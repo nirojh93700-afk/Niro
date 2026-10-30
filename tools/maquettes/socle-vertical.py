@@ -69,7 +69,7 @@ EXTRA = """
 .sv-xl{font-size:.88rem;margin:4px 0 8px;color:#7c6120;font-weight:600}
 .sv-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:8px 0}
 .sv-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:3px;min-width:0}
-.sv-card img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:4px}
+.sv-card img{width:100%!important;height:auto!important;max-height:none!important;aspect-ratio:1/1!important;object-fit:contain!important;object-position:center!important;background:#f1e9da;border-radius:8px;margin-bottom:4px}
 .sv-vide{width:100%;aspect-ratio:1;border-radius:8px;margin-bottom:4px;display:grid;place-items:center;
   background:#f3e8d3;color:#7c6120;font-size:.78rem}
 .maq-band{background:#1a1206;color:#e2c67e;font:600 .85rem/1.4 system-ui,sans-serif;padding:10px 16px;text-align:center}
