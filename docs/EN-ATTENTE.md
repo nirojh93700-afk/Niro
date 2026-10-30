@@ -512,7 +512,11 @@ En attente de SA décision :
 - Elle a demandé une date de livraison : réponse partie par le site le 28/10 à 18 h 15 (fabrication 3 à 5 jours ouvrés,
   « nous vous enverrons un e-mail dès que votre colis sera parti, avec son numéro de suivi »). Promesse tenue par l'e-mail
   « expédiée » du site : passer la commande en « Expédiée » AVEC le numéro Mondial Relay.
-## 🧭 Gestion moderne — MAQUETTE du 29/10/2026, ✅ ENREGISTRÉE telle quelle (version 1), en attente de son « applique »
+## 🧭 Gestion moderne — ✅ EN LIGNE LE 30/10/2026 (v3 + accueil version B, « mets en ligne la version B »)
+- Squelette (9 sections + sous-onglets, raccourcis, menu réductible, icônes) et accueil B construits sur les vraies données (voir CLAUDE.md).
+- **Reste à lui demander** : les 4 écrans « Nouveau (v3) » (règles automatiques, notifications & résumé du matin, journal d'activité, état du système),
+  la fiche commande en panneau à droite, la vue par date limite / tournée du jour, l'édition en ligne — rien de tout ça n'est construit.
+### (historique) MAQUETTE du 29/10/2026, enregistrée telle quelle (version 1)
 - 30/10 : v2 publiée (37 écrans dessinés, panneau à onglets, tri, épingle, aide clavier) — en attente de son avis ; v1 gardée dans l'historique.
 - 30/10 : **v3 publiée** = v2 + les 20 nouveautés « plus autonome » (centre d'actions, règles si/alors simulées, réachat calculé, résumé du
   matin, état du système, fil client + résumé IA, boîte triée, veille prix, rapprochement Stripe, tournée du jour, QR, liste de contrôle, vue date
