@@ -1,4 +1,22 @@
-## 🧭 MAQUETTE « GESTION MODERNE » — ✅ ENREGISTRÉE TELLE QUELLE LE 29/10/2026 (« Enregistre la maquette », version 1) — RIEN en ligne
+## 🧭 GESTION MODERNE v3 + ACCUEIL « VERSION B » — ✅ EN LIGNE LE 30/10/2026 (« Oui la plus récente, mets en ligne la version B … fais vraiment attention en Réglages »)
+- Maquette appliquée : https://claude.ai/artifact/KipDFvam6ABJnV2JGc83PN (v3 + accueil B). **`AdminShell.jsx`** : barre latérale encre en
+  **9 sections + sous-onglets** (Aujourd'hui · Commandes · Messages · Clients · Catalogue · Stock & achats · Marketing · Finances · Réglages)
+  + la rubrique **Fêtes** gardée à part ; TOUTES les adresses `/gestion/*` inchangées (« Réglage des aperçus » = `/gestion/reglages` →
+  cristal-reglage / couverts-reglage, PAS TOUCHÉS ; « Réponses à valider » = `/gestion/assistant` ; « Emballages vendus » = `/gestion/emballages`) ;
+  raccourcis épinglés (bouton « Épingler » en haut de chaque écran) + 3 écrans récents, menu réductible à ses icônes, icônes SVG au trait
+  (`Ico`), logo du site `/logo-niv-creation.jpg`, sous-onglets de la section sous la barre du haut, 5 onglets téléphone (Aujourd'hui ·
+  Commandes · Messages · Produits · Plus). Réglages retenus sur l'appareil (`localStorage niv-gestion-menu`). CSS `.ash-*` réécrit aux tokens
+  de la maquette (`--ash-*`), `.hb-*` ajouté en fin de `globals.css`.
+- **Accueil `/gestion` = `src/components/admin/AccueilB.jsx`** : Bonjour + date, pastilles Express / à traiter / à valider / à racheter, bandeau
+  rouge de la dernière commande Express, 4 chiffres du mois (CA, commandes, panier vs mois d'avant, objectif ou devis), **« À faire » groupé
+  Urgent / Aujourd'hui / Cette semaine / Surveillance / Tout** (Express, date limite dépassée — `delaiCommande` —, messages > 24 h, à expédier
+  aujourd'hui/demain, réponses à valider, réponses de clientes, devis, URSSAF, matériel sous seuil, ruptures, avis, santé du catalogue), chacun
+  avec « Pourquoi c'est là » et « Plus tard (demain) » (localStorage) ; Messages à traiter (Pub / Traité) ; dernières commandes (vignette, délai) ;
+  colonne droite : Activité récente, Ce mois en détail, et les anciens blocs en volets (Ventes hors site URSSAF, Stock des blocs cristal, Assistant).
+  ⛔ TOUT vient des vraies données déjà chargées : aucun chiffre inventé. **NON construits (à lui demander)** : les 4 écrans « Nouveau (v3) » de la
+  maquette (règles automatiques, notifications & résumé du matin, journal d'activité, état du système), la fiche commande en panneau à droite.
+- Vérifié Chromium 390 / 1280 (données simulées) : 0 erreur JS, 0 débordement, tiroir, menu réduit, épingler, « Tout » 11 points, « Plus tard ».
+### (historique) MAQUETTE « GESTION MODERNE » — ENREGISTRÉE LE 29/10/2026 (version 1)
 > C'est CETTE version (artifact v1) à reproduire à l'identique le jour de l'« applique » ; ne pas la modifier sans sa demande (règle du 23/07).
 > Gérant : « analyse la page admin… il y a un peu de tout partout, tu supprimes rien… plus fluide, plus professionnel, moderne…
 > cherche comment font les grandes sociétés… fais-moi une maquette, toutes les catégories ».

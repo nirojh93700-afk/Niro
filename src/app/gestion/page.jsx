@@ -5,8 +5,8 @@ import DelaiCommande from "@/components/admin/DelaiCommande";
 import { nomLivraisonDifferent } from "@/lib/nomLivraison";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { formatEuro } from "@/lib/format";
-import { BandeauDelai, BandeauFetes, MessagesATraiter, ChiffresPeriode } from "@/components/admin/DashBlocks";
-import { commandesEnRetard } from "@/lib/dashPeriodes";
+import { BandeauDelai, BandeauFetes, MessagesATraiter } from "@/components/admin/DashBlocks";
+import AccueilB from "@/components/admin/AccueilB";
 import { getCategoryLabel, getProductBySlug } from "@/lib/products";
 import { TableGravure } from "@/lib/engravingSheet";
 import DeclarationReminder from "@/components/admin/DeclarationReminder";
@@ -796,20 +796,6 @@ export default function GestionPage({ onglet = "" } = {}) {
   const segColors = { VIP: "#8a6d3b", "Fidèle": "#256b34", Nouvelle: "#5b6b8a" };
 
   // ---- Tableau de bord (accueil) : données réelles ----
-  const enGravure = orders.filter((o) => !o.test && (o.status || "a_preparer") === "en_gravure").length;
-  // Commandes « à préparer » depuis plus de 14 jours (la plus ancienne en tête).
-  const retards = commandesEnRetard(orders, 14).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-  const recentOrders = [...orders]
-    .filter((o) => !o.test)
-    .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
-    .slice(0, 5);
-  const DASH_CHIPS = {
-    a_preparer: ["prep", "À préparer"], en_gravure: ["grav", "En gravure"],
-    expediee: ["exp", "Expédiée"], livree: ["liv", "Livrée"],
-    remise_main_propre: ["liv", "Remise en main propre"],
-    annulee: ["ann", "Annulée"], remboursee: ["ann", "Remboursée"],
-  };
-  const dashDate = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
   // Stock des blocs cristal (partagé vertical + horizontal) pour le tableau de bord.
   const blocStockRows = [
     { key: "bloc-cristal-petit", label: "Petit" },
@@ -836,12 +822,6 @@ export default function GestionPage({ onglet = "" } = {}) {
         {/* ---------------- ACCUEIL (tableau de bord) ---------------- */}
         {tab === "accueil" && (
           <>
-            {pendingReviews > 0 && (
-              <div className="notice" style={{ background: "#fbf3e6", borderColor: "#e2c67e", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
-                <span>⭐ <b>{pendingReviews} nouvel{pendingReviews > 1 ? "s" : ""} avis à valider</b> — un client a laissé un avis. Validez-le pour qu&apos;il s&apos;affiche sur le site.</span>
-                <button className="btn btn-gold" style={{ padding: "6px 16px" }} onClick={() => setTab("avis")}>Voir les avis →</button>
-              </div>
-            )}
             {/* 🎄 Fêtes : alerte 2 mois avant (Gestion → Fêtes de l'année). */}
             <BandeauFetes fetes={fetesCfg} />
             {/* ② Mode délai allongé : visible tant qu'il est allumé, avec Éteindre. */}
@@ -855,24 +835,24 @@ export default function GestionPage({ onglet = "" } = {}) {
             {/* 🔔 Alertes sur le téléphone (nouvelle commande, réponse de cliente). */}
             <AlertesTelephone adminKey={key} />
 
-            <div className="dash-top">
-              <div className="dash-hi">
-                <h1>Bonjour 👋</h1>
-                <p style={{ textTransform: "capitalize" }}>{dashDate} · voici ce qui se passe sur votre boutique.</p>
-              </div>
-              <div className="dash-actions">
-                <button type="button" className="dash-abtn gold" onClick={() => setTab("produits")}>+ Ajouter un produit</button>
-                <button type="button" className="dash-abtn" onClick={() => setTab("promos")}>🏷️ Remise rapide</button>
-                <button type="button" className="dash-abtn" onClick={() => setTab("stats")}>📊 Statistiques</button>
-              </div>
-            </div>
-
-            {/* ① Les messages qui attendent — en tête, c'est ce qui presse. */}
-            <MessagesATraiter
-              pending={pendingList}
-              unread={unreadMeta}
+            {/* Accueil « version B » (maquette Gestion moderne v3, 30/10/2026) : vraies données, rien d'inventé. */}
+            <AccueilB
+              orders={orders}
+              validOrders={validOrders}
+              pendingList={pendingList}
+              unreadMeta={unreadMeta}
+              quotes={quotes}
+              pendingReviews={pendingReviews}
+              salesGoal={siteSettings.salesGoal}
+              rows={rows}
               adminKey={key}
-              onClasse={(id) => { setPendingList((l) => l.filter((x) => x.id !== id)); setPendingReplies((n) => Math.max(0, n - 1)); }}
+              photoProduit={photoProduit}
+              urssaf={(() => {
+                const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+                const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+                return { montant: caToDeclare, periode: `${MOIS[_prevMois.getMonth()]} ${_prevMois.getFullYear()}`, deadline: `${lastDay.getDate()} ${MOIS[lastDay.getMonth()]}`, daysLeft: Math.max(0, Math.ceil((lastDay - now) / 86400000)) };
+              })()}
+              onTab={(t) => setTab(t)}
               onOpenOrder={(orderId) => {
                 setTab("commandes");
                 setOpenOrders((prev) => new Set([...prev, orderId]));
@@ -880,132 +860,24 @@ export default function GestionPage({ onglet = "" } = {}) {
                 setBatUnread((u) => u.filter((x) => x !== orderId));
                 setUnreadMeta((u) => u.filter((x) => x.orderId !== orderId));
               }}
-            />
-
-            {/* ③ + ④ Les chiffres, sur la période choisie, comparés à la précédente. */}
-            <ChiffresPeriode
-              orders={validOrders}
-              quotes={quotes}
-              salesGoal={siteSettings.salesGoal}
-              strip={{
-                aPreparer,
-                enRetard: retards.length,
-                retardRef: retards[0]?.ref || "",
-                enGravure,
-                avis: pendingReviews,
-              }}
-              onTab={(t) => {
-                if (t === "file") window.location.href = "/gestion/commandes";
-                else if (t === "atelier") window.location.href = "/gestion/atelier";
-                else setTab(t);
-              }}
-            />
-
-            <div className="dash-two">
-              <div className="dash-col">
-                <div className="dash-panel">
-                  <div className="dash-ph"><h3>Dernières commandes</h3><button type="button" onClick={() => setTab("commandes")}>Tout voir →</button></div>
-                  {recentOrders.length === 0 ? (
-                    <p style={{ padding: "16px 18px", color: "var(--ink-soft)", margin: 0 }}>Aucune commande pour le moment.</p>
-                  ) : recentOrders.map((o) => {
-                    const [cls, label] = DASH_CHIPS[o.status || "a_preparer"] || ["prep", "À préparer"];
-                    const summary = (o.items || []).map((i) => i.name).filter(Boolean).slice(0, 2).join(", ") || "Commande";
-                    return (
-                      <div className="dash-orow" key={o.id}>
-                        <span className="id">#{o.ref || o.id?.slice(-6)}</span>
-                        <span>{summary}<br /><span className="who">{o.customerName || o.customerEmail || "—"}</span></span>
-                        <span className="pr">{formatEuro(o.total)}</span>
-                        <span className={`dash-chip ${cls}`}>{label}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {hasBlocStock && (
-                  <div className="dash-panel">
-                    <div className="dash-ph"><h3>Stock — blocs cristal (partagé V + H)</h3><button type="button" onClick={() => setTab("produits")}>Gérer →</button></div>
-                    {blocStockRows.map((b) => {
-                      const s = b.stock;
-                      const out = s === 0;
-                      const low = s !== null && s > 0 && s <= 5;
-                      const pct = s === null ? 0 : Math.round((s / blocMax) * 100);
-                      const color = out ? "#b4452f" : low ? "#d08a2a" : "linear-gradient(90deg,#e2c67e,#a98935)";
-                      return (
-                        <div className="dash-stockrow" key={b.key}>
-                          <span className="sl">{b.label}</span>
-                          <span className="dash-bar"><i style={{ width: `${pct}%`, background: color }} /></span>
-                          {s === null ? (
-                            <span className="dash-sq" style={{ color: "var(--ink-soft)" }}>non suivi</span>
-                          ) : out ? (
-                            <span className="dash-rupt">RUPTURE</span>
-                          ) : (
-                            <span className={`dash-sq ${low ? "low" : ""}`}>{s} rest.</span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              <div className="dash-col">
-                <div className="dash-panel">
-                  <div className="dash-ph"><h3>À faire</h3></div>
-                  {(() => {
-                    // Rappel automatique : déclaration URSSAF (mensuelle). On déclare
-                    // le CA du mois PRÉCÉDENT, à faire avant la fin du mois EN COURS.
-                    const now = new Date();
-                    const MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-                    const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-                    const periode = `${MOIS[prev.getMonth()]} ${prev.getFullYear()}`;
-                    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-                    const deadline = `${lastDay.getDate()} ${MOIS[lastDay.getMonth()]}`;
-                    const daysLeft = Math.max(0, Math.ceil((lastDay - now) / 86400000));
-                    const urgent = daysLeft <= 10;
-                    const montant = formatEuro(caToDeclare);
-                    return (
-                      <a
-                        href="https://www.autoentrepreneur.urssaf.fr/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="dash-todo"
-                        style={{ textDecoration: "none", color: "inherit", ...(urgent ? { background: "#fdeee8", boxShadow: "inset 3px 0 0 #b4452f" } : {}) }}
-                      >
-                        <span className="ic">🧾</span>
-                        <span>
-                          <b>URSSAF — à déclarer : {caToDeclare > 0 ? montant : "0 € (rien à déclarer)"}</b>
-                          <small>
-                            {caToDeclare > 0
-                              ? `Chiffre d'affaires de ${periode} (montant encaissé). À déclarer avant le ${deadline}${daysLeft > 0 ? ` · ${daysLeft} j restants` : " · aujourd'hui !"}`
-                              : `Aucune vente en ${periode} → déclarez « 0 » avant le ${deadline}${daysLeft > 0 ? ` · ${daysLeft} j restants` : ""}`}
-                          </small>
-                        </span>
-                        <span className="go">→</span>
-                      </a>
-                    );
-                  })()}
-                  <a href="/gestion/commandes" className="dash-todo" style={{ textDecoration: "none", color: "inherit" }}>
-                    <span className="ic">🗂️</span>
-                    <span><b>{aPreparer} commande{aPreparer > 1 ? "s" : ""} à préparer</b><small>{aPreparer > 0 ? "Ouvrir la file de production (dans l'ordre)" : "Rien en attente 🎉"}</small></span>
-                    <span className="go">→</span>
-                  </a>
-                  <a href="/gestion/atelier" className="dash-todo" style={{ textDecoration: "none", color: "inherit" }}>
-                    <span className="ic">🥃</span>
-                    <span><b>Atelier — pièces à graver</b><small>Visuels &amp; fichiers à graver{enGravure > 0 ? ` · ${enGravure} en gravure` : ""}</small></span>
-                    <span className="go">→</span>
-                  </a>
-                  <button type="button" className="dash-todo" onClick={() => setTab("avis")}>
-                    <span className="ic">⭐</span>
-                    <span><b>Avis clients</b><small>Valider ou masquer les avis</small></span>
-                    <span className="go">→</span>
-                  </button>
-                  <button type="button" className="dash-todo" onClick={() => setTab("produits")}>
-                    <span className="ic">📊</span>
-                    <span><b>Stock</b><small>Vérifier les ruptures et réapprovisionner</small></span>
-                    <span className="go">→</span>
-                  </button>
-                </div>
-
+              apresAFaire={(
+                <MessagesATraiter
+                  pending={pendingList}
+                  unread={unreadMeta}
+                  adminKey={key}
+                  onClasse={(id) => { setPendingList((l) => l.filter((x) => x.id !== id)); setPendingReplies((n) => Math.max(0, n - 1)); }}
+                  onOpenOrder={(orderId) => {
+                    setTab("commandes");
+                    setOpenOrders((prev) => new Set([...prev, orderId]));
+                    setBatOpen(orderId);
+                    setBatUnread((u) => u.filter((x) => x !== orderId));
+                    setUnreadMeta((u) => u.filter((x) => x.orderId !== orderId));
+                  }}
+                />
+              )}
+            >
+              <details className="hb-det">
+                <summary><span className="hb-det-ic">🧾</span>Ventes hors site (URSSAF)</summary>
                 <div className="dash-panel">
                   <div className="dash-ph"><h3>Ventes hors site (URSSAF)</h3></div>
                   <div style={{ padding: "12px 16px" }}>
@@ -1047,7 +919,39 @@ export default function GestionPage({ onglet = "" } = {}) {
                     })()}
                   </div>
                 </div>
-
+              </details>
+              {hasBlocStock && (
+              <details className="hb-det">
+                <summary><span className="hb-det-ic">💎</span>Stock des blocs cristal</summary>
+                {(
+                  <div className="dash-panel">
+                    <div className="dash-ph"><h3>Stock — blocs cristal (partagé V + H)</h3><button type="button" onClick={() => setTab("produits")}>Gérer →</button></div>
+                    {blocStockRows.map((b) => {
+                      const s = b.stock;
+                      const out = s === 0;
+                      const low = s !== null && s > 0 && s <= 5;
+                      const pct = s === null ? 0 : Math.round((s / blocMax) * 100);
+                      const color = out ? "#b4452f" : low ? "#d08a2a" : "linear-gradient(90deg,#e2c67e,#a98935)";
+                      return (
+                        <div className="dash-stockrow" key={b.key}>
+                          <span className="sl">{b.label}</span>
+                          <span className="dash-bar"><i style={{ width: `${pct}%`, background: color }} /></span>
+                          {s === null ? (
+                            <span className="dash-sq" style={{ color: "var(--ink-soft)" }}>non suivi</span>
+                          ) : out ? (
+                            <span className="dash-rupt">RUPTURE</span>
+                          ) : (
+                            <span className={`dash-sq ${low ? "low" : ""}`}>{s} rest.</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </details>
+              )}
+              <details className="hb-det">
+                <summary><span className="hb-det-ic">✦</span>Assistant</summary>
                 <div className="dash-panel">
                   <div className="dash-ph"><h3>Assistant</h3></div>
                   <div className="dash-assist">
@@ -1063,8 +967,8 @@ export default function GestionPage({ onglet = "" } = {}) {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </details>
+            </AccueilB>
           </>
         )}
 
