@@ -6,7 +6,9 @@
   photos en fond (`src/lib/mailCagnotteNoel.js`, `modele: "cagnotte-noel"` dans `/api/admin/send-client-email`). 2 envois en erreur
   de connexion (Cécilia, scinjcc) vérifiés absents de la boîte d'envoi puis renvoyés : 33 / 33.
 - ⛔ Commandes annulées : RIEN (gérant) → Nina Beltran exclue.
-- ⏳ EN ATTENTE de son accord : les 9 clientes dont la commande n'est pas encore reçue (Doriane, Dorian, Loris, Adrien en gravure ;
+- ✅ 31/10 (« pousse ») : les 9 clientes dont la commande n'est pas encore reçue sont PROGRAMMÉES : le site leur envoie le mail
+  4 jours après le passage de la commande en « livrée » (`/api/admin/envois-livraison`, battement, `runEnvoisApresLivraison`), une seule
+  fois, rien si annulée, plus rien après le 26/12 (date limite enregistrée). ⏳ Restent en attente de son accord (Doriane, Dorian, Loris, Adrien en gravure ;
   Diane, Edwige, Pierre, ivana83, celinedruesne60 expédiées) · Céline Naulin (cagnotte enregistrée sur « …@gmail.comn » : à déplacer sur
   naulinceline71@gmail.com avant) · lorenzo-franchi@orange.fr (2e adresse de Lorenzo, qui a reçu sur prescheux027).
 
