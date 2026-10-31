@@ -2792,6 +2792,12 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
   · **Les vidéos 1 à 13** ne sont PAS dans le dépôt (livrées avant le registre) : elles ne sont que
     dans les transcripts des sessions (`~/.claude/projects/-home-user-Niro/<session>.jsonl`, chercher
     `#nivcreation`) — le dire s'il les redemande, et proposer de les régénérer avec les scripts.
+- ⛔ **VIDÉOS : NE PAS REMETTRE TOUJOURS LES MÊMES BIJOUX (gérant, 31/10/2026 : « remets pas les mêmes bijoux, tu mets toujours les mêmes »)** :
+  Collier Cœur gravé, Collier Double Cœur, Collier Cœur & plaques, Bracelet à plaque gravée et Bracelet femme gravé sont dans presque toutes les
+  vidéos (34, 40, 42, 45 v1…). Avant chaque vidéo : relire les produits des dernières vidéos dans `docs/videos/REGISTRE-VIDEOS.md` et prendre
+  d'AUTRES bijoux. Bijoux à photo GRAVÉE encore peu utilisés : Collier Enveloppe (`il_fullxfull.7864685302_iebi.jpg`, `…7864685300_7l25.jpg`),
+  Médaillon Cœur ouvrable (`il_fullxfull.8007460526_h2kk.jpg`), Collier 3 Cœurs « Naomi » (`collier-3coeurs-3.jpg`), Bracelet Cœur à graver
+  (`bracelet-coeur-ot-dore.jpg`). Les autres photos de bijoux du site sont VIERGES (planche regardée le 31/10).
 - ✅ **LES EFFETS DE LA VIDÉO 41 PLAISENT AU GÉRANT (29/10/2026 : « j'aime bien ce montage… je veux dire l'effet », à garder en mémoire)** :
   script `tools/video/noel_deco_verres_41.py` = la BOÎTE À EFFETS à réutiliser : fond de nuit avec lumières dorées floues (bokeh) + neige
   qui tombe sur toute la vidéo · titre qui s'écrit lettre par lettre · avant / après au rideau doré (vierge → gravé) · carrousel : le

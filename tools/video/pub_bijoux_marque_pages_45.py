@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# VIDÉO 45 (31/10/2026) — gérant : « avec bijoux et marque-pages ». Bijoux GRAVÉS (gravure visible sur chaque photo) + les trois
+# VIDÉO 45 (31/10/2026) — gérant : « avec bijoux et marque-pages », puis « remets pas les mêmes bijoux ». Bijoux GRAVÉS (gravure visible sur chaque photo) + les trois
 # marque-pages : bois à pompon, ajouré (exemples gravés du site) et MÉTAL (jamais écrit « gravé » : il ne se grave pas).
 # Effets de la 41, habillage encre et or sans Noël (comme 43 et 44). ⛔ Aucun prix, aucun nombre, aucune date.
 # Usage : python3 tools/video/pub_bijoux_marque_pages_45.py <dossier de sortie> [--apercu]
@@ -109,20 +109,19 @@ def carte_auto(img, cw=CW, hmax=1100):
     """Carte à la forme de la photo (photo entière, jamais recadrée)."""
     h = min(hmax, int((cw - 40) * img.height / img.width) + 40)
     return carte(img, cw, h)
-BIJOUX = [
-    ("produits/collier-coeur-grave-1.jpg", "Collier Cœur gravé", "Des initiales et une date"),
-    ("produits/collier-double-coeur-3.jpg", "Collier Double Cœur", "Un mot doux au verso"),
-    ("produits/collier-coeur-plaques-1.jpg", "Collier Cœur & plaques", "Un prénom sur chaque plaque"),
-    ("produits/bracelet-femme-acier-grave.jpg", "Bracelet femme gravé", "Votre phrase"),
-    ("produits/bracelet-cordon-plaque-4.jpg", "Bracelet à plaque gravée", "Des initiales, un symbole"),
+BIJOUX = [  # 31/10 : AUTRES bijoux que d'habitude (gérant : « tu mets toujours les mêmes »)
+    ("produits/catalogue/il_fullxfull.7864685302_iebi.jpg", "Collier Enveloppe", "Un message secret gravé"),
+    ("produits/catalogue/il_fullxfull.8007460526_h2kk.jpg", "Médaillon Cœur ouvrable", "Un dessin, des mots à l'intérieur"),
+    ("produits/collier-3coeurs-3.jpg", "Collier 3 Cœurs entrelacés", "Un prénom sur chaque cœur"),
+    ("produits/bracelet-coeur-ot-dore.jpg", "Bracelet Cœur à graver", "Votre texte sur le cœur"),
 ]
 MP = [("marque-pages/m1/exemple-ex1.jpg", "Un prénom et un dessin"), ("marque-pages/m1/exemple-ex4.jpg", "Un mot à la verticale"),
       ("marque-pages/m1/exemple-ex5.jpg", "Une photo gravée"), ("marque-pages/m1/exemple-ex7.jpg", "« Pour Mamie »"),
       ("marque-pages/m2/exemple-ex1.jpg", "Le modèle ajouré"), ("marque-pages/m2/exemple-ex4.jpg", "Une photo et un prénom")]
-C_BIJ = [(carte_auto(ph(f)), nom, pil) for f, nom, pil in BIJOUX]
+C_BIJ = [(carte_auto(rogne(ph(f), 70) if ("h2kk" in f or "ot-dore" in f) else ph(f), 760 if ("h2kk" in f or "ot-dore" in f) else CW), nom, pil) for f, nom, pil in BIJOUX]
 C_MP = [(carte_auto(rogne(ph(f)), 620, 1250), t) for f, t in MP]
 C_METAL = [carte_auto(ph("marque-pages/metal/10-roses-blanches-van-gogh-pompon-dore.jpg"), 640), carte_auto(ph("marque-pages/metal/09-nympheas-monet-pompon.jpg"), 640)]
-C_AMB = carte_auto(ph("produits/collier-coeur-grave-2.jpg"), 820)
+C_AMB = carte_auto(ph("produits/catalogue/il_fullxfull.7864685300_7l25.jpg"), 780)
 
 def s_intro(im, t, d):
     titre = ["Un mot doux,", "gravé pour toujours"]
@@ -188,7 +187,7 @@ def s_fin(im, t, d):
     texte_centre(im, 1330, "NiV CRÉATION", FT_MARQUE, GOLD2, alpha=int(200 * ease((t - 1.2) / 0.5)))
     texte_centre(im, 1410, "Gravé en France", FT_PETIT, CREAM, alpha=int(200 * ease((t - 1.4) / 0.5)))
 
-SCENES = [(3.2, s_intro), (9.0, s_bijoux), (7.2, s_marque_pages), (3.6, s_metal), (2.8, s_tampons), (3.6, s_fin)]
+SCENES = [(3.2, s_intro), (8.0, s_bijoux), (7.2, s_marque_pages), (3.6, s_metal), (2.8, s_tampons), (3.6, s_fin)]
 
 def main():
     total = sum(d for d, _ in SCENES); nf = int(total * FPS)

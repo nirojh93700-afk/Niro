@@ -692,9 +692,11 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 - Demande du gérant : « avec bijoux et marque-pages ». Bijoux GRAVÉS (gravure visible) + marque-pages en bois à pompon et ajouré (exemples
   gravés du site, fond crème vide retiré autour, le produit jamais coupé) + marque-pages en MÉTAL (Roses blanches, Nymphéas ; jamais écrits
   « gravés »). Effets de la 41, habillage encre et or sans Noël. 29,4 s, sans son, 1080 × 1920 et 720 × 1280. Aucun prix.
+- Refaite le même soir (gérant : « remets pas les mêmes bijoux, tu mets toujours les mêmes ») : bijoux = Enveloppe, Médaillon Cœur ouvrable,
+  3 Cœurs (« Naomi »), Bracelet Cœur à graver. 28,4 s.
 - Script : `python3 tools/video/pub_bijoux_marque_pages_45.py <dossier>` (`--apercu`). Fichiers NON commités.
 
-**Vidéo 45 — Un mot doux, gravé pour toujours** (Collier Cœur gravé, Collier Double Cœur, Collier Cœur & plaques, Bracelet femme gravé, Bracelet à plaque gravée, Marque-page en bois, Marque-page ajouré, Marque-page en métal)
+**Vidéo 45 — Un mot doux, gravé pour toujours** (Collier Enveloppe Message Secret, Collier Médaillon Cœur ouvrable, Collier 3 Cœurs entrelacés, Bracelet Cœur à graver, Marque-page en bois, Marque-page ajouré, Marque-page en métal)
 > ✨ Un prénom, une date, un mot doux gravés sur un bijou… ou sur un marque-page en bois, avec un dessin ou une photo 📚
 > Et nos marque-pages en métal aux tableaux de Van Gogh et Monet 💛 Gravé dans notre atelier
 > 👉 nivcreation.fr
