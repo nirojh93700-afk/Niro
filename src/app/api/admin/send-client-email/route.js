@@ -3,6 +3,7 @@ import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
 import { boutonsAvis } from "@/lib/clientMail";
 import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
 import { getSiteOrders } from "@/lib/firebase";
+import { mailCagnotteNoel } from "@/lib/mailCagnotteNoel";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -60,7 +61,8 @@ export async function POST(req) {
   // Signature TOUJOURS ajoutée par le serveur (28/09/2026, demande du gérant après un
   // envoi parti sans "Cordialement" : ne plus dépendre de l'agent pour la retaper à
   // chaque message — structurel, comme le bouton Répondre).
-  const html = emailLayout({
+  // Habillage spécial (31/10/2026) : mail « cagnotte de Noël » avec photos en fond. Le texte reste celui envoyé.
+  const html = body?.modele === "cagnotte-noel" ? mailCagnotteNoel({ message, replyBtn }) : emailLayout({
     heading: subject,
     bodyHtml: `${imageHtml}<div style="white-space:pre-line;font-size:15px;line-height:1.6;">${escapeHtml(message)}</div>
       ${boutons}
