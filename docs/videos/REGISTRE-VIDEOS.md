@@ -673,3 +673,17 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #gravure #cristalgrave #ideecadeau
+
+## Vidéo 44 — Le mariage (31/10/2026)
+- Demande du gérant : « fais-moi une vidéo » (thème libre). Thème choisi : le MARIAGE, pas encore fait. Numéros de table, étiquette et
+  rond de serviette, menu gravé, verre à vin et flûtes gravés (photos où la gravure / les prénoms se voient ; produits vérifiés EN VENTE
+  le 31/10 ; porte-serviettes écartés, rien de gravé dessus). Effets de la 41, habillage encre et or sans Noël (comme la 43). Cartes à la
+  forme de chaque photo (jamais recadrée). 27,1 s, sans son, 1080 × 1920 (6,6 Mo) et 720 × 1280 (2,2 Mo). Aucun prix.
+- Script : `python3 tools/video/pub_mariage_44.py <dossier>` (`--apercu`). Fichiers NON commités.
+
+**Vidéo 44 — Le plus beau jour, gravé à vos noms** (Numéros de table en bois, Étiquette de serviette aux initiales, Rond de serviette prénom, Menu de mariage gravé, Verre à vin gravé, Flûtes à champagne gravées)
+> 💍 Numéros de table, ronds de serviette au prénom de chaque invité, menu gravé, flûtes pour le premier toast ✨
+> Toute la décoration de votre mariage, gravée à vos noms dans notre atelier 🥂
+> 👉 nivcreation.fr
+
+#nivcreation #mariage #decorationmariage #cadeaupersonnalise #ideecadeau
