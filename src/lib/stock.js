@@ -2951,3 +2951,44 @@ export async function modifierEtiquettesAdresses(fn) {
   await persistCatalog(data, ["etiquettesAdresses"]);
   return data.etiquettesAdresses;
 }
+
+// --- Envois programmés « X jours après la livraison » (31/10/2026) ----------
+// Gérant : « programme pour envoyer automatiquement dès qu'ils ont été livrés, quatre jours plus tard ».
+// Section `envoisApresLivraison` = { [id]: { to, name, subject, message, modele, orderId, delayDays, until,
+// status: "attente" | "envoye" | "annule" | "trop-tard" | "echec", createdAt, sentAt, error } }.
+// Lecture FRAÎCHE + écriture de cette seule section (jamais de remplacement en bloc).
+export async function getEnvoisApresLivraison(fresh = false) {
+  const data = await getCatalogRaw(fresh);
+  return data.envoisApresLivraison || {};
+}
+export async function addEnvoisApresLivraison(items) {
+  const data = await getCatalogRaw(true);
+  const cur = data.envoisApresLivraison || {};
+  let n = 0;
+  for (const it of Array.isArray(items) ? items : []) {
+    const to = String(it?.to || "").trim().toLowerCase();
+    const orderId = String(it?.orderId || "").trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to) || !orderId || !String(it?.message || "").trim()) continue;
+    const id = `${orderId}:${String(it.modele || "message")}`;
+    if (cur[id]) continue; // déjà programmé : on ne double jamais
+    cur[id] = {
+      to, name: String(it.name || "").slice(0, 80), subject: String(it.subject || "").slice(0, 200),
+      message: String(it.message).slice(0, 5000), modele: String(it.modele || ""), orderId,
+      delayDays: Math.max(0, Math.min(60, Number(it.delayDays) || 0)), until: Number(it.until) || 0,
+      status: "attente", createdAt: Date.now(),
+    };
+    n++;
+  }
+  data.envoisApresLivraison = cur;
+  await persistCatalog(data, ["envoisApresLivraison"]);
+  return n;
+}
+export async function majEnvoiApresLivraison(id, patch) {
+  const data = await getCatalogRaw(true);
+  const cur = data.envoisApresLivraison || {};
+  if (!cur[id]) return false;
+  cur[id] = { ...cur[id], ...(patch || {}) };
+  data.envoisApresLivraison = cur;
+  await persistCatalog(data, ["envoisApresLivraison"]);
+  return true;
+}

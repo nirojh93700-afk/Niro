@@ -10,6 +10,7 @@ import { offreActive } from "@/lib/offreGravure";
 import { runFetesAlerte } from "@/lib/fetesAlerte";
 import { runUrssafAlerte } from "@/lib/urssafAlerte";
 import { runRangementMails, heureDuRangement } from "@/lib/rangementMails";
+import { runEnvoisApresLivraison } from "@/lib/envoisApresLivraison";
 
 const MIN = 60000;
 
@@ -83,5 +84,9 @@ export async function maybeRunJobs() {
       out.rangementMails = { faits: (r.faits || []).length, total: r.total, ajoutes: r.ajoutes, fini: r.fini };
     }
   } catch (e) { out.rangementMailsError = e.message; }
+  // Messages programmés « N jours après la livraison » (31/10/2026 : mail cagnotte de Noël).
+  try {
+    if (await claimJob("envoisApresLivraison", 30 * MIN)) out.apresLivraison = await runEnvoisApresLivraison();
+  } catch (e) { out.apresLivraisonError = e.message; }
   return out;
 }
