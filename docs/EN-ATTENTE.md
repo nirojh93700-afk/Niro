@@ -1,5 +1,15 @@
 # 📋 TOUT CE QUI EST EN ATTENTE — inventaire de reprise
 
+## 🎄 MAIL « CAGNOTTE FIDÉLITÉ POUR NOËL » — 31/10/2026
+- ✅ ENVOYÉ le 31/10 vers 11 h 35 (heure UTC) aux **33 clientes dont la commande est livrée** (gérant : « pousse », « envoie pour les
+  autres ») : mail personnalisé (prénom, produit commandé, date de fin de la cagnotte), SANS montant (elle le voit sur /espace),
+  photos en fond (`src/lib/mailCagnotteNoel.js`, `modele: "cagnotte-noel"` dans `/api/admin/send-client-email`). 2 envois en erreur
+  de connexion (Cécilia, scinjcc) vérifiés absents de la boîte d'envoi puis renvoyés : 33 / 33.
+- ⛔ Commandes annulées : RIEN (gérant) → Nina Beltran exclue.
+- ⏳ EN ATTENTE de son accord : les 9 clientes dont la commande n'est pas encore reçue (Doriane, Dorian, Loris, Adrien en gravure ;
+  Diane, Edwige, Pierre, ivana83, celinedruesne60 expédiées) · Céline Naulin (cagnotte enregistrée sur « …@gmail.comn » : à déplacer sur
+  naulinceline71@gmail.com avant) · lorenzo-franchi@orange.fr (2e adresse de Lorenzo, qui a reçu sur prescheux027).
+
 > **Mis à jour le 30/10/2026 soir.** Ce fichier est l'index unique pour reprendre le travail depuis
 > n'importe quelle conversation : messages à envoyer, maquettes validées non appliquées, projets en
 > pause, actions côté gérant, questions sans réponse. Le détail de chaque sujet reste dans
