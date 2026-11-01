@@ -151,7 +151,7 @@ HTML = f"""<title>Devis modifiable</title>
   <button class="mq-tab" role="tab" aria-selected="true" data-v="client">① Ce que voit la cliente</button>
   <button class="mq-tab" role="tab" aria-selected="false" data-v="gestion">② Gestion → Devis (vous)</button>
 </div>
-<p class="mq-note">Exemple réel : devis DEV-1528 (Santos, verre à whisky, rose des vents + « Eugenio »). Prix lus sur la fiche du verre à whisky : 19,90 € l'unité, 37,90 € les 2, 71,90 € les 4, règle de gravure des verres. Rien n'est sur le site.</p>
+<p class="mq-note">Exemple réel : devis DEV-1528 (Santos, verre à whisky, rose des vents + « Eugenio »). La cliente ne change que la quantité ; le prix se calcule à partir des lignes du devis (lots de la fiche : 19,90 € l'unité, 37,90 € les 2, 71,90 € les 4 ; l'image est comprise, le prénom se paie sur chaque verre). Rien n'est sur le site.</p>
 
 <section class="dm-vue" id="v-client">
  <div class="sheet">
@@ -160,64 +160,27 @@ HTML = f"""<title>Devis modifiable</title>
    <div><h1>Devis</h1><div class="num">DEV-1528</div><div class="dt">01 novembre 2026</div></div>
   </div>
   <div class="dv-to"><strong>Adressé à :</strong><br>Santos</div>
-  <p class="dv-intro">Vous pouvez ajuster ce devis avant de le régler : le nombre de verres et ce que nous gravons. Le total se met à jour tout seul.</p>
 
   <div class="dv-art">
    <img src="{MODELE}" alt="Votre modèle : rose des vents et prénom">
-   <div><h2>Verre à whisky gravé</h2><p>Rose des vents (N, O, E, S) et trait de vagues, d'après l'image que vous nous avez envoyée. Gravure blanche dépolie sur la face du verre.</p></div>
+   <div><h2>Verre à whisky gravé</h2><p>Rose des vents (N, O, E, S) et trait de vagues, d'après l'image que vous nous avez envoyée, prénom « Eugenio » gravé dessous. Gravure blanche dépolie sur la face du verre.</p></div>
   </div>
 
   <div class="st">
-   <h3><span class="dm-n">1</span>Nombre de verres</h3>
+   <h3>Nombre de verres</h3>
    <div class="qty">
     <div class="qbox"><button type="button" id="moins" aria-label="Un verre de moins">−</button><output id="qte">1</output><button type="button" id="plus" aria-label="Un verre de plus">+</button></div>
-    <small id="lotTxt">À l'unité : 19,90 €</small>
-   </div>
-  </div>
-
-  <div class="st">
-   <h3><span class="dm-n">2</span>Que gravons-nous ?</h3>
-   <div class="choix" id="choix">
-    <button type="button" class="ch" data-c="both" aria-pressed="true">
-     <span class="vis"><img src="{MODELE}" alt=""></span>
-     <span><b>Image + prénom</b><span class="tag"> · votre modèle</span><br><span class="px" data-px="both"></span></span>
-    </button>
-    <button type="button" class="ch" data-c="img" aria-pressed="false">
-     <span class="vis"><img src="{MODELE}" alt=""><span class="masque"></span></span>
-     <span><b>Image seule</b><br><span class="px" data-px="img"></span></span>
-    </button>
-    <button type="button" class="ch" data-c="txt" aria-pressed="false">
-     <span class="vis"><span class="nom">EUGENIO</span></span>
-     <span><b>Prénom seul</b><br><span class="px" data-px="txt"></span></span>
-    </button>
-   </div>
-   <label class="fld" id="fldPrenom">Prénom à graver
-    <input id="prenom" value="EUGENIO" maxlength="20" autocomplete="off">
-   </label>
-   <label class="chk" id="chkDiff" hidden><input type="checkbox" id="diff"><span>Chaque verre est différent<small>Un prénom ou une gravure différente sur chaque verre.</small></span></label>
-   <div class="pv" id="pv" hidden></div>
-  </div>
-
-  <div class="st">
-   <h3><span class="dm-n">3</span>En option</h3>
-   <div class="opt">
-    <label class="chk" style="margin-top:0"><input type="checkbox" id="fond"><span>Graver aussi le fond du verre, vu à travers le verre <b>(+7 € par verre)</b><small>Par exemple une date ou un petit mot.</small></span></label>
-    <label class="fld" id="fldFond" hidden>Texte du fond<input id="texteFond" placeholder="Ex. 12.06.2027" maxlength="30"></label>
+    <small>Même gravure sur chaque verre. Le total se met à jour tout seul.</small>
    </div>
   </div>
 
   <div class="rec">
-   <table><tbody id="lignes"></tbody></table>
+   <table><thead><tr style="text-align:left;color:var(--ink-soft);font-size:.82rem"><th style="padding:6px 4px">Désignation</th><th style="padding:6px 4px;text-align:right">Total</th></tr></thead><tbody id="lignes"></tbody></table>
    <div class="tot"><span>Total des articles</span><strong id="total">22,90 €</strong></div>
    <div class="tva">TVA non applicable, art. 293 B du CGI · livraison choisie à l'étape suivante</div>
    <button type="button" class="dm-pay" id="pay">Valider et payer</button>
-   <div class="pay-msg" id="payMsg">Le devis enregistré suit vos choix ; la fiche de l'atelier aussi.</div>
+   <div class="pay-msg" id="payMsg">Le devis et la fiche de l'atelier reprennent le nombre de verres choisi.</div>
   </div>
-
-  <details class="dm-grid"><summary>Voir tous les prix</summary>
-   <div class="tbl"><table><thead><tr><th>Verres</th><th>Image + prénom</th><th>Image seule</th><th>Prénom seul</th></tr></thead><tbody id="grille"></tbody></table></div>
-   <p class="foot">Verre 1 : l'image est offerte, ou le prénom s'il n'y a pas d'image ; avec les deux, le prénom fait +3 €. Chaque verre en plus : image + prénom +5 €, image seule ou prénom seul +3 €.</p>
-  </details>
   <p class="foot">Devis valable 30 jours. La fabrication démarre après le paiement.</p>
  </div>
 </section>
@@ -225,128 +188,59 @@ HTML = f"""<title>Devis modifiable</title>
 <section class="dm-vue" id="v-gestion" hidden>
  <div class="adm">
   <div><div class="crumb">Gestion › Commandes › Devis &amp; factures</div><h1>Devis DEV-1528 · Santos</h1></div>
-
   <div class="dm-card">
-   <h2>Lignes du devis <span>prix calculés comme sur la fiche</span></h2>
-   <div class="ligne">
-    <div class="ligne-h">
-     <img src="{MODELE}" alt="">
-     <div><b>Verre à whisky portrait personnalisé</b><small>Produit du catalogue · prix des lots et règle de gravure des verres appliqués d'office</small></div>
-     <span class="pill">✓ lié à la fiche</span>
-    </div>
-    <div class="dm-g3">
-     <label class="dm-lab">Image de la cliente<select><option>Photo du 01/11 (rose des vents)</option><option>Aucune</option></select></label>
-     <label class="dm-lab">Prénom proposé<input value="EUGENIO"></label>
-     <label class="dm-lab">Gravure proposée d'office<select id="aDef"><option value="both">Image + prénom</option><option value="img">Image seule</option><option value="txt">Prénom seul</option></select></label>
-    </div>
-    <div class="box-on">
-     <label class="chk"><input type="checkbox" checked id="aQte"><span><b>La cliente peut changer le nombre</b><small>Boutons − 1 + sur son devis. Les prix des lots de la fiche s'appliquent.</small></span></label>
-     <div class="dm-sub" id="aQteSub">
-      <label class="dm-lab">Au moins<input type="number" value="1" min="1"></label>
-      <label class="dm-lab">Au plus<input type="number" value="12" min="1"></label>
-     </div>
-    </div>
-    <div class="box-on">
-     <label class="chk"><input type="checkbox" checked id="aGrav"><span><b>La cliente peut choisir ce que l'on grave</b><small>Le prix change selon son choix, verre par verre.</small></span></label>
-     <div class="gr" id="aGr">
-      <label><input type="checkbox" checked><span>Image + prénom</span><span>verre 1 +3 € · suivants +5 €</span></label>
-      <label><input type="checkbox" checked><span>Image seule</span><span>verre 1 offert · suivants +3 €</span></label>
-      <label><input type="checkbox" checked><span>Prénom seul</span><span>verre 1 offert · suivants +3 €</span></label>
-     </div>
-    </div>
-    <div class="box-on">
-     <label class="chk"><input type="checkbox" checked><span><b>Proposer « chaque verre différent »</b><small>Un prénom et une gravure par verre ; tout part à la fiche atelier.</small></span></label>
+   <h2>Lignes du devis <span>comme aujourd'hui</span></h2>
+   <div class="dm-g2" style="grid-template-columns:minmax(0,3fr) minmax(0,1fr) minmax(0,1fr)">
+    <label class="dm-lab">Désignation<input value="Verre à whisky gravé — rose des vents (image)"></label>
+    <label class="dm-lab">Qté<input value="1"></label>
+    <label class="dm-lab">Prix<input value="19,90"></label>
+    <label class="dm-lab">Désignation<input value="Prénom « Eugenio » gravé"></label>
+    <label class="dm-lab">Qté<input value="1"></label>
+    <label class="dm-lab">Prix<input value="3,00"></label>
+   </div>
+   <div class="box-on" style="margin-top:14px">
+    <label class="chk"><input type="checkbox" checked id="aQte"><span><b>La cliente peut changer le nombre de verres</b><small>Boutons − 1 + sur son devis. Le prix se recalcule à partir de ces lignes : prix des lots de la fiche pour les verres, image comprise, prénom payé sur chaque verre.</small></span></label>
+    <div class="dm-sub" id="aQteSub">
+     <label class="dm-lab">Au moins<input type="number" value="1" min="1"></label>
+     <label class="dm-lab">Au plus<input type="number" value="12" min="1"></label>
     </div>
    </div>
-
-   <div class="ligne" style="margin-top:12px">
-    <div class="ligne-h">
-     <div><b>Gravure au fond du verre</b><small>Option de la fiche « face + fond » · 7 € par verre</small></div>
-     <span class="pill or">facultative</span>
-    </div>
-    <div class="box-on"><label class="chk"><input type="checkbox" checked><span><b>Ligne facultative</b><small>Décochée par défaut chez la cliente ; elle la coche si elle la veut.</small></span></label></div>
-   </div>
-
-   <div class="dm-add" style="margin-top:12px">+ Ajouter une ligne (produit du catalogue ou ligne libre à prix fixe)</div>
   </div>
-
   <div class="voit">
    <h2>Ce que la cliente pourra payer</h2>
-   <p id="aRes"></p>
+   <div class="tbl"><table style="min-width:0"><thead><tr><th style="text-align:left;color:#d6b25a;background:transparent">Verres</th><th style="color:#d6b25a;background:transparent">Total</th></tr></thead><tbody id="aGrille"></tbody></table></div>
    <ul>
-    <li>Le paiement est recalculé par le site : impossible de payer un autre prix que celui de la fiche.</li>
-    <li>La commande garde le nombre de verres, la gravure de chaque verre et les prénoms : la fiche atelier les affiche.</li>
-    <li>Même système pour les autres produits : chaque ligne reprend les suppléments de sa fiche (bijoux +3 € par texte, cristal texte +5 €…).</li>
+    <li>Le paiement est recalculé par le site : impossible de payer un autre prix.</li>
+    <li>La commande garde le nombre de verres : la fiche atelier l'affiche.</li>
    </ul>
   </div>
-
   <div class="btns"><button class="b">Enregistrer</button><button class="b gold">Envoyer le devis</button></div>
  </div>
 </section>
 
 <script>
 (function(){{
- var LOT={{1:19.9,2:37.9,4:71.9}}, MIN=1, MAX=12;
- var NOMS={{both:'Image + prénom',img:'Image seule',txt:'Prénom seul'}};
+ var LOT={{1:19.9,2:37.9,4:71.9}}, MIN=1, MAX=12, PRENOM1=3, SUIVANT=5;
  function eur(n){{return n.toLocaleString('fr-FR',{{minimumFractionDigits:2,maximumFractionDigits:2}})+' €';}}
  function prixVerres(n){{var t=0,r=n;while(r>=4){{t+=LOT[4];r-=4;}}while(r>=2){{t+=LOT[2];r-=2;}}if(r)t+=LOT[1];return Math.round(t*100)/100;}}
- function decomp(n){{var a=[],r=n,c4=0,c2=0,c1=0;while(r>=4){{c4++;r-=4;}}while(r>=2){{c2++;r-=2;}}c1=r;if(c4)a.push(c4>1?c4+' lots de 4':'lot de 4');if(c2)a.push('lot de 2');if(c1)a.push(c1+' à l\\'unité');return a.join(' + ');}}
- function grav(i,c){{if(i===0)return c==='both'?3:0;return c==='both'?5:3;}}
- var st={{n:1,c:'both',diff:false,per:[],fond:false}};
- var $=function(id){{return document.getElementById(id);}};
- function choixVerre(i){{return st.diff&&st.per[i]?st.per[i].c:st.c;}}
- function calc(){{
-  var n=st.n,v=prixVerres(n),g=[],tg=0;
-  for(var i=0;i<n;i++){{var x=grav(i,choixVerre(i));g.push(x);tg+=x;}}
-  var f=st.fond?7*n:0;
-  return {{v:v,g:g,tg:tg,f:f,t:Math.round((v+tg+f)*100)/100}};
- }}
+ function decomp(n){{var a=[],r=n,c4=0,c2=0;while(r>=4){{c4++;r-=4;}}while(r>=2){{c2++;r-=2;}}if(c4)a.push(c4>1?c4+' lots de 4':'lot de 4');if(c2)a.push('lot de 2');if(r)a.push('1 à l\\'unité');return a.join(' + ');}}
+ function total(n){{return Math.round((prixVerres(n)+PRENOM1+SUIVANT*(n-1))*100)/100;}}
+ var n=1, $=function(id){{return document.getElementById(id);}};
  function render(){{
-  var n=st.n,r=calc();
   $('qte').textContent=n;$('moins').disabled=n<=MIN;$('plus').disabled=n>=MAX;
-  $('lotTxt').textContent=(n===1?'À l\\'unité : ':decomp(n)+' : ')+eur(r.v);
-  document.querySelectorAll('.ch').forEach(function(b){{b.setAttribute('aria-pressed',String(b.dataset.c===st.c));}});
-  var px={{both:'Verre 1 : <em>+3 €</em>',img:'Verre 1 : <em>offerte</em>',txt:'Verre 1 : <em>offert</em>'}};
-  var nx={{both:'+5 €',img:'+3 €',txt:'+3 €'}};
-  document.querySelectorAll('[data-px]').forEach(function(s){{var c=s.dataset.px;s.innerHTML=px[c]+(n>1?' · verres suivants : <em>'+nx[c]+'</em>':'');}});
-  $('fldPrenom').hidden=st.diff||st.c==='img';
-  $('chkDiff').hidden=n<2; if(n<2)st.diff=false; $('diff').checked=st.diff;
-  var pv=$('pv'); pv.hidden=!st.diff; pv.innerHTML='';
-  if(st.diff){{for(var i=0;i<n;i++){{
-   if(!st.per[i])st.per[i]={{c:st.c,p:$('prenom').value}};
-   var d=document.createElement('div');d.className='dm-pv-row';
-   d.innerHTML='<b>Verre '+(i+1)+'</b><select aria-label="Gravure du verre '+(i+1)+'"><option value="both">Image + prénom</option><option value="img">Image seule</option><option value="txt">Prénom seul</option></select><input class="dm-nm" aria-label="Prénom du verre '+(i+1)+'" maxlength="20"><span class="dm-p">'+(r.g[i]?'+'+eur(r.g[i]):'offert')+'</span>';
-   var sel=d.querySelector('select'),inp=d.querySelector('input');sel.value=st.per[i].c;inp.value=st.per[i].p;inp.disabled=st.per[i].c==='img';inp.placeholder=st.per[i].c==='img'?'sans prénom':'Prénom';
-   (function(k,s,ip){{s.onchange=function(){{st.per[k].c=s.value;render();}};ip.oninput=function(){{st.per[k].p=ip.value;}};}})(i,sel,inp);
-   pv.appendChild(d);
-  }}}}
-  $('fldFond').hidden=!st.fond;
   var L=[];
-  L.push(['Verre à whisky gravé × '+n+(n>1?' <small>('+decomp(n)+')</small>':''),eur(r.v)]);
-  if(!st.diff){{
-   var c=st.c;
-   L.push(['Gravure verre 1 : '+NOMS[c].toLowerCase(),r.g[0]?eur(r.g[0]):'<span class="dm-off">offerte</span>']);
-   if(n>1)L.push(['Gravure verres 2 à '+n+' : '+NOMS[c].toLowerCase()+' ('+eur(r.g[1])+' × '+(n-1)+')',eur(r.g[1]*(n-1))]);
-  }}else{{for(var i=0;i<n;i++)L.push(['Gravure verre '+(i+1)+' : '+NOMS[choixVerre(i)].toLowerCase(),r.g[i]?eur(r.g[i]):'<span class="dm-off">offerte</span>']);}}
-  if(st.fond)L.push(['Gravure au fond du verre (7 € × '+n+')',eur(r.f)]);
+  L.push(['Verre à whisky gravé — rose des vents (image comprise) × '+n+(n>1?' <small>('+decomp(n)+')</small>':''),eur(prixVerres(n))]);
+  L.push(['Prénom « Eugenio » gravé — verre 1',eur(PRENOM1)]);
+  if(n>1)L.push(['Image + prénom, verres 2 à '+n+' <small>('+eur(SUIVANT)+' × '+(n-1)+')</small>',eur(SUIVANT*(n-1))]);
   $('lignes').innerHTML=L.map(function(l){{return '<tr><td>'+l[0]+'</td><td>'+l[1]+'</td></tr>';}}).join('');
-  $('total').textContent=eur(r.t);$('pay').textContent='Valider et payer '+eur(r.t);
+  $('total').textContent=eur(total(n));$('pay').textContent='Valider et payer '+eur(total(n));
  }}
- function grille(){{var h='';[1,2,3,4,6].forEach(function(n){{var row='<tr><td>'+n+' verre'+(n>1?'s':'')+'</td>';['both','img','txt'].forEach(function(c){{var t=prixVerres(n);for(var i=0;i<n;i++)t+=grav(i,c);row+='<td>'+eur(Math.round(t*100)/100)+'</td>';}});h+=row+'</tr>';}});$('grille').innerHTML=h;}}
- $('moins').onclick=function(){{if(st.n>MIN){{st.n--;render();}}}};
- $('plus').onclick=function(){{if(st.n<MAX){{st.n++;render();}}}};
- document.querySelectorAll('.ch').forEach(function(b){{b.onclick=function(){{st.c=b.dataset.c;st.per=st.per.map(function(p){{return {{c:st.c,p:p.p}};}});render();}};}});
- $('diff').onchange=function(){{st.diff=this.checked;render();}};
- $('fond').onchange=function(){{st.fond=this.checked;render();}};
+ $('moins').onclick=function(){{if(n>MIN){{n--;render();}}}};
+ $('plus').onclick=function(){{if(n<MAX){{n++;render();}}}};
  $('pay').onclick=function(){{$('payMsg').textContent='Maquette : ici, la page de paiement s\\'ouvre avec ce total exact.';}};
- grille();render();
- // Gestion
- function aRes(){{var c=$('aDef').value;var a=prixVerres(1)+grav(0,c),b=prixVerres(12);for(var i=0;i<12;i++)b+=grav(i,'both');
-  $('aRes').innerHTML='Proposé d\\'office : 1 verre, '+NOMS[c].toLowerCase()+' = <b>'+eur(a)+'</b>. Selon ses choix, de <b>'+eur(prixVerres(1))+'</b> (1 verre, prénom ou image seule) à <b>'+eur(Math.round((b+84)*100)/100)+'</b> (12 verres, image + prénom, fond gravé).';}}
- $('aDef').onchange=function(){{aRes();st.c=this.value;render();}};
+ render();
+ $('aGrille').innerHTML=[1,2,3,4,5,6,8,12].map(function(k){{return '<tr><td style="color:#e9dcc0">'+k+' verre'+(k>1?'s':'')+'</td><td style="color:#fff">'+eur(total(k))+'</td></tr>';}}).join('');
  $('aQte').onchange=function(){{$('aQteSub').hidden=!this.checked;}};
- $('aGrav').onchange=function(){{$('aGr').hidden=!this.checked;}};
- aRes();
  document.querySelectorAll('.mq-tab').forEach(function(t){{t.onclick=function(){{document.querySelectorAll('.mq-tab').forEach(function(x){{x.setAttribute('aria-selected',String(x===t));}});
   $('v-client').hidden=t.dataset.v!=='client';$('v-gestion').hidden=t.dataset.v!=='gestion';window.scrollTo(0,0);}};}});
 }})();
