@@ -38,6 +38,8 @@ body{background:#f4f1ea;color:var(--ink);font-family:Inter,system-ui,sans-serif;
 .dv-head .num{text-align:right;font-weight:700}.dv-head .dt{text-align:right;font-size:.85rem;color:var(--ink-soft)}
 .dv-to{margin-top:18px;font-size:.92rem}
 .dv-intro{margin:20px 0 0;background:var(--cream);border-radius:10px;padding:12px 14px;font-size:.9rem;line-height:1.5}
+.paliers small{display:block}
+@media (max-width:400px){.paliers{gap:6px}.pal{padding:8px 4px}}
 .dv-art{display:grid;grid-template-columns:120px 1fr;gap:16px;margin-top:22px;align-items:start}
 .dv-art img{width:120px;height:120px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
 .dv-art h2{font-family:'Playfair Display',serif;font-size:1.15rem;margin:0 0 4px}
@@ -74,6 +76,17 @@ body{background:#f4f1ea;color:var(--ink);font-family:Inter,system-ui,sans-serif;
 .dm-pv-row .dm-p{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
 .opt{border:1px dashed var(--gold);border-radius:12px;padding:12px 14px;margin-top:4px}
 .opt .fld{margin-top:8px}
+.paliers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.pal{border:1.5px solid var(--line);border-radius:12px;padding:10px;text-align:center;font-size:.8rem;line-height:1.35;background:#fff}
+.pal b{display:block;font-size:.95rem;font-variant-numeric:tabular-nums}
+.pal s{color:var(--ink-soft);font-size:.78rem}
+.pal .rm{display:inline-block;margin-top:4px;background:#e8f3ec;color:var(--ok);border-radius:999px;padding:2px 8px;font-weight:700;font-size:.74rem}
+.pal.on{border-color:var(--gold-dark);background:#fffaf0;box-shadow:0 0 0 3px rgba(194,161,78,.18)}
+.nudge{margin-top:10px;background:#e8f3ec;color:#225c3b;border-radius:10px;padding:10px 12px;font-size:.86rem}
+.dm-rem td{color:var(--ok);font-weight:600}
+.eco{display:flex;justify-content:flex-end;gap:10px;align-items:center;margin-top:4px;font-size:.9rem}
+.eco s{color:var(--ink-soft)}
+.eco span{background:#e8f3ec;color:var(--ok);border-radius:999px;padding:3px 10px;font-weight:700;font-size:.82rem}
 .rec{margin-top:24px;border-top:2px solid var(--line);padding-top:12px}
 .rec table{width:100%;border-collapse:collapse;font-size:.9rem}
 .rec td{padding:7px 4px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -151,7 +164,7 @@ HTML = f"""<title>Devis modifiable</title>
   <button class="mq-tab" role="tab" aria-selected="true" data-v="client">① Ce que voit la cliente</button>
   <button class="mq-tab" role="tab" aria-selected="false" data-v="gestion">② Gestion → Devis (vous)</button>
 </div>
-<p class="mq-note">Exemple réel : devis DEV-1528 (Santos, verre à whisky, rose des vents + « Eugenio »). La cliente ne change que la quantité ; le prix se calcule à partir des lignes du devis (comme sur la fiche : remise au lot de 2 (37,90 €) et au lot de 4 (71,90 €), pas de lot de 3, le reste à 19,90 € l'unité ; l'image est comprise, le prénom se paie sur chaque verre). Rien n'est sur le site.</p>
+<p class="mq-note">Exemple réel : devis DEV-1528 (Santos, verre à whisky, rose des vents + « Eugenio »). La cliente ne change que la quantité ; le prix se calcule à partir des lignes du devis (comme sur le site : remise au lot de 2 (37,90 €) et au lot de 4 (71,90 €), pas de lot de 3, le reste à 19,90 € l'unité ; la remise est montrée à la cliente ; l'image est comprise, le prénom se paie sur chaque verre). Rien n'est sur le site.</p>
 
 <section class="dm-vue" id="v-client">
  <div class="sheet">
@@ -172,11 +185,14 @@ HTML = f"""<title>Devis modifiable</title>
     <div class="qbox"><button type="button" id="moins" aria-label="Un verre de moins">−</button><output id="qte">1</output><button type="button" id="plus" aria-label="Un verre de plus">+</button></div>
     <small>Même gravure sur chaque verre. Le total se met à jour tout seul.</small>
    </div>
+   <div class="paliers" id="paliers"></div>
+   <div class="nudge" id="nudge" hidden></div>
   </div>
 
   <div class="rec">
    <table><thead><tr style="text-align:left;color:var(--ink-soft);font-size:.82rem"><th style="padding:6px 4px">Désignation</th><th style="padding:6px 4px;text-align:right">Total</th></tr></thead><tbody id="lignes"></tbody></table>
    <div class="tot"><span>Total des articles</span><strong id="total">22,90 €</strong></div>
+   <div class="eco" id="eco" hidden><s id="avant"></s><span id="ecoTxt"></span></div>
    <div class="tva">TVA non applicable, art. 293 B du CGI · livraison choisie à l'étape suivante</div>
    <button type="button" class="dm-pay" id="pay">Valider et payer</button>
    <div class="pay-msg" id="payMsg">Le devis et la fiche de l'atelier reprennent le nombre de verres choisi.</div>
@@ -208,7 +224,7 @@ HTML = f"""<title>Devis modifiable</title>
   </div>
   <div class="voit">
    <h2>Ce que la cliente pourra payer</h2>
-   <div class="tbl"><table style="min-width:0"><thead><tr><th style="text-align:left;color:#d6b25a;background:transparent">Verres</th><th style="color:#d6b25a;background:transparent">Total</th></tr></thead><tbody id="aGrille"></tbody></table></div>
+   <div class="tbl"><table style="min-width:0"><thead><tr><th style="text-align:left;color:#d6b25a;background:transparent">Verres</th><th style="color:#d6b25a;background:transparent">Remise</th><th style="color:#d6b25a;background:transparent">Total</th></tr></thead><tbody id="aGrille"></tbody></table></div>
    <ul>
     <li>Le paiement est recalculé par le site : impossible de payer un autre prix.</li>
     <li>La commande garde le nombre de verres : la fiche atelier l'affiche.</li>
@@ -227,21 +243,31 @@ HTML = f"""<title>Devis modifiable</title>
  function prixVerres(n){{var x=parts(n);return Math.round((x.c4*LOT[4]+x.c2*LOT[2]+x.c1*LOT[1])*100)/100;}}
  function decomp(n){{var x=parts(n),a=[];if(x.c4)a.push(x.c4>1?x.c4+' lots de 4':'lot de 4');if(x.c2)a.push('lot de 2');if(x.c1)a.push(x.c1+' à l\\'unité');return a.join(' + ');}}
  function total(n){{return Math.round((prixVerres(n)+PRENOM1+SUIVANT*(n-1))*100)/100;}}
+ function remise(n){{return Math.round((n*LOT[1]-prixVerres(n))*100)/100;}}
+ function nomRemise(n){{var x=parts(n),a=[];if(x.c4)a.push(x.c4>1?x.c4+' lots de 4':'lot de 4');if(x.c2)a.push('lot de 2');return 'Remise '+a.join(' + ');}}
  var n=1, $=function(id){{return document.getElementById(id);}};
  function render(){{
   $('qte').textContent=n;$('moins').disabled=n<=MIN;$('plus').disabled=n>=MAX;
   var L=[];
-  L.push(['Verre à whisky gravé — rose des vents (image comprise) × '+n+(n>1?' <small>('+decomp(n)+')</small>':''),eur(prixVerres(n))]);
+  var rm=remise(n);
+  L.push(['Verre à whisky gravé — rose des vents (image comprise) × '+n+(n>1?' <small>(19,90 € × '+n+')</small>':''),eur(n*LOT[1])]);
+  if(rm>0)L.push(['<span class="dm-r">'+nomRemise(n)+'</span>','−'+eur(rm),'dm-rem']);
   L.push(['Prénom « Eugenio » gravé — verre 1',eur(PRENOM1)]);
   if(n>1)L.push(['Image + prénom, verres 2 à '+n+' <small>('+eur(SUIVANT)+' × '+(n-1)+')</small>',eur(SUIVANT*(n-1))]);
-  $('lignes').innerHTML=L.map(function(l){{return '<tr><td>'+l[0]+'</td><td>'+l[1]+'</td></tr>';}}).join('');
+  $('lignes').innerHTML=L.map(function(l){{return '<tr'+(l[2]?' class="'+l[2]+'"':'')+'><td>'+l[0]+'</td><td>'+l[1]+'</td></tr>';}}).join('');
+  $('eco').hidden=!(rm>0);$('avant').textContent=eur(total(n)+rm);$('ecoTxt').textContent='Vous économisez '+eur(rm);
+  var P=[[1,'1 verre'],[2,'Lot de 2'],[4,'Lot de 4']];
+  $('paliers').innerHTML=P.map(function(q){{var k=q[0],r=remise(k);var on=(k===4&&n>=4)||(k===2&&parts(n).c2>0&&n<4)||(k===1&&n===1)||(k===1&&n===3);
+   return '<div class="pal'+(on?' on':'')+'">'+q[1]+'<b>'+eur(prixVerres(k))+'</b>'+(r>0?'<s>'+eur(k*LOT[1])+'</s><br><span class="rm">−'+eur(r)+'</span>':'<span style="display:block;font-size:.74rem;color:var(--ink-soft);margin-top:6px">prix de base</span>')+'</div>';}}).join('');
+  var nd='';if(n===1)nd='Avec un 2ᵉ verre, vous profitez du lot de 2 : remise de '+eur(remise(2))+'.';else if(n===3)nd='Avec 1 verre de plus, vous profitez du lot de 4 : remise de '+eur(remise(4))+'.';
+  $('nudge').hidden=!nd;$('nudge').textContent=nd;
   $('total').textContent=eur(total(n));$('pay').textContent='Valider et payer '+eur(total(n));
  }}
  $('moins').onclick=function(){{if(n>MIN){{n--;render();}}}};
  $('plus').onclick=function(){{if(n<MAX){{n++;render();}}}};
  $('pay').onclick=function(){{$('payMsg').textContent='Maquette : ici, la page de paiement s\\'ouvre avec ce total exact.';}};
  render();
- $('aGrille').innerHTML=[1,2,3,4,5,6,8,12].map(function(k){{return '<tr><td style="color:#e9dcc0">'+k+' verre'+(k>1?'s':'')+'</td><td style="color:#fff">'+eur(total(k))+'</td></tr>';}}).join('');
+ $('aGrille').innerHTML=[1,2,3,4,5,6,8,12].map(function(k){{return '<tr><td style="color:#e9dcc0">'+k+' verre'+(k>1?'s':'')+'</td><td style="color:#9fd8b5">'+(remise(k)>0?'−'+eur(remise(k)):'—')+'</td><td style="color:#fff">'+eur(total(k))+'</td></tr>';}}).join('');
  $('aQte').onchange=function(){{$('aQteSub').hidden=!this.checked;}};
  document.querySelectorAll('.mq-tab').forEach(function(t){{t.onclick=function(){{document.querySelectorAll('.mq-tab').forEach(function(x){{x.setAttribute('aria-selected',String(x===t));}});
   $('v-client').hidden=t.dataset.v!=='client';$('v-gestion').hidden=t.dataset.v!=='gestion';window.scrollTo(0,0);}};}});
