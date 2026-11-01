@@ -20,6 +20,7 @@ import CartDrawer from "@/components/CartDrawer";
 import SiteGate from "@/components/SiteGate";
 import ShopButton from "@/components/ShopButton";
 import QuestionWidget from "@/components/QuestionWidget";
+import FlottantsAuto from "@/components/FlottantsAuto";
 import WelcomePopup from "@/components/WelcomePopup";
 import RefCapture from "@/components/RefCapture";
 import SiteAnalytics from "@/components/SiteAnalytics";
@@ -254,6 +255,7 @@ export default async function RootLayout({ children }) {
               <main>{children}</main>
               <Footer masques={Object.keys(visibilite.univers || {})} />
               <CartDrawer />
+              <FlottantsAuto />
               <ShopButton />
               {settings.agents?.widget !== false ? <QuestionWidget /> : null}
               <WelcomePopup enabled={settings.welcome?.enabled} code={settings.welcome?.code} text={settings.welcome?.text} />

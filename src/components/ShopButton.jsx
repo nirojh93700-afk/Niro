@@ -15,6 +15,7 @@ export default function ShopButton() {
     <Link
       href="/boutique"
       aria-label="Voir tous les produits"
+      className="flot-btn"
       style={{
         position: "fixed", bottom: 20, right: 20, zIndex: 60,
         display: "inline-flex", alignItems: "center", gap: 8,

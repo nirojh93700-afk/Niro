@@ -8,6 +8,11 @@
   REGARDE (`imagesPourAgent`, `src/lib/photosMessageServeur.js`), alerte « [À valider] » avec vignettes (`blocPhotos` de `replyAlert.js`).
   Affichées dans Gestion (CRM dossier, BatThread) et sur `/repondre/<jeton>` (`src/components/PhotosMessage.jsx`). Page « Répondre » :
   une photo seule suffit (texte « (photo jointe) »). Sous le bouton « Répondre » des e-mails : « vous pouvez y joindre vos photos ».
+- **Boutons flottants « Une question ? » / « La boutique » sur TÉLÉPHONE (≤ 760 px) seulement (gérant, 01/11/2026, « oui 4 secondes
+  téléphone seulement »)** : visibles 4 s à l'ouverture, puis glissent vers le bas ; chaque toucher de l'écran les remontre 4 s ; la
+  fenêtre « Une question ? » ouverte les garde (`FlottantsAuto.jsx`, classes `flot-btn` / `html.flot-cache` / `flot-garde`). Ordinateur inchangé.
+- ✉️ Mail à Laure (galasa16@orange.fr, yeux bleus du chien → gravure blanc givré) ENVOYÉ par le site le 01/11. Alixia Coco : mail préparé,
+  NON envoyé (le gérant a dit « pas l'autre »).
 
 ## 🧭 GESTION MODERNE v3 + ACCUEIL « VERSION B » — ✅ EN LIGNE LE 30/10/2026 (« Oui la plus récente, mets en ligne la version B … fais vraiment attention en Réglages »)
 - Maquette appliquée : https://claude.ai/artifact/KipDFvam6ABJnV2JGc83PN (v3 + accueil B). **`AdminShell.jsx`** : barre latérale encre en

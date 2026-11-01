@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import PhotosJointes from "@/components/PhotosJointes";
 
@@ -16,6 +16,11 @@ export default function QuestionWidget() {
   const [photos, setPhotos] = useState([]);
   const [envoiPhoto, setEnvoiPhoto] = useState(false);
   const [cle, setCle] = useState(0);
+  // Fenêtre ouverte : les boutons du bas restent visibles sur téléphone (FlottantsAuto).
+  useEffect(() => {
+    document.documentElement.classList.toggle("flot-garde", open);
+    return () => document.documentElement.classList.remove("flot-garde");
+  }, [open]);
   const hidden = ["/gestion", "/panier", "/paiement", "/merci", "/repondre", "/reponse", "/document", "/suivi", "/espace"].some((p) => pathname.startsWith(p));
   if (hidden) return null;
 
@@ -52,6 +57,7 @@ export default function QuestionWidget() {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label="Poser une question"
+        className="flot-btn"
         style={{
           position: "fixed", bottom: 20, left: 20, zIndex: 60,
           display: "inline-flex", alignItems: "center", gap: 8,
