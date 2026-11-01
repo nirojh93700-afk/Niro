@@ -748,6 +748,8 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       // Commande sur mesure : demande du client + n° de devis (visibles dans l'admin).
       demande: quote ? (quote.note || "").trim() : "",
       quoteNumber: quote?.number || "",
+      // Nombre de pièces choisi par la cliente sur un devis à quantité modifiable (01/11/2026).
+      ...(Number(session?.metadata?.qte) > 0 ? { quoteQte: Number(session.metadata.qte) } : {}),
       quoteClientName: quote?.client?.name || "", // sert si le client tape son adresse dans le champ « nom » de Stripe
       surMesure: Boolean(quote),
       paymentIntentId: (session.payment_intent || "").toString(),

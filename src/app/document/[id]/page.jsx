@@ -3,6 +3,8 @@ import { getQuote } from "@/lib/firebase";
 import DocumentActions from "@/components/DocumentActions";
 import { livraisonActive } from "@/lib/portDevis";
 import { indexVariantes } from "@/lib/indexVariantes";
+import { configQuantite } from "@/lib/devisQuantite";
+import DevisInteractif from "@/components/DevisInteractif";
 import { LOGO_FICHIER } from "@/lib/photosLocales";
 
 export const dynamic = "force-dynamic";
@@ -23,11 +25,61 @@ export default async function DocumentPage({ params }) {
   const isFacture = q.type === "facture";
   const titre = isFacture ? "Facture" : "Devis";
   // Devis dont chaque ligne a un poids : le client choisit sa livraison sur cette page.
-  const avecChoix = !isFacture && q.status !== "paye" && livraisonActive(q.items, await indexVariantes());
+  const index = await indexVariantes();
+  const avecChoix = !isFacture && q.status !== "paye" && livraisonActive(q.items, index);
+  // Devis dont la cliente choisit le nombre de pièces (01/11/2026) : page interactive.
+  const cfg = !isFacture && q.status !== "paye" ? configQuantite(q, index) : null;
 
   return (
     <section className="section">
       <div className="container" style={{ maxWidth: 720 }}>
+        {cfg ? (
+          <DevisInteractif
+            q={{ id: q.id, type: q.type, status: q.status, client: q.client, items: q.items, total: q.total }}
+            cfg={cfg}
+            livraison={avecChoix}
+            avant={<>
+          {/* En-tête */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
+            <div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={LOGO_FICHIER} alt="Niv Création" style={{ height: 64, borderRadius: 8 }} />
+              <div style={{ fontSize: "0.82rem", color: "var(--ink-soft)", marginTop: 8, lineHeight: 1.5 }}>
+                Niv Création — Atelier de personnalisation<br />
+                6 rue d'Armaillé, 75017 Paris<br />
+                contact.nivcreation@gmail.com · 07 66 15 31 02
+              </div>
+            </div>
+            <div style={{ textAlign: "right" }}>
+              <h1 style={{ margin: 0, color: "var(--gold-dark)", fontSize: "1.6rem" }}>{titre}</h1>
+              <div style={{ fontWeight: 700 }}>{q.number}</div>
+              <div style={{ fontSize: "0.85rem", color: "var(--ink-soft)" }}>{fmtDate(q.createdAt)}</div>
+            </div>
+          </div>
+
+          {/* Client */}
+          <div style={{ marginTop: 24, fontSize: "0.92rem" }}>
+            <strong>Adressé à :</strong><br />
+            {q.client?.name || "—"}<br />
+            {q.client?.email ? <>{q.client.email}<br /></> : null}
+            {q.client?.address ? <span style={{ whiteSpace: "pre-line" }}>{q.client.address}</span> : null}
+          </div>
+
+            </>}
+            apres={<>
+          {q.note ? (
+            <p style={{ marginTop: 20, fontSize: "0.88rem", color: "var(--ink-soft)", whiteSpace: "pre-line", background: "var(--cream)", padding: 12, borderRadius: 8 }}>{q.note}</p>
+          ) : null}
+
+          {!isFacture && (
+            <p style={{ marginTop: 16, fontSize: "0.82rem", color: "var(--ink-soft)" }}>
+              Devis valable 30 jours. La fabrication démarre après acceptation et paiement.
+            </p>
+          )}
+            </>}
+          />
+        ) : (
+          <>
         <div className="doc-sheet" style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: 14, padding: "32px 28px", boxShadow: "var(--shadow)" }}>
           {/* En-tête */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
@@ -96,6 +148,8 @@ export default async function DocumentPage({ params }) {
         </div>
 
         <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={q.total} livraison={avecChoix} />
+          </>
+        )}
       </div>
     </section>
   );

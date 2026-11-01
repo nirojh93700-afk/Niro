@@ -555,6 +555,30 @@ export async function deleteQuote(id) {
   }
 }
 
+// Réglage « la cliente peut changer le nombre » d'un devis déjà créé (01/11/2026) : seulement
+// `qte` et, ligne par ligne, `suit` / `prixSuivant`. Les désignations, quantités et prix ne bougent pas.
+export async function updateQuoteQuantite(id, qte, lignes) {
+  const a = getApp();
+  if (!a) return false;
+  try {
+    const ref = admin.firestore().collection("siteQuotes").doc(id);
+    const doc = await ref.get();
+    if (!doc.exists) return false;
+    const items = (doc.data().items || []).map((it, i) => {
+      const l = Array.isArray(lignes) ? lignes[i] : null;
+      const out = { ...it };
+      delete out.suit; delete out.prixSuivant;
+      if (l?.suit) { out.suit = true; if (l.prixSuivant != null) out.prixSuivant = l.prixSuivant; }
+      return out;
+    });
+    await ref.update({ qte, items });
+    return true;
+  } catch (e) {
+    console.error("updateQuoteQuantite:", e.message);
+    return false;
+  }
+}
+
 export async function updateQuoteStatus(id, status) {
   const a = getApp();
   if (!a) return false;

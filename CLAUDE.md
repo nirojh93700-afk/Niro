@@ -1,3 +1,15 @@
+## 🔢 DEVIS : LA CLIENTE CHOISIT LE NOMBRE DE PIÈCES — ✅ APPLIQUÉ LE 01/11/2026 (« Applique la maquette », https://claude.ai/artifact/UajL1z3fV5Fu5GF36voVcf)
+- Gestion → Devis : case « La cliente peut changer le nombre » (min / max) + par ligne « Suit le nombre » (et « Prix des suivantes » pour une
+  ligne de gravure) — à la création ET sur un devis existant (bouton « 🔢 Nombre modifiable », action `quantite`, seuls `qte` / `suit` /
+  `prixSuivant` changent). La cliente ne change QUE le nombre (− 1 +) ; le devis reste écrit comme d'habitude.
+- Calcul `src/lib/devisQuantite.js` (pur, `npm run test-devis-quantite`) COMME LE SITE : ligne rattachée à un produit vendu par lots → prix des
+  lots de la fiche (gérant : remise dès 2 verres, lot de 2 et lot de 4, pas de lot de 3 → 3 = à l'unité, 6 = lot 4 + lot 2) ; ligne de gravure →
+  prix de la ligne pour la 1re pièce puis `prixSuivant` (règle des verres : prénom 3 € puis 5 €). DEV-1528 : 22,90 · 45,90 · 72,70 · 89,90 €.
+- Page `/document/<id>` (`DevisInteractif.jsx`) : cases « 1 verre / Lot de 2 / Lot de 4 » avec prix barré et remise, conseil « avec 1 verre de
+  plus… », ligne verte « Remise lot de N », ancien total barré + « Vous économisez ». Port, code promo et paiement recalculés côté serveur pour
+  le nombre choisi (`devisEffectif.js` dans quote-shipping / quote-promo / quote-pay) ; Stripe reçoit les lignes par lot ; stock décompté par
+  lot ; `metadata.qte` → `order.quoteQte`. Un devis sans la case = exactement comme avant. E-mail du devis : une phrase le dit.
+
 ## 📷 PHOTOS JOINTES AUX MESSAGES DU SITE — ✅ APPLIQUÉ LE 01/11/2026 (« Applique la maquette », https://claude.ai/artifact/48MjaGPXc5RgmfVtqkGQYi)
 - Avant : AUCUN formulaire ne permettait de joindre une photo (Alixia Coco « à partir de cette photo », rien n'arrivait). Maintenant
   « 📷 Ajouter une photo (facultatif) », 3 max, sur la page Contact, la bulle « Une question ? », « Faire une demande particulière » et la page

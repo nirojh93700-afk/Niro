@@ -1,5 +1,6 @@
 import { getQuote } from "@/lib/firebase";
 import { verifierCodeDevis } from "@/lib/promoDevis";
+import { devisEffectif } from "@/lib/devisEffectif";
 
 export const dynamic = "force-dynamic";
 
@@ -9,8 +10,9 @@ export const dynamic = "force-dynamic";
 export async function POST(req) {
   let body;
   try { body = await req.json(); } catch { return Response.json({ valid: false }); }
-  const q = body?.id ? await getQuote(body.id) : null;
-  if (!q || q.type === "facture" || q.status === "paye") return Response.json({ valid: false });
+  const q0 = body?.id ? await getQuote(body.id) : null;
+  if (!q0 || q0.type === "facture" || q0.status === "paye") return Response.json({ valid: false });
+  const { q } = await devisEffectif(q0, body?.n);
   const email = String(body?.email || q.client?.email || "");
   const r = await verifierCodeDevis(body?.code, email, q.items);
   if (!r.valid) return Response.json(r);

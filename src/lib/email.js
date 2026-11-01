@@ -294,6 +294,7 @@ export function quoteEmail(q, link) {
     </table>
     <p style="margin:0 0 18px;text-align:right;font-size:16px;"><strong style="color:${BRAND.gold};">Total : ${fmt(q?.total)}</strong></p>
     ${q?.note ? `<p style="margin:0 0 16px;white-space:pre-line;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:10px;padding:12px;">${escapeHtml(q.note)}</p>` : ""}
+    ${q?.qte?.modifiable && !isFacture ? `<p style="margin:0 0 16px;">Sur la page du devis, vous pouvez changer le nombre de pièces : le prix se met à jour tout seul.</p>` : ""}
     <p style="margin:0 0 20px;text-align:center;">
       <a href="${link}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 26px;border-radius:8px;font-weight:bold;">Voir ${isFacture ? "et régler ma facture" : "et accepter mon devis"}</a>
     </p>

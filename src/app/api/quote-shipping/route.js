@@ -1,7 +1,7 @@
 import { getQuote } from "@/lib/firebase";
 import { getSettings } from "@/lib/stock";
 import { livraisonActive, poidsDevis, portDevis } from "@/lib/portDevis";
-import { indexVariantes } from "@/lib/indexVariantes";
+import { devisEffectif } from "@/lib/devisEffectif";
 
 export const dynamic = "force-dynamic";
 
@@ -10,9 +10,10 @@ export const dynamic = "force-dynamic";
 export async function POST(req) {
   let body;
   try { body = await req.json(); } catch { return Response.json({ actif: false }); }
-  const q = body?.id ? await getQuote(body.id) : null;
-  if (!q || q.type === "facture" || q.status === "paye") return Response.json({ actif: false });
-  const index = await indexVariantes();
+  const q0 = body?.id ? await getQuote(body.id) : null;
+  if (!q0 || q0.type === "facture" || q0.status === "paye") return Response.json({ actif: false });
+  // Nombre de pièces choisi par la cliente (devis à quantité modifiable) : port calculé dessus.
+  const { q, index } = await devisEffectif(q0, body?.n);
   if (!livraisonActive(q.items, index)) return Response.json({ actif: false });
   const settings = await getSettings();
   if (body?.method === "relais" || body?.method === "domicile") {

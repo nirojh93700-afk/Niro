@@ -6,7 +6,10 @@ import RelaisPicker from "@/components/RelaisPicker";
 const euro = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(n || 0);
 const prixPort = (n) => (n === 0 ? "Offerte" : euro(n));
 
-export default function DocumentActions({ id, type, status, clientEmail = "", totalArticles = 0, livraison = false }) {
+export default function DocumentActions({ id, type, status, clientEmail = "", totalArticles = 0, livraison = false, n = null }) {
+  // `n` : nombre de pièces choisi par la cliente (devis à quantité modifiable, 01/11/2026) — envoyé
+  // à chaque calcul (port, code promo, paiement) ; le serveur recalcule tout dessus.
+  const avecN = n != null ? { n } : {};
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   // Code promo (devis seulement) : le client s'inscrit, reçoit son code, le saisit ici.
@@ -27,15 +30,21 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
   useEffect(() => {
     if (!peutLivrer) return;
     let vivant = true;
-    fetch("/api/quote-shipping", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) })
+    fetch("/api/quote-shipping", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, ...avecN }) })
       .then((r) => r.json()).then((d) => { if (vivant && d.actif) setTarifs(d); }).catch(() => {});
+    if (relais) choisirRelais(relais);
     return () => { vivant = false; };
-  }, [id, peutLivrer]);
+  }, [id, peutLivrer, n]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Nombre changé avec un code déjà appliqué : la remise est recalculée sur le nouveau devis.
+  useEffect(() => {
+    if (promo && n != null) appliquer(promo.code);
+  }, [n]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function choisirRelais(p) {
     setRelais(p); setPortRelais(null); setErr("");
     try {
-      const res = await fetch("/api/quote-shipping", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, method: "relais", relaisPoint: p }) });
+      const res = await fetch("/api/quote-shipping", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, method: "relais", relaisPoint: p, ...avecN }) });
       const d = await res.json();
       if (typeof d.price === "number") setPortRelais(d.price);
     } catch { /* le prix exact est de toute façon recalculé au paiement */ }
@@ -46,15 +55,16 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
   const total = peutLivrer && port != null ? Math.round((totalArticles - remise + port) * 100) / 100 : null;
   const bloque = peutLivrer && (!tarifs || (method === "relais" && !relais) || port == null);
 
-  async function appliquer() {
+  async function appliquer(codeForce) {
+    const leCode = typeof codeForce === "string" ? codeForce : code;
     setPromoMsg(""); setPromo(null);
-    if (!code.trim()) { setPromoMsg("Saisissez votre code promo."); return; }
+    if (!leCode.trim()) { setPromoMsg("Saisissez votre code promo."); return; }
     setVerif(true);
     try {
       const res = await fetch("/api/quote-promo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, code, email: clientEmail || email }),
+        body: JSON.stringify({ id, code: leCode, email: clientEmail || email, ...avecN }),
       });
       const d = await res.json();
       if (d.valid) setPromo({ code: d.code, remise: d.remise, label: d.label, total: d.total, email: d.email || (clientEmail || email) });
@@ -79,6 +89,7 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id,
+          ...avecN,
           ...(promo ? { promoCode: promo.code, promoEmail: promo.email } : {}),
           ...(peutLivrer ? { deliveryMethod: method, ...(method === "relais" ? { relaisPoint: relais } : {}) } : {}),
         }),
@@ -151,7 +162,7 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
                   onKeyDown={(e) => { if (e.key === "Enter") appliquer(); }}
                   placeholder="Ex : BIENVENUE10" autoCapitalize="characters" autoComplete="off"
                   style={{ flex: "1 1 180px", minWidth: 0, padding: "11px 12px", borderRadius: 10, border: "1px solid var(--line)", font: "inherit" }} />
-                <button type="button" className="btn btn-outline" onClick={appliquer} disabled={verif}>{verif ? "Vérification…" : "Appliquer"}</button>
+                <button type="button" className="btn btn-outline" onClick={() => appliquer()} disabled={verif}>{verif ? "Vérification…" : "Appliquer"}</button>
               </div>
               {!clientEmail && (
                 <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Votre adresse e-mail (celle de l'inscription)" autoComplete="email"

@@ -4,7 +4,7 @@ import { toCents } from "@/lib/format";
 import { verifierCodeDevis } from "@/lib/promoDevis";
 import { getSettings } from "@/lib/stock";
 import { livraisonActive, portDevis } from "@/lib/portDevis";
-import { indexVariantes } from "@/lib/indexVariantes";
+import { devisEffectif } from "@/lib/devisEffectif";
 
 export const dynamic = "force-dynamic";
 
@@ -16,9 +16,12 @@ export async function POST(req) {
   const id = body?.id;
   if (!id) return Response.json({ error: "Document introuvable." }, { status: 400 });
 
-  const q = await getQuote(id);
-  if (!q) return Response.json({ error: "Document introuvable." }, { status: 404 });
-  if (q.status === "paye") return Response.json({ error: "Ce document est déjà payé." }, { status: 400 });
+  const q0 = await getQuote(id);
+  if (!q0) return Response.json({ error: "Document introuvable." }, { status: 404 });
+  if (q0.status === "paye") return Response.json({ error: "Ce document est déjà payé." }, { status: 400 });
+  // Devis à quantité modifiable (01/11/2026) : lignes et total RECALCULÉS ici pour le nombre choisi
+  // (prix des lots de la fiche, gravure pièce par pièce) — jamais un prix venu du navigateur.
+  const { q, index, app } = await devisEffectif(q0, body?.n);
   if (!(q.total > 0)) return Response.json({ error: "Montant invalide." }, { status: 400 });
 
   function resolveSiteUrl() {
@@ -29,7 +32,7 @@ export async function POST(req) {
     return new URL(req.url).origin;
   }
   const siteUrl = resolveSiteUrl();
-  const stockPairs = q.items.filter((it) => it.stockId).map((it) => [it.stockId, it.qty]);
+  const stockPairs = app.stock;
   const stripe = new Stripe(secret);
   // Pays livrés (mêmes que la boutique) — pour collecter l'adresse de livraison.
   const SHIPPING_COUNTRIES = ["FR", "BE", "CH", "LU", "DE", "ES", "IT", "NL", "PT", "MC"];
@@ -38,7 +41,6 @@ export async function POST(req) {
   // Livraison choisie par le client sur le lien du devis (03/10/2026) : prix recalculé ICI,
   // côté serveur, d'après le poids des lignes. Devis sans poids = comportement d'avant.
   let shippingOpts, relaisMeta = {}, countries = SHIPPING_COUNTRIES;
-  const index = await indexVariantes();
   if (livraisonActive(q.items, index)) {
     const method = body?.deliveryMethod === "relais" ? "relais" : "domicile";
     const r = portDevis(q, await getSettings(), index, method, body?.relaisPoint);
@@ -90,6 +92,7 @@ export async function POST(req) {
       metadata: {
         quoteId: id,
         quoteNumber: q.number || "",
+        ...(app.n ? { qte: String(app.n) } : {}),
         ...promoMeta,
         ...relaisMeta,
         ...(stockPairs.length ? { stock: JSON.stringify(stockPairs).slice(0, 480) } : {}),

@@ -11,6 +11,44 @@ const ARTICLES_SITE = products.flatMap((p) => (p.variants || []).map((v) => ({
   poids: Number(v.weight) || Number(p.weight) || 200, lettre: Boolean(p.letter),
 })));
 
+// Réglage « la cliente peut changer le nombre » (maquette validée le 01/11/2026,
+// https://claude.ai/artifact/UajL1z3fV5Fu5GF36voVcf). Une ligne « suit le nombre » : rattachée à un
+// produit vendu par lots → prix des lots de la fiche (remise montrée à la cliente) ; sinon (gravure)
+// prix de la ligne pour la 1re pièce puis « prix des suivantes » pour chaque pièce en plus.
+function BlocQuantite({ qte, setQte, lignes, setLigne }) {
+  return (
+    <div style={{ border: "1px dashed var(--gold)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
+      <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: "0.9rem" }}>
+        <input type="checkbox" checked={Boolean(qte.modifiable)} onChange={(e) => setQte({ ...qte, modifiable: e.target.checked })} style={{ marginTop: 3 }} />
+        <span><strong>La cliente peut changer le nombre</strong><br />
+          <small style={{ color: "var(--ink-soft)" }}>Boutons − 1 + sur son devis. Ligne rattachée à un produit vendu par lots : prix des lots de la fiche, remise montrée. Ligne de gravure : prix de la ligne pour la 1re pièce, puis le prix des suivantes.</small></span>
+      </label>
+      {qte.modifiable && (
+        <>
+          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", fontSize: "0.85rem", alignItems: "center" }}>
+            Au moins <input type="number" min="1" value={qte.min} onChange={(e) => setQte({ ...qte, min: e.target.value })} style={{ width: 64, padding: 6, border: "1px solid var(--line)", borderRadius: 8 }} />
+            au plus <input type="number" min="1" value={qte.max} onChange={(e) => setQte({ ...qte, max: e.target.value })} style={{ width: 64, padding: 6, border: "1px solid var(--line)", borderRadius: 8 }} />
+          </div>
+          {lignes.map((l, i) => (
+            <div key={i} style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", fontSize: "0.84rem", background: "var(--cream)", borderRadius: 8, padding: "6px 8px" }}>
+              <label style={{ display: "flex", gap: 6, alignItems: "center", flex: "1 1 220px", minWidth: 0 }}>
+                <input type="checkbox" checked={Boolean(l.suit)} onChange={(e) => setLigne(i, { suit: e.target.checked })} />
+                <span style={{ overflowWrap: "anywhere" }}>Suit le nombre : {l.desc || `ligne ${i + 1}`}</span>
+              </label>
+              {l.suit && !l.variantId ? (
+                <label style={{ display: "flex", gap: 6, alignItems: "center" }}>Prix des suivantes (€)
+                  <input type="number" min="0" step="0.01" value={l.prixSuivant ?? ""} placeholder={String(l.price || "")} onChange={(e) => setLigne(i, { prixSuivant: e.target.value })}
+                    style={{ width: 80, padding: 6, border: "1px solid var(--line)", borderRadius: 8 }} />
+                </label>
+              ) : l.suit ? <small style={{ color: "var(--ink-soft)" }}>prix des lots de la fiche</small> : null}
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  );
+}
+
 const STATUS_LABEL = { envoye: "Envoyé", paye: "Payé ✓", facture: "Facture", annule: "Annulé" };
 
 export default function QuotesAdmin({ adminKey }) {
@@ -23,6 +61,8 @@ export default function QuotesAdmin({ adminKey }) {
   const [client, setClient] = useState({ name: "", email: "", address: "" });
   const [items, setItems] = useState([{ desc: "", qty: 1, price: "" }]);
   const [note, setNote] = useState("");
+  const [qte, setQte] = useState({ modifiable: false, min: 1, max: 12 });
+  const [edQte, setEdQte] = useState(null); // { id, qte, lignes } : réglage d'un devis existant
 
   async function load() {
     const res = await fetch("/api/admin/quotes", { headers: { "x-admin-key": adminKey } });
@@ -65,7 +105,7 @@ export default function QuotesAdmin({ adminKey }) {
     const res = await fetch("/api/admin/quotes", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
-      body: JSON.stringify({ type, client, items, note }),
+      body: JSON.stringify({ type, client, items, note, qte }),
     });
     const d = await res.json();
     if (d.ok) {
@@ -73,6 +113,7 @@ export default function QuotesAdmin({ adminKey }) {
       setClient({ name: "", email: "", address: "" });
       setItems([{ desc: "", qty: 1, price: "" }]);
       setNote("");
+      setQte({ modifiable: false, min: 1, max: 12 });
       setShowForm(false);
       load();
     } else {
@@ -157,6 +198,11 @@ export default function QuotesAdmin({ adminKey }) {
           <button className="btn btn-outline" style={{ justifySelf: "start", padding: "4px 12px" }}
             onClick={() => setItems([...items, { desc: "", qty: 1, price: "" }])}>+ Ligne</button>
 
+          {type === "devis" && (
+            <BlocQuantite qte={qte} setQte={setQte} lignes={items}
+              setLigne={(i, patch) => setItems(items.map((x, j) => (j === i ? { ...x, ...patch } : x)))} />
+          )}
+
           <label className="admin-field">Demande du client / à fabriquer (recopie ici sa demande)
             <textarea value={note} onChange={(e) => setNote(e.target.value)} style={{ minHeight: 70 }} placeholder="Ex. : gravure logo + date, sur les 2 faces, livraison avant le 12… (s'affichera automatiquement dans la commande une fois payée)" />
           </label>
@@ -188,11 +234,31 @@ export default function QuotesAdmin({ adminKey }) {
               style={{ padding: "4px 12px", fontSize: "0.85rem" }}>
               ✉️ Envoyer par e-mail
             </button>
+            {q.type !== "facture" && q.status !== "paye" && (
+              <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
+                onClick={() => setEdQte(edQte?.id === q.id ? null : { id: q.id, qte: { modifiable: Boolean(q.qte?.modifiable), min: q.qte?.min || 1, max: q.qte?.max || 12 }, lignes: (q.items || []).map((it) => ({ ...it })) })}>
+                🔢 Nombre modifiable{q.qte?.modifiable ? " ✓" : ""}
+              </button>
+            )}
             <button className="btn btn-outline" onClick={() => removeQuote(q)}
               style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f" }}>
               Supprimer
             </button>
           </div>
+          {edQte?.id === q.id && (
+            <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
+              <BlocQuantite qte={edQte.qte} setQte={(v) => setEdQte({ ...edQte, qte: v })} lignes={edQte.lignes}
+                setLigne={(i, patch) => setEdQte({ ...edQte, lignes: edQte.lignes.map((x, j) => (j === i ? { ...x, ...patch } : x)) })} />
+              <button className="btn btn-gold" style={{ justifySelf: "start", padding: "4px 14px" }} onClick={async () => {
+                const res = await fetch("/api/admin/quotes", {
+                  method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
+                  body: JSON.stringify({ action: "quantite", id: q.id, qte: edQte.qte, lignes: edQte.lignes.map((l) => ({ suit: Boolean(l.suit), prixSuivant: l.prixSuivant })) }),
+                });
+                const d = await res.json().catch(() => ({}));
+                if (d.ok) { setMsg(`${q.number} : réglage enregistré ✓`); setEdQte(null); load(); } else setMsg(d.error || "Échec.");
+              }}>Enregistrer</button>
+            </div>
+          )}
         </div>
       ))}
     </>
