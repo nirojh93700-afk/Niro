@@ -151,7 +151,7 @@ HTML = f"""<title>Devis modifiable</title>
   <button class="mq-tab" role="tab" aria-selected="true" data-v="client">① Ce que voit la cliente</button>
   <button class="mq-tab" role="tab" aria-selected="false" data-v="gestion">② Gestion → Devis (vous)</button>
 </div>
-<p class="mq-note">Exemple réel : devis DEV-1528 (Santos, verre à whisky, rose des vents + « Eugenio »). La cliente ne change que la quantité ; le prix se calcule à partir des lignes du devis (comme sur la fiche : remise au lot de 2 (37,90 €) et au lot de 4 (71,90 €), pas de lot de 3, le reste à 19,90 € l'unité ; l'image est comprise, le prénom se paie sur chaque verre). Rien n'est sur le site.</p>
+<p class="mq-note">Exemple réel : devis DEV-1528 (Santos, verre à whisky, rose des vents + « Eugenio »). La cliente ne change que la quantité ; le prix se calcule à partir des lignes du devis (remise à partir du 4e verre : 71,90 € les 4 ; en dessous et en plus, 19,90 € l'unité ; l'image est comprise, le prénom se paie sur chaque verre). Rien n'est sur le site.</p>
 
 <section class="dm-vue" id="v-client">
  <div class="sheet">
@@ -222,8 +222,8 @@ HTML = f"""<title>Devis modifiable</title>
 (function(){{
  var LOT={{1:19.9,2:37.9,4:71.9}}, MIN=1, MAX=12, PRENOM1=3, SUIVANT=5;
  function eur(n){{return n.toLocaleString('fr-FR',{{minimumFractionDigits:2,maximumFractionDigits:2}})+' €';}}
- // Comme la fiche : lot de 2 et lot de 4 seulement (pas de lot de 3) ; le reste au prix de l'unité.
- function parts(n){{var c4=Math.floor(n/4),r=n%4;return {{c4:c4,c2:r===2?1:0,c1:r===2?0:r}};}}
+ // Règle du gérant (01/11/2026) : remise à partir du 4e verre (prix du lot de 4), le reste au prix de l'unité.
+ function parts(n){{return {{c4:Math.floor(n/4),c2:0,c1:n%4}};}}
  function prixVerres(n){{var x=parts(n);return Math.round((x.c4*LOT[4]+x.c2*LOT[2]+x.c1*LOT[1])*100)/100;}}
  function decomp(n){{var x=parts(n),a=[];if(x.c4)a.push(x.c4>1?x.c4+' lots de 4':'lot de 4');if(x.c2)a.push('lot de 2');if(x.c1)a.push(x.c1+' à l\\'unité');return a.join(' + ');}}
  function total(n){{return Math.round((prixVerres(n)+PRENOM1+SUIVANT*(n-1))*100)/100;}}
