@@ -18,7 +18,7 @@ export async function boutonRepondre({ email, name = "", subject = "", excerpt =
     if (!token) return "";
     return `<p style="margin:22px 0 6px;text-align:center;">
       <a href="${BRAND.siteUrl}/reponse/${token}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:13px 30px;border-radius:999px;font-weight:bold;">✉️ Répondre à ce message</a></p>
-    <p style="margin:0;text-align:center;color:#8a7a56;font-size:12px;">Votre réponse arrive directement dans votre dossier — pas besoin d'écrire un e-mail.</p>`;
+    <p style="margin:0;text-align:center;color:#8a7a56;font-size:12px;">Votre réponse arrive directement dans votre dossier, et vous pouvez y joindre vos photos.</p>`;
   } catch { return ""; }
 }
 

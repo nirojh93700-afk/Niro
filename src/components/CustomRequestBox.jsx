@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PhotosJointes from "@/components/PhotosJointes";
 
 // Message d'aide adapté À CHAQUE produit. Priorité au champ `requestHint` posé
 // sur le produit (products.js) ; sinon repli intelligent selon la catégorie/type.
@@ -27,6 +28,8 @@ export default function CustomRequestBox({ product }) {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState(null); // null | "sending" | "ok" | "error"
   const [error, setError] = useState("");
+  const [photos, setPhotos] = useState([]);
+  const [envoiPhoto, setEnvoiPhoto] = useState(false);
 
   async function submit(e) {
     e.preventDefault();
@@ -50,6 +53,7 @@ export default function CustomRequestBox({ product }) {
           subject: `Demande sur mesure — ${product?.name || "produit"}`,
           message: fullMessage,
           productSlug: product?.slug || "",
+          photos,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -129,6 +133,7 @@ export default function CustomRequestBox({ product }) {
               background: "#fff",
             }}
           />
+          <PhotosJointes onChange={setPhotos} onBusy={setEnvoiPhoto} productSlug={product?.slug || ""} />
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <input
               type="text"
@@ -163,7 +168,7 @@ export default function CustomRequestBox({ product }) {
           <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
             <button
               type="submit"
-              disabled={status === "sending"}
+              disabled={status === "sending" || envoiPhoto}
               style={{
                 border: "none",
                 background: "var(--gold-dark)",
@@ -176,7 +181,7 @@ export default function CustomRequestBox({ product }) {
                 fontSize: "0.9rem",
               }}
             >
-              {status === "sending" ? "Envoi…" : "Envoyer ma demande"}
+              {status === "sending" ? "Envoi…" : envoiPhoto ? "Envoi de la photo…" : "Envoyer ma demande"}
             </button>
             <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>
               ou{" "}

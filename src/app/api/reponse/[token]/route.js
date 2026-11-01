@@ -6,6 +6,9 @@ import { getSiteOrders } from "@/lib/firebase";
 import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
 import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
+import { nettoyerPhotos } from "@/lib/photosMessage";
+import { imagesPourAgent } from "@/lib/photosMessageServeur";
+import { blocPhotos } from "@/lib/replyAlert";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -33,7 +36,10 @@ export async function POST(req, { params }) {
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
   // Pas de limite de longueur pour la cliente (demande du gérant, 15/09) —
   // seul un plafond technique très haut protège la base contre un abus.
-  const text = String(body?.text || "").trim().slice(0, 100000);
+  const photos = nettoyerPhotos(body?.photos);
+  let text = String(body?.text || "").trim().slice(0, 100000);
+  // Photos seules (01/11/2026) : le message n'est plus obligatoire si elle joint une photo.
+  if (text.length < 2 && photos.length) text = photos.length > 1 ? "(photos jointes)" : "(photo jointe)";
   if (text.length < 2) return Response.json({ error: "Écrivez votre message avant d'envoyer." }, { status: 400 });
 
   // 1) Dossier de communication de la cliente (toujours).
@@ -41,7 +47,7 @@ export async function POST(req, { params }) {
     await logComm({
       email: it.email, name: it.name, from: "cliente", text,
       subject: `Re : ${it.subject || "votre message"}`, via: "bouton",
-      orderId: it.orderId || "", orderRef: it.orderRef || "",
+      orderId: it.orderId || "", orderRef: it.orderRef || "", photos,
     });
   } catch { /* jamais bloquant */ }
 
@@ -54,7 +60,7 @@ export async function POST(req, { params }) {
   if (it.orderId) {
     try {
       await ensureCommThread(it.orderId, { ref: it.orderRef || "", customerEmail: it.email, customerName: it.name });
-      await batImportEmails(it.orderId, [{ gmailId: `bouton-${params.token}-${Date.now()}`, text, at: Date.now() }]);
+      await batImportEmails(it.orderId, [{ gmailId: `bouton-${params.token}-${Date.now()}`, text, at: Date.now(), photos }]);
     } catch { /* jamais bloquant */ }
   }
   try { await recordReplyLinkUse(params.token); } catch { /* ignore */ }
@@ -76,13 +82,14 @@ export async function POST(req, { params }) {
         let draft = null;
         try {
           const context = await buildContext(order, String(it.email || "").toLowerCase());
-          draft = await triageIncomingEmail({ name: it.name || it.email, email: it.email, subject: it.subject || "", message: text, context });
+          const images = photos.length ? await imagesPourAgent(photos) : [];
+          draft = await triageIncomingEmail({ name: it.name || it.email, email: it.email, subject: it.subject || "", message: text, context, images });
         } catch { draft = null; }
         const item = await addPendingReply({
           name: it.name || it.email, email: it.email, subject: it.subject || "", message: text,
           draft: draft?.reply || "", draftSubject: draft?.subject || (it.subject ? `Re : ${String(it.subject).replace(/^re\s*:\s*/i, "")}` : "Votre message — Niv Création"),
           reason: draft?.reason || "",
-          orderId: it.orderId || "", orderRef: it.orderRef || "", source: "bouton",
+          orderId: it.orderId || "", orderRef: it.orderRef || "", source: "bouton", photos,
         });
         if (item) {
           await sendDraftAlert(item, { orderRef: it.orderRef || "", reason: draft?.reason || "", source: "bouton" });
@@ -98,7 +105,8 @@ export async function POST(req, { params }) {
     heading: prospect ? (prospect.stop ? "Un restaurant / bar demande à ne plus être contacté (STOP)" : "Réponse d'un restaurant / bar (prospection)") : "Réponse d'une cliente (bouton Répondre)",
     bodyHtml: `<p style="margin:0 0 10px;"><strong>${escapeHtml(it.name || it.email)}</strong> &lt;${escapeHtml(it.email)}&gt;${it.orderRef ? ` · commande #${escapeHtml(it.orderRef)}` : ""}</p>
       <p style="margin:0 0 12px;color:#7a7268;">En réponse à : ${escapeHtml(it.subject || "votre message")}</p>
-      <div style="white-space:pre-line;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:10px;padding:12px;">${escapeHtml(text)}</div>
+      <div style="white-space:pre-line;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:10px;padding:12px;margin-bottom:12px;">${escapeHtml(text)}</div>
+      ${blocPhotos(photos)}
       ${prospect ? `<p style="margin:14px 0 0;color:#7a7268;">Rangée dans Gestion → Clients → Restaurants &amp; bars.${prospect.stop ? " Statut passé à « Ne plus contacter » : aucun e-mail ne pourra plus lui être envoyé." : ""}</p>` : ""}<p style="margin:14px 0 0;color:#7a7268;">Rangée dans son dossier${it.orderRef ? " et dans le fil de sa commande" : ""}. Répondez depuis Gestion → Clients (« Écrire à ce client ») ou depuis la commande.</p>`,
   });
   const subject = `${prospect ? "🍸 Restaurant / bar — réponse" : "📬 Réponse"} de ${it.name || it.email}${it.orderRef ? ` — #${it.orderRef}` : ""}`;

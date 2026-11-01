@@ -42,6 +42,7 @@ export async function GET(req) {
           id: `b${meta.orderId}_${m.at}`, from, at: Number(m.at) || 0,
           text: m.text || (m.image ? "(aperçu envoyé)" : ""), subject: "", via: m.viaEmail ? "gmail" : "commande",
           orderId: meta.orderId, orderRef: meta.ref || "", gmailId: m.gmailId || "", decision: m.decision || "",
+          ...(Array.isArray(m.photos) && m.photos.length ? { photos: m.photos } : {}),
         });
       }
     }

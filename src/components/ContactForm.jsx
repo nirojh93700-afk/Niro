@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import PhotosJointes from "@/components/PhotosJointes";
 
 export default function ContactForm() {
   const [status, setStatus] = useState("idle"); // idle | sending | ok | error
   const [error, setError] = useState("");
+  const [photos, setPhotos] = useState([]);
+  const [envoiPhoto, setEnvoiPhoto] = useState(false);
+  const [cle, setCle] = useState(0);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -18,6 +22,7 @@ export default function ContactForm() {
       phone: form.phone.value.trim(),
       subject: form.subject.value.trim(),
       message: form.message.value.trim(),
+      photos,
     };
 
     try {
@@ -30,6 +35,7 @@ export default function ContactForm() {
       if (!res.ok) throw new Error(json.error || "Envoi impossible.");
       setStatus("ok");
       form.reset();
+      setPhotos([]); setCle((c) => c + 1);
     } catch (err) {
       setError(err.message);
       setStatus("error");
@@ -66,6 +72,9 @@ export default function ContactForm() {
         <label htmlFor="message">Votre message</label>
         <textarea id="message" name="message" required placeholder="Décrivez votre projet ou votre question…" style={{ minHeight: 130 }} />
       </div>
+      <div className="field">
+        <PhotosJointes key={cle} onChange={setPhotos} onBusy={setEnvoiPhoto} />
+      </div>
 
       {status === "error" && (
         <div className="notice">
@@ -75,8 +84,8 @@ export default function ContactForm() {
         </div>
       )}
 
-      <button type="submit" className="btn btn-gold btn-block" disabled={status === "sending"}>
-        {status === "sending" ? "Envoi en cours…" : "Envoyer mon message"}
+      <button type="submit" className="btn btn-gold btn-block" disabled={status === "sending" || envoiPhoto}>
+        {status === "sending" ? "Envoi en cours…" : envoiPhoto ? "Envoi de la photo…" : "Envoyer mon message"}
       </button>
     </form>
   );

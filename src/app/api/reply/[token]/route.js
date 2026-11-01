@@ -16,6 +16,7 @@ function view(it) {
     at: it.at, status: it.status, finalText: it.finalText || "", resolvedAt: it.resolvedAt || 0,
     orderId: it.orderId || "", orderRef: it.orderRef || "", source: it.source || "contact",
     productSlug: it.productSlug || "", productName: it.productName || "",
+    photos: Array.isArray(it.photos) ? it.photos : [],
   };
 }
 

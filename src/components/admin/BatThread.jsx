@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import PhotoUpload, { UPLOAD_AVAILABLE } from "@/components/PhotoUpload";
 import MailBody from "@/components/admin/MailBody";
+import PhotosMessage from "@/components/PhotosMessage";
 
 // Discussion / BAT (bon à tirer) d'une commande, côté admin.
 export default function BatThread({ order, adminKey }) {
@@ -106,6 +107,7 @@ export default function BatThread({ order, adminKey }) {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   {m.image ? <img className="bt-img" src={m.image} alt="Aperçu envoyé" /> : null}
                   {m.text ? <MailBody text={m.text} /> : null}
+                  <PhotosMessage photos={m.photos} taille={72} />
                 </div>
               </div>
             );

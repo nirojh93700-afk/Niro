@@ -7,6 +7,7 @@
 // · envoi d'e-mail à l'image de la marque · export CSV. Gratuit (données déjà là).
 // =============================================================================
 
+import PhotosMessage from "@/components/PhotosMessage";
 import { lienSuivi } from "@/lib/suiviColis";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
@@ -565,6 +566,7 @@ export default function CrmPage() {
                             </div>
                             {m.subject ? <div className="cm-subject">{m.subject}</div> : null}
                             <div className="cm-text">{m.text}</div>
+                            <PhotosMessage photos={m.photos} taille={72} />
                           </div>
                         ))}
                       </div>

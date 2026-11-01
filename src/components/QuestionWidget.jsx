@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import PhotosJointes from "@/components/PhotosJointes";
 
 // Bouton flottant « Une question ? » : un formulaire court, envoyé par le même
 // canal que la page Contact (/api/contact). La réponse est PRÉPARÉE par l'agent
@@ -12,6 +13,9 @@ export default function QuestionWidget() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | sending | ok | error
   const [error, setError] = useState("");
+  const [photos, setPhotos] = useState([]);
+  const [envoiPhoto, setEnvoiPhoto] = useState(false);
+  const [cle, setCle] = useState(0);
   const hidden = ["/gestion", "/panier", "/paiement", "/merci", "/repondre", "/reponse", "/document", "/suivi", "/espace"].some((p) => pathname.startsWith(p));
   if (hidden) return null;
 
@@ -30,12 +34,12 @@ export default function QuestionWidget() {
         body: JSON.stringify({
           name: f.name.value.trim(), email: f.email.value.trim(), phone: "",
           subject: "Question depuis le site", message: f.message.value.trim(),
-          productSlug, page: pathname,
+          productSlug, page: pathname, photos,
         }),
       });
       const d = await res.json();
       if (!res.ok) throw new Error(d.error || "Envoi impossible.");
-      setStatus("ok"); f.reset();
+      setStatus("ok"); f.reset(); setPhotos([]); setCle((c) => c + 1);
     } catch (err) { setError(err.message); setStatus("error"); }
   }
 
@@ -66,7 +70,7 @@ export default function QuestionWidget() {
           style={{
             position: "fixed", bottom: 74, left: 16, zIndex: 61, width: "min(360px, calc(100vw - 32px))",
             background: "#fff", border: "1px solid var(--line, #ece3d2)", borderRadius: 16,
-            boxShadow: "0 12px 34px rgba(0,0,0,0.22)", padding: 16,
+            boxShadow: "0 12px 34px rgba(0,0,0,0.22)", padding: 16, boxSizing: "border-box", maxHeight: "calc(100dvh - 110px)", overflowY: "auto",
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
@@ -83,9 +87,10 @@ export default function QuestionWidget() {
               <input name="name" required placeholder="Votre prénom" style={field} autoComplete="given-name" />
               <input name="email" type="email" required placeholder="Votre e-mail" style={field} autoComplete="email" />
               <textarea name="message" required placeholder="Votre question" style={{ ...field, minHeight: 90 }} />
+              <PhotosJointes key={cle} compact onChange={setPhotos} onBusy={setEnvoiPhoto} productSlug={productSlug} />
               {error ? <div style={{ color: "#8a2a1f", fontSize: "0.85rem" }}>{error}</div> : null}
-              <button type="submit" disabled={status === "sending"} style={{ padding: "11px 16px", borderRadius: 9, border: "none", background: "var(--gold, #c9a24b)", color: "#fff", fontWeight: 700, cursor: "pointer", font: "inherit" }}>
-                {status === "sending" ? "Envoi…" : "Envoyer ma question"}
+              <button type="submit" disabled={status === "sending" || envoiPhoto} style={{ padding: "11px 16px", borderRadius: 9, border: "none", background: "var(--gold, #c9a24b)", color: "#fff", fontWeight: 700, cursor: "pointer", font: "inherit" }}>
+                {status === "sending" ? "Envoi…" : envoiPhoto ? "Envoi de la photo…" : "Envoyer ma question"}
               </button>
             </form>
           )}

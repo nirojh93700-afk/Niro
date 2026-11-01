@@ -1,5 +1,6 @@
 import { sendEmail, emailLayout, escapeHtml as esc, BRAND } from "@/lib/email";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
+import { nettoyerPhotos, urlPhoto } from "@/lib/photosMessage";
 
 // =============================================================================
 // ALERTE « À VALIDER » ENVOYÉE AU GÉRANT : le message de la cliente, la réponse
@@ -7,6 +8,19 @@ import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 // Partagée par le formulaire de contact ET la boîte mail surveillée.
 // Rien ne part à la cliente d'ici : seul le clic du gérant envoie.
 // =============================================================================
+// Photos jointes par la cliente (01/11/2026) : vignettes cliquables (= en grand).
+export function blocPhotos(photos) {
+  const ids = nettoyerPhotos(photos);
+  if (!ids.length) return "";
+  const cases = ids.map((id, i) => {
+    const u = urlPhoto(id, BRAND.siteUrl);
+    return `<td style="padding:0 8px 0 0;vertical-align:top;"><a href="${u}" target="_blank"><img src="${u}" width="120" height="120" alt="Photo ${i + 1}" style="display:block;width:120px;height:120px;object-fit:cover;border-radius:10px;border:1px solid #e6d7b8;"></a><div style="font-size:12px;color:#8a7a56;margin-top:4px;text-align:center;"><a href="${u}" target="_blank" style="color:#8a7a56;">Photo ${i + 1} · voir en grand</a></div></td>`;
+  }).join("");
+  return `<p style="margin:0 0 6px;"><strong>📷 ${ids.length} photo${ids.length > 1 ? "s" : ""} jointe${ids.length > 1 ? "s" : ""} par la cliente</strong></p>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 6px;"><tr>${cases}</tr></table>
+    <p style="margin:0 0 14px;color:#7a7268;font-size:13px;">Aussi rangée${ids.length > 1 ? "s" : ""} dans son dossier (Gestion → Clients). L'agent les a regardées avant de préparer la réponse.</p>`;
+}
+
 export function buildDraftAlertHtml(item, { orderRef = "", reason = "", source = "contact" } = {}) {
   const lien = `${BRAND.siteUrl}/repondre/${item.token}`;
   const boxCream = `white-space:pre-line;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:10px;padding:12px;margin:6px 0 14px;`;
@@ -18,6 +32,7 @@ export function buildDraftAlertHtml(item, { orderRef = "", reason = "", source =
     ${item.productName ? `<p style="margin:0 0 4px;color:#8a6d1f;">🛍️ Écrit depuis la fiche produit : <a href="${BRAND.siteUrl}/produit/${esc(item.productSlug || "")}" style="color:#8a6d1f;font-weight:bold;">${esc(item.productName)}</a></p>` : ""}
     <p style="margin:0 0 4px;color:#7a7268;">Sujet : ${esc(item.subject || "(sans sujet)")}</p>
     <div style="${boxCream}">${esc(item.message)}</div>
+    ${blocPhotos(item.photos)}
     <p style="margin:0 0 4px;"><strong>Réponse préparée par l'agent</strong>${reason ? ` <span style="color:#9a6b00;">— ${esc(reason)}</span>` : ""}</p>
     ${item.draft
       ? `<div style="${boxWhite}">${esc(item.draft)}</div>`

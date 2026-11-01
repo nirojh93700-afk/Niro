@@ -320,7 +320,7 @@ function makeReplyToken() {
   ).slice(0, 40);
 }
 
-export async function addPendingReply({ name, email, phone = "", subject = "", message, draft = "", draftSubject = "", reason = "", orderId = "", orderRef = "", gmailId = "", gmailThreadId = "", messageId = "", references = "", source = "", productSlug = "", productName = "" }) {
+export async function addPendingReply({ name, email, phone = "", subject = "", message, draft = "", draftSubject = "", reason = "", orderId = "", orderRef = "", gmailId = "", gmailThreadId = "", messageId = "", references = "", source = "", productSlug = "", productName = "", photos = [] }) {
   const e = normEmail(email);
   if (!validEmail(e) || !String(message || "").trim()) return null;
   const data = await getCatalogRaw(true);
@@ -343,6 +343,8 @@ export async function addPendingReply({ name, email, phone = "", subject = "", m
     source: String(source || "contact").slice(0, 20),
     // Fiche produit depuis laquelle la cliente a écrit (widget « Une question ? »).
     productSlug: String(productSlug || "").slice(0, 120), productName: String(productName || "").slice(0, 160),
+    // Photos jointes par la cliente (01/11/2026), identifiants /api/img/<id>.
+    photos: (Array.isArray(photos) ? photos : []).map((x) => String(x || "").trim()).filter((x) => /^[A-Za-z0-9_-]{8,64}$/.test(x)).slice(0, 3),
     at: now, exp: now + REPLY_TTL_MS, status: "pending",
   };
   data.pendingReplies[id] = item;
@@ -1117,6 +1119,8 @@ export async function batImportEmails(orderId, msgs = []) {
     const gid = String(m?.gmailId || "").trim();
     if (!gid || th.importedGmailIds.includes(gid)) continue;
     const msg = { from: "cliente", text: String(m?.text || "").trim(), at: Number(m?.at) || Date.now(), viaEmail: true, gmailId: gid };
+    const ph = (Array.isArray(m?.photos) ? m.photos : []).map((x) => String(x || "").trim()).filter((x) => /^[A-Za-z0-9_-]{8,64}$/.test(x)).slice(0, 3);
+    if (ph.length) msg.photos = ph;
     if (m?.decision === "valide" || m?.decision === "modif") msg.decision = m.decision;
     th.messages.push(msg);
     th.importedGmailIds.push(gid);
@@ -1248,7 +1252,7 @@ export async function batImportHistorique(orderId, msgs = [], info = {}) {
 // =============================================================================
 const COMMS_PER_CLIENT = 300;
 const COMMS_CLIENTS_MAX = 3000;
-export async function logComm({ email, name = "", from, text, subject = "", at = 0, via = "", orderId = "", orderRef = "", gmailId = "", dedupeWindowMs = 0 }) {
+export async function logComm({ email, name = "", from, text, subject = "", at = 0, via = "", orderId = "", orderRef = "", gmailId = "", dedupeWindowMs = 0, photos = [] }) {
   const e = normEmail(email);
   if (!validEmail(e) || !String(text || "").trim()) return null;
   const data = await getCatalogRaw(true);
@@ -1271,6 +1275,9 @@ export async function logComm({ email, name = "", from, text, subject = "", at =
     orderId: String(orderId || "").slice(0, 80), orderRef: String(orderRef || "").slice(0, 40),
     gmailId: gid.slice(0, 80),
   };
+  // Photos jointes par la cliente (01/11/2026) : identifiants /api/img/<id>, 3 max.
+  const ph = (Array.isArray(photos) ? photos : []).map((x) => String(x || "").trim()).filter((x) => /^[A-Za-z0-9_-]{8,64}$/.test(x)).slice(0, 3);
+  if (ph.length) msg.photos = ph;
   dossier.messages.push(msg);
   dossier.messages.sort((a, b) => (a.at || 0) - (b.at || 0));
   if (dossier.messages.length > COMMS_PER_CLIENT) dossier.messages = dossier.messages.slice(-COMMS_PER_CLIENT);

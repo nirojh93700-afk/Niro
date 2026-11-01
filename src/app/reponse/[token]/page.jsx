@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import PhotosJointes from "@/components/PhotosJointes";
 
 // Page « Répondre à l'atelier » — ouverte par le bouton doré des e-mails
 // clients (maquette validée le 15/09/2026). La cliente écrit sa réponse ici :
@@ -29,6 +30,8 @@ export default function ReponsePage({ params }) {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
+  const [photos, setPhotos] = useState([]);
+  const [envoiPhoto, setEnvoiPhoto] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -42,12 +45,13 @@ export default function ReponsePage({ params }) {
   useEffect(() => { load(); }, [load]);
 
   async function envoyer() {
-    if (busy || !text.trim()) { if (!text.trim()) setErr("Écrivez votre message avant d'envoyer."); return; }
+    if (busy || envoiPhoto) return;
+    if (!text.trim() && !photos.length) { setErr("Écrivez votre message avant d'envoyer."); return; }
     setBusy(true); setErr("");
     try {
       const res = await fetch(`/api/reponse/${token}`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: text.trim() }),
+        body: JSON.stringify({ text: text.trim(), photos }),
       });
       const d = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(d?.error || "L'envoi a échoué. Réessayez.");
@@ -98,12 +102,13 @@ export default function ReponsePage({ params }) {
               onChange={(e) => setText(e.target.value)}
               placeholder="Écrivez votre réponse ici…"
             />
-            <button style={{ ...S.send, opacity: busy ? 0.6 : 1 }} disabled={busy} onClick={envoyer}>
-              {busy ? "Envoi…" : "Envoyer ma réponse"}
+            <div style={{ marginTop: 10 }}><PhotosJointes onChange={setPhotos} onBusy={setEnvoiPhoto} /></div>
+            <button style={{ ...S.send, opacity: busy || envoiPhoto ? 0.6 : 1 }} disabled={busy || envoiPhoto} onClick={envoyer}>
+              {busy ? "Envoi…" : envoiPhoto ? "Envoi de la photo…" : "Envoyer ma réponse"}
             </button>
             {err ? <div style={S.err}>{err}</div> : null}
             <div style={S.safe}>
-              Votre message est transmis directement à l&apos;atelier et rangé dans votre dossier.<br />
+              Votre message et vos photos sont transmis directement à l&apos;atelier et rangés dans votre dossier.<br />
               Nous vous répondons par e-mail.
             </div>
           </>

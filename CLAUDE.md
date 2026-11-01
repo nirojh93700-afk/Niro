@@ -1,3 +1,14 @@
+## 📷 PHOTOS JOINTES AUX MESSAGES DU SITE — ✅ APPLIQUÉ LE 01/11/2026 (« Applique la maquette », https://claude.ai/artifact/48MjaGPXc5RgmfVtqkGQYi)
+- Avant : AUCUN formulaire ne permettait de joindre une photo (Alixia Coco « à partir de cette photo », rien n'arrivait). Maintenant
+  « 📷 Ajouter une photo (facultatif) », 3 max, sur la page Contact, la bulle « Une question ? », « Faire une demande particulière » et la page
+  « Répondre » des e-mails (`src/components/PhotosJointes.jsx` : réduite à 1600 px JPEG dans le navigateur, envoyée par `/api/upload` dès
+  qu'elle est choisie, bouton d'envoi grisé « Envoi de la photo… » pendant ce temps ; CSS `.pjm-*`).
+- Serveur : `/api/contact` et `/api/reponse/[token]` acceptent `photos` (ids, `nettoyerPhotos` de `src/lib/photosMessage.js`) → dossier
+  (`logComm({photos})`), fil de la commande (`batImportEmails` msg.photos), réponse à valider (`addPendingReply({photos})`), l'agent les
+  REGARDE (`imagesPourAgent`, `src/lib/photosMessageServeur.js`), alerte « [À valider] » avec vignettes (`blocPhotos` de `replyAlert.js`).
+  Affichées dans Gestion (CRM dossier, BatThread) et sur `/repondre/<jeton>` (`src/components/PhotosMessage.jsx`). Page « Répondre » :
+  une photo seule suffit (texte « (photo jointe) »). Sous le bouton « Répondre » des e-mails : « vous pouvez y joindre vos photos ».
+
 ## 🧭 GESTION MODERNE v3 + ACCUEIL « VERSION B » — ✅ EN LIGNE LE 30/10/2026 (« Oui la plus récente, mets en ligne la version B … fais vraiment attention en Réglages »)
 - Maquette appliquée : https://claude.ai/artifact/KipDFvam6ABJnV2JGc83PN (v3 + accueil B). **`AdminShell.jsx`** : barre latérale encre en
   **9 sections + sous-onglets** (Aujourd'hui · Commandes · Messages · Clients · Catalogue · Stock & achats · Marketing · Finances · Réglages)

@@ -15,6 +15,9 @@ import { sendEmail, emailLayout, escapeHtml as esc, BRAND } from "@/lib/email";
 import { triageIncomingEmail } from "@/lib/agents/registry";
 import { sendDraftAlert } from "@/lib/replyAlert";
 import { getCatalogAdmin } from "@/lib/catalog";
+import { nettoyerPhotos } from "@/lib/photosMessage";
+import { imagesPourAgent } from "@/lib/photosMessageServeur";
+import { blocPhotos } from "@/lib/replyAlert";
 
 function escapeHtml(str) {
   return String(str)
@@ -36,6 +39,8 @@ export async function POST(req) {
   const phone = String(body?.phone || "").trim();
   const subject = String(body?.subject || "").trim() || "Nouveau message";
   const message = String(body?.message || "").trim();
+  // Photos jointes (01/11/2026) : identifiants renvoyés par /api/upload, 3 max.
+  const photos = nettoyerPhotos(body?.photos);
 
   if (!name || !email || !message) {
     return Response.json({ error: "Merci de remplir tous les champs obligatoires." }, { status: 400 });
@@ -99,7 +104,7 @@ export async function POST(req) {
   const commText = produit && !message.includes(`/produit/${produit.slug}`)
     ? `${message}\n\n— — —\n${produitLigne}`
     : message;
-  try { await logComm({ email, name, from: "cliente", text: commText, subject, via: "formulaire" }); } catch { /* jamais bloquant */ }
+  try { await logComm({ email, name, from: "cliente", text: commText, subject, via: "formulaire", photos }); } catch { /* jamais bloquant */ }
   let settings = null;
   try { settings = await getSettings(); } catch { settings = null; }
   if (settings?.agents?.emailDraft !== false) {
@@ -116,7 +121,9 @@ export async function POST(req) {
           msgs.map((m) => `- [${m.from === "nous" ? "Nous" : "Cliente"} · ${new Date(m.at || 0).toLocaleDateString("fr-FR")}] ${String(m.text || "").replace(/\s+/g, " ").slice(0, 400)}`).join("\n");
       }
     } catch { /* sans dossier */ }
-    try { draft = await triageIncomingEmail({ name, email, subject, message, context: `${produitContext || ""}${histo}`, origin: "formulaire de contact du site" }); } catch { draft = null; }
+    let images = [];
+    try { images = photos.length ? await imagesPourAgent(photos) : []; } catch { images = []; }
+    try { draft = await triageIncomingEmail({ name, email, subject, message, context: `${produitContext || ""}${histo}`, origin: "formulaire de contact du site", images }); } catch { draft = null; }
     let item = null;
     try {
       item = await addPendingReply({
@@ -125,6 +132,7 @@ export async function POST(req) {
         draftSubject: draft?.subject || (subject ? `Re : ${subject}` : "Votre message — Niv Création"),
         reason: draft?.reason || "",
         productSlug: produit?.slug || "", productName: produit?.name || "",
+        photos,
       });
     } catch { item = null; }
     if (item) {
@@ -184,6 +192,7 @@ export async function POST(req) {
     ${produit ? `<p><strong>🛍️ Écrit depuis la fiche produit :</strong> <a href="${BRAND.siteUrl}/produit/${produit.slug}">${escapeHtml(produit.name)}</a></p>` : ""}
     <p><strong>Message :</strong></p>
     <p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>
+    ${blocPhotos(photos)}
     ${agentBlock}
   `;
 
