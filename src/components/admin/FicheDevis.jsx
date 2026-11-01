@@ -53,7 +53,7 @@ export default function FicheDevis({ order }) {
               {l.fichier ? (
                 <div style={{ margin: "8px 0 0" }}>
                   <a href={l.fichier} download className="btn btn-gold" style={{ padding: "7px 14px", fontSize: "0.82rem", display: "inline-block", textDecoration: "none" }}>
-                    ⬇ Télécharger le fichier à graver (SVG)
+                    ⬇ Télécharger le fichier à graver{/\.svg$/i.test(l.fichier) ? " (SVG)" : ""}
                   </a>
                 </div>
               ) : null}

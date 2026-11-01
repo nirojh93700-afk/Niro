@@ -45,6 +45,17 @@ export const FICHIERS_DEVIS = {
       note: "Finition argentée. Modèle du tournesol : image « 1000025149.jpg » reçue par e-mail le 18/10 (voir les photos ci-dessous). Le client : « sur la pièce de puzzle gauche comme sur la photo transmise ». Express Chronopost : à graver en priorité.",
     },
   ],
+  // Devis DEV-1528, Santos (01/11/2026) : image envoyée par le formulaire du site (bouton photo).
+  // Rangé par NUMÉRO DE DEVIS : la référence de la commande n'existe qu'au paiement.
+  "DEV-1528": [
+    {
+      fichier: "/api/img/zZUWRyvaRidkJmdAtCzI",
+      texte: "EUGENIO (en capitales, sous la rose des vents)",
+      emplacement: "Face avant du verre",
+      note: "Image envoyée par le client le 01/11 : rose des vents avec N, O, E, S, prénom « EUGENIO » dessous, petit trait de vagues. C'est un visuel d'exemple (photo d'un verre) : reprendre la rose des vents, le prénom et les vagues.",
+    },
+    { texte: "Eugenio", note: "Ce n'est pas une 2ᵉ pièce : c'est le prénom gravé sur le MÊME verre (ligne 1), sous la rose des vents." },
+  ],
 };
 
 // Lignes d'envoi (pas des pièces à fabriquer) : « Livraison… », « Lettre suivie La Poste », « Colis suivi ».
@@ -52,7 +63,7 @@ const LIVRAISON = /livraison|point relais|retrait|expédition|frais de port|^\s*
 
 /** Les pièces à fabriquer d'une commande sur devis, une par ligne du devis. */
 export function lignesDevis(order) {
-  const fichiers = FICHIERS_DEVIS[order?.ref] || [];
+  const fichiers = FICHIERS_DEVIS[order?.ref] || FICHIERS_DEVIS[order?.quoteNumber] || [];
   return (order?.items || [])
     .filter((it) => !LIVRAISON.test(it.name || ""))
     .map((it, i) => {
