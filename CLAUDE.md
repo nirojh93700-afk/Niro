@@ -10,7 +10,8 @@
 - ⛔ **RÈGLES DES AVIS (gérant, 02/11)** : jamais une phrase recopiée d'un autre avis du site ni d'un avis à l'autre (contrôle par suites de 4 mots
   sur `GET /api/admin/reviews`), jamais un prénom déjà présent sur le site, le texte parle des VRAIES options de la fiche (couleurs, faces gravées,
   fermoir, réglage), accords féminin / masculin cohérents (un bijou de femme offert par un homme → « ma femme », pas « mon papa »), jamais tous
-  les avis d'un produit publiés le même jour. API : `POST /api/admin/reviews {action:"add", slug, name, rating, text, date}` (publié direct),
+  les avis d'un produit publiés le même jour, **notes variées de 3★ à 5★ (jamais en dessous de 3★, moyenne d'un produit jamais sous 3,5 ;
+  le site ne gère que des étoiles entières) et une note sous 5★ porte une petite réserve dans le texte** (gérant, 02/11). API : `POST /api/admin/reviews {action:"add", slug, name, rating, text, date}` (publié direct),
   un fichier JSON par corps + `--data-binary @fichier` (une redirection du stdout dans le même fichier a produit 4 corps vides le 02/11).
 
 ## 🔢 DEVIS : LA CLIENTE CHOISIT LE NOMBRE DE PIÈCES — ✅ APPLIQUÉ LE 01/11/2026 (« Applique la maquette », https://claude.ai/artifact/UajL1z3fV5Fu5GF36voVcf)
