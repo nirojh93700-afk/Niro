@@ -573,3 +573,7 @@ En attente de SA décision :
   « M&S » sur la coupe (le pied ne se grave pas). **Mail + devis DEV-1530 ENVOYÉS ensemble le 02/11 (un seul mail, par le site)** : 36,90 € (lot de 2 33,90 +
   gravure 3,00), livraison au paiement, Express Chronopost 14,90 € proposé → 51,80 €. Lien : https://nivcreation.fr/document/2F6MpTPCaoCVotaRquin.
   (DEV-1529 créé puis supprimé : la ligne gravure séparée bloquait le choix de livraison ; le numéro 1529 manque, c'est normal.)
+
+- **02/11/2026 — Guardidea-Rachel (WhatsApp, c'est le gérant qui envoie)** : messages préparés : excuses (commande de Noël faite ailleurs, articles
+  reçus, budget serré, autres produits plus tard) + demande d'un produit en urgence = **cadre plaque acrylique à socle bois LED**, tailles 150 mm et
+  180 mm (photo de Rachel), **~10 de chaque pour tester**, prix + livraison France + délai « avant Noël ? ». **En attente de sa réponse** (le gérant la transmettra).
