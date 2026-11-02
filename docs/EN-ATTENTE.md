@@ -586,3 +586,9 @@ En attente de SA décision :
   règle bijoux du 18/10 (à coder : option « 1er texte offert » dans `engravingPrice`, textesPrix à adapter) · texte ~15 caractères par face,
   dans la longueur · photos (avec gravure « I LOVE YOU ») + captures fournisseur : `docs/maquettes/assets/barre-verticale/` ·
   `weight: 72`, `letter: true`, emballages colliers (`COLLIERS`). Maquette = méthode habituelle (fiche ajoutée en local, capture, artifact).
+
+- **02/11/2026 — NOUVEAU BRACELET « GOURMETTE À PLAQUE » DORÉ ET NOIR (Nihaojewelry) — PHOTOS REÇUES, RIEN DE FAIT** : 8 images envoyées sans texte
+  (fiche Nihao : acier inoxydable 304, plaqué or 18 carats pour le doré, 15 g, « Hommes », gravure laser, étanche selon le vendeur) → copiées dans
+  `docs/maquettes/assets/gourmette-doree-noire/` (2 photos fournisseur, 3 portées dorées, 2 portées noires). Une petite pierre semble visible au bout de
+  la plaque dorée alors que la fiche dit « sans pierres ». Questions posées : nouvelle fiche ou couleurs ajoutées au « Bracelet Homme Identité
+  (Gourmette) » existant (acier, 30,90 €) ? prix voulu ? stock par couleur ? gravure recto seul ou recto-verso ? maquette ou en ligne directement ?
