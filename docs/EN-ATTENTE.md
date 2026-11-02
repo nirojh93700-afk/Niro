@@ -590,7 +590,7 @@ En attente de SA décision :
 - **02/11/2026 — BRACELET « GOURMETTE À PLAQUE GRAVÉE » DORÉ ET NOIR — MAQUETTE FAITE, en attente de son avis, RIEN en ligne** :
   https://claude.ai/artifact/DrNUSrwMsGSTpYo2x5turM · générateur `tools/maquettes/gourmette-plaque.py <capture>` (fiche locale :
   `scratchpad` fiche-locale.py, recopiée dans le générateur en commentaire au besoin). Réponses du gérant : **nouvelle fiche**, **27,90 €**
-  (lu comme prix payé → **barré 30,90 → payé 27,81 €**, code 33,90 ; à confirmer), **stock 5** (par couleur ? à confirmer), **gravure sur la
+  (lu comme prix payé → **barré 30,90 → payé 27,81 €**, code 33,90 ; à confirmer), **stock 5 de chaque couleur (5 dorés + 5 noirs, confirmé le 02/11)**, **gravure sur la
   plaque seulement** (+3 €, 25 caractères). Slug proposé `bracelet-gourmette-plaque`, nom « Bracelet Gourmette à plaque gravée », sous-catégorie
   homme, emballages des bracelets longs (boîte allongée, pack bracelet), Noël automatique. 3D : le viewer gourmette existe mais force l'argent →
   à la construction, `braceletFin = braceletFinish` pour que la plaque suive la couleur (la chaîne 3D reste argentée). Photos reçues : 8 images envoyées sans texte
