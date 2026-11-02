@@ -66,7 +66,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
   if (!pret || typeof document === "undefined") return null;
 
   const a = order.shippingAddress || {};
-  const adresse = [a.line1, a.line2, [a.postal_code, a.city].filter(Boolean).join(" "), a.country]
+  const adresse = [order.shippingCompany, a.line1, a.line2, [a.postal_code, a.city].filter(Boolean).join(" "), a.country]
     .filter(Boolean).join(", ");
   // Point relais : il contient déjà le transporteur ET l'adresse du point, donc
   // on l'affiche seul ; sinon on affiche le mode de livraison choisi.

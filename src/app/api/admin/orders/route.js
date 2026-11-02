@@ -67,6 +67,39 @@ export async function POST(req) {
   // Changer le point relais d'une commande (22/10/2026, renvoi du verre cassé #1ZGOWMIL vers le point
   // choisi par la cliente). L'adresse du client reste celle du paiement (contact) ; l'ancienne
   // livraison est gardée dans `livraisonAvant`.
+  // Corriger le nom / l'adresse de livraison d'une commande (02/11/2026, commande 04AT1IG4 : nom de l'hôtel
+  // demandé sur l'étiquette). Seuls les champs envoyés changent ; l'état d'avant est gardé une fois (livraisonCorrigeeDe).
+  if (id && body?.action === "livraison") {
+    const order = await getSiteOrder(id);
+    if (!order) return Response.json({ ok: false, error: "Commande introuvable." }, { status: 404 });
+    const txt = (v, n) => String(v ?? "").replace(/\s+/g, " ").trim().slice(0, n);
+    const patch = {};
+    if (typeof body.shippingName === "string") {
+      if (!txt(body.shippingName, 100)) return Response.json({ ok: false, error: "Le nom ne peut pas être vide." }, { status: 400 });
+      patch.shippingName = txt(body.shippingName, 100);
+    }
+    if (typeof body.shippingCompany === "string") patch.shippingCompany = txt(body.shippingCompany, 100);
+    const adr = { ...(order.shippingAddress || {}) };
+    let adrChange = false;
+    for (const k of ["line1", "line2", "postal_code", "city"]) {
+      if (typeof body[k] === "string") { adr[k] = txt(body[k], 150) || null; adrChange = true; }
+    }
+    if (adrChange) {
+      if (!adr.line1 || !adr.postal_code || !adr.city) return Response.json({ ok: false, error: "Adresse, code postal et ville sont obligatoires." }, { status: 400 });
+      patch.shippingAddress = adr;
+    }
+    if (typeof body.customerPhone === "string" && txt(body.customerPhone, 30)) patch.customerPhone = txt(body.customerPhone, 30);
+    if (!Object.keys(patch).length) return Response.json({ error: "Rien à enregistrer." }, { status: 400 });
+    if (!order.livraisonCorrigeeDe) {
+      patch.livraisonCorrigeeDe = {
+        shippingName: order.shippingName || "", shippingCompany: order.shippingCompany || "",
+        shippingAddress: order.shippingAddress || null, customerPhone: order.customerPhone || "", at: Date.now(),
+      };
+    }
+    const ok = await updateSiteOrder(id, patch);
+    return Response.json({ ok, patch });
+  }
+
   if (id && body?.action === "relais") {
     const relaisPoint = String(body.relaisPoint || "").trim().slice(0, 300);
     if (!relaisPoint) return Response.json({ ok: false, error: "Point relais manquant." }, { status: 400 });

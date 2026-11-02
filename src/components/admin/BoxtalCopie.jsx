@@ -72,7 +72,69 @@ function Titre({ children }) {
   return <h4 style={{ margin: "14px 0 4px", fontFamily: "Georgia,serif", color: "var(--gold-dark)", fontSize: "1rem" }}>{children}</h4>;
 }
 
-export default function BoxtalCopie({ order }) {
+function cleAdmin() {
+  try { return sessionStorage.getItem("niv-admin-key") || ""; } catch { return ""; }
+}
+
+// Corriger le nom / l'adresse de l'étiquette (02/11/2026) : enregistré dans la commande (action « livraison »).
+function CorrigerLivraison({ order, onSaved }) {
+  const a = order.shippingAddress || {};
+  const [ouvert, setOuvert] = useState(false);
+  const [f, setF] = useState({
+    shippingName: order.shippingName || "", shippingCompany: order.shippingCompany || "",
+    line1: a.line1 || "", line2: a.line2 || "", postal_code: a.postal_code || "", city: a.city || "",
+    customerPhone: order.customerPhone || "",
+  });
+  const [etat, setEtat] = useState("");
+  const champ = (k, label, ph = "") => (
+    <label style={{ display: "block", fontSize: "0.8rem", color: "var(--ink-soft)", margin: "6px 0 0" }}>
+      {label}
+      <input value={f[k]} placeholder={ph} onChange={(e) => setF({ ...f, [k]: e.target.value })}
+        style={{ display: "block", width: "100%", boxSizing: "border-box", minWidth: 0, padding: "6px 8px", border: "1px solid #e2d6bb", borderRadius: 6, fontSize: "0.9rem" }} />
+    </label>
+  );
+  async function enregistrer() {
+    setEtat("…");
+    try {
+      const r = await fetch("/api/admin/orders", {
+        method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": cleAdmin() },
+        body: JSON.stringify({ id: order.id, action: "livraison", ...f }),
+      });
+      const d = await r.json();
+      if (!r.ok || !d.ok) { setEtat(d.error || "Erreur : rien n'a été enregistré."); return; }
+      onSaved(d.patch || {});
+      setEtat("Enregistré ✓");
+      setOuvert(false);
+    } catch { setEtat("Erreur réseau : rien n'a été enregistré."); }
+  }
+  if (!ouvert) {
+    return (
+      <p style={{ margin: "6px 0 0", fontSize: "0.82rem" }}>
+        <button type="button" className="btn btn-outline" style={{ padding: "4px 10px", fontSize: "0.8rem" }} onClick={() => setOuvert(true)}>✏️ Corriger le nom ou l&apos;adresse</button>
+        {etat ? <span style={{ marginLeft: 8, color: "#256b34", fontWeight: 600 }}>{etat}</span> : null}
+      </p>
+    );
+  }
+  return (
+    <div style={{ margin: "8px 0 4px", padding: "8px 10px", background: "#fff", border: "1px solid #ece0c4", borderRadius: 8 }}>
+      {champ("shippingName", "Nom sur le colis (prénom nom)")}
+      {champ("shippingCompany", "Société / établissement (facultatif)", "ex. Hôtel …")}
+      {champ("line1", "Adresse")}
+      {champ("line2", "Complément d'adresse (facultatif)")}
+      {champ("postal_code", "Code postal")}
+      {champ("city", "Ville")}
+      {champ("customerPhone", "Téléphone (SMS du transporteur)")}
+      <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+        <button type="button" className="btn btn-gold" style={{ padding: "6px 12px", fontSize: "0.85rem" }} onClick={enregistrer}>Enregistrer dans la commande</button>
+        <button type="button" className="btn btn-outline" style={{ padding: "6px 12px", fontSize: "0.85rem" }} onClick={() => setOuvert(false)}>Annuler</button>
+        {etat ? <span style={{ alignSelf: "center", fontSize: "0.82rem", color: "#b32b2b" }}>{etat}</span> : null}
+      </div>
+    </div>
+  );
+}
+
+export default function BoxtalCopie({ order: orderInitial }) {
+  const [order, setOrder] = useState(orderInitial);
   const a = order.shippingAddress || {};
   const dims = useMemo(() => dimsParDefaut(order.items), [order.items]);
   const poids = useMemo(() => poidsEstime(order.items), [order.items]);
@@ -110,11 +172,13 @@ export default function BoxtalCopie({ order }) {
       ) : null}
       <Ligne label="Prénom" valeur={prenom} />
       <Ligne label="Nom" valeur={nom} gras />
+      <Ligne label="Société" valeur={order.shippingCompany || ""} gras />
       <Ligne label="Adresse" valeur={[a.line1, a.line2].filter(Boolean).join(", ")} />
       <Ligne label="Code postal ou ville" valeur={[a.postal_code, a.city].filter(Boolean).join(" ")} />
       <Ligne label="E-mail" valeur={order.customerEmail} />
       <Ligne label="Mobile" valeur={order.customerPhone} />
       {order.relaisPoint ? <Ligne label="📍 Point relais choisi" valeur={order.relaisPoint} gras /> : null}
+      <CorrigerLivraison key={order.shippingName + (order.shippingCompany || "")} order={order} onSaved={(p) => setOrder((o) => ({ ...o, ...p }))} />
 
       <Titre>Détails de l&apos;envoi</Titre>
       <Ligne label="L (cm)" valeur={dims.L} />

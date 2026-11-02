@@ -64,7 +64,7 @@ function DetailLivraison({ o }) {
   const express = /express|chronopost/i.test(m);
   const relais = String(o.relaisPoint || "");
   const a = o.shippingAddress || null;
-  const adresse = a ? [o.shippingName, a.line1, a.line2, `${a.postal_code || ""} ${a.city || ""}`.trim(), a.country].filter(Boolean).join(", ") : "";
+  const adresse = a ? [o.shippingName, o.shippingCompany, a.line1, a.line2, `${a.postal_code || ""} ${a.city || ""}`.trim(), a.country].filter(Boolean).join(", ") : "";
   const prix = Number(o.shippingPrice) > 0 ? ` · ${euro(o.shippingPrice)}` : "";
   return (
     <div className={`file-liv${express ? " express" : ""}`}>

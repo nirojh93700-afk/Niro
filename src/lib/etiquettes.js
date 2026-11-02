@@ -46,7 +46,7 @@ export function adresseEtiquette(o) {
   const pays = String(a.country || "FR").toUpperCase();
   return {
     nom: nomLivraison(o).complet || "",
-    lignes: [a.line1, a.line2].map((x) => String(x || "").trim()).filter(Boolean),
+    lignes: [o?.shippingCompany, a.line1, a.line2].map((x) => String(x || "").trim()).filter(Boolean),
     cpVille: `${String(a.postal_code || "").trim()} ${String(a.city || "").trim()}`.trim().toUpperCase(),
     pays: pays && pays !== "FR" ? (PAYS[pays] || pays) : "",
     ref: o?.ref || "",

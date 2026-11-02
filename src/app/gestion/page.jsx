@@ -1060,7 +1060,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                   {o.customerPhone ? <> · {o.customerPhone}</> : null}
                   {o.shippingAddress ? (
                     <div style={{ whiteSpace: "pre-line", marginTop: 4 }}>
-                      📦 {[o.shippingName, o.shippingAddress.line1, o.shippingAddress.line2, `${o.shippingAddress.postal_code || ""} ${o.shippingAddress.city || ""}`.trim(), o.shippingAddress.country].filter(Boolean).join(", ")}
+                      📦 {[o.shippingName, o.shippingCompany, o.shippingAddress.line1, o.shippingAddress.line2, `${o.shippingAddress.postal_code || ""} ${o.shippingAddress.city || ""}`.trim(), o.shippingAddress.country].filter(Boolean).join(", ")}
                       {o.shippingMethod ? ` — ${o.shippingMethod}` : ""}
                       {nomLivraisonDifferent(o).different ? <span style={{ display: "block", marginTop: 3, color: "#8a5a00", fontWeight: 700 }}>⚠️ Livré au nom de « {o.shippingName} » (la cliente est « {o.customerName} ») — à mettre sur l&apos;étiquette.</span> : null}
                     </div>
