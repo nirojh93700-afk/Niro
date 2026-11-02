@@ -23,6 +23,7 @@
 - 02/11 : 15 avis publiés sur les 10 bijoux sans avis + 4 avis corrigés (Hannah, Svetlana, Mathilde, Ousmane). Puis clés
   « a_publier_2026-11-03 » et « a_publier_2026-11-05 » de `docs/avis/plan-avis-bijoux-2026-11.json` → 2 à 4 avis par bijou, jamais le même nombre partout. 10 avis en réserve (clé « reserve ») : seulement
   s'il le demande. Mot de passe Gestion : lui redemander (jamais écrit dans un fichier).
+- Relances du 02/11 : Alissia relancée (envoyé 02/11 matin) ; Santos (DEV-1528) programmée mardi 03/11 9 h (`sch_qtxren8emvz2w9g4`).
 - Devis modifiable (DEV-1528) : la case « La cliente peut changer le nombre » n'est pas cochée ; proposé de la cocher d'office → sans réponse.
 
 ## ⛳ REPRISE — ÉTAT AU 30/10/2026 SOIR (la conversation précédente est pleine : continuer ici, comme si de rien n'était)

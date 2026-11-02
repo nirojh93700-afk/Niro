@@ -9,4 +9,6 @@
   ⛔ PAS l'autre fée (sans couronne, cheveux longs, assise sur le scorpion de face) : refusée.
 - Aperçu = photo du site `public/produits/cristal-v-femme.jpg`, portrait effacé, verre transparent (meuble / mur / marbre
   vus à travers), dessin en blanc « gravé ». `apercu-cristal-sans-filigrane.jpg` = même aperçu sans filigrane (ne pas l'envoyer).
+- 02/11 : relance douce envoyée par le site (« Votre fée et le Scorpion » : l'aperçu vous a plu ? on peut adapter le dessin ;
+  quand vous le souhaiterez, indiquez la taille → devis). Ne pas la relancer une 3ᵉ fois sans demande du gérant.
 - ⏳ En attente de sa réponse. AVANT tout devis : demander au gérant le montant du supplément « image personnalisée ».
