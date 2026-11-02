@@ -5,6 +5,9 @@
   de Noël et les autres emballages de Noël** (oublié dans le mail de Manuel le 02/11). Prix à relire en ligne avant d'écrire.
 - Vérifié le 02/11 : les 34 bijoux en ligne ont les 6 emballages. Après tout ajout de bijou : relire sa fiche en ligne (« Pack de Noël » présent).
 - S'arrête QUAND le gérant éteint Noël dans Gestion → Fêtes (alors plus un mot de Noël nulle part).
+- ⛔ **EMBALLAGES DE NOËL = BIJOUX SEULEMENT (gérant, 02/11/2026, rappel ferme : « Noël c'est que pour les bijoux, je t'ai déjà dit »)** :
+  jamais sur un verre, une carafe, un cristal, un marque-page ni aucun autre produit, ni sur leur fiche, ni sur un devis, ni dans un mail.
+  Un devis de verres ou de cristal = aucun emballage de Noël proposé. (Les DESSINS de Noël à graver sont une autre chose : verres, carafe, cristal.)
 
 ## 🛍️ DEVIS : EMBALLAGE CADEAU + AUTRES ARTICLES, PAYÉS ENSEMBLE AU PANIER — ✅ EN LIGNE LE 02/11/2026 (« Applique la maquette », https://claude.ai/artifact/Lo8LopW8uKma8KuAgriD6a, e74b0562)
 - Page `/document/<id>` (`DevisPanier.jsx`) : « Votre emballage » (les emballages de la fiche du produit principal du devis = 1re ligne rattachée à
