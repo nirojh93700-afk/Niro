@@ -588,7 +588,7 @@ En attente de SA décision :
   `weight: 72`, `letter: true`, emballages colliers (`COLLIERS`). Maquette = méthode habituelle (fiche ajoutée en local, capture, artifact).
 
 - **02/11/2026 — BRACELET « GOURMETTE À PLAQUE GRAVÉE » DORÉ ET NOIR — ✅ MIS EN LIGNE LE 02/11 (« enlève le visuel et tu peux mettre en ligne ») : SANS visuel 3D,
-  commit 1314af66 ; stock 5 dorés + 5 noirs à poser dès que la fiche répond ; déploiements Firebase en échec depuis 9040e9a0 (voir CLAUDE.md)** :
+  commit 1314af66 ; stock 5 dorés + 5 noirs POSÉ le 02/11 ; déploiements Firebase en échec depuis 9040e9a0 (voir CLAUDE.md)** :
   https://claude.ai/artifact/DrNUSrwMsGSTpYo2x5turM · générateur `tools/maquettes/gourmette-plaque.py <capture>` (fiche locale :
   `scratchpad` fiche-locale.py, recopiée dans le générateur en commentaire au besoin). Réponses du gérant : **nouvelle fiche**, **27,90 €**
   (lu comme prix payé → **barré 30,90 → payé 27,81 €**, code 33,90 ; à confirmer), **stock 5 de chaque couleur (5 dorés + 5 noirs, confirmé le 02/11)**, **gravure sur la
