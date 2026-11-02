@@ -1,3 +1,18 @@
+## 🛍️ DEVIS : EMBALLAGE CADEAU + AUTRES ARTICLES, PAYÉS ENSEMBLE AU PANIER — ✅ EN LIGNE LE 02/11/2026 (« Applique la maquette », https://claude.ai/artifact/Lo8LopW8uKma8KuAgriD6a, e74b0562)
+- Page `/document/<id>` (`DevisPanier.jsx`) : « Votre emballage » (les emballages de la fiche du produit principal du devis = 1re ligne rattachée à
+  un `variantId`, + emballage de Noël replié), total mis à jour ; « Compléter votre commande » (6 articles du même rayon + un petit cadeau,
+  `articlesAssortis`) ; « Ajouter ce devis à mon panier ». Toucher un article = devis au panier + fiche ouverte. Avec un emballage choisi, le
+  règlement direct (code promo, livraison, Payer) est remplacé par « Ajouter au panier et payer ». Sans emballage, la page reste comme avant.
+- Panier : UNE ligne `variantId: "devis:<id>"`, `devis:{id,n}`, quantité fixe, remplacée si on rajoute le même devis. `/api/checkout` RELIT le
+  devis (`getQuote` + `devisEffectif`) : une ligne Stripe par ligne du devis + « Emballage cadeau », poids/port par `lignesDevisPanier`
+  (ligne sans produit ni poids = suit le produit principal à 0 g), stock du devis décompté, metadata `quoteId`/`quoteNumber`/`qte`/`quoteEmballage`
+  → le webhook le marque payé et joint la demande. Un seul devis par commande ; payé / inexistant = refusé. Testé en ligne le 02/11.
+- Pas proposé si : facture, payé, ligne « Livraison » saisie à la main, ligne impossible à peser, ou case décochée dans Gestion → Devis
+  (« Emballage et autres articles », `panierOff`, action `panier`). Atelier : une commande mixte montre aussi la partie devis (`FicheDevis`
+  ne garde que les lignes sans fiche produit) et « 📦 Emballage du devis ». Fichiers : `src/lib/devisPanier.js`, `npm run test-devis-panier`.
+- ⚠️ DEV-1531 (Manuel) : réglé DIRECTEMENT par son lien, il ne paie AUCUNE livraison (la ligne « Gravure… » n'a pas de poids → pas de choix
+  de livraison, comme DEV-1528) ; par le panier, la livraison est calculée. À trancher par le gérant.
+
 ## ⭐ AVIS DES BIJOUX SANS AVIS + 4 AVIS CORRIGÉS — 02/11/2026 (gérant : « ajoute des avis sur les bijoux qui n'en ont pas… unique dans tout le site… pas tout le même jour »)
 - **Corrigés le 02/11** (action `edit`, seuls ces 4 ; ⛔ ne pas toucher aux autres avis bijoux, ordre du gérant) : Hannah et Svetlana (Bracelet Empreinte
   Pied de Bébé : « mon papa » → maman / femme), Mathilde (couverts enfants : neveu), Ousmane (porte-stylo Espagne : fils, 12 ans). Les autres

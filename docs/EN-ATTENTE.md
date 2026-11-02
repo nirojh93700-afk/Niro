@@ -599,3 +599,8 @@ En attente de SA décision :
   `docs/maquettes/assets/gourmette-doree-noire/` (2 photos fournisseur, 3 portées dorées, 2 portées noires). Une petite pierre semble visible au bout de
   la plaque dorée alors que la fiche dit « sans pierres ». Questions posées : nouvelle fiche ou couleurs ajoutées au « Bracelet Homme Identité
   (Gourmette) » existant (acier, 30,90 €) ? prix voulu ? stock par couleur ? gravure recto seul ou recto-verso ? maquette ou en ligne directement ?
+
+## ✉️ MANUEL (DEV-1531, bracelet gourmette, cœurs aux extrémités) — 02/11/2026
+- Ses 2 mails (devis + « commander sur le site ») ont REBONDI : moreiramanuel@diocese-paris.net refusée (550 Invalid Recipient).
+- Nouveau mail préparé (devis + emballage cadeau + autres articles au panier), NON envoyé : il faut une adresse valide donnée par le gérant.
+- DEV-1531 réglé directement par son lien = aucune livraison facturée (ligne gravure sans poids) ; la ligne dit encore « entourés d'un cœur ».
