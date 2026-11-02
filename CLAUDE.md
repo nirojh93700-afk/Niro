@@ -4717,6 +4717,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   page `/cristaux-graves`, lignes de stock dans Gestion. Le jour où le gérant a les adaptateurs : `ADAPTATEUR_NOIR_FOURNI = true`.
   `npm run test-socles`.
 
+## 💡 CHAQUE NOUVEAU PRODUIT = SON PARAGRAPHE DANS « IDÉES & CONSEILS », TOUJOURS (gérant, 02/11/2026 : « oublie pas à chaque fois qu'on met un produit, il faut que tu le fasses »)
+- Dès qu'un produit est mis en ligne : l'ajouter dans le(s) guide(s) de sa famille (`docs/maquettes/guide-*.html`) avec une phrase qui dit
+  pour qui / ce qu'on y grave + sa carte (lien, photo du site, prix), puis `node tools/generer-guides.mjs`, build, et le pousser AVEC le produit.
+  Ne jamais écrire un nombre de modèles (« des quatre ») : la grille grandit. Fait le 02/11 : Collier Quatre Mots (« Que graver sur un bijou ? »,
+  « Idées cadeaux femme »), Gourmette à plaque gravée (« Bijoux homme »).
+
 ## 🔗 BRACELET GOURMETTE À PLAQUE GRAVÉE — MIS EN LIGNE LE 02/11/2026 (« enlève le visuel et tu peux mettre en ligne »)
 - Fiche `bracelet-gourmette-plaque` (sous-catégorie homme), Doré / Noir (`bracelet-gourmette-plaque-dore` / `-noir`), code 33,90 → barré 30,90 →
   payé 27,81 €, gravure de la plaque seulement +3 € (25 caractères), SANS visuel 3D (refusé : la chaîne 3D reste argentée), 7 photos
