@@ -1,0 +1,328 @@
+{
+ "aujourdhui": [
+  {
+   "action": "add",
+   "slug": "collier-double-coeur",
+   "name": "Clémence",
+   "rating": 5,
+   "text": "Pris en or rose, mon prénom et celui de mon mari au verso. Les petits zircons accrochent la lumière sans faire trop, et l'écriture se lit sans effort.",
+   "date": "2026-09-14"
+  },
+  {
+   "action": "add",
+   "slug": "collier-double-coeur",
+   "name": "Perrine",
+   "rating": 5,
+   "text": "C'était pour la trentaine de ma petite sœur. Elle a d'abord cru à un collier de bijouterie, puis elle a retourné le pendentif et vu la date : moment parfait.",
+   "date": "2026-09-27"
+  },
+  {
+   "action": "add",
+   "slug": "collier-coeur-plaques",
+   "name": "Laetitia",
+   "rating": 5,
+   "text": "Les prénoms de mes deux enfants sur les plaques et notre date de mariage au centre : tout tient, tout se lit, et l'ensemble bouge joliment sur la chaîne.",
+   "date": "2026-09-09"
+  },
+  {
+   "action": "add",
+   "slug": "collier-3coeurs",
+   "name": "Virginie",
+   "rating": 5,
+   "text": "Trois enfants, trois cœurs, trois prénoms : mes enfants me l'ont offert en mai et je l'ai porté toute la journée en touchant chaque cœur.",
+   "date": "2026-09-12"
+  },
+  {
+   "action": "add",
+   "slug": "collier-3coeurs",
+   "name": "Corinne",
+   "rating": 5,
+   "text": "Pour ma mère, avec les prénoms de ses trois petits-enfants. Elle a lu les cœurs un par un à voix haute, c'était très touchant.",
+   "date": "2026-10-02"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-coeur-chaine",
+   "name": "Maëva",
+   "rating": 5,
+   "text": "La grosse maille dorée a vraiment le style que je cherchais, et le fermoir en T s'attache d'une main. Nos initiales passent très bien sur la face du pendentif.",
+   "date": "2026-09-18"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-cordon-plaque",
+   "name": "Grégoire",
+   "rating": 5,
+   "text": "Cordon noir, boucle acier, et une date sur la plaque. Ça se règle en tirant le cordon, pratique quand on change de poignet selon la montre.",
+   "date": "2026-09-06"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-cordon-plaque",
+   "name": "Capucine",
+   "rating": 5,
+   "text": "Pour mon frère qui ne porte jamais rien : avec son prénom dessus il le garde depuis un mois. Le tressage n'a pas peluché.",
+   "date": "2026-09-22"
+  },
+  {
+   "action": "add",
+   "slug": "collier-medaillon-pivotant",
+   "name": "Émilie",
+   "rating": 5,
+   "text": "Le médaillon tourne entre les doigts : un prénom sur une face, une date sur l'autre. En or rose, c'est devenu mon porte-bonheur.",
+   "date": "2026-09-15"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-homme-plaque-cuir",
+   "name": "Loïc",
+   "rating": 5,
+   "text": "Cuir noir chiné, mon prénom sur la plaque, fermoir clip qui tient bien même en bricolant. Il a l'air plus cher qu'il ne l'est.",
+   "date": "2026-09-10"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-homme-plaque-cuir",
+   "name": "Valérie",
+   "rating": 5,
+   "text": "Marron, avec notre date de rencontre sur la plaque, pour les quarante ans de mon mari. Enfilé au petit-déjeuner, encore au poignet au dîner.",
+   "date": "2026-09-28"
+  },
+  {
+   "action": "add",
+   "slug": "collier-pastille",
+   "name": "Anaïs",
+   "rating": 5,
+   "text": "Pastille dorée toute petite, un prénom devant et une date derrière. Discret au point qu'on me demande ce qui est écrit dessus.",
+   "date": "2026-09-11"
+  },
+  {
+   "action": "add",
+   "slug": "collier-coeur-grave",
+   "name": "Ophélie",
+   "rating": 5,
+   "text": "Cœur plat argenté, prénom devant, date derrière. L'écriture est centrée et la chaîne a juste la bonne longueur pour tomber sous la clavicule.",
+   "date": "2026-09-08"
+  },
+  {
+   "action": "add",
+   "slug": "collier-coeur-grave",
+   "name": "Mélissa",
+   "rating": 5,
+   "text": "Ma meilleure amie déménageait loin ; je lui ai fait graver un mot pour qu'elle pense à nous. Elle m'a envoyé une photo du collier dès le lendemain.",
+   "date": "2026-09-24"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-perles-pastille",
+   "name": "Éloïse",
+   "rating": 5,
+   "text": "Les perles acier dorées roulent agréablement sur le poignet et le lien coulissant permet de le serrer ou de le desserrer. Prénom bien gravé sur la pastille.",
+   "date": "2026-09-13"
+  }
+ ],
+ "demain": [
+  {
+   "action": "add",
+   "slug": "collier-double-coeur",
+   "name": "Hélène",
+   "rating": 4,
+   "text": "Le pendentif est moins grand que sur mon écran, et c'est tant mieux : il reste délicat au cou. Ma date au dos est bien centrée.",
+   "date": "2026-10-05"
+  },
+  {
+   "action": "add",
+   "slug": "collier-coeur-plaques",
+   "name": "Stéphanie M.",
+   "rating": 5,
+   "text": "Ma mère l'a reçu avec nos trois prénoms répartis entre les plaques et le pendentif. Depuis, elle le montre à toutes ses amies.",
+   "date": "2026-09-30"
+  },
+  {
+   "action": "add",
+   "slug": "collier-coeur-plaques",
+   "name": "Solène",
+   "rating": 4,
+   "text": "Finition argentée propre, les plaques sont fines et les petits caractères tiennent la route. Seul bémol, j'aurais aimé une chaîne un peu plus longue.",
+   "date": "2026-10-11"
+  },
+  {
+   "action": "add",
+   "slug": "collier-3coeurs",
+   "name": "Sandrine",
+   "rating": 4,
+   "text": "Les cœurs entrelacés ne se prennent pas dans la chaîne, ce que je craignais. Doré agréable, ni trop jaune ni trop pâle.",
+   "date": "2026-10-16"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-coeur-chaine",
+   "name": "Jade",
+   "rating": 5,
+   "text": "Anniversaire de ma copine : elle rêvait d'une chaîne épaisse, j'ai ajouté son surnom derrière le petit cœur. Elle a crié en ouvrant l'écrin.",
+   "date": "2026-10-04"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-coeur-chaine",
+   "name": "Lina",
+   "rating": 4,
+   "text": "Costaud sans être lourd au poignet. La lettre gravée à l'arrière est petite mais parfaitement dessinée.",
+   "date": "2026-10-13"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-cordon-plaque",
+   "name": "Florent",
+   "rating": 4,
+   "text": "Modèle simple, la plaque acier est nette aux angles et la gravure ne brille pas trop, c'est discret. Bon achat.",
+   "date": "2026-10-08"
+  },
+  {
+   "action": "add",
+   "slug": "collier-medaillon-pivotant",
+   "name": "Noémie B.",
+   "rating": 5,
+   "text": "Ma grand-mère y a fait graver les initiales de ses petits-enfants, quatre devant, quatre derrière. Elle le fait pivoter sans arrêt en racontant qui est qui.",
+   "date": "2026-10-01"
+  },
+  {
+   "action": "add",
+   "slug": "collier-medaillon-pivotant",
+   "name": "Charlotte",
+   "rating": 4,
+   "text": "Le pivot est fluide et ne grince pas. Le doré est un peu plus clair que sur l'écran, mais très joli porté.",
+   "date": "2026-10-14"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-homme-plaque-cuir",
+   "name": "Kévin",
+   "rating": 4,
+   "text": "Le bleu marine est sobre, la plaque acier bien ajustée au cuir. La longueur convient à un poignet moyen, à vérifier si vous avez le poignet large.",
+   "date": "2026-10-09"
+  },
+  {
+   "action": "add",
+   "slug": "collier-pastille",
+   "name": "Sabine",
+   "rating": 5,
+   "text": "Ma fille a eu 20 ans en septembre ; je l'ai choisi en or rose. Elle qui ne porte que des bijoux fins l'a trouvé exactement à son goût.",
+   "date": "2026-09-25"
+  },
+  {
+   "action": "add",
+   "slug": "collier-pastille",
+   "name": "Roxane",
+   "rating": 4,
+   "text": "Mignon et léger. Le disque est petit donc l'écriture aussi, mais on distingue bien chaque lettre. Prix raisonnable pour du gravé.",
+   "date": "2026-10-10"
+  },
+  {
+   "action": "add",
+   "slug": "collier-coeur-grave",
+   "name": "Caroline D.",
+   "rating": 4,
+   "text": "Conforme aux photos, le doré est doux. Le message au verso est petit mais j'arrive à le lire sans lunettes.",
+   "date": "2026-10-07"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-perles-pastille",
+   "name": "Marjorie",
+   "rating": 5,
+   "text": "Version argentée pour ma belle-sœur. Elle a trouvé le mélange perles et pastille gravée très élégant, et le réglage lui va parfaitement.",
+   "date": "2026-09-29"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-perles-pastille",
+   "name": "Rozenn",
+   "rating": 4,
+   "text": "Léger, on l'oublie vite au poignet. Le coulissant tient en place sans se desserrer dans la journée.",
+   "date": "2026-10-12"
+  }
+ ],
+ "reserve": [
+  {
+   "action": "add",
+   "slug": "collier-double-coeur",
+   "name": "Léonie",
+   "rating": 5,
+   "text": "Version dorée avec un mot doux caché au verso pour ma meilleure amie. Elle l'a lu dans la voiture et a dû s'arrêter pour s'essuyer les yeux.",
+   "date": "2026-10-19"
+  },
+  {
+   "action": "add",
+   "slug": "collier-coeur-plaques",
+   "name": "Bastien",
+   "rating": 5,
+   "text": "Commandé pour ma femme à la naissance de notre fille, avec les deux prénoms. Elle l'a mis à la maternité et ne l'a plus quitté.",
+   "date": "2026-10-23"
+  },
+  {
+   "action": "add",
+   "slug": "collier-3coeurs",
+   "name": "Fanny",
+   "rating": 5,
+   "text": "Plus fin qu'en photo et c'est une bonne surprise : ça se porte avec tout. Les trois prénoms sont alignés exactement au milieu de chaque cœur.",
+   "date": "2026-10-27"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-coeur-chaine",
+   "name": "Priscilla",
+   "rating": 5,
+   "text": "Le prénom de ma fille gravé devant, le dos laissé vide pour un futur petit frère ou petite sœur. Le doré est resté intact depuis trois semaines.",
+   "date": "2026-10-25"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-cordon-plaque",
+   "name": "Agathe",
+   "rating": 5,
+   "text": "Un gris foncé pour mon mari et un noir pour moi, avec le même mot gravé sur les deux. Réglable, donc nos deux poignets différents y trouvent leur compte.",
+   "date": "2026-10-21"
+  },
+  {
+   "action": "add",
+   "slug": "collier-medaillon-pivotant",
+   "name": "Audrey",
+   "rating": 5,
+   "text": "Je voulais deux faces à graver sur un seul bijou, celui-ci le fait avec élégance. Le texte est bien lisible malgré la petite taille du disque.",
+   "date": "2026-10-28"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-homme-plaque-cuir",
+   "name": "Blandine",
+   "rating": 5,
+   "text": "Mon fils a eu 18 ans et voulait un vrai bracelet d'homme : celui-ci, en cuir, avec ses initiales, l'a conquis. Moi, j'ai aimé la boîte.",
+   "date": "2026-10-24"
+  },
+  {
+   "action": "add",
+   "slug": "collier-pastille",
+   "name": "Margaux",
+   "rating": 5,
+   "text": "Deux initiales, une de chaque côté, pour marquer notre couple sans que ça se voie de loin. Pile le bijou que je cherchais depuis des mois.",
+   "date": "2026-10-26"
+  },
+  {
+   "action": "add",
+   "slug": "collier-coeur-grave",
+   "name": "Alice",
+   "rating": 5,
+   "text": "En or rose pour ma maman, mon prénom d'un côté du cœur et celui de ma sœur de l'autre. Elle l'assortit maintenant à toutes ses tenues.",
+   "date": "2026-10-22"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-perles-pastille",
+   "name": "Tiphaine",
+   "rating": 5,
+   "text": "Une date gravée pour fêter le jour où l'on s'est rencontrés. Mon compagnon l'a reconnue tout de suite, mission réussie.",
+   "date": "2026-10-20"
+  }
+ ]
+}

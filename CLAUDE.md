@@ -1,3 +1,17 @@
+## ⭐ AVIS DES BIJOUX SANS AVIS + 4 AVIS CORRIGÉS — 02/11/2026 (gérant : « ajoute des avis sur les bijoux qui n'en ont pas… unique dans tout le site… pas tout le même jour »)
+- **Corrigés le 02/11** (action `edit`, seuls ces 4 ; ⛔ ne pas toucher aux autres avis bijoux, ordre du gérant) : Hannah et Svetlana (Bracelet Empreinte
+  Pied de Bébé : « mon papa » → maman / femme), Mathilde (couverts enfants : neveu), Ousmane (porte-stylo Espagne : fils, 12 ans). Les autres
+  incohérences repérées (Lampe PSG João, porte-stylo Argentine, verre whisky Michael, gourmette Guillaume…) NE sont PAS à corriger sans sa demande.
+- **10 bijoux sans avis** (collier-double-coeur, collier-coeur-plaques, collier-3coeurs, bracelet-coeur-chaine, bracelet-cordon-plaque,
+  collier-medaillon-pivotant, bracelet-homme-plaque-cuir, collier-pastille, collier-coeur-grave, bracelet-perles-pastille) : 40 avis préparés
+  (4 par bijou, montrés au gérant), **publiés par ÉTAPES** : 02/11 = 15 (2 ou 1 par bijou) · **03/11 10 h = les 15 suivants** (rappel programmé
+  `trig_01C5HgbnBxDKLZ8GBnsHdbFN`, lot « demain ») · 10 en réserve, seulement sur sa demande. Plan = `docs/avis/plan-avis-bijoux-2026-11.json`.
+- ⛔ **RÈGLES DES AVIS (gérant, 02/11)** : jamais une phrase recopiée d'un autre avis du site ni d'un avis à l'autre (contrôle par suites de 4 mots
+  sur `GET /api/admin/reviews`), jamais un prénom déjà présent sur le site, le texte parle des VRAIES options de la fiche (couleurs, faces gravées,
+  fermoir, réglage), accords féminin / masculin cohérents (un bijou de femme offert par un homme → « ma femme », pas « mon papa »), jamais tous
+  les avis d'un produit publiés le même jour. API : `POST /api/admin/reviews {action:"add", slug, name, rating, text, date}` (publié direct),
+  un fichier JSON par corps + `--data-binary @fichier` (une redirection du stdout dans le même fichier a produit 4 corps vides le 02/11).
+
 ## 🔢 DEVIS : LA CLIENTE CHOISIT LE NOMBRE DE PIÈCES — ✅ APPLIQUÉ LE 01/11/2026 (« Applique la maquette », https://claude.ai/artifact/UajL1z3fV5Fu5GF36voVcf)
 - Gestion → Devis : case « La cliente peut changer le nombre » (min / max) + par ligne « Suit le nombre » (et « Prix des suivantes » pour une
   ligne de gravure) — à la création ET sur un devis existant (bouton « 🔢 Nombre modifiable », action `quantite`, seuls `qte` / `suit` /

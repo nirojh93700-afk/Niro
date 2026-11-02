@@ -19,6 +19,12 @@
 
 ---
 
+## ⭐ AVIS BIJOUX — LOT DU 03/11 À PUBLIER (programmé 10 h, `trig_01C5HgbnBxDKLZ8GBnsHdbFN`)
+- 02/11 : 15 avis publiés sur les 10 bijoux sans avis + 4 avis corrigés (Hannah, Svetlana, Mathilde, Ousmane). 03/11 : les 15 suivants
+  (clé « demain » de `docs/avis/plan-avis-bijoux-2026-11.json`, 3 avis par bijou au total). 10 avis en réserve (clé « reserve ») : seulement
+  s'il le demande. Mot de passe Gestion : lui redemander (jamais écrit dans un fichier).
+- Devis modifiable (DEV-1528) : la case « La cliente peut changer le nombre » n'est pas cochée ; proposé de la cocher d'office → sans réponse.
+
 ## ⛳ REPRISE — ÉTAT AU 30/10/2026 SOIR (la conversation précédente est pleine : continuer ici, comme si de rien n'était)
 1. **Alissia (alissiarnd@hotmail.com) — cristal fée + Scorpion** : 2 mails envoyés par le site le 30/10 (le 2ᵉ avec l'aperçu
    filigrané INTÉGRÉ dans le mail). Tout est dans `docs/clients/alissia-fee-scorpion/` (dessin retenu = fée COURONNÉE, aperçus,
