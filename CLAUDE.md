@@ -4717,6 +4717,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   page `/cristaux-graves`, lignes de stock dans Gestion. Le jour où le gérant a les adaptateurs : `ADAPTATEUR_NOIR_FOURNI = true`.
   `npm run test-socles`.
 
+## 📿 MAQUETTE « COLLIER BARRE VERTICALE À GRAVER » — ✅ ENREGISTRÉE TELLE QUELLE LE 02/11/2026 (version 1) — RIEN en ligne
+- https://claude.ai/artifact/EMNQWoLhYFJKNVXMowyAvP · générateur `tools/maquettes/collier-barre-verticale.py <capture>` · photos
+  `docs/maquettes/assets/barre-verticale/`. Nihaojewelry NH11122064, acier 304, barre 31 × 4 mm, 4 faces, pierre en bas de la face 1,
+  chaîne 50 + 5 cm, 11 g · **argenté seulement (photo noire écartée), stock 5** · barré 21,90 € → payé 19,71 € (code 23,90) · gravure
+  4 faces, 15 caractères, **1re face remplie offerte, chaque face en plus +3 €** (exception à la règle bijoux du 18/10). Au « applique » :
+  option `textesOfferts: 1` dans `engravingPrice.js` (+ textesPrix, prixPremiereGravure), fiche `products.js`, `productInfo.js`, `productDates.js`.
+
 ## ✏️ CORRIGER LE NOM / L'ADRESSE DE LIVRAISON D'UNE COMMANDE — ✅ EN LIGNE LE 02/11/2026 (« pousse », commande 04AT1IG4 Villa Marquis)
 - Gestion → commande → « Copier pour Boxtal » → **« ✏️ Corriger le nom ou l'adresse »** (nom, société / établissement, adresse, complément,
   CP, ville, téléphone). API `POST /api/admin/orders {id, action:"livraison", shippingName?, shippingCompany?, line1?, line2?, postal_code?, city?,
