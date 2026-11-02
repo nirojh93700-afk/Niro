@@ -925,7 +925,7 @@
 - ⛔ **APRÈS UN ENVOI : CHERCHER AUSSI LE REBOND, PAS SEULEMENT LA BOÎTE D'ENVOI (02/11/2026, Manuel moreiramanuel@diocese-paris.net :
   2 mails « partis » d'après l'API et la boîte d'envoi, en fait REFUSÉS « 550 Invalid Recipient » ; gérant : « c'est faux »)**. Avant de dire
   « envoyé », relire le fil Gmail du message (`get_thread`) : un « Delivery Status Notification (Failure) » de mailer-daemon arrive dans le
-  MÊME fil quelques secondes après. Adresse refusée = ne pas renvoyer (ça rebondira encore), ne jamais deviner une autre adresse : le dire au gérant.
+  MÊME fil quelques secondes après. Adresse refusée = ne pas renvoyer (ça rebondira encore), ne jamais deviner une autre adresse : le dire au gérant. ⚠️ Le rebond peut arriver 10 s à 1 min APRÈS l'envoi (02/11 : vérifié trop tôt, annoncé « pas de rebond » à tort) : relire le fil ET chercher `from:mailer-daemon newer_than:1h` au moins une minute après.
 
 - ⛔ **ENTRETIEN : JAMAIS DE « LAVE-VAISSELLE » SUR LES BIJOUX NI SUR LE BOIS (gérant, 09/10/2026 soir : « depuis quand les gens
   mettent du bois dans le lave-vaisselle… pour les bijoux et les bois y a pas de lave-vaisselle »)**. Le lave-vaisselle ne se

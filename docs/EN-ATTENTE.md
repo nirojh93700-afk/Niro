@@ -607,4 +607,5 @@ En attente de SA décision :
   cœurs aux extrémités, livraison au choix, emballages + Noël, adresse .net). 18 h 36 : réponse envoyée depuis sa demande (« Relire, modifier
   et envoyer », sur ordre du gérant) → REBONDI à nouveau (550 Invalid Recipient). 3ᵉ refus : ne plus rien envoyer à cette adresse.
 - 18 h 38 : DEV-1534 supprimé, devis = DEV-1535 (https://nivcreation.fr/document/XpWwN4DLympJu7jvgR44, adresse moreiramanuel@diocese-paris.fr) ;
-  mail + devis envoyés à l'adresse .fr (essai demandé par le gérant) : PAS de rebond à la vérification (1 min après). Revérifier le fil plus tard.
+  mail + devis envoyés à l'adresse .fr (essai demandé par le gérant) : REBONDI aussi (18 h 39, « 554 Relay access denied » : ovh n'a pas cette boîte).
+  Les 2 adresses sont mortes. Plus d'envoi tant qu'il n'a pas donné une vraie adresse (téléphone : absent de sa demande).
