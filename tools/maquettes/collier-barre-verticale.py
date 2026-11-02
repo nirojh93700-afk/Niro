@@ -40,6 +40,10 @@ def raw_uri(path):
 
 
 src = open(SRC, encoding="utf-8").read()
+# Nom choisi par le gérant le 02/11/2026 : « Collier Quatre Mots » (la capture porte l'ancien nom).
+src = src.replace("Collier barre verticale à graver sur 4 faces — acier inoxydable, petite pierre",
+                  "Collier Quatre Mots — barre à graver sur 4 faces, acier inoxydable")
+src = src.replace("Collier Barre verticale à graver", "Collier Quatre Mots")
 src = re.sub(r"<script\b.*?</script>", "", src, flags=re.S)
 src = re.sub(r'<link[^>]+rel="(?:preload|modulepreload|preconnect|dns-prefetch)"[^>]*>', "", src)
 body_start = src.find(">", src.find("<body")) + 1
@@ -134,8 +138,8 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX)).replace("__FACE__", json.dumps(FACE))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Collier barre verticale à graver » · <b>rien n\'est en ligne</b></div>'
-TITLE = "<title>Collier barre verticale</title>"
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Collier Quatre Mots » · <b>rien n\'est en ligne</b></div>'
+TITLE = "<title>Collier Quatre Mots</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"
 full = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
