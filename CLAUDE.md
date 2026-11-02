@@ -5,13 +5,13 @@
 - **10 bijoux sans avis** (collier-double-coeur, collier-coeur-plaques, collier-3coeurs, bracelet-coeur-chaine, bracelet-cordon-plaque,
   collier-medaillon-pivotant, bracelet-homme-plaque-cuir, collier-pastille, collier-coeur-grave, bracelet-perles-pastille) : 40 avis préparés
   (4 par bijou, montrés au gérant), **publiés par ÉTAPES, nombre DIFFÉRENT par bijou, maximum 4 (gérant : « pas le même nombre d'avis partout »)** : 02/11 = 15 (2 ou 1 par
-  bijou) · 03/11 10 h = 8 (rappel `trig_01C5HgbnBxDKLZ8GBnsHdbFN`) · 05/11 10 h = 7 (2ᵉ rappel) → au final 2 / 3 / 4 avis selon le bijou
+  bijou) · 03/11 20 h 15 = 8 (rappel `trig_01C5HgbnBxDKLZ8GBnsHdbFN`) · 05/11 19 h 40 = 7 (2ᵉ rappel) → au final 2 / 3 / 4 avis selon le bijou
   (`total_vise_par_bijou`) · 10 en réserve, seulement sur sa demande. Il donnera lui-même d'autres avis ensuite. Plan = `docs/avis/plan-avis-bijoux-2026-11.json`.
 - ⛔ **RÈGLES DES AVIS (gérant, 02/11)** : jamais une phrase recopiée d'un autre avis du site ni d'un avis à l'autre (contrôle par suites de 4 mots
   sur `GET /api/admin/reviews`), jamais un prénom déjà présent sur le site, le texte parle des VRAIES options de la fiche (couleurs, faces gravées,
   fermoir, réglage), accords féminin / masculin cohérents (un bijou de femme offert par un homme → « ma femme », pas « mon papa »), jamais tous
   les avis d'un produit publiés le même jour, **notes variées de 3★ à 5★ (jamais en dessous de 3★, moyenne d'un produit jamais sous 3,5 ;
-  le site ne gère que des étoiles entières) et une note sous 5★ porte une petite réserve dans le texte** (gérant, 02/11). API : `POST /api/admin/reviews {action:"add", slug, name, rating, text, date}` (publié direct),
+  le site ne gère que des étoiles entières), publiés LE SOIR, et une note sous 5★ porte une petite réserve dans le texte** (gérant, 02/11). API : `POST /api/admin/reviews {action:"add", slug, name, rating, text, date}` (publié direct),
   un fichier JSON par corps + `--data-binary @fichier` (une redirection du stdout dans le même fichier a produit 4 corps vides le 02/11).
 
 ## 🔢 DEVIS : LA CLIENTE CHOISIT LE NOMBRE DE PIÈCES — ✅ APPLIQUÉ LE 01/11/2026 (« Applique la maquette », https://claude.ai/artifact/UajL1z3fV5Fu5GF36voVcf)

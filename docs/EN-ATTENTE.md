@@ -19,7 +19,7 @@
 
 ---
 
-## ⭐ AVIS BIJOUX — LOTS DU 03/11 (8 avis) ET DU 05/11 (7 avis) À PUBLIER (programmés 10 h)
+## ⭐ AVIS BIJOUX — LOTS DU 03/11 (8 avis) ET DU 05/11 (7 avis) À PUBLIER LE SOIR (03/11 20 h 15, 05/11 19 h 40)
 - 02/11 : 15 avis publiés sur les 10 bijoux sans avis + 4 avis corrigés (Hannah, Svetlana, Mathilde, Ousmane). Puis clés
   « a_publier_2026-11-03 » et « a_publier_2026-11-05 » de `docs/avis/plan-avis-bijoux-2026-11.json` → 2 à 4 avis par bijou, jamais le même nombre partout. 10 avis en réserve (clé « reserve ») : seulement
   s'il le demande. Mot de passe Gestion : lui redemander (jamais écrit dans un fichier).
