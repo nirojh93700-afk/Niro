@@ -4716,3 +4716,10 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   `socle-led-rectangle-noir`, photo, texte), petit et grand chacun de son côté ; appliqué dans `getCatalog` (fiches + paiement),
   page `/cristaux-graves`, lignes de stock dans Gestion. Le jour où le gérant a les adaptateurs : `ADAPTATEUR_NOIR_FOURNI = true`.
   `npm run test-socles`.
+
+## ✏️ CORRIGER LE NOM / L'ADRESSE DE LIVRAISON D'UNE COMMANDE — ✅ EN LIGNE LE 02/11/2026 (« pousse », commande 04AT1IG4 Villa Marquis)
+- Gestion → commande → « Copier pour Boxtal » → **« ✏️ Corriger le nom ou l'adresse »** (nom, société / établissement, adresse, complément,
+  CP, ville, téléphone). API `POST /api/admin/orders {id, action:"livraison", shippingName?, shippingCompany?, line1?, line2?, postal_code?, city?,
+  customerPhone?}` ; l'état d'avant est gardé une fois dans `livraisonCorrigeeDe`. La société (`shippingCompany`) s'affiche dans Boxtal (ligne
+  « Société »), la file de production, la fiche commande, la fiche papier et les étiquettes La Poste.
+- 04AT1IG4 corrigée : Chloé Faussone · Hôtel Villa Marquis · 35 rue Jean Goujon, 75008 Paris · 07 77 49 14 95 (avant : « Chloe faussone », 06 19 12 30 49).
