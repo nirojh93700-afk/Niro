@@ -1,3 +1,11 @@
+## 🎄 TANT QUE NOËL EST ALLUMÉ : TOUS LES EMBALLAGES DE NOËL PARTOUT POUR LES BIJOUX (gérant, 02/11/2026 : « à chaque fois maintenant jusqu'à que je désactive le bouton Noël, tout ce qu'on ajoute, il faut l'emballage Noël, tous les emballages Noël »)
+- Tout ce qui concerne un bijou propose les 6 emballages de Noël (sachet 0,90 · pochette 3,90 · sac à anses 4,90 · boîte à ruban 3,90 · boîte
+  rouge 3,90 · **Pack de Noël 7,90 € barré 8,80**) : fiche (nouveau bijou compris, automatique par `emballagesNoelPourProduit`, catégorie
+  bijoux), page du devis (`DevisPanier`), et **chaque mail client qui parle d'un bijou, d'un devis de bijou ou d'un emballage : citer le Pack
+  de Noël et les autres emballages de Noël** (oublié dans le mail de Manuel le 02/11). Prix à relire en ligne avant d'écrire.
+- Vérifié le 02/11 : les 34 bijoux en ligne ont les 6 emballages. Après tout ajout de bijou : relire sa fiche en ligne (« Pack de Noël » présent).
+- S'arrête QUAND le gérant éteint Noël dans Gestion → Fêtes (alors plus un mot de Noël nulle part).
+
 ## 🛍️ DEVIS : EMBALLAGE CADEAU + AUTRES ARTICLES, PAYÉS ENSEMBLE AU PANIER — ✅ EN LIGNE LE 02/11/2026 (« Applique la maquette », https://claude.ai/artifact/Lo8LopW8uKma8KuAgriD6a, e74b0562)
 - Page `/document/<id>` (`DevisPanier.jsx`) : « Votre emballage » (les emballages de la fiche du produit principal du devis = 1re ligne rattachée à
   un `variantId`, + emballage de Noël replié), total mis à jour ; « Compléter votre commande » (6 articles du même rayon + un petit cadeau,
