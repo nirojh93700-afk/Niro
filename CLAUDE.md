@@ -4727,7 +4727,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Fiche `bracelet-gourmette-plaque` (sous-catégorie homme), Doré / Noir (`bracelet-gourmette-plaque-dore` / `-noir`), code 33,90 → barré 30,90 →
   payé 27,81 €, gravure de la plaque seulement +3 € (25 caractères), SANS visuel 3D (refusé : la chaîne 3D reste argentée), 7 photos
   `public/produits/bracelet-gourmette-plaque-1..7.jpg`, boîte allongée / pack bracelet, Noël automatique, badge « Nouveau ». Stock 5 + 5.
-- ⚠️ Déploiements Firebase « Build failed » (~2 min 20) depuis 9040e9a0, alors que le build local passe (508 Mo suivis).
+- Déploiements Firebase « Build failed » (~2 min 20) de 9040e9a0 à 4660f7e9 (6 de suite, cause inconnue, build local OK) ; repassé tout seul avec 57a9fd52 : fiche EN LIGNE, stock 5 + 5 vérifié.
 
 ## 📿 COLLIER QUATRE MOTS — ✅ EN VENTE DEPUIS LE 02/11/2026 (gérant : « enlève la photo et les mesures dans la description… tu peux mettre en ligne »)
 - Fiche `collier-barre-verticale` (nom « Collier Quatre Mots »), argenté, **stock 5** (posé le 02/11), barré 21,90 → payé 19,71 €, 3 photos
