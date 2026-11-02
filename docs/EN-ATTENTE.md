@@ -578,8 +578,8 @@ En attente de SA décision :
   reçus, budget serré, autres produits plus tard) + demande d'un produit en urgence = **cadre plaque acrylique à socle bois LED**, tailles 150 mm et
   180 mm (photo de Rachel), **~10 de chaque pour tester**, prix + livraison France + délai « avant Noël ? ». **En attente de sa réponse** (le gérant la transmettra).
 
-- **02/11/2026 — NOUVEAU BIJOU « PENDENTIF BARRE VERTICALE » — MAQUETTE À FAIRE SEULEMENT QUAND LE GÉRANT LE DIT** (« fais pas maintenant, on va
-  finir de parler avec le fournisseur… quand je te dirai, fais la maquette »). Tout est décidé :
+- **02/11/2026 — NOUVEAU BIJOU « PENDENTIF BARRE VERTICALE » — MAQUETTE FAITE LE 02/11 (« Fais la maquette »), en attente de son avis** : https://claude.ai/artifact/EMNQWoLhYFJKNVXMowyAvP ,
+  générateur `tools/maquettes/collier-barre-verticale.py <capture>` (fiche ajoutée en local, capturée, site remis à l'identique). Tout est décidé :
   Nihaojewelry NH11122064 (1,29 € pièce), acier inoxydable 304, unisexe, barre 31 × 4 mm à 4 faces, petite pierre en bas d'une face,
   chaîne câble 50 + 5 cm, 11 g · **argenté SEULEMENT, stock 5** · **prix barré 21,90 € → la cliente paie 19,71 €** (code products.js 23,90) ·
   **gravure sur les 4 faces : la 1re face remplie OFFERTE, chaque face en plus +3 €** (19,71 / 22,71 / 25,71 / 28,71 €) = exception voulue à la
