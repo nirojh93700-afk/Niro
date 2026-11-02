@@ -2193,6 +2193,7 @@ export const products = [
     weight: 72, pickup: false, letter: true, subcategory: "femme",
     title: "Collier Quatre Mots — barre à graver sur 4 faces, acier inoxydable",
     category: "bijoux", type: "Collier personnalisé",
+    engrave3d: true, // aperçu 3D : la barre à 4 faces, la cliente la fait pivoter (même visuel que le pendentif géométrique)
     tagline: "Une fine barre à quatre faces, à graver d'un prénom, d'une date ou d'un mot sur chacune.",
     personalizable: true, personalizationLabel: "Gravure sur 1 à 4 faces : la 1re face offerte, chaque face en plus +3 €",
     engravingPricing: {
