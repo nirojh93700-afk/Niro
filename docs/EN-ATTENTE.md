@@ -587,7 +587,13 @@ En attente de SA décision :
   dans la longueur · photos (avec gravure « I LOVE YOU ») + captures fournisseur : `docs/maquettes/assets/barre-verticale/` ·
   `weight: 72`, `letter: true`, emballages colliers (`COLLIERS`). Maquette = méthode habituelle (fiche ajoutée en local, capture, artifact).
 
-- **02/11/2026 — NOUVEAU BRACELET « GOURMETTE À PLAQUE » DORÉ ET NOIR (Nihaojewelry) — PHOTOS REÇUES, RIEN DE FAIT** : 8 images envoyées sans texte
+- **02/11/2026 — BRACELET « GOURMETTE À PLAQUE GRAVÉE » DORÉ ET NOIR — MAQUETTE FAITE, en attente de son avis, RIEN en ligne** :
+  https://claude.ai/artifact/DrNUSrwMsGSTpYo2x5turM · générateur `tools/maquettes/gourmette-plaque.py <capture>` (fiche locale :
+  `scratchpad` fiche-locale.py, recopiée dans le générateur en commentaire au besoin). Réponses du gérant : **nouvelle fiche**, **27,90 €**
+  (lu comme prix payé → **barré 30,90 → payé 27,81 €**, code 33,90 ; à confirmer), **stock 5** (par couleur ? à confirmer), **gravure sur la
+  plaque seulement** (+3 €, 25 caractères). Slug proposé `bracelet-gourmette-plaque`, nom « Bracelet Gourmette à plaque gravée », sous-catégorie
+  homme, emballages des bracelets longs (boîte allongée, pack bracelet), Noël automatique. 3D : le viewer gourmette existe mais force l'argent →
+  à la construction, `braceletFin = braceletFinish` pour que la plaque suive la couleur (la chaîne 3D reste argentée). Photos reçues : 8 images envoyées sans texte
   (fiche Nihao : acier inoxydable 304, plaqué or 18 carats pour le doré, 15 g, « Hommes », gravure laser, étanche selon le vendeur) → copiées dans
   `docs/maquettes/assets/gourmette-doree-noire/` (2 photos fournisseur, 3 portées dorées, 2 portées noires). Une petite pierre semble visible au bout de
   la plaque dorée alors que la fiche dit « sans pierres ». Questions posées : nouvelle fiche ou couleurs ajoutées au « Bracelet Homme Identité
