@@ -407,7 +407,8 @@
   (texte en arc autour de la tige) ; compris si c'est la seule gravure du verre 1, sinon +3 € ; le pied seul active « Ajouter au panier ».
   Détail et suite au « applique » : `docs/EN-ATTENTE.md`. Origine : demande de Nicky (25/10), le gérant peut graver le pied.
 - ⛔ **Le pied du verre 47 cl NE SE GRAVE PAS** (gérant, 02/11/2026, demande de l'hôtel Villa Marquis : « sur ce verre on peut pas graver
-  sur le pied »). Le pied ne se propose que sur le 36 cl, et seulement le jour où la maquette est appliquée.
+  sur le pied »), puis « et on peut pas sur le pied » pour le 36 cl : **AUCUN pied ne se grave pour l'instant (ni 47 cl ni 36 cl)**,
+  ne le proposer à aucune cliente tant qu'il ne l'a pas dit lui-même.
 
 ## ✅ LES TROIS MAQUETTES MARQUE-PAGES — ENREGISTRÉES TELLES QUELLES LE 23/10/2026 SOIR (« Enregistre toutes les maquettes ») — RIEN en ligne
 > Versions FINALES enregistrées le 23/10 soir : **modèle 1 v3 · modèle 2 v3 (face = texte seul) · modèle 3 v4**, + les zones de gravure
