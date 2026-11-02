@@ -1,5 +1,5 @@
 {
- "aujourdhui": [
+ "publie_2026-11-02": [
   {
    "action": "add",
    "slug": "collier-double-coeur",
@@ -121,7 +121,7 @@
    "date": "2026-09-13"
   }
  ],
- "demain": [
+ "a_publier_2026-11-03": [
   {
    "action": "add",
    "slug": "collier-double-coeur",
@@ -133,26 +133,10 @@
   {
    "action": "add",
    "slug": "collier-coeur-plaques",
-   "name": "Stéphanie M.",
-   "rating": 5,
-   "text": "Ma mère l'a reçu avec nos trois prénoms répartis entre les plaques et le pendentif. Depuis, elle le montre à toutes ses amies.",
-   "date": "2026-09-30"
-  },
-  {
-   "action": "add",
-   "slug": "collier-coeur-plaques",
    "name": "Solène",
    "rating": 4,
    "text": "Finition argentée propre, les plaques sont fines et les petits caractères tiennent la route. Seul bémol, j'aurais aimé une chaîne un peu plus longue.",
    "date": "2026-10-11"
-  },
-  {
-   "action": "add",
-   "slug": "collier-3coeurs",
-   "name": "Sandrine",
-   "rating": 4,
-   "text": "Les cœurs entrelacés ne se prennent pas dans la chaîne, ce que je craignais. Doré agréable, ni trop jaune ni trop pâle.",
-   "date": "2026-10-16"
   },
   {
    "action": "add",
@@ -161,14 +145,6 @@
    "rating": 5,
    "text": "Anniversaire de ma copine : elle rêvait d'une chaîne épaisse, j'ai ajouté son surnom derrière le petit cœur. Elle a crié en ouvrant l'écrin.",
    "date": "2026-10-04"
-  },
-  {
-   "action": "add",
-   "slug": "bracelet-coeur-chaine",
-   "name": "Lina",
-   "rating": 4,
-   "text": "Costaud sans être lourd au poignet. La lettre gravée à l'arrière est petite mais parfaitement dessinée.",
-   "date": "2026-10-13"
   },
   {
    "action": "add",
@@ -188,35 +164,11 @@
   },
   {
    "action": "add",
-   "slug": "collier-medaillon-pivotant",
-   "name": "Charlotte",
-   "rating": 4,
-   "text": "Le pivot est fluide et ne grince pas. Le doré est un peu plus clair que sur l'écran, mais très joli porté.",
-   "date": "2026-10-14"
-  },
-  {
-   "action": "add",
-   "slug": "bracelet-homme-plaque-cuir",
-   "name": "Kévin",
-   "rating": 4,
-   "text": "Le bleu marine est sobre, la plaque acier bien ajustée au cuir. La longueur convient à un poignet moyen, à vérifier si vous avez le poignet large.",
-   "date": "2026-10-09"
-  },
-  {
-   "action": "add",
    "slug": "collier-pastille",
    "name": "Sabine",
    "rating": 5,
    "text": "Ma fille a eu 20 ans en septembre ; je l'ai choisi en or rose. Elle qui ne porte que des bijoux fins l'a trouvé exactement à son goût.",
    "date": "2026-09-25"
-  },
-  {
-   "action": "add",
-   "slug": "collier-pastille",
-   "name": "Roxane",
-   "rating": 4,
-   "text": "Mignon et léger. Le disque est petit donc l'écriture aussi, mais on distingue bien chaque lettre. Prix raisonnable pour du gravé.",
-   "date": "2026-10-10"
   },
   {
    "action": "add",
@@ -233,14 +185,64 @@
    "rating": 5,
    "text": "Version argentée pour ma belle-sœur. Elle a trouvé le mélange perles et pastille gravée très élégant, et le réglage lui va parfaitement.",
    "date": "2026-09-29"
+  }
+ ],
+ "a_publier_2026-11-05": [
+  {
+   "action": "add",
+   "slug": "collier-coeur-plaques",
+   "name": "Stéphanie M.",
+   "rating": 5,
+   "text": "Ma mère l'a reçu avec nos trois prénoms répartis entre les plaques et le pendentif. Depuis, elle le montre à toutes ses amies.",
+   "date": "2026-09-30"
   },
   {
    "action": "add",
-   "slug": "bracelet-perles-pastille",
-   "name": "Rozenn",
+   "slug": "collier-coeur-plaques",
+   "name": "Bastien",
+   "rating": 5,
+   "text": "Commandé pour ma femme à la naissance de notre fille, avec les deux prénoms. Elle l'a mis à la maternité et ne l'a plus quitté.",
+   "date": "2026-10-23"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-coeur-chaine",
+   "name": "Lina",
    "rating": 4,
-   "text": "Léger, on l'oublie vite au poignet. Le coulissant tient en place sans se desserrer dans la journée.",
-   "date": "2026-10-12"
+   "text": "Costaud sans être lourd au poignet. La lettre gravée à l'arrière est petite mais parfaitement dessinée.",
+   "date": "2026-10-13"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-cordon-plaque",
+   "name": "Agathe",
+   "rating": 5,
+   "text": "Un gris foncé pour mon mari et un noir pour moi, avec le même mot gravé sur les deux. Réglable, donc nos deux poignets différents y trouvent leur compte.",
+   "date": "2026-10-21"
+  },
+  {
+   "action": "add",
+   "slug": "bracelet-homme-plaque-cuir",
+   "name": "Kévin",
+   "rating": 4,
+   "text": "Le bleu marine est sobre, la plaque acier bien ajustée au cuir. La longueur convient à un poignet moyen, à vérifier si vous avez le poignet large.",
+   "date": "2026-10-09"
+  },
+  {
+   "action": "add",
+   "slug": "collier-pastille",
+   "name": "Roxane",
+   "rating": 4,
+   "text": "Mignon et léger. Le disque est petit donc l'écriture aussi, mais on distingue bien chaque lettre. Prix raisonnable pour du gravé.",
+   "date": "2026-10-10"
+  },
+  {
+   "action": "add",
+   "slug": "collier-coeur-grave",
+   "name": "Alice",
+   "rating": 5,
+   "text": "En or rose pour ma maman, mon prénom d'un côté du cœur et celui de ma sœur de l'autre. Elle l'assortit maintenant à toutes ses tenues.",
+   "date": "2026-10-22"
   }
  ],
  "reserve": [
@@ -254,11 +256,11 @@
   },
   {
    "action": "add",
-   "slug": "collier-coeur-plaques",
-   "name": "Bastien",
-   "rating": 5,
-   "text": "Commandé pour ma femme à la naissance de notre fille, avec les deux prénoms. Elle l'a mis à la maternité et ne l'a plus quitté.",
-   "date": "2026-10-23"
+   "slug": "collier-3coeurs",
+   "name": "Sandrine",
+   "rating": 4,
+   "text": "Les cœurs entrelacés ne se prennent pas dans la chaîne, ce que je craignais. Doré agréable, ni trop jaune ni trop pâle.",
+   "date": "2026-10-16"
   },
   {
    "action": "add",
@@ -278,11 +280,11 @@
   },
   {
    "action": "add",
-   "slug": "bracelet-cordon-plaque",
-   "name": "Agathe",
-   "rating": 5,
-   "text": "Un gris foncé pour mon mari et un noir pour moi, avec le même mot gravé sur les deux. Réglable, donc nos deux poignets différents y trouvent leur compte.",
-   "date": "2026-10-21"
+   "slug": "collier-medaillon-pivotant",
+   "name": "Charlotte",
+   "rating": 4,
+   "text": "Le pivot est fluide et ne grince pas. Le doré est un peu plus clair que sur l'écran, mais très joli porté.",
+   "date": "2026-10-14"
   },
   {
    "action": "add",
@@ -310,11 +312,11 @@
   },
   {
    "action": "add",
-   "slug": "collier-coeur-grave",
-   "name": "Alice",
-   "rating": 5,
-   "text": "En or rose pour ma maman, mon prénom d'un côté du cœur et celui de ma sœur de l'autre. Elle l'assortit maintenant à toutes ses tenues.",
-   "date": "2026-10-22"
+   "slug": "bracelet-perles-pastille",
+   "name": "Rozenn",
+   "rating": 4,
+   "text": "Léger, on l'oublie vite au poignet. Le coulissant tient en place sans se desserrer dans la journée.",
+   "date": "2026-10-12"
   },
   {
    "action": "add",
@@ -324,5 +326,17 @@
    "text": "Une date gravée pour fêter le jour où l'on s'est rencontrés. Mon compagnon l'a reconnue tout de suite, mission réussie.",
    "date": "2026-10-20"
   }
- ]
+ ],
+ "total_vise_par_bijou": {
+  "collier-double-coeur": 3,
+  "collier-coeur-plaques": 4,
+  "collier-3coeurs": 2,
+  "bracelet-coeur-chaine": 3,
+  "bracelet-cordon-plaque": 4,
+  "collier-medaillon-pivotant": 2,
+  "bracelet-homme-plaque-cuir": 3,
+  "collier-pastille": 3,
+  "collier-coeur-grave": 4,
+  "bracelet-perles-pastille": 2
+ }
 }

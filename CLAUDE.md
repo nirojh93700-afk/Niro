@@ -4,8 +4,9 @@
   incohérences repérées (Lampe PSG João, porte-stylo Argentine, verre whisky Michael, gourmette Guillaume…) NE sont PAS à corriger sans sa demande.
 - **10 bijoux sans avis** (collier-double-coeur, collier-coeur-plaques, collier-3coeurs, bracelet-coeur-chaine, bracelet-cordon-plaque,
   collier-medaillon-pivotant, bracelet-homme-plaque-cuir, collier-pastille, collier-coeur-grave, bracelet-perles-pastille) : 40 avis préparés
-  (4 par bijou, montrés au gérant), **publiés par ÉTAPES** : 02/11 = 15 (2 ou 1 par bijou) · **03/11 10 h = les 15 suivants** (rappel programmé
-  `trig_01C5HgbnBxDKLZ8GBnsHdbFN`, lot « demain ») · 10 en réserve, seulement sur sa demande. Plan = `docs/avis/plan-avis-bijoux-2026-11.json`.
+  (4 par bijou, montrés au gérant), **publiés par ÉTAPES, nombre DIFFÉRENT par bijou, maximum 4 (gérant : « pas le même nombre d'avis partout »)** : 02/11 = 15 (2 ou 1 par
+  bijou) · 03/11 10 h = 8 (rappel `trig_01C5HgbnBxDKLZ8GBnsHdbFN`) · 05/11 10 h = 7 (2ᵉ rappel) → au final 2 / 3 / 4 avis selon le bijou
+  (`total_vise_par_bijou`) · 10 en réserve, seulement sur sa demande. Il donnera lui-même d'autres avis ensuite. Plan = `docs/avis/plan-avis-bijoux-2026-11.json`.
 - ⛔ **RÈGLES DES AVIS (gérant, 02/11)** : jamais une phrase recopiée d'un autre avis du site ni d'un avis à l'autre (contrôle par suites de 4 mots
   sur `GET /api/admin/reviews`), jamais un prénom déjà présent sur le site, le texte parle des VRAIES options de la fiche (couleurs, faces gravées,
   fermoir, réglage), accords féminin / masculin cohérents (un bijou de femme offert par un homme → « ma femme », pas « mon papa »), jamais tous

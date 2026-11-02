@@ -19,9 +19,9 @@
 
 ---
 
-## ⭐ AVIS BIJOUX — LOT DU 03/11 À PUBLIER (programmé 10 h, `trig_01C5HgbnBxDKLZ8GBnsHdbFN`)
-- 02/11 : 15 avis publiés sur les 10 bijoux sans avis + 4 avis corrigés (Hannah, Svetlana, Mathilde, Ousmane). 03/11 : les 15 suivants
-  (clé « demain » de `docs/avis/plan-avis-bijoux-2026-11.json`, 3 avis par bijou au total). 10 avis en réserve (clé « reserve ») : seulement
+## ⭐ AVIS BIJOUX — LOTS DU 03/11 (8 avis) ET DU 05/11 (7 avis) À PUBLIER (programmés 10 h)
+- 02/11 : 15 avis publiés sur les 10 bijoux sans avis + 4 avis corrigés (Hannah, Svetlana, Mathilde, Ousmane). Puis clés
+  « a_publier_2026-11-03 » et « a_publier_2026-11-05 » de `docs/avis/plan-avis-bijoux-2026-11.json` → 2 à 4 avis par bijou, jamais le même nombre partout. 10 avis en réserve (clé « reserve ») : seulement
   s'il le demande. Mot de passe Gestion : lui redemander (jamais écrit dans un fichier).
 - Devis modifiable (DEV-1528) : la case « La cliente peut changer le nombre » n'est pas cochée ; proposé de la cocher d'office → sans réponse.
 
