@@ -570,6 +570,6 @@ En attente de SA décision :
   assistant en panneau, fiche commande en panneau. À trancher : le rangement, Emballages / Matériel séparés, tout au « vous ».
 
 - **02/11/2026 — Chloé Faussone (chloe.faussone@melia.com, hôtel Villa Marquis, anniversaire de mariage samedi 07/11)** : 2 verres à vin 36 cl,
-  « M&S » sur la coupe (le pied ne se grave pas). Mail préparé (pas envoyé). **Devis DEV-1530 créé, PAS envoyé** : 36,90 € (lot de 2 33,90 +
+  « M&S » sur la coupe (le pied ne se grave pas). **Mail + devis DEV-1530 ENVOYÉS ensemble le 02/11 (un seul mail, par le site)** : 36,90 € (lot de 2 33,90 +
   gravure 3,00), livraison au paiement, Express Chronopost 14,90 € proposé → 51,80 €. Lien : https://nivcreation.fr/document/2F6MpTPCaoCVotaRquin.
   (DEV-1529 créé puis supprimé : la ligne gravure séparée bloquait le choix de livraison ; le numéro 1529 manque, c'est normal.)
