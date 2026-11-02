@@ -96,11 +96,14 @@ export function optionsArticle(item) {
   }
 
   // 4) Zones de texte payantes (recto / verso, cœur / plaques…) : une ligne par zone remplie.
+  let offertes = Number(cfg.textesOfferts) || 0;
   for (const k of cfg.textKeys || []) {
     const v = rempli(k);
     if (!v) continue;
     const f = def(k);
-    out.push({ libelle: f ? libelleChamp(f) : k, detail: `« ${v} »`, montant: cfg.textExtra || 0, physique: false });
+    const offerte = offertes > 0;
+    if (offerte) offertes -= 1;
+    out.push({ libelle: f ? libelleChamp(f) : k, detail: `« ${v} »${offerte ? " (offerte)" : ""}`, montant: offerte ? 0 : cfg.textExtra || 0, physique: false });
   }
   const motifs = (cfg.motifKeys || []).filter((k) => rempli(k)).length;
   if (motifs > 1 && (cfg.motifExtra || 0) > 0) {

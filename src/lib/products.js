@@ -2185,6 +2185,41 @@ export const products = [
 <p>Une initiale devant, une date derrière. Un prénom d'un côté, un mot de l'autre. C'est un bijou simple qui porte quelque chose de personnel, visible ou caché.</p>`,
   },
   {
+    // Collier Quatre Mots (gérant, 02/11/2026) : Nihaojewelry NH11122064, argenté seulement, 5 en stock.
+    // Barré 21,90 € → payé 19,71 €. 4 faces : la 1re face remplie OFFERTE, chaque face en plus +3 €.
+    slug: "collier-barre-verticale",
+    badge: "Nouveau",
+    name: "Collier Quatre Mots",
+    weight: 72, pickup: false, letter: true, subcategory: "femme",
+    title: "Collier Quatre Mots — barre à graver sur 4 faces, acier inoxydable",
+    category: "bijoux", type: "Collier personnalisé",
+    tagline: "Une fine barre à quatre faces, à graver d'un prénom, d'une date ou d'un mot sur chacune.",
+    personalizable: true, personalizationLabel: "Gravure sur 1 à 4 faces : la 1re face offerte, chaque face en plus +3 €",
+    engravingPricing: {
+      textKeys: ["face1", "face2", "face3", "face4"],
+      textExtra: 3,
+      textesOfferts: 1,
+    },
+    personalizationFields: [
+      { key: "note", type: "note", text: "La barre a quatre faces. La première face gravée est offerte, chaque face en plus ajoute 3 €. Le texte est gravé dans la longueur de la barre. Une face laissée vide reste lisse." },
+      { key: "face1", label: "Face 1 — face avec la pierre", placeholder: "Ex. Camille", maxLength: 15, optional: true },
+      { key: "face2", label: "Face 2", placeholder: "Ex. 14.02.2026", maxLength: 15, optional: true },
+      { key: "face3", label: "Face 3", placeholder: "Ex. Toujours", maxLength: 15, optional: true },
+      { key: "face4", label: "Face 4", placeholder: "Ex. Paul", maxLength: 15, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: [
+      "/produits/collier-quatre-mots-1.jpg",
+      "/produits/collier-quatre-mots-2.jpg",
+      "/produits/collier-quatre-mots-3.jpg",
+    ],
+    variants: [
+      { id: "collier-barre-verticale-argente", title: "Argenté", price: 23.90, stockId: "collier-barre-verticale-argente", image: "/produits/collier-quatre-mots-1.jpg" },
+    ],
+    descriptionHtml: `<p>Une <strong>barre verticale toute fine</strong>, portée sur une chaîne en acier : un bijou sobre qui se porte tous les jours. Ses <strong>quatre faces</strong> se gravent chacune d'un prénom, d'une date ou d'un mot.</p>
+<p>Un prénom sur une face, une date sur une autre, un mot que vous seuls comprenez sur la dernière : chaque face raconte un morceau de votre histoire.</p>`,
+  },
+  {
     slug: "collier-coeur-grave",
     badge: "Nouveau",
     name: "Collier Cœur à graver recto-verso",

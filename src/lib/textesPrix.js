@@ -104,6 +104,9 @@ export function supplementsPayes(product) {
         if (d > 0) out.add(d);
       }
     }
+    // Faces offertes (textesOfferts) : seule chaque face AU-DELÀ des offertes se paie.
+    const ep = product.engravingPricing || {};
+    if ((Number(ep.textesOfferts) || 0) > 0 && (ep.textExtra || 0) > 0) out.add(arrondi(ep.textExtra));
     // Motifs : le 1er peut être offert, les suivants payants → on regarde chaque motif ajouté.
     const motifs = champs.filter((f) => f && f.type === "motif");
     let ctx = {}, avant = base(ctx);

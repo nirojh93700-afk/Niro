@@ -11,7 +11,7 @@ import CrystalSizeGuide from "@/components/CrystalSizeGuide";
 import VacationNotice from "@/components/VacationNotice";
 import DelaiFabrication from "@/components/DelaiFabrication";
 import RestockAlerte from "@/components/RestockAlerte";
-import { engravingExtra } from "@/lib/engravingPrice";
+import { engravingExtra, facesOffertes } from "@/lib/engravingPrice";
 import { aEmplacement, lignesDuCote } from "@/lib/apercuCote";
 import { prixGravureVerres, estRegleVerres, detailEnTexte, texteOffertVerre1 } from "@/lib/prixVerres";
 import GrillePrixVerres from "./GrillePrixVerres";
@@ -408,7 +408,16 @@ export default function ProductDetail({ product, realisations = [] }) {
   // « (offert) » à la place de « (+3 €) ». Même fonction que le prix (texteOffertVerre1).
   const cleTexteOffert = RV && (!perGlass || activeGlass === 0)
     ? texteOffertVerre1(product, fieldValues, variant?.id, visibleFields.map((f) => f.key)) : null;
-  const etiquetteChamp = (f) => (cleTexteOffert === f.key ? String(f.label || "").replace(/\(\+\s*[\d,.]+\s*€\)/, "(offert)") : f.label);
+  // Faces offertes (Collier Quatre Mots, 02/11/2026) : la 1re face remplie « (offerte) », les autres « (+3 €) ».
+  const faceOff = product.engravingPricing?.textesOfferts ? facesOffertes(product, fieldValues) : null;
+  const etiquetteChamp = (f) => {
+    if (faceOff && (product.engravingPricing.textKeys || []).includes(f.key)) {
+      const prix = String(product.engravingPricing.textExtra || 0).replace(".", ",");
+      const txt = faceOff.cles.includes(f.key) ? (faceOff.aucune ? "(1re face remplie offerte)" : "(offerte)") : `(+${prix} €)`;
+      return <>{f.label} <span style={{ color: faceOff.cles.includes(f.key) ? "#1c6b3a" : "#7c6120", fontWeight: 600 }}>{txt}</span></>;
+    }
+    return cleTexteOffert === f.key ? String(f.label || "").replace(/\(\+\s*[\d,.]+\s*€\)/, "(offert)") : f.label;
+  };
 
   // Menu de personnalisation par onglets (opt-in via product.personaTabs).
   // Chaque onglet = { key, label, sub, fields:[...clés] }. Les champs non listés

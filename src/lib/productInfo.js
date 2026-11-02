@@ -1385,6 +1385,11 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.`,
   },
 
+  "collier-barre-verticale": {
+    material: "Acier inoxydable 304, finition argentée.\nBarre : 31 mm de haut, 4 mm de côté, petite pierre en bas d'une face.\nChaîne maille câble : 50 cm + 5 cm de rallonge.\nPoids : environ 11 g.",
+    usage: "Gravure sur 1 à 4 faces, dans la longueur de la barre (15 caractères par face environ). La 1re face gravée est offerte, chaque face en plus +3 €.\n\nMettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment les finitions.\nEntretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
+    returns: "Bijou gravé à la commande dans notre atelier, puis envoyé en lettre suivie.\nPièce personnalisée : pas de droit de rétractation (art. L221-28 du Code de la consommation). Un défaut de fabrication ou une erreur de notre part est bien sûr pris en charge.",
+  },
   "collier-pastille": {
     material: `Taille & Matériaux
 - Pastille ronde lisse sur chaîne fine maille câble.

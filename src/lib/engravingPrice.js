@@ -60,6 +60,9 @@ export function engravingExtra(product, fields = {}, variantId = null) {
     const filled = (k) => k && (fields[k] || "").toString().trim();
     let amount = 0, pages = 0;
     for (const k of cfg.textKeys || []) if (filled(k)) { amount += cfg.textExtra || 0; pages += 1; }
+    // Textes offerts (Collier Quatre Mots, 02/11/2026) : la 1re face remplie est offerte, quelle qu'elle soit.
+    const offerts = Math.min(pages, Number(cfg.textesOfferts) || 0);
+    amount -= offerts * (cfg.textExtra || 0);
     const motifs = (cfg.motifKeys || []).filter((k) => filled(k)).length;
     if (motifs > 1) amount += (motifs - 1) * (cfg.motifExtra || 0); // 1er motif offert
     const photo = Boolean(cfg.photoKey && filled(cfg.photoKey));
@@ -110,7 +113,9 @@ export function prixPremiereGravure(product, fields = {}, variantId = null) {
 
   // 1) Zones de texte (recto/verso, cœur/plaques…) : une zone remplie = textExtra.
   if (Array.isArray(cfg.textKeys) && cfg.textKeys.some(filled) && (cfg.textExtra || 0) > 0) {
-    return cfg.textExtra;
+    // Si des faces sont déjà offertes par la fiche, le code n'offre que la face payante suivante.
+    const remplies = cfg.textKeys.filter(filled).length;
+    if (remplies > (Number(cfg.textesOfferts) || 0)) return cfg.textExtra;
   }
   // 2) Pages : la première page gravée (texte → pageText, motif → pageMotif).
   if (Array.isArray(cfg.pages)) {
@@ -145,4 +150,13 @@ export function prixPremiereGravure(product, fields = {}, variantId = null) {
     if (amount > 0) return amount;
   }
   return 0;
+}
+
+/** Faces offertes d'une fiche à `textesOfferts` : les N premières remplies (dans l'ordre de la fiche), sinon les N premières. */
+export function facesOffertes(product, fields = {}) {
+  const cfg = product?.engravingPricing;
+  const n = Number(cfg?.textesOfferts) || 0;
+  if (!n || !Array.isArray(cfg.textKeys)) return { cles: [], aucune: true };
+  const remplies = cfg.textKeys.filter((k) => (fields[k] || "").toString().trim());
+  return remplies.length ? { cles: remplies.slice(0, n), aucune: false } : { cles: cfg.textKeys.slice(0, n), aucune: true };
 }
