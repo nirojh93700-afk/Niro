@@ -4717,6 +4717,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   page `/cristaux-graves`, lignes de stock dans Gestion. Le jour où le gérant a les adaptateurs : `ADAPTATEUR_NOIR_FOURNI = true`.
   `npm run test-socles`.
 
+## 🔗 BRACELET GOURMETTE À PLAQUE GRAVÉE — MIS EN LIGNE LE 02/11/2026 (« enlève le visuel et tu peux mettre en ligne »)
+- Fiche `bracelet-gourmette-plaque` (sous-catégorie homme), Doré / Noir (`bracelet-gourmette-plaque-dore` / `-noir`), code 33,90 → barré 30,90 →
+  payé 27,81 €, gravure de la plaque seulement +3 € (25 caractères), SANS visuel 3D (refusé : la chaîne 3D reste argentée), 7 photos
+  `public/produits/bracelet-gourmette-plaque-1..7.jpg`, boîte allongée / pack bracelet, Noël automatique, badge « Nouveau ». Stock 5 + 5.
+- ⚠️ Déploiements Firebase « Build failed » (~2 min 20) depuis 9040e9a0, alors que le build local passe (508 Mo suivis).
+
 ## 📿 COLLIER QUATRE MOTS — ✅ EN VENTE DEPUIS LE 02/11/2026 (gérant : « enlève la photo et les mesures dans la description… tu peux mettre en ligne »)
 - Fiche `collier-barre-verticale` (nom « Collier Quatre Mots »), argenté, **stock 5** (posé le 02/11), barré 21,90 → payé 19,71 €, 3 photos
   `public/produits/collier-quatre-mots-1..3.jpg` (la photo des mesures RETIRÉE, et plus de liste de mesures dans la description : elles sont
