@@ -606,3 +606,5 @@ En attente de SA décision :
 - 02/11 : DEV-1531, 1532, 1533 SUPPRIMÉS (jamais reçus). Devis actuel = DEV-1534 (https://nivcreation.fr/document/tMxm4DB1BPLAnYS9IHCk, 28,11 €,
   cœurs aux extrémités, livraison au choix, emballages + Noël, adresse .net). 18 h 36 : réponse envoyée depuis sa demande (« Relire, modifier
   et envoyer », sur ordre du gérant) → REBONDI à nouveau (550 Invalid Recipient). 3ᵉ refus : ne plus rien envoyer à cette adresse.
+- 18 h 38 : DEV-1534 supprimé, devis = DEV-1535 (https://nivcreation.fr/document/XpWwN4DLympJu7jvgR44, adresse moreiramanuel@diocese-paris.fr) ;
+  mail + devis envoyés à l'adresse .fr (essai demandé par le gérant) : PAS de rebond à la vérification (1 min après). Revérifier le fil plus tard.
