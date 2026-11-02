@@ -310,7 +310,17 @@ export async function gmailListPhotosFrom(token, fromEmail, max = 15) {
       out.push({ messageId: id, date: m.date, subject: m.subject, filename: a.filename, mimeType: a.mimeType, attachmentId: a.attachmentId, size: a.size });
     }
   }
-  return out;
+  return sansSignatures(out);
+}
+
+// Logos de signature (02/11/2026, commande 04AT1IG4 : le logo de l'hôtel, joint à chacun des
+// 4 mails de la cliente, sortait 4 fois en grand sur la fiche imprimée → 4 pages). Une photo
+// à graver ne pèse jamais moins de 15 Ko, et une même image jointe à plusieurs mails
+// (même nom, même poids) est une signature : on ne la montre pas.
+export function sansSignatures(liste) {
+  const vus = {};
+  for (const p of liste) { const k = `${p.filename}|${p.size}`; vus[k] = (vus[k] || 0) + 1; }
+  return liste.filter((p) => Number(p.size) >= 15000 && vus[`${p.filename}|${p.size}`] < 2);
 }
 
 // Contenu binaire d'une pièce jointe (Buffer).
