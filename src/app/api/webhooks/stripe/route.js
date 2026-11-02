@@ -751,6 +751,8 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       // Nombre de pièces choisi par la cliente sur un devis à quantité modifiable (01/11/2026).
       ...(Number(session?.metadata?.qte) > 0 ? { quoteQte: Number(session.metadata.qte) } : {}),
       quoteClientName: quote?.client?.name || "", // sert si le client tape son adresse dans le champ « nom » de Stripe
+      // Devis payé AVEC le panier (02/11/2026) : emballage choisi sur la page du devis.
+      ...(session?.metadata?.quoteEmballage ? { quoteEmballage: String(session.metadata.quoteEmballage) } : {}),
       surMesure: Boolean(quote),
       paymentIntentId: (session.payment_intent || "").toString(),
       total: (session.amount_total || 0) / 100,

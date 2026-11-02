@@ -557,6 +557,22 @@ export async function deleteQuote(id) {
 
 // Réglage « la cliente peut changer le nombre » d'un devis déjà créé (01/11/2026) : seulement
 // `qte` et, ligne par ligne, `suit` / `prixSuivant`. Les désignations, quantités et prix ne bougent pas.
+// Devis : « emballage + autres articles » (passage par le panier) désactivé pour CE devis (02/11/2026).
+export async function updateQuotePanier(id, off) {
+  const a = getApp();
+  if (!a) return false;
+  try {
+    const ref = admin.firestore().collection("siteQuotes").doc(id);
+    const doc = await ref.get();
+    if (!doc.exists) return false;
+    await ref.update({ panierOff: off === true });
+    return true;
+  } catch (e) {
+    console.error("updateQuotePanier:", e.message);
+    return false;
+  }
+}
+
 export async function updateQuoteQuantite(id, qte, lignes) {
   const a = getApp();
   if (!a) return false;

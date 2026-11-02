@@ -6,6 +6,9 @@ import { indexVariantes } from "@/lib/indexVariantes";
 import { configQuantite } from "@/lib/devisQuantite";
 import DevisInteractif from "@/components/DevisInteractif";
 import { LOGO_FICHIER } from "@/lib/photosLocales";
+import DevisPanier from "@/components/DevisPanier";
+import { getCatalog } from "@/lib/catalog";
+import { donneesPanier } from "@/lib/devisPanier";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +22,7 @@ function fmtDate(iso) {
 
 export const metadata = { robots: { index: false } };
 
+
 export default async function DocumentPage({ params }) {
   const q = await getQuote(params.id);
   if (!q) notFound();
@@ -29,6 +33,8 @@ export default async function DocumentPage({ params }) {
   const avecChoix = !isFacture && q.status !== "paye" && livraisonActive(q.items, index);
   // Devis dont la cliente choisit le nombre de pièces (01/11/2026) : page interactive.
   const cfg = !isFacture && q.status !== "paye" ? configQuantite(q, index) : null;
+  const panier = donneesPanier(q, index, await getCatalog().catch(() => []));
+  const actions = <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={q.total} livraison={avecChoix} />;
 
   return (
     <section className="section">
@@ -38,6 +44,7 @@ export default async function DocumentPage({ params }) {
             q={{ id: q.id, type: q.type, status: q.status, client: q.client, items: q.items, total: q.total }}
             cfg={cfg}
             livraison={avecChoix}
+            panier={panier}
             avant={<>
           {/* En-tête */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
@@ -147,7 +154,7 @@ export default async function DocumentPage({ params }) {
           )}
         </div>
 
-        <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={q.total} livraison={avecChoix} />
+        {panier ? <DevisPanier {...panier} totalDevis={q.total}>{actions}</DevisPanier> : actions}
           </>
         )}
       </div>

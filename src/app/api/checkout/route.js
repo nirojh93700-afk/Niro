@@ -14,6 +14,9 @@ import { prixGravureVerres, estRegleVerres, detailEnTexte } from "@/lib/prixVerr
 import { packagingExtra } from "@/lib/packaging";
 import { packagingNoelExtra } from "@/lib/fetes";
 import { nouvelEtatPort, ajouterLignePort, optionsPort } from "@/lib/panierPort";
+import { getQuote } from "@/lib/firebase";
+import { devisEffectif } from "@/lib/devisEffectif";
+import { lignesDevisPanier, produitPrincipal, devisPanierPossible } from "@/lib/devisPanier";
 
 // Nettoie une fiche de réglages avant de la stocker (taille maîtrisée en base) :
 // on tronque les textes trop longs et on retire les images "data:" (jamais stockées).
@@ -160,8 +163,65 @@ export async function POST(req) {
   // Offre « gravure offerte » : prix de la PREMIÈRE gravure payante trouvée dans
   // le panier (ordre du panier). 0 = aucune gravure payante → le code ne déduit rien.
   let gravureOfferte = 0;
+  // Devis payé avec le panier (02/11/2026) : un seul par commande (le webhook le marque « payé »).
+  let devisMeta = null;
 
   for (const item of items) {
+    // DEVIS DANS LE PANIER : prix, lignes, poids et stock RELUS dans le devis (jamais ceux du navigateur) ;
+    // l'emballage choisi sur la page du devis est recalculé sur le produit principal du devis.
+    if (item?.devis && typeof item.devis === "object") {
+      if (devisMeta) return Response.json({ error: "Un seul devis par commande : réglez d'abord le premier." }, { status: 400 });
+      const q0 = await getQuote(String(item.devis.id || "").slice(0, 80));
+      if (!q0) return Response.json({ error: "Le devis de votre panier n'existe plus : retirez-le pour continuer." }, { status: 400 });
+      if (q0.status === "paye") return Response.json({ error: "Ce devis est déjà payé : retirez-le du panier." }, { status: 400 });
+      const { q, app } = await devisEffectif(q0, item.devis.n);
+      if (!devisPanierPossible(q, variantIndex)) {
+        return Response.json({ error: "Ce devis se règle uniquement depuis son lien : retirez-le du panier." }, { status: 400 });
+      }
+      const lignesD = lignesDevisPanier(q.items, variantIndex);
+      const principal = produitPrincipal(q.items, variantIndex);
+      const pkgD = principal ? packagingExtra(principal.product, item.packaging || []) : { amount: 0, weight: 0, labels: [], chosen: [] };
+      const pkgND = principal ? packagingNoelExtra(principal.product, item.packagingNoel, item.packaging || []) : { amount: 0, weight: 0, colis: false, label: "", stockIds: [] };
+      const boiteD = (pkgD.chosen || []).some((id) => /boite|pack/i.test(String(id))) || pkgND.colis;
+      lignesD.forEach((l, i) => {
+        // Emballage : son poids va sur la 1re ligne, et une boîte fait partir le colis comme pour un bijou.
+        ajouterLignePort(etatPort, { ...l, unitGrams: l.unitGrams + (i === 0 ? (pkgD.weight || 0) + (pkgND.weight || 0) : 0), pkgBoite: l.pkgBoite || boiteD });
+      });
+      for (const [sid, n] of app.stock || []) boughtVariants.push({ variantId: sid, qty: Number(n) || 1 });
+      for (const sid of pkgND.stockIds || []) boughtVariants.push({ variantId: sid, qty: 1 });
+      for (const it of q.items) {
+        lineItems.push({
+          quantity: Math.max(1, Number(it.qty) || 1),
+          price_data: {
+            currency: "eur",
+            unit_amount: toCents(it.price),
+            product_data: { name: String(it.desc || "Article du devis").slice(0, 240), description: `Devis ${q.number || ""}`.trim() },
+          },
+        });
+      }
+      const extraPkg = Math.round(((pkgD.amount || 0) + (pkgND.amount || 0)) * 100) / 100;
+      if (extraPkg > 0) {
+        ajouterLignePort(etatPort, { product: principal.product, unitGrams: 0, unitPrice: extraPkg, quantity: 1, pkgBoite: boiteD });
+        lineItems.push({
+          quantity: 1,
+          price_data: {
+            currency: "eur",
+            unit_amount: toCents(extraPkg),
+            product_data: {
+              name: "Emballage cadeau",
+              description: [pkgD.labels.length ? `Emballage : ${pkgD.labels.join(", ")}` : "", pkgND.label, `Devis ${q.number || ""}`.trim()].filter(Boolean).join(" — ").slice(0, 900),
+            },
+          },
+        });
+      }
+      devisMeta = {
+        quoteId: q0.id || String(item.devis.id),
+        quoteNumber: q.number || "",
+        ...(app.n ? { qte: String(app.n) } : {}),
+        ...(pkgD.labels.length || pkgND.label ? { quoteEmballage: [pkgD.labels.join(", "), pkgND.label].filter(Boolean).join(" · ").slice(0, 480) } : {}),
+      };
+      continue;
+    }
     const match = variantIndex.get(item.variantId);
     if (!match) {
       return Response.json(
@@ -465,6 +525,8 @@ export async function POST(req) {
         // sert à décrémenter le stock après paiement (variantId:quantité)
         stock: JSON.stringify(boughtVariants.map((b) => [b.variantId, b.qty])).slice(0, 480),
         promoCode: appliedCode,
+        // Devis payé avec le panier : le webhook le marque « payé » et joint sa demande à la commande.
+        ...(devisMeta || {}),
         ...(appliedCode2 ? { promoCode2: appliedCode2 } : {}),
         ...(giftUsed ? { giftUsed: String(giftUsed) } : {}),
         clientIp,

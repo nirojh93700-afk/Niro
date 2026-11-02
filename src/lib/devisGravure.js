@@ -66,6 +66,9 @@ export function lignesDevis(order) {
   const fichiers = FICHIERS_DEVIS[order?.ref] || FICHIERS_DEVIS[order?.quoteNumber] || [];
   return (order?.items || [])
     .filter((it) => !LIVRAISON.test(it.name || ""))
+    // Devis payé AVEC d'autres articles du site (02/11/2026) : seules les lignes du devis (sans fiche
+    // produit) ; les articles de la boutique ont leur propre fiche, l'emballage est écrit à part.
+    .filter((it) => !it.slug && !/^Emballage cadeau$/i.test(String(it.name || "").trim()))
     .map((it, i) => {
       const nom = String(it.name || "").trim();
       const texteNom = (/«\s*([^»]+?)\s*»/.exec(nom) || [])[1] || "";

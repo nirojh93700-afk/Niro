@@ -250,6 +250,7 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
             <strong>📋 {order.quoteNumber ? `Devis ${order.quoteNumber} — ` : ""}ce que la cliente a demandé :</strong><br />{order.demande}
           </p>
         ) : null}
+        {order.quoteEmballage ? <p style={{ margin: "0 0 8px", fontSize: "0.88rem" }}><strong>📦 Emballage du devis :</strong> {order.quoteEmballage}</p> : null}
         {/* Une carte par pièce du devis : quantité, texte, style, fichier à graver. */}
         <FicheDevis order={order} />
         <MessagesEmail email={order.customerEmail} depuis={order.createdAt} adminKey={adminKey} print={print} />
@@ -273,6 +274,18 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
         </div>
       ) : null}
       {items.map((it, i) => <ItemSheet key={i} item={it} />)}
+      {/* Devis payé AVEC d'autres articles du site (02/11/2026) : la demande du devis aussi. */}
+      {order?.surMesure ? (
+        <div style={{ marginTop: 10 }}>
+          {order.demande && !print ? (
+            <p style={{ margin: "4px 0 8px", padding: "8px 10px", background: "#eef4fb", border: "1px solid #c9dcef", borderRadius: 8, fontSize: "0.88rem" }}>
+              <strong>📋 {order.quoteNumber ? `Devis ${order.quoteNumber} — ` : ""}ce que la cliente a demandé :</strong><br />{order.demande}
+            </p>
+          ) : null}
+          {order.quoteEmballage ? <p style={{ margin: "0 0 8px", fontSize: "0.88rem" }}><strong>📦 Emballage du devis :</strong> {order.quoteEmballage}</p> : null}
+          <FicheDevis order={order} />
+        </div>
+      ) : null}
       {/* Une cliente peut renvoyer sa photo PAR E-MAIL après la commande (autre
          version, autre langue…) : on la montre ici aussi, sinon l'atelier
          grave la version du site sans le savoir (Rose Catarino #1Z17IKQ8,

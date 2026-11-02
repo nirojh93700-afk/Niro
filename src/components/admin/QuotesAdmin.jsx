@@ -87,6 +87,14 @@ export default function QuotesAdmin({ adminKey }) {
     setMsg(d.ok ? `Devis envoyé par e-mail à ${d.to} ✓` : (d.error || "Échec de l'envoi."));
   }
 
+  async function basculerPanier(q, off) {
+    try {
+      const res = await fetch("/api/admin/quotes", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": adminKey }, body: JSON.stringify({ action: "panier", id: q.id, off }) });
+      const d = await res.json().catch(() => ({}));
+      if (d.ok) setQuotes((prev) => prev.map((x) => (x.id === q.id ? { ...x, panierOff: off } : x)));
+    } catch { /* rien changé */ }
+  }
+
   async function removeQuote(q) {
     if (!confirm(`Supprimer définitivement ${q.number} ?`)) return;
     const res = await fetch("/api/admin/quotes", {
@@ -239,6 +247,13 @@ export default function QuotesAdmin({ adminKey }) {
                 onClick={() => setEdQte(edQte?.id === q.id ? null : { id: q.id, qte: { modifiable: Boolean(q.qte?.modifiable), min: q.qte?.min || 1, max: q.qte?.max || 12 }, lignes: (q.items || []).map((it) => ({ ...it })) })}>
                 🔢 Nombre modifiable{q.qte?.modifiable ? " ✓" : ""}
               </button>
+            )}
+            {q.type !== "facture" && q.status !== "paye" && (
+              <label style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "0.85rem", padding: "4px 6px" }}
+                title="Sur la page du devis : choix d'un emballage cadeau et d'autres articles du site, réglés ensemble au panier">
+                <input type="checkbox" checked={q.panierOff !== true} onChange={(e) => basculerPanier(q, !e.target.checked)} />
+                Emballage et autres articles
+              </label>
             )}
             <button className="btn btn-outline" onClick={() => removeQuote(q)}
               style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f" }}>

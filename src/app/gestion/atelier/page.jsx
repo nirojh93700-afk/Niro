@@ -156,8 +156,8 @@ export default function AtelierPage() {
         setOrders((data.orders || []).filter((o) => Array.isArray(o.spec) && o.spec.length));
         // Commandes sur devis : pas de réglages enregistrés, la photo arrive par
         // e-mail → section à part, avec la demande du devis et la photo reçue.
-        setDevis((data.orders || []).filter((o) => (!Array.isArray(o.spec) || !o.spec.length)
-          && o.surMesure && !o.test && ["a_preparer", "en_gravure"].includes(o.status)));
+        // Un devis payé AVEC d'autres articles (02/11/2026) apparaît aussi ici pour sa partie sur mesure.
+        setDevis((data.orders || []).filter((o) => o.surMesure && !o.test && ["a_preparer", "en_gravure"].includes(o.status)));
       });
       if (r.status === 401) { setError("Mot de passe incorrect."); setAuthed(false); setLoading(false); return; }
       if (!r.ok && !r.data) { setError("Erreur de chargement."); setLoading(false); return; }

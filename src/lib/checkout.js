@@ -14,6 +14,7 @@ export async function startCheckout(items, postalCode = "", promoCode = "", deli
     packaging: Array.isArray(i.packaging) ? i.packaging : [], // emballages payants choisis (ids)
     packagingNoel: i.packagingNoel && i.packagingNoel.id ? { id: String(i.packagingNoel.id), couleur: i.packagingNoel.couleur || null } : undefined, // 🎄 emballage de Noël (recalculé au paiement)
     spec: i.spec || null, // réglages détaillés (fiche atelier)
+    devis: i.devis && i.devis.id ? { id: String(i.devis.id), n: i.devis.n || undefined } : undefined, // devis payé avec le panier (prix relu au serveur)
   }));
 
   const res = await fetch("/api/checkout", {

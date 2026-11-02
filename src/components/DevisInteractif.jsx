@@ -8,12 +8,13 @@
 
 import { useState } from "react";
 import DocumentActions from "@/components/DocumentActions";
+import DevisPanier from "@/components/DevisPanier";
 import { appliquerQuantite, paliersRemise } from "@/lib/devisQuantite";
 
 const euro = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(n || 0);
 const VERT = "#2f7a4f";
 
-export default function DevisInteractif({ q, cfg, livraison, avant, apres }) {
+export default function DevisInteractif({ q, cfg, livraison, avant, apres, panier = null }) {
   const [n, setN] = useState(cfg.depart);
   const app = appliquerQuantite(q, cfg, n);
   const paliers = paliersRemise(cfg);
@@ -110,7 +111,13 @@ export default function DevisInteractif({ q, cfg, livraison, avant, apres }) {
         {apres}
       </div>
 
-      <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={app.total} livraison={livraison} n={n} />
+      {panier ? (
+        <DevisPanier {...panier} totalDevis={app.total} n={n}>
+          <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={app.total} livraison={livraison} n={n} />
+        </DevisPanier>
+      ) : (
+        <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={app.total} livraison={livraison} n={n} />
+      )}
     </>
   );
 }

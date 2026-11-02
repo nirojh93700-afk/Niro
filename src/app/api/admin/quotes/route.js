@@ -1,5 +1,5 @@
 import { isAdmin } from "@/lib/stock";
-import { createQuote, listQuotes, updateQuoteStatus, getQuote, deleteQuote, setQuoteCounter, updateQuoteQuantite } from "@/lib/firebase";
+import { createQuote, listQuotes, updateQuoteStatus, getQuote, deleteQuote, setQuoteCounter, updateQuoteQuantite, updateQuotePanier } from "@/lib/firebase";
 import { quoteEmail } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 
@@ -56,6 +56,12 @@ export async function POST(req) {
     const lignes = (Array.isArray(body.lignes) ? body.lignes : []).map((l) => ({ suit: l?.suit === true, prixSuivant: prixOuNull(l?.prixSuivant) }));
     if (qte && !lignes.some((l) => l.suit)) return Response.json({ error: "Cochez au moins une ligne qui suit le nombre." }, { status: 400 });
     const ok = await updateQuoteQuantite(body.id, qte, qte ? lignes : []);
+    return Response.json({ ok });
+  }
+
+  // Page du devis : emballage + « Compléter votre commande » proposés ou non (02/11/2026, actif par défaut).
+  if (body.action === "panier") {
+    const ok = await updateQuotePanier(body.id, body.off === true);
     return Response.json({ ok });
   }
 

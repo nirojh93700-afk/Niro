@@ -191,9 +191,11 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
                 );
               })}
             </section>
-          ) : order.surMesure ? (
+          ) : null}
+          {order.surMesure ? (
             <section className="fp-bloc fp-graver">
               <h3>À graver — commande sur devis</h3>
+              {order.quoteEmballage ? <p><strong>📦 Emballage du devis :</strong> {order.quoteEmballage}</p> : null}
               <FicheDevis order={order} />
             </section>
           ) : null}
