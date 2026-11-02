@@ -5486,3 +5486,30 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .dz-shop{color:#7c6120;font-weight:600;text-decoration:underline;text-underline-offset:3px}
 @media (max-width:520px){.dz{padding:18px 14px}.dz-emb{grid-template-columns:auto 44px minmax(0,1fr) auto;gap:9px}.dz-ph{width:44px;height:44px}}
 @media print{.dz{display:none}}
+
+/* Historique d'une commande (02/11/2026) : devis, factures, images échangées. */
+.hc { margin: 0 0 10px; padding: 10px 12px; background: #fbf7ee; border: 1px solid #e6d7b8; border-radius: 10px; font-size: 0.85rem; color: #3a2e18; }
+.hc-titre { font-weight: 700; margin-bottom: 6px; }
+.hc-note { background: #fff; border: 1px solid #ecdcb6; border-left: 3px solid #c9a24b; border-radius: 8px; padding: 7px 10px; margin-bottom: 8px; white-space: pre-line; overflow-wrap: anywhere; }
+.hc-bloc { margin-top: 8px; }
+.hc-sous { font-weight: 600; color: #7c6120; margin-bottom: 5px; }
+.hc-devis { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.hc-devis li { background: #fff; border: 1px solid #ece3d2; border-radius: 8px; padding: 7px 10px; min-width: 0; }
+.hc-devis li.principal { border-color: #c9a24b; }
+.hc-ligne1 { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.hc-ligne1 a { color: #1a1206; }
+.hc-chip { font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; background: #f3e8d3; color: #5a4a26; }
+.hc-chip.facture { background: #e8f0ff; color: #2b4f8a; }
+.hc-chip.st-paye { background: #e3f4e6; color: #1f6a32; }
+.hc-chip.st-annule { background: #fbe4e4; color: #8a2b2b; }
+.hc-chip.lien { background: #1a1206; color: #f3e8d3; }
+.hc-chip.autre { background: #f1efe9; color: #6b6458; }
+.hc-tot { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+.hc-date { color: #8a7a56; font-size: 0.78rem; }
+.hc-lignes { margin-top: 4px; color: #5a4a26; font-size: 0.8rem; overflow-wrap: anywhere; }
+.hc-dnote { margin-top: 4px; color: #6b6458; font-size: 0.78rem; font-style: italic; overflow-wrap: anywhere; }
+.hc-vigs { display: flex; flex-wrap: wrap; gap: 8px; }
+.hc-vig { display: flex; flex-direction: column; align-items: center; gap: 2px; text-decoration: none; color: #8a7a56; font-size: 0.7rem; }
+.hc-vig img { object-fit: cover; border-radius: 8px; border: 1px solid #e6d7b8; background: #f3e8d3; display: block; }
+.hc-pied { margin-top: 8px; color: #8a7a56; font-size: 0.75rem; }
+.hc-papier { break-inside: avoid; }

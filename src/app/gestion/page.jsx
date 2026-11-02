@@ -1,5 +1,6 @@
 "use client";
 
+import HistoriqueCommande from "@/components/admin/HistoriqueCommande";
 import { lienSuivi } from "@/lib/suiviColis";
 import DelaiCommande from "@/components/admin/DelaiCommande";
 import { nomLivraisonDifferent } from "@/lib/nomLivraison";
@@ -1072,6 +1073,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                     {o.demande ? `\n${o.demande}` : "\nVoir le détail des articles ci-dessous."}
                   </div>
                 ) : null}
+                <HistoriqueCommande order={o} />
                 {/* Articles avec vignette : photo du produit (enregistrée sur la
                     commande, sinon retrouvée dans le catalogue par son identifiant)
                     et, si la cliente a envoyé une photo/un aperçu, la vignette atelier. */}

@@ -1,6 +1,7 @@
 import { detaillerCommande } from "@/lib/detailProduit";
-import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder } from "@/lib/stock";
-import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder } from "@/lib/firebase";
+import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder, getBatTousLesFils } from "@/lib/stock";
+import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder, listQuotes } from "@/lib/firebase";
+import { devisDeLaCommande, imagesDuFil } from "@/lib/historiqueDevis";
 import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 import { sansAncienHebergeur } from "@/lib/photosLocales";
@@ -16,8 +17,15 @@ export async function GET(req) {
   if (orders === null) {
     return Response.json({ orders: [], firebase: false });
   }
+  // Historique (02/11/2026) : devis / factures liés et images échangées dans le fil de la commande.
+  const [quotes, fils] = await Promise.all([listQuotes(400).catch(() => null), getBatTousLesFils().catch(() => ({}))]);
+  const enrichir = (o) => {
+    const devisLies = devisDeLaCommande(o, quotes || []);
+    const images = imagesDuFil(fils?.[o.id]);
+    return { ...o, ...(devisLies.length ? { devisLies } : {}), ...(images.length ? { imagesEchangees: images } : {}) };
+  };
   // Produit exact de chaque ligne (taille du verre à vin, etc.) pour tous les écrans de Gestion (13/10/2026).
-  return Response.json({ orders: sansAncienHebergeur(orders.map((o) => { try { return detaillerCommande(o); } catch { return o; } })), firebase: true });
+  return Response.json({ orders: sansAncienHebergeur(orders.map((o) => { try { return enrichir(detaillerCommande(o)); } catch { return o; } })), firebase: true });
 }
 
 // Met à jour le statut d'une commande (à préparer / expédiée).

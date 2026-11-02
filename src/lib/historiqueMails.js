@@ -17,7 +17,7 @@
 // Lecture seule côté Gmail. Jamais bloquant.
 // =============================================================================
 
-import { getGmailCreds, getCommsFor, logComm, getBatThread, batImportHistorique } from "@/lib/stock";
+import { getGmailCreds, getCommsFor, logComm, getBatThread, batImportHistorique, batAjouterImages } from "@/lib/stock";
 import { gmailAccessToken, gmailSearchIds, gmailGetMessage } from "@/lib/gmail";
 import { separerCitation } from "@/lib/mailQuote";
 
@@ -36,7 +36,7 @@ export async function syncHistoriqueCommande(order, { maxMails = 80 } = {}) {
     const dossier = await getCommsFor(email);
     for (const m of dossier.messages || []) {
       if (m.from === "nous" && BRUIT.test(m.subject || "")) continue;
-      msgs.push({ key: m.gmailId || `c:${m.id}`, from: m.from === "cliente" ? "cliente" : "atelier", text: m.text, at: m.at, subject: m.subject });
+      msgs.push({ key: m.gmailId || `c:${m.id}`, from: m.from === "cliente" ? "cliente" : "atelier", text: m.text, at: m.at, subject: m.subject, photos: m.photos });
     }
   } catch { /* dossier illisible : on continue avec Gmail */ }
 
@@ -63,12 +63,27 @@ export async function syncHistoriqueCommande(order, { maxMails = 80 } = {}) {
         const brut = String(m.body || m.snippet || "").trim();
         const text = (separerCitation(brut).main || brut).trim().slice(0, 3000);
         if (!text) continue;
-        msgs.push({ key: id, from: deLaCliente ? "cliente" : "atelier", text, at, subject: m.subject || "" });
+        // Images du site posées dans l'e-mail (aperçu, planche… envoyés à la cliente).
+        const photos = Array.isArray(m.images) ? m.images : [];
+        msgs.push({ key: id, from: deLaCliente ? "cliente" : "atelier", text, at, subject: m.subject || "", photos });
         // Le dossier de la cliente se complète au passage (même règle anti-doublon).
         try {
-          await logComm({ email, name: deLaCliente ? m.fromName : "", from: deLaCliente ? "cliente" : "nous", text, subject: m.subject || "", at, via: "gmail", orderId: order.id, orderRef: order.ref || "", gmailId: id, dedupeWindowMs: deLaCliente ? 0 : 5 * 60 * 1000 });
+          await logComm({ email, name: deLaCliente ? m.fromName : "", from: deLaCliente ? "cliente" : "nous", text, subject: m.subject || "", at, via: "gmail", orderId: order.id, orderRef: order.ref || "", gmailId: id, dedupeWindowMs: deLaCliente ? 0 : 5 * 60 * 1000, photos });
         } catch { /* jamais bloquant */ }
       }
+    }
+    // 3) Messages déjà rangés AVANT que les images soient lues (02/11/2026) : on relit
+    //    une seule fois leur e-mail pour retrouver les images envoyées (12 par passage).
+    if (creds?.refreshToken) {
+      const token = await gmailAccessToken(creds);
+      const th = await getBatThread(order.id);
+      const aRelire = (th?.messages || []).filter((x) => x.gmailId && !x.imagesLu && !(x.photos || []).length).slice(0, 12);
+      const trouvees = {};
+      for (const x of aRelire) {
+        const m = await gmailGetMessage(token, x.gmailId, true).catch(() => null);
+        trouvees[x.gmailId] = Array.isArray(m?.images) ? m.images : [];
+      }
+      if (aRelire.length) await batAjouterImages(order.id, trouvees).catch(() => 0);
     }
   } catch { /* Gmail indisponible : on range au moins le dossier du site */ }
 

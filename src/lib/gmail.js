@@ -108,6 +108,23 @@ function extractBody(payload) {
   return txt.slice(0, 8000);
 }
 
+// Images du site posées DANS un e-mail (aperçu, planche d'écritures… envoyés à une cliente) :
+// identifiants des téléversements /api/img/<id> trouvés dans le HTML. (02/11/2026, gérant,
+// commande 04AT1IG4 : « t'as pas mis les images qu'on a envoyées ».)
+function htmlDuMessage(part) {
+  if (!part) return "";
+  if (part.mimeType === "text/html" && part.body?.data) return decodeB64(part.body.data);
+  if (part.parts) for (const p of part.parts) { const h = htmlDuMessage(p); if (h) return h; }
+  return "";
+}
+export function imagesDuSite(html) {
+  const out = [];
+  const re = /\/api\/img\/([A-Za-z0-9_-]{8,64})/g;
+  let m;
+  while ((m = re.exec(String(html || "")))) if (!out.includes(m[1])) out.push(m[1]);
+  return out.slice(0, 6);
+}
+
 // Vrai mail de cliente ? (on écarte pubs, newsletters, no-reply, notifications)
 export function looksLikeRealCustomer(fromEmail, labelIds = [], blocage = {}) {
   const e = (fromEmail || "").toLowerCase();
@@ -228,6 +245,7 @@ export async function gmailGetMessage(token, id, full = true) {
     labelIds: data.labelIds || [],
     unread: (data.labelIds || []).includes("UNREAD"),
     body: full ? extractBody(data.payload) : "",
+    images: full ? imagesDuSite(htmlDuMessage(data.payload)) : [],
     attachments: listAttachments(data.payload),
   };
 }

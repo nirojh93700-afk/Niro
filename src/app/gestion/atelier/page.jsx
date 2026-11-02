@@ -20,6 +20,7 @@ import PageHead from "@/components/admin/PageHead";
 import PhotosEmail from "@/components/admin/PhotosEmail";
 import MessagesEmail from "@/components/admin/MessagesEmail";
 import FicheDevis from "@/components/admin/FicheDevis";
+import HistoriqueCommande from "@/components/admin/HistoriqueCommande";
 import { lignesDevis } from "@/lib/devisGravure";
 import { optionsArticle, livraisonCommande } from "@/lib/optionsVendues";
 import { formatEuro } from "@/lib/format";
@@ -253,6 +254,7 @@ export default function AtelierPage() {
               ) : null}
               {o.adminNote ? <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "#6b5a2e" }}>📝 {o.adminNote}</p> : null}
               <FicheDevis order={o} />
+              <HistoriqueCommande order={o} sansNote />
               <MessagesEmail email={o.customerEmail} depuis={o.createdAt} adminKey={key} />
               <PhotosEmail email={o.customerEmail} adminKey={key} />
               {/* Pièce ratée / conditionnement : comme pour les autres commandes (22/10/2026). */}

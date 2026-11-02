@@ -30,6 +30,9 @@ export async function POST(req) {
   // imageUrl (optionnel) : visuel/aperçu à afficher DANS l'e-mail (ex. montage
   // gravure), URL absolue déjà hébergée (via /api/upload). Ajouté 01/09/2026.
   const imageUrl = typeof body?.imageUrl === "string" ? body.imageUrl.trim() : "";
+  // L'image envoyée est gardée avec le message (dossier + fil de la commande), 02/11/2026.
+  const imageId = (imageUrl.match(/\/api\/img\/([A-Za-z0-9_-]{8,64})/) || [])[1] || "";
+  const photosEnvoyees = imageId ? [imageId] : [];
   const imageHtml = imageUrl
     ? `<img src="${escapeHtml(imageUrl)}" alt="Aperçu" style="display:block;width:100%;max-width:520px;height:auto;border-radius:10px;border:1px solid #ece3d2;margin:0 0 16px;">`
     : "";
@@ -76,7 +79,7 @@ export async function POST(req) {
     if (creds?.refreshToken) {
       const token = await gmailAccessToken(creds);
       const sent = await gmailSendHtml(token, { to, subject, html, bcc: BRAND.contact });
-      try { await logComm({ email: to, from: "nous", text: message, subject, via: "gmail" }); } catch { /* ignore */ }
+      try { await logComm({ email: to, from: "nous", text: message, subject, via: "gmail", photos: photosEnvoyees }); } catch { /* ignore */ }
       if (prospect) { try { await markProspectSent(to, { threadId: sent?.threadId }); } catch { /* ignore */ } }
       return Response.json({ ok: true, via: "gmail" });
     }
@@ -85,7 +88,7 @@ export async function POST(req) {
   // 2) Secours Resend.
   if (process.env.RESEND_API_KEY) {
     const r = await sendEmail({ to, subject, html, replyTo: BRAND.contact, bcc: BRAND.contact });
-    if (r.ok) { try { await logComm({ email: to, from: "nous", text: message, subject, via: "resend" }); } catch { /* ignore */ } if (prospect) { try { await markProspectSent(to); } catch { /* ignore */ } } return Response.json({ ok: true, via: "resend" }); }
+    if (r.ok) { try { await logComm({ email: to, from: "nous", text: message, subject, via: "resend", photos: photosEnvoyees }); } catch { /* ignore */ } if (prospect) { try { await markProspectSent(to); } catch { /* ignore */ } } return Response.json({ ok: true, via: "resend" }); }
   }
   return Response.json({ error: "Échec de l'envoi (Gmail non connecté et Resend indisponible)." }, { status: 500 });
 }

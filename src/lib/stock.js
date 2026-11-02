@@ -1233,7 +1233,8 @@ export async function batImportHistorique(orderId, msgs = [], info = {}) {
       && (from === "atelier" || debut(x.text) === debut(text)));
     th.importedGmailIds.push(key);
     if (doublon) continue;
-    th.messages.push({ from, text: text.slice(0, 3000), at, viaEmail: true, gmailId: key, historique: true, ...(m.subject ? { subject: String(m.subject).slice(0, 200) } : {}) });
+    const ph = (Array.isArray(m.photos) ? m.photos : []).map((x) => String(x || "").trim()).filter((x) => /^[A-Za-z0-9_-]{8,64}$/.test(x)).slice(0, 3);
+    th.messages.push({ from, text: text.slice(0, 3000), at, viaEmail: true, gmailId: key, historique: true, imagesLu: true, ...(ph.length ? { photos: ph } : {}), ...(m.subject ? { subject: String(m.subject).slice(0, 200) } : {}) });
     added++;
   }
   th.messages.sort((a, b) => (Number(a.at) || 0) - (Number(b.at) || 0));
@@ -1241,6 +1242,32 @@ export async function batImportHistorique(orderId, msgs = [], info = {}) {
   data.bat[id] = th;
   await persistCatalog(data, ["bat"]);
   return added;
+}
+
+// Tous les fils de commande (lecture du cache, pour l'historique affiché dans Gestion).
+export async function getBatTousLesFils() {
+  const data = await getCatalogRaw();
+  return data.bat || {};
+}
+
+// Images retrouvées dans des e-mails déjà rangés (02/11/2026) : { gmailId: [ids] }.
+// Marque chaque message relu (`imagesLu`) pour ne jamais le relire.
+export async function batAjouterImages(orderId, parGmailId = {}) {
+  const id = String(orderId || "").trim();
+  const cles = Object.keys(parGmailId || {});
+  if (!id || !cles.length) return 0;
+  const data = await getCatalogRaw(true);
+  const th = data.bat?.[id];
+  if (!th) return 0;
+  let n = 0;
+  for (const m of th.messages || []) {
+    if (!m.gmailId || !cles.includes(m.gmailId)) continue;
+    const ph = (parGmailId[m.gmailId] || []).map((x) => String(x || "").trim()).filter((x) => /^[A-Za-z0-9_-]{8,64}$/.test(x)).slice(0, 3);
+    if (ph.length && !(m.photos || []).length) { m.photos = ph; n++; }
+    m.imagesLu = true;
+  }
+  await persistCatalog(data, ["bat"]);
+  return n;
 }
 
 // =============================================================================
