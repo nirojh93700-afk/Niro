@@ -4717,7 +4717,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   page `/cristaux-graves`, lignes de stock dans Gestion. Le jour où le gérant a les adaptateurs : `ADAPTATEUR_NOIR_FOURNI = true`.
   `npm run test-socles`.
 
-## 📿 MAQUETTE « COLLIER BARRE VERTICALE À GRAVER » — ✅ ENREGISTRÉE TELLE QUELLE LE 02/11/2026 (version 1) — RIEN en ligne
+## 📿 COLLIER QUATRE MOTS — ✅ EN VENTE DEPUIS LE 02/11/2026 (gérant : « enlève la photo et les mesures dans la description… tu peux mettre en ligne »)
+- Fiche `collier-barre-verticale` (nom « Collier Quatre Mots »), argenté, **stock 5** (posé le 02/11), barré 21,90 → payé 19,71 €, 3 photos
+  `public/produits/collier-quatre-mots-1..3.jpg` (la photo des mesures RETIRÉE, et plus de liste de mesures dans la description : elles sont
+  dans « Taille & Matériaux »). **`engravingPricing.textesOfferts: 1`** (nouveau, `engravingPrice.js`) : la 1re face remplie est offerte, chaque
+  face en plus +3 € ; libellés calculés sur la fiche (`facesOffertes` → « (1re face remplie offerte) » / « (offerte) » / « (+3 €) ») ;
+  « Vendu en plus » marque la face offerte à 0 € ; le code « gravure offerte » ne s'applique qu'à une face payante. Emballages + Noël : automatiques (bijou).
+### (historique) MAQUETTE « COLLIER BARRE VERTICALE À GRAVER » — ENREGISTRÉE LE 02/11/2026
 - **NOM CHOISI PAR LE GÉRANT LE 02/11 : « Collier Quatre Mots »** (maquette v2 du 02/11 : titre « Collier Quatre Mots — barre à graver sur 4 faces, acier inoxydable » ; C'EST la version à reproduire).
 - **v3 du 02/11 (gérant : « t'as pas mis les prix pour les autres faces et t'as oublié le paquet Noël, y a les photos des paquets normaux »)** : chaque face porte son prix (« (1re face remplie offerte) » / « (offerte) » / « (+3 €) »), le bloc « Votre emballage » est celui du site EN LIGNE avec les vraies photos de Gestion (copiées dans `assets/barre-verticale/emb-*.jpg`, bloc `emballage-site.html`), et le bloc replié « 🎄 Ajouter un emballage de Noël » (6 choix, seulement ce qui rentre, couleur vert / bleu nuit, étiquette offerte, livraison lettre / colis) compte dans le total. C'est la v3 à reproduire.
 - https://claude.ai/artifact/EMNQWoLhYFJKNVXMowyAvP · générateur `tools/maquettes/collier-barre-verticale.py <capture>` · photos
