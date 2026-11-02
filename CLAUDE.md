@@ -9,6 +9,13 @@
   jamais sur un verre, une carafe, un cristal, un marque-page ni aucun autre produit, ni sur leur fiche, ni sur un devis, ni dans un mail.
   Un devis de verres ou de cristal = aucun emballage de Noël proposé. (Les DESSINS de Noël à graver sont une autre chose : verres, carafe, cristal.)
 
+## 🗂️ HISTORIQUE D'UNE COMMANDE DANS GESTION — 02/11/2026 (commande 04AT1IG4 : « l'historique de devis… les images qu'on a envoyées, l'image qu'elle a sélectionnée, y a rien ») — PRÉPARÉ, À POUSSER SUR SON MOT
+- Fiche commande (`/gestion`) et cartes devis de l'Atelier : bloc « 🗂️ Historique de la commande » (`HistoriqueCommande.jsx`) = note de l'atelier
+  (choix de la cliente), devis et factures liés (`devisDeLaCommande` de `src/lib/historiqueDevis.js` : n° de devis de la commande, toute pièce
+  qui cite la réf. ou ce devis, autres devis de la même adresse), vignettes des images envoyées / reçues (`imagesDuFil`). Calculé par `GET /api/admin/orders`.
+- Les images du site posées dans un e-mail (`/api/img/<id>`) sont gardées avec le message : `gmailGetMessage().images`, import du fil
+  (`syncHistoriqueCommande`) + relecture une fois des messages déjà rangés (`batAjouterImages`, `imagesLu`), et `send-client-email` (`photos` dans `logComm`).
+
 ## 🛍️ DEVIS : EMBALLAGE CADEAU + AUTRES ARTICLES, PAYÉS ENSEMBLE AU PANIER — ✅ EN LIGNE LE 02/11/2026 (« Applique la maquette », https://claude.ai/artifact/Lo8LopW8uKma8KuAgriD6a, e74b0562)
 - Page `/document/<id>` (`DevisPanier.jsx`) : « Votre emballage » (les emballages de la fiche du produit principal du devis = 1re ligne rattachée à
   un `variantId`, + emballage de Noël replié), total mis à jour ; « Compléter votre commande » (6 articles du même rayon + un petit cadeau,
