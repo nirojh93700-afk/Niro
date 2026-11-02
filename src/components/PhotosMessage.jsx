@@ -3,12 +3,12 @@
 // Gestion (dossier, fil de commande) et sur la page « Réponse à valider ».
 import { nettoyerPhotos, urlPhoto } from "@/lib/photosMessage";
 
-export default function PhotosMessage({ photos, taille = 88 }) {
+export default function PhotosMessage({ photos, taille = 88, titre = "" }) {
   const ids = nettoyerPhotos(photos);
   if (!ids.length) return null;
   return (
     <div style={{ margin: "8px 0 2px" }}>
-      <div style={{ fontSize: 12.5, color: "#8a7a56", marginBottom: 6 }}>📷 {ids.length} photo{ids.length > 1 ? "s" : ""} jointe{ids.length > 1 ? "s" : ""} · toucher pour voir en grand</div>
+      <div style={{ fontSize: 12.5, color: "#8a7a56", marginBottom: 6 }}>{titre ? `${titre}${ids.length > 1 ? ` (${ids.length})` : ""}` : `📷 ${ids.length} photo${ids.length > 1 ? "s" : ""} jointe${ids.length > 1 ? "s" : ""}`} · toucher pour voir en grand</div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
         {ids.map((id, i) => (
           <a key={id} href={urlPhoto(id)} target="_blank" rel="noreferrer" title={`Photo ${i + 1}`}

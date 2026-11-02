@@ -77,7 +77,12 @@ export default function BatThread({ order, adminKey }) {
   }[thread?.status] || ((thread?.messages || []).length ? "📧 Historique des messages" : "Aucun échange pour l'instant");
 
   // Un séparateur de jour entre les messages : on se repère sans lire les dates.
-  const messages = thread?.messages || [];
+  // Devis et factures de la commande / de la cliente rangés DANS le fil, à leur date
+  // (02/11/2026, gérant : « il faut qu'il y ait les devis aussi dans les messages »).
+  const devisFil = (order.devisLies || []).map((q) => ({ kind: "devis", at: Date.parse(q.createdAt || "") || 0, q }));
+  const messages = [...(thread?.messages || []), ...devisFil].sort((a, b) => (Number(a.at) || 0) - (Number(b.at) || 0));
+  const euros = (n) => `${(Number(n) || 0).toFixed(2).replace(".", ",")} €`;
+  const STATUTS = { brouillon: "brouillon", envoye: "envoyé", vu: "vu", accepte: "accepté", paye: "payé", annule: "annulé" };
   const jour = (ts) => { try { return new Date(ts).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }); } catch { return ""; } };
   const heure = (ts) => { try { return new Date(ts).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); } catch { return ""; } };
 
@@ -92,6 +97,19 @@ export default function BatThread({ order, adminKey }) {
         <div className="bt-thread">
           {messages.map((m, i) => {
             const nouveauJour = i === 0 || jour(m.at) !== jour(messages[i - 1].at);
+            if (m.kind === "devis") {
+              const q = m.q;
+              return (
+                <div key={`d${q.id}`}>
+                  {nouveauJour ? <div className="bt-daysep">{jour(m.at)}</div> : null}
+                  <div className="bt-devis">
+                    <div>🧾 <strong>{q.type === "facture" ? "Facture" : "Devis"} {q.number}</strong> · {euros(q.total)}{q.status ? ` · ${STATUTS[q.status] || q.status}` : ""}{q.principal ? " · payé par cette commande" : !q.lie ? " · autre devis de la cliente" : ""} · {heure(m.at)}</div>
+                    {(q.lignes || []).map((l, k) => <div key={k} className="bt-devis-l">{l.qty > 1 ? `${l.qty} × ` : ""}{l.desc} — {euros(l.price)}</div>)}
+                    <a href={q.lien} target="_blank" rel="noreferrer">{q.type === "facture" ? "Ouvrir la facture" : "Ouvrir le devis"} →</a>
+                  </div>
+                </div>
+              );
+            }
             return (
               <div key={i}>
                 {nouveauJour ? <div className="bt-daysep">{jour(m.at)}</div> : null}
@@ -107,7 +125,7 @@ export default function BatThread({ order, adminKey }) {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   {m.image ? <img className="bt-img" src={m.image} alt="Aperçu envoyé" /> : null}
                   {m.text ? <MailBody text={m.text} /> : null}
-                  <PhotosMessage photos={m.photos} taille={72} />
+                  <PhotosMessage photos={m.photos} taille={m.from === "atelier" ? 120 : 72} titre={m.from === "atelier" ? "🖼️ Image envoyée à la cliente" : ""} />
                 </div>
               </div>
             );
