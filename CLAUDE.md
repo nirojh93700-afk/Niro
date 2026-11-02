@@ -4718,6 +4718,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   `npm run test-socles`.
 
 ## 📿 MAQUETTE « COLLIER BARRE VERTICALE À GRAVER » — ✅ ENREGISTRÉE TELLE QUELLE LE 02/11/2026 (version 1) — RIEN en ligne
+- **NOM CHOISI PAR LE GÉRANT LE 02/11 : « Collier Quatre Mots »** (à mettre au « applique » ; la maquette v1 porte encore « Collier Barre verticale à graver »).
 - https://claude.ai/artifact/EMNQWoLhYFJKNVXMowyAvP · générateur `tools/maquettes/collier-barre-verticale.py <capture>` · photos
   `docs/maquettes/assets/barre-verticale/`. Nihaojewelry NH11122064, acier 304, barre 31 × 4 mm, 4 faces, pierre en bas de la face 1,
   chaîne 50 + 5 cm, 11 g · **argenté seulement (photo noire écartée), stock 5** · barré 21,90 € → payé 19,71 € (code 23,90) · gravure
