@@ -279,6 +279,31 @@ export const products = [
 <p>Idéal pour un anniversaire, la Fête des Pères, Noël ou la Saint-Valentin.</p>`,
   },
   {
+    // Bracelet gourmette à plaque (gérant, 02/11/2026) : Nihaojewelry, acier 304 (doré = plaqué or 18 carats), 5 de chaque couleur.
+    // Barré 30,90 € → payé 27,81 €. Gravure sur la plaque seulement, +3 €. Pas de visuel 3D (gérant : « enlève »).
+    slug: "bracelet-gourmette-plaque",
+    badge: "Nouveau",
+    name: "Bracelet Gourmette à plaque gravée",
+    weight: 72, pickup: false, letter: true, subcategory: "homme",
+    title: "Bracelet gourmette à plaque gravée — acier inoxydable, doré ou noir",
+    category: "bijoux", type: "Bracelet personnalisé",
+    tagline: "Une gourmette à mailles épaisses et sa plaque lisse, à graver d'un prénom, d'une date ou d'un message.",
+    personalizable: true, personalizationLabel: "Texte gravé sur la plaque (+3 €)",
+    engravingPricing: { textKeys: ["texte"], textExtra: 3 },
+    personalizationFields: [
+      { key: "note", type: "note", text: "La gravure se fait sur la plaque : un prénom, une date, des initiales ou un court message. Laissez le champ vide pour un bracelet sans gravure." },
+      { key: "texte", label: "Texte à graver sur la plaque (+3 €)", placeholder: "Ex. Thomas", maxLength: 25, optional: true },
+      { key: "police", type: "font", label: "Police de gravure", optional: true },
+    ],
+    images: ["/produits/bracelet-gourmette-plaque-1.jpg", "/produits/bracelet-gourmette-plaque-2.jpg", "/produits/bracelet-gourmette-plaque-3.jpg", "/produits/bracelet-gourmette-plaque-4.jpg", "/produits/bracelet-gourmette-plaque-5.jpg", "/produits/bracelet-gourmette-plaque-6.jpg", "/produits/bracelet-gourmette-plaque-7.jpg"],
+    variants: [
+      { id: "bracelet-gourmette-plaque-dore", title: "Doré", price: 33.90, stockId: "bracelet-gourmette-plaque-dore", image: "/produits/bracelet-gourmette-plaque-1.jpg" },
+      { id: "bracelet-gourmette-plaque-noir", title: "Noir", price: 33.90, stockId: "bracelet-gourmette-plaque-noir", image: "/produits/bracelet-gourmette-plaque-5.jpg" },
+    ],
+    descriptionHtml: `<p>Une <strong>gourmette à mailles épaisses</strong> et sa <strong>plaque lisse</strong> : le bracelet d'identité classique, en acier inoxydable, doré ou noir.</p>
+<p>Gravez sur la plaque un prénom, une date qui compte ou quelques mots. Un cadeau qui se porte tous les jours, pour lui comme pour elle.</p>`,
+  },
+  {
     slug: "bracelet-homme-acier-silicone",
     name: "Bracelet Homme Acier & Silicone",
     weight: 72,

@@ -1390,6 +1390,11 @@ Un souci à la réception ?
     usage: "Gravure sur 1 à 4 faces, dans la longueur de la barre (15 caractères par face environ). La 1re face gravée est offerte, chaque face en plus +3 €.\n\nMettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment les finitions.\nEntretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
     returns: "Bijou gravé à la commande dans notre atelier, puis envoyé en lettre suivie.\nPièce personnalisée : pas de droit de rétractation (art. L221-28 du Code de la consommation). Un défaut de fabrication ou une erreur de notre part est bien sûr pris en charge.",
   },
+  "bracelet-gourmette-plaque": {
+    material: "Acier inoxydable 304. Doré : plaqué or 18 carats. Noir : finition noire.\nChaîne gourmette à mailles épaisses, plaque lisse gravable, fermoir mousqueton.\nPoids : environ 15 g.",
+    usage: "Gravure sur la plaque (25 caractères environ) : +3 €. Laissez le champ vide pour un bracelet sans gravure.\n\nMettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.\nEntretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
+    returns: "Bijou gravé à la commande dans notre atelier, puis envoyé en lettre suivie.\nPièce personnalisée : pas de droit de rétractation (art. L221-28 du Code de la consommation). Un défaut de fabrication ou une erreur de notre part est bien sûr pris en charge.",
+  },
   "collier-pastille": {
     material: `Taille & Matériaux
 - Pastille ronde lisse sur chaîne fine maille câble.
