@@ -603,4 +603,5 @@ En attente de SA décision :
 ## ✉️ MANUEL (DEV-1531, bracelet gourmette, cœurs aux extrémités) — 02/11/2026
 - Ses 2 mails (devis + « commander sur le site ») ont REBONDI : moreiramanuel@diocese-paris.net refusée (550 Invalid Recipient).
 - Nouveau mail préparé (devis + emballage cadeau + autres articles au panier), NON envoyé : il faut une adresse valide donnée par le gérant.
-- DEV-1531 réglé directement par son lien = aucune livraison facturée (ligne gravure sans poids) ; la ligne dit encore « entourés d'un cœur ».
+- 02/11 : DEV-1531 SUPPRIMÉ (gérant). Remplacé par DEV-1532 (https://nivcreation.fr/document/zLDoXVoCNBmD4u7XhCMQ, 28,11 €, cœurs aux extrémités,
+  livraison au choix, emballages + Noël). Mail + devis NON envoyés : la seule adresse connue (formulaire du site) rebondit.
