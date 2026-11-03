@@ -627,4 +627,7 @@ En attente de SA décision :
   cristal, devis) REFUSÉ par le serveur Microsoft de Meliá (« 550 5.4.1 Recipient address rejected: Access denied », rebond 27 min après).
 - 03/11 20 h 30 : à la place, mail court envoyé (« Votre colis est parti aujourd'hui en Chronopost Express, suivi XN204868790JB »). L'envoi
   programmé du long mail le 04/11 à 9 h a été ANNULÉ (gérant : « annule pour demain, on verra plus tard, garde en mémoire »).
+- 03/11 20 h 42 : le mail COURT a été refusé lui aussi (même message « Access denied », 7 min après) → le serveur de Meliá bloque désormais
+  nos envois (les mails d'avant 19 h étaient passés). Ne plus écrire à cette adresse ; à voir avec le gérant : téléphone 07 77 49 14 95,
+  ou l'adresse écrite sur la commande `chloe.faussone@melia.com` (avec un point) SEULEMENT s'il le décide.
 - ⛔ Le mail long (texte dans `chloe.json` du scratchpad de la session du 03/11, et ci-dessus) ne repart QUE quand le gérant le redemande.
