@@ -2249,6 +2249,30 @@ export async function debitCagnotte(email, amount, orderId = "") {
   return used;
 }
 
+// Déplace la cagnotte d'une adresse mal tapée vers la bonne (03/11/2026, Céline Naulin « gmail.comn »).
+// Solde ajouté à celui de la bonne adresse, historique fusionné, la date d'activité la plus récente gardée
+// (l'expiration ne bouge pas). L'ancienne adresse est vidée. Renvoie le montant déplacé.
+export async function deplacerCagnotte(from, to) {
+  const a = normEmail(from), b = normEmail(to);
+  if (!a || !validEmail(b) || a === b) return 0;
+  const data = await getCatalogRaw(true);
+  data.cagnotte = data.cagnotte || {};
+  const src = data.cagnotte[a];
+  if (!src || !(src.balance > 0)) return 0;
+  const dst = data.cagnotte[b] || { balance: 0, history: [] };
+  const amt = Math.round(src.balance * 100) / 100;
+  dst.balance = Math.round(((dst.balance || 0) + amt) * 100) / 100;
+  dst.history = [{ amount: 0, reason: `Cagnotte reprise de ${a}`.slice(0, 80), orderId: "", at: Date.now() },
+    ...[...(src.history || []), ...(dst.history || [])].sort((x, y) => (y.at || 0) - (x.at || 0))].slice(0, 100);
+  dst.updatedAt = Math.max(dst.updatedAt || 0, src.updatedAt || 0) || Date.now();
+  dst.remindedAt = 0;
+  data.cagnotte[b] = dst;
+  data.cagnotte[a] = { ...src, balance: 0, updatedAt: Date.now(),
+    history: [{ amount: -amt, reason: `Déplacée vers ${b}`.slice(0, 80), orderId: "", at: Date.now() }, ...(src.history || [])].slice(0, 100) };
+  await persistCatalog(data, ["cagnotte"]);
+  return amt;
+}
+
 // --- Expiration de la cagnotte (12 mois d'inactivité) ----------------------
 // Un rappel e-mail est envoyé ~30 jours avant l'expiration (voir /api/cron/cashback).
 export const CAGNOTTE_EXPIRY_DAYS = 365;      // expire après 12 mois sans activité

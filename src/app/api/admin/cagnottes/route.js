@@ -1,4 +1,4 @@
-import { isAdmin, listCagnottes, getSettings, getCagnotte, creditCagnotte, CAGNOTTE_EXPIRY_DAYS } from "@/lib/stock";
+import { isAdmin, listCagnottes, getSettings, getCagnotte, creditCagnotte, deplacerCagnotte, CAGNOTTE_EXPIRY_DAYS } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -32,6 +32,12 @@ export async function POST(req) {
   if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
+  // Déplacer une cagnotte d'une adresse mal tapée vers la bonne (03/11/2026).
+  if (body?.action === "deplacer") {
+    const moved = await deplacerCagnotte(body.from, body.to);
+    const c = await getCagnotte(String(body.to || ""));
+    return Response.json({ ok: moved > 0, deplace: moved, balance: c?.balance ?? null });
+  }
   const email = String(body?.email || "").trim().toLowerCase();
   const amount = Number(body?.amount);
   const reason = String(body?.reason || "Geste commercial").slice(0, 120);

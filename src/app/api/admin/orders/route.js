@@ -1,5 +1,5 @@
 import { detaillerCommande } from "@/lib/detailProduit";
-import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder, getBatTousLesFils } from "@/lib/stock";
+import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder, getBatTousLesFils, deplacerCagnotte } from "@/lib/stock";
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder, listQuotes } from "@/lib/firebase";
 import { devisDeLaCommande, imagesDuFil } from "@/lib/historiqueDevis";
 import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
@@ -69,7 +69,10 @@ export async function POST(req) {
     const order = await getSiteOrder(id);
     if (!order) return Response.json({ ok: false, error: "Commande introuvable." }, { status: 404 });
     const ok = await updateSiteOrder(id, { customerEmail: email, emailCorrigeDe: order.customerEmail || "" });
-    return Response.json({ ok, avant: order.customerEmail || "", apres: email });
+    // La cagnotte (cashback) suit la bonne adresse, sinon la cliente ne la voit pas dans son espace (03/11/2026).
+    let cagnotteDeplacee = 0;
+    try { if (ok && order.customerEmail) cagnotteDeplacee = await deplacerCagnotte(order.customerEmail, email); } catch { /* jamais bloquant */ }
+    return Response.json({ ok, avant: order.customerEmail || "", apres: email, cagnotteDeplacee });
   }
 
   // Changer le point relais d'une commande (22/10/2026, renvoi du verre cassé #1ZGOWMIL vers le point
