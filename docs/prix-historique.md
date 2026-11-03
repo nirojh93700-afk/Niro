@@ -307,3 +307,10 @@ Autres verres inchangés (+5 € logo et texte, +3 € logo seul ou texte seul, 
 ## 29/10/2026 — Emballages de Noël des bijoux (maquette Fêtes, rien en ligne)
 Avant (28/10) : pochette à languette dorée 2,90 € · sac de Noël à anses 2,90 € · pack de Noël 5,90 € barré 6,80 €.
 Après (gérant, 29/10) : pochette 3,90 € · sac 4,90 € · pack 7,90 € barré 8,80 € (avant ce jour : 5,90 € barré 6,80 €) (= boîte 3,90 + sac 4,90). Générateur `tools/maquettes/fetes-noel.py` (`EMB_NOEL`).
+
+## 03/11/2026 — Livraison à l'étranger (domicile) : grille La Poste 2026 + marge
+Avant (3 zones) — lettre bijoux : EU1 ≤250 g 6,90 · ≤500 g 9,90 · ≤2 kg 12,90 ; EU2 7,90 / 10,90 / 14,90 ; CH 8,90 / 12,90 / 17,90.
+Colis : EU1 ≤1 kg 16,90 · 2 kg 22,90 · 5 kg 32,90 · 10 kg 46,90 · + 74,90 ; EU2 18,90 / 24,90 / 36,90 / 52,90 / 84,90 ;
+CH 22,90 / 29,90 / 44,90 / 64,90 / 99,90.
+Après (même grille pour tous les pays) : lettre ≤100 g 8,90 · ≤250 g 15,90 · puis Colissimo ≤500 g 16,90 · 1 kg 20,90 ·
+2 kg 23,90 · 5 kg 30,90 · 10 kg 48,90 · 15 kg 69,90 · 30 kg 89,90. Points relais Europe inchangés.
