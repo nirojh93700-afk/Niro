@@ -14,6 +14,7 @@ import { lignesGravure, policeDeGravure } from "@/lib/engravingSheet";
 import { detailVariante } from "@/lib/detailProduit";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 import { LOGO_URL } from "@/lib/photosLocales";
+import { paysDeLaCommande } from "@/lib/paysLivraison";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -567,6 +568,7 @@ export async function POST(req) {
          </div>`
       : "";
 
+    const paysAlerte = paysDeLaCommande({ shippingAddress: shipping?.address || customer?.address || null });
     const ownerBody = `
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
         ${imageBlock}
@@ -578,6 +580,9 @@ export async function POST(req) {
         ${immediateStart ? `<p style="background:#fbf3e6;padding:12px 14px;border-radius:10px;border:1px solid #e7d3a1;margin:0 0 14px;"><strong>⚡ Fabrication immédiate demandée</strong> — la cliente a renoncé au délai de 24 h. Tu peux lancer la fabrication tout de suite (commande verrouillée).</p>` : ""}
 
         ${sectionTitle("Livraison")}
+        ${paysAlerte.etranger
+          ? `<div style="background:#fdecec;border:2px solid #d64545;padding:12px 14px;border-radius:10px;margin:0 0 10px;"><strong style="color:#b32b2b;font-size:16px;">${paysAlerte.drapeau} À ENVOYER EN ${escapeHtml(paysAlerte.nom.toUpperCase())}</strong><p style="margin:6px 0 0;">Envoi hors de France : affranchir pour l'international, jamais un timbre France.</p></div>`
+          : `<p style="margin:0 0 8px;"><strong>Pays :</strong> ${paysAlerte.drapeau} ${escapeHtml(paysAlerte.nom)}</p>`}
         <p style="margin:0 0 8px;"><strong>Méthode :</strong> ${escapeHtml(shippingRateName)} (${euro(shippingAmount, currency)})</p>
         ${session.metadata?.relaisPoint ? `<p style="background:#fbf3e6;padding:12px 14px;border-radius:10px;border:1px solid #e7d3a1;margin:0 0 8px;"><strong>📍 Point relais choisi par le client :</strong><br>${escapeHtml(session.metadata.relaisPoint)}</p>` : ""}
         <p style="background:${BRAND.cream};padding:14px;border-radius:10px;white-space:pre-line;border:1px solid #ece3d2;">
@@ -618,7 +623,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
     const ownerEmail = process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com";
     await sendEmail({
       to: ownerEmail,
-      subject: `${alertesImage.length ? "⚠️ " : ""}🛎️ Commande ${orderRef} — ${customer.name || "Client"} (${euro(session.amount_total, currency)})`,
+      subject: `${alertesImage.length ? "⚠️ " : ""}${paysAlerte.etranger ? `${paysAlerte.drapeau} ${paysAlerte.nom.toUpperCase()} · ` : ""}🛎️ Commande ${orderRef} — ${customer.name || "Client"} (${euro(session.amount_total, currency)})`,
       html,
       replyTo: customer.email || undefined,
     });

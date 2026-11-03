@@ -11,6 +11,7 @@
 // Gestion → Commandes : bouton « Fiche complète → ».
 // =============================================================================
 
+import { paysDeLaCommande } from "@/lib/paysLivraison";
 import { lienSuivi } from "@/lib/suiviColis";
 import DelaiCommande from "@/components/admin/DelaiCommande";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -66,8 +67,10 @@ function DetailLivraison({ o }) {
   const a = o.shippingAddress || null;
   const adresse = a ? [o.shippingName, o.shippingCompany, a.line1, a.line2, `${a.postal_code || ""} ${a.city || ""}`.trim(), a.country].filter(Boolean).join(", ") : "";
   const prix = Number(o.shippingPrice) > 0 ? ` · ${euro(o.shippingPrice)}` : "";
+  const pays = paysDeLaCommande(o);
   return (
     <div className={`file-liv${express ? " express" : ""}`}>
+      <div className={`file-liv-pays${pays.etranger ? " etranger" : ""}`}>{pays.etranger ? `${pays.drapeau} À ENVOYER EN ${pays.nom.toUpperCase()} — hors de France, affranchir pour l'international (pas de timbre France)` : `${pays.drapeau} Pays : ${pays.nom}`}</div>
       <div className="file-liv-mode">🚚 <b>{livraison(o)}</b>{m ? <span> — {m}</span> : null}{prix && !m.includes("€") ? <span>{prix}</span> : null}</div>
       {express ? <div className="file-liv-alerte">⚡ EXPRESS payé par la cliente : colis Chronopost à domicile, à graver EN PRIORITÉ.</div> : null}
       {relais ? <div>📍 <b>Point relais choisi :</b> {relais}</div> : null}

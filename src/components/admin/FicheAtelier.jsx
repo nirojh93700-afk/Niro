@@ -93,6 +93,11 @@ export function GlassPreview({ item }) {
   const scale = lay?.scale ?? 0.1;
   const color = "#3a2f1d"; // fond du verre désormais clair → gravure foncée
   const txt = !item.modele && !item.photoSrc ? textLinesOf(item, p) : null;
+  // Le texte ne déborde jamais de l'image (03/11/2026, fiche 1PCACXUM : « Mamy eveux 27/10/26 mon étoile »
+  // sortait du bracelet) : la taille est réduite pour que la ligne la plus longue tienne dans 84 % de la largeur
+  // (une lettre ≈ 0,6 de sa hauteur). Le texte complet reste dans le tableau « À graver ».
+  const plusLongue = txt ? Math.max(1, ...txt.lines.map((l) => String(l).length)) : 1;
+  const tailleTexte = Math.max(7, Math.min(scale * W, (W * 0.84) / (0.6 * plusLongue)));
 
   return (
     <div style={{ position: "relative", width: W, maxWidth: "100%", borderRadius: 10, overflow: "hidden", background: "#111" }}>
@@ -106,7 +111,7 @@ export function GlassPreview({ item }) {
           <img src={item.photoSrc} alt="" style={{ width: scale * W * 2, filter: "grayscale(1) contrast(1.4)", opacity: 0.9 }} />
         ) : txt && txt.lines.length ? (
           txt.lines.map((line, i) => (
-            <span key={i} className={txt.fontClass} style={{ color, fontSize: Math.max(10, scale * W), whiteSpace: "nowrap" }}>{line}</span>
+            <span key={i} className={txt.fontClass} style={{ color, fontSize: tailleTexte, whiteSpace: "nowrap" }}>{line}</span>
           ))
         ) : null}
       </div>

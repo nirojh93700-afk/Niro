@@ -3179,6 +3179,10 @@ body.impression-mesure .zone-impression {
 .zone-impression .fp-tete .fp-sous { margin: 2pt 0 0; font-size: calc(9pt * var(--fp-k, 1)); color: #333; }
 .zone-impression .fp-ref { text-align: right; font-size: calc(8.4pt * var(--fp-k, 1)); color: #444; white-space: nowrap; }
 .zone-impression .fp-ref b { display: block; font-size: calc(13pt * var(--fp-k, 1)); color: #000; letter-spacing: .5pt; }
+/* Pays de livraison (03/11/2026, 1PCACXUM en Belgique) : toujours dit, en ROUGE et en grand hors de France. */
+.zone-impression .fp-pays { display: block; margin-top: 2pt; font-weight: 700; color: #000; }
+.zone-impression .fp-pays.etranger { color: #b3261e; font-size: calc(12pt * var(--fp-k, 1)); text-transform: uppercase; }
+.zone-impression .fp-pays-alerte strong { font-size: calc(11pt * var(--fp-k, 1)); }
 
 /* --- deux colonnes : c'est ce qui fait tenir la fiche sur une page ---
 Colonne de droite figee a 300px : c'est la largeur EXACTE du visuel
@@ -5534,3 +5538,8 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .bt-devis-l { color: #6b5a2e; font-size: 0.8rem; margin-top: 2px; }
 .bt-devis a { display: inline-block; margin-top: 4px; color: #7c6120; font-weight: 600; }
 
+
+/* Pays de livraison dans la file de production (03/11/2026) */
+.file-liv-pays { font-weight: 700; }
+.file-liv-pays.etranger { margin: 2px 0 4px; padding: 6px 9px; border-radius: 8px; background: #fdecea; border: 1.5px solid #b3261e; color: #b3261e; }
+.co-pays { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: #b3261e; color: #fff; font-style: normal; font-size: .72rem; font-weight: 700; }

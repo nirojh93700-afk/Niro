@@ -17,6 +17,7 @@ import dynamic from "next/dynamic";
 import { imprimerFiche } from "@/lib/impression";
 import { apparierSpec } from "@/lib/orderSpec";
 import { chargerAvecCache, viderCache } from "@/components/admin/adminCache";
+import { paysDeLaCommande } from "@/lib/paysLivraison";
 import { ongletDuChemin, cheminDeLOnglet } from "@/components/admin/ongletsGestion";
 import VarBadge from "@/components/admin/VarBadge";
 import { modeEnvoi } from "@/lib/etiquettes";
@@ -1040,7 +1041,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                 {/* Ligne compacte : on voit l'essentiel, on clique pour ouvrir la fiche complète */}
                 <button type="button" className="co-head" onClick={() => toggleOrder(o.id)} aria-expanded={isOpen}>
                   <span className="co-ref">#{o.ref || o.id?.slice(-6)}<small>{fmtDate(o.createdAt)}</small></span>
-                  <span className="co-who"><strong>{o.customerName || "—"}</strong><small>{resumeArticles(o)}</small></span>
+                  <span className="co-who"><strong>{o.customerName || "—"}</strong>{paysDeLaCommande(o).etranger ? <em className="co-pays">{paysDeLaCommande(o).drapeau} {paysDeLaCommande(o).nom.toUpperCase()}</em> : null}<small>{resumeArticles(o)}</small></span>
                   <span className={`co-status s-${o.status || "a_preparer"}`}>{libelleStatut(o)}</span>
                   <span className="co-total">{formatEuro(o.total)}{o.shippingPrice != null ? <small>livraison {formatEuro(o.shippingPrice)}</small> : null}</span>
                   <span className="co-chev" aria-hidden>{isOpen ? "▾" : "▸"}</span>
@@ -1063,6 +1064,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                     <div style={{ whiteSpace: "pre-line", marginTop: 4 }}>
                       📦 {[o.shippingName, o.shippingCompany, o.shippingAddress.line1, o.shippingAddress.line2, `${o.shippingAddress.postal_code || ""} ${o.shippingAddress.city || ""}`.trim(), o.shippingAddress.country].filter(Boolean).join(", ")}
                       {o.shippingMethod ? ` — ${o.shippingMethod}` : ""}
+                      <span className={`file-liv-pays${paysDeLaCommande(o).etranger ? " etranger" : ""}`} style={{ display: "block", marginTop: 4 }}>{paysDeLaCommande(o).etranger ? `${paysDeLaCommande(o).drapeau} À ENVOYER EN ${paysDeLaCommande(o).nom.toUpperCase()} — hors de France, affranchir pour l'international (pas de timbre France)` : `${paysDeLaCommande(o).drapeau} Pays : ${paysDeLaCommande(o).nom}`}</span>
                       {nomLivraisonDifferent(o).different ? <span style={{ display: "block", marginTop: 3, color: "#8a5a00", fontWeight: 700 }}>⚠️ Livré au nom de « {o.shippingName} » (la cliente est « {o.customerName} ») — à mettre sur l&apos;étiquette.</span> : null}
                     </div>
                   ) : null}

@@ -23,6 +23,7 @@
 // Invisible à l'écran : elle ne sert qu'au papier.
 // =============================================================================
 
+import { paysDeLaCommande } from "@/lib/paysLivraison";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { GlassPreview, ReglagesItem } from "@/components/admin/FicheAtelier";
@@ -71,6 +72,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
   // Point relais : il contient déjà le transporteur ET l'adresse du point, donc
   // on l'affiche seul ; sinon on affiche le mode de livraison choisi.
   const livraison = order.relaisPoint || order.shippingMethod || "";
+  const pays = paysDeLaCommande(order);
   const items = order.items || [];
   const spec = (order.spec || []).filter(Boolean);
 
@@ -125,6 +127,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
           <b>#{order.ref || (order.id || "").slice(-6)}</b>
           {STATUTS[order.status || "a_preparer"] || order.status}
           {total ? ` · ${formatEuro(total)}` : ""}
+          <span className={`fp-pays${pays.etranger ? " etranger" : ""}`}>{pays.drapeau} {pays.nom}</span>
         </div>
       </header>
 
@@ -132,6 +135,12 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
         {/* ============================ COLONNE GAUCHE ==================== */}
         <div className="fp-col">
           {/* Ce qui ne doit surtout pas être oublié passe TOUT EN HAUT. */}
+          {pays.etranger ? (
+            <div className="fp-encadre alerte fp-pays-alerte">
+              <strong>{pays.drapeau} À ENVOYER EN {pays.nom.toUpperCase()}</strong>
+              <div>Envoi hors de France : affranchir pour l&apos;international, jamais un timbre France.</div>
+            </div>
+          ) : null}
           {order.alerteInterne ? (
             <div className="fp-encadre alerte">
               <strong>⚠️ Geste promis à ce client</strong>
@@ -227,6 +236,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
                 <L k="Téléphone" v={order.customerPhone} />
                 <L k="E-mail" v={order.customerEmail} />
                 <L k="Livrer à" v={[nomLivraison(order).complet, adresse].filter(Boolean).join(" — ")} />
+                <L k="Pays" v={pays.etranger ? `${pays.drapeau} ${pays.nom.toUpperCase()} (hors de France)` : `${pays.drapeau} ${pays.nom}`} />
                 <L k="Mode" v={livraison} />
                 <L k="Suivi" v={order.tracking} />
               </tbody>

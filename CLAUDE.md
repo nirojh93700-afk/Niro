@@ -9,6 +9,12 @@
   jamais sur un verre, une carafe, un cristal, un marque-page ni aucun autre produit, ni sur leur fiche, ni sur un devis, ni dans un mail.
   Un devis de verres ou de cristal = aucun emballage de Noël proposé. (Les DESSINS de Noël à graver sont une autre chose : verres, carafe, cristal.)
 
+## 🌍 PAYS DE LIVRAISON DIT PARTOUT — 03/11/2026 (gérant, 1PCACXUM en Belgique : « heureusement que j'ai vu, sinon j'aurais pris un timbre pour la France… tu dois me dire pour quel pays c'est »)
+- `src/lib/paysLivraison.js` (`paysDeLaCommande`) : fiche imprimée (pays sous la réf. + encadré rouge « À ENVOYER EN BELGIQUE » en tête + ligne « Pays »),
+  file de production (bandeau rouge dans le bloc 🚚), fiche commande (pastille rouge sur la ligne + bandeau), e-mail 🛎️ (objet « 🇧🇪 BELGIQUE · » + encadré).
+  Monaco = tarif France (pays dit, sans alerte). ⛔ Quand je parle d'une commande au gérant : TOUJOURS dire le pays si ce n'est pas la France.
+- Aperçu de la fiche (`GlassPreview`) : le texte est réduit pour tenir dans l'image (il débordait du bracelet).
+
 ## 🗂️ HISTORIQUE D'UNE COMMANDE DANS GESTION — 02/11/2026 (commande 04AT1IG4 : « l'historique de devis… les images qu'on a envoyées, l'image qu'elle a sélectionnée, y a rien ») — PRÉPARÉ, À POUSSER SUR SON MOT
 - Fiche commande (`/gestion`) et cartes devis de l'Atelier : bloc « 🗂️ Historique de la commande » (`HistoriqueCommande.jsx`) = note de l'atelier
   (choix de la cliente), devis et factures liés (`devisDeLaCommande` de `src/lib/historiqueDevis.js` : n° de devis de la commande, toute pièce
