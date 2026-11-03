@@ -621,3 +621,10 @@ En attente de SA décision :
 - 18 h 38 : DEV-1534 supprimé, devis = DEV-1535 (https://nivcreation.fr/document/XpWwN4DLympJu7jvgR44, adresse moreiramanuel@diocese-paris.fr) ;
   mail + devis envoyés à l'adresse .fr (essai demandé par le gérant) : REBONDI aussi (18 h 39, « 554 Relay access denied » : ovh n'a pas cette boîte).
   Les 2 adresses sont mortes. Plus d'envoi tant qu'il n'a pas donné une vraie adresse (téléphone : absent de sa demande).
+
+## ✉️ HÔTEL VILLA MARQUIS (Chloé Faussone, chloefaussone@melia.com, commande 04AT1IG4) — MAIL « AUTRES CADEAUX » EN ATTENTE (03/11/2026)
+- 03/11 19 h 26 : mail long « Vos verres « M&S » sont partis » (expédition + liste des autres cadeaux : verres, carafes, cristal 3D, porte-clés
+  cristal, devis) REFUSÉ par le serveur Microsoft de Meliá (« 550 5.4.1 Recipient address rejected: Access denied », rebond 27 min après).
+- 03/11 20 h 30 : à la place, mail court envoyé (« Votre colis est parti aujourd'hui en Chronopost Express, suivi XN204868790JB »). L'envoi
+  programmé du long mail le 04/11 à 9 h a été ANNULÉ (gérant : « annule pour demain, on verra plus tard, garde en mémoire »).
+- ⛔ Le mail long (texte dans `chloe.json` du scratchpad de la session du 03/11, et ci-dessus) ne repart QUE quand le gérant le redemande.
