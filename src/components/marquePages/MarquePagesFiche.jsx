@@ -427,6 +427,9 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   const placesNb = boitesNb.reduce((a, b) => a + b, 0);
   const prixBoitesNb = boitesNb.reduce((a, b) => a + MP_BOITES[b].prix, 0);
   const boiteEpuisee = false;
+  // Case pas encore cochée : on montre déjà la boîte proposée pour ce nombre (photo + prix), pas une case vide à 0 €.
+  const boitesVues = avecBoite ? boitesNb : mpBoitesPour(Math.max(1, nb));
+  const prixBoitesVues = boitesVues.reduce((a, b) => a + MP_BOITES[b].prix, 0);
   const coffret = fmt.n > 1;
   const quoi = avecBoite ? `Votre coffret de ${fmt.n} marque-pages` : `Vos ${fmt.n} marque-pages`;
   const cust = slots.some((o) => o.touched || mpPrixGravure(o.v) > 0);
@@ -548,12 +551,12 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
           <label className={`mq-boxopt${avecBoite ? " on" : ""}${boiteEpuisee ? " off" : ""}`}>
             <input type="checkbox" checked={avecBoite} disabled={boiteEpuisee} onChange={(e) => choisirBoite(e.target.checked)} />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={boites[boitesNb[0]]} alt="" />
+            <img src={boites[boitesVues[0] || 1]} alt="" />
             <span className="mq-boxt">
               <b>Ajouter la boîte cadeau bleu nuit</b>
-              <span>{!avecBoite ? "Boîte bleu nuit, 1, 2 ou 4 places : vous choisissez" : boitesNb.length ? mpBoitesTexte(boitesNb) : "Choisissez vos boîtes ci-dessous"}</span>
+              <span>{!avecBoite ? `Proposée : ${mpBoitesTexte(boitesVues)} (1, 2 ou 4 places au choix)` : boitesNb.length ? mpBoitesTexte(boitesNb) : "Choisissez vos boîtes ci-dessous"}</span>
             </span>
-            <em>+{formatEuro(prixBoitesNb)}</em>
+            <em>+{formatEuro(prixBoitesVues)}</em>
           </label>
           {avecBoite && (
             <div className="mq-boites">
