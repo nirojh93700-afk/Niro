@@ -2340,14 +2340,16 @@ export async function setBirthday(email, date) {
 export async function addSubscriber(email) {
   const e = String(email || "").trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) return false;
-  const data = await getCatalogRaw();
+  // Lecture FRAÎCHE + écriture de la seule section (03/11/2026) : avec le cache de 60 s, une inscription
+  // faite juste avant sur une autre instance du site pouvait être effacée.
+  const data = await getCatalogRaw(true);
   data.subscribers = data.subscribers || [];
   // Compatible ancien format (chaînes) : on vérifie l'existence sur l'e-mail,
   // et on enregistre le NOUVEL abonné avec sa date d'inscription.
   const exists = data.subscribers.some((s) => (typeof s === "string" ? s : s?.email) === e);
   if (!exists) {
     data.subscribers.push({ email: e, date: new Date().toISOString() });
-    await persistCatalog(data);
+    await persistCatalog(data, ["subscribers"]);
   }
   return true;
 }

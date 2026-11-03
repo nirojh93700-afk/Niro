@@ -1,6 +1,7 @@
 import { addSubscriber, setBirthday, getSettings, ensureWelcomeCode } from "@/lib/stock";
 import { welcomeEmail, BRAND } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
+import { reserverEnvoiUnique } from "@/lib/firebase";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,11 @@ export async function POST(req) {
     const settings = await getSettings().catch(() => ({}));
     const w = settings?.welcome || {};
     const code = (w.code || "").toString().trim();
-    if (code) {
+    // UN SEUL e-mail de bienvenue par adresse (03/11/2026 : deux partaient quand le bouton était
+    // touché deux fois). Réservation atomique AVANT l'envoi, jamais rendue
+    // (un « échec » d'envoi peut être parti quand même : mieux vaut zéro doublon ; le code reste affiché à l'écran).
+    const cleBienvenue = `bienvenue:${email.toLowerCase()}`;
+    if (code && await reserverEnvoiUnique(cleBienvenue)) {
       // On s'assure que le code promis dans l'e-mail EXISTE vraiment, sinon il
       // serait refusé au paiement.
       await ensureWelcomeCode();

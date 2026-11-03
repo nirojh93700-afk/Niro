@@ -19,6 +19,7 @@ export default function WelcomePopup({ enabled, code, text }) {
   const [email, setEmail] = useState("");
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
+  const [envoi, setEnvoi] = useState(false); // un seul envoi à la fois (double toucher = 2 e-mails)
 
   const pathname = usePathname();
 
@@ -44,6 +45,8 @@ export default function WelcomePopup({ enabled, code, text }) {
 
   async function submit(e) {
     e.preventDefault();
+    if (envoi) return;
+    setEnvoi(true);
     setErr("");
     try {
       const res = await fetch("/api/newsletter", {
@@ -55,6 +58,7 @@ export default function WelcomePopup({ enabled, code, text }) {
       setDone(true);
       try { localStorage.setItem(KEY, "1"); } catch { /* ignore */ } // inscrite → ne réapparaît plus
     } catch (e2) { setErr(e2.message); }
+    setEnvoi(false);
   }
 
   if (!enabled || !show) return null;
@@ -81,7 +85,7 @@ export default function WelcomePopup({ enabled, code, text }) {
             <form onSubmit={submit}>
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Votre e-mail" style={{ width: "100%", padding: "12px 14px", border: "1px solid var(--line)", borderRadius: 10, marginBottom: 10, font: "inherit", textAlign: "center" }} />
               {err && <p style={{ color: "#b4452f", fontSize: "0.9rem", margin: "0 0 8px" }}>{err}</p>}
-              <button type="submit" className="btn btn-gold btn-block">Recevoir mon code</button>
+              <button type="submit" disabled={envoi} className="btn btn-gold btn-block">{envoi ? "Envoi…" : "Recevoir mon code"}</button>
             </form>
             <button onClick={close} style={{ background: "none", border: 0, color: "var(--ink-soft)", cursor: "pointer", marginTop: 12, fontSize: "0.85rem", textDecoration: "underline" }}>Non merci</button>
           </>

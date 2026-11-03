@@ -7,9 +7,12 @@ export default function NewsletterSignup() {
   const [birthday, setBirthday] = useState("");
   const [done, setDone] = useState(false);
   const [err, setErr] = useState("");
+  const [envoi, setEnvoi] = useState(false); // un seul envoi à la fois (double toucher = 2 e-mails)
 
   async function submit(e) {
     e.preventDefault();
+    if (envoi) return;
+    setEnvoi(true);
     setErr("");
     try {
       const res = await fetch("/api/newsletter", {
@@ -20,6 +23,7 @@ export default function NewsletterSignup() {
       if (!res.ok) throw new Error("Adresse invalide.");
       setDone(true);
     } catch (e2) { setErr(e2.message); }
+    setEnvoi(false);
   }
 
   return (
@@ -49,7 +53,7 @@ export default function NewsletterSignup() {
               style={{ padding: "9px 12px", borderRadius: 10, border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.08)", color: "#fff" }}
             />
           </label>
-          <button type="submit" className="btn btn-gold" style={{ padding: "10px 20px" }}>S'inscrire</button>
+          <button type="submit" disabled={envoi} className="btn btn-gold" style={{ padding: "10px 20px" }}>{envoi ? "Envoi…" : "S'inscrire"}</button>
         </form>
       )}
       {err && <p style={{ color: "#e7a", fontSize: "0.85rem", margin: "8px 0 0" }}>{err}</p>}

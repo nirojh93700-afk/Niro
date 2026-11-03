@@ -664,3 +664,31 @@ export async function getCustomerUpload(id) {
     return null;
   }
 }
+
+// ENVOI UNIQUE (03/11/2026, gérant : « quelqu'un s'est inscrit, il y a deux mails qui sont partis »).
+// Deux demandes quasi simultanées (double toucher du bouton, deux instances du site) passaient toutes
+// les deux le contrôle « déjà envoyé ? » avant que l'une ait écrit. Comme pour claimSiteOrder, la
+// réservation est un document à identifiant FIXE créé par `.create()` : Firestore refuse le 2ᵉ.
+// Renvoie true = c'est à moi d'envoyer ; false = déjà réservé (doublon). Erreur autre : true (on n'empêche
+// pas un envoi légitime pour une panne de la base).
+function cleEnvoi(cle) {
+  return String(cle || "").toLowerCase().replace(/[^a-z0-9_.@-]/g, "_").replace(/\//g, "_").slice(0, 400);
+}
+export async function reserverEnvoiUnique(cle) {
+  const a = getApp();
+  if (!a || !cle) return true;
+  try {
+    await admin.firestore().collection("envoisUniques").doc(cleEnvoi(cle)).create({ cle: String(cle), at: new Date().toISOString() });
+    return true;
+  } catch (e) {
+    if (e.code === 6 || /ALREADY_EXISTS/i.test(e.message || "")) return false;
+    console.error("Réservation envoi unique:", e.message);
+    return true;
+  }
+}
+// L'envoi a échoué : on rend la réservation pour qu'un nouvel essai puisse partir.
+export async function libererEnvoiUnique(cle) {
+  const a = getApp();
+  if (!a || !cle) return;
+  try { await admin.firestore().collection("envoisUniques").doc(cleEnvoi(cle)).delete(); } catch { /* ignore */ }
+}
