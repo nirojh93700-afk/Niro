@@ -1,5 +1,17 @@
 # 📋 TOUT CE QUI EST EN ATTENTE — inventaire de reprise
 
+## 💶 IDÉE EN ATTENTE : FACTURER LES BIJOUX AU PRÉNOM, PAS À LA FACE — 03/11/2026 (gérant : « enregistre pour les prix là pour les prénoms… je te dirai »)
+- Constat (commande 0QEIXDI5, Vanessa Gorgol, Collier Plaque Acier) : 4 prénoms gravés (AXANDRE / MAXIM au recto, SASHA / PALOMA au verso)
+  mais 2 textes facturés (+3 € par face remplie = +6 €), comme la fiche l'annonce. Au prénom, ça aurait fait +12 €.
+- Règle actuelle des bijoux (18/10/2026) : +3 € par face / champ de texte rempli, quel que soit le nombre de mots.
+- ⛔ RIEN À FAIRE tant qu'il ne le demande pas : ni changement de prix, ni réclamation à Vanessa (elle a payé le prix affiché).
+  S'il le veut : maquette d'abord (« +3 € par prénom » écrit sur la fiche, compteur de prénoms par face), puis « applique ».
+
+## 📦 DIANE COOK (0AYWFAHI, verres 47 cl arrivés cassés, remboursée 78,21 €) — EN PAUSE (gérant, 03/11 : « oublie Diane, je te dirai »)
+- Mail d'excuses préparé et NON envoyé ; réclamation Boxtal (envoi 2610291626CHRPDC1XFR, réponse attendue avant le mar. 17/11/2026 :
+  facture HT, articles abîmés, photos des verres / du calage (on les a), photo du carton avec l'étiquette (à demander à Diane), adresse du
+  point de dépôt, RIB dans l'espace Boxtal ; refus probable faute de réserves au retrait). Rien ne part sans son mot.
+
 ## 🎄 MAIL « CAGNOTTE FIDÉLITÉ POUR NOËL » — 31/10/2026
 - ✅ ENVOYÉ le 31/10 vers 11 h 35 (heure UTC) aux **33 clientes dont la commande est livrée** (gérant : « pousse », « envoie pour les
   autres ») : mail personnalisé (prénom, produit commandé, date de fin de la cagnotte), SANS montant (elle le voit sur /espace),
