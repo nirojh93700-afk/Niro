@@ -293,7 +293,7 @@ function pointRelaisPrice(totalGrams, boxtal, freeShipping, carrierCode) {
 }
 
 // Construit les options « livraison à domicile » (+ verres/déco selon le panier).
-function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping, bijouxOnly = false }) {
+function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping, bijouxOnly = false, portDomicileMini = 0 }) {
   const options = [];
   if (freeShipping) {
     options.push(rate(0, "Livraison à domicile — Offerte", [2, 5]));
@@ -312,7 +312,8 @@ function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQt
     // Panier 100 % bijoux dont un en BOÎTE (colis) : jamais moins cher que le
     // même panier en lettre suivie → ajouter une boîte fait toujours monter le port.
     const lettre = bijouxOnly ? letterPriceByWeight(totalGrams, cfg.bijouxHome) : 0;
-    const price = Math.max(qtyPrice, homePriceByWeight(totalGrams), lettre);
+    // Cristal (03/11/2026) : plancher du colis à domicile (`portDomicileMini` des produits).
+    const price = Math.max(qtyPrice, homePriceByWeight(totalGrams), lettre, Number(portDomicileMini) || 0);
     options.push(rate(price, "Livraison à domicile", [2, 5]));
   }
   return options;
@@ -320,7 +321,7 @@ function homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQt
 
 const PICKUP_LABEL = "Retrait en main propre — Val-d'Oise (95), sur rendez-vous";
 
-export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "", express = false, bijouxOnly = false }) {
+export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, parcelQty = 0, glassQty = 0, pickupEligible = false, freeShipping = false, config, boxtal, deliveryMethod = "", relaisLabel = "", relaisCarrier = "", country = "", express = false, bijouxOnly = false, portDomicileMini = 0 }) {
   const cfg = resolveShippingConfig(config);
   const boxtalOn = Boolean(boxtal && boxtal.enabled);
   // Hors France (+ Monaco) : tarif Europe par zone/poids.
@@ -336,7 +337,7 @@ export function buildShippingOptions({ subtotal, letterOnly, totalGrams = 0, par
     }
     return europeOptions(zone, { letterOnly, totalGrams });
   }
-  const home = () => homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping, bijouxOnly });
+  const home = () => homeOptions(cfg, { subtotal, letterOnly, totalGrams, parcelQty, glassQty, freeShipping, bijouxOnly, portDomicileMini });
 
   // Bijoux (lettre suivie) : la livraison est offerte dès le seuil (45 €). Ce
   // seuil ne s'appliquait qu'à la livraison à DOMICILE — la cliente qui

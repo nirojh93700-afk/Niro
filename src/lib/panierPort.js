@@ -20,6 +20,9 @@ export function nouvelEtatPort() {
     // Sûr : ne s'applique que si TOUS les colis du panier portent freeShipThreshold.
     allColisThreshFree: true,
     colisThresh: Infinity,
+    // Plancher du port à DOMICILE (03/11/2026, gérant : « juste pour les cristal », « minimum 1,5 kg ») :
+    // un bloc de cristal part en colis calé, jamais moins de 9,90 € à domicile. Point relais inchangé.
+    portDomicileMini: 0,
   };
 }
 
@@ -43,6 +46,7 @@ export function ajouterLignePort(e, { product, unitGrams, unitPrice, quantity, p
   if (product.category === "verres") e.glassQty += quantity;
   if (!product.freeShipping) e.allFreeShip = false;
   if (!product.pickup) e.allPickup = false;
+  if (Number(product.portDomicileMini) > 0) e.portDomicileMini = Math.max(e.portDomicileMini || 0, Number(product.portDomicileMini));
 }
 
 // Options de livraison (format Stripe `shipping_options`) pour l'état accumulé.
@@ -53,6 +57,7 @@ export function optionsPort(e, { settings, deliveryMethod = "", relaisLabel = ""
   return buildShippingOptions({
     totalGrams: e.totalGrams, subtotal: paye, parcelQty: e.parcelQty, glassQty: e.glassQty, letterOnly: e.letterOnly,
     bijouxOnly: e.tousBijouxLettre, // bijou en boîte : jamais moins cher qu'en lettre
+    portDomicileMini: e.portDomicileMini || 0, // cristal : plancher du colis à domicile
     // Gratuité : produits toujours offerts, seuil des colis (verres…), ET la promesse bijoux
     // « offerte dès 45 € » — qui reste vraie même quand une boîte cadeau fait passer le bijou en petit colis.
     freeShipping: e.allFreeShip
