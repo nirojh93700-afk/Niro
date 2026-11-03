@@ -710,6 +710,8 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
   « Léa », mention « Exemple de gravure » à l'écran ; images dans `tools/video/assets46/`). Marque-pages bois : exemples m1 ex2/ex3/ex6, m2 ex3/ex5 ;
   métal : Amandier en fleurs et Iris (Van Gogh). Effets de la 41, habillage encre et or. 33,7 s, sans son, 1080 × 1920 (7,8 Mo) et
   720 × 1280 (2,5 Mo). Aucun prix.
+- Refaite le même soir (gérant : « mélange un peu… le verre, après bijoux… il faut que ça mélange ») : UN seul défilé de 13 produits,
+  familles alternées (verre, bijou, marque-page, verre, métal, bijou…), chaque produit TOMBE dans l'image avec un petit rebond.
 - Script : `python3 tools/video/pub_nouveautes_46.py <dossier>` (`--apercu`). Fichiers NON commités.
 
 **Vidéo 46 — Nos nouveautés, gravées pour vous** (Verre tumbler en cristal, Grand tumbler en cristal, Verre à cocktail, Gourmette à plaque gravée, Collier Quatre Mots, Marque-page en bois, Marque-page ajouré, Marque-page en métal)

@@ -68,11 +68,13 @@ def rebond(x):
     return 1 + 2.70158 * (x - 1) ** 3 + 1.70158 * (x - 1) ** 2
 
 def texte_centre(im, y, txt, font, fill, ombre=True, alpha=255):
+    if alpha <= 0: return  # Pillow dessine en plein un texte à transparence 0
     d = ImageDraw.Draw(im, "RGBA"); w = d.textlength(txt, font=font)
     if ombre: d.text(((W - w) / 2 + 3, y + 3), txt, font=font, fill=(0, 0, 0, int(alpha * 0.55)))
     d.text(((W - w) / 2, y), txt, font=font, fill=fill + (alpha,))
 
 def pilule(im, cx, y, txt, font, fond, coul, s=1.0, alpha=255):
+    if alpha <= 0: return
     d0 = ImageDraw.Draw(im); w = d0.textlength(txt, font=font); hh = font.size + 30
     pw, ph = int(w + 64), hh
     p = Image.new("RGBA", (pw, ph)); d = ImageDraw.Draw(p)
@@ -125,9 +127,14 @@ MP = [("marque-pages/m1/exemple-ex2.jpg", "Un cadre et un prénom"), ("marque-pa
       ("marque-pages/m2/exemple-ex5.jpg", "Un prénom et une photo")]
 C_VER = [(carte_auto(ph(f), 860), nom, pil) for f, nom, pil in VERRES]
 C_BIJ = [(carte_auto(im, CW), nom, pil) for im, nom, pil in BIJOUX]
-C_MP = [(carte_auto(rogne(ph(f)), 620, 1250), t) for f, t in MP]
-C_METAL = [carte_auto(ph("marque-pages/metal/01-amandier-en-fleurs-van-gogh.jpg"), 640), carte_auto(ph("marque-pages/metal/02-iris-van-gogh.jpg"), 640)]
+C_MP = [(carte_auto(rogne(ph(f)), 620, 1250), "Marque-page ajouré" if "/m2/" in f else "Marque-page en bois", t) for f, t in MP]
+C_METAL = [(carte_auto(ph("marque-pages/metal/01-amandier-en-fleurs-van-gogh.jpg"), 820), "Marque-page en métal", "L'Amandier en fleurs de Van Gogh"),
+           (carte_auto(ph("marque-pages/metal/02-iris-van-gogh.jpg"), 820), "Marque-page en métal", "Les Iris de Van Gogh")]
 C_AMB = carte_auto(ph("produits/verre_tumbler_37_ex_photo.jpg"), 780)
+# 03/11 (gérant : « mélange un peu… le verre, après bijoux… il faut que ça mélange ») : un seul défilé, les familles alternées,
+# chaque produit TOMBE dans l'image (chute + petit rebond), le précédent glisse vers le bas.
+MIX = [C_VER[0], C_BIJ[0], C_MP[0], C_VER[1], C_METAL[0], C_BIJ[1], C_VER[2], C_MP[3], C_VER[3], C_MP[2], C_METAL[1], C_VER[4], C_MP[4]]
+BIJ_IDS = {id(x) for x in C_BIJ}
 
 def s_intro(im, t, d):
     titre = ["Nos nouveautés,", "gravées pour vous"]
@@ -141,56 +148,28 @@ def s_intro(im, t, d):
         texte_centre(im, 1020, "à personnaliser", FT_SOUS, GOLD2, alpha=a)
     if t > 2.1: pilule(im, W / 2, 1160, "Gravé en France", FT_PIL, GOLD, ENCRE, s=rebond((t - 2.1) / 0.5))
 
-def s_verres(im, t, d):
-    pas = d / len(C_VER); i = min(len(C_VER) - 1, int(t / pas)); u = (t - i * pas) / pas
-    c, nom, pil = C_VER[i]
-    e = ease(u / 0.28)
-    if e < 1:
-        x = c.resize((max(2, int(c.width * e)), c.height), Image.BILINEAR)
-        coller(im, x, W / 2, 980, rot=(1 - e) * 8)
-    else:
-        coller(im, c, W / 2 - 18 * (u - 0.28), 980, s=1 + 0.03 * (u - 0.28))
-    if i > 0 and u < 0.2:
-        coller(im, C_VER[i - 1][0], W / 2 - W * ease(u / 0.2), 980, alpha=1 - u / 0.2)
-    a = int(255 * ease((u - 0.2) / 0.2))
-    texte_centre(im, 250, nom, FT_NOM, CREAM, alpha=a)
-    pilule(im, W / 2, 1600, pil, FT_PIL, VERT, GOLD2, alpha=a)
+def chute(u):
+    """0 → 1 : tombe d'en haut puis rebondit un peu."""
+    u = max(0.0, min(1.0, u))
+    if u < 0.7: return (u / 0.7) ** 2
+    v = (u - 0.7) / 0.3
+    return 1 - 0.06 * math.sin(v * math.pi) * (1 - v)
 
-def s_bijoux(im, t, d):
-    pas = d / len(C_BIJ); i = min(len(C_BIJ) - 1, int(t / pas)); u = (t - i * pas) / pas
-    c, nom, pil = C_BIJ[i]
-    e = ease(u / 0.28)
-    if e < 1:
-        x = c.resize((max(2, int(c.width * e)), c.height), Image.BILINEAR)
-        coller(im, x, W / 2, 980, rot=(1 - e) * 8)
-    else:
-        coller(im, c, W / 2 - 18 * (u - 0.28), 980, s=1 + 0.03 * (u - 0.28))
-    if i > 0 and u < 0.2:
-        coller(im, C_BIJ[i - 1][0], W / 2 - W * ease(u / 0.2), 980, alpha=1 - u / 0.2)
-    a = int(255 * ease((u - 0.2) / 0.2))
-    texte_centre(im, 250, nom, FT_NOM, CREAM, alpha=a)
-    pilule(im, W / 2, 1600, pil, FT_PIL, VERT, GOLD2, alpha=a)
-    texte_centre(im, 1720, "Exemple de gravure", FT_PETIT, GOLD2, alpha=int(a * 0.8))
-
-def s_marque_pages(im, t, d):
-    texte_centre(im, 200, "Nos marque-pages en bois", FT_NOM, CREAM)
-    pas = d / len(C_MP); i = min(len(C_MP) - 1, int(t / pas)); u = (t - i * pas) / pas
-    cx, cy = W / 2, 980
-    if i > 0 and u < 0.25:
-        coller(im, C_MP[i - 1][0], cx, cy, alpha=1 - u / 0.25)
-        coller(im, C_MP[i][0], cx, cy, s=0.94 + 0.06 * ease(u / 0.25), alpha=u / 0.25)
-    else:
-        coller(im, C_MP[i][0], cx, cy, s=1.0 + 0.02 * u)
-    pilule(im, W / 2, 1660, C_MP[i][1], FT_PIL, BRUN, CREAM, s=rebond(min(1, u / 0.3)))
-
-def s_metal(im, t, d):
-    e = ease(t / 0.8)
-    coller(im, C_METAL[0], -400 + (W / 2 - 190 + 400) * e, 900, rot=-4 * e)
-    coller(im, C_METAL[1], W + 400 - (W + 400 - (W / 2 + 190)) * e, 1080, rot=4 * e)
-    a = int(255 * ease((t - 0.6) / 0.5))
-    texte_centre(im, 260, "Et en métal", FT_NOM, CREAM, alpha=a)
-    texte_centre(im, 345, "Les tableaux de Van Gogh", FT_NOM, GOLD2, alpha=a)
-    texte_centre(im, 1560, "Amandier en fleurs, Iris : pour garder sa page", FT_PETIT, GOLD2, alpha=int(255 * ease((t - 1.2) / 0.5)))
+def s_mix(im, t, d):
+    pas = d / len(MIX); i = min(len(MIX) - 1, int(t / pas)); u = (t - i * pas) / pas
+    c, nom, pil = MIX[i]
+    cy = 960
+    if i > 0 and u < 0.3:  # le précédent part vers le bas
+        cp = MIX[i - 1][0]; k = ease(u / 0.3)
+        coller(im, cp, W / 2, cy + 1400 * k, rot=-6 * k, alpha=1 - k)
+    e = chute(u / 0.32)
+    sens = -1 if i % 2 else 1
+    coller(im, c, W / 2, -900 + (cy + 900) * e, s=1 + 0.02 * max(0, u - 0.32), rot=sens * 7 * (1 - min(1, u / 0.32)))
+    a = int(255 * ease((u - 0.22) / 0.18))
+    texte_centre(im, 230, nom, FT_NOM, CREAM, alpha=a)
+    col = VERT if id(MIX[i]) in BIJ_IDS else (BRUN if "Marque" in nom else ROSE)
+    pilule(im, W / 2, 1640, pil, FT_PIL, col, GOLD2 if col == VERT else CREAM, s=rebond(max(0, (u - 0.25) / 0.3)), alpha=a)
+    if id(MIX[i]) in BIJ_IDS: texte_centre(im, 1760, "Exemple de gravure", FT_PETIT, GOLD2, alpha=int(a * 0.8))
 
 TAMPONS = [("Gravé à la commande", ROSE), ("Dans notre atelier", VERT), ("Un cadeau unique", (120, 88, 30))]
 def s_tampons(im, t, d):
@@ -209,7 +188,7 @@ def s_fin(im, t, d):
     texte_centre(im, 1330, "NiV CRÉATION", FT_MARQUE, GOLD2, alpha=int(200 * ease((t - 1.2) / 0.5)))
     texte_centre(im, 1410, "Gravé en France", FT_PETIT, CREAM, alpha=int(200 * ease((t - 1.4) / 0.5)))
 
-SCENES = [(3.2, s_intro), (9.0, s_verres), (5.0, s_bijoux), (6.5, s_marque_pages), (3.6, s_metal), (2.8, s_tampons), (3.6, s_fin)]
+SCENES = [(3.2, s_intro), (24.0, s_mix), (2.8, s_tampons), (3.6, s_fin)]
 
 def main():
     total = sum(d for d, _ in SCENES); nf = int(total * FPS)
@@ -240,7 +219,7 @@ def main():
 
 if __name__ == "__main__":
     if len(sys.argv) > 2 and sys.argv[2] == "--apercu":
-        for ts in [2.6, 4.5, 6.5, 9.0, 11.0, 13.5, 15.5, 19.0, 23.0, 26.5, 29.0, 32.5]:
+        for ts in [3.7, 4.0, 4.4, 6.0, 8.0, 10.0, 12.0, 13.6, 15.5, 17.4, 19.2, 21.0, 23.0, 24.8, 26.7, 29.0]:
             acc = 0
             for d, fn in SCENES:
                 if ts < acc + d: break
