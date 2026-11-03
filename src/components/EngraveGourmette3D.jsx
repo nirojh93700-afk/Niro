@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { noterLignes } from "@/lib/apercuLignes";
 
 // Aperçu 3D d'un bracelet à plaque gravée. Polyvalent :
 //  • band "chain"    → grosse chaîne (gourmette)
@@ -64,6 +65,13 @@ function layoutText(ctx, text, fontKey, maxW, maxH) {
   return null;
 }
 
+// Lignes de l'aperçu (Gestion : commandes passées avant l'enregistrement des lignes).
+export function lignesApercu(text, fontKey, { decor = "" } = {}) {
+  const ctx = document.createElement("canvas").getContext("2d");
+  const lay = layoutText(ctx, text, fontKey, decor === "butterfly" ? TEXW * 0.6 : TEXW * 0.84, TEXH * 0.7);
+  return lay ? lay.lines : null;
+}
+
 // Petit papillon (silhouette) dessiné dans la couleur de gravure.
 function drawButterfly(ctx, cx, cy, s, color) {
   ctx.save();
@@ -90,6 +98,7 @@ function plateCanvas(text, fontKey, fin, decor) {
     textCx = TEXW * 0.6; textMaxW = TEXW * 0.6;
   }
   const lay = layoutText(ctx, text, fontKey, textMaxW, TEXH * 0.7);
+  if (lay) noterLignes(text, lay.lines);
   if (lay) {
     ctx.font = fontSpec(fontKey, lay.size);
     const startY = TEXH / 2 - ((lay.lines.length - 1) * lay.lineH) / 2;

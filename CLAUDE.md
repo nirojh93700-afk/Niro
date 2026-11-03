@@ -9,6 +9,13 @@
   jamais sur un verre, une carafe, un cristal, un marque-page ni aucun autre produit, ni sur leur fiche, ni sur un devis, ni dans un mail.
   Un devis de verres ou de cristal = aucun emballage de Noël proposé. (Les DESSINS de Noël à graver sont une autre chose : verres, carafe, cristal.)
 
+## 📐 DISPOSITION DE L'APERÇU 3D ENREGISTRÉE AVEC LA COMMANDE — 03/11/2026 (commande 0QEIXDI5, Vanessa Gorgol : l'aperçu montrait « AXANDRE / MAXIM » sur deux lignes, l'atelier l'a lu côte à côte ; gérant : « il faut que ce soit comme le client veut, regarde les photos qu'il a envoyées ») — PRÉPARÉ, À POUSSER SUR SON MOT
+- Chaque aperçu 3D (plaque, enveloppe, médaillons livre / cœur, gourmette) note les lignes qu'il dessine (`noterLignes`, `src/lib/apercuLignes.js`) ;
+  à l'ajout au panier la fiche range `spec.apercuLignes = { recto: ["Axandre","Maxim"], … }`. Atelier : bloc « 📐 Disposition vue par la cliente
+  sur l'aperçu » dans `TableGravure` (`DispositionApercu.jsx` : fiche commande, page Atelier, fiche papier) ; ancienne commande = recalcul avec le
+  MÊME code que l'aperçu (`lignesApercu` exporté par chaque composant 3D). E-mail 🛎️ : tableau des lignes. ⛔ Avant de décrire une gravure au
+  gérant ou à une cliente : regarder l'aperçu / les photos de la cliente, jamais le seul texte tapé.
+
 ## 🌍 PAYS DE LIVRAISON DIT PARTOUT — 03/11/2026 (gérant, 1PCACXUM en Belgique : « heureusement que j'ai vu, sinon j'aurais pris un timbre pour la France… tu dois me dire pour quel pays c'est »)
 - `src/lib/paysLivraison.js` (`paysDeLaCommande`) : fiche imprimée (pays sous la réf. + encadré rouge « À ENVOYER EN BELGIQUE » en tête + ligne « Pays »),
   file de production (bandeau rouge dans le bloc 🚚), fiche commande (pastille rouge sur la ligne + bandeau), e-mail 🛎️ (objet « 🇧🇪 BELGIQUE · » + encadré).

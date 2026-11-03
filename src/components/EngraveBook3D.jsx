@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { noterLignes } from "@/lib/apercuLignes";
 import { drawMotifInBox, preloadMotifs } from "@/lib/motifDraw";
 
 // Aperçu 3D du médaillon LIVRE qui s'ouvre (forme rectangulaire).
@@ -63,6 +64,13 @@ function layoutText(ctx, text, fontKey, maxW, maxH) {
   return null;
 }
 
+// Lignes de l'aperçu (Gestion : commandes passées avant l'enregistrement des lignes).
+export function lignesApercu(text, fontKey) {
+  const ctx = document.createElement("canvas").getContext("2d");
+  const lay = layoutText(ctx, text, fontKey, TEXW * 0.74, TEXH * 0.72);
+  return lay ? lay.lines : null;
+}
+
 function drawPageFace(ctx, { text, motifVal, motifPos, fontKey, baseColor, ink, bevel }) {
   ctx.fillStyle = baseColor;
   ctx.fillRect(0, 0, TEXW, TEXH);
@@ -73,6 +81,7 @@ function drawPageFace(ctx, { text, motifVal, motifPos, fontKey, baseColor, ink, 
   const boxTop = TEXH * 0.14;
   const boxH = TEXH * 0.72;
   const lay = layoutText(ctx, text, fontKey, boxW, boxH);
+  if (lay) noterLignes(text, lay.lines);
   if (lay) {
     ctx.font = fontSpec(fontKey, lay.size);
     const cy = boxTop + boxH / 2;

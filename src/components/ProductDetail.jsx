@@ -29,6 +29,7 @@ import EngraveBook3D from "./EngraveBook3D";
 import EngraveEnvelope3D from "./EngraveEnvelope3D";
 import EngravePlate3D from "./EngravePlate3D";
 import EngraveGourmette3D from "./EngraveGourmette3D";
+import { lignesPourChamps } from "@/lib/apercuLignes";
 import Model3D from "./Model3D";
 import MotifPicker from "./MotifPicker";
 import LetteringPicker from "./LetteringPicker";
@@ -1194,6 +1195,8 @@ export default function ProductDetail({ product, realisations = [] }) {
       layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null, motifFond: motifLayoutFond || null, crystalText: crystalTextPos || null },
       // on évite de stocker deux fois le modèle (déjà dans "modele")
       fields: (() => { const { modele, ...rest } = fieldValues; return rest; })(),
+      // Lignes du texte telles que l'aperçu 3D les a montrées (« Axandre / Maxim ») : l'atelier grave pareil.
+      apercuLignes: any3d ? lignesPourChamps(fieldValues) : null,
       perGlass: perGlass ? syncedGlassConfigs() : null, // détail par verre (lot personnalisé)
       personalization: perGlass ? perGlassText(false) : [composition?.summary, buildPersonalization()].filter(Boolean).join(" · "),
       composition: composition || null, // configurateur gobelet (côté + motifs) pour l'atelier

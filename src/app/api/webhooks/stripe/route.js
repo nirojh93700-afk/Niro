@@ -440,6 +440,15 @@ export async function POST(req) {
           </div>
         </div>`;
     };
+    // Lignes du texte telles que l'aperçu 3D les a montrées (03/11/2026, 0QEIXDI5 : « Axandre / Maxim »).
+    const dispositionHtml = (it) => {
+      const al = it.apercuLignes;
+      if (!al || typeof al !== "object") return "";
+      const faces = Object.entries(al).filter(([, l]) => Array.isArray(l) && l.length > 1);
+      if (!faces.length) return "";
+      const rows = faces.map(([k, l]) => `<tr><td style="border:1px solid #d9cdb4;padding:4px 8px;font-weight:bold;width:30%;">${escapeHtml(k)}</td><td style="border:1px solid #d9cdb4;padding:4px 8px;font-size:16px;font-weight:bold;">${l.map((x) => escapeHtml(x)).join("<br>")}</td></tr>`).join("");
+      return `<p style="margin:8px 0 4px;color:#8a6d1f;font-weight:bold;">📐 Disposition vue par la cliente sur l'aperçu (ligne par ligne, centré)</p><table style="border-collapse:collapse;width:100%;font-size:14px;">${rows}</table>`;
+    };
     const persoBlocks = specItems.map((it) => {
       // Variante EXACTE (taille du verre à vin comprise) — 13/10/2026.
       let varTxt = it.variantTitle || "";
@@ -470,6 +479,7 @@ export async function POST(req) {
           <p style="margin:0 0 4px;"><strong>Emplacement :</strong> ${escapeHtml(emplacementDe(it))}</p>
           ${pol ? `<p style="margin:0 0 4px;"><strong>Police :</strong> ${escapeHtml(pol.label)}${pol.defaut ? " (police proposée, non changée par la cliente)" : ""}</p>` : ""}
           ${recap ? `<p style="margin:0;white-space:pre-line;">${escapeHtml(recap)}</p>` : ""}
+          ${dispositionHtml(it)}
         </div>`;
     }).join("");
     const persoSection = persoBlocks

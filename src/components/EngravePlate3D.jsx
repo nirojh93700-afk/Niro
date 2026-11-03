@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { noterLignes } from "@/lib/apercuLignes";
 // Aperçu 3D d'une plaque (dog tag) gravable RECTO / VERSO : texte et
 // PHOTO. La plaque se retourne pour montrer les deux faces ; la photo apparaît
 // sur la face choisie par la cliente. À titre indicatif.
@@ -77,8 +78,16 @@ function layoutText(ctx, text, fontKey, maxW, maxH) {
   return null;
 }
 
+// Lignes de l'aperçu (Gestion : commandes passées avant l'enregistrement des lignes).
+export function lignesApercu(text, fontKey, { avecPhoto = false } = {}) {
+  const ctx = document.createElement("canvas").getContext("2d");
+  const lay = layoutText(ctx, text, fontKey, TEXW * 0.8, avecPhoto ? TEXH * 0.28 : TEXH * 0.76);
+  return lay ? lay.lines : null;
+}
+
 function drawTextBlock(ctx, text, fontKey, top, h, ink) {
   const lay = layoutText(ctx, text, fontKey, TEXW * 0.8, h);
+  if (lay) noterLignes(text, lay.lines);
   if (!lay) return;
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
   ctx.font = fontSpec(fontKey, lay.size);

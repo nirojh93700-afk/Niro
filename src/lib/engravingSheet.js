@@ -15,6 +15,7 @@ import { eclaterParVerre } from "@/lib/orderSpec";
 import VarBadge from "@/components/admin/VarBadge";
 import { consignesGravure } from "@/lib/consignesGravure";
 import OubliesAtelier from "@/components/admin/OubliesAtelier";
+import DispositionApercu from "@/components/admin/DispositionApercu";
 
 // Champ affiché à la cliente pour cette commande (même règles que la fiche :
 // « afficher si tel choix » et « seulement pour telle option »).
@@ -212,6 +213,8 @@ export function TableGravure({ item, titre = true }) {
     <div style={{ marginBottom: 12 }}>
       {vide ? null : entete}
       {vide ? null : <Consignes item={item} />}
+      {/* Lignes du texte telles que l'aperçu 3D les a montrées à la cliente (03/11/2026, 0QEIXDI5). */}
+      <DispositionApercu item={item} />
       {/* Filet de sécurité : tout choix de la cliente non affiché ci-dessus (controleAtelier.js). */}
       <OubliesAtelier item={item} />
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { noterLignes } from "@/lib/apercuLignes";
 
 // Aperçu 3D du médaillon cœur qui s'ouvre COMME UN LIVRE (8 faces gravables).
 // Charnière sur le côté ; 4 feuillets (recto-verso) dont on tourne les pages une
@@ -80,6 +81,13 @@ function layoutText(ctx, text, fontKey, maxW, maxH) {
   return null;
 }
 
+// Lignes de l'aperçu (Gestion : commandes passées avant l'enregistrement des lignes).
+export function lignesApercu(text, fontKey, { avecPhoto = false } = {}) {
+  const ctx = document.createElement("canvas").getContext("2d");
+  const lay = layoutText(ctx, text, fontKey, TEXW * 0.66, avecPhoto ? TEXH * 0.2 : TEXH * 0.5);
+  return lay ? lay.lines : null;
+}
+
 function drawHeartFace(ctx, { text, fontKey, baseColor, ink, photo, bevel }) {
   ctx.fillStyle = baseColor;
   ctx.fillRect(0, 0, TEXW, TEXH);
@@ -103,6 +111,7 @@ function drawHeartFace(ctx, { text, fontKey, baseColor, ink, photo, bevel }) {
   const boxTop = photo ? TEXH * 0.66 : TEXH * 0.14;
   const boxH = photo ? TEXH * 0.2 : TEXH * 0.5;
   const lay = layoutText(ctx, text, fontKey, boxW, boxH);
+  if (lay) noterLignes(text, lay.lines);
   if (lay) {
     ctx.font = fontSpec(fontKey, lay.size);
     const cy = boxTop + boxH / 2;
