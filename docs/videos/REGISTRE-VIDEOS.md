@@ -702,3 +702,19 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #bijougrave #marquepage #cadeaupersonnalise #ideecadeau
+
+## Vidéo 46 — Nos nouveautés : verres, bijoux, marque-pages (03/11/2026)
+- Demande du gérant : « une vidéo avec des nouveaux produits, pas les mêmes photos, pas de déco ni mariage, juste les verres, marque-pages,
+  bijoux, surtout pas les mêmes bijoux, les nouveaux ». Verres tumbler (37 et 39 cl) et cocktail : exemples gravés du site jamais passés en
+  vidéo. Bijoux NOUVEAUX : Gourmette à plaque et Collier Quatre Mots — photos fournisseur VIERGES, prénom d'EXEMPLE posé dessus (« Léo »,
+  « Léa », mention « Exemple de gravure » à l'écran ; images dans `tools/video/assets46/`). Marque-pages bois : exemples m1 ex2/ex3/ex6, m2 ex3/ex5 ;
+  métal : Amandier en fleurs et Iris (Van Gogh). Effets de la 41, habillage encre et or. 33,7 s, sans son, 1080 × 1920 (7,8 Mo) et
+  720 × 1280 (2,5 Mo). Aucun prix.
+- Script : `python3 tools/video/pub_nouveautes_46.py <dossier>` (`--apercu`). Fichiers NON commités.
+
+**Vidéo 46 — Nos nouveautés, gravées pour vous** (Verre tumbler en cristal, Grand tumbler en cristal, Verre à cocktail, Gourmette à plaque gravée, Collier Quatre Mots, Marque-page en bois, Marque-page ajouré, Marque-page en métal)
+> 🆕 Nouveau dans notre atelier : des verres en cristal, une gourmette à plaque, un collier à quatre faces et nos marque-pages ✨
+> Un prénom, une photo, un dessin… on grave ce que vous voulez 💛
+> 👉 nivcreation.fr
+
+#nivcreation #nouveaute #cadeaupersonnalise #gravure #ideecadeau
