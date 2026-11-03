@@ -197,31 +197,24 @@ function expressRate(grams) {
 }
 
 // -----------------------------------------------------------------------------
-// LIVRAISON EUROPE (hors France) — par ZONE et par POIDS réel.
-// Tarifs relevés le 06/07/2026 sur les grilles Colissimo International (Zone A/B)
-// + Lettre suivie internationale pour les petits objets, avec marge → la cliente
-// ne perd JAMAIS d'argent. La France (+ Monaco) garde ses tarifs habituels.
-//   EU1 = Belgique, Luxembourg, Pays-Bas, Allemagne (proche)
-//   EU2 = Espagne, Italie, Portugal
-//   CH  = Suisse (hors UE : douane, plus cher)
+// LIVRAISON EUROPE (hors France) — par POIDS réel, UNE grille pour tous les pays.
+// Tarifs La Poste 2026 relus le 03/11/2026 (laposte.fr) : la lettre suivie
+// internationale et le Colissimo « UE et Suisse » ont le MÊME prix pour tous
+// ces pays. Coûts (Mon timbre en ligne / Colissimo) : lettre ≤100 g 7,50 ·
+// ≤250 g 14,09 · Colissimo ≤500 g 14,99 · 1 kg 19,39 · 2 kg 22,19 · 5 kg 28,59
+// · 10 kg 46,99 · 15 kg 67,99 · 30 kg 87,99. Prix cliente = coût + ~1,40 à 2 €
+// (gérant, 03/11 : « un peu plus »). Au-dessus de 250 g on envoie en Colissimo
+// (moins cher que la lettre suivie à 18,99 €).
+//   Zones gardées (EU1/EU2/CH) pour pouvoir les différencier plus tard.
 // -----------------------------------------------------------------------------
 const EU_ZONE_OF = { BE: "EU1", LU: "EU1", NL: "EU1", DE: "EU1", ES: "EU2", IT: "EU2", PT: "EU2", CH: "CH" };
-const EU_TIERS = {
-  // letter = petits objets (bijoux) en lettre suivie internationale (≤ 2 kg)
-  // parcel = colis (dès qu'il y a un objet plus gros/fragile)
-  EU1: {
-    letter: [[250, 6.9], [500, 9.9], [2000, 12.9]],
-    parcel: [[1000, 16.9], [2000, 22.9], [5000, 32.9], [10000, 46.9], [Infinity, 74.9]],
-  },
-  EU2: {
-    letter: [[250, 7.9], [500, 10.9], [2000, 14.9]],
-    parcel: [[1000, 18.9], [2000, 24.9], [5000, 36.9], [10000, 52.9], [Infinity, 84.9]],
-  },
-  CH: {
-    letter: [[250, 8.9], [500, 12.9], [2000, 17.9]],
-    parcel: [[1000, 22.9], [2000, 29.9], [5000, 44.9], [10000, 64.9], [Infinity, 99.9]],
-  },
+const EU_GRILLE = {
+  // letter = petits objets (bijoux) : lettre suivie jusqu'à 250 g, puis Colissimo
+  letter: [[100, 8.9], [250, 15.9], [500, 16.9], [1000, 20.9], [2000, 23.9]],
+  // parcel = colis Colissimo international
+  parcel: [[500, 16.9], [1000, 20.9], [2000, 23.9], [5000, 30.9], [10000, 48.9], [15000, 69.9], [Infinity, 89.9]],
 };
+const EU_TIERS = { EU1: EU_GRILLE, EU2: EU_GRILLE, CH: EU_GRILLE };
 
 // POINT RELAIS EUROPE (Mondial Relay). Seuls ces pays ont des points relais
 // Mondial Relay (l'Allemagne et la Suisse = domicile uniquement). Grille par
@@ -262,10 +255,13 @@ export function relaisPointPrice(grams, carrierCode, country = "FR") {
 }
 
 // Option de livraison Europe : un seul tarif « à domicile », au poids réel.
-function europeOptions(zoneKey, { letterOnly, totalGrams }) {
+export function europeHomePrice(grams, letterOnly = false, zoneKey = "EU1") {
   const z = EU_TIERS[zoneKey] || EU_TIERS.EU1;
-  const grid = letterOnly && totalGrams <= 2000 ? z.letter : z.parcel;
-  return [rate(tierByGrams(grid, totalGrams), "Livraison en Europe — à domicile", [4, 8])];
+  const grid = letterOnly && grams <= 2000 ? z.letter : z.parcel;
+  return tierByGrams(grid, grams);
+}
+function europeOptions(zoneKey, { letterOnly, totalGrams }) {
+  return [rate(europeHomePrice(totalGrams, letterOnly, zoneKey), "Livraison en Europe — à domicile", [4, 8])];
 }
 
 function rate(amount, name, days) {

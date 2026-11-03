@@ -1,6 +1,6 @@
 import { getCatalog, priceFrom } from "@/lib/catalog";
 import { imageAbsolue, couleurProduit, sexeProduit } from "@/lib/productGoogle";
-import { letterPriceByWeight } from "@/lib/shipping";
+import { letterPriceByWeight, europeHomePrice } from "@/lib/shipping";
 
 export const dynamic = "force-dynamic";
 
@@ -40,8 +40,7 @@ function portFR(p) {
 function portEU1(p) {
   if (p.freeShipping) return 0;
   const w = poidsProduit(p);
-  if (p.letter) return w <= 250 ? 6.9 : w <= 500 ? 9.9 : 12.9;        // lettre suivie EU1
-  return w <= 1000 ? 16.9 : w <= 2000 ? 22.9 : w <= 5000 ? 32.9 : w <= 10000 ? 46.9 : 74.9; // colis EU1
+  return europeHomePrice(w, Boolean(p.letter)); // même grille que le paiement
 }
 
 // Blocs de livraison du produit pour les 3 pays diffusés (FR, BE, LU).
