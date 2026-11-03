@@ -35,6 +35,12 @@ const MARGE = 10;                 // marge d'impression (doit égaler @page)
 // n'insiste plus : mieux vaut une deuxième feuille qu'un texte de 5 pt.
 const ECHELLES = [1, 0.97, 0.94, 0.91, 0.88, 0.85, 0.82, 0.79, 0.76, 0.75];
 const PLANCHER = 0.75;
+// 03/11/2026, gérant : « je veux que ça fasse une page, tout concentré dessus » (devis sortis sur
+// 3-4 pages). Avant de descendre sous PLANCHER, on retire ce qui se relit ailleurs (niveau 1 :
+// détail des articles et du prix ; niveau 2 : e-mails plus anciens que le dernier). Si ça ne
+// suffit toujours pas, l'échelle continue de descendre jusqu'à ce que la fiche tienne : UNE page.
+const NIVEAUX = [1, 2];
+const ECHELLES_SECOURS = [0.72, 0.69, 0.66, 0.63, 0.6, 0.57, 0.54, 0.51, 0.48, 0.45, 0.42, 0.4];
 // Tailles d'essai des visuels, de la plus grande à la plus petite : à échelle
 // égale on préfère rapetisser une photo plutôt que le texte.
 const VISUELS = [1, 0.85, 0.72, 0.6, 0.45];
@@ -75,7 +81,13 @@ function tient(el, { vis = 1, echelle = 1, texte = 1 }) {
   return Boolean(h) && h * echelle <= HAUTEUR_UTILE_PX * 0.99;
 }
 
+function reduire(el, niveau) {
+  el.classList.toggle("fp-reduit-1", niveau >= 1);
+  el.classList.toggle("fp-reduit-2", niveau >= 2);
+}
+
 function poser(el, r) {
+  reduire(el, r.niveau || 0);
   el.style.setProperty("--fp-vis", String(r.visuels));
   el.style.setProperty("--fp-k", String(r.texte));
   el.style.setProperty("--impr-echelle", String(r.echelle));
@@ -85,24 +97,37 @@ function poser(el, r) {
 /** Règle la feuille pour qu'elle tienne sur une page, la plus lisible possible.
  *  Les réglages restent posés sur l'élément : c'est ce que l'impression utilise. */
 export function reglerPourUnePage(el) {
-  if (!el) return { echelle: 1, visuels: 1, texte: 1 };
+  if (!el) return { echelle: 1, visuels: 1, texte: 1, niveau: 0 };
   document.body.classList.add("impression-mesure");
   try {
+    reduire(el, 0);
     // 1. La page a de la place ? On agrandit le texte (photos et colonnes
     //    inchangées) jusqu'à la remplir.
     for (const texte of TEXTES) {
-      if (tient(el, { texte })) return poser(el, { echelle: 1, visuels: 1, texte });
+      if (tient(el, { texte })) return poser(el, { echelle: 1, visuels: 1, texte, niveau: 0 });
     }
     // 2. Sinon, on descend l'échelle cran par cran ; à chaque cran, la plus
     //    grande taille de photos qui fait tenir la feuille.
-    for (const echelle of ECHELLES) {
-      for (const vis of VISUELS) {
-        if (tient(el, { vis, echelle })) return poser(el, { echelle, visuels: vis, texte: 1 });
+    const essayer = (echelles, niveau) => {
+      reduire(el, niveau);
+      for (const echelle of echelles) {
+        for (const vis of VISUELS) {
+          if (tient(el, { vis, echelle })) return poser(el, { echelle, visuels: vis, texte: 1, niveau });
+        }
       }
+      return null;
+    };
+    const r0 = essayer(ECHELLES, 0);
+    if (r0) return r0;
+    // 3. On retire ce qui se relit ailleurs, puis on réessaie au même plancher.
+    for (const niveau of NIVEAUX) {
+      const r = essayer(ECHELLES, niveau);
+      if (r) return r;
     }
-    // 3. Rien ne tient, même au plancher : on garde le plancher lisible et la
-    //    fiche passera sur une deuxième feuille.
-    return poser(el, { echelle: PLANCHER, visuels: 0.45, texte: 1 });
+    // 4. Toujours trop long : on continue de réduire, la fiche reste sur UNE page.
+    const r4 = essayer(ECHELLES_SECOURS, 2);
+    if (r4) return r4;
+    return poser(el, { echelle: ECHELLES_SECOURS[ECHELLES_SECOURS.length - 1], visuels: 0.45, texte: 1, niveau: 2 });
   } finally {
     document.body.classList.remove("impression-mesure");
   }
@@ -127,11 +152,7 @@ export function imprimerFiche({ attenteMaxMs = 8000 } = {}) {
     }
 
     const { echelle } = reglerPourUnePage(zone);
-    if (echelle <= PLANCHER) {
-      console.warn(
-        "[impression] Fiche très chargée : gardée au minimum lisible (" +
-        Math.round(PLANCHER * 100) + " %). Elle peut prendre une deuxième feuille.");
-    }
+    if (echelle < PLANCHER) console.warn("[impression] Fiche très chargée : réduite à " + Math.round(echelle * 100) + " % pour tenir sur une page.");
 
     document.body.classList.add("impression-fiche");
     window.print();
@@ -140,6 +161,7 @@ export function imprimerFiche({ attenteMaxMs = 8000 } = {}) {
       zone.style.removeProperty("--impr-echelle");
       zone.style.removeProperty("--fp-vis");
       zone.style.removeProperty("--fp-k");
+      zone.classList.remove("fp-reduit-1", "fp-reduit-2");
     }, 300);
   };
 

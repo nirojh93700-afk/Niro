@@ -78,23 +78,48 @@ ${grille ? `<div class="fp-visuels">${Array.from({ length: nbArticles }, (_, i) 
 <footer class="fp-pied"><span>Niv Création — fiche interne.</span><span>#TEST1234</span></footer></div>`;
 }
 
+// Devis chargé (03/11/2026, fiches de devis sorties sur 3-4 pages) : demande longue, 3 e-mails,
+// 3 pièces avec fichier, articles détaillés, note interne, photo envoyée.
+function feuilleDevis() {
+  const long = "Bonjour, je me permets de vous contacter pour une demande assez urgente. ".repeat(6);
+  const mails = [1, 2, 3].map((i) => `<div ${i > 1 ? 'data-fp-niveau="2"' : ""} style="padding:6px 0;border-top:1px dashed #e3d3a5"><div style="font-size:0.78rem">0${i}/11/2026</div><div style="font-size:0.85rem;white-space:pre-line">${long.slice(0, 400)}…</div></div>`).join("");
+  const piece = (i) => `<div class="fd-carte" style="border:1px solid #c9a24b;border-radius:8px;margin:0 0 8px"><div style="padding:4px 10px;font-weight:800">Pièce ${i} / 3 · Quantité : 2</div><div style="display:flex;gap:10px;padding:8px"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACwAAAAAAQABAAACAkQBADs=" style="width:150px;height:96px;background:#ddd"><table style="width:100%;font-size:0.95rem"><tbody>${["Pièce","Quantité","Texte à graver","Police","Emplacement","Emballage"].map((k) => `<tr><td style="border:1px solid #999;padding:6px 10px;width:38%">${k}</td><td style="border:1px solid #999;padding:6px 10px">Valeur de la pièce</td></tr>`).join("")}</tbody></table></div></div>`;
+  const arts = [1, 2, 3, 4].map((i) => `<tr><td><strong>1× Ligne de devis ${i}</strong><div class="fp-detail" data-fp-niveau="1">${long.slice(0, 220)}</div></td><td class="fp-prix">36,90 €</td></tr>`).join("");
+  return `<div class="zone-impression">
+<header class="fp-tete"><div><h2>Fiche atelier — à graver à l'identique</h2><p class="fp-sous">02/11/2026 · devis DEV-1530 · Niv Création</p></div><div class="fp-ref"><b>#TESTDEVI</b>À préparer · 51,80 €</div></header>
+<div class="fp-corps"><div class="fp-col">
+<div class="fp-encadre"><strong>📋 Devis DEV-1530 — ce que la cliente a demandé</strong><div class="fp-pre">${long}</div></div>
+<div class="fp-encadre"><div style="font-weight:700">✉️ Ce que la cliente a écrit par e-mail</div>${mails}</div>
+<section class="fp-bloc fp-graver"><h3>À graver — commande sur devis</h3><div class="fd-devis"><div style="padding:8px 12px;font-weight:700">⚠️ 6 pièces à fabriquer</div>${[1, 2, 3].map(piece).join("")}</div></section>
+<section class="fp-bloc"><h3>Articles</h3><table class="fp-table fp-articles"><tbody>${arts}</tbody></table></section>
+<section class="fp-bloc"><h3>Client &amp; livraison</h3><table class="fp-table"><tbody><tr><td class="fp-cle">Cliente</td><td>Prénom NOM</td></tr><tr><td class="fp-cle">Livrer à</td><td>Hôtel, 35 rue Jean Goujon, 75008 Paris</td></tr><tr><td class="fp-cle">Mode</td><td>Express Chronopost</td></tr></tbody></table></section>
+<section class="fp-bloc" data-fp-niveau="1"><h3>Détail du prix</h3><table class="fp-table fp-argent"><tbody><tr><td class="fp-cle">Sous-total</td><td>36,90 €</td></tr><tr class="fp-total"><td class="fp-cle">Total payé</td><td>51,80 €</td></tr></tbody></table></section>
+<section class="fp-bloc"><h3>Note interne</h3><div class="fp-pre">${long.slice(0, 300)}</div></section>
+</div><div class="fp-col"><div class="fp-photos"><figure style="width:320px"><div style="width:100%;height:260px;background:#ccc"></div><figcaption>photo.jpg</figcaption></figure></div></div></div>
+<footer class="fp-pied"><span>Niv Création — fiche interne.</span><span>#TESTDEVI</span></footer></div>`;
+}
+
 // Copie fidèle de l'algorithme de src/lib/impression.js, joué dans la page.
 const ALGO = `(() => {
   const L = ${L}, H = ${H}, PLANCHER = 0.75, ECHELLES = [1, 0.97, 0.94, 0.91, 0.88, 0.85, 0.82, 0.79, 0.76, 0.75],
-    VISUELS = [1, 0.85, 0.72, 0.6, 0.45], TEXTES = [1.35, 1.28, 1.2, 1.12, 1.06];
+    VISUELS = [1, 0.85, 0.72, 0.6, 0.45], TEXTES = [1.35, 1.28, 1.2, 1.12, 1.06],
+    SECOURS = [0.72, 0.69, 0.66, 0.63, 0.6, 0.57, 0.54, 0.51, 0.48, 0.45, 0.42, 0.4];
   const el = document.querySelector(".zone-impression");
+  const reduire = (n) => { el.classList.toggle("fp-reduit-1", n >= 1); el.classList.toggle("fp-reduit-2", n >= 2); };
   const hauteurA = (w) => { const a = el.getAttribute("style") || "";
     el.setAttribute("style", a + ";width:" + Math.round(w) + "px;max-width:none;zoom:1;");
     const h = el.scrollHeight; el.setAttribute("style", a); return h; };
   const tient = ({ vis = 1, echelle = 1, texte = 1 }) => { el.style.setProperty("--fp-vis", String(vis)); el.style.setProperty("--fp-k", String(texte));
     const h = hauteurA(L / echelle); return Boolean(h) && h * echelle <= H * 0.99; };
-  const poser = (r) => { el.style.setProperty("--fp-vis", String(r.visuels)); el.style.setProperty("--fp-k", String(r.texte)); el.style.setProperty("--impr-echelle", String(r.echelle)); return r; };
+  const poser = (r) => { reduire(r.niveau || 0); el.style.setProperty("--fp-vis", String(r.visuels)); el.style.setProperty("--fp-k", String(r.texte)); el.style.setProperty("--impr-echelle", String(r.echelle)); return r; };
+  const essayer = (echs, niveau) => { reduire(niveau); for (const echelle of echs) for (const vis of VISUELS) if (tient({ vis, echelle })) return poser({ echelle, visuels: vis, texte: 1, niveau }); return null; };
   document.body.classList.add("impression-mesure");
   const mesurable = el.scrollHeight;
   let r = null;
-  for (const texte of TEXTES) { if (tient({ texte })) { r = poser({ echelle: 1, visuels: 1, texte }); break; } }
-  if (!r) for (const echelle of ECHELLES) { for (const vis of VISUELS) { if (tient({ vis, echelle })) { r = poser({ echelle, visuels: vis, texte: 1 }); break; } } if (r) break; }
-  if (!r) r = poser({ echelle: PLANCHER, visuels: 0.45, texte: 1 });
+  reduire(0);
+  for (const texte of TEXTES) { if (tient({ texte })) { r = poser({ echelle: 1, visuels: 1, texte, niveau: 0 }); break; } }
+  if (!r) r = essayer(ECHELLES, 0) || essayer(ECHELLES, 1) || essayer(ECHELLES, 2) || essayer(SECOURS, 2)
+    || poser({ echelle: 0.4, visuels: 0.45, texte: 1, niveau: 2 });
   document.body.classList.remove("impression-mesure");
   return { ...r, mesurable };
 })()`;
@@ -102,9 +127,11 @@ const ALGO = `(() => {
 const CAS = [
   { nom: "1 article", n: 1, lourd: false, attendu: { texte: 1.2 } },          // page courte : le texte grandit
   { nom: "2 articles", n: 2, lourd: true },
-  { nom: "3 articles", n: 3, lourd: true, grille: true, attendu: { echelle: 0.75 } },   // visuels sous le texte (FichePapier dès 3)
-  { nom: "4 verres", n: 4, lourd: true, grille: true, attendu: { echelle: 0.75 } },     // lot « chacun différent » × 2
+  { nom: "3 articles", n: 3, lourd: true, grille: true, attendu: { echelle: 0.5 } },   // visuels sous le texte (FichePapier dès 3)
+  { nom: "4 verres", n: 4, lourd: true, grille: true, attendu: { echelle: 0.45 } },     // lot « chacun différent » × 2 — une page depuis le 03/11
   { nom: "devis", n: 0, lourd: false, attendu: { texte: 1.35 } },
+  { nom: "devis chargé", devis: true },
+  { nom: "devis x2", devis: 2 },
 ];
 
 const css = cssDuSite();
@@ -117,7 +144,7 @@ for (const cas of CAS) {
   fs.writeFileSync(f, `<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <style>body{margin:0;font-family:Arial,Helvetica,sans-serif}</style><style>${css}</style></head>
 <body class="impression-fiche"><main><div class="ash">écran admin</div></main>
-${feuille(cas.n, cas.lourd, cas.grille)}</body></html>`);
+${cas.devis === 2 ? feuilleDevis().replace(/(<section class="fp-bloc fp-graver">)/, "$1" + feuilleDevis().match(/<section class="fp-bloc fp-graver">([\s\S]*?)<\/section>/)[1]) : cas.devis ? feuilleDevis() : feuille(cas.n, cas.lourd, cas.grille)}</body></html>`);
 
   const page = await nav.newPage({ viewport: { width: L, height: H } });
   const erreurs = [];
@@ -154,18 +181,18 @@ ${feuille(cas.n, cas.lourd, cas.grille)}</body></html>`);
   if (!r.mesurable) soucis.push("feuille NON MESURABLE (mise à l'échelle faussée)");
   if (vu.display === "none") soucis.push("MASQUÉE à l'impression");
   if (encre < 2) soucis.push(`FEUILLE BLANCHE (${encre} % d'encre)`);
-  if (pages !== 1 && !(r.echelle <= 0.75 && pages === 2)) soucis.push(`${pages} pages au lieu d'une`);
+  if (pages !== 1) soucis.push(`${pages} pages au lieu d'une`);
   if (erreurs.length) soucis.push("erreur JS : " + erreurs[0]);
   // « trop petit » (09/10/2026) : une fiche courte doit grandir, une fiche à 3-4 visuels rester lisible.
   if (cas.attendu?.texte && r.texte < cas.attendu.texte) soucis.push(`texte ${r.texte} < ${cas.attendu.texte} attendu`);
   if (cas.attendu?.echelle && r.echelle < cas.attendu.echelle) soucis.push(`échelle ${r.echelle} < ${cas.attendu.echelle} attendu (trop petit)`);
   if (soucis.length) ko++;
 
-  console.log(`${soucis.length ? "✗ ÉCHEC" : "✓ OK   "} ${cas.nom.padEnd(11)} texte ×${r.texte} · visuels ${r.visuels} · échelle ${r.echelle} · ${vu.hauteur}px · encre ${encre} % · ${pages} page${pages > 1 ? "s" : ""}${soucis.length ? "  → " + soucis.join(" · ") : ""}`);
+  console.log(`${soucis.length ? "✗ ÉCHEC" : "✓ OK   "} ${cas.nom.padEnd(13)} texte ×${r.texte} · visuels ${r.visuels} · échelle ${r.echelle} · réduit ${r.niveau || 0} · ${vu.hauteur}px · encre ${encre} % · ${pages} page${pages > 1 ? "s" : ""}${soucis.length ? "  → " + soucis.join(" · ") : ""}`);
   await page.close();
 }
 
 await nav.close();
 fs.rmSync(dossier, { recursive: true, force: true });
-console.log(ko ? `\n${ko} cas en défaut.` : "\nLes 5 fiches s'impriment sur UNE page, lisibles, avec de l'encre dessus.");
+console.log(ko ? `\n${ko} cas en défaut.` : `\nLes ${CAS.length} fiches s'impriment sur UNE page, avec de l'encre dessus.`);
 process.exit(ko ? 1 : 0);

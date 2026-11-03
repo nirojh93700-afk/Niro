@@ -16,6 +16,14 @@
 - Les images du site posées dans un e-mail (`/api/img/<id>`) sont gardées avec le message : `gmailGetMessage().images`, import du fil
   (`syncHistoriqueCommande`) + relecture une fois des messages déjà rangés (`batAjouterImages`, `imagesLu`), et `send-client-email` (`photos` dans `logComm`).
 
+## 🖨️ FICHE IMPRIMÉE = TOUJOURS UNE SEULE PAGE — 03/11/2026 (gérant : « quand c'est les devis, si j'ai encore quatre ou trois pages… je veux que ça fasse une page, tout concentré dessus »)
+- Remplace le plancher 0,75 + « deuxième feuille » du 09/10. `impression.js` : texte agrandi si la page a de la place ; sinon échelle 1 → 0,75 ;
+  puis on retire ce qui se relit ailleurs (niveau 1 : détail des lignes d'articles `.fp-detail`, « Détail du prix » ; niveau 2 : e-mails de la
+  cliente plus anciens que le dernier), attributs `data-fp-niveau` + classes `fp-reduit-1/2` ; puis l'échelle continue jusqu'à 0,40 : UNE page.
+- Pièces d'un devis serrées sur papier (`.fd-devis` / `.fd-carte` dans le bloc d'impression de globals.css) ; e-mails sans lignes vides.
+  Logos de signature des e-mails plus jamais pris pour des photos (`sansSignatures`, gmail.js : < 15 Ko ou même image jointe à plusieurs mails).
+- `npm run test-impression` : 7 fiches, toutes sur 1 page (devis chargé : 0,82 ; deux fois plus chargé : 0,60).
+
 ## 🛍️ DEVIS : EMBALLAGE CADEAU + AUTRES ARTICLES, PAYÉS ENSEMBLE AU PANIER — ✅ EN LIGNE LE 02/11/2026 (« Applique la maquette », https://claude.ai/artifact/Lo8LopW8uKma8KuAgriD6a, e74b0562)
 - Page `/document/<id>` (`DevisPanier.jsx`) : « Votre emballage » (les emballages de la fiche du produit principal du devis = 1re ligne rattachée à
   un `variantId`, + emballage de Noël replié), total mis à jour ; « Compléter votre commande » (6 articles du même rayon + un petit cadeau,

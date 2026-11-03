@@ -209,7 +209,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
                   <tr key={i}>
                     <td>
                       <strong>{it.quantity}× {it.name}</strong>
-                      {it.details ? <div className="fp-detail">{it.details}</div> : null}
+                      {it.details ? <div className="fp-detail" data-fp-niveau="1">{it.details}</div> : null}
                     </td>
                     <td className="fp-prix">{formatEuro(it.total)}</td>
                   </tr>
@@ -234,7 +234,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
           </section>
 
           {/* ------------------------ DÉTAIL DU PRIX ----------------------- */}
-          <section className="fp-bloc">
+          <section className="fp-bloc" data-fp-niveau="1">
             <h3>Détail du prix</h3>
             <table className="fp-table fp-argent">
               <tbody>

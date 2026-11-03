@@ -57,13 +57,13 @@ export default function MessagesEmail({ email, depuis, adminKey, print = false }
   return (
     <div className={print ? "fp-encadre" : undefined} style={print ? undefined : { margin: "8px 0", padding: "8px 10px", background: "#fff8e6", border: "1px solid #ecd9a6", borderRadius: 8 }}>
       <div style={{ fontWeight: 700, fontSize: "0.88rem", marginBottom: 4 }}>{titre}</div>
-      {montres.map((m) => (
-        <div key={m.messageId} style={{ padding: "6px 0", borderTop: "1px dashed #e3d3a5" }}>
+      {montres.map((m, i) => (
+        <div key={m.messageId} data-fp-niveau={print && i > 0 ? "2" : undefined} style={{ padding: "6px 0", borderTop: "1px dashed #e3d3a5" }}>
           <div style={{ fontSize: "0.78rem", color: "#7a6a3e", marginBottom: 2 }}>
             {dateFr(m.at)}{m.photos ? ` · ${m.photos} photo${m.photos > 1 ? "s" : ""} jointe${m.photos > 1 ? "s" : ""}` : ""}
           </div>
           {print
-            ? <div style={{ fontSize: "0.85rem", whiteSpace: "pre-line", overflowWrap: "anywhere" }}>{m.text.length > 400 ? `${m.text.slice(0, 400)}…` : m.text}</div>
+            ? <div style={{ fontSize: "0.85rem", whiteSpace: "pre-line", overflowWrap: "anywhere" }}>{(() => { const t = m.text.replace(/\n\s*\n+/g, "\n").trim(); return t.length > 400 ? `${t.slice(0, 400)}…` : t; })()}</div>
             : <MailBody text={m.text} />}
         </div>
       ))}

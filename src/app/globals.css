@@ -3152,6 +3152,23 @@ body.impression-mesure .zone-impression {
 .zone-impression button,
 .zone-impression .btn,
 .zone-impression details { display: none !important; }
+/* Fiche trop longue (03/11/2026, « une page, tout concentré dessus ») : impression.js retire
+   d'abord ce qui se relit ailleurs (niveau 1 puis 2) avant de réduire davantage. */
+.zone-impression.fp-reduit-1 [data-fp-niveau="1"],
+.zone-impression.fp-reduit-2 [data-fp-niveau="1"],
+.zone-impression.fp-reduit-2 [data-fp-niveau="2"] { display: none !important; }
+/* Pièces d'un devis sur papier : serrées (elles gardaient la taille de l'écran, 0,95 rem et
+   6 × 10 px de marge par case : 3 pièces = une demi-page). */
+.zone-impression .fd-devis { margin: 2pt 0 !important; }
+.zone-impression .fd-devis > div:first-child { padding: 3pt 6pt !important; margin: 0 0 4pt !important; font-size: calc(8.6pt * var(--fp-k, 1)) !important; }
+.zone-impression .fd-carte { margin: 0 0 4pt !important; }
+.zone-impression .fd-carte > div:first-child { padding: 1.5pt 6pt !important; font-size: calc(8.6pt * var(--fp-k, 1)) !important; }
+.zone-impression .fd-carte > div + div { padding: 3pt !important; gap: 6pt !important; }
+.zone-impression .fd-carte img { width: 90px !important; height: 60px !important; }
+.zone-impression .fd-carte a { font-size: calc(6.5pt * var(--fp-k, 1)) !important; }
+.zone-impression .fd-carte table { font-size: calc(8.8pt * var(--fp-k, 1)) !important; }
+.zone-impression .fd-carte td { padding: 1.2pt 5pt !important; }
+.zone-impression .fd-carte td + td { font-size: inherit !important; }
 
 /* --- en-tête --- */
 .zone-impression .fp-tete {
@@ -5516,3 +5533,4 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .bt-devis { margin: 8px auto; max-width: 520px; background: #fbf7ee; border: 1px dashed #c9a24b; border-radius: 10px; padding: 8px 12px; font-size: 0.84rem; color: #3a2e18; overflow-wrap: anywhere; }
 .bt-devis-l { color: #6b5a2e; font-size: 0.8rem; margin-top: 2px; }
 .bt-devis a { display: inline-block; margin-top: 4px; color: #7c6120; font-weight: 600; }
+
