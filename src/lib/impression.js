@@ -167,3 +167,5 @@ export function imprimerFiche({ attenteMaxMs = 8000 } = {}) {
 
   setTimeout(lancer, 250);
 }
+
+// Relance du déploiement (03/11/2026).
