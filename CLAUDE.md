@@ -9,6 +9,11 @@
   jamais sur un verre, une carafe, un cristal, un marque-page ni aucun autre produit, ni sur leur fiche, ni sur un devis, ni dans un mail.
   Un devis de verres ou de cristal = aucun emballage de Noël proposé. (Les DESSINS de Noël à graver sont une autre chose : verres, carafe, cristal.)
 
+## 💎 CRISTAL À DOMICILE = 9,90 € MINIMUM — ✅ EN LIGNE LE 03/11/2026 (gérant : « c'est minimum 1,5 kg », « juste pour les cristal »)
+- `portDomicileMini: 9.9` sur les blocs (vertical, horizontal, déjà gravé, pyramide, trophée) → `ajouterLignePort` / `optionsPort` / `homeOptions` :
+  le port à DOMICILE d'un panier qui contient un bloc ne descend jamais sous 9,90 € (Mondial Domicile 1–2 kg ≈ 8,71 € TTC). Relais, express,
+  livraison offerte, porte-clés et clé USB cristal : inchangés. Plus lourd (> 2 kg) : la grille par poids (14,90 €…) reste.
+
 ## 📐 DISPOSITION DE L'APERÇU 3D ENREGISTRÉE AVEC LA COMMANDE — 03/11/2026 (commande 0QEIXDI5, Vanessa Gorgol : l'aperçu montrait « AXANDRE / MAXIM » sur deux lignes, l'atelier l'a lu côte à côte ; gérant : « il faut que ce soit comme le client veut, regarde les photos qu'il a envoyées ») — PRÉPARÉ, À POUSSER SUR SON MOT
 - Chaque aperçu 3D (plaque, enveloppe, médaillons livre / cœur, gourmette) note les lignes qu'il dessine (`noterLignes`, `src/lib/apercuLignes.js`) ;
   à l'ajout au panier la fiche range `spec.apercuLignes = { recto: ["Axandre","Maxim"], … }`. Atelier : bloc « 📐 Disposition vue par la cliente
