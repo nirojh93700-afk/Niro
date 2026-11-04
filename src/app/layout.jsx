@@ -1,13 +1,9 @@
-import {
-  Playfair_Display,
-  Inter,
-  Cinzel,
-  Cinzel_Decorative,
-  Montserrat,
-  Great_Vibes,
-  Allura,
-  Pacifico,
-} from "next/font/google";
+// Polices HÉBERGÉES DANS LE SITE (src/app/fonts/, fichiers d'origine Google Fonts,
+// sous-ensemble latin, mêmes graisses qu'avant). Avant le 04/11/2026 elles étaient
+// téléchargées chez Google à CHAQUE construction (next/font/google) : quand Google
+// répondait mal, Firebase échouait (« An error occurred in next/font »), d'où les
+// « Build failed » au hasard depuis octobre. Plus aucun accès réseau au build.
+import localFont from "next/font/local";
 import "./globals.css";
 import "./univers.css";
 import "./univers-site.css";
@@ -33,27 +29,32 @@ import { CATEGORIES } from "@/lib/products";
 import { UNIVERS } from "@/lib/univers";
 import { LOGO_URL } from "@/lib/photosLocales";
 
-const display = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+const display = localFont({
+  src: [{ path: "./fonts/playfair-display-ef05b3.woff2", weight: "500 700", style: "normal" }],
   variable: "--font-display",
   display: "swap",
+  adjustFontFallback: "Times New Roman",
 });
 
-const body = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+const body = localFont({
+  src: [{ path: "./fonts/inter-260c81.woff2", weight: "400 700", style: "normal" }],
   variable: "--font-body",
   display: "swap",
 });
 
 // Polices de gravure (palette Niv Création).
-const cinzel = Cinzel({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-cinzel", display: "swap" });
-const cinzelDeco = Cinzel_Decorative({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-cinzel-deco", display: "swap" });
-const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-montserrat", display: "swap" });
-const greatVibes = Great_Vibes({ subsets: ["latin"], weight: ["400"], variable: "--font-great-vibes", display: "swap" });
-const allura = Allura({ subsets: ["latin"], weight: ["400"], variable: "--font-allura", display: "swap" });
-const pacifico = Pacifico({ subsets: ["latin"], weight: ["400"], variable: "--font-pacifico", display: "swap" });
+const cinzel = localFont({ src: [{ path: "./fonts/cinzel-e7ed1a.woff2", weight: "400 600", style: "normal" }], variable: "--font-cinzel", display: "swap", adjustFontFallback: "Times New Roman" });
+const cinzelDeco = localFont({
+  src: [
+    { path: "./fonts/cinzel-decorative-281359.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/cinzel-decorative-280e13.woff2", weight: "700", style: "normal" },
+  ],
+  variable: "--font-cinzel-deco", display: "swap", adjustFontFallback: "Times New Roman",
+});
+const montserrat = localFont({ src: [{ path: "./fonts/montserrat-311d35.woff2", weight: "400 600", style: "normal" }], variable: "--font-montserrat", display: "swap" });
+const greatVibes = localFont({ src: [{ path: "./fonts/great-vibes-51c0e8.woff2", weight: "400", style: "normal" }], variable: "--font-great-vibes", display: "swap" });
+const allura = localFont({ src: [{ path: "./fonts/allura-9ff526.woff2", weight: "400", style: "normal" }], variable: "--font-allura", display: "swap" });
+const pacifico = localFont({ src: [{ path: "./fonts/pacifico-d150e6.woff2", weight: "400", style: "normal" }], variable: "--font-pacifico", display: "swap" });
 
 const fontVars = [cinzel, cinzelDeco, montserrat, greatVibes, allura, pacifico]
   .map((f) => f.variable)
