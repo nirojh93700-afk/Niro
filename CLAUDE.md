@@ -1394,6 +1394,9 @@ n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même compo
   ⚠️ **Exception décidée par le gérant le 04/11/2026** : Agathe Barreau (agathebarreau61@gmail.com, devis **DEV-1541**, cristal horizontal Moyen,
   image « M ♥ A » + 2 lignes de texte, 64,90 € = 59,90 + texte 5 €) : « on lui enverra un aperçu avant la gravure » → promis dans le mail du 04/11.
   À sa commande : envoyer l'aperçu par le fil Aperçu / BAT AVANT de graver.
+  · 04/11 16 h : elle veut l'écriture CENTRÉE et la vague TOUT EN BAS À GAUCHE du cristal (son image n'est pas modifiée, seulement le placement)
+    + le socle lumineux → **DEV-1542 (84,80 € = 59,90 + texte 5 + socle 19,90) envoyé, DEV-1541 annulé**. Aperçu final à lui envoyer après paiement
+    (`docs/clients/agathe-barreau/apercu-v2-*.jpg` = placement demandé, pas encore envoyé).
   ⚠️ **Exception décidée par le gérant le 19/10/2026** : Aurélie (aurelie.persoo@hotmail.com, verre à cocktail, photo en couleur
   demandée → impossible, gravé blanc givré) : « on lui donnera un aperçu avant les gravures » → mail parti le 19/10 13 h 59 lui
   demandant sa photo et promettant l'aperçu. À sa commande : envoyer l'aperçu par le fil Aperçu / BAT AVANT de graver.
