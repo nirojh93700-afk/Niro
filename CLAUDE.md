@@ -966,6 +966,10 @@
   n'existe que s'il le décide lui-même, de sa propre initiative.
   **Et dans un mail de devis : JAMAIS les prix de livraison** (gérant, 04/11 : « je t'ai déjà dit, livraison tu laisses choisir le client sur
   le site ») : on donne le prix de l'article et de la gravure, la livraison se choisit sur le site au paiement, sans montant dans le mail.
+- ⛔ **DEVIS : TESTER QUE LA LIVRAISON SE CHOISIT AVANT DE LE MONTRER (04/11/2026, DEV-1537 de Stéphanie : la ligne « Préparation des
+  fichiers » sans poids bloquait le choix de la livraison, comme DEV-1531 ; gérant : « quand tu fais un truc, il faut que ça soit fonctionnel »)**.
+  Toute ligne de devis sans produit (`variantId`) porte un poids (`weight`, 1 g pour une ligne de service : gravure, préparation…), puis
+  `POST /api/quote-shipping {id}` doit répondre `actif:true` avant de montrer le devis ou le mail.
 - ⛔ **ADRESSE D'UN MAIL CLIENT = RELUE SUR LE SITE, JAMAIS RECOPIÉE DE L'AFFICHAGE GMAIL (04/11/2026, hôtel Villa Marquis : 3 mails
   envoyés à « chloefaussone@melia.com » au lieu de « chloe.faussone@melia.com », refusés, j'ai accusé à tort le serveur de l'hôtel ;
   gérant : « fais plus d'erreurs comme ça »)**. L'outil Gmail AFFICHE les adresses SANS LES POINTS (destinataires des mails envoyés) :
