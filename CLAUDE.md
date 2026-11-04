@@ -1034,6 +1034,9 @@
   « envoyé », relire le fil Gmail du message (`get_thread`) : un « Delivery Status Notification (Failure) » de mailer-daemon arrive dans le
   MÊME fil quelques secondes après. Adresse refusée = ne pas renvoyer (ça rebondira encore), ne jamais deviner une autre adresse : le dire au gérant. ⚠️ Le rebond peut arriver 10 s à 1 min APRÈS l'envoi (02/11 : vérifié trop tôt, annoncé « pas de rebond » à tort) : relire le fil ET chercher `from:mailer-daemon newer_than:1h` au moins une minute après.
 
+- ⛔ **DEMANDE DE RENSEIGNEMENTS SANS PRÉCISION = DEMANDER CE QU'ELLE VEUT SAVOIR, SANS PRIX NI CATALOGUE (gérant, 04/11/2026, Agathe Barreau,
+  « des renseignements pour une création en cristal » : « pourquoi tu mets des prix… il faut demander qu'est-ce qu'elle veut savoir, avec plaisir, sois poli »)**.
+  Réponse courte et polie : « Avec plaisir », puis lui demander ce qu'elle souhaite savoir / son projet. Aucun prix, aucune liste de produits tant qu'elle n'a rien précisé.
 - ⛔⛔ **TOUJOURS LE PRIX DU SITE, SANS DEMANDER (gérant, 04/11/2026, très ferme : « je t'ai déjà dit, faut toujours garder le prix du
   site… j'ai pas à répéter 10 000 fois »)**. Devis, mail, « meilleur tarif » demandé par une cliente : on donne le prix de la fiche en ligne
   (`node tools/prix-fiche.mjs`), jamais de remise ni de geste proposé, et on NE LUI DEMANDE PLUS s'il veut faire un geste. Un geste
