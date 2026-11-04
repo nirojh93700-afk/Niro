@@ -960,6 +960,11 @@
   « envoyé », relire le fil Gmail du message (`get_thread`) : un « Delivery Status Notification (Failure) » de mailer-daemon arrive dans le
   MÊME fil quelques secondes après. Adresse refusée = ne pas renvoyer (ça rebondira encore), ne jamais deviner une autre adresse : le dire au gérant. ⚠️ Le rebond peut arriver 10 s à 1 min APRÈS l'envoi (02/11 : vérifié trop tôt, annoncé « pas de rebond » à tort) : relire le fil ET chercher `from:mailer-daemon newer_than:1h` au moins une minute après.
 
+- ⛔ **ADRESSE D'UN MAIL CLIENT = RELUE SUR LE SITE, JAMAIS RECOPIÉE DE L'AFFICHAGE GMAIL (04/11/2026, hôtel Villa Marquis : 3 mails
+  envoyés à « chloefaussone@melia.com » au lieu de « chloe.faussone@melia.com », refusés, j'ai accusé à tort le serveur de l'hôtel ;
+  gérant : « fais plus d'erreurs comme ça »)**. L'outil Gmail AFFICHE les adresses SANS LES POINTS (destinataires des mails envoyés) :
+  ne jamais en copier une. L'adresse se prend dans la commande (`customerEmail`), le dossier (`/api/admin/comms`) ou la demande reçue
+  (`pending-replies` → `email`). Un rebond « 550 5.4.1 Recipient address rejected » = d'abord vérifier l'adresse tapée, pas le serveur.
 - ⛔ **ENTRETIEN : JAMAIS DE « LAVE-VAISSELLE » SUR LES BIJOUX NI SUR LE BOIS (gérant, 09/10/2026 soir : « depuis quand les gens
   mettent du bois dans le lave-vaisselle… pour les bijoux et les bois y a pas de lave-vaisselle »)**. Le lave-vaisselle ne se
   mentionne QUE pour ce qui peut y aller (verres gravés, couverts inox). Bois = « un coup de chiffon sec suffit ». Avant
