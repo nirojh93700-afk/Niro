@@ -43,6 +43,13 @@
 - S'il valide (« applique ») : page `/gestion/commande/<ref>` avec les mêmes API, rien supprimé de la fiche actuelle ; s'il veut un autre dosage
   (fiche en panneau à droite plutôt qu'en page, onglets, autre ordre des blocs), le dire en une phrase suffit.
 
+## 🗂️ MAQUETTE « FILE DE PRODUCTION » RÉORGANISÉE — 04/11/2026 — EN ATTENTE DE L'AVIS DU GÉRANT
+- https://claude.ai/artifact/3B7UPQuyWCkAXxSQ6Sf2rE (générateur `tools/maquettes/file-production.py`, coquille partagée
+  `tools/maquettes/gestion_coquille.py`). Détail dans CLAUDE.md (section du même nom). Même méthode que la fiche commande, sur sa demande.
+- S'il valide (« applique ») : `/gestion/commandes` refait avec les mêmes API (statuts, annotate, matériel, bat unread), vues en
+  onglets, date limite (`delaiCommande`) sur chaque carte, une grande action + menu, expédition confirmée dans la carte (jamais de
+  `prompt`), sélection + actions groupées (fiches, étiquettes, fabrication), « Tournée du jour ». Rien supprimé de la file actuelle.
+
 ## ⛳ REPRISE — ÉTAT AU 30/10/2026 SOIR (la conversation précédente est pleine : continuer ici, comme si de rien n'était)
 1. **Alissia (alissiarnd@hotmail.com) — cristal fée + Scorpion** : 2 mails envoyés par le site le 30/10 (le 2ᵉ avec l'aperçu
    filigrané INTÉGRÉ dans le mail). Tout est dans `docs/clients/alissia-fee-scorpion/` (dessin retenu = fée COURONNÉE, aperçus,

@@ -1,3 +1,31 @@
+## 🗂️ MAQUETTE « FILE DE PRODUCTION » DE GESTION RÉORGANISÉE — 04/11/2026 (gérant, après la fiche : « fais exactement ce que t'as fait pour l'autre maquette pour celui de cette page ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- **Artifact** https://claude.ai/artifact/3B7UPQuyWCkAXxSQ6Sf2rE · générateur `tools/maquettes/file-production.py <dossier css> <sortie>` (css = les
+  3 feuilles en ligne ; vraies classes `.ash-*`, seul `.fq-*` est neuf) · sortie `docs/maquettes/file-production.html` (684 Ko, ignorée par git) ·
+  **coquille partagée `tools/maquettes/gestion_coquille.py`** (icônes au trait, logo d'origine, barre latérale / barre du haut / sous-onglets /
+  onglets téléphone : `shell(...)`) — toute nouvelle maquette de Gestion part de là. 10 commandes d'EXEMPLE + 3 terminées.
+- **Inventaire de la file actuelle (`/gestion/commandes`)** : KPI, recherche, 3 colonnes (À préparer · En fabrication · Expédiées récentes) + `details`
+  terminées, ordre numéroté (urgentes puis FIFO), cartes longues (`DelaiCommande`, `DetailLivraison`, articles, `RatesCommande`, encadrés, chips,
+  note, `BlocConditionnement`, 5 boutons sur une ligne). Pas de tri, pas de filtre, pas de sélection, expédition par `prompt`, tout au même niveau.
+- **Ce que la maquette range (rien supprimé)** : chiffres du haut CLIQUABLES (à préparer · en fabrication · en retard · Express · réponses · expédiées)
+  → barre collée : **vues en onglets avec compteur** (Tout · À préparer · En fabrication · Expédiées · **Par date limite** (En retard / Demain /
+  Cette semaine / Parties) · Terminées) + recherche (`/`) + tri (ordre de traitement · date limite · récentes · montant) + filtres (Express · relais ·
+  cadeau · réponse · hors France · alerte) → PC : tableau 3 colonnes ; téléphone : une liste, KPI et filtres en rails qui glissent → **carte compacte** :
+  case à cocher, n° d'ordre, #réf (ouvre la fiche = artifact 43E3za7KKg1G87cSCtPowq), total · cliente · mode (Express en rouge, relais + point, retrait,
+  pays hors France en rouge) · pastilles d'alerte TOUJOURS visibles (Express priorité, pays, réponse cliente, cadeau promis, date dans l'image, alerte
+  interne, sur mesure + devis, photos par e-mail, e-mail corrigé) · articles avec ✍️ gravure · **« À expédier avant … »** coloré (rouge dépassé / orange
+  demain / or semaine ; expédiée = « en N j ouvrés · dans les temps · transporteur n° ») · étiquettes (flags) + chip Conditionnement (à faire / validé ·
+  gain) + note interne en ligne · **UNE grande action** (Commencer la fabrication → Expédier… → Livrée) + menu « ··· » (fiche, imprimer, étiquette,
+  conditionnement, raté, étiqueter, note, communications, copier l'e-mail, annuler avec confirmation EN LIGNE). Expédier = formulaire DANS la carte
+  (n° de suivi, transporteur reconnu, case « prévenir », rappel point relais / pays) ; chaque action = **toast « Annuler » 10 s**. Cases cochées →
+  **barre d'actions groupées** (imprimer les fiches · étiquettes · passer en fabrication) ; **« Tournée du jour »** = fiches + étiquettes des commandes à
+  préparer en un PDF ; terminées / annulées repliées en bas ; J / K / Entrée / X / « / » / « ? ».
+- Sources (Shopify vues + bulk, Etsy ship-by, Amazon onglets + confirmer l'expédition, kanban Dispatch / Katana, Sendcloud Pack & Go, Linear, Clispot)
+  dans le volet « D'où vient chaque idée » en bas. Vérifié Chromium 1280 / 390 : 0 erreur JS, 0 débordement, 6 vues, KPI-filtre, recherche, filtre, tri,
+  sélection + passage groupé en fabrication, menu, étiquettes, expédition + annulation (toast), note, confirmation d'annulation, J, « ? », tournée.
+- Au « applique » : `/gestion/commandes` refait avec les MÊMES API (`/api/admin/orders` statut / annotate, `/api/admin/materiel`, `/api/admin/bat?action=unread`),
+  `delaiCommande`, `RatesCommande`, `Conditionnement`, `DelaiCommande` réutilisés ; jamais de `prompt` / `confirm` ; une seule logique d'expédition
+  (n° + case « prévenir », partagée avec la fiche).
+
 ## 🗂️ MAQUETTE « FICHE COMMANDE » DE GESTION RÉORGANISÉE — 04/11/2026 (gérant : « la page commande c'est trop mélangé, rangé n'importe comment… aide-moi par étape… cherche dans les grands logiciels du monde entier et mélange le meilleur ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - **Artifact** https://claude.ai/artifact/43E3za7KKg1G87cSCtPowq · générateur `tools/maquettes/fiche-commande.py <dossier css> <sortie>` (css = les 3 feuilles
   en ligne, vraies classes `.ash-*` ; seul `.fc-*` est neuf) · sortie `docs/maquettes/fiche-commande.html` (872 Ko, ignorée par git). 3 commandes
