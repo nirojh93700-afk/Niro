@@ -466,6 +466,18 @@ En attente de SA décision :
   Poids estimé 380 g → lettre suivie 8,90 € / relais 4,90 € : À VÉRIFIER (pesée réelle).
 - Couvertures DESSINÉES dans la maquette : il faudra de vraies photos gravées avant la mise en ligne.
 
+## 🧭 MAQUETTE « MENU SUR UNE LIGNE » — ENREGISTRÉE LE 04/11/2026 (« on verra, tu enregistres, je verrai plus tard ») — RIEN en ligne
+- Aujourd'hui : 16 liens sur 2 lignes. Proposé : 11 liens sur UNE ligne (vérifié 1100 / 1280 / 1440 px) :
+  Boutique · Bijoux · 💎 Cristal Photo 3D · Verres & Carafes · Bébé & Enfant · Mariage · Maison & Déco · Marque-pages ·
+  Petits cadeaux · Offrir ▾ (Trouver un cadeau · Carte cadeau · Idées & conseils) · Promotions.
+  À propos et Contact → seulement dans le pied de page (déjà présents) ; « Mon compte » → l'icône personne en haut à droite.
+  Téléphone : même ordre, « Offrir » affiche ses 3 liens directement (pas de menu à ouvrir).
+- Captures refaites par `node tools/maquettes/menu-une-ligne.mjs` (remplace seulement le menu sur le site en ligne).
+  Au « applique » : `src/components/Header.jsx` (+ CSS `.mn-*`), logo / icônes / adresses inchangés.
+- Ses autres décisions de l'audit du 04/11 encore ouvertes : médiateur de la consommation (adhésion), bandeau cookies
+  pour Google Analytics (sa décision), nom + accroche du Bracelet Homme Tressé dans Gestion (« Cuir tressé » → « Tressé
+  aspect cuir », proposé, pas fait), fenêtres trop nombreuses sur téléphone (maquette à faire), 42 vieilles promos à supprimer.
+
 ## 🌐 www.nivcreation.fr — ÉTAPES REDONNÉES AU GÉRANT LE 04/11/2026 (audit externe)
 - État vérifié le 04/11 soir : `www` est encore un CNAME vers `exquisite-khapse-7af3a0.netlify.app` ; Netlify répond 404 avec un
   certificat invalide (l'ancien site a bien été supprimé : plus de mails en double). `nivcreation.fr` → Firebase, intact.
