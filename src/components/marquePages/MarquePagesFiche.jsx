@@ -297,6 +297,17 @@ function Editeur({ modele, v, onChange, owner, grille, setGrille, productSlug })
 // --- La fiche ------------------------------------------------------------------------------------------------------
 export default function MarquePagesFiche({ product, realisations = [] }) {
   const { addItem } = useCart();
+  // Statistiques « produit vu » : comme toutes les autres fiches (ProductDetail), 1 fois par produit et par visite.
+  useEffect(() => {
+    trackOnce("vi-" + product.slug, "view_item", { slug: product.slug });
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
+      window.gtag("event", "view_item", {
+        currency: "EUR",
+        value: product.variants?.[0]?.price || 0,
+        items: [{ item_id: product.slug, item_name: product.name, item_category: product.category }],
+      });
+    }
+  }, [product.slug]);
   const cfg = product.marquePages;
   const modele = cfg.modele;
   const gravure = Boolean(cfg.gravure);

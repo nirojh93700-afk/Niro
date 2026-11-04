@@ -121,6 +121,9 @@ export default function CristauxGraves({ prix = {}, noel = null, socles = null }
     return { visibles: new Set(v.map((x) => x.idx)), reste: list.length - v.length };
   }, [ITEMS, grp, fam, plus]);
 
+  // Statistiques « produit vu » : la fiche du cristal déjà gravé redirige ici, la visite se compte donc ici.
+  useEffect(() => { trackOnce("vi-" + CG_SLUG, "view_item", { slug: CG_SLUG }); }, []);
+
   useEffect(() => {
     if (!("IntersectionObserver" in window) || !panneau.current) return undefined;
     const io = new IntersectionObserver((e) => setBarOff(e[0].isIntersecting), { threshold: 0.15 });
