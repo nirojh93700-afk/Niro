@@ -36,7 +36,7 @@ export const FAQ = [
   },
   {
     q: "Les bijoux sont-ils hypoallergéniques ?",
-    a: "Oui : nos bijoux sont en acier inoxydable 316L (qualité chirurgicale), sans nickel, adapté aux peaux sensibles. Ils ne noircissent pas la peau et supportent la transpiration du quotidien.",
+    a: "Nos bijoux sont en acier inoxydable (316L ou 304 selon le modèle, précisé sur chaque fiche), l'acier utilisé en bijouterie, qui convient généralement aux peaux sensibles. Ils ne noircissent pas la peau et supportent la transpiration du quotidien. En cas d'allergie connue au nickel, écrivez-nous avant de commander : nous vous indiquerons la matière exacte du bijou.",
   },
   {
     q: "Comment entretenir ma gravure ?",

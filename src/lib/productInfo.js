@@ -92,7 +92,7 @@ export const productInfo = {
     material: `Acier inoxydable 316L hypoallergénique (acier chirurgical)
 
 Pourquoi le 316L
-- Sans nickel : ne provoque pas d'allergies, validé pour peaux sensibles.
+- Acier de bijouterie, qui convient généralement aux peaux sensibles.
 - Composition enrichie en molybdène : très bonne résistance à la corrosion et à la transpiration.
 - Matière de référence des bijoux en acier : garde son éclat avec un entretien simple.
 
@@ -132,7 +132,7 @@ Un souci à la réception ?
   "collier-medaillon-coeur-ouvrable": {
     material: `Acier inoxydable 316L hypoallergénique
 
-- Sans nickel : adapté aux peaux sensibles.
+- Acier de bijouterie, qui convient généralement aux peaux sensibles.
 - Médaillon cœur ouvrable, 5 faces gravables.
 - Chaîne 50 cm.
 - Finitions : Argent, Doré ou Bicolore (Or & Argent).
