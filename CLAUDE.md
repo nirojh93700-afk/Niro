@@ -1,4 +1,4 @@
-## 🗂️ FILE DE PRODUCTION + FICHE COMMANDE REFAITES DANS GESTION — 04/11/2026 (gérant : « tu peux intégrer les deux sur le site, réunis pas les deux ») — CONSTRUIT, TESTÉ, EN ATTENTE DE SON « POUSSE »
+## 🗂️ FILE DE PRODUCTION + FICHE COMMANDE REFAITES DANS GESTION — 04/11/2026 (gérant : « tu peux intégrer les deux sur le site, réunis pas les deux ») — ✅ EN LIGNE LE 04/11/2026 (fa50db13, déploiement réussi)
 - **Les deux maquettes sont reproduites dans le site, pages SÉPARÉES** : `/gestion/commandes` (file, refaite) et **`/gestion/commande/<réf>` (nouvelle fiche)**.
   `/gestion/fiches` (l'ancienne fiche complète) est GARDÉE telle quelle ; la file y renvoie plus (ses liens vont sur la nouvelle fiche), le sous-onglet reste.
 - **Code** : règles pures `src/lib/fileCommandes.js` (statuts, mode d'envoi, ordre de traitement, état de la date limite late / today / week / later / done,

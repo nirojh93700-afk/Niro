@@ -43,7 +43,7 @@
 - S'il valide (« applique ») : page `/gestion/commande/<ref>` avec les mêmes API, rien supprimé de la fiche actuelle ; s'il veut un autre dosage
   (fiche en panneau à droite plutôt qu'en page, onglets, autre ordre des blocs), le dire en une phrase suffit.
 
-## 🗂️ FILE DE PRODUCTION + FICHE COMMANDE REFAITES — 04/11/2026 — CONSTRUIT, EN ATTENTE DU « POUSSE »
+## 🗂️ FILE DE PRODUCTION + FICHE COMMANDE REFAITES — ✅ EN LIGNE LE 04/11/2026 (fa50db13)
 - Les deux maquettes sont intégrées au site en pages séparées (`/gestion/commandes` refaite, `/gestion/commande/<réf>` nouvelle), build OK, test navigateur
   OK, commit local. Rien en ligne tant qu'il ne dit pas « pousse » (12 commits locaux partiront avec : cagnotte `deplacerCagnotte`, règles, maquettes).
   Après le push : déplacer la cagnotte de Céline Naulin (`POST /api/admin/cagnottes {action:"deplacer", from:"naulinceline71@gmail.comn", to:"naulinceline71@gmail.com"}`).
