@@ -1034,6 +1034,9 @@
   « envoyé », relire le fil Gmail du message (`get_thread`) : un « Delivery Status Notification (Failure) » de mailer-daemon arrive dans le
   MÊME fil quelques secondes après. Adresse refusée = ne pas renvoyer (ça rebondira encore), ne jamais deviner une autre adresse : le dire au gérant. ⚠️ Le rebond peut arriver 10 s à 1 min APRÈS l'envoi (02/11 : vérifié trop tôt, annoncé « pas de rebond » à tort) : relire le fil ET chercher `from:mailer-daemon newer_than:1h` au moins une minute après.
 
+- ⛔ **« BONJOUR » OU « BONSOIR » SELON L'HEURE D'ENVOI (gérant, 04/11/2026 : « je t'ai déjà dit, il est l'après-midi, on dit pas bonjour »)** :
+  avant d'écrire un mail client, regarder l'heure de Paris (`TZ=Europe/Paris date`) : à partir de 18 h → « Bonsoir », avant → « Bonjour ».
+  Si le mail est programmé, c'est l'heure d'ENVOI qui compte.
 - ⛔ **DEMANDE DE RENSEIGNEMENTS SANS PRÉCISION = DEMANDER CE QU'ELLE VEUT SAVOIR, SANS PRIX NI CATALOGUE (gérant, 04/11/2026, Agathe Barreau,
   « des renseignements pour une création en cristal » : « pourquoi tu mets des prix… il faut demander qu'est-ce qu'elle veut savoir, avec plaisir, sois poli »)**.
   Réponse courte et polie : « Avec plaisir », puis lui demander ce qu'elle souhaite savoir / son projet. Aucun prix, aucune liste de produits tant qu'elle n'a rien précisé.
