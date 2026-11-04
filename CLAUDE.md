@@ -964,6 +964,8 @@
   site… j'ai pas à répéter 10 000 fois »)**. Devis, mail, « meilleur tarif » demandé par une cliente : on donne le prix de la fiche en ligne
   (`node tools/prix-fiche.mjs`), jamais de remise ni de geste proposé, et on NE LUI DEMANDE PLUS s'il veut faire un geste. Un geste
   n'existe que s'il le décide lui-même, de sa propre initiative.
+  **Et dans un mail de devis : JAMAIS les prix de livraison** (gérant, 04/11 : « je t'ai déjà dit, livraison tu laisses choisir le client sur
+  le site ») : on donne le prix de l'article et de la gravure, la livraison se choisit sur le site au paiement, sans montant dans le mail.
 - ⛔ **ADRESSE D'UN MAIL CLIENT = RELUE SUR LE SITE, JAMAIS RECOPIÉE DE L'AFFICHAGE GMAIL (04/11/2026, hôtel Villa Marquis : 3 mails
   envoyés à « chloefaussone@melia.com » au lieu de « chloe.faussone@melia.com », refusés, j'ai accusé à tort le serveur de l'hôtel ;
   gérant : « fais plus d'erreurs comme ça »)**. L'outil Gmail AFFICHE les adresses SANS LES POINTS (destinataires des mails envoyés) :
