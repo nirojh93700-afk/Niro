@@ -1,84 +1,31 @@
 "use client";
 
 // =============================================================================
-// FILE DE PRODUCTION — /gestion/commandes
-// -----------------------------------------------------------------------------
-// « Un truc propre, dans l'ordre, pour ne pas mélanger les commandes. »
-// Une carte compacte par commande, numérotée dans l'ordre de traitement
-// (urgentes d'abord, puis par date), rangée en 3 colonnes : À préparer ·
-// En fabrication · Expédiées récentes. Note interne + étiquettes par commande.
-// La fiche complète (adresse, prix détaillé, aperçu, fichiers) reste dans
-// Gestion → Commandes : bouton « Fiche complète → ».
+// FILE DE PRODUCTION — /gestion/commandes (refaite le 04/11/2026 d'après la maquette
+// validée https://claude.ai/artifact/3B7UPQuyWCkAXxSQ6Sf2rE, gérant : « c'est trop
+// mélangé… range par étape, prends le meilleur des grands logiciels »).
+// Chiffres du haut cliquables (filtres) · vues en onglets (Tout · À préparer · En
+// fabrication · Expédiées · Par date limite · Terminées) · recherche, tri, filtres ·
+// tableau à 3 colonnes sur ordinateur, une liste sur téléphone · cartes compactes
+// (CarteCommande) · cases à cocher → actions groupées · « Tournée du jour ».
+// Mêmes API qu'avant (/api/admin/orders statut + annotate, /api/admin/materiel,
+// /api/admin/bat?action=unread). Rien de la file d'avant n'est retiré.
 // =============================================================================
-
-import { paysDeLaCommande } from "@/lib/paysLivraison";
-import { lienSuivi } from "@/lib/suiviColis";
-import DelaiCommande from "@/components/admin/DelaiCommande";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import PageHead from "@/components/admin/PageHead";
-import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
+import dynamic from "next/dynamic";
+import Ic from "@/components/admin/IconesGestion";
+import CarteCommande from "@/components/admin/CarteCommande";
 import { chargerAvecCache } from "@/components/admin/adminCache";
-import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
-import { RatesCommande } from "@/components/admin/Rates";
-import VarBadge from "@/components/admin/VarBadge";
-import { modeEnvoi } from "@/lib/etiquettes";
+import FenetreConditionnement from "@/components/admin/Conditionnement";
+import { imprimerFiche } from "@/lib/impression";
+import { ACTIFS, FILTRES, TRIS, estActive, estPartie, estFinie, etatDelai, positions, passeFiltre, rechercheTexte, trier, statutInfo, estExpress, euro, dateFr, refDe, hrefFiche } from "@/lib/fileCommandes";
 
-const FLAGS = [
-  { id: "urgent", label: "🚨 Urgent" },
-  { id: "attend", label: "⏳ Accepte d'attendre" },
-  { id: "cadeau", label: "🎁 Cadeau promis" },
-  { id: "gravure_offerte", label: "🎨 Gravure offerte" },
-  { id: "attente_client", label: "❓ En attente du client" },
-  { id: "appel", label: "📞 À rappeler" },
-];
-const ACTIFS = new Set(["", "a_preparer", "en_gravure"]);
-const euro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ",") + " €";
+const FichePapier = dynamic(() => import("@/components/admin/FichePapier"), { ssr: false });
 
-// Jours du CALENDRIER à l'heure française (avant : tranches de 24 h depuis maintenant → une commande d'hier
-// soir regardée ce midi s'affichait « aujourd'hui » à côté de la date d'hier ; gérant, 12/10/2026).
-const JOUR_PARIS = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" });
-const numJour = (t) => Math.round(Date.parse(JOUR_PARIS.format(new Date(t)) + "T00:00:00Z") / 86400000);
-function age(iso) {
-  const t = Date.parse(iso || ""); if (!t) return "";
-  const j = numJour(Date.now()) - numJour(t);
-  if (j <= 0) return "aujourd'hui";
-  if (j === 1) return "hier";
-  return `il y a ${j} j`;
-}
-function dateFr(iso) {
-  const d = new Date(iso || ""); if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short", timeZone: "Europe/Paris" }) + " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" });
-}
-function livraison(o) {
-  const m = String(o.shippingMethod || "").toLowerCase();
-  if (/express|chronopost/.test(m)) return "⚡ Express Chronopost";
-  if (o.relaisPoint || m.includes("relais")) return "🏪 Point relais";
-  if (m.includes("main propre") || m.includes("retrait") || o.status === "remise_main_propre") return "🤝 Retrait";
-  return "🏠 Domicile";
-}
-
-// Tout le détail de l'envoi (13/10/2026, gérant : « il faut que tu me détailles tout… j'envoie à domicile ou en
-// point relais ? ») : mode exact payé, prix, et l'adresse OU le point relais à mettre sur l'étiquette.
-function DetailLivraison({ o }) {
-  const m = String(o.shippingMethod || "");
-  const express = /express|chronopost/i.test(m);
-  const relais = String(o.relaisPoint || "");
-  const a = o.shippingAddress || null;
-  const adresse = a ? [o.shippingName, o.shippingCompany, a.line1, a.line2, `${a.postal_code || ""} ${a.city || ""}`.trim(), a.country].filter(Boolean).join(", ") : "";
-  const prix = Number(o.shippingPrice) > 0 ? ` · ${euro(o.shippingPrice)}` : "";
-  const pays = paysDeLaCommande(o);
-  return (
-    <div className={`file-liv${express ? " express" : ""}`}>
-      <div className={`file-liv-pays${pays.etranger ? " etranger" : ""}`}>{pays.etranger ? `${pays.drapeau} À ENVOYER EN ${pays.nom.toUpperCase()} — hors de France, affranchir pour l'international (pas de timbre France)` : `${pays.drapeau} Pays : ${pays.nom}`}</div>
-      <div className="file-liv-mode">🚚 <b>{livraison(o)}</b>{m ? <span> — {m}</span> : null}{prix && !m.includes("€") ? <span>{prix}</span> : null}</div>
-      {express ? <div className="file-liv-alerte">⚡ EXPRESS payé par la cliente : colis Chronopost à domicile, à graver EN PRIORITÉ.</div> : null}
-      {relais ? <div>📍 <b>Point relais choisi :</b> {relais}</div> : null}
-      {adresse ? <div>{relais ? "👤 Coordonnées de la cliente : " : "🏠 Adresse de l'étiquette : "}{adresse}</div> : null}
-    </div>
-  );
-}
-function estUrgent(o) { return o.immediateStart || (o.flags || []).includes("urgent"); }
+const VUES = [["tout", "Tout"], ["prep", "À préparer"], ["fab", "En fabrication"], ["exp", "Expédiées"], ["dead", "Par date limite"], ["fin", "Terminées"]];
+const STORE = "niv-file";
+const lireStore = () => { try { return JSON.parse(localStorage.getItem(STORE) || "{}") || {}; } catch { return {}; } };
 
 export default function FileProductionPage() {
   const [key, setKey] = useState("");
@@ -87,89 +34,171 @@ export default function FileProductionPage() {
   const [orders, setOrders] = useState([]);
   const [unread, setUnread] = useState([]);
   const [error, setError] = useState("");
-  const [q, setQ] = useState("");
-  const [showDone, setShowDone] = useState(false);
-  const [busy, setBusy] = useState("");
-  const [mat, setMat] = useState(null);        // matériel & conditionnement (stock + validations)
+  const [mat, setMat] = useState(null);
   const [condOrder, setCondOrder] = useState(null);
+  const [busy, setBusy] = useState("");
+  const [view, setView] = useState("tout");
+  const [q, setQ] = useState("");
+  const [sort, setSort] = useState("ordre");
+  const [filters, setFilters] = useState(() => new Set());
+  const [sel, setSel] = useState(() => new Set());
+  const [focus, setFocus] = useState("");
+  const [help, setHelp] = useState(false);
+  const [toast, setToast] = useState(null); // { texte, undo? }
+  const [printQueue, setPrintQueue] = useState([]); // commandes à imprimer l'une après l'autre
+  const toastT = useRef(null);
 
   const loadMat = useCallback(async (adminKey) => {
-    try {
-      const r = await fetch("/api/admin/materiel", { headers: { "x-admin-key": adminKey } });
-      if (r.ok) setMat(await r.json());
-    } catch { /* le bloc reste « à faire » */ }
+    try { const r = await fetch("/api/admin/materiel", { headers: { "x-admin-key": adminKey } }); if (r.ok) setMat(await r.json()); } catch { /* le bloc reste « à faire » */ }
   }, []);
-
   const load = useCallback(async (adminKey) => {
     setError("");
     try {
-      // Mémoire partagée (02/10/2026) : la file déjà vue s'affiche aussitôt.
-      const r = await chargerAvecCache("/api/admin/orders", adminKey, (d) => {
-        setKey(adminKey); setAuthed(true);
-        setOrders((d.orders || []).filter((o) => !o.test));
-      });
+      const r = await chargerAvecCache("/api/admin/orders", adminKey, (d) => { setKey(adminKey); setAuthed(true); setOrders((d.orders || []).filter((o) => !o.test)); });
       if (r.status === 401) { setError("Mot de passe incorrect."); setAuthed(false); return; }
       if (!r.ok) { if (!r.data) setError("Erreur de chargement."); return; }
       sessionStorage.setItem("niv-admin-key", adminKey);
       loadMat(adminKey);
-      try {
-        const u = await fetch("/api/admin/bat?action=unread", { headers: { "x-admin-key": adminKey } });
-        if (u.ok) setUnread((await u.json()).unread || []);
-      } catch { /* ignore */ }
+      try { const u = await fetch("/api/admin/bat?action=unread", { headers: { "x-admin-key": adminKey } }); if (u.ok) setUnread((await u.json()).unread || []); } catch { /* ignore */ }
     } catch { setError("Erreur de chargement."); }
   }, [loadMat]);
 
   useEffect(() => {
     const saved = sessionStorage.getItem("niv-admin-key");
     if (saved) load(saved);
-    // ?q=REF (recherche du haut / recherche universelle) pré-remplit le filtre (02/10/2026 :
-    // avant, ce paramètre était envoyé mais jamais lu).
-    try { const qq = new URLSearchParams(window.location.search).get("q"); if (qq) setQ(qq); } catch { /* ignore */ }
-  }, [load]);
-
-  // Ordre de traitement : urgentes d'abord, puis les plus anciennes en premier (FIFO).
-  const actives = useMemo(() => {
-    const list = orders.filter((o) => ACTIFS.has(o.status || ""));
-    list.sort((a, b) => (estUrgent(b) - estUrgent(a)) || (Date.parse(a.createdAt || 0) - Date.parse(b.createdAt || 0)));
-    return list.map((o, i) => ({ ...o, pos: i + 1 }));
-  }, [orders]);
-  const match = (o) => {
-    const s = q.trim().toLowerCase(); if (!s) return true;
-    return [o.ref, o.customerName, o.customerEmail, ...(o.items || []).map((i) => i.name)].join(" ").toLowerCase().includes(s);
-  };
-  const aPreparer = actives.filter((o) => !o.status || o.status === "a_preparer").filter(match);
-  const enFab = actives.filter((o) => o.status === "en_gravure").filter(match);
-  const expediees = orders.filter((o) => ["expediee", "remise_main_propre"].includes(o.status)).filter(match)
-    .sort((a, b) => Date.parse(b.shippedAt || b.createdAt || 0) - Date.parse(a.shippedAt || a.createdAt || 0)).slice(0, 12);
-  const terminees = orders.filter((o) => ["livree", "annulee", "remboursee"].includes(o.status)).filter(match)
-    .sort((a, b) => Date.parse(b.createdAt || 0) - Date.parse(a.createdAt || 0));
-  const nbUnread = actives.filter((o) => unread.includes(o.id)).length;
-  const nbUrgent = actives.filter(estUrgent).length;
-
-  async function setStatus(o, status) {
-    let tracking = "";
-    if (status === "expediee") {
-      tracking = window.prompt(`Numéro de suivi pour #${o.ref} (laisser vide si aucun) :`, o.tracking || "") ?? null;
-      if (tracking === null) return;
-    }
-    if (status === "livree" && !window.confirm(`Marquer #${o.ref} comme livrée ?`)) return;
-    setBusy(o.id);
     try {
-      await fetch("/api/admin/orders", {
-        method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key },
-        body: JSON.stringify({ id: o.id, status, tracking: tracking || undefined, notifyCustomer: status === "expediee" && Boolean(tracking) }),
-      });
-      await load(key);
-    } finally { setBusy(""); }
+      const p = new URLSearchParams(window.location.search);
+      if (p.get("q")) setQ(p.get("q"));
+      if (p.get("vue") && VUES.some(([v]) => v === p.get("vue"))) setView(p.get("vue"));
+      const s = lireStore(); if (s.sort && TRIS.some(([t]) => t === s.sort)) setSort(s.sort);
+    } catch { /* ignore */ }
+  }, [load]);
+  useEffect(() => { try { localStorage.setItem(STORE, JSON.stringify({ ...lireStore(), sort })); } catch { /* ignore */ } }, [sort]);
+
+  function montrer(texte, undo) {
+    clearTimeout(toastT.current);
+    setToast({ texte, undo });
+    toastT.current = setTimeout(() => setToast(null), undo ? 10000 : 2600);
   }
 
-  async function annotate(o, patch) {
-    setOrders((os) => os.map((x) => (x.id === o.id ? { ...x, ...patch } : x))); // optimiste
-    await fetch("/api/admin/orders", {
-      method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key },
-      body: JSON.stringify({ id: o.id, action: "annotate", ...patch }),
-    });
+  // Changement de statut : optimiste, puis l'API ; « Annuler » 10 s remet le statut d'avant
+  // (sauf si un e-mail est parti : on le dit, un e-mail ne se rappelle pas).
+  const setStatus = useCallback(async (o, status, extra = {}, opts = {}) => {
+    const avant = o.status || "a_preparer";
+    setBusy(o.id);
+    setOrders((os) => os.map((x) => (x.id === o.id ? { ...x, status, ...(extra.tracking != null ? { tracking: extra.tracking } : {}), ...(status === "expediee" ? { shippedAt: new Date().toISOString() } : {}) } : x)));
+    try {
+      const r = await fetch("/api/admin/orders", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ id: o.id, status, ...extra }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || "Échec");
+      const lib = statutInfo({ status }).lib.toLowerCase();
+      const texte = `#${refDe(o)} ${opts.texte || lib}${extra.notifyCustomer ? (d.emailed ? " · e-mail envoyé" : " · l'e-mail n'a pas pu partir") : ""}`;
+      const peutAnnuler = opts.undo && !extra.notifyCustomer;
+      montrer(texte, peutAnnuler ? async () => {
+        setOrders((os) => os.map((x) => (x.id === o.id ? { ...x, status: avant } : x)));
+        await fetch("/api/admin/orders", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ id: o.id, status: avant }) });
+        montrer(`#${refDe(o)} revenue en « ${statutInfo({ status: avant }).lib} »`);
+      } : null);
+    } catch (e) {
+      setOrders((os) => os.map((x) => (x.id === o.id ? { ...x, status: avant } : x)));
+      montrer(`Échec : ${e.message}`);
+    } finally { setBusy(""); }
+  }, [key]);
+
+  const annotate = useCallback(async (o, patch) => {
+    setOrders((os) => os.map((x) => (x.id === o.id ? { ...x, ...patch } : x)));
+    try {
+      await fetch("/api/admin/orders", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ id: o.id, action: "annotate", ...patch }) });
+      montrer(patch.adminNote != null ? "Note enregistrée" : "Étiquettes enregistrées");
+    } catch { montrer("Échec de l'enregistrement"); }
+  }, [key]);
+
+  // ---- listes ----
+  const unreadSet = useMemo(() => new Set(unread), [unread]);
+  const pos = useMemo(() => positions(orders), [orders]);
+  const matches = useCallback((o) => {
+    const s = q.trim().toLowerCase();
+    if (s && !rechercheTexte(o).includes(s)) return false;
+    for (const f of filters) if (!passeFiltre(o, f, unreadSet.has(o.id))) return false;
+    return true;
+  }, [q, filters, unreadSet]);
+  const actives = useMemo(() => orders.filter(estActive), [orders]);
+  const vis = useMemo(() => orders.filter(matches), [orders, matches]);
+  const prep = useMemo(() => trier(vis.filter((o) => !o.status || o.status === "a_preparer"), sort), [vis, sort]);
+  const fab = useMemo(() => trier(vis.filter((o) => o.status === "en_gravure"), sort), [vis, sort]);
+  const exp = useMemo(() => vis.filter(estPartie).sort((a, b) => Date.parse(b.shippedAt || b.remisAt || b.createdAt || 0) - Date.parse(a.shippedAt || a.remisAt || a.createdAt || 0)), [vis]);
+  const expRecent = useMemo(() => exp.slice(0, 12), [exp]);
+  const fin = useMemo(() => vis.filter(estFinie).sort((a, b) => Date.parse(b.createdAt || 0) - Date.parse(a.createdAt || 0)), [vis]);
+  const nPrep = orders.filter((o) => !o.status || o.status === "a_preparer").length;
+  const nFab = orders.filter((o) => o.status === "en_gravure").length;
+  const nExp = orders.filter(estPartie).length;
+  const nFin = orders.filter(estFinie).length;
+  const nRep = actives.filter((o) => unreadSet.has(o.id)).length;
+  const nLate = actives.filter((o) => etatDelai(o).k === "late").length;
+  const nExpress = actives.filter(estExpress).length;
+
+  // Toutes les cartes affichées, dans l'ordre de l'écran (J / K).
+  const visibles = useMemo(() => {
+    if (view === "tout") return [...prep, ...fab, ...expRecent];
+    if (view === "prep") return prep; if (view === "fab") return fab; if (view === "exp") return exp; if (view === "fin") return fin;
+    const act = [...prep, ...fab].sort((a, b) => ["late", "today", "week", "later"].indexOf(etatDelai(a).k) - ["late", "today", "week", "later"].indexOf(etatDelai(b).k) || Date.parse(a.createdAt || 0) - Date.parse(b.createdAt || 0));
+    return [...act, ...exp];
+  }, [view, prep, fab, exp, expRecent, fin]);
+
+  function toggleFilter(f) { setFilters((s) => { const n = new Set(s); n.has(f) ? n.delete(f) : n.add(f); return n; }); }
+  function kpi(k) {
+    if (k === "prep" || k === "fab" || k === "exp") { setView((v) => (v === k ? "tout" : k)); setFilters((s) => { const n = new Set(s); n.delete("late"); return n; }); }
+    else { toggleFilter(k); if (k === "late" || k === "express" || k === "reponse") setView("tout"); }
   }
+  function toggleSel(o) { setSel((s) => { const n = new Set(s); n.has(o.id) ? n.delete(o.id) : n.add(o.id); return n; }); }
+  const selList = orders.filter((o) => sel.has(o.id));
+
+  async function bulkFab() {
+    const cibles = selList.filter((o) => !o.status || o.status === "a_preparer");
+    for (const o of cibles) {
+      setOrders((os) => os.map((x) => (x.id === o.id ? { ...x, status: "en_gravure" } : x)));
+      try { await fetch("/api/admin/orders", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ id: o.id, status: "en_gravure" }) }); } catch { /* la prochaine actualisation remettra le vrai statut */ }
+    }
+    setSel(new Set());
+    montrer(`${cibles.length} commande${cibles.length > 1 ? "s" : ""} passée${cibles.length > 1 ? "s" : ""} en fabrication`);
+  }
+  // Impression groupée : les fiches atelier l'une après l'autre (une feuille A4 chacune, comme « Imprimer la fiche »).
+  function imprimerToutes(liste) {
+    if (!liste.length) { montrer("Aucune commande à imprimer"); return; }
+    setPrintQueue(liste.map((o) => o.id));
+    montrer(`${liste.length} fiche${liste.length > 1 ? "s" : ""} atelier : une impression après l'autre`);
+  }
+  useEffect(() => {
+    if (!printQueue.length) return undefined;
+    const suivant = () => setPrintQueue((qq) => qq.slice(1));
+    window.addEventListener("afterprint", suivant, { once: true });
+    const t = setTimeout(() => imprimerFiche(), 400);
+    return () => { clearTimeout(t); window.removeEventListener("afterprint", suivant); };
+  }, [printQueue]);
+  const etiquettesHref = (liste) => `/gestion/etiquettes?ids=${liste.map((o) => encodeURIComponent(o.id)).join(",")}`;
+
+  // Clavier : J / K cartes, Entrée = fiche, X = cocher, / = recherche, ? = aide, Échap.
+  useEffect(() => {
+    const h = (e) => {
+      const typing = /INPUT|TEXTAREA|SELECT/.test(e.target.tagName);
+      if (e.key === "Escape") { if (help) setHelp(false); if (typing) e.target.blur(); return; }
+      if (typing) return;
+      if (e.key === "/") { e.preventDefault(); document.getElementById("fq-q")?.focus(); return; }
+      if (e.key === "?") { setHelp((v) => !v); return; }
+      if (e.key === "j" || e.key === "k") {
+        if (!visibles.length) return;
+        let i = visibles.findIndex((o) => o.id === focus);
+        i = e.key === "j" ? Math.min(visibles.length - 1, i + 1) : Math.max(0, i - 1);
+        const o = visibles[i]; setFocus(o.id);
+        const el = document.querySelector(`[data-card="${o.id}"]`); el?.scrollIntoView({ block: "nearest" }); el?.focus();
+        return;
+      }
+      if (e.key === "Enter" && focus) { const o = orders.find((x) => x.id === focus); if (o) window.location.href = hrefFiche(o); return; }
+      if (e.key === "x" && focus) { const o = orders.find((x) => x.id === focus); if (o) toggleSel(o); }
+    };
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [visibles, focus, orders, help]);
 
   if (!authed) {
     return (
@@ -185,188 +214,102 @@ export default function FileProductionPage() {
     );
   }
 
+  const carte = (o, inBoard = false) => (
+    <CarteCommande key={o.id} o={o} pos={pos[o.id]} inBoard={inBoard} unread={unreadSet.has(o.id)} selected={sel.has(o.id)} onSelect={toggleSel}
+      onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} busy={busy === o.id} onToast={montrer} focus={focus === o.id} />
+  );
+  const liste = (l, inBoard = false) => (l.length ? l.map((o) => carte(o, inBoard)) : <div className="fq-empty">Rien ici : tout est traité ✓</div>);
+  const Kpi = ({ k, n, l, s, tone, on }) => <button type="button" className={`fq-kpi ${n ? tone : ""}${on ? " on" : ""}`} onClick={() => kpi(k)}><b>{n}</b><span>{l}</span>{s ? <small>{s}</small> : null}</button>;
+  const groupe = (k, t, l) => (l.length ? <section className="fq-group" key={k}><h2><i className={k} />{t}<b>· {l.length}</b></h2><div className="fq-grid" style={{ marginTop: 0 }}>{liste(l)}</div></section> : null);
+  const tableFin = (l) => (l.length ? (
+    <div className="fq-done-body"><table>
+      <thead><tr><th>Commande</th><th>Cliente</th><th>Articles</th><th>État</th><th>Total</th></tr></thead>
+      <tbody>{l.map((o) => <tr key={o.id}><td className="mono"><Link className="fq-ref" href={hrefFiche(o)}>#{refDe(o)}</Link></td><td>{o.customerName || "—"}</td><td>{(o.items || []).map((i) => `${i.quantity}× ${i.name}`).join(", ")}</td><td><span className={`fq-pill ${statutInfo(o).tone}`}>{statutInfo(o).lib}</span> <span className="muted">{dateFr(o.deliveredAt || o.createdAt, false)}</span></td><td className="mono">{euro(o.total)}</td></tr>)}</tbody>
+    </table></div>
+  ) : <div className="fq-empty" style={{ margin: 10 }}>Aucune commande terminée pour cette recherche.</div>);
+
   return (
-    <div className="container file" style={{ padding: "28px 16px 60px" }}>
-      <PageHead eyebrow="Commandes" title="File de production" subtitle="Dans l'ordre de traitement : les urgentes d'abord, puis les plus anciennes. Une carte par commande, rien ne se mélange."
-        actions={<><Link href="/gestion/atelier" className="btn btn-outline">🛠️ Atelier</Link><Link href="/gestion/fiches" className="btn btn-outline">Fiches complètes</Link></>} />
+    <div className="fq">
+      <div className="fq-head">
+        <div><h1>File de production</h1><div className="sub">Dans l&apos;ordre de traitement : Express et urgentes d&apos;abord, puis les premières arrivées. Une carte = une commande ; toucher la référence ouvre la fiche.</div></div>
+        <div className="acts">
+          <button type="button" className="fq-btn" onClick={() => imprimerToutes(orders.filter((o) => !o.status || o.status === "a_preparer").sort((a, b) => (pos[a.id] || 0) - (pos[b.id] || 0)))} title="Fiches atelier de toutes les commandes à préparer"><Ic n="print" /> Tournée du jour</button>
+          <Link className="fq-btn" href={etiquettesHref(orders.filter((o) => !o.status || o.status === "a_preparer"))}><Ic n="tag" /> Étiquettes du jour</Link>
+          <Link className="fq-btn ghost" href="/gestion/atelier"><Ic n="pen" /> Atelier</Link>
+          <button type="button" className="fq-btn ghost" onClick={() => { load(key); montrer("Liste actualisée"); }}><Ic n="undo" /> Actualiser</button>
+          <button type="button" className="fq-ibtn" onClick={() => setHelp(true)} aria-label="Aide clavier">?</button>
+        </div>
+      </div>
+      {error ? <div className="notice" style={{ marginTop: 10 }}>{error}</div> : null}
 
-      <div className="file-kpis">
-        <div className="file-kpi"><small>À préparer</small><b>{actives.filter((o) => !o.status || o.status === "a_preparer").length}</b></div>
-        <div className="file-kpi"><small>En fabrication</small><b>{actives.filter((o) => o.status === "en_gravure").length}</b></div>
-        <div className={`file-kpi${nbUnread ? " alert" : ""}`}><small>Réponses clientes</small><b>{nbUnread}</b></div>
-        <div className={`file-kpi${nbUrgent ? " alert" : ""}`}><small>Urgentes</small><b>{nbUrgent}</b></div>
+      <div className="fq-kpis">
+        <Kpi k="prep" n={nPrep} l="À préparer" s="ordre de traitement" tone="gold" on={view === "prep"} />
+        <Kpi k="fab" n={nFab} l="En fabrication" tone="info" on={view === "fab"} />
+        <Kpi k="late" n={nLate} l="En retard" s="date limite dépassée" tone="bad" on={filters.has("late")} />
+        <Kpi k="express" n={nExpress} l="Express" s="à graver en priorité" tone="bad" on={filters.has("express")} />
+        <Kpi k="reponse" n={nRep} l="Réponses clientes" s="non lues" tone="info" on={filters.has("reponse")} />
+        <Kpi k="exp" n={nExp} l="Expédiées" s="à suivre" tone="" on={view === "exp"} />
       </div>
 
-      <div className="file-tools">
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher (n° de commande, nom, e-mail, produit)…" />
-        <button className="btn btn-outline" onClick={() => load(key)}>↻ Actualiser</button>
+      <div className="fq-tools">
+        <div className="fq-views">
+          {VUES.map(([v, l]) => <button key={v} type="button" className={`fq-view${view === v ? " on" : ""}`} onClick={() => { setView(v); setFilters((s) => { const n = new Set(s); n.delete("late"); return n; }); }}>{l}<b>{{ tout: actives.length + nExp, prep: nPrep, fab: nFab, exp: nExp, dead: actives.length, fin: nFin }[v]}</b></button>)}
+        </div>
+        <div className="fq-row2">
+          <label className="fq-search"><Ic n="search" /><input id="fq-q" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Réf., cliente, produit, gravure…" /><kbd>/</kbd></label>
+          <select className="fq-select" value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Trier">{TRIS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
+          <div className="fq-chipbar">
+            {FILTRES.map((f) => <button key={f.id} type="button" className={`fq-chip${filters.has(f.id) ? " on" : ""}`} onClick={() => toggleFilter(f.id)}><Ic n={f.ic} />{f.lib}</button>)}
+            {filters.size || q ? <button type="button" className="fq-chip" onClick={() => { setFilters(new Set()); setQ(""); }}><Ic n="x" />Effacer</button> : null}
+          </div>
+          <span className="fq-count">{vis.length} commande{vis.length > 1 ? "s" : ""} affichée{vis.length > 1 ? "s" : ""}</span>
+        </div>
       </div>
 
-      {error ? <div className="notice">{error}</div> : null}
+      {view === "tout" ? (
+        <div className="fq-board">
+          <section className="fq-col"><h2 className="fq-col-h"><i className="prep" />À préparer<b>{prep.length}</b></h2><div className="fq-list">{liste(prep, true)}</div></section>
+          <section className="fq-col"><h2 className="fq-col-h"><i className="fab" />En fabrication<b>{fab.length}</b></h2><div className="fq-list">{liste(fab, true)}</div></section>
+          <section className="fq-col"><h2 className="fq-col-h"><i className="exp" />Expédiées récentes<b>{expRecent.length}</b></h2><div className="fq-list">{liste(expRecent, true)}</div>{exp.length > expRecent.length ? <button type="button" className="fq-btn sm ghost" style={{ marginTop: 8 }} onClick={() => setView("exp")}>Voir les {exp.length} expédiées</button> : null}</section>
+        </div>
+      ) : view === "dead" ? (
+        <>
+          {(() => { const act = visibles.filter(estActive); return [groupe("late", "En retard", act.filter((o) => etatDelai(o).k === "late")), groupe("today", "À expédier demain au plus tard", act.filter((o) => etatDelai(o).k === "today")), groupe("week", "Cette semaine", act.filter((o) => etatDelai(o).k === "week")), groupe("later", "Plus tard", act.filter((o) => etatDelai(o).k === "later")), groupe("done", "Parties", exp)]; })()}
+          {!visibles.length ? <div className="fq-empty" style={{ marginTop: 14 }}>Rien ici : tout est traité ✓</div> : null}
+        </>
+      ) : view === "fin" ? (
+        <div className="fq-done" style={{ marginTop: 14 }}>{tableFin(fin)}</div>
+      ) : (
+        <div className="fq-grid">{liste({ prep, fab, exp }[view])}</div>
+      )}
 
-      <div className="file-cols">
-        <Colonne titre="● À préparer" n={aPreparer.length} vide="Rien à préparer 🎉">
-          {aPreparer.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} />)}
-        </Colonne>
-        <Colonne titre="✏️ En fabrication" n={enFab.length} vide="Aucune pièce en cours.">
-          {enFab.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} />)}
-        </Colonne>
-        <Colonne titre="📦 Expédiées récemment" n={expediees.length} vide="Aucune expédition récente.">
-          {expediees.map((o) => <Carte key={o.id} o={o} unread={unread.includes(o.id)} busy={busy === o.id} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} compact />)}
-        </Colonne>
-      </div>
+      {view !== "fin" ? (
+        <details className="fq-done">
+          <summary><Ic n="check" /> Terminées, annulées et remboursées <b>{nFin} · repliées pour ne pas se mélanger</b></summary>
+          {tableFin(fin)}
+        </details>
+      ) : null}
 
       {condOrder ? <FenetreConditionnement o={condOrder} adminKey={key} mat={mat} onClose={() => setCondOrder(null)} onSaved={() => loadMat(key)} /> : null}
+      {printQueue.length ? (() => { const o = orders.find((x) => x.id === printQueue[0]); return o ? <FichePapier key={o.id} order={o} fmtDate={(iso) => dateFr(iso)} adminKey={key} /> : null; })() : null}
 
-      <details className="file-done" open={showDone} onToggle={(e) => setShowDone(e.currentTarget.open)}>
-        <summary>Terminées, annulées, remboursées ({terminees.length})</summary>
-        <div className="file-cols" style={{ marginTop: 10 }}>
-          <div className="file-col" style={{ gridColumn: "1 / -1", background: "transparent", border: "none", padding: 0 }}>
-            {terminees.map((o) => <Carte key={o.id} o={o} unread={false} busy={false} onStatus={setStatus} onAnnotate={annotate} mat={mat} onCond={setCondOrder} adminKey={key} onMat={() => loadMat(key)} compact />)}
+      <div className="fq-bulk" hidden={!sel.size}>
+        <span>{sel.size} sélectionnée{sel.size > 1 ? "s" : ""}</span>
+        <button type="button" className="fq-btn sm" onClick={() => imprimerToutes(selList)}><Ic n="print" /> Imprimer les fiches</button>
+        <Link className="fq-btn sm" href={etiquettesHref(selList)}><Ic n="tag" /> Étiquettes</Link>
+        {selList.some((o) => !o.status || o.status === "a_preparer") ? <button type="button" className="fq-btn sm" onClick={bulkFab}><Ic n="pen" /> Passer en fabrication</button> : null}
+        <button type="button" className="fq-btn sm" onClick={() => setSel(new Set())} aria-label="Tout désélectionner"><Ic n="x" /></button>
+      </div>
+      <div className={`fq-toast${toast ? " on" : ""}`} role="status">{toast?.texte}{toast?.undo ? <button type="button" onClick={() => { const u = toast.undo; setToast(null); u(); }}>Annuler</button> : null}</div>
+      {help ? (
+        <div className="fq-help" onClick={() => setHelp(false)}>
+          <div className="box fq" onClick={(e) => e.stopPropagation()}>
+            <h2 style={{ fontSize: 16 }}>Raccourcis clavier</h2>
+            <dl><dt><kbd>J</kbd> / <kbd>K</kbd></dt><dd>commande suivante / précédente</dd><dt><kbd>Entrée</kbd></dt><dd>ouvrir la fiche de la commande</dd><dt><kbd>X</kbd></dt><dd>cocher / décocher la commande</dd><dt><kbd>/</kbd></dt><dd>chercher</dd><dt><kbd>Échap</kbd></dt><dd>fermer</dd><dt><kbd>?</kbd></dt><dd>cette aide</dd></dl>
+            <div style={{ marginTop: 14, textAlign: "right" }}><button type="button" className="fq-btn pri" onClick={() => setHelp(false)}>Fermer</button></div>
           </div>
         </div>
-      </details>
-    </div>
-  );
-}
-
-function Colonne({ titre, n, vide, children }) {
-  return (
-    <div className="file-col">
-      <div className="file-col-h"><span>{titre}</span><span className="n">{n}</span></div>
-      {n === 0 ? <div className="file-empty">{vide}</div> : children}
-    </div>
-  );
-}
-
-function Carte({ o, unread, busy, onStatus, onAnnotate, compact, mat, onCond, adminKey, onMat }) {
-  const [note, setNote] = useState(o.adminNote || "");
-  const [editing, setEditing] = useState(false);
-  const [etiqueter, setEtiqueter] = useState(false);
-  const flags = o.flags || [];
-  const statut = o.status || "a_preparer";
-  const chipStatut = { a_preparer: ["prep", "À préparer"], en_gravure: ["grav", "En fabrication"], expediee: ["exp", "Expédiée"], remise_main_propre: ["exp", "Remise en main propre"], livree: ["liv", "Livrée"], annulee: ["ann", "Annulée"], remboursee: ["ann", "Remboursée"] }[statut] || ["prep", statut];
-  const ref = o.ref || (o.id || "").slice(-6);
-  const cadeau = o.cadeauChoix ? (() => { const lib = (v) => ({ surprise: "surprise", femme: "plutôt femme", homme: "plutôt homme" })[v] || v; const p = String(o.cadeauChoix).split("+").filter(Boolean); return p.length === 2 ? `🎁🎁 ${lib(p[0])} + ${lib(p[1])}` : `🎁 ${lib(o.cadeauChoix)}`; })() : "";
-
-  return (
-    <div className={`file-card${estUrgent(o) && ACTIFS.has(o.status || "") ? " urgent" : flags.includes("attend") || flags.includes("attente_client") ? " attente" : ""}`}>
-      <div className="file-card-top">
-        <div>
-          {o.pos ? <span className="file-pos">{o.pos}</span> : null}
-          <span className="file-ref">#{ref}</span>
-          <span className={`dash-chip ${chipStatut[0]}`} style={{ marginLeft: 8 }}>{chipStatut[1]}</span>
-        </div>
-        <div style={{ textAlign: "right" }}>
-          <div style={{ fontWeight: 800 }}>{euro(o.total)}</div>
-          <div className="file-age" title={dateFr(o.createdAt)}>{age(o.createdAt)} · {dateFr(o.createdAt)}</div>
-        </div>
-      </div>
-
-      <div className="file-who"><strong>{o.customerName || "—"}</strong> <span>· {livraison(o)}</span></div>
-      <DelaiCommande order={o} style={{ margin: "6px 0 2px" }} />
-      {!compact ? <DetailLivraison o={o} /> : null}
-
-      <ul className="file-items">
-        {(() => {
-          // Réglages appariés AVANT le filtre des lignes de livraison (les rangs doivent correspondre).
-          const specParLigne = apparierSpec(o.items, o.spec);
-          return (o.items || []).map((it, i) => ({ it, s: specParLigne[i] }))
-            .filter(({ it }) => !/livraison|point relais|retrait/i.test(it.name || ""))
-            .map(({ it, s }, i) => {
-              // Lot « chacun différent » : le détail Stripe est TRONQUÉ (« date 1 ») et
-              // illisible → une ligne par verre, lue dans les réglages complets.
-              const verres = s ? eclaterParVerre(s) : [];
-              const enLot = verres.length > 1;
-              const details = enLot ? String(it.details || "").replace(/\s*—\s*Personnalisation\s*:[\s\S]*$/, "") : it.details;
-              return (
-                <li key={i}>
-                  <span className="q">{it.quantity}×</span>
-                  <span>
-                    {it.name}
-                    {(s?.variantDetail || it.variantDetail) ? <span className="d"><VarBadge texte={s?.variantDetail || it.variantDetail} /></span> : null}
-                    {!compact && details ? <span className="d">{details}</span> : null}
-                    {!compact && enLot ? (
-                      <>
-                        <span className="d" style={{ color: "#b32b2b", fontWeight: 700 }}>⚠️ {verres.length} verres, chacun différent :</span>
-                        {verres.map((v) => <span key={v.verre} className="d">✍️ {v.personalization}</span>)}
-                      </>
-                    ) : null}
-                    {!compact && !enLot && it.personalization ? <span className="d">✍️ {it.personalization}</span> : null}
-                  </span>
-                </li>
-              );
-            });
-        })()}
-      </ul>
-
-      {/* Pièce ratée / à refaire : le même bouton partout, tout statut sauf annulée / remboursée (22/10/2026). */}
-      <RatesCommande o={o} mat={mat} adminKey={adminKey} onSaved={onMat} />
-
-      {!compact && o.demande ? (
-        <div className="file-note-box">
-          {o.demande ? <div>📋 <strong>Sur mesure :</strong> {o.demande}</div> : null}
-        </div>
       ) : null}
-      {o.alerteInterne ? <div className="file-note-box red">🚨 {o.alerteInterne}</div> : null}
-      {Array.isArray(o.alerteImage) && o.alerteImage.length ? <div className="file-note-box red">⚠️ Date dans l&apos;image — à regarder avant de graver : {o.alerteImage.join(" · ")}</div> : null}
-      {o.alerteEmail || o.emailCorrigeDe ? <div className="file-note-box red">✉️ {o.alerteEmail || `E-mail corrigé : « ${o.emailCorrigeDe} » → « ${o.customerEmail} »`}</div> : null}
-
-      <div className="file-chips">
-        {o.immediateStart ? <span className="file-chip red">⚡ Fabrication immédiate</span> : null}
-        {unread ? <span className="file-chip red">📬 Nouvelle réponse</span> : null}
-        {cadeau ? <span className="file-chip on" title={o.cadeauPromis || ""}>{o.cadeauPromis ? `${cadeau} · promis` : cadeau}</span> : null}
-        {o.tracking ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking, o).url} target="_blank" rel="noreferrer" title={`Suivre le colis sur ${lienSuivi(o.tracking, o).nom}`}>📦 {o.tracking} · suivre ({lienSuivi(o.tracking, o).nom})</a> : null}
-        {o.tracking && lienSuivi(o.tracking, o).autre ? <a className="file-chip green" style={{ textDecoration: "none" }} href={lienSuivi(o.tracking, o).autre.url} target="_blank" rel="noreferrer">suivre (La Poste)</a> : null}
-        {/* Seules les étiquettes réellement posées s'affichent ; les autres sont rangées derrière « + Étiqueter ». */}
-        {FLAGS.filter((f) => flags.includes(f.id)).map((f) => (
-          <button key={f.id} type="button" className={`file-chip btn on flag-${f.id}`} title="Cliquer pour retirer cette étiquette"
-            onClick={() => onAnnotate(o, { flags: flags.filter((x) => x !== f.id) })}>
-            {f.label} <span aria-hidden="true" className="file-chip-x">×</span>
-          </button>
-        ))}
-        {FLAGS.some((f) => !flags.includes(f.id)) ? (
-          <button type="button" className="file-chip btn add" aria-expanded={etiqueter} onClick={() => setEtiqueter((v) => !v)}>
-            {etiqueter ? "Fermer" : "+ Étiqueter"}
-          </button>
-        ) : null}
-      </div>
-      {etiqueter ? (
-        <div className="file-chips file-etq">
-          {FLAGS.filter((f) => !flags.includes(f.id)).map((f) => (
-            <button key={f.id} type="button" className="file-chip btn off" title="Cliquer pour poser cette étiquette"
-              onClick={() => { onAnnotate(o, { flags: [...flags, f.id] }); setEtiqueter(false); }}>
-              {f.label}
-            </button>
-          ))}
-        </div>
-      ) : null}
-
-      <div className="file-note">
-        {editing ? (
-          <>
-            <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note interne (visible seulement ici)…" autoFocus />
-            <div className="file-actions">
-              <button className="btn btn-gold" onClick={() => { onAnnotate(o, { adminNote: note }); setEditing(false); }}>Enregistrer la note</button>
-              <button className="btn btn-outline" onClick={() => { setNote(o.adminNote || ""); setEditing(false); }}>Annuler</button>
-            </div>
-          </>
-        ) : (
-          <div onClick={() => setEditing(true)} style={{ cursor: "text", fontSize: "0.86rem", color: o.adminNote ? "var(--ink)" : "var(--ink-soft)", whiteSpace: "pre-line", padding: "6px 8px", border: "1px dashed var(--line)", borderRadius: 8 }}>
-            {o.adminNote || "📝 Ajouter une note interne…"}
-          </div>
-        )}
-      </div>
-
-      {!["annulee", "remboursee"].includes(statut) ? <BlocConditionnement o={o} mat={mat} onOpen={() => onCond(o)} /> : null}
-
-      <div className="file-actions">
-        {statut === "a_preparer" ? <button className="btn btn-gold" disabled={busy} onClick={() => onStatus(o, "en_gravure")}>✏️ Commencer la fabrication</button> : null}
-        {(statut === "a_preparer" || statut === "en_gravure") ? <button className="btn btn-outline" disabled={busy} onClick={() => onStatus(o, "expediee")}>📦 Expédiée (n° de suivi)</button> : null}
-        {statut === "expediee" ? <button className="btn btn-outline" disabled={busy} onClick={() => onStatus(o, "livree")}>✓✓ Livrée</button> : null}
-        {!["annulee", "remboursee"].includes(statut) ? <Link href={`/gestion/etiquettes?id=${encodeURIComponent(o.id)}`} className="btn btn-outline">🏷️ Étiquette</Link> : null}
-        <Link href={`/gestion/fiches?q=${encodeURIComponent(ref)}`} className="btn btn-outline">Fiche complète →</Link>
-      </div>
     </div>
   );
 }

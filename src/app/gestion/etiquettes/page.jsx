@@ -84,6 +84,10 @@ export default function EtiquettesPage() {
       try {
         const p = new URLSearchParams(window.location.search), id = p.get("id"), ref = p.get("ref");
         const liste = r.data?.orders || [];
+        // Plusieurs commandes d'un coup (actions groupées de la file de production, 04/11/2026) : ?ids=a,b,c
+        const ids = String(p.get("ids") || "").split(",").map((x) => x.trim()).filter(Boolean);
+        const plusieurs = ids.length ? liste.filter((x) => ids.includes(x.id)) : [];
+        if (plusieurs.length) { setCoches(plusieurs.map((x) => x.id)); if (plusieurs.some((x) => !A_EXPEDIER.includes(x.status || "a_preparer"))) setToutes(true); }
         const o = liste.find((x) => (id && x.id === id) || (ref && String(x.ref).toUpperCase() === ref.toUpperCase()));
         if (o) { setCoches([o.id]); if (!A_EXPEDIER.includes(o.status || "a_preparer")) setToutes(true); }
       } catch { /* ignore */ }

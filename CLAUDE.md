@@ -1,3 +1,27 @@
+## 🗂️ FILE DE PRODUCTION + FICHE COMMANDE REFAITES DANS GESTION — 04/11/2026 (gérant : « tu peux intégrer les deux sur le site, réunis pas les deux ») — CONSTRUIT, TESTÉ, EN ATTENTE DE SON « POUSSE »
+- **Les deux maquettes sont reproduites dans le site, pages SÉPARÉES** : `/gestion/commandes` (file, refaite) et **`/gestion/commande/<réf>` (nouvelle fiche)**.
+  `/gestion/fiches` (l'ancienne fiche complète) est GARDÉE telle quelle ; la file y renvoie plus (ses liens vont sur la nouvelle fiche), le sous-onglet reste.
+- **Code** : règles pures `src/lib/fileCommandes.js` (statuts, mode d'envoi, ordre de traitement, état de la date limite late / today / week / later / done,
+  pastilles, filtres, tris) · `src/components/admin/CarteCommande.jsx` (carte compacte + `FormExpedition` dans la carte + `Pill`) ·
+  `src/components/admin/IconesGestion.jsx` (icônes au trait, une famille) · `src/app/gestion/commandes/page.jsx` (KPI cliquables, vues, recherche `/`, tri
+  retenu sur l'appareil `localStorage niv-file`, filtres, tableau 3 colonnes / liste, groupes par date limite, sélection → barre d'actions groupées, « Tournée du
+  jour » = fiches atelier imprimées l'une après l'autre (`FichePapier` + `imprimerFiche`, événement `afterprint`) + « Étiquettes du jour », toast « Annuler »
+  10 s, J / K / Entrée / X / ? ) · `src/app/gestion/commande/[ref]/page.jsx` (en-tête collé, alertes, frise + `DelaiCommande` + liste de contrôle, raccourcis,
+  colonnes ; réutilise `FicheAtelier`, `RatesCommande`, `BlocConditionnement` / `FenetreConditionnement`, `BoxtalCopie` (+ corriger l'adresse), `BatThread`,
+  `HistoriqueCommande`, `FichePapier`, `useAdminBack`) · CSS `.fq-*` et `.fc-*` en fin de `globals.css` (copiés des générateurs de maquettes).
+- **API** : les MÊMES (`/api/admin/orders` statut / annotate / review / test / DELETE, `/api/admin/refund`, `/api/admin/materiel`, `/api/admin/bat`). Une seule
+  nouveauté : `annotate` accepte `controles` (liste de contrôle de la fiche : gravee · controlee · emballee · etiquette · expediee). `/gestion/etiquettes?ids=a,b`
+  coche plusieurs commandes (actions groupées). `AdminShell` : `/gestion/commande/*` = fil d'Ariane « Commandes › Fiche commande », flèche ‹ vers la file.
+- **Plus aucun `prompt` / `confirm`** sur ces deux pages : expédition = formulaire dans la carte (n° de suivi, transporteur reconnu par `lienSuivi`, case
+  « prévenir ») ; annuler / rembourser / supprimer / livrée = confirmation en ligne ; « Annuler » 10 s après fabrication commencée / livrée (jamais quand un
+  e-mail est parti). Livrée envoie la demande d'avis si la case reste cochée (comme avant).
+- **Vérifié le 04/11** : `npm run build` OK · navigateur local (`next start`, API simulées par Playwright avec l'export réel de 54 commandes du scratchpad,
+  AUCUNE écriture sur le site) à 1280 / 390 : 0 erreur JS, 0 débordement, 6 vues, recherche, filtre, sélection + barre groupée, menu, étiquettes, formulaire
+  d'expédition (Mondial Relay reconnu), note, J ; fiche : 12 cartes, menu, confirmation d'annulation, case de contrôle, action principale, champs Boxtal,
+  J → fiche suivante. ⛔ Aucune donnée du site touchée (aucun POST réel) ; l'export avant / après n'a pas lieu d'être tant que rien n'est poussé.
+- **Au « pousse »** : branche locale = la branche de déploiement + 12 commits locaux (fast-forward) ; `git push` puis miroirs `main` / `master`, puis vérifier
+  en ligne `/gestion/commandes` et une fiche réelle. Si quelque chose manque par rapport à l'ancienne fiche : `/gestion/fiches` est toujours là.
+
 ## 🗂️ MAQUETTE « FILE DE PRODUCTION » DE GESTION RÉORGANISÉE — 04/11/2026 (gérant, après la fiche : « fais exactement ce que t'as fait pour l'autre maquette pour celui de cette page ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - **Artifact** https://claude.ai/artifact/3B7UPQuyWCkAXxSQ6Sf2rE · générateur `tools/maquettes/file-production.py <dossier css> <sortie>` (css = les
   3 feuilles en ligne ; vraies classes `.ash-*`, seul `.fq-*` est neuf) · sortie `docs/maquettes/file-production.html` (684 Ko, ignorée par git) ·

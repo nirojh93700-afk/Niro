@@ -43,6 +43,11 @@
 - S'il valide (« applique ») : page `/gestion/commande/<ref>` avec les mêmes API, rien supprimé de la fiche actuelle ; s'il veut un autre dosage
   (fiche en panneau à droite plutôt qu'en page, onglets, autre ordre des blocs), le dire en une phrase suffit.
 
+## 🗂️ FILE DE PRODUCTION + FICHE COMMANDE REFAITES — 04/11/2026 — CONSTRUIT, EN ATTENTE DU « POUSSE »
+- Les deux maquettes sont intégrées au site en pages séparées (`/gestion/commandes` refaite, `/gestion/commande/<réf>` nouvelle), build OK, test navigateur
+  OK, commit local. Rien en ligne tant qu'il ne dit pas « pousse » (12 commits locaux partiront avec : cagnotte `deplacerCagnotte`, règles, maquettes).
+  Après le push : déplacer la cagnotte de Céline Naulin (`POST /api/admin/cagnottes {action:"deplacer", from:"naulinceline71@gmail.comn", to:"naulinceline71@gmail.com"}`).
+
 ## 🗂️ MAQUETTE « FILE DE PRODUCTION » RÉORGANISÉE — 04/11/2026 — EN ATTENTE DE L'AVIS DU GÉRANT
 - https://claude.ai/artifact/3B7UPQuyWCkAXxSQ6Sf2rE (générateur `tools/maquettes/file-production.py`, coquille partagée
   `tools/maquettes/gestion_coquille.py`). Détail dans CLAUDE.md (section du même nom). Même méthode que la fiche commande, sur sa demande.

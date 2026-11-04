@@ -56,6 +56,9 @@ export async function POST(req) {
     if (typeof body.adminNote === "string") patch.adminNote = body.adminNote.trim().slice(0, 1000);
     if (Array.isArray(body.flags)) patch.flags = [...new Set(body.flags.map(String).filter((f) => FLAGS.includes(f)))];
     if (typeof body.alerteInterne === "string") patch.alerteInterne = body.alerteInterne.trim().slice(0, 600);
+    // Liste de contrôle de la fiche commande (04/11/2026) : gravée · contrôlée · emballée · étiquette · expédiée.
+    const CONTROLES = ["gravee", "controlee", "emballee", "etiquette", "expediee"];
+    if (Array.isArray(body.controles)) patch.controles = [...new Set(body.controles.map(String).filter((c) => CONTROLES.includes(c)))];
     if (!Object.keys(patch).length) return Response.json({ error: "Rien à enregistrer." }, { status: 400 });
     const ok = await updateSiteOrder(id, patch);
     return Response.json({ ok, patch });

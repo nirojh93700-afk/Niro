@@ -197,8 +197,10 @@ export default function AdminShell({ children }) {
   useEffect(() => { loadCounts(); const t = setInterval(loadCounts, 120000); return () => clearInterval(t); }, [loadCounts]);
 
   const cur = currentId(path, hash);
-  const ecran = PAR_ID[cur];
-  const secId = SECTION_DE[cur] || "";
+  // Fiche d'une commande (/gestion/commande/<réf>, 04/11/2026) : écran hors menu, rangé sous « Commandes ».
+  const fiche = path.startsWith("/gestion/commande/");
+  const ecran = PAR_ID[cur] || (fiche ? { id: "fiche", t: "Fiche commande", group: "Commandes", section: "commandes", href: path } : undefined);
+  const secId = SECTION_DE[cur] || (fiche ? "commandes" : "");
   const section = SECTIONS.find((s) => s.id === secId);
   const meta = ecran ? { text: ecran.t, group: ecran.group } : { text: "Gestion", group: "" };
   const cnt = { ...counts, messages: counts.unread + counts.replies };
