@@ -4,6 +4,7 @@
 // Ce fichier est PUR (aucun accès base) : il reçoit l'index des variantes du catalogue en direct.
 // ⛔ Le prix du devis n'est JAMAIS celui du navigateur : `/api/checkout` relit le devis et passe ici.
 import { estLignePort } from "@/lib/remiseDevis";
+import { PRODUCT_DATES } from "@/lib/productDates";
 
 const PRODUIT_LIBRE = { letter: false, freeShipping: false, freeShipThreshold: 0, category: "", pickup: false };
 
@@ -55,26 +56,53 @@ export function devisPanierPossible(q, index) {
 // Articles proposés sous le devis : même univers que le produit principal (même sous-catégorie d'abord),
 // en vente, jamais le produit du devis lui-même ; complété par un petit cadeau. 6 au plus.
 const PETITS_CADEAUX = ["porte-cles-cuir-a-graver", "piece-ronde-laiton"];
+
+// « Compléter votre commande » (04/11/2026, gérant : « si le client sélectionne du cristal, tu dois mettre des bijoux ») :
+// on propose D'AUTRES familles que celle du devis, jamais la même. Familles du catalogue (champ `category`).
+const FAMILLE = { bijoux: "bijoux", cristal: "cristal", verres: "verres", deco: "maison", naissance: "maison", jeux: "maison", mariage: "maison", cadeaux: "cadeaux" };
+// Ordre des 5 premières places selon la famille du devis ; la 6ᵉ place reste au petit cadeau.
+const PLAN = {
+  cristal: ["bijoux", "verres", "bijoux", "maison", "bijoux"],
+  bijoux: ["cristal", "verres", "cristal", "maison", "verres"],
+  verres: ["bijoux", "cristal", "bijoux", "maison", "cristal"],
+  maison: ["bijoux", "cristal", "verres", "bijoux", "cristal"],
+  cadeaux: ["bijoux", "cristal", "verres", "bijoux", "maison"],
+  "": ["bijoux", "cristal", "verres", "bijoux", "maison"],
+};
+const dateDe = (p) => Date.parse(PRODUCT_DATES[p.slug] || "") || 0;
+const graveD = (p) => (p.personalizationFields || []).some((f) => f && f.type !== "note");
+
 export function articlesAssortis(catalog, principal, max = 6) {
   const enVente = (Array.isArray(catalog) ? catalog : []).filter((p) => !p.hidden && !p.soldOut && !p.marquePages && !p.pageDediee && (p.images || []).length);
   const slugP = principal?.product?.slug || "";
-  const catP = principal?.product?.category || "";
-  const subP = principal?.product?.subcategory || "";
+  const famP = FAMILLE[principal?.product?.category || ""] || "";
   const out = [];
-  const pousser = (p) => { if (p && p.slug !== slugP && !out.some((x) => x.slug === p.slug) && out.length < max) out.push(p); };
-  if (catP) {
-    enVente.filter((p) => p.category === catP && subP && p.subcategory === subP).forEach(pousser);
-    enVente.filter((p) => p.category === catP).forEach(pousser);
+  const pris = (p) => out.some((x) => x.slug === p.slug);
+  const pousser = (p) => { if (p && p.slug !== slugP && !pris(p) && out.length < max) out.push(p); };
+  // Dans chaque famille : les pièces gravées d'abord, les plus récentes en tête ; bijoux femme / homme en alternance.
+  const parFamille = {};
+  for (const p of enVente) {
+    const f = FAMILLE[p.category];
+    if (!f || f === famP || PETITS_CADEAUX.includes(p.slug)) continue;
+    (parFamille[f] ||= []).push(p);
   }
-  for (const s of PETITS_CADEAUX) {
-    if (out.length >= max) break;
-    pousser(enVente.find((p) => p.slug === s));
-  }
-  // Devis sans produit du site : les petits cadeaux puis les premières créations du catalogue.
-  enVente.forEach(pousser);
-  // Le petit cadeau garde sa place en dernier quand le rayon remplit déjà tout.
-  const cadeau = enVente.find((p) => PETITS_CADEAUX.includes(p.slug) && p.slug !== slugP);
-  if (cadeau && !out.some((x) => x.slug === cadeau.slug) && out.length >= max) out[max - 1] = cadeau;
+  for (const f of Object.keys(parFamille)) parFamille[f].sort((a, b) => (graveD(b) - graveD(a)) || (dateDe(b) - dateDe(a)));
+  const derniereSub = {};
+  const prendre = (f) => {
+    const liste = (parFamille[f] || []).filter((p) => !pris(p));
+    if (!liste.length) return null;
+    if (f === "bijoux" && derniereSub.bijoux) {
+      const autre = liste.find((p) => p.subcategory && p.subcategory !== derniereSub.bijoux);
+      if (autre) { derniereSub.bijoux = autre.subcategory; return autre; }
+    }
+    derniereSub[f] = liste[0].subcategory || "";
+    return liste[0];
+  };
+  for (const f of PLAN[famP] || PLAN[""]) pousser(prendre(f));
+  // Une famille vide : on complète avec les autres familles, toujours hors famille du devis.
+  for (const f of ["bijoux", "cristal", "verres", "maison"]) { let x; while (out.length < max - 1 && (x = prendre(f))) pousser(x); }
+  pousser(enVente.find((p) => PETITS_CADEAUX.includes(p.slug) && p.slug !== slugP));
+  enVente.filter((p) => (FAMILLE[p.category] || "") !== famP || !famP).forEach(pousser);
   return out;
 }
 

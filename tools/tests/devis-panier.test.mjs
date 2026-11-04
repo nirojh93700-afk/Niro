@@ -29,11 +29,19 @@ t("payé, facture ou désactivé : pas de panier", () => {
   assert.equal(devisPanierPossible({ ...dev1531, panierOff: true }, index), false);
 });
 t("ligne libre sans poids ni produit : pas de panier", () => assert.equal(devisPanierPossible({ total: 10, items: [{ desc: "Clé USB", qty: 1, price: 10 }] }, index), false));
-t("articles proposés : même rayon, sans le bijou du devis, 6 au plus, un petit cadeau", () => {
+t("articles proposés : d'autres familles que le devis, 6 au plus, un petit cadeau à la fin", () => {
   const cat = products.filter((p) => !p.hidden);
   const a = articlesAssortis(cat, produitPrincipal(dev1531.items, index));
   assert.ok(a.length > 0 && a.length <= 6);
-  assert.ok(!a.some((p) => p.slug === index.get("gourm-sans").product.slug));
-  assert.ok(a.slice(0, 3).every((p) => p.category === "bijoux"));
+  assert.ok(!a.some((p) => p.category === "bijoux"));
+  assert.ok(["porte-cles-cuir-a-graver", "piece-ronde-laiton"].includes(a[a.length - 1].slug));
+});
+t("devis de cristal : des bijoux en tête, aucun cristal", () => {
+  const cat = products.filter((p) => !p.hidden);
+  const cr = products.find((p) => p.slug === "cristal-photo-3d-horizontal");
+  const a = articlesAssortis(cat, { product: cr });
+  assert.equal(a[0].category, "bijoux");
+  assert.ok(a.filter((p) => p.category === "bijoux").length >= 2);
+  assert.ok(!a.some((p) => p.category === "cristal"));
 });
 console.log(`\n${ok} vérifications OK`);
