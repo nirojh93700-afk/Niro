@@ -217,7 +217,7 @@ export default async function HomePage() {
             <div className="lim-copy">
               <span className="lim-pill"><i></i>Édition limitée</span>
               <h2 id="t-lim">La carafe à whisky <em>gravée</em>, un cadeau d’exception</h2>
-              <p>Verre taillé, bouchon à facettes, gravée avec votre prénom ou le modèle de votre choix. Livraison offerte dès 60 € d’achat.</p>
+              <p>Verre taillé, bouchon à facettes, gravée avec votre prénom ou le modèle de votre choix. Livraison offerte dès 60 € d’achat sur les verres et carafes.</p>
               <p className="lim-price"><b>{prixTexte(carafe)}</b><span>livraison offerte</span></p>
               <Bouton href={carafe.href}>Découvrir la carafe</Bouton>
             </div>

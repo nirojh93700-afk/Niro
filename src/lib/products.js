@@ -279,7 +279,7 @@ export const products = [
 <p>Idéal pour un anniversaire, la Fête des Pères, Noël ou la Saint-Valentin.</p>`,
   },
   {
-    // Bracelet gourmette à plaque (gérant, 02/11/2026) : Nihaojewelry, acier 304 (doré = plaqué or 18 carats), 5 de chaque couleur.
+    // Bracelet gourmette à plaque (gérant, 02/11/2026) : Nihaojewelry, acier 304 (doré = finition dorée ; jamais écrire « plaqué or » : appellation réservée à 3 microns d'or minimum), 5 de chaque couleur.
     // Barré 30,90 € → payé 27,81 €. Gravure sur la plaque seulement, +3 €. Pas de visuel 3D (gérant : « enlève »).
     slug: "bracelet-gourmette-plaque",
     badge: "Nouveau",
@@ -1999,7 +1999,7 @@ export const products = [
     badge: "Nouveau",
     name: "Bracelet Cœur grosse chaîne à graver",
     weight: 72, pickup: false, letter: true, subcategory: "femme",
-    title: "Bracelet cœur à graver, grosse chaîne dorée et fermoir T — plaqué or 18 carats",
+    title: "Bracelet cœur à graver, grosse chaîne dorée et fermoir T",
     category: "bijoux", type: "Bracelet personnalisé",
     tagline: "Une grosse chaîne dorée, un cœur à graver et un petit cœur pavé de strass.",
     personalizable: true, personalizationLabel: "Gravure sur le cœur : recto et/ou verso (+3 € par face)",
@@ -2027,7 +2027,7 @@ export const products = [
     descriptionHtml: `<p>Un bracelet qui a de la présence : une <strong>grosse chaîne à maillons dorée</strong>, un <strong>fermoir T</strong> facile à mettre, et deux cœurs suspendus — un grand cœur lisse, <strong>à faire graver au recto comme au verso</strong>, et un petit cœur <strong>pavé de strass</strong> qui accroche la lumière.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (placage ionique)</li>
+<li><strong>Matière :</strong> acier inoxydable 304, <strong>finition dorée</strong> (dépôt ionique)</li>
 <li><strong>Finition :</strong> acier inoxydable hypoallergénique</li>
 <li><strong>Poids :</strong> environ 18 g, une vraie chaîne qui se sent au poignet</li>
 <li><strong>Fermoir :</strong> T (toggle), simple à ouvrir et fermer d'une main</li>
@@ -2085,7 +2085,7 @@ export const products = [
     badge: "Nouveau",
     name: "Collier Médaillon pivotant à graver",
     weight: 72, pickup: false, letter: true, subcategory: "femme",
-    title: "Collier médaillon pivotant à graver recto-verso — plaqué or 18 carats, doré, or rose ou argenté",
+    title: "Collier médaillon pivotant à graver recto-verso — doré, or rose ou argenté",
     category: "bijoux", type: "Collier personnalisé",
     tagline: "Un médaillon qui tourne dans son anneau : deux faces à graver, deux choses à dire.",
     personalizable: true, personalizationLabel: "Deux faces gravables : avant et arrière (+3 € par face)",
@@ -2118,7 +2118,7 @@ export const products = [
     descriptionHtml: `<p>Un <strong>médaillon rond suspendu dans son anneau</strong>, qui <strong>pivote entre les doigts</strong>. Ce n'est pas qu'un détail de style : c'est ce qui permet de graver <strong>les deux faces</strong> et de les montrer l'une après l'autre.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (placage ionique)</li>
+<li><strong>Matière :</strong> acier inoxydable 304, <strong>finition dorée</strong> (dépôt ionique)</li>
 <li><strong>Finitions :</strong> doré, or rose et argenté</li>
 <li><strong>Chaîne :</strong> maille câble en acier inoxydable 304, fermoir mousqueton</li>
 <li><strong>Poids du pendentif :</strong> environ 12 g</li>
@@ -2176,7 +2176,7 @@ export const products = [
     badge: "Nouveau",
     name: "Collier Pastille à graver recto-verso",
     weight: 72, pickup: false, letter: true, subcategory: "femme",
-    title: "Collier pastille ronde à graver recto-verso — chaîne fine, plaqué or 18 carats",
+    title: "Collier pastille ronde à graver recto-verso — chaîne fine dorée",
     category: "bijoux", type: "Collier personnalisé",
     tagline: "Une pastille ronde sur une chaîne fine — à graver au recto, au verso, ou les deux.",
     personalizable: true, personalizationLabel: "Gravure recto-verso : les deux faces de la pastille (+3 € par face)",
@@ -2206,7 +2206,7 @@ export const products = [
     descriptionHtml: `<p>Une <strong>pastille ronde toute simple</strong> sur une chaîne fine : le bijou qu'on porte tous les jours sans y penser, et qu'on ne quitte plus. Sa surface lisse se grave <strong>des deux côtés</strong>.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (revêtement PVD)</li>
+<li><strong>Matière :</strong> acier inoxydable 304, <strong>finition dorée</strong> (revêtement PVD)</li>
 <li><strong>Finitions :</strong> doré, or rose et argenté</li>
 <li><strong>Chaîne :</strong> maille câble fine en acier inoxydable 304</li>
 <li><strong>Poids :</strong> environ 5 g — léger, discret, se superpose bien avec d'autres chaînes</li>
@@ -2329,7 +2329,7 @@ export const products = [
     descriptionHtml: `<p>Un rang de <strong>perles d'acier polies</strong>, une petite <strong>pastille ronde à graver</strong>, et une <strong>chaîne coulissante</strong> terminée par deux billes : le bracelet s'ajuste d'un geste, de <strong>16 à 23 cm</strong>.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> acier inoxydable 304, <strong>plaqué or véritable 18 carats</strong> (revêtement PVD)</li>
+<li><strong>Matière :</strong> acier inoxydable 304, <strong>finition dorée</strong> (revêtement PVD)</li>
 <li><strong>Deux finitions :</strong> doré et argenté</li>
 <li><strong>Taille réglable</strong> de 16 à 23 cm par chaîne coulissante</li>
 <li><strong>Poids :</strong> environ 12 g</li>

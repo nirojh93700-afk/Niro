@@ -80,7 +80,7 @@ export default function Finder({ qui, occ, fetePhotos = FETES_PHOTO_DEFAUT, card
     <section className={`fd rv${page ? " fd-page in" : ""}`} id="trouver" aria-labelledby={page ? undefined : "t-fd"}>
       <div className="fd-in">
         {!page ? <h2 id="t-fd">Trouver le bon cadeau <em>en deux étapes</em></h2> : null}
-        <p className="fd-lead">Fait main en France : chaque pièce est gravée et découpée dans notre atelier.</p>
+        <p className="fd-lead">Gravé et découpé en France : chaque pièce est personnalisée dans notre atelier.</p>
         <div className="fd-step" role="group" aria-label="Pour qui">
           <div className="fd-h"><b>1</b><span>Pour qui ?</span></div>
           <div className="fts">{qui.map((t) => <Tuile key={t.v} k="qui" v={t.v} label={t.label} image={t.image} on={sel.qui === t.v} off={sel.qui !== t.v && isOff("qui", t.v)} onClick={() => toggle("qui", t.v)} />)}</div>

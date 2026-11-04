@@ -1314,7 +1314,7 @@ Un souci à la réception ?
   "bracelet-coeur-chaine": {
     material: `Taille & Matériaux
 - Grosse chaîne à maillons avec fermoir T (toggle), grande médaille cœur lisse + petit cœur pavé de strass.
-- Matière : acier inoxydable 304, plaqué or véritable 18 carats (placage ionique).
+- Matière : acier inoxydable 304, finition dorée (dépôt ionique).
 - Poids : environ 18 g.`,
     usage: `Personnalisation & Entretien
 - La grande médaille cœur se grave au laser sur ses deux faces : prénom, date ou petit message (20 caractères maximum par face pour rester lisible).
@@ -1351,7 +1351,7 @@ Un souci à la réception ?
   "collier-medaillon-pivotant": {
     material: `Taille & Matériaux
 - Médaillon rond monté sur pivot dans un anneau : il tourne pour découvrir l'une ou l'autre face.
-- Matière : acier inoxydable 304, plaqué or véritable 18 carats (placage ionique).
+- Matière : acier inoxydable 304, finition dorée (dépôt ionique).
 - Chaîne maille câble en acier inoxydable 304, fermoir mousqueton. Poids du pendentif ~12 g.
 - Finitions : doré, or rose ou argenté.`,
     usage: `Personnalisation & Entretien
@@ -1391,7 +1391,7 @@ Un souci à la réception ?
     returns: "Bijou gravé à la commande dans notre atelier, puis envoyé en lettre suivie.\nPièce personnalisée : pas de droit de rétractation (art. L221-28 du Code de la consommation). Un défaut de fabrication ou une erreur de notre part est bien sûr pris en charge.",
   },
   "bracelet-gourmette-plaque": {
-    material: "Acier inoxydable 304. Doré : plaqué or 18 carats. Noir : finition noire.\nChaîne gourmette à mailles épaisses, plaque lisse gravable, fermoir mousqueton.\nPoids : environ 15 g.",
+    material: "Acier inoxydable 304. Doré : finition dorée. Noir : finition noire.\nChaîne gourmette à mailles épaisses, plaque lisse gravable, fermoir mousqueton.\nPoids : environ 15 g.",
     usage: "Gravure sur la plaque (25 caractères environ) : +3 €. Laissez le champ vide pour un bracelet sans gravure.\n\nMettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.\nEntretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
     returns: "Bijou gravé à la commande dans notre atelier, puis envoyé en lettre suivie.\nPièce personnalisée : pas de droit de rétractation (art. L221-28 du Code de la consommation). Un défaut de fabrication ou une erreur de notre part est bien sûr pris en charge.",
   },
@@ -1400,7 +1400,7 @@ Un souci à la réception ?
 - Pastille ronde lisse sur chaîne fine maille câble.
 - Pastille : 2,4 cm de diamètre, 1,3 mm d'épaisseur.
 - Chaîne : 24 cm de hauteur portée, soit un tour de cou d'environ 48 cm (la pastille tombe juste sous la base du cou).
-- Matière : acier inoxydable 304, plaqué or véritable 18 carats (revêtement PVD).
+- Matière : acier inoxydable 304, finition dorée (revêtement PVD).
 - Finitions : doré, or rose ou argenté. Poids du bijou ~5 g.
 - Acier inoxydable : supporte la transpiration au quotidien.`,
     usage: `Personnalisation & Entretien
@@ -1438,7 +1438,7 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Rang de perles d'acier polies, petite pastille ronde à graver, chaîne coulissante à deux billes.
 - Taille réglable de 16 à 23 cm : convient à tous les poignets.
-- Matière : acier inoxydable 304, plaqué or véritable 18 carats (revêtement PVD).
+- Matière : acier inoxydable 304, finition dorée (revêtement PVD).
 - Deux finitions : doré ou argenté. Poids ~12 g.`,
     usage: `Personnalisation & Entretien
 - La pastille (environ 1 cm) se grave au laser : prénom court, initiales ou date (12 caractères maximum).
