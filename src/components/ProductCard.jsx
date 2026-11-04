@@ -12,8 +12,13 @@ export default function ProductCard({ product }) {
   const distinct = new Set(prices).size > 1;
   const showDes = distinct && basePrice === Math.min(...prices);
   const image = product.cardImage || product.images[0];
+  // Prix barré arrondi en ,90 — uniquement pour les bijoux.
+  const old90 = (x) => (product.category === "bijoux" ? roundTo90(x) : x);
   const sale = product.salePrice; // promo sur la variante par défaut
-  const hasPromo = typeof sale === "number" && sale < basePrice;
+  // Une promo ne s'affiche que si elle fait au moins 1 % ET si le prix barré (arrondi)
+  // reste au-dessus du prix promo : jamais de badge « -0 % » ni de promo plus chère que le barré.
+  const hasPromo = typeof sale === "number" && sale < basePrice
+    && Math.round((1 - sale / basePrice) * 100) >= 1 && old90(basePrice) > sale;
   // Prix conseillé (comparaison « moins cher qu'ailleurs »), seulement s'il n'y a pas déjà une promo réelle.
   const refMarkup = Number(product.refMarkup) || 0;
   const refPrice = !hasPromo && refMarkup > 0 ? Math.round(basePrice * (1 + refMarkup / 100) * 100) / 100 : 0;
@@ -21,8 +26,6 @@ export default function ProductCard({ product }) {
   const compareAt = product.variants[0].compareAt;
   const hasCompare = !hasPromo && typeof compareAt === "number" && compareAt > basePrice;
   const comparePct = hasCompare ? Math.round((1 - basePrice / compareAt) * 100) : 0;
-  // Prix barré arrondi en ,90 — uniquement pour les bijoux.
-  const old90 = (x) => (product.category === "bijoux" ? roundTo90(x) : x);
 
   return (
     <Link href={`/produit/${product.slug}`} className="product-card">

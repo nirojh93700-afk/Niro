@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { getPromos } from "@/lib/stock";
+import { stripBijouxPromos } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +12,11 @@ export const metadata = {
 };
 
 export default async function OffresPage() {
-  const [catalog, promos] = await Promise.all([getCatalog(), getPromos()]);
+  // Mêmes promos que la fiche, le panier et le paiement : sur les bijoux, seule la
+  // remise permanente −10 % s'applique (les anciennes remises rapides sont ignorées).
+  // Avant, cette page lisait les promos brutes → prix barrés faux, badges « -0 % ».
+  const [catalog, rawPromos] = await Promise.all([getCatalog(), getPromos()]);
+  const promos = await stripBijouxPromos(rawPromos);
 
   const onSale = catalog
     .map((p) => {
@@ -33,7 +38,7 @@ export default async function OffresPage() {
         <div className="section-head">
           <span className="eyebrow">Bons plans</span>
           <h2>Offres spéciales</h2>
-          <p>Nos promotions du moment — profitez-en, les quantités sont limitées.</p>
+          <p>Nos promotions du moment.</p>
         </div>
 
         {onSale.length === 0 ? (

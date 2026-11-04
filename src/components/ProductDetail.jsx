@@ -352,7 +352,9 @@ export default function ProductDetail({ product, realisations = [] }) {
   const variantStock = stockMap[variant.stockId || variant.id];
   const soldOut = typeof variantStock === "number" && variantStock <= 0;
   const salePrice = promos[variant.id];
-  const hasPromo = typeof salePrice === "number" && salePrice < variant.price;
+  // Même garde que la vignette : au moins 1 % de remise, jamais un badge « -0 % ».
+  const hasPromo = typeof salePrice === "number" && salePrice < variant.price
+    && Math.round((1 - salePrice / variant.price) * 100) >= 1;
   // Supplément de gravure (pages de texte en plus de la couverture).
   const engrave = engravingExtra(product, fieldValues, variant.id);
   // Supplément d'emballage (écrin / pochette choisis) — le sachet offert est inclus d'office.
