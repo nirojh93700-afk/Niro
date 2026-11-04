@@ -12,3 +12,5 @@
 - 02/11 : relance douce envoyée par le site (« Votre fée et le Scorpion » : l'aperçu vous a plu ? on peut adapter le dessin ;
   quand vous le souhaiterez, indiquez la taille → devis). Ne pas la relancer une 3ᵉ fois sans demande du gérant.
 - ⏳ En attente de sa réponse. AVANT tout devis : demander au gérant le montant du supplément « image personnalisée ».
+- 04/11/2026 ~14 h 50 : 2ᵉ relance envoyée par le site sur demande du gérant (`mail-relance-04-11.json`), SANS l'image (déjà envoyée) :
+  « si le dessin ne vous plaît pas tout à fait, nous pouvons le refaire selon vos idées ». Ne plus relancer sans sa demande.
