@@ -23,7 +23,7 @@ const html = `
 <p>Conformément au Règlement Général sur la Protection des Données, vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation, de portabilité et d'opposition. Pour exercer ces droits, contactez : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a></p>
 
 <h3>5. Cookies</h3>
-<p>Notre site utilise uniquement un stockage local essentiel au fonctionnement de la boutique (mémorisation de votre panier). La page de paiement, gérée par Stripe, peut déposer des cookies nécessaires à la sécurité de la transaction. Nous n'utilisons pas de cookies publicitaires.</p>
+<p>Nous utilisons Google Analytics pour mesurer la fréquentation du site (pages vues, produits consultés). Ces données sont anonymisées et ne servent pas à la publicité. Le site utilise aussi un stockage local pour mémoriser votre panier, et la page de paiement, gérée par Stripe, peut déposer des cookies nécessaires à la sécurité de la transaction. Nous n'utilisons pas de cookies publicitaires.</p>
 
 <h3>6. Mesure d'audience de nos e-mails</h3>
 <p>Si vous êtes inscrite à notre lettre d'information, nos e-mails de nouveautés contiennent une image de mesure invisible et des liens de suivi qui nous indiquent si le message a été ouvert et quels produits ont été consultés. Cette mesure nous sert uniquement à savoir si nos envois vous intéressent et à ne pas vous écrire inutilement ; elle n'est jamais utilisée à des fins publicitaires ni transmise à un tiers. Vous pouvez la neutraliser en bloquant l'affichage des images dans votre messagerie, et vous désinscrire à tout moment en nous écrivant.</p>
@@ -32,7 +32,7 @@ const html = `
 <p>Si vous utilisez votre espace client (connexion par lien reçu par e-mail), nous conservons la date et l'heure de vos connexions pendant 90 jours, associées à votre adresse e-mail. Cette information nous sert uniquement à mieux vous accompagner (par exemple retrouver votre demande plus vite) ; elle n'est jamais utilisée à des fins publicitaires ni transmise à un tiers.</p>
 
 <h3>7. Partage des données</h3>
-<p>Vos données ne sont jamais vendues. Elles sont partagées uniquement avec nos prestataires techniques (Netlify pour l'hébergement, Stripe pour le paiement, La Poste / Mondial Relay pour la livraison, Resend pour l'envoi de nos e-mails) dans le strict cadre du traitement de votre commande.</p>
+<p>Vos données ne sont jamais vendues. Elles sont partagées uniquement avec nos prestataires techniques (Google Firebase pour l'hébergement, Google Analytics pour la mesure d'audience, Stripe pour le paiement, La Poste / Mondial Relay pour la livraison, Resend et Gmail pour l'envoi de nos e-mails) dans le strict cadre du traitement de votre commande.</p>
 
 <h3>8. Sécurité</h3>
 <p>Notre site est sécurisé en HTTPS. Les paiements sont traités par Stripe, certifié PCI DSS niveau 1 : vos numéros de carte ne transitent jamais par nos serveurs.</p>
@@ -48,7 +48,7 @@ export default function ConfidentialitePage() {
         <div className="section-head" style={{ marginBottom: 28 }}>
           <span className="eyebrow">Informations</span>
           <h2>Politique de confidentialité</h2>
-          <p>Dernière mise à jour : juin 2026</p>
+          <p>Dernière mise à jour : novembre 2026</p>
         </div>
         <div
           className="product-desc"

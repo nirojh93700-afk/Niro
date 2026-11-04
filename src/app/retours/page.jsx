@@ -13,14 +13,16 @@ const html = `
 <h3>Principe général (article L221-28 du Code de la consommation)</h3>
 <p>Les produits personnalisés ne sont pas remboursables une fois la fabrication lancée — exception au droit de rétractation pour biens confectionnés selon les spécifications du consommateur.</p>
 
+<p>Dans tous les cas, vous bénéficiez de la garantie légale de conformité (2 ans à compter de la livraison) et de la garantie contre les vices cachés : un article défectueux ou non conforme est refait ou remboursé, sans condition de délai de signalement.</p>
+
 <h3>Articles non personnalisés (sans gravure / modèle vierge)</h3>
 <p>Pour un article commandé <strong>sans personnalisation</strong> (option « sans gravure » / « sans texte », pièce vierge), vous bénéficiez du <strong>droit de rétractation légal de 14 jours</strong> à compter de la réception. Renvoyez-le neuf, non utilisé et dans son emballage d'origine (frais de retour à votre charge) : nous vous remboursons sous 14 jours après réception.</p>
 
 <h3>Annulation avant fabrication</h3>
 <ul>
 <li><strong>Dans les 24 heures après la commande :</strong> remboursement intégral à 100 %.</li>
-<li><strong>Au-delà de 24 h, avant validation de l'aperçu :</strong> remboursement moins 10 € à 15 € de frais de préparation (un de nos designers a été affecté à votre projet).</li>
-<li><strong>Après validation de l'aperçu :</strong> la fabrication a démarré, votre commande n'est plus remboursable.</li>
+<li><strong>Au-delà de 24 h, avant le lancement de la fabrication :</strong> remboursement moins 10 € de frais de préparation (votre projet a déjà été préparé par l'atelier).</li>
+<li><strong>Après le lancement de la fabrication :</strong> votre commande n'est plus remboursable.</li>
 </ul>
 
 <h3>Conditions spécifiques par catégorie</h3>
@@ -30,7 +32,7 @@ const html = `
 <li>Annulation 24 h : 100 % remboursé</li>
 <li>Après 24 h, avant le lancement de la fabrication : moins 10 € de frais</li>
 <li>Dès le lancement de la fabrication (découpe) : non remboursable</li>
-<li>Défaut à l'arrivée : photo sous 24 h, refonte gratuite</li>
+<li>Défaut à l'arrivée : signalez-le-nous dès réception, avec une photo : refonte gratuite</li>
 </ul>
 
 <h4>Bijoux gravés</h4>
@@ -38,7 +40,7 @@ const html = `
 <li>Annulation 24 h : 100 % remboursé</li>
 <li>Après 24 h, avant gravure : moins 10 € de frais</li>
 <li>Après gravure : non remboursable</li>
-<li>Défaut à l'arrivée : photo sous 14 jours, refonte ou remboursement</li>
+<li>Défaut à l'arrivée : signalez-le-nous dès réception, avec une photo : refonte ou remboursement</li>
 </ul>
 
 <h3>Retrait en main propre (click &amp; collect)</h3>
@@ -62,7 +64,7 @@ export default function RetoursPage() {
         <div className="section-head" style={{ marginBottom: 28 }}>
           <span className="eyebrow">Informations</span>
           <h2>Politique de retour</h2>
-          <p>Dernière mise à jour : juin 2026</p>
+          <p>Dernière mise à jour : novembre 2026</p>
         </div>
         <div
           className="product-desc"

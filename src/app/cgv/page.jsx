@@ -5,7 +5,7 @@ export const metadata = {
 };
 
 const html = `
-<p><em>Dernière mise à jour : juin 2026</em></p>
+<p><em>Dernière mise à jour : novembre 2026</em></p>
 
 <h3>1. Identification du vendeur</h3>
 <p>Niv Création — Atelier de personnalisation<br>Entreprise individuelle (micro-entrepreneur) — Niv Création<br>E-mail : <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a><br>Téléphone : <a href="tel:+33766153102">07 66 15 31 02</a><br>SIRET : 105 914 774 00010<br>Siège social : 6 rue d'Armaillé, 75017 Paris</p>
@@ -14,7 +14,7 @@ const html = `
 <p>Les présentes CGV régissent les ventes de produits personnalisés réalisés par Niv Création auprès de consommateurs particuliers ou professionnels.</p>
 
 <h3>3. Prix et paiement</h3>
-<p>Les prix sont indiqués en euros. « TVA non applicable, art. 293 B du CGI » (Niv Création bénéficie de la franchise en base de TVA en tant que micro-entreprise). Le paiement s'effectue intégralement à la commande par carte bancaire via notre prestataire sécurisé Stripe. La commande n'est validée qu'après réception complète du paiement.</p>
+<p>Les prix sont indiqués en euros. « TVA non applicable, art. 293 B du CGI » (Niv Création bénéficie de la franchise en base de TVA en tant que micro-entreprise). Le paiement s'effectue intégralement à la commande, par carte bancaire ou par les autres moyens proposés sur la page de paiement sécurisée de notre prestataire Stripe (paiement en plusieurs fois PayPal ou Klarna, selon disponibilité). La commande n'est validée qu'après réception complète du paiement.</p>
 
 <h3>4. Commande et personnalisation</h3>
 <p>Pour une commande personnalisée, le client transmet par e-mail sa photo / son texte à graver. La fabrication démarre dès réception des éléments nécessaires à la personnalisation.</p>
@@ -25,6 +25,7 @@ const html = `
 <li>Vous disposez de 24 h pour modifier votre commande avant le lancement de la fabrication (ou choisissez « fabrication immédiate » au paiement pour un démarrage direct)</li>
 <li>Une fois prête, la commande est expédiée en colis suivi ; le délai de livraison dépend ensuite du transporteur</li>
 </ul>
+<p>Les frais de livraison dépendent du mode choisi (domicile, point relais, Express) et du poids du colis. Ils sont affichés dans le panier avant le paiement. Livraison offerte dès 45 € pour les bijoux et dès 60 € pour les verres et carafes.</p>
 
 <h3>6. Droit de rétractation</h3>
 <p><strong>Articles personnalisés :</strong> conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux produits personnalisés ou confectionnés selon les spécifications du consommateur (articles gravés ou découpés sur mesure, photo ou texte fournis par le client).</p>
@@ -40,7 +41,6 @@ const html = `
 <h3>9. Litiges et médiation</h3>
 <p>En cas de litige, le client peut recourir gratuitement à un médiateur de la consommation en vue d'un règlement amiable, conformément aux articles L611-1 et suivants du Code de la consommation.</p>
 <p>Médiateur de la consommation dont relève Niv Création : coordonnées communiquées prochainement (adhésion à un service de médiation en cours).</p>
-<p>Le client peut également utiliser la plateforme européenne de Règlement en Ligne des Litiges (RLL) : <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</p>
 <p>À défaut d'accord amiable, les tribunaux français sont seuls compétents.</p>
 
 <h3>10. Acceptation</h3>
