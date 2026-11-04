@@ -466,6 +466,13 @@ En attente de SA décision :
   Poids estimé 380 g → lettre suivie 8,90 € / relais 4,90 € : À VÉRIFIER (pesée réelle).
 - Couvertures DESSINÉES dans la maquette : il faudra de vraies photos gravées avant la mise en ligne.
 
+## 🌐 www.nivcreation.fr — ÉTAPES REDONNÉES AU GÉRANT LE 04/11/2026 (audit externe)
+- État vérifié le 04/11 soir : `www` est encore un CNAME vers `exquisite-khapse-7af3a0.netlify.app` ; Netlify répond 404 avec un
+  certificat invalide (l'ancien site a bien été supprimé : plus de mails en double). `nivcreation.fr` → Firebase, intact.
+- À faire par LUI (rien dans le code) : ① Firebase → App Hosting → niv-creation → Domaines → ajouter `www.nivcreation.fr`
+  « redirigé vers nivcreation.fr » → noter les lignes DNS ; ② Hostinger → DNS → supprimer le CNAME www → Netlify, ajouter les
+  lignes de Firebase. Ensuite : je vérifie que www redirige avec un certificat valide.
+
 ## 🌐 DOMAINE nivcreation.fr — À TRANSFÉRER AVANT LE 28/03/2027 (vu le 23/10/2026)
 - Hostinger a mis une restriction PERMANENTE sur son compte : renouvellement impossible chez eux. Le domaine reste actif
   jusqu'au 28/03/2027. Il faut le transférer vers un autre registrar (ex. OVHcloud ou Gandi, qui gèrent le .fr).
