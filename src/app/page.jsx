@@ -187,7 +187,7 @@ export default async function HomePage() {
             <div className="enf-grid">
               <Link className="enf-big" href={couverts?.href || "/boutique/enfants"}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/produits/couverts_enfants_ex_enfant.jpg" alt="Enfant qui mange avec sa cuillère personnalisée" />
+                <img src="/produits/couverts_enfants_ex_enfant.jpg" alt="Enfant qui mange avec sa cuillère personnalisée" loading="lazy" decoding="async" />
                 {couverts ? <span className="enf-lab"><b>{couverts.name}</b><span>{prixTexte(couverts)}</span></span> : null}
               </Link>
               <div className="enf-copy">
@@ -212,7 +212,7 @@ export default async function HomePage() {
           <section className="limited rv" aria-labelledby="t-lim">
             <div className="mxframe mxframe-sq"><LienPhoto c={carafe}><div className="mxframe-in">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/produits/carafe_gravee.jpg" alt="Carafe à whisky gravée, bouchon à facettes" />
+              <img src="/produits/carafe_gravee.jpg" alt="Carafe à whisky gravée, bouchon à facettes" loading="lazy" decoding="async" />
             </div></LienPhoto></div>
             <div className="lim-copy">
               <span className="lim-pill"><i></i>Édition limitée</span>

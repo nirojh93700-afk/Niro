@@ -36,7 +36,7 @@ export default function MurUnivers({ items }) {
   const tuiles = (row, copie) => row.map((c) => (
     <Link className="wt" href={c.href} key={`${copie}-${c.slug}`} aria-label={copie ? undefined : c.name} tabIndex={copie ? -1 : undefined}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="wt-img" src={c.image} alt={copie ? "" : c.name} />
+      <img className="wt-img" src={c.image} alt={copie ? "" : c.name} loading="lazy" decoding="async" />
       <span className="wt-l"><span>{c.name}</span><b>{c.prix ? `${c.prix.des ? "dès " : ""}${c.prix.texte}` : ""}</b></span>
     </Link>
   ));
