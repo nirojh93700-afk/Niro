@@ -966,6 +966,15 @@
   texte au fond : face + fond et texte oubliés, −7 €), DEV-1519 (Julien, prénom + phrase + date : un texte oublié, −3 €), Nicky (−2 €) ;
   DEV-1526 (Kim, flûtes) juste ; DEV-1506 (Ludovic, 47 cl sur mesure) fait avant que le 47 cl soit en boutique.
 
+## ⛔⛔⛔ JE NE FAIS RIEN SANS LUI DEMANDER — JAMAIS JE NE DÉCIDE À SA PLACE (gérant, 04/11/2026, très en colère)
+- Incident : il demandait que le site soit « en règle » ; j'ai lu « pas besoin de bandeau » comme un ordre de RETIRER Google Analytics et
+  je l'ai retiré du code (pas mis en ligne, annulé aussitôt). Il ne l'avait jamais demandé.
+- Règle : je ne supprime, ne retire, ne désactive RIEN (Google Analytics, Search Console, flux Google, balises, produits, réglages)
+  sans qu'il l'ait demandé mot pour mot. Quand une phrase peut se lire de deux façons : je DEMANDE, je ne choisis pas.
+- Google Analytics (G-RMBERKLVN9), la vérification Search Console, le sitemap et le flux Google Shopping RESTENT EN PLACE. Toute
+  nouvelle fiche / page produit doit envoyer la vue produit À LA FOIS au compteur du site (`trackOnce view_item`) ET à Google
+  (`gtag view_item`), comme `ProductDetail.jsx`, `MarquePagesFiche.jsx`, `CristauxGraves.jsx`.
+
 ## ⛔⛔ RÈGLE N° 1 — « NE FAIS PAS » = INTERDIT TOUT DE SUITE, PARTOUT, SANS DÉTOUR (04/10/2026)
 > Gérant, après l'incident du logo (on lui avait dit de ne pas prendre de copie du logo, et on en a pris trois
 > à la suite : sa capture, un e-mail, l'icône du site) : « quand je te dis de pas faire, tu le fais pas,

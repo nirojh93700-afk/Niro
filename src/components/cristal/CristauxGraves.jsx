@@ -122,7 +122,16 @@ export default function CristauxGraves({ prix = {}, noel = null, socles = null }
   }, [ITEMS, grp, fam, plus]);
 
   // Statistiques « produit vu » : la fiche du cristal déjà gravé redirige ici, la visite se compte donc ici.
-  useEffect(() => { trackOnce("vi-" + CG_SLUG, "view_item", { slug: CG_SLUG }); }, []);
+  useEffect(() => {
+    trackOnce("vi-" + CG_SLUG, "view_item", { slug: CG_SLUG });
+    if (typeof window !== "undefined" && typeof window.gtag === "function") {
+      window.gtag("event", "view_item", {
+        currency: "EUR",
+        value: Number(prix?.Petit || prix?.petit || 0) || 0,
+        items: [{ item_id: CG_SLUG, item_name: "Cristal déjà gravé", item_category: "cristal" }],
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (!("IntersectionObserver" in window) || !panneau.current) return undefined;
