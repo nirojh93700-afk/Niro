@@ -1,3 +1,19 @@
+## 🔎 AUDIT EXTERNE DU 04/11/2026 — CORRECTIONS MISES EN LIGNE LE SOIR MÊME (gérant : « commence par les prix, montre-moi avant de pousser »)
+- **Promotions** (4a3c9daa) : `/offres` lisait les promos BRUTES → 42 vieilles « remises rapides » bijoux de juin (ignorées partout ailleurs par
+  `stripBijouxPromos`) donnaient « -0 % », « -1 % » et 15,90 → 15,92 €. La page passe par `stripBijouxPromos` comme la fiche et le paiement ;
+  `ProductCard` / `ProductDetail` n'affichent un badge que si remise ≥ 1 % et prix barré > promo ; « quantités limitées » retiré. Les 42 promos
+  restent en base (inutiles) : à supprimer dans Gestion → Promotions sur son mot.
+- **Textes légaux** (6b1d56e5) : hébergeur = Google Ireland / Firebase (plus Netlify) ; Confidentialité déclare Google Analytics (§5, §7) ; CGV :
+  carte / PayPal / Klarna selon disponibilité, paragraphe frais de livraison (45 € bijoux, 60 € verres), lien RLL ec.europa.eu RETIRÉ (plateforme
+  fermée le 20/07/2025) ; Retours : garantie légale 2 ans sans délai de signalement, « photo sous 24 h / 14 jours » → « dès réception »,
+  frais d'annulation = 10 € partout, « validation de l'aperçu » → « lancement de la fabrication ». Médiateur toujours « communiqué prochainement ».
+- **« Sans nickel »** (e64fad75) : retiré des 2 fiches (Collier Enveloppe, Médaillon Cœur ouvrable) et de la FAQ (le 316L contient du nickel) ;
+  la FAQ renvoie à la matière de chaque fiche (316L ou 304). 1er déploiement Firebase en échec (2 min 22), relancé par ce commit.
+- **Reste de l'audit, à faire sur son mot** : accueil 22 Mo (87 images du mur préchargées : `MurUnivers` sans `loading="lazy"` ; le PNG
+  `Gemini_Generated_Image_rdfslxrdfslxrdfs.png` du numéro de table eucalyptus fait 5,1 Mo ; `/_next/image` répond 404 en prod, aucune page
+  n'utilise l'optimiseur) · www.nivcreation.fr (plan domaine dans EN-ATTENTE) · en-têtes de sécurité absents · avis sans date affichée ·
+  « Fait main en France » sur l'accueil.
+
 ## 🗂️ FILE DE PRODUCTION + FICHE COMMANDE REFAITES DANS GESTION — 04/11/2026 (gérant : « tu peux intégrer les deux sur le site, réunis pas les deux ») — ✅ EN LIGNE LE 04/11/2026 (fa50db13, déploiement réussi)
 - **Les deux maquettes sont reproduites dans le site, pages SÉPARÉES** : `/gestion/commandes` (file, refaite) et **`/gestion/commande/<réf>` (nouvelle fiche)**.
   `/gestion/fiches` (l'ancienne fiche complète) est GARDÉE telle quelle ; la file y renvoie plus (ses liens vont sur la nouvelle fiche), le sous-onglet reste.
