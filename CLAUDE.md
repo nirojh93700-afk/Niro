@@ -1,3 +1,25 @@
+## 🗂️ MAQUETTE « FICHE COMMANDE » DE GESTION RÉORGANISÉE — 04/11/2026 (gérant : « la page commande c'est trop mélangé, rangé n'importe comment… aide-moi par étape… cherche dans les grands logiciels du monde entier et mélange le meilleur ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- **Artifact** https://claude.ai/artifact/43E3za7KKg1G87cSCtPowq · générateur `tools/maquettes/fiche-commande.py <dossier css> <sortie>` (css = les 3 feuilles
+  en ligne, vraies classes `.ash-*` ; seul `.fc-*` est neuf) · sortie `docs/maquettes/fiche-commande.html` (872 Ko, ignorée par git). 3 commandes
+  d'EXEMPLE (Camille Durand à préparer / Paul Mercier en fabrication, Belgique / Inès Martin expédiée), J / K pour passer de l'une à l'autre.
+- **Inventaire de la fiche actuelle (agent, 04/11)** : `PreparationCommande` (Raté + Conditionnement) affiché DEUX fois quand la fiche atelier est
+  ouverte ; la gravure montrée sous 3 formes (TableGravure, ItemSheet, OptionsVendues) ; « Date dans l'image » et la demande sur mesure en double ;
+  alertes critiques (geste, cadeau, e-mail corrigé) APRÈS les articles et le prix ; Rembourser / Annuler / Supprimer sur la même ligne que les
+  statuts ; `relaisPoint`, les étiquettes (flags) et la note interne modifiable absents de la fiche (seulement dans la file) ; deux logiques
+  d'expédition (prompt + confirm dans Gestion, e-mail automatique dans la file) ; « Imprimer » force l'ouverture de la fiche atelier.
+- **Ce que la maquette range (rien supprimé)** : en-tête COLLÉ (n°, cliente, 3 statuts payée · fabrication · envoi, UNE grande action qui suit
+  l'étape, « Plus d'actions » avec les actions dangereuses à confirmation EN LIGNE) → alertes TOUJOURS en haut (Express, pays, cadeau promis,
+  date dans l'image, réponse cliente) → frise Payée → Livrée + « À expédier au plus tard » (ouvrés + calendaires) + « Ce qu'il reste à faire »
+  (5 cases) → raccourcis « Aller à » → GAUCHE : À graver (une carte par face, aperçu de la cliente, photo, Vendu en plus, Raté, e-mails à lire)
+  · Emballage & envoi (mode, point relais, matériel coché + gain, Boxtal champ par champ, étiquette, suivi) · Messages (fil unifié e-mails /
+  Répondre / BAT / devis + réponse de l'assistant) · Historique (+ notes internes) ; DROITE : Cliente · Livraison (corriger) · Paiement (+ gain,
+  remboursement possible ?) · Étiquettes & note · Cadeau & geste · Devis & documents. Téléphone : une colonne, grande action collée en bas.
+- Sources (Shopify, Stripe, Etsy, Zendesk, Amazon, Linear, GotPhoto, Katana, Clispot) dans le volet « D'où vient chaque idée » en bas de la page.
+  Vérifié Chromium 1280 / 390 : 0 erreur JS, 0 débordement, actions jouées (cases, menu, confirmations, J / K, étiquettes, Boxtal).
+- Au « applique » : fiche = page à part (`/gestion/commande/<ref>`, ouverte depuis la file et la liste), MÊMES API qu'aujourd'hui (`/api/admin/orders`
+  statut / annotate / livraison / relais / review, `/api/admin/materiel`, `/api/admin/bat`), `apparierSpec`, `RatesCommande`, `Conditionnement`,
+  `TableGravure`, `DelaiCommande`, `BatThread` réutilisés ; une seule logique d'expédition (n° + case « prévenir ») ; jamais de `prompt` / `confirm`.
+
 ## 🎄 TANT QUE NOËL EST ALLUMÉ : TOUS LES EMBALLAGES DE NOËL PARTOUT POUR LES BIJOUX (gérant, 02/11/2026 : « à chaque fois maintenant jusqu'à que je désactive le bouton Noël, tout ce qu'on ajoute, il faut l'emballage Noël, tous les emballages Noël »)
 - Tout ce qui concerne un bijou propose les 6 emballages de Noël (sachet 0,90 · pochette 3,90 · sac à anses 4,90 · boîte à ruban 3,90 · boîte
   rouge 3,90 · **Pack de Noël 7,90 € barré 8,80**) : fiche (nouveau bijou compris, automatique par `emballagesNoelPourProduit`, catégorie
