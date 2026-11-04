@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { vignette } from "@/lib/vignettes";
 import WishlistButton from "@/components/WishlistButton";
 import { Ic } from "./icones";
 
@@ -22,7 +23,7 @@ export default function Carte({ c, badge = "", style }) {
       <span className="uc-img">
         {c.image ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img className="uc-ph uc-remote" src={c.image} alt={c.name} loading="lazy" />
+          <img className="uc-ph uc-remote" src={vignette(c.image)} alt={c.name} loading="lazy" />
         ) : (
           <span className="uc-none"><Ic n="image" /><small>photo à venir</small></span>
         )}

@@ -3262,6 +3262,9 @@ sont **récupérables** dans le transcript de session (`~/.claude/projects/…/<
    couleur, photo…).
 4. **Ajouter** l'objet produit dans `src/lib/products.js` (et une entrée dans
    `src/lib/productInfo.js`).
+4quater. **🖼️ VIGNETTES (04/11/2026)** : après tout ajout ou changement de photo de carte, lancer `npm run vignettes`
+   (copies WebP 480 px dans `public/vignettes/` + `src/lib/vignettes.json`, originaux jamais touchés). Les cartes de la boutique
+   (`Carte.jsx`) et le mur (`MurUnivers.jsx`) passent par `vignette(src)` ; sans vignette, la photo d'origine s'affiche.
 4ter. **⚠️ DATE D'AJOUT OBLIGATOIRE** : ajouter le slug + la date du jour dans
    `src/lib/productDates.js` (`PRODUCT_DATES`). C'est elle qui : 1) fait passer le produit
    **en tête du bandeau « Vient d'arriver »** de l'accueil ; 2) **éteint l'étiquette
