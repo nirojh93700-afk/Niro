@@ -1,5 +1,13 @@
 # 📋 TOUT CE QUI EST EN ATTENTE — inventaire de reprise
 
+## 🖼️ GOOGLE MERCHANT : 8 PHOTOS DE PRODUITS < 500 × 500 px — À DÉCIDER AVANT LE 31/01/2027 (gérant, 04/11/2026 : « mets une alerte, tu me rappelleras, on décidera »)
+- Mail Merchant Center (ID 5840330121) : dès le 31/01/2027, une photo principale < 500 × 500 px = produit refusé dans Google Shopping.
+- Concernés (photo principale du flux) : bracelet-femme-acier 400×379, bracelet-femme-coeur 381×400 (grandes photos 800 / 900 px déjà sur leur fiche),
+  cle-usb-personnalisee 355×400, cle-usb-cristal-3d 355×400, cle-usb-bois-coffret 321×400, bracelet-homme-cuir-tresse-acier 360×400,
+  porte-cles-cuir-a-graver 400×390, piece-ronde-laiton 386×400 (aucune grande photo). + 10 photos secondaires trop petites (ignorées par Google, sans blocage).
+- Choix à lui proposer : grande photo existante pour les 2 bracelets (flux seulement) ; pour les 6 autres, nouvelles photos OU copie agrandie 600×600 pour Google.
+- Rappel programmé le 01/12/2026 à 9 h (Paris), `trig_01Tokc91HdQkq3T9PkU4LYGj`. ⛔ Rien à modifier sans sa décision.
+
 ## 💶 IDÉE EN ATTENTE : FACTURER LES BIJOUX AU PRÉNOM, PAS À LA FACE — 03/11/2026 (gérant : « enregistre pour les prix là pour les prénoms… je te dirai »)
 - Constat (commande 0QEIXDI5, Vanessa Gorgol, Collier Plaque Acier) : 4 prénoms gravés (AXANDRE / MAXIM au recto, SASHA / PALOMA au verso)
   mais 2 textes facturés (+3 € par face remplie = +6 €), comme la fiche l'annonce. Au prénom, ça aurait fait +12 €.
