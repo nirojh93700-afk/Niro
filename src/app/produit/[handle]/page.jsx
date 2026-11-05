@@ -7,7 +7,7 @@ import { realisationsVisibles } from "@/components/TrustSection";
 import { guidePourProduit } from "@/lib/guides";
 import ProductReviews from "@/components/ProductReviews";
 import ProductCard from "@/components/ProductCard";
-import { getCatalogBySlug, getCatalog, getCatalogAdmin, priceFrom } from "@/lib/catalog";
+import { getCatalogBySlug, getCatalog, getCatalogAdmin, prixOuverture } from "@/lib/catalog";
 import { getCategoryLabel } from "@/lib/products";
 
 // Jeton d'aperçu privé : permet d'afficher une fiche d'un produit caché
@@ -139,7 +139,7 @@ export default async function ProductPage({ params, searchParams }) {
     offers: {
       "@type": "Offer",
       priceCurrency: "EUR",
-      price: priceFrom(product).toFixed(2),
+      price: prixOuverture(product).toFixed(2),
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
       url: `https://nivcreation.fr/produit/${product.slug}`,
