@@ -91,7 +91,7 @@ def build():
     </div>
   </div>
   <div class="prc-mode" data-mode="photo" hidden>
-    <p class="prc-legend">Téléversez le fichier (JPG, PNG). L'atelier vérifie la qualité avant de graver.</p>
+    <p class="prc-legend">Téléversez le fichier (JPG, PNG). L'atelier vérifie la qualité avant de graver. Vous avez plusieurs photos ou logos ? Nous préparons la mise en page et vous envoyons un aperçu à valider.</p>
     <div class="prc-fields">
       <div class="field"><label>Votre photo ou logo</label><input type="file" id="prc-file" accept="image/*"><p class="prc-fileok" id="prc-fileok" hidden>Photo ajoutée ✓</p></div>
       <div class="field"><label>Texte sous la photo <span class="prc-opt">(facultatif)</span></label><input type="text" id="prc-ptxt" maxlength="30" placeholder="Prénom, message…"></div>
@@ -106,6 +106,7 @@ def build():
 <section class="prc-step">
   <div class="prc-sh"><span class="prc-num" data-step="3">3</span><h3>Autour de votre gravure <span class="prc-opt">— facultatif, +{EXTRA} € par élément</span></h3></div>
   <p class="prc-legend">Un cadre avec un prénom, une lettre fleurie, un 2ᵉ dessin, une date… sur la face, les côtés ou tout autour du gobelet.</p>
+  <p class="prc-hint prc-miseenpage">✦ Plusieurs images, photos ou logos ? Nous préparons la mise en page et vous envoyons un aperçu à valider avant la gravure.</p>
   <button type="button" class="prc-change" id="prc-plus">＋ Ajouter un élément autour</button>
   <div class="prc-fields prc-extra" id="prc-xform" hidden>
     <div class="field"><label>Quoi ?</label><div class="prc-chips" id="prc-xkind">
@@ -365,7 +366,34 @@ button.add{border:0;font:inherit;cursor:pointer;width:100%}
   majPols(); refresh();
 })();
 </script>''' % (json.dumps([[k, l] for k, l, _ in POLICES], ensure_ascii=False), PRIX, EXTRA)
-    h = STYLE + h + SCRIPT
+    # Exemples gravés (05/11/2026, gérant : « des images comme gravé pour montrer, comme pour les marque-pages ») :
+    # rendus par tools/maquettes/gobelet-exemples.py — gravure dorée (bande dorée) ou irisée (bande multicolore).
+    import base64, glob, os
+    exs = sorted(glob.glob(f"{ROOT}/docs/maquettes/assets/gobelet/exemples/ex*.jpg"), key=lambda f: int(re.search(r"ex(\d+)", os.path.basename(f)).group(1)))
+    LEG = {"1": "Dessin n° 48 + prénom", "2": "Dessin n° 67 + prénom", "3": "Dessin n° 22 + prénom", "4": "Dessin n° 71 + prénom",
+           "5": "Photo + texte", "6": "Texte seul", "7": "Photo de couple + date", "8": "Photo + prénom", "9": "Plusieurs images"}
+    def tuile(f):
+        k = re.search(r"ex(\d+)", os.path.basename(f)).group(1)
+        b64 = base64.b64encode(open(f, "rb").read()).decode()
+        leg = LEG.get(k, "Exemple")
+        return (f'<div class="ti"><div class="t"><span class="ex-tag">Exemple</span><img src="data:image/jpeg;base64,{b64}" '
+                f'alt="Exemple de gobelet gravé : {leg}"></div><div class="cap">{leg}</div></div>')
+    tiles = "".join(tuile(f) for f in exs)
+    anc = re.search(r'(Chaque coloris a ses propres photos.*?</div>)', h, re.S)
+    assert anc, "galerie introuvable"
+    h = h[:anc.end()] + f'\n      <div class="ex-lbl">Exemples de gravures <span>— la gravure prend la couleur de la bande du haut : dorée sur le crème et le rose, irisée sur le bleu et le blanc</span></div>\n      <div class="thumbs thumbs-ex">{tiles}</div>' + h[anc.end():]
+    STYLE_EX = """<style>
+.thumbs-ex{flex-wrap:wrap}
+.thumbs .t{position:relative}
+.thumbs-ex .t img{transform:scale(1.55)}
+.ex-tag{position:absolute;left:5px;top:5px;background:rgba(29,24,17,.82);color:#f3e6c4;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:6px;z-index:1}
+.ex-lbl{margin-top:18px;font-size:13px;font-weight:700;color:var(--ink)}
+.ex-lbl span{font-weight:400;color:var(--ink-soft)}
+.prc-miseenpage{background:#fbf6ea;border:1px solid #ecdcb4;border-radius:10px;padding:9px 12px;color:#6b5320}
+@media (max-width:760px){.thumbs-ex .ti{width:31%}}
+</style>"""
+    SCRIPT_EX = """<script>document.querySelectorAll('.thumbs-ex .ti').forEach(function(t){t.addEventListener('click',function(){var h=document.querySelector('.hero');if(h){var r=h.getBoundingClientRect();if(r.bottom<60||r.top>innerHeight-60)h.scrollIntoView({behavior:'smooth',block:'center'});}});});</script>"""
+    h = STYLE + STYLE_EX + h + SCRIPT + SCRIPT_EX
     open(OUT, "w", encoding="utf8").write(h)
     print("écrit", OUT, len(h) // 1024, "Ko")
 

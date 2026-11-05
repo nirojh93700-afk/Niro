@@ -3804,6 +3804,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 >   - Clone EXACT du verre à vin (mêmes réglages : styles 1-19, lettre fleurie, 8 polices, note, prix : voir `node tools/prix-fiche.mjs flute-a-champagne-gravee`). Change seulement : photos (`IMG_9599 vierge / 9601 set / 9602 ambiance`) + infos (verre **21 cl**, Ø 6,3 × H 21,4 cm, lave-vaisselle ; coût Metro 2,34 €/flûte, réf Pinomaro).
 
 ### 🥤 GOBELET — MAQUETTE « PARCOURS GUIDÉ » ✅ ENREGISTRÉE LE 03/10/2026 (remplace celle du 25/09)
+> **05/11/2026 (version 5 de l'artifact, gérant : « des images comme gravé pour montrer, comme pour les marque-pages »)** : 9 images
+> « Exemple » sous le choix de la couleur (dessins n° 48, 67, 22, 71 + prénoms, photo + texte, texte seul, photo de couple + date,
+> photo + prénom, plusieurs images) rendues par `tools/maquettes/gobelet-exemples.py` → `docs/maquettes/assets/gobelet/exemples/`.
+> ⛔ **La gravure prend la couleur de la BANDE du haut** (gérant) : DORÉE sur le crème et le rose (bande dorée), IRISÉE
+> (turquoise → bleu → violet → rose) sur le bleu marine et le blanc (bande multicolore) — jamais gris ni blanc.
+> Phrase ajoutée (étape 3 et mode photo) : « Plusieurs images, photos ou logos ? Nous préparons la mise en page et vous envoyons
+> un aperçu à valider avant la gravure. » = décision du gérant pour le gobelet (exception à « pas d'aperçu »).
 > Gérant, 03/10 : « Retravailler la maquette comme t'as fait pour les verres de vin » → puis « il faut que ça soit
 > une édition limitée, comme carafe » → « on va le mettre à 47 euros 90 et livraison c'est pas gratuit » →
 > **« Enregistre la maquette, je te donnerai les quantités après »**. Rien n'est en ligne (gobelet `hidden:true`).
