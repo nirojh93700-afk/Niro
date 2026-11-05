@@ -19,6 +19,7 @@ import { photosEnvoyees } from "@/lib/apercuCote";
 import { optionsArticle } from "@/lib/optionsVendues";
 import { MODELES, imageDesign } from "@/lib/modeles";
 import { texteAvecDecor } from "@/lib/decorTexte";
+import { lireLigne, quoiElement } from "@/lib/gobeletParcours";
 
 const IGNORES = new Set(["emplacement", "mode", "police", "deuxEmplacement"]);
 const estUrl = (s) => typeof s === "string" && /^(\/api\/img\/|https?:\/\/|data:image\/|\/produits\/)/.test(s);
@@ -77,7 +78,7 @@ export function oubliesAtelier(item) {
     if (produit?.gobeletParcours && champs.mode && ["autour", "cote", "place", "dessin", "cadre", "lettre", "nom", "texte", "texteSousPhoto"].includes(cle)) {
       if (cle === "autour") {
         for (const l of String(valeur || "").split("\n").map((x) => x.trim()).filter(Boolean)) {
-          const quoi = l.split(" — ")[0];
+          const quoi = quoiElement(lireLigne(l));
           if (!vu(quoi)) out.push({ cle, libelle: "Élément en plus", valeur: l, photo: false });
         }
         continue;

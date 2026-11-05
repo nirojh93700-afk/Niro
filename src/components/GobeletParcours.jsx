@@ -13,8 +13,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import { formatEuro } from "@/lib/format";
 import {
-  gobeletEtat, gobeletSupplement, gobeletElements, lignesAutour, lireLigne, ligneElement, champsPremier,
-  premierElement, manqueElement, quoiElement, ouElement, placesDuCote, GOB_COTES, GOB_PLACES,
+  gobeletEtat, gobeletSupplement, gobeletElements, champsDepuisListe, premiereLibre, ORDRE_PLACES,
+  manqueElement, quoiElement, ouElement, placesDuCote, GOB_COTES, GOB_PLACES,
   GOB_DESSINS_MAX, GOB_CADRE_MIN, GOB_CADRE_MAX,
 } from "@/lib/gobeletParcours";
 import PhotoUpload, { GUIDE_PHOTO_GRAVURE } from "./PhotoUpload";
@@ -82,7 +82,8 @@ function Planches({ items, onOpen }) {
 
 // Tuiles (un fichier par dessin), utilisées seulement si cfg.dessinUnite existe. Toucher la case = le dessin est choisi ;
 // la loupe 🔍 l'ouvre en grand (on peut aussi y choisir).
-function TuilesDessins({ cfg, choisi, onPick, onView }) {
+function TuilesDessins({ cfg, choisis = [], onPick, onView }) {
+  const choisi = choisis[0];
   const fam = useMemo(() => familles(cfg), [cfg]);
   // Une famille à la fois (celle du dessin choisi, sinon la 1re) : moins d'images chargées d'un coup.
   const [f, setF] = useState(() => {
@@ -100,11 +101,11 @@ function TuilesDessins({ cfg, choisi, onPick, onView }) {
       </div>
       <div className="gbp-tuiles">
         {nums.map((n) => (
-          <div key={n} className={`gbp-tuile${choisi === n ? " on" : ""}`}>
-            <button type="button" className="gbp-tuile-btn" onClick={() => onPick(n)} aria-pressed={choisi === n} aria-label={`Choisir le dessin n° ${n}`}>
+          <div key={n} className={`gbp-tuile${choisis.includes(n) ? " on" : ""}`}>
+            <button type="button" className="gbp-tuile-btn" onClick={() => onPick(n)} aria-pressed={choisis.includes(n)} aria-label={`${choisis.includes(n) ? "Retirer" : "Choisir"} le dessin n° ${n}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={srcDessin(cfg, n)} alt="" loading="lazy" decoding="async" width="120" height="104" />
-              <span className="gbp-tnum">{choisi === n ? "✓ " : ""}n° {n}</span>
+              <span className="gbp-tnum">{choisis.includes(n) ? "✓ " : ""}n° {n}</span>
             </button>
             <button type="button" className="gbp-loupe" onClick={() => onView(n, nums)} aria-label={`Voir le dessin n° ${n} en grand`}>🔍</button>
           </div>
@@ -191,36 +192,30 @@ function Fenetre({ v, cfg, onClose, onPick }) {
   );
 }
 
-const VIDE = { kind: "", num: "", lettre: "", nom: "", texte: "", photo: "", sous: "", police: "great-vibes", side: "face", zone: "" };
+const VIDE = { kind: "", num: "", lettre: "", nom: "", texte: "", photo: "", sous: "", police: "great-vibes", side: "", zone: "" };
+const LIBELLE_PLACE = (c, z) => `${GOB_COTES[c]} — ${GOB_PLACES[z]}`;
 
 export default function GobeletParcours({ product, fieldValues, setFieldValues, unitPrice, couleur, onComposition }) {
   const cfg = product.gobeletParcours;
   const etat = gobeletEtat(fieldValues);
   const sup = gobeletSupplement(fieldValues, cfg);
-  const elements = gobeletElements(fieldValues);
-  const premier = premierElement(fieldValues);
-  const aPremier = Boolean(premier) && !manqueElement(premier);
-  const [ed, setEd] = useState(null); // élément en cours de création (null = fermé)
+  // La gravure = une liste d'éléments (le texte sous une photo fait partie de la photo).
+  const liste = gobeletElements(fieldValues).filter((e) => e.kind !== "sous");
+  const [ouvert, setOuvert] = useState(""); // catégorie ouverte : dessin | cadre | lettre | texte | photo | ""
+  const [ed, setEd] = useState(VIDE);
   const [msg, setMsg] = useState("");
   const [fen, setFen] = useState(null);
   const edRef = useRef(null);
+  const recapRef = useRef(null);
 
-  const set = (patch) => setFieldValues((prev) => ({ ...prev, ...patch }));
+  const ecrire = (nouvelle) => setFieldValues((prev) => ({ ...prev, ...champsDepuisListe(nouvelle) }));
 
-  // Un 1er élément commencé mais pas fini (ancien panier, retour arrière) : on le rouvre dans l'éditeur.
-  useEffect(() => {
-    if (premier && manqueElement(premier) && !ed) {
-      setEd({ ...VIDE, ...premier, num: premier.num ? String(premier.num) : "", police: premier.police || "great-vibes" });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Prix + repères de l'aperçu (photo de la FACE du gobelet) : seuls les éléments posés sur la face y sont montrés.
+  // Prix + repères de l'aperçu (photo de la FACE du gobelet).
   useEffect(() => {
     const zoneAp = { milieu: "principal", haut: "haut", bas: "bas", gauche: "gauche", droite: "droite" };
     const motifs = [];
-    for (const e of elements) {
-      if (e.side !== "face" || e.kind === "sous") continue;
+    for (const e of liste) {
+      if (e.side !== "face") continue;
       if (e.kind === "dessin" || e.kind === "cadre") motifs.push({ zone: zoneAp[e.zone], num: e.num });
       else motifs.push({ zone: zoneAp[e.zone], text: e.kind === "photo" ? "Photo" : e.kind === "lettre" ? e.lettre : (e.texte || "T") });
     }
@@ -228,137 +223,101 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldValues.mode, fieldValues.dessin, fieldValues.cadre, fieldValues.lettre, fieldValues.texte, fieldValues.photo, fieldValues.texteSousPhoto, fieldValues.autour, fieldValues.cote, fieldValues.place]);
 
-  const extras = lignesAutour(fieldValues).map(lireLigne);
-  const estPremier = !aPremier; // l'élément en cours sera le 1er (compris) tant qu'il n'y en a pas
-
-  // Places déjà prises (côté + place), hors l'élément en cours.
-  const prises = useMemo(() => {
-    const s = new Set();
-    if (aPremier) s.add(`${premier.side}|${premier.zone}`);
-    for (const e of extras) s.add(`${e.side}|${e.zone}`);
-    return s;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fieldValues.autour, fieldValues.cote, fieldValues.place, aPremier]);
-  const libres = ed ? placesDuCote(ed.side).filter((z) => !prises.has(`${ed.side}|${z}`)) : [];
-  const zoneEd = ed && libres.includes(ed.zone) ? ed.zone : (libres[0] || "");
-
   function ouvrir(kind) {
     setMsg("");
-    setEd({ ...VIDE, kind, police: (ed && ed.police) || "great-vibes" });
+    setOuvert(kind);
+    setEd({ ...VIDE, kind, police: ed.police || "great-vibes" });
     setTimeout(() => edRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
   }
   const maj = (patch) => setEd((p) => ({ ...p, ...patch }));
 
-  function enregistrer() {
-    if (!ed) return;
+  // Dessins : un toucher ajoute le dessin à la gravure (à la 1re place libre), un 2e toucher le retire.
+  const dessinsChoisis = liste.filter((e) => e.kind === "dessin").map((e) => e.num);
+  function basculerDessin(n) {
+    setMsg("");
+    const i = liste.findIndex((e) => e.kind === "dessin" && e.num === n);
+    if (i >= 0) { ecrire(liste.filter((_, k) => k !== i)); return; }
+    const place = premiereLibre(liste);
+    if (!place) { setMsg("Toutes les places du gobelet sont prises : retirez un élément avant d'en ajouter un autre."); return; }
+    ecrire([...liste, { kind: "dessin", num: n, ...place }]);
+  }
+
+  // Cadre, lettre, texte, photo : on remplit puis « Ajouter à ma gravure ».
+  const place = (ed.side && ed.zone && !liste.some((e) => e.side === ed.side && e.zone === ed.zone)) ? { side: ed.side, zone: ed.zone } : premiereLibre(liste);
+  function ajouter() {
     const e = {
-      kind: ed.kind, side: ed.side, zone: zoneEd, police: AVEC_ECRITURE.includes(ed.kind) || (ed.kind === "photo" && ed.sous.trim()) ? ed.police : "",
-      num: parseInt(ed.num, 10), lettre: ed.lettre, nom: ed.nom.trim(), texte: ed.texte.trim(), photo: ed.photo, sous: ed.sous.trim(),
+      kind: ed.kind, police: AVEC_ECRITURE.includes(ed.kind) || (ed.kind === "photo" && ed.sous.trim()) ? ed.police : "",
+      num: parseInt(ed.num, 10), lettre: ed.lettre, nom: ed.nom.trim(), texte: ed.texte.trim(), photo: ed.photo,
+      sous: liste.length === 0 && ed.kind === "photo" ? ed.sous.trim() : "", ...(place || {}),
     };
-    if (!zoneEd) { setMsg("Toutes les places de ce côté sont prises : choisissez un autre endroit."); return; }
+    if (!place) { setMsg("Toutes les places du gobelet sont prises : retirez un élément avant d'en ajouter un autre."); return; }
     const manque = manqueElement(e);
     if (manque) { setMsg(manque); return; }
-    if (estPremier) set(champsPremier(e));
-    else set({ autour: [...lignesAutour(fieldValues), ligneElement(e)].join("\n") });
-    setEd(null);
+    ecrire([...liste, e]);
+    setEd({ ...VIDE, kind: ed.kind, police: ed.police });
     setMsg("");
+    setTimeout(() => recapRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 60);
   }
 
-  function retirer(i) {
-    // i = index dans `elements`. Le 1er (compris) retiré : l'élément suivant devient le 1er.
-    const el = elements[i];
-    if (el.compris) {
-      const reste = extras;
-      if (reste.length) {
-        const [nouveau, ...autres] = reste;
-        set({ ...champsPremier(nouveau), autour: autres.map((x) => x.ligne).join("\n") });
-      } else set(champsPremier(null));
-    } else if (el.kind === "sous") {
-      set({ texteSousPhoto: "" });
-    } else {
-      const idx = i - elements.findIndex((x) => !x.compris && x.kind !== "sous");
-      set({ autour: lignesAutour(fieldValues).filter((_, k) => k !== idx).join("\n") });
-    }
+  function retirer(i) { ecrire(liste.filter((_, k) => k !== i)); }
+  function deplacer(i, valeur) {
+    const [side, zone] = valeur.split("|");
+    ecrire(liste.map((e, k) => (k === i ? { ...e, side, zone } : e)));
   }
 
-  const choix = CHOIX.filter((c) => estPremier || c.k !== "photo");
   const ecr = (p) => getFontLabel(p).split(" — ")[0];
+  const extra = prix(cfg.extra);
+  const prochain = liste.length === 0 ? "compris" : `+${extra} €`;
+  const placesDispo = (i) => ORDRE_PLACES.filter(([c, z]) => !liste.some((e, k) => k !== i && e.side === c && e.zone === z));
 
   return (
     <div className="prc gbp" id="gobelet-parcours">
-      <div className="prc-head"><p className="prc-title">Personnalisez votre gobelet</p><p className="prc-sub">Le 1er élément gravé est compris dans le prix, chaque élément en plus : +{prix(cfg.extra)} €.</p></div>
+      <div className="prc-head"><p className="prc-title">Personnalisez votre gobelet</p><p className="prc-sub">Choisissez tout ce que vous voulez : dessins, cadres avec un prénom, lettres, textes, photos. Le 1er élément est compris, chaque élément en plus : +{extra} €.</p></div>
 
       <section className="prc-step">
         <div className="prc-sh"><span className={`prc-num${etat.ok ? " done" : ""}`}>1</span><h3>Que voulez-vous graver ?</h3></div>
+        <div className="prc-cards gbp-choix">
+          {CHOIX.map((c) => (
+            <button type="button" key={c.k} className={`prc-card${ouvert === c.k ? " on" : ""}`} onClick={() => (ouvert === c.k ? setOuvert("") : ouvrir(c.k))}>
+              <span className={`prc-cimg${c.k === "texte" ? " prc-cimg-aa" : c.k === "photo" ? " prc-cimg-photo" : " gbp-cimg-planche"}`}>
+                {c.k === "texte" ? <span className={getFontClass("great-vibes")}>Aa</span>
+                  : c.k === "lettre" ? <span className="gbp-lettre-ic">A</span>
+                  : /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={c.k === "photo" ? cfg.imagePhoto : c.k === "cadre" ? cfg.cadres[2].src : (cfg.dessinUnite ? srcDessin(cfg, 48) : cfg.dessins[0].src)} alt="" />}
+              </span>
+              <span className="prc-ctxt"><b>{c.titre}</b><small>{c.sous}</small></span>
+            </button>
+          ))}
+        </div>
+        <p className="prc-hint gbp-miseenpage">✦ Plusieurs images, photos ou logos ? Nous préparons la mise en page et vous envoyons un aperçu à valider avant la gravure.</p>
 
-        {elements.length > 0 && (
-          <div className="gbp-liste">
-            <p className="gbp-liste-t">Votre gravure</p>
-            <ul className="gbp-xlist">
-              {elements.map((e, i) => (
-                <li key={i}>
-                  <span><b>{i + 1}.</b> {quoiElement(e)}{["cadre", "lettre", "texte", "sous"].includes(e.kind) && e.police ? ` (écriture ${ecr(e.police)})` : ""}<br /><small>📍 {ouElement(e)}</small></span>
-                  <b className="p">{e.compris ? "compris" : `+${prix(cfg.extra)} €`}</b>
-                  <button type="button" aria-label="Retirer" onClick={() => retirer(i)}>×</button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {!ed && (
-          <>
-            {aPremier && <p className="prc-legend">Vous voulez graver autre chose en plus (un 2ᵉ dessin, un prénom, une date…) ? Chaque élément en plus : +{prix(cfg.extra)} €.</p>}
-            <div className="prc-cards gbp-choix">
-              {choix.map((c) => (
-                <button type="button" key={c.k} className="prc-card" onClick={() => ouvrir(c.k)}>
-                  <span className={`prc-cimg${c.k === "texte" ? " prc-cimg-aa" : c.k === "photo" ? " prc-cimg-photo" : " gbp-cimg-planche"}`}>
-                    {c.k === "texte" ? <span className={getFontClass("great-vibes")}>Aa</span>
-                      : c.k === "lettre" ? <span className="gbp-lettre-ic">A</span>
-                      : /* eslint-disable-next-line @next/next/no-img-element */
-                        <img src={c.k === "photo" ? cfg.imagePhoto : c.k === "cadre" ? cfg.cadres[2].src : cfg.dessins[0].src} alt="" />}
-                  </span>
-                  <span className="prc-ctxt"><b>{aPremier ? "＋ " : ""}{c.titre}</b><small>{c.sous}</small></span>
-                  {aPremier && <span className="gbp-prix">+{prix(cfg.extra)} €</span>}
-                </button>
-              ))}
-            </div>
-            {!aPremier && <p className="prc-hint">Votre 1er élément est compris dans le prix. Ensuite, vous pourrez en ajouter d&apos;autres (+{prix(cfg.extra)} € chacun).</p>}
-            <p className="prc-hint gbp-miseenpage">✦ Plusieurs images, photos ou logos ? Nous préparons la mise en page et vous envoyons un aperçu à valider avant la gravure.</p>
-          </>
-        )}
-
-        {ed && (
+        {ouvert && (
           <div className="gbp-extra" ref={edRef}>
             <div className="gbp-extra-top">
-              <b>{CHOIX.find((c) => c.k === ed.kind)?.titre} — {estPremier ? "compris" : `+${prix(cfg.extra)} €`}</b>
-              <button type="button" className="gbp-fermer" onClick={() => { setEd(null); setMsg(""); }}>✕ Fermer</button>
+              <b>{CHOIX.find((c) => c.k === ouvert)?.titre}</b>
+              <button type="button" className="gbp-fermer" onClick={() => { setOuvert(""); setMsg(""); }}>✕ Fermer</button>
             </div>
 
-            {ed.kind === "dessin" && (
-              <div className="field"><label>1. Choisissez le dessin</label>
+            {ouvert === "dessin" && (
+              <div className="field">
+                <label>Touchez les dessins que vous voulez — vous pouvez en choisir plusieurs (un 2ᵉ toucher le retire).</label>
                 {cfg.dessinUnite ? (
-                  <TuilesDessins cfg={cfg} choisi={parseInt(ed.num, 10)} onPick={(n) => maj({ num: String(n) })} onView={(n, list) => setFen({ n, list })} />
+                  <TuilesDessins cfg={cfg} choisis={dessinsChoisis} onPick={basculerDessin} onView={(n, list) => setFen({ n, list })} />
                 ) : (
-                  <>
-                    <p className="prc-opt">Touchez une planche pour l&apos;ouvrir en grand et lire les numéros.</p>
-                    <Planches items={cfg.dessins} onOpen={(p) => setFen({ src: p.src, titre: `${p.legende} — n° ${p.nums}` })} />
-                  </>
+                  <Planches items={cfg.dessins} onOpen={(p) => setFen({ src: p.src, titre: `${p.legende} — n° ${p.nums}` })} />
                 )}
-                {cfg.dessinUnite && parseInt(ed.num, 10) >= 1 && parseInt(ed.num, 10) <= GOB_DESSINS_MAX && (
-                  <div className="gbp-choisi">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={srcDessin(cfg, parseInt(ed.num, 10))} alt="" />
-                    <p>Dessin n° {ed.num} choisi ✓<br /><span>Choisissez maintenant où le graver, plus bas.</span></p>
+                <div className="gbp-numdirect">
+                  <label htmlFor="gbp-num" className="gbp-sous-label">Ou tapez un numéro</label>
+                  <div className="gbp-numrow">
+                    <input id="gbp-num" type="number" min="1" max={GOB_DESSINS_MAX} inputMode="numeric" placeholder="Ex : 12" value={ed.num} onChange={(e) => maj({ num: e.target.value })} />
+                    <button type="button" className="gbp-xadd" onClick={() => { const n = parseInt(ed.num, 10); if (n >= 1 && n <= GOB_DESSINS_MAX) { if (!dessinsChoisis.includes(n)) basculerDessin(n); maj({ num: "" }); } else setMsg(`Numéro de dessin : de 1 à ${GOB_DESSINS_MAX}.`); }}>Ajouter</button>
                   </div>
-                )}
-                <label htmlFor="gbp-num" className="gbp-sous-label">{cfg.dessinUnite ? "Ou tapez le numéro" : `Numéro du dessin (1 à ${GOB_DESSINS_MAX})`}</label>
-                <input id="gbp-num" type="number" min="1" max={GOB_DESSINS_MAX} inputMode="numeric" placeholder="Ex : 12" value={ed.num} onChange={(e) => maj({ num: e.target.value })} />
+                </div>
               </div>
             )}
 
-            {ed.kind === "cadre" && (
-              <div className="field"><label>1. Choisissez le cadre ou la banderole</label>
+            {ouvert === "cadre" && (
+              <div className="field"><label>Choisissez le cadre ou la banderole</label>
                 <p className="prc-opt">Touchez une planche pour l&apos;ouvrir en grand et lire les numéros.</p>
                 <Planches items={cfg.cadres} onOpen={(p) => setFen({ src: p.src, titre: `${p.legende} — n° ${p.nums}` })} />
                 <label htmlFor="gbp-cn" className="gbp-sous-label">Numéro du cadre ({GOB_CADRE_MIN} à {GOB_CADRE_MAX})</label>
@@ -366,8 +325,8 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
               </div>
             )}
 
-            {ed.kind === "lettre" && (
-              <div className="field"><label>1. Choisissez la lettre</label>
+            {ouvert === "lettre" && (
+              <div className="field"><label>Choisissez la lettre</label>
                 <button type="button" className="gbp-planche gbp-alpha" onClick={() => setFen({ src: cfg.alphabet, titre: "Lettres fleuries A à Z" })}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={cfg.alphabet} alt="Alphabet fleuri A à Z" />
@@ -379,70 +338,100 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
               </div>
             )}
 
-            {(ed.kind === "cadre" || ed.kind === "lettre") && (
-              <div className="field"><label htmlFor="gbp-nom">2. Le nom à graver {ed.kind === "cadre" ? "au milieu du cadre" : "dans la lettre"}</label>
+            {(ouvert === "cadre" || ouvert === "lettre") && (
+              <div className="field"><label htmlFor="gbp-nom">Le nom à graver {ouvert === "cadre" ? "au milieu du cadre" : "dans la lettre"}</label>
                 <input id="gbp-nom" type="text" maxLength={30} placeholder="Ex : Léna" value={ed.nom} onChange={(e) => maj({ nom: e.target.value })} /></div>
             )}
 
-            {ed.kind === "texte" && (
-              <div className="field"><label htmlFor="gbp-txt">1. Votre texte</label>
+            {ouvert === "texte" && (
+              <div className="field"><label htmlFor="gbp-txt">Votre texte</label>
                 <input id="gbp-txt" type="text" maxLength={30} placeholder="Prénom, date, message…" value={ed.texte} onChange={(e) => maj({ texte: e.target.value })} />
                 <span className="prc-count">{ed.texte.length}/30</span></div>
             )}
 
-            {ed.kind === "photo" && (
+            {ouvert === "photo" && (
               <>
-                <div className="field"><label>1. Votre photo ou logo</label>
-                  <p className="prc-opt">JPG ou PNG. L&apos;atelier vérifie la qualité avant de graver.</p>
-                  <PhotoUpload value={ed.photo} onChange={(url) => maj({ photo: url })} productSlug={product.slug} guide={GUIDE_PHOTO_GRAVURE} /></div>
-                <div className="field"><label htmlFor="gbp-ptxt">Texte sous la photo <span className="prc-opt">(facultatif, +{prix(cfg.extra)} €)</span></label>
-                  <input id="gbp-ptxt" type="text" maxLength={30} placeholder="Prénom, message…" value={ed.sous} onChange={(e) => maj({ sous: e.target.value })} /></div>
+                <div className="field"><label>Votre photo ou logo</label>
+                  <p className="prc-opt">JPG ou PNG. L&apos;atelier vérifie la qualité avant de graver. Vous pouvez en ajouter plusieurs, une par une.</p>
+                  <PhotoUpload key={liste.length} value={ed.photo} onChange={(url) => maj({ photo: url })} productSlug={product.slug} guide={GUIDE_PHOTO_GRAVURE} /></div>
+                {liste.length === 0 && (
+                  <div className="field"><label htmlFor="gbp-ptxt">Texte sous la photo <span className="prc-opt">(facultatif, +{extra} €)</span></label>
+                    <input id="gbp-ptxt" type="text" maxLength={30} placeholder="Prénom, message…" value={ed.sous} onChange={(e) => maj({ sous: e.target.value })} /></div>
+                )}
               </>
             )}
 
-            {(AVEC_ECRITURE.includes(ed.kind) || (ed.kind === "photo" && ed.sous.trim())) && (
+            {(AVEC_ECRITURE.includes(ouvert) || (ouvert === "photo" && ed.sous.trim())) && (
               <div className="field"><label>Écriture</label>
                 <Polices value={ed.police} onChange={(p) => maj({ police: p })} />
-                <p className={`gbp-apercu ${getFontClass(ed.police)}`}>{(ed.kind === "texte" ? ed.texte : ed.kind === "photo" ? ed.sous : ed.nom) || "Léna"}</p></div>
+                <p className={`gbp-apercu ${getFontClass(ed.police)}`}>{(ouvert === "texte" ? ed.texte : ouvert === "photo" ? ed.sous : ed.nom) || "Léna"}</p></div>
             )}
 
-            <div className="field"><label>Où le graver sur le gobelet ?</label>
-              <div className="gbp-cotes">
-                {Object.keys(GOB_COTES).map((c) => (
-                  <button type="button" key={c} className={`gbp-cote${ed.side === c ? " on" : ""}`} onClick={() => maj({ side: c, zone: "" })}>
-                    <MiniGobelet cote={c} /><span>{GOB_COTES[c]}</span>
-                  </button>
-                ))}
-              </div>
-              <div className="prc-chips gbp-zones">{libres.length ? libres.map((z) => (
-                <button type="button" key={z} className={`prc-chip${zoneEd === z ? " on" : ""}`} onClick={() => maj({ zone: z })}>{GOB_PLACES[z].charAt(0).toUpperCase() + GOB_PLACES[z].slice(1)}</button>
-              )) : <span className="prc-opt">Toutes les places de ce côté sont prises.</span>}</div>
-              <p className="prc-opt">La face est le côté opposé à l&apos;anse : celui qu&apos;on voit quand on tient le gobelet de la main droite.</p>
-            </div>
-
+            {ouvert !== "dessin" && (
+              <>
+                <div className="field"><label>Où le graver sur le gobelet ?</label>
+                  <div className="gbp-cotes">
+                    {Object.keys(GOB_COTES).map((c) => (
+                      <button type="button" key={c} className={`gbp-cote${(place?.side || "face") === c ? " on" : ""}`} onClick={() => maj({ side: c, zone: placesDuCote(c).find((z) => !liste.some((e) => e.side === c && e.zone === z)) || "" })}>
+                        <MiniGobelet cote={c} /><span>{GOB_COTES[c]}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="prc-chips gbp-zones">{placesDuCote(place?.side || "face").map((z) => {
+                    const prise = liste.some((e) => e.side === (place?.side || "face") && e.zone === z);
+                    return <button type="button" key={z} disabled={prise} className={`prc-chip${place?.zone === z ? " on" : ""}`} onClick={() => maj({ side: place?.side || "face", zone: z })}>{GOB_PLACES[z].charAt(0).toUpperCase() + GOB_PLACES[z].slice(1)}{prise ? " (pris)" : ""}</button>;
+                  })}</div>
+                  <p className="prc-opt">La face est le côté opposé à l&apos;anse : celui qu&apos;on voit quand on tient le gobelet de la main droite.</p>
+                </div>
+                <div className="gbp-xbtns">
+                  <button type="button" className="gbp-xadd" onClick={ajouter}>Ajouter à ma gravure ({prochain})</button>
+                </div>
+              </>
+            )}
             {msg && <p className="gbp-xmsg">{msg}</p>}
-            <div className="gbp-xbtns">
-              <button type="button" className="gbp-xadd" onClick={enregistrer}>{estPremier ? "Valider ce choix (compris)" : `Ajouter à ma gravure (+${prix(cfg.extra)} €)`}</button>
-              <button type="button" className="gbp-fermer" onClick={() => { setEd(null); setMsg(""); }}>Fermer</button>
-            </div>
           </div>
         )}
+
+        <div className="gbp-liste" ref={recapRef}>
+          <p className="gbp-liste-t">Votre gravure {liste.length ? `· ${liste.length} élément${liste.length > 1 ? "s" : ""}` : ""}</p>
+          {liste.length === 0 ? (
+            <p className="prc-opt">Rien de choisi pour l&apos;instant : touchez « Un dessin », « Mon texte », « Ma photo »… au-dessus.</p>
+          ) : (
+            <ul className="gbp-xlist">
+              {liste.map((e, i) => (
+                <li key={i}>
+                  {(e.kind === "dessin" && cfg.dessinUnite) || e.kind === "photo" ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img className="gbp-xvig" src={e.kind === "photo" ? e.photo : srcDessin(cfg, e.num)} alt="" />
+                  ) : null}
+                  <span>
+                    <b>{i + 1}.</b> {quoiElement(e)}{e.kind === "photo" && e.sous ? ` + « ${e.sous} » (+${extra} €)` : ""}{["cadre", "lettre", "texte"].includes(e.kind) && e.police ? ` (écriture ${ecr(e.police)})` : ""}
+                  </span>
+                  <b className="p">{i === 0 ? "compris" : `+${extra} €`}</b>
+                  <button type="button" aria-label="Retirer" onClick={() => retirer(i)}>×</button>
+                  <select className="gbp-ou" aria-label="Où le graver" value={`${e.side}|${e.zone}`} onChange={(ev) => deplacer(i, ev.target.value)}>
+                    {placesDispo(i).map(([c, z]) => <option key={`${c}|${z}`} value={`${c}|${z}`}>📍 {LIBELLE_PLACE(c, z)}</option>)}
+                  </select>
+                </li>
+              ))}
+            </ul>
+          )}
+          {liste.length > 0 && <p className="gbp-total-ligne">Gravure : {sup.enPlus ? `1 compris + ${sup.enPlus} × ${extra} € = ${formatEuro(sup.montant)}` : "comprise"} · <b>Total {formatEuro(unitPrice)}</b> (hors livraison)</p>}
+        </div>
       </section>
 
       <section className="prc-step">
-        <div className="prc-sh"><span className={`prc-num${etat.ok ? " done" : ""}`}>2</span><h3>Résumé de votre gravure</h3></div>
+        <div className="prc-sh"><span className={`prc-num${etat.ok ? " done" : ""}`}>2</span><h3>Résumé</h3></div>
         <div className="prc-sum">
           <div className="prc-sumrow"><span>Couleur</span><b>{couleur}</b></div>
-          {elements.length ? elements.map((e, i) => (
-            <div className="prc-sumrow" key={i}><span>{i + 1}. {e.compris ? "compris" : `+${prix(cfg.extra)} €`}</span><b>{quoiElement(e)} — {ouElement(e)}</b></div>
-          )) : <div className="prc-sumrow"><span>Gravure</span><b className="prc-miss">à choisir (étape 1)</b></div>}
-          {sup.enPlus > 0 && <div className="prc-sumrow"><span>Éléments en plus</span><b>{sup.enPlus} × {prix(cfg.extra)} € = {formatEuro(sup.montant)}</b></div>}
+          <div className="prc-sumrow"><span>Éléments gravés</span><b className={liste.length ? "" : "prc-miss"}>{liste.length || "à choisir (étape 1)"}</b></div>
+          {sup.enPlus > 0 && <div className="prc-sumrow"><span>Éléments en plus</span><b>{sup.enPlus} × {extra} € = {formatEuro(sup.montant)}</b></div>}
           <div className="prc-sumrow prc-sumtot"><span>Total (hors livraison)</span><b>{formatEuro(unitPrice)}</b></div>
         </div>
       </section>
 
       {fen && (
-        <Fenetre v={fen} cfg={cfg} onClose={() => setFen(null)} onPick={(n) => { maj({ num: String(n) }); setFen(null); }} />
+        <Fenetre v={fen} cfg={cfg} onClose={() => setFen(null)} onPick={(n) => { if (!dessinsChoisis.includes(n)) basculerDessin(n); setFen(null); }} />
       )}
     </div>
   );

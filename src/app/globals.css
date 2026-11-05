@@ -6128,3 +6128,13 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .gbp-loupe{position:absolute;top:4px;right:4px;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:.9rem;line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}
 @media print{.tg-dl{display:none!important}}
 .gbp-loupe{width:28px;height:28px;font-size:.78rem;background:rgba(255,255,255,.85)}
+/* Gobelet v4 (05/11 soir) : sélection multiple + récapitulatif sous les choix */
+.gbp-xvig{flex:none;width:48px;height:48px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px}
+.gbp-ou{display:block;margin-top:6px;max-width:100%;min-height:36px;padding:4px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;font:inherit;font-size:.82rem;color:var(--ink)}
+.gbp-numrow{display:flex;gap:8px;align-items:center}
+.gbp-numrow input{flex:1;min-width:0}
+.gbp-total-ligne{margin:10px 0 0;font-size:.9rem}
+.gbp-liste{margin-top:14px}
+.gbp-ou{width:100%}
+.gbp-liste .gbp-xlist li{flex-wrap:wrap}.gbp-liste .gbp-ou{flex:1 1 100%;margin-top:2px}
+@media (max-width:900px){.engrave3d-mini.gp-mini-wrap{display:none}}

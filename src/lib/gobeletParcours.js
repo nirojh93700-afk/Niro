@@ -18,7 +18,7 @@ export const GOB_DESSINS_MAX = 74;
 export const GOB_CADRE_MIN = 75;
 export const GOB_CADRE_MAX = 102;
 export const GOB_CADRES_ABSENTS = [97, 99]; // 96, 98 et 102 sont des cadres complets (24/10/2026)
-export const GOB_ELEMENTS_MAX = 12;
+export const GOB_ELEMENTS_MAX = 13;
 
 export const cadreValide = (n) => Number.isInteger(n) && n >= GOB_CADRE_MIN && n <= GOB_CADRE_MAX && !GOB_CADRES_ABSENTS.includes(n);
 export const dessinValide = (n) => Number.isInteger(n) && n >= 1 && n <= GOB_DESSINS_MAX;
@@ -60,7 +60,26 @@ export const ouElement = (e) => `${GOB_COTES[e.side] || "Face"}, ${GOB_PLACES[e.
 /** Une ligne de « autour » pour un élément en plus. */
 export function ligneElement(e) {
   const ecr = ["cadre", "lettre", "texte"].includes(e.kind) && e.police ? `, écriture ${ecritureCourte(e.police)}` : "";
-  return `${quoiElement(e)} — ${ouElement(e)}${ecr}`;
+  const quoi = e.kind === "photo" ? `Photo / logo de la cliente (${e.photo})` : quoiElement(e);
+  return `${quoi} — ${ouElement(e)}${ecr}`;
+}
+
+/** Ordre dans lequel les nouveaux éléments prennent leur place (la cliente peut la changer ensuite). */
+export const ORDRE_PLACES = [
+  ["face", "milieu"], ["face", "haut"], ["face", "bas"], ["gauche", "milieu"], ["droite", "milieu"], ["face", "gauche"], ["face", "droite"],
+  ["gauche", "haut"], ["gauche", "bas"], ["droite", "haut"], ["droite", "bas"], ["tour", "haut"], ["tour", "bas"],
+];
+/** La 1re place libre (côté, place) parmi ORDRE_PLACES, ou null si tout est pris. */
+export function premiereLibre(elements) {
+  const prises = new Set((elements || []).map((e) => `${e.side}|${e.zone}`));
+  const p = ORDRE_PLACES.find(([c, z]) => !prises.has(`${c}|${z}`));
+  return p ? { side: p[0], zone: p[1] } : null;
+}
+
+/** Écrit une liste complète d'éléments dans les champs : le 1er dans les champs du 1er, les autres en lignes. */
+export function champsDepuisListe(liste) {
+  const [p, ...autres] = liste || [];
+  return { ...champsPremier(p || null), autour: autres.map(ligneElement).join("\n") };
 }
 
 /** Relit une ligne écrite par ligneElement (et les anciennes lignes « … — Face, en haut, écriture … »). */
@@ -76,6 +95,7 @@ export function lireLigne(l) {
   else if ((x = /^Cadre n° (\d+) avec « (.*) »$/.exec(quoi))) e = { kind: "cadre", num: +x[1], nom: x[2] };
   else if ((x = /^Lettre fleurie ([A-Z]) avec « (.*) »$/.exec(quoi))) e = { kind: "lettre", lettre: x[1], nom: x[2] };
   else if ((x = /^Texte « (.*) »$/.exec(quoi))) e = { kind: "texte", texte: x[1] };
+  else if ((x = /^Photo \/ logo de la cliente \((.*)\)$/.exec(quoi))) e = { kind: "photo", photo: x[1] };
   return { ...e, side, zone, police, ligne: String(l || "").trim() };
 }
 
