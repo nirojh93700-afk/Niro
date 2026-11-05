@@ -65,7 +65,7 @@ export const UNIVERS = [
     rayons: [{ nom: "Numéros de table", regle: (p) => p.subcategory === "tables" },
              { nom: "Décor de table & menus", slugs: ["etiquette-serviette-initiales", "ronds-de-serviette-bois", "porte-serviettes-bois-fleur", "porte-serviettes-colombes", "menu-de-mariage-bois-grave"] },
              { nom: "Verres de réception", slugs: ["flute-a-champagne-gravee", "carafe-a-whisky-gravee", "verre-a-vin-grave"] }] },
-  { id: "maison", nom: "Maison & Déco", short: "Maison & Déco", img: "/produits/arbre-vie-rond-1.jpg",
+  { id: "maison", nom: "Maison & Déco", short: "Maison & Déco", img: "/produits/photophore-fee-1.jpg",
     accroche: "Lampes, veilleuses et bougeoirs gravés, pour une lumière qui vous ressemble.",
     rayons: [{ nom: "Lampes & veilleuses", slugs: ["arbre-de-vie-lumineux", "veilleuse-arbre-de-vie-ronde", "veilleuse-arbre-de-vie-prenom", "lampe-led-paris-saint-germain"] },
              { nom: "Bougeoirs", slugs: ["bougeoir-mandala-bois", "photophore-fee-bois", "bougeoir-fleur-de-lotus"] }] },
