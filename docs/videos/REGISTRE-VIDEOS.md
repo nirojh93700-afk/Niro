@@ -1,5 +1,7 @@
 # 🎬 Registre des vidéos — Niv Création
 
+> 🗑️ 05/11/2026 (gérant) : les FICHIERS vidéo sont supprimés 2 jours après l'envoi ; ce registre est gardé. Vidéos 14 à 46 supprimées le 05/11, la 47 le 07/11. Pour en refaire une : son script (`tools/video/…`).
+
 > **Demande du gérant (26/09/2026) : « Enregistrer ces vidéos et les tailles que tu me donneras avec les
 > descriptions, je te demanderai. »** Ce fichier est LA mémoire des vidéos : pour chaque vidéo, les
 > fichiers (avec leurs tailles), la description Instagram et les 5 hashtags, exactement tels qu'ils ont

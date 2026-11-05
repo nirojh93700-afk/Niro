@@ -2972,6 +2972,13 @@ ne descend jamais sous zéro.
   - **Prix auto par poids (v1)** = OPTIONNEL (la gérante est OK avec le prix fixe). L'app v1 existe (clés sur son compte Boxtal) mais l'endpoint cotation v1 reste à trouver ; non nécessaire pour l'Option A.
 
 
+### 🗑️ FICHIERS VIDÉO SUPPRIMÉS 2 JOURS APRÈS L'ENVOI, LE REGISTRE GARDÉ (gérant, 05/11/2026 : « tu peux supprimer les vidéos deux jours plus tard… tu le gardes en mémoire avec toutes les vidéos… ça prend énormément d'espace »)
+- Une vidéo livrée reste dans `docs/videos/` 2 jours, puis ses fichiers `.mp4` sont SUPPRIMÉS. Le registre `docs/videos/REGISTRE-VIDEOS.md`
+  (produits, description, hashtags, durée, script) est GARDÉ pour toujours : une vidéo redemandée se refait avec son script `tools/video/…`.
+- Les vidéos ne se commitent plus (`docs/videos/*.mp4` exclu). Au début de chaque session et à chaque nouvelle vidéo : supprimer les fichiers
+  vidéo de plus de 2 jours (date dans le registre). ⛔ Ne JAMAIS toucher `public/produits/cristal-video-*.mp4` : le site s'en sert.
+- 05/11 : vidéos 14 à 46 supprimées (127 Mo dans le dépôt) ; la 47 est à supprimer le 07/11.
+
 ### ⛔ VIDÉO — UNIQUEMENT DES PRODUITS DÉJÀ GRAVÉS (règle ferme du gérant, 22/09/2026)
 > « Refais la vidéo avec des produits déjà gravés, je t'ai déjà dit mais mets en mémoire,
 > avant de faire un truc fais-le correctement. » Il l'avait déjà dit en conversation et
