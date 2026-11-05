@@ -61,7 +61,7 @@ export default async function AProposPage() {
               <div className="sf-card">
                 <div className="sf-ic">🌿</div>
                 <h3>Des matériaux choisis avec soin</h3>
-                <p>Des matériaux nobles et durables : bois clairs, acier inoxydable 316L hypoallergénique, acrylique premium. Des pièces conçues pour traverser le temps et rester aussi belles qu'au premier jour.</p>
+                <p>Des matériaux nobles et durables : bois clairs, acier inoxydable, acrylique premium. Des pièces conçues pour traverser le temps et rester aussi belles qu'au premier jour.</p>
               </div>
               <div className="sf-card">
                 <div className="sf-ic">✏️</div>

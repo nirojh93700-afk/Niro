@@ -151,7 +151,7 @@ export const products = [
 <ul>
 <li><strong>Pendentif :</strong> 23 mm × 14 mm, épaisseur 4 mm</li>
 <li><strong>Chaîne :</strong> 40 cm + 5 cm de rallonge</li>
-<li><strong>Matériau :</strong> Acier inoxydable hypoallergénique, résistant au ternissement</li>
+<li><strong>Matériau :</strong> Acier inoxydable, résistant au ternissement</li>
 <li><strong>Couleurs :</strong> Or, Argent, Or Rose</li>
 </ul>
 <h3>Points forts</h3>
@@ -222,7 +222,7 @@ export const products = [
 <h3>Spécifications</h3>
 <ul>
 <li><strong>Chaîne :</strong> 50 cm</li>
-<li><strong>Matériau :</strong> Acier inoxydable hypoallergénique</li>
+<li><strong>Matériau :</strong> Acier inoxydable</li>
 <li><strong>Couleurs :</strong> Argent, Doré ou Bicolore (Or & Argent)</li>
 <li>🎁 Livré dans une élégante boîte cadeau noire</li>
 </ul>
@@ -271,10 +271,10 @@ export const products = [
 <p>Monté sur une belle chaîne gourmette à gros maillons cubains en acier inoxydable, il allie solidité, élégance et style contemporain.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> Acier inoxydable 316L (qualité chirurgicale)</li>
+<li><strong>Matière :</strong> Acier inoxydable 316L</li>
 <li><strong>Plaque :</strong> Rectangulaire, surface lisse gravable</li>
 <li><strong>Fermoir :</strong> Mousqueton sécurisé</li>
-<li><em>Hypoallergénique • Résistant à l'oxydation • Ne noircit pas</em></li>
+<li><em>Résistant à l'oxydation • Ne noircit pas</em></li>
 </ul>
 <p>Idéal pour un anniversaire, la Fête des Pères, Noël ou la Saint-Valentin.</p>`,
   },
@@ -347,7 +347,7 @@ export const products = [
 <p>Fabriqué en acier inoxydable de qualité associé à un gel de silicone souple, il allie solidité et confort pour un port quotidien agréable.</p>
 <h3>Points forts</h3>
 <ul>
-<li>💪 Acier inoxydable hypoallergénique</li>
+<li>💪 Acier inoxydable</li>
 <li>🪶 Bracelet silicone souple, confortable au quotidien</li>
 <li>🎨 2 finitions : plaque argentée ou plaque noire</li>
 <li>🎁 Idéal Fête des Pères, anniversaire, Noël, Saint-Valentin</li>
@@ -1438,7 +1438,7 @@ export const products = [
       { id: "chaine-acier-argente", title: "Argenté", price: 27.90 },
     ],
     descriptionHtml: `<p>Bracelet homme en <strong>acier inoxydable</strong>, plaque gravable au laser. Solide, élégant, intemporel.</p>
-<ul><li>Acier inoxydable hypoallergénique</li><li>Fermoir sécurisé</li><li>Gravure prénom, date ou message</li></ul>`,
+<ul><li>Acier inoxydable</li><li>Fermoir sécurisé</li><li>Gravure prénom, date ou message</li></ul>`,
   },
   {
     slug: "bracelet-femme-acier",
@@ -1466,7 +1466,7 @@ export const products = [
     ],
     variants: [{ id: "bracelet-femme-acier-dore", title: "Doré", price: 27.90 }],
     descriptionHtml: `<p>Bracelet femme délicat en <strong>acier inoxydable doré</strong>, à personnaliser par gravure.</p>
-<ul><li>Acier inoxydable hypoallergénique</li><li>Gravure fine au laser</li></ul>`,
+<ul><li>Acier inoxydable</li><li>Gravure fine au laser</li></ul>`,
   },
   {
     slug: "bracelet-empreinte-pied-bebe",
@@ -1492,7 +1492,7 @@ export const products = [
       { id: "empreinte-bebe-dore", title: "Doré", price: 19.90, image: "/produits/bracelet_empreinte_de_pied_de_bebe_a_graver_dore.jpg" },
     ],
     descriptionHtml: `<p>Un bracelet tendre orné d'une <strong>empreinte de pied de bébé</strong>, personnalisé avec le prénom et la date de naissance. Cadeau de naissance idéal.</p>
-<ul><li>Acier inoxydable hypoallergénique</li><li>Argenté ou doré</li></ul>`,
+<ul><li>Acier inoxydable</li><li>Argenté ou doré</li></ul>`,
   },
   {
     slug: "bracelet-femme-coeur",
@@ -1781,7 +1781,7 @@ export const products = [
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, doré (finition PVD)</li>
 <li><strong>Pierres :</strong> zircons (pavé + pierre centrale)</li>
-<li><strong>Finition :</strong> acier inoxydable hypoallergénique</li>
+<li><strong>Finition :</strong> acier inoxydable</li>
 <li><strong>Fermoir :</strong> mousqueton</li>
 </ul>`,
   },
@@ -1808,7 +1808,7 @@ export const products = [
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, doré (finition PVD)</li>
 <li><strong>Perle :</strong> perle nacrée</li>
-<li><strong>Finition :</strong> acier inoxydable hypoallergénique</li>
+<li><strong>Finition :</strong> acier inoxydable</li>
 <li><strong>Fermoir :</strong> mousqueton</li>
 </ul>`,
   },
@@ -2028,7 +2028,7 @@ export const products = [
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, <strong>finition dorée</strong> (dépôt ionique)</li>
-<li><strong>Finition :</strong> acier inoxydable hypoallergénique</li>
+<li><strong>Finition :</strong> acier inoxydable</li>
 <li><strong>Poids :</strong> environ 18 g, une vraie chaîne qui se sent au poignet</li>
 <li><strong>Fermoir :</strong> T (toggle), simple à ouvrir et fermer d'une main</li>
 <li><strong>Gravure en option :</strong> prénom, date ou petit message au laser sur le grand cœur — recto et/ou verso, 3 € par face gravée</li>
