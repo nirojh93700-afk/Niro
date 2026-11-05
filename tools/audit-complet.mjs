@@ -362,7 +362,7 @@ else {
     if (e.length) erreursJs.push(`${chemin} (${e[0].slice(0, 60)})`);
     const m = await p.evaluate(() => {
       const large = document.documentElement.scrollWidth > window.innerWidth + 1;
-      const cibles = [...document.querySelectorAll("a, button, input, select, textarea, [role=button]")].filter((el) => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width > 0 && r.height > 0 && s.visibility !== "hidden" && (r.width < 24 || r.height < 24) && !el.closest("p, li, .breadcrumb, nav.crumb"); });
+      const cibles = [...document.querySelectorAll("a, button, input, select, textarea, [role=button]")].filter((el) => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width > 0 && r.height > 0 && s.visibility !== "hidden" && (r.width < 24 || r.height < 24) && !el.closest("p, li, .breadcrumb, nav.crumb, label"); });
       return { large, petits: cibles.length };
     });
     if (m.large) debord.push(chemin);

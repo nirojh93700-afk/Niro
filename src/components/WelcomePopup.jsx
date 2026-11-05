@@ -87,7 +87,7 @@ export default function WelcomePopup({ enabled, code, text }) {
               {err && <p style={{ color: "#b4452f", fontSize: "0.9rem", margin: "0 0 8px" }}>{err}</p>}
               <button type="submit" disabled={envoi} className="btn btn-gold btn-block">{envoi ? "Envoi…" : "Recevoir mon code"}</button>
             </form>
-            <button onClick={close} style={{ background: "none", border: 0, color: "var(--ink-soft)", cursor: "pointer", margin: "8px 0 -4px", padding: "4px 10px", fontSize: "0.85rem", textDecoration: "underline" }}>Non merci</button>
+            <button onClick={close} style={{ background: "none", border: 0, color: "var(--ink-soft)", cursor: "pointer", margin: "8px 0 -4px", padding: "5px 10px", fontSize: "0.85rem", textDecoration: "underline" }}>Non merci</button>
           </>
         )}
       </div>
