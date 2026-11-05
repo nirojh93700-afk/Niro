@@ -3803,6 +3803,21 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > - **Flûte à champagne gravée** : `docs/maquettes/flute-champagne-fiche.html` · artifact https://claude.ai/code/artifact/9948bdc8-7ab5-44ec-9c50-2eda30dc2c72
 >   - Clone EXACT du verre à vin (mêmes réglages : styles 1-19, lettre fleurie, 8 polices, note, prix : voir `node tools/prix-fiche.mjs flute-a-champagne-gravee`). Change seulement : photos (`IMG_9599 vierge / 9601 set / 9602 ambiance`) + infos (verre **21 cl**, Ø 6,3 × H 21,4 cm, lave-vaisselle ; coût Metro 2,34 €/flûte, réf Pinomaro).
 
+### 🥤 GOBELET ISOTHERME 40 OZ — ✅ EN LIGNE LE 05/11/2026 (« Mets en ligne », e404f815, déploiement réussi)
+- Fiche `gobelet-isotherme-40oz` (plus `hidden`), badge « Édition limitée », **47,90 € net, livraison en plus** (colis au poids : `category`
+  reste `cadeaux` pour ne PAS prendre la grille des verres 11,90 € ; `categorieAffichee: "verres"` = fil d'Ariane « Verres, Carafes & Gobelet »).
+- Parcours guidé `src/components/GobeletParcours.jsx` (classes `.prc-*` + `.gbp-*` en fin de globals.css) : ① centre = un dessin 1–74 (10 planches)
+  / mon texte (30 car., 8 écritures) / ma photo (+ texte dessous +3 €) ; ② détail ; ③ « Autour » +3 € par élément (cadre 75–102 + nom,
+  lettre fleurie + nom, dessin, texte ; côté + place), écrit ligne par ligne dans `fields.autour` ; ④ résumé. Bouton grisé tant que le
+  centre manque. Prix = `gobeletSupplement` (`src/lib/gobeletParcours.js`), le MÊME au paiement (`/api/checkout`). Phrase rouge « plusieurs
+  photos ou logos → mise en page + aperçu à valider ». Aperçu = l'ancien aperçu 2D à pastilles (`GobeletPreview`), pas le 3D de la maquette.
+- Univers « Verres & Carafes » renommé **« Verres, Carafes & Gobelet »** (même adresse /boutique/verres, + `CATEGORIES` de products.js),
+  3ᵉ rayon « Gobelet isotherme ». Guide « Verres et carafes gravés » : section gobelet ajoutée.
+- **Stock** : posé par le code (`STOCK_DEPART` dans `stock.js`, crème 1 · rose 2 · bleu marine 2 · blanc 3) : une ligne absente du stock
+  prend cette valeur, puis vit dans Firestore dès la 1re écriture. Vérifié en ligne (`/api/stock`). Couleur à 0 = pastille barrée,
+  « Épuisé », « Prévenez-moi » ; aucun chiffre montré. ⚠️ Remettre une couleur « non suivie » dans Gestion la ramène à sa valeur de départ.
+  (La clé de Gestion n'a pas pu servir d'ici : l'outil de sécurité refuse de la relire dans l'historique ; c'est pourquoi le stock est dans le code.)
+
 ### 🥤 GOBELET — MAQUETTE « PARCOURS GUIDÉ » ✅ ENREGISTRÉE LE 03/10/2026 (remplace celle du 25/09)
 > **05/11/2026 (version 5 de l'artifact, gérant : « des images comme gravé pour montrer, comme pour les marque-pages »)** : 9 images
 > « Exemple » sous le choix de la couleur (dessins n° 48, 67, 22, 71 + prénoms, photo + texte, texte seul, photo de couple + date,
