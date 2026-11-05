@@ -256,7 +256,9 @@ export function consignesGravure(item) {
 
   // Police : une seule ligne, écrite dès qu'il y a un texte (même règle que la fiche atelier).
   const fonte = vus.find((f) => f.type === "font");
-  if (fonte && aDuTexte && champs.mode !== "modele" && champs.mode !== "noel") {
+  // Gobelet : l'écriture n'existe que pour un texte (au centre ou sous la photo) ; chaque élément en plus porte la sienne dans sa ligne.
+  const sansPoliceGobelet = Boolean(produit?.gobeletParcours) && !String(champs.police || "").trim();
+  if (fonte && aDuTexte && champs.mode !== "modele" && champs.mode !== "noel" && !sansPoliceGobelet) {
     const choisie = String(champs[fonte.key] || "").trim();
     general.push({ k: "Police", v: choisie ? (getFontLabel(choisie) || choisie) : `${getFontLabel("playfair")} (police proposée, non changée)` });
   }

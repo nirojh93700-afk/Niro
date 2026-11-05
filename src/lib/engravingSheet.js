@@ -41,6 +41,7 @@ export function policeDeGravure(item) {
   const choisie = String(champs[fonte.key] || "").trim();
   const aDuTexte = vus.some((f) => estTexte(f) && String(champs[f.key] || "").trim());
   if (!aDuTexte || champs.mode === "modele") return null;
+  if (produit?.gobeletParcours && !String(champs.police || "").trim()) return null; // gobelet : écriture seulement pour un texte
   if (choisie) return { label: getFontLabel(choisie) || choisie, defaut: false };
   return { label: getFontLabel("playfair"), defaut: true };
 }

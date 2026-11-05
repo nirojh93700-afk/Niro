@@ -4,7 +4,8 @@
 // payant, même un prénom » → 1 élément compris (le centre), chaque élément en plus +3 €.
 //
 // Champs écrits (clés de la fiche, lues telles quelles par l'atelier) :
-//   mode            dessin | texte | photo        (la gravure du CENTRE, obligatoire)
+//   mode            dessin | texte | photo        (la gravure PRINCIPALE, obligatoire)
+//   cote            face | gauche | droite         (où graver la gravure principale ; vide = face)
 //   dessin          n° du dessin au centre (1–74)
 //   texte           texte au centre
 //   photo           photo / logo envoyé (adresse)
@@ -30,8 +31,17 @@ export function lignesAutour(fields) {
   return t(fields?.autour).split("\n").map((l) => l.trim()).filter(Boolean).slice(0, GOB_ELEMENTS_MAX);
 }
 
-/** La gravure du centre est-elle complète ? */
+export const GOB_COTES = { face: "face", gauche: "côté gauche", droite: "côté droit" };
+export const coteCentre = (fields) => (GOB_COTES[t(fields?.cote)] ? t(fields.cote) : "face");
+
+/** La gravure principale est-elle complète ? (centre = libellé + l'endroit si ce n'est pas la face) */
 export function gobeletEtat(fields) {
+  const e = etatSansCote(fields);
+  const c = coteCentre(fields);
+  if (e.ok && c !== "face") e.centre = `${e.centre} — ${GOB_COTES[c]}`;
+  return e;
+}
+function etatSansCote(fields) {
   const f = fields || {};
   const mode = t(f.mode);
   if (mode === "dessin") {
@@ -40,7 +50,7 @@ export function gobeletEtat(fields) {
   }
   if (mode === "texte") return t(f.texte) ? { ok: true, centre: `« ${t(f.texte)} »` } : { ok: false, centre: "Mon propre texte — à écrire", manque: "Écrivez votre texte." };
   if (mode === "photo") return t(f.photo) ? { ok: true, centre: "Votre photo / logo" + (t(f.texteSousPhoto) ? ` + « ${t(f.texteSousPhoto)} »` : "") } : { ok: false, centre: "Ma photo ou mon logo — à ajouter", manque: "Ajoutez votre photo ou votre logo." };
-  return { ok: false, centre: null, manque: "Choisissez ce qui sera gravé au centre (étape 1)." };
+  return { ok: false, centre: null, manque: "Choisissez votre gravure principale (étape 1)." };
 }
 
 /** Nombre d'éléments gravés : le centre (compris) + le texte sous la photo + chaque élément autour. */
@@ -67,5 +77,5 @@ export function gobeletResume(fields) {
   const autour = lignesAutour(fields);
   const f = fields || {};
   const ecrit = (t(f.mode) === "texte" || (t(f.mode) === "photo" && t(f.texteSousPhoto))) && t(f.police) ? `, écriture ${getFontLabel(t(f.police)).split(" — ")[0]}` : "";
-  return [e.centre ? `Au centre : ${e.centre}${ecrit}` : "", ...autour.map((l) => `Autour : ${l}`)].filter(Boolean).join(" · ");
+  return [e.centre ? `Gravure principale : ${e.centre}${ecrit}` : "", ...autour.map((l) => `En plus : ${l}`)].filter(Boolean).join(" · ");
 }

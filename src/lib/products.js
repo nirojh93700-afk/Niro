@@ -4355,6 +4355,8 @@ export const products = [
       extra: 3,
       imagePhoto: "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg",
       alphabet: "/produits/alphabet-fleuri.jpg",
+      // Un fichier par dessin (01.webp … 74.webp), découpé des planches : les clientes VOIENT chaque dessin avec son numéro.
+      dessinUnite: "/produits/gobelet/dessins/",
       dessins: [
         { src: "/produits/gobelet/planche-dessins-01.jpg", nums: "1–10", legende: "Fleurs & papillons" },
         { src: "/produits/gobelet/planche-dessins-02.jpg", nums: "11–27", legende: "Roses" },
@@ -4380,12 +4382,14 @@ export const products = [
     personalizationFields: [
       { key: "mode", type: "select", label: "Gravure au centre", optional: true, options: [
         { value: "dessin", label: "Un dessin" }, { value: "texte", label: "Mon propre texte" }, { value: "photo", label: "Ma photo ou mon logo" } ] },
-      { key: "dessin", label: "Dessin au centre (n°)", optional: true },
-      { key: "texte", label: "Texte au centre", optional: true, maxLength: 30 },
-      { key: "photo", type: "photo", label: "Photo ou logo au centre", optional: true },
+      { key: "cote", type: "select", label: "Emplacement de la gravure principale", optional: true, options: [
+        { value: "face", label: "Face (devant)" }, { value: "gauche", label: "Côté gauche" }, { value: "droite", label: "Côté droit" } ] },
+      { key: "dessin", label: "Dessin principal (n°)", optional: true },
+      { key: "texte", label: "Texte principal", optional: true, maxLength: 30 },
+      { key: "photo", type: "photo", label: "Photo ou logo (gravure principale)", optional: true },
       { key: "texteSousPhoto", label: "Texte sous la photo", optional: true, maxLength: 30 },
       { key: "police", type: "font", label: "Écriture", optional: true },
-      { key: "autour", type: "textarea", label: "Autour de la gravure", optional: true },
+      { key: "autour", type: "textarea", label: "Éléments en plus", optional: true },
     ],
     title: "Gobelet isotherme 40 oz gravé — édition limitée, personnalisé (anse + paille)",
     // Galerie initiale = coloris Crème (variante par défaut). Chaque coloris a sa propre galerie :
