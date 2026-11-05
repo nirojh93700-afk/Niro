@@ -3803,7 +3803,16 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > - **Flûte à champagne gravée** : `docs/maquettes/flute-champagne-fiche.html` · artifact https://claude.ai/code/artifact/9948bdc8-7ab5-44ec-9c50-2eda30dc2c72
 >   - Clone EXACT du verre à vin (mêmes réglages : styles 1-19, lettre fleurie, 8 polices, note, prix : voir `node tools/prix-fiche.mjs flute-a-champagne-gravee`). Change seulement : photos (`IMG_9599 vierge / 9601 set / 9602 ambiance`) + infos (verre **21 cl**, Ø 6,3 × H 21,4 cm, lave-vaisselle ; coût Metro 2,34 €/flûte, réf Pinomaro).
 
-### 🥤 GOBELET — PARCOURS REFAIT, ✅ EN LIGNE LE 05/11/2026 SOIR (« Tu peux tout mettre en ligne », 6ac107f5)
+### 🥤 GOBELET — SÉLECTION MULTIPLE + PHOTO 6 € + « OÙ » REDESSINÉ — ✅ POUSSÉ LE 05/11/2026 SOIR (« Tu peux tout pousser », 9ce4949a)
+- Dessins : un toucher ajoute / retire (plusieurs d'un coup), une famille à la fois ; cadre, lettre, texte, photo s'ajoutent avec « Ajouter à ma
+  gravure » ; récapitulatif « Votre gravure » sous les choix (vignette, prix, ×, menu 📍 de l'endroit sur sa propre ligne).
+- Prix (gérant, 05/11) : 1er élément compris (photo comprise), chaque élément en plus +3 €, **chaque PHOTO en plus +6 €** (`extraPhoto: 6`,
+  `prixElement`), même calcul fiche / panier / paiement / atelier.
+- « Où le graver ? » : 4 gobelets dessinés DE CÔTÉ avec l'anse à sa vraie place (Face = à l'opposé de l'anse, anse cachée ; Côté gauche = anse à
+  gauche ; Côté droit = anse à droite ; Tout autour = bande) + case **« Je ne sais pas où le placer »** (côté `atelier`, sans place) : l'atelier
+  place au mieux et ENVOIE UN APERÇU à valider avant de graver (décision du gérant pour le gobelet). Fiche atelier : bloc « Endroit au choix de
+  l'atelier » + ligne « ⚠️ Aperçu : N éléments à placer… » (`gobeletApercuAEnvoyer`).
+### (historique) 🥤 GOBELET — PARCOURS REFAIT, ✅ EN LIGNE LE 05/11/2026 SOIR (« Tu peux tout mettre en ligne », 6ac107f5)
 - **Une seule étape « Que voulez-vous graver ? »** (gérant : « la partie trois, tu l'intègres dans le un ») : la cliente compose « Votre
   gravure » élément par élément — un dessin (1–74) · un cadre ou une banderole + nom (75–102) · une lettre fleurie + nom · mon texte ·
   ma photo (1er élément seulement). 1er élément compris, chaque autre +3 €. Pour CHAQUE élément : où (Face / Côté gauche / Côté droit /
