@@ -4,6 +4,7 @@
 // choisis par la cliente (emplacement, taille, position, textes, polices, motif,
 // fond, options) + un visuel reconstruit du verre, pour graver à l'identique.
 
+import ImagesOrigine from "@/components/admin/ImagesOrigine";
 import { getProductBySlug } from "@/lib/products";
 import { MODELES, layoutLabel } from "@/lib/modeles";
 import { getFontLabel, getFontClass } from "@/lib/fonts";
@@ -204,6 +205,7 @@ function SheetCorps({ item, titre = true }) {
             </a>
           </div>
         ))}
+        <ImagesOrigine item={item} compact />
         <details style={{ marginTop: 8 }}>
           <summary style={{ cursor: "pointer", fontSize: "0.8rem", color: "#888" }}>Tous les réglages (brut)</summary>
           <pre style={{ fontSize: "0.72rem", whiteSpace: "pre-wrap", wordBreak: "break-word", background: "#faf7f1", padding: 8, borderRadius: 6, marginTop: 6 }}>

@@ -23,6 +23,7 @@ import { ongletDuChemin, cheminDeLOnglet } from "@/components/admin/ongletsGesti
 import VarBadge from "@/components/admin/VarBadge";
 import { modeEnvoi } from "@/lib/etiquettes";
 import PreparationCommande from "@/components/admin/PreparationCommande";
+import ImagesOrigine from "@/components/admin/ImagesOrigine";
 import { photosEnvoyees } from "@/lib/apercuCote";
 
 // Écrans chargés seulement quand on les ouvre (02/10/2026) : l'accueil Gestion ne
@@ -1127,6 +1128,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                                     <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>Dessin n° {num}</span>
                                   </span>
                                 )}
+                                <ImagesOrigine item={s} compact />
                                 {!enLot && photosEnvoyees(s).map((ph) => (
                                   <a key={ph.src} href={ph.src} target="_blank" rel="noreferrer" style={{ display: "block", marginTop: 4, fontSize: "0.82rem", color: "var(--gold-dark, #a98935)", fontWeight: 600 }}>
                                     📷 Ouvrir la photo envoyée par la cliente{ph.titre.includes("—") ? ` (${ph.titre.split("— ")[1]})` : ""}

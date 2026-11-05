@@ -11,6 +11,7 @@
 // =============================================================================
 
 import { useCallback, useEffect, useState } from "react";
+import ImagesOrigine from "@/components/admin/ImagesOrigine";
 import Link from "next/link";
 import { getProductBySlug, CATEGORIES, getCategoryLabel } from "@/lib/products";
 import { imageDesign } from "@/lib/modeles";
@@ -392,6 +393,7 @@ export default function AtelierPage() {
                     ))}
                   </div>
 
+                  <ImagesOrigine item={item} compact />
                   {/* Pièce ratée : la quantité sort du stock du produit (Rates.jsx). */}
                   <BoutonRate o={o} item={item} mat={mat} adminKey={key} onSaved={() => loadMat(key)} />
                   {/* Conditionnement de la commande, comme dans la file de production. */}
