@@ -234,10 +234,14 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
     setOuvert(kind);
     setEd({ ...VIDE, kind, police: ed.police || "great-vibes" });
     // Si la fermeture d'un autre panneau au-dessus a fait remonter la carte hors de l'écran, on la ramène (sans animation).
-    requestAnimationFrame(() => {
+    // Tous les téléphones et ordinateurs : si, après le toucher, la carte ou le haut du panneau n'est plus à l'écran
+    // (un autre panneau s'est refermé et la page a bougé), on ramène la carte en haut, sans animation.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
       const el = document.querySelector(`.gbp-choix [data-k="${kind}"]`);
-      if (el && el.getBoundingClientRect().top < 110) el.scrollIntoView({ block: "start" });
-    });
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < 110 || r.bottom + 120 > window.innerHeight) el.scrollIntoView({ block: "start" });
+    }));
   }
   const maj = (patch) => setEd((p) => ({ ...p, ...patch }));
 
