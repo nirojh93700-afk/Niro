@@ -148,7 +148,8 @@
   `docs/maquettes/gobelet-parcours-guide.html` (artifact https://claude.ai/artifact/KNBxJ9BAsss7oshCo2RJfC, générateur
   `tools/maquettes/parcours-gobelet.py`) — édition limitée comme la carafe (étiquette, accroche, description, bandeau d'accueil sombre & or), **47,90 € net,
   livraison en plus**. ✅ **ENREGISTRÉE le 03/10 (« Enregistre la maquette, je te donnerai les quantités après »)** :
-  c'est CETTE version (parcours guidé) qui remplace celle du 25/09. **En attente : les quantités par couleur, puis
+  c'est CETTE version (parcours guidé) qui remplace celle du 25/09. ✅ **Stock reçu le 05/11 : crème 1 · rose 2 ·
+  bleu marine 2 · blanc 3 (8 au total).** **En attente : ~~les quantités par couleur~~, puis
   son « mets en ligne ».** Rien n'est en ligne.
 
 ## 1. Messages / clients en attente

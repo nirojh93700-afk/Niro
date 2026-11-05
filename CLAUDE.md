@@ -3831,7 +3831,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   « Nouveau »), accroche « — édition limitée », encadré sous le prix (« série gravée à la main, en quantité
   limitée — une fois épuisée, elle n'est pas reconduite »), puce dans la description, **et le même bandeau sombre
   & or que la carafe sur l'accueil** (`.limed`, gobelet ENTIER sur fond flou — pas de recadrage).
-- **Reste avant le « mets en ligne »** : les **quantités par couleur** (il les donne), puis construire dans
+- ✅ **STOCK DONNÉ PAR LE GÉRANT LE 05/11/2026** : **crème 1 · rose 2 · bleu marine 2 · blanc 3** (8 gobelets ; il dit
+  « gourde beige / rose / bleu / blanche »). À saisir comme stock par couleur à la construction.
+- **Reste avant le « mets en ligne »** : ~~les quantités par couleur~~ (reçues le 05/11), son « mets en ligne », puis construire dans
   `products.js` (parcoursGuide gobelet + éléments autour comptés au checkout 1 inclus puis +3 €, `badge:"Édition
   limitée"`, packaging, `productDates.js`, stock par couleur) + bandeau d'accueil comme la carafe, fidèlement à
   CETTE maquette. Commande = récap écrit + image d'aperçu (règle du 22/07 inchangée).
