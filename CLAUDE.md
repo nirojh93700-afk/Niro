@@ -3833,6 +3833,12 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   & or que la carafe sur l'accueil** (`.limed`, gobelet ENTIER sur fond flou — pas de recadrage).
 - ✅ **STOCK DONNÉ PAR LE GÉRANT LE 05/11/2026** : **crème 1 · rose 2 · bleu marine 2 · blanc 3** (8 gobelets ; il dit
   « gourde beige / rose / bleu / blanche »). À saisir comme stock par couleur à la construction.
+- ✅ **OÙ IL VA (gérant, 05/11/2026 : « on va le mettre avec les verres, carafe et gobelet… le stock c'est pour admin, les gens il faut
+  pas qu'ils sachent… dès que c'est vendu, il faut qu'il soit en rupture »)** : maquette https://claude.ai/artifact/6PX4q48TRatmNhAv7A7oac
+  (générateur `tools/maquettes/gobelet-en-ligne.py <capture /boutique/verres> <dossier css> <sortie>`, sortie non commitée) : l'univers
+  « Verres & Carafes » devient **« Verres, Carafes & Gobelet »** (même adresse /boutique/verres) avec un 3ᵉ rayon « Gobelet isotherme » ;
+  stock par couleur SEULEMENT dans Gestion, jamais affiché ; couleur à 0 = pastille barrée « Épuisé », bouton « Épuisé », « Prévenez-moi »
+  (mécanisme déjà présent : `cs-btn sold-out`, `RestockAlerte`). Le nom « gobelet » est gardé (pas « gourde »). En attente de son avis.
 - **Reste avant le « mets en ligne »** : ~~les quantités par couleur~~ (reçues le 05/11), son « mets en ligne », puis construire dans
   `products.js` (parcoursGuide gobelet + éléments autour comptés au checkout 1 inclus puis +3 €, `badge:"Édition
   limitée"`, packaging, `productDates.js`, stock par couleur) + bandeau d'accueil comme la carafe, fidèlement à
