@@ -91,7 +91,7 @@ def build():
     </div>
   </div>
   <div class="prc-mode" data-mode="photo" hidden>
-    <p class="prc-legend">Téléversez le fichier (JPG, PNG). L'atelier vérifie la qualité avant de graver. Vous avez plusieurs photos ou logos ? Nous préparons la mise en page et vous envoyons un aperçu à valider.</p>
+    <p class="prc-legend">Téléversez le fichier (JPG, PNG). L'atelier vérifie la qualité avant de graver. <span class="prc-rouge">Vous avez plusieurs photos ou logos ? Nous préparons la mise en page et vous envoyons un aperçu à valider.</span></p>
     <div class="prc-fields">
       <div class="field"><label>Votre photo ou logo</label><input type="file" id="prc-file" accept="image/*"><p class="prc-fileok" id="prc-fileok" hidden>Photo ajoutée ✓</p></div>
       <div class="field"><label>Texte sous la photo <span class="prc-opt">(facultatif)</span></label><input type="text" id="prc-ptxt" maxlength="30" placeholder="Prénom, message…"></div>
@@ -389,7 +389,8 @@ button.add{border:0;font:inherit;cursor:pointer;width:100%}
 .ex-tag{position:absolute;left:5px;top:5px;background:rgba(29,24,17,.82);color:#f3e6c4;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:6px;z-index:1}
 .ex-lbl{margin-top:18px;font-size:13px;font-weight:700;color:var(--ink)}
 .ex-lbl span{font-weight:400;color:var(--ink-soft)}
-.prc-miseenpage{background:#fbf6ea;border:1px solid #ecdcb4;border-radius:10px;padding:9px 12px;color:#6b5320}
+.prc-miseenpage{background:#fdecea;border:1px solid #f1b7b0;border-radius:10px;padding:9px 12px;color:#b3261e;font-weight:700}
+.prc-rouge{color:#b3261e;font-weight:700}
 @media (max-width:760px){.thumbs-ex .ti{width:31%}}
 </style>"""
     SCRIPT_EX = """<script>document.querySelectorAll('.thumbs-ex .ti').forEach(function(t){t.addEventListener('click',function(){var h=document.querySelector('.hero');if(h){var r=h.getBoundingClientRect();if(r.bottom<60||r.top>innerHeight-60)h.scrollIntoView({behavior:'smooth',block:'center'});}});});</script>"""
