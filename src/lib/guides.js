@@ -26,6 +26,7 @@ export const GUIDES = [
     auto: { category: "bijoux", subcategory: "homme" },
     nav: "Bijoux homme",
     title: "Bijoux homme à graver — bracelets et colliers personnalisés",
+    titreGoogle: "Bijoux homme à graver — bracelets, colliers",
     description:
       "Bracelets et colliers homme à graver : cuir tressé, gourmette d'identité, chaîne acier. Nos conseils pour choisir la bonne largeur et la bonne gravure.",
   },
@@ -42,6 +43,7 @@ export const GUIDES = [
     auto: { category: "naissance" },
     nav: "Cadeau de naissance",
     title: "Cadeaux de naissance personnalisés — plaque et bijoux gravés",
+    titreGoogle: "Cadeaux de naissance personnalisés gravés",
     description:
       "Plaque de naissance en bois gravé, bracelet empreinte de pied, plaque de porte : nos idées de cadeaux de naissance et de baptême personnalisés au prénom de bébé.",
   },
@@ -58,6 +60,7 @@ export const GUIDES = [
     auto: { category: "cristal" },
     nav: "Cristal photo 3D",
     title: "Cristal photo 3D — comment ça marche, prix et idées cadeau",
+    titreGoogle: "Cristal photo 3D — prix et idées cadeau",
     description:
       "La gravure photo 3D dans le cristal expliquée simplement : quelle photo choisir, quelle taille, quel prix, avec ou sans socle lumineux. Réalisé en France.",
   },
@@ -82,6 +85,7 @@ export const GUIDES = [
     auto: { motCle: /cl(é|e) usb|usb/i },
     nav: "Clé USB gravée",
     title: "Clé USB personnalisée gravée — mariage, photographe, souvenirs",
+    titreGoogle: "Clé USB personnalisée gravée — mariage, photo",
     description:
       "Clé USB en bois gravée aux prénoms et à la date, avec ou sans coffret : le cadeau des mariés, le livrable des photographes. Nos conseils et quoi faire graver.",
   },
@@ -90,6 +94,7 @@ export const GUIDES = [
     auto: { motCle: /porte-cl(é|e)s|pi(è|e)ce ronde|m(é|e)daille/i },
     nav: "Porte-clés & pièce",
     title: "Porte-clés et pièce porte-bonheur à graver personnalisés",
+    titreGoogle: "Porte-clés et pièce à graver personnalisés",
     description:
       "Porte-clés en cuir gravé, pièce porte-bonheur en laiton : les petits objets personnalisés qu'on garde sur soi, et ce qu'il vaut mieux faire graver dessus.",
   },
@@ -98,6 +103,7 @@ export const GUIDES = [
     auto: { motCle: /couverts|plaque de porte|enfant/i },
     nav: "Cadeau enfant",
     title: "Cadeaux personnalisés pour un enfant — plaque, couverts gravés",
+    titreGoogle: "Cadeaux personnalisés pour un enfant",
     description:
       "Plaque de porte au prénom, couverts gravés, souvenir de naissance : les cadeaux d'enfant personnalisés qui se gardent, et quoi faire graver dessus.",
   },
@@ -106,6 +112,7 @@ export const GUIDES = [
     auto: { motCle: /support t(é|e)l(é|e)phone/i },
     nav: "Support téléphone",
     title: "Support téléphone en bois personnalisé — photo gravée ou ajouré",
+    titreGoogle: "Support téléphone en bois personnalisé",
     description:
       "Support de téléphone en bois à personnaliser : photo gravée, dessin, initiale fleurie, ou motif découpé à jour. Comment choisir entre les deux modèles.",
   },
@@ -115,14 +122,16 @@ export const GUIDES = [
     auto: { category: "jeux" },
     nav: "Puzzles en bois",
     title: "Puzzles en bois personnalisés — au prénom ou à votre photo",
+    titreGoogle: "Puzzles en bois personnalisés, prénom ou photo",
     description:
-      "Puzzle à encastrer gravé au prénom pour les tout-petits, ou votre photo gravée sur un puzzle en bois de 24 à 100 pièces : comment choisir, et quoi savoir avant de commander.",
+      "Puzzle à encastrer gravé au prénom pour les tout-petits, ou votre photo gravée sur un puzzle en bois de 24 à 100 pièces : comment bien choisir.",
   },
   {
     slug: "porte-stylo-bois-personnalise",
     auto: { motCle: /porte-stylo/i },
     nav: "Porte-stylo",
     title: "Porte-stylo en bois personnalisé — cadeau supporter et bureau",
+    titreGoogle: "Porte-stylo en bois personnalisé",
     description:
       "Porte-stylo en bois découpé et gravé, aux couleurs d'une équipe et au prénom de celui qui l'utilise : à qui l'offrir et quoi faire graver.",
   },
@@ -132,8 +141,9 @@ export const GUIDES = [
     auto: { motCle: /marque-page/i },
     nav: "Marque-pages",
     title: "Marque-pages personnalisés — gravés au prénom, dessin ou photo",
+    titreGoogle: "Marque-pages personnalisés gravés",
     description:
-      "Marque-page en bois gravé d'un prénom, d'un dessin ou d'une photo, ou marque-page en métal doré d'après Van Gogh et Monet : comment choisir, quoi faire graver, et la boîte cadeau.",
+      "Marque-page en bois gravé d'un prénom, d'un dessin ou d'une photo, ou en métal doré d'après Van Gogh et Monet : comment choisir et quoi faire graver.",
   },
 ];
 

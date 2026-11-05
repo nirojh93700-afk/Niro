@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
   const g = getGuide(params.slug);
   if (!g) return { title: "Guide introuvable" };
   return {
-    title: g.title,
+    title: g.titreGoogle || g.title,
     description: g.description,
     alternates: { canonical: `/idees/${g.slug}` },
     openGraph: {

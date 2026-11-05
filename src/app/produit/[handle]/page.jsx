@@ -8,6 +8,7 @@ import { guidePourProduit } from "@/lib/guides";
 import ProductReviews from "@/components/ProductReviews";
 import ProductCard from "@/components/ProductCard";
 import { getCatalogBySlug, getCatalog, getCatalogAdmin, prixOuverture } from "@/lib/catalog";
+import { titreGoogle } from "@/lib/titresGoogle";
 import { getCategoryLabel } from "@/lib/products";
 
 // Jeton d'aperçu privé : permet d'afficher une fiche d'un produit caché
@@ -29,7 +30,8 @@ export async function generateMetadata({ params }) {
   if (!product) return {};
   const text = (product.descriptionHtml || "").replace(/<[^>]+>/g, " ").trim().slice(0, 155);
   return {
-    title: product.title,
+    // Ligne bleue de Google : titre court (table titresGoogle) ; le H1 de la fiche garde `title`.
+    title: titreGoogle(product),
     description: text,
     alternates: { canonical: `/produit/${params.handle}` },
     openGraph: {

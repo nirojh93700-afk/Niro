@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Carte cadeau — offrez le choix",
   description:
-    "Offrez une carte cadeau Niv Création : bijoux gravés, verres personnalisés, cristal photo 3D. Envoyée par e-mail avec votre petit mot, valable un an sur toute la boutique.",
+    "Offrez une carte cadeau Niv Création : bijoux gravés, verres personnalisés, cristal photo 3D. Envoyée par e-mail avec votre mot, valable un an.",
   alternates: { canonical: "/carte-cadeau" },
 };
 
