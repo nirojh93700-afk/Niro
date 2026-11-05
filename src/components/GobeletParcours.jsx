@@ -9,7 +9,7 @@
 //      Si `cfg.dessinUnite` existe (un fichier par dessin, propre), les dessins s'affichent en tuiles au lieu des planches.
 //   ② résumé + total ; « Ajouter au panier » grisé tant que le 1er élément manque (gobeletEtat, vérifié aussi dans handleAdd).
 // Données et prix : src/lib/gobeletParcours.js (même calcul au paiement, même lecture à l'atelier).
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import { formatEuro } from "@/lib/format";
 import {
@@ -233,7 +233,11 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
     setMsg("");
     setOuvert(kind);
     setEd({ ...VIDE, kind, police: ed.police || "great-vibes" });
-    setTimeout(() => edRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+    // Si la fermeture d'un autre panneau au-dessus a fait remonter la carte hors de l'écran, on la ramène (sans animation).
+    requestAnimationFrame(() => {
+      const el = document.querySelector(`.gbp-choix [data-k="${kind}"]`);
+      if (el && el.getBoundingClientRect().top < 110) el.scrollIntoView({ block: "start" });
+    });
   }
   const maj = (patch) => setEd((p) => ({ ...p, ...patch }));
 
@@ -278,28 +282,10 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
   const prochain = liste.length === 0 ? "compris" : `+${ed.kind === "photo" ? extraPhoto : extra} €`;
   const placesDispo = (i) => [...ORDRE_PLACES.filter(([c, z]) => !liste.some((e, k) => k !== i && e.side === c && e.zone === z)), ["atelier", ""]];
 
-  return (
-    <div className="prc gbp" id="gobelet-parcours">
-      <div className="prc-head"><p className="prc-title">Personnalisez votre gobelet</p><p className="prc-sub">Choisissez tout ce que vous voulez : dessins, cadres avec un prénom, lettres, textes, photos. Le 1er élément est compris ; chaque élément en plus : +{extra} €, une photo en plus : +{extraPhoto} €.</p></div>
+  // Le panneau s'ouvre JUSTE SOUS la carte touchée (gérant, 05/11 : « il faut que je clique pour que ça s'ouvre » :
+  // il s'ouvrait sous les 5 cartes, hors de l'écran du téléphone).
+  const panneau = ouvert ? (
 
-      <section className="prc-step">
-        <div className="prc-sh"><span className={`prc-num${etat.ok ? " done" : ""}`}>1</span><h3>Que voulez-vous graver ?</h3></div>
-        <div className="prc-cards gbp-choix">
-          {CHOIX.map((c) => (
-            <button type="button" key={c.k} className={`prc-card${ouvert === c.k ? " on" : ""}`} onClick={() => (ouvert === c.k ? setOuvert("") : ouvrir(c.k))}>
-              <span className={`prc-cimg${c.k === "texte" ? " prc-cimg-aa" : c.k === "photo" ? " prc-cimg-photo" : " gbp-cimg-planche"}`}>
-                {c.k === "texte" ? <span className={getFontClass("great-vibes")}>Aa</span>
-                  : c.k === "lettre" ? <span className="gbp-lettre-ic">A</span>
-                  : /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={c.k === "photo" ? cfg.imagePhoto : c.k === "cadre" ? cfg.cadres[2].src : (cfg.dessinUnite ? srcDessin(cfg, 48) : cfg.dessins[0].src)} alt="" />}
-              </span>
-              <span className="prc-ctxt"><b>{c.titre}</b><small>{c.sous}</small></span>
-            </button>
-          ))}
-        </div>
-        <p className="prc-hint gbp-miseenpage">✦ Plusieurs images, photos ou logos ? Nous préparons la mise en page et vous envoyons un aperçu à valider avant la gravure.</p>
-
-        {ouvert && (
           <div className="gbp-extra" ref={edRef}>
             <div className="gbp-extra-top">
               <b>{CHOIX.find((c) => c.k === ouvert)?.titre}</b>
@@ -403,7 +389,31 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
             )}
             {msg && <p className="gbp-xmsg">{msg}</p>}
           </div>
-        )}
+  ) : null;
+
+  return (
+    <div className="prc gbp" id="gobelet-parcours">
+      <div className="prc-head"><p className="prc-title">Personnalisez votre gobelet</p><p className="prc-sub">Choisissez tout ce que vous voulez : dessins, cadres avec un prénom, lettres, textes, photos. Le 1er élément est compris ; chaque élément en plus : +{extra} €, une photo en plus : +{extraPhoto} €.</p></div>
+
+      <section className="prc-step">
+        <div className="prc-sh"><span className={`prc-num${etat.ok ? " done" : ""}`}>1</span><h3>Que voulez-vous graver ?</h3></div>
+        <div className="prc-cards gbp-choix">
+          {CHOIX.map((c) => (
+            <Fragment key={c.k}>
+            <button type="button" data-k={c.k} className={`prc-card${ouvert === c.k ? " on" : ""}`} aria-expanded={ouvert === c.k} onClick={() => (ouvert === c.k ? setOuvert("") : ouvrir(c.k))}>
+              <span className={`prc-cimg${c.k === "texte" ? " prc-cimg-aa" : c.k === "photo" ? " prc-cimg-photo" : " gbp-cimg-planche"}`}>
+                {c.k === "texte" ? <span className={getFontClass("great-vibes")}>Aa</span>
+                  : c.k === "lettre" ? <span className="gbp-lettre-ic">A</span>
+                  : /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={c.k === "photo" ? cfg.imagePhoto : c.k === "cadre" ? cfg.cadres[2].src : (cfg.dessinUnite ? srcDessin(cfg, 48) : cfg.dessins[0].src)} alt="" />}
+              </span>
+              <span className="prc-ctxt"><b>{c.titre}</b><small>{c.sous}</small></span>
+            </button>
+            {ouvert === c.k && panneau}
+            </Fragment>
+          ))}
+        </div>
+        <p className="prc-hint gbp-miseenpage">✦ Plusieurs images, photos ou logos ? Nous préparons la mise en page et vous envoyons un aperçu à valider avant la gravure.</p>
 
         <div className="gbp-liste" ref={recapRef}>
           <p className="gbp-liste-t">Votre gravure {liste.length ? `· ${liste.length} élément${liste.length > 1 ? "s" : ""}` : ""}</p>

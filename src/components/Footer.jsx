@@ -35,7 +35,7 @@ export default function Footer({ masques = [] }) {
                 aria-label="Suivez Niv Création sur Instagram"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="footer-insta-qr" src="/instagram-qr.png" alt="QR code Instagram Niv Création" />
+                <img className="footer-insta-qr" src="/instagram-qr.png" loading="lazy" decoding="async" alt="QR code Instagram Niv Création" />
               </a>
               <div className="footer-insta-txt">
                 <span className="fi-title">Suivez-nous sur Instagram</span>
