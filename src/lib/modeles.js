@@ -53,8 +53,12 @@ export function layoutOptions(t) {
   return [...(t?.layouts || []), ...((t?.imageDesigns || []).map((d) => d.id))];
 }
 // Renvoie le design image correspondant à un layout (ou null si style vectoriel).
+// `t` = le modèle OU sa clé (« peres ») : les commandes enregistrent la clé (modeleTemplate). Avant le
+// 05/11/2026 seule la fiche passait l'objet → à la commande (0SJAY2KK, Jack Daniel's) la capture et
+// l'atelier ne retrouvaient pas le design et montraient le modèle « élu Papa de l'année » à la place.
 export function imageDesign(t, layout) {
-  return (t?.imageDesigns || []).find((d) => d.id === layout) || null;
+  const tpl = typeof t === "string" ? MODELES[t] : t;
+  return (tpl?.imageDesigns || []).find((d) => d.id === layout) || null;
 }
 // Libellé d'un layout (nom du design image, ou nom du style vectoriel).
 const VECTOR_LABELS = { classic: "élu Papa de l'année", badge: "Médaillon rond", stack: "Simple" };

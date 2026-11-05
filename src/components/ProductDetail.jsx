@@ -1001,7 +1001,12 @@ export default function ProductDetail({ product, realisations = [] }) {
       const subLine = tpl.lines.find((l) => l.below);
       const subTxt = subLine && mv?.addText !== false ? ((text[subLine.key] || "").trim() || subLine.placeholder || "") : "";
       const rows = [];
-      if (layout === "classic") {
+      const dsgR = imageDesign(tpl, layout);
+      if (dsgR) {
+        // Design « image » (Jack Daniel's, Papa poule…) : l'image fixe, puis le prénom / la date dessous,
+        // exactement comme ModeleArt l'affiche sur la fiche (05/11/2026, commande 0SJAY2KK).
+        rows.push({ k: "img", src: (color || "").toLowerCase() === "#3a2f1d" ? dsgR.dark : dsgR.light, em: 4.6 });
+      } else if (layout === "classic") {
         const t = get("top"), m = get("mid"), b = get("bot");
         if (t) rows.push({ k: "text", ...t });
         rows.push({ k: "flourish" });
@@ -1022,6 +1027,7 @@ export default function ProductDetail({ product, realisations = [] }) {
         for (const r of rows) {
           const fs = base * (r.em || 1);
           if (r.k === "flourish") { totalH += base * 0.5; maxW = Math.max(maxW, base * 3.6); }
+          else if (r.k === "img") { totalH += fs; maxW = Math.max(maxW, fs); }
           else if (r.k === "motif") { totalH += fs; maxW = Math.max(maxW, fs); }
           else { ctx.font = `${r.bold ? "700 " : ""}${fs}px ${fontFamilyFor(r.cls)}`; const w = ctx.measureText(r.txt).width * (r.mid ? 1.7 : 1); totalH += fs * 1.1; maxW = Math.max(maxW, w); }
           totalH += gap();
@@ -1044,6 +1050,10 @@ export default function ProductDetail({ product, realisations = [] }) {
           ctx.beginPath(); ctx.arc(cx + half, fy, base * 0.07, 0, 7); ctx.fill();
           ctx.beginPath(); ctx.moveTo(cx, fy - base * 0.13); ctx.lineTo(cx + base * 0.1, fy); ctx.lineTo(cx, fy + base * 0.13); ctx.lineTo(cx - base * 0.1, fy); ctx.closePath(); ctx.fill();
           y += base * 0.5 + gap();
+        } else if (r.k === "img") {
+          const im = await loadImg(r.src).catch(() => null);
+          if (im) ctx.drawImage(im, cx - fs / 2, y, fs, fs);
+          y += fs + gap();
         } else if (r.k === "motif") {
           const m = await tintedMotif(r.id, color, fs);
           if (m) ctx.drawImage(m, cx - fs / 2, y, fs, fs);
@@ -1110,7 +1120,10 @@ export default function ProductDetail({ product, realisations = [] }) {
         const faceBox = (engraveCfg && engraveCfg.box) || { left: 0.2, top: 0.2, width: 0.6, height: 0.6 };
         const fondBox = (fondCfg && fondCfg.box) || { left: 0.3, top: 0.3, width: 0.4, height: 0.4 };
         // FACE : photo envoyée, sinon design image choisi (Fête des pères) — version foncée.
-        const faceArt = photoSrc || (dsg ? dsg.dark : null);
+        // Un design avec le prénom / la date dessous passe par renderModele (image + texte), sinon le
+        // texte ajouté disparaissait de l'aperçu et du fichier à graver.
+        const subDsg = dsg && modeleVal?.addText !== false && Object.values(modeleVal?.text || {}).some((t) => String(t || "").trim());
+        const faceArt = photoSrc || (dsg && !subDsg ? dsg.dark : null);
         // Montage libre (motif n° / photo + texte placés par la cliente) : aperçu
         // composé À L'IDENTIQUE de ce qu'elle voit (position + taille + police).
         if (!modeleField && aEmplacement(product) && emplacement) {
