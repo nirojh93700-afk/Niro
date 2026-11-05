@@ -3803,6 +3803,24 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 > - **Flûte à champagne gravée** : `docs/maquettes/flute-champagne-fiche.html` · artifact https://claude.ai/code/artifact/9948bdc8-7ab5-44ec-9c50-2eda30dc2c72
 >   - Clone EXACT du verre à vin (mêmes réglages : styles 1-19, lettre fleurie, 8 polices, note, prix : voir `node tools/prix-fiche.mjs flute-a-champagne-gravee`). Change seulement : photos (`IMG_9599 vierge / 9601 set / 9602 ambiance`) + infos (verre **21 cl**, Ø 6,3 × H 21,4 cm, lave-vaisselle ; coût Metro 2,34 €/flûte, réf Pinomaro).
 
+### 🥤 GOBELET — PARCOURS REFAIT, ✅ EN LIGNE LE 05/11/2026 SOIR (« Tu peux tout mettre en ligne », 6ac107f5)
+- **Une seule étape « Que voulez-vous graver ? »** (gérant : « la partie trois, tu l'intègres dans le un ») : la cliente compose « Votre
+  gravure » élément par élément — un dessin (1–74) · un cadre ou une banderole + nom (75–102) · une lettre fleurie + nom · mon texte ·
+  ma photo (1er élément seulement). 1er élément compris, chaque autre +3 €. Pour CHAQUE élément : où (Face / Côté gauche / Côté droit /
+  Tout autour + au milieu / en haut / en bas / à gauche / à droite), place déjà prise refusée. × retire (le suivant devient le compris).
+- **Dessins en cases** (`dessinUnite: "/produits/gobelet/dessins/"`, 01–74.webp) : toucher = choisi (✓ doré), loupe 🔍 = grande fenêtre.
+  ⛔ Les découpes faites sur les planches NUMÉROTÉES perdent ce que les gros ronds dorés cachent (rose 12, tiges 20/23/25…) : les dessins
+  se découpent dans les IMAGES D'ORIGINE sans numéros (`docs/planches/origines/`, `tools/maquettes/gobelet-decoupe-origines.py`, mêmes
+  boîtes que les planches à l'échelle). Fait : 1–36. 37–74 = anciennes découpes (petits numéros dans les coins) ; n° 56 (prénoms
+  d'exemple coupés) et n° 59 (trait en haut) à refaire quand il redonne leurs images d'origine. Cadres 75–102 = planches qu'on agrandit.
+  `docs/planches/origines/nouvelle-planche-ornements-05-11.jpg` = 11 ornements fleuris NON intégrés (question posée : n° 103–113 ?).
+- Fenêtres : « ✕ Fermer » en haut, fond, glisser vers le bas, Échap, bouton retour du téléphone (history.pushState).
+- Données : `src/lib/gobeletParcours.js` (1er élément = champs mode/dessin/cadre/lettre/nom/texte/photo/texteSousPhoto/police/cote/
+  place ; les autres = lignes de `autour` écrites par `ligneElement`, relues par `lireLigne`). Atelier : `consignesGobelet`
+  (consignesGravure) = un bloc par côté, côtés vides marqués, chaque élément avec place, compris / +3 €, et **l'image exacte du dessin**
+  (grande, « ⬇ Télécharger l'image ») ; cadre = sa planche. Contrôle `oubliesAtelier` lit chaque ligne en plus.
+- Aussi en ligne : univers renommé « Verres & Carafes & Gobelet » (dfa8c8e9) et « images d'origine téléchargeables » de Gestion.
+
 ### 🥤 GOBELET ISOTHERME 40 OZ — ✅ EN LIGNE LE 05/11/2026 (« Mets en ligne », e404f815, déploiement réussi)
 - Fiche `gobelet-isotherme-40oz` (plus `hidden`), badge « Édition limitée », **47,90 € net, livraison en plus** (colis au poids : `category`
   reste `cadeaux` pour ne PAS prendre la grille des verres 11,90 € ; `categorieAffichee: "verres"` = fil d'Ariane « Verres, Carafes & Gobelet »).
