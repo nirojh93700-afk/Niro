@@ -17,6 +17,7 @@
 //   · `placement` : où et à quelle taille graver (enregistré à la commande).
 // Module pur (pas de JSX) : testé par `npm run test-consignes`.
 // =============================================================================
+import { texteAvecDecor } from "@/lib/decorTexte";
 import { getProductBySlug } from "@/lib/products";
 import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
@@ -195,7 +196,7 @@ export function consignesGravure(item) {
     }
     if (typeof brut !== "string" || !brut.trim()) continue;
     if (estTexte(f)) aDuTexte = true;
-    const valeur = valeurLisible(f, brut);
+    const valeur = texteAvecDecor(f.key, valeurLisible(f, brut), champs);
     if (/^sens\b/i.test(nettoie(f.label || f.key)) || f.key === "sens") {
       general.push({ k: "Sens d'écriture", v: sensLisible(valeur) + (faces.size > 1 ? " (toutes les faces)" : ""), fort: true });
       continue;

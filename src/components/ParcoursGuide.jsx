@@ -133,20 +133,23 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
   const replie = Boolean(styleNum) && !grilleOuverte;
   const replieNoel = Boolean(noelM) && !grilleOuverte;
 
+  // Décor autour du texte (♥ ★ ✿ ◆ •) : whisky et cocktail depuis toujours, tous les verres depuis le 05/11/2026.
+  const decorChips = cfg.decors?.length > 0 ? (
+    <div className="field"><label>Décor autour du texte <span className="prc-opt">(facultatif)</span></label>
+      <div className="prc-chips prc-decors">
+        {cfg.decors.map((d) => (
+          <button type="button" key={d.value} className={`prc-chip${(fieldValues.decor || "") === d.value ? " on" : ""}`} onClick={() => set({ decor: d.value })}>{d.label}</button>
+        ))}
+      </div></div>
+  ) : null;
+
   // Date, décor et écriture (verre à whisky) — un élément JSX, jamais un composant imbriqué
   // (sinon le champ perdrait le focus à chaque frappe).
   const commun = E ? (
     <>
       <div className="field"><label>Date <span className="prc-opt">(facultatif{prixDe(dateKey, { mode: "texte", texte: "x" }) ? `, ${px(dateKey, { mode: "texte", texte: "x" })}` : ""})</span></label>
         <input type="text" maxLength={dateMax} placeholder="Ex : 12.06.2024" value={fieldValues[dateKey] || ""} onChange={(e) => set({ [dateKey]: e.target.value })} /></div>
-      {cfg.decors?.length > 0 && (
-        <div className="field"><label>Décor autour du texte <span className="prc-opt">(facultatif)</span></label>
-          <div className="prc-chips prc-decors">
-            {cfg.decors.map((d) => (
-              <button type="button" key={d.value} className={`prc-chip${(fieldValues.decor || "") === d.value ? " on" : ""}`} onClick={() => set({ decor: d.value })}>{d.label}</button>
-            ))}
-          </div></div>
-      )}
+      {decorChips}
       <div className="field"><label>Écriture</label><Polices value={police} onChange={(p) => set({ police: p })} /></div>
     </>
   ) : null;
@@ -375,6 +378,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
                     <>
                       <div className="field"><label>Date ou année <span className="prc-opt">(facultatif{prixDe("date", { mode: "texte", texte: "x" }) ? `, ${px("date", { mode: "texte", texte: "x" })}` : ""})</span></label>
                         <input type="text" maxLength={20} placeholder="Ex. 1989 · 09.09.25" value={fieldValues.date || ""} onChange={(e) => set({ date: e.target.value })} /></div>
+                      {decorChips}
                       <div className="field"><label>Écriture</label><Polices value={police} onChange={(p) => set({ police: p })} /></div>
                     </>
                   )}
@@ -393,7 +397,7 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
                     {caseDate("dateImage", "photo")}</div>
                   <div className="field"><label>Texte sous la photo <span className="prc-opt">(facultatif{prixDe("texte", { mode: "photo" }) ? `, ${px("texte", { mode: "photo" })}` : ""})</span></label>
                     <input type="text" maxLength={texteMax} placeholder={E ? "Prénom, message…" : "Ex. Stephan · 1989"} value={fieldValues.texte || ""} onChange={(e) => set({ texte: e.target.value })} /></div>
-                  {commun || (fieldValues.texte && <div className="field"><label>Écriture du texte</label><Polices value={police} onChange={(p) => set({ police: p })} /></div>)}
+                  {commun || (fieldValues.texte && <>{decorChips}<div className="field"><label>Écriture du texte</label><Polices value={police} onChange={(p) => set({ police: p })} /></div></>)}
                 </div>
               </div>
             </div>

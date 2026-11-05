@@ -45,6 +45,9 @@ const policeNom = (k) => {
 // l'ancienne fiche (emplacement, photo, texte, texte2, decor, police, photoFond, texteFond).
 // Validé par le CHOIX ; seule exception : « face + fond » (+7 €) demande ce qui sera gravé au
 // fond, sinon on facturerait une gravure vide.
+// Décor choisi autour du texte (05/11/2026 : maintenant sur tous les verres, pas seulement le whisky).
+const avecDecorFv = (fv, t) => { const d = v(fv, "decor"); return d ? `${d} ${t} ${d}` : t; };
+
 function etatVerre(product, fv) {
   const cfg = product.parcoursGuide;
   const dateKey = cfg.dateKey || "date";
@@ -125,13 +128,13 @@ function etatSimple(product, fv) {
     const ph = v(fv, "photo");
     if (!ph) return { ok: false, grav: "Ma photo ou mon logo", detail: "", manque: "Ajoutez votre photo ou votre logo (étape 2)." };
     const t = v(fv, "texte");
-    return { ok: true, grav: "Votre photo / logo", detail: t ? `Texte sous la photo : ${t} (${policeNom(v(fv, "police"))})` : "photo seule, vérifiée par l'atelier", manque: "" };
+    return { ok: true, grav: "Votre photo / logo", detail: t ? `Texte sous la photo : ${avecDecorFv(fv, t)} (${policeNom(v(fv, "police"))})` : "photo seule, vérifiée par l'atelier", manque: "" };
   }
   if (mode === "texte") {
     const t = v(fv, "texte");
     if (!t) return { ok: false, grav: "Mon propre texte", detail: "", manque: "Écrivez votre texte (étape 2)." };
     const d = v(fv, "date");
-    return { ok: true, grav: `Texte : « ${t} »`, detail: `Écriture ${policeNom(v(fv, "police"))}${d ? ` · Date : ${d} (+3 €)` : ""}`, manque: "" };
+    return { ok: true, grav: `Texte : « ${avecDecorFv(fv, t)} »`, detail: `Écriture ${policeNom(v(fv, "police"))}${d ? ` · Date : ${d} (+3 €)` : ""}`, manque: "" };
   }
   return { ok: false, grav: null, detail: "", manque: "Choisissez votre gravure (étape 1)." };
 }

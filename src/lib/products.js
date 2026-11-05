@@ -104,6 +104,26 @@ const VIN_47_APERCU = {
 // de texte »). Même ton que celui des verres, adapté à la gravure 3D.
 export const GUIDE_CRISTAL_TEXTE = "Choisissez une image nette et bien éclairée (lumière du jour idéale), avec le ou les visages bien visibles et un peu d'espace autour. Évitez les photos sombres, floues, à contre-jour ou trop serrées, et les groupes où les visages sont trop petits. Votre photo est préparée par notre atelier, puis gravée en 3D au cœur du cristal. L'aperçu en ligne est indicatif.";
 
+// Décor autour du texte (♥ ★ ✿ ◆ •), le même sur tous les verres (gérant, 05/11/2026 : « ajoute sur
+// tous les verres », après la commande 1K8QTJYM où la cliente avait tapé les cœurs à la main sur le tumbler).
+// Gratuit, « Aucun » par défaut. Le décor entoure le texte principal (clé « texte »).
+const DECORS_TEXTE = [
+  { value: "", label: "Aucun" },
+  { value: "★", label: "★ Étoiles" },
+  { value: "♥", label: "♥ Cœurs" },
+  { value: "✿", label: "✿ Fleurs" },
+  { value: "◆", label: "◆ Losanges" },
+  { value: "•", label: "• Points" },
+];
+const CHAMP_DECOR = { key: "decor", type: "select", label: "Décor autour du texte ?", optional: true, options: [
+  { value: "", label: "Aucun" },
+  { value: "★", label: "Étoiles  ★ texte ★" },
+  { value: "♥", label: "Cœurs  ♥ texte ♥" },
+  { value: "✿", label: "Fleurs  ✿ texte ✿" },
+  { value: "◆", label: "Losanges  ◆ texte ◆" },
+  { value: "•", label: "Points  • texte •" },
+] };
+
 export const products = [
   // ----------------------------- BIJOUX --------------------------------------
   {
@@ -3070,6 +3090,7 @@ export const products = [
     // `ParcoursGuide.jsx` rend les étapes et écrit dans les clés ci-dessous. Modèles, photos et
     // textes de la fiche inchangés. Aucun champ obligatoire (règle du gérant).
     parcoursGuide: {
+      decors: DECORS_TEXTE,
       titre: "Personnalisez votre verre", objet: "verre", objetArticle: "le verre",
       vignetteModele: "/produits/vin-motif-05.png",
       alphabet: "/produits/alphabet-fleuri.jpg",
@@ -3132,6 +3153,7 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Ex. Santé · Merci", maxLength: 40, optional: true },
       { key: "date", label: "Date (+3 €)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
       { key: "initiale", label: "Initiale (monogramme) (+3 €)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
+      CHAMP_DECOR,
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     variants: [
@@ -3233,6 +3255,7 @@ export const products = [
     // `ParcoursGuide.jsx` rend les étapes et écrit dans les clés ci-dessous. Modèles, photos et
     // textes de la fiche inchangés. Aucun champ obligatoire (règle du gérant).
     parcoursGuide: {
+      decors: DECORS_TEXTE,
       titre: "Personnalisez votre flûte", objet: "flûte", objetArticle: "la flûte",
       vignetteModele: "/produits/vin-motif-05.png",
       alphabet: "/produits/alphabet-fleuri.jpg",
@@ -3317,6 +3340,7 @@ export const products = [
       { key: "texte", label: "Texte à graver", placeholder: "Ex. Santé · Merci", maxLength: 40, optional: true },
       { key: "date", label: "Date (+3 €)", placeholder: "Ex. 23.07.2024", maxLength: 20, optional: true },
       { key: "initiale", label: "Initiale (monogramme) (+3 €)", placeholder: "Ex. C · CL", maxLength: 3, optional: true },
+      CHAMP_DECOR,
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     variants: [
@@ -3432,6 +3456,7 @@ export const products = [
     // → résumé) et qui écrit dans ces mêmes clés. La liste `personalizationFields` reste
     // la source des libellés pour le panier, la commande et la fiche atelier.
     parcoursGuide: {
+      decors: DECORS_TEXTE,
       titre: "Personnalisez votre carafe", objet: "carafe", objetArticle: "la carafe",
       sousModele: "33 modèles numérotés : monogramme, blason, mariage, whisky… Vous indiquez juste le prénom ou l'initiale.",
       vignetteModele: "/produits/carafe-motif-05.png",
@@ -3505,6 +3530,7 @@ export const products = [
       { key: "role", label: "Rôle", placeholder: "Ex. Papa · Témoin · Best Man", maxLength: 20, optional: true },
       { key: "texte", label: "Texte à graver", placeholder: "Ex. Pour Papa", maxLength: 40, optional: true },
       { key: "date", label: "Date / année (+3 €)", placeholder: "Ex. 1989 · 09.09.25", maxLength: 20, optional: true },
+      CHAMP_DECOR,
       { key: "police", type: "font", label: "Police de gravure", optional: true },
       { key: "coffret", type: "select", label: "Coffret", optional: true, options: [
         { value: "", label: "Carafe seule" },

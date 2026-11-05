@@ -15,6 +15,7 @@
 //
 // Pure (aucun accès réseau) : testée par `npm run test-options` (tools/tests).
 // =============================================================================
+import { texteAvecDecor } from "@/lib/decorTexte";
 import { mpFormat, MP_BOITES } from "@/lib/marquePages";
 import { getProductBySlug } from "@/lib/products";
 import { apparierSpec } from "@/lib/orderSpec";
@@ -83,7 +84,7 @@ export function optionsArticle(item) {
     const physique = Boolean(e.stockId || e.stockIdByVariant || e.weight || e.weightByVariant);
     const montant = montantPour(e, item.variantId);
     const libelle = f ? libelleChamp(f) : e.key;
-    const detail = f ? valeurChamp(f, v) : v;
+    const detail = texteAvecDecor(e.key, f ? valeurChamp(f, v) : v, champs);
     out.push({ libelle, detail: detail === "oui" ? "oui" : detail, montant, physique });
   }
 
@@ -103,7 +104,7 @@ export function optionsArticle(item) {
     const f = def(k);
     const offerte = offertes > 0;
     if (offerte) offertes -= 1;
-    out.push({ libelle: f ? libelleChamp(f) : k, detail: `« ${v} »${offerte ? " (offerte)" : ""}`, montant: offerte ? 0 : cfg.textExtra || 0, physique: false });
+    out.push({ libelle: f ? libelleChamp(f) : k, detail: `« ${texteAvecDecor(k, v, champs)} »${offerte ? " (offerte)" : ""}`, montant: offerte ? 0 : cfg.textExtra || 0, physique: false });
   }
   const motifs = (cfg.motifKeys || []).filter((k) => rempli(k)).length;
   if (motifs > 1 && (cfg.motifExtra || 0) > 0) {
