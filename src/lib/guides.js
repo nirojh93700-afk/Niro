@@ -205,7 +205,7 @@ export function guidePourProduit(product) {
   if (/couverts|plaque de porte/.test(nom)) return getGuide("cadeau-enfant-personnalise");
   if (cat === "naissance") return getGuide("cadeau-naissance");
   if (cat === "mariage") return getGuide("deco-mariage-personnalisee");
-  if (cat === "verres") return getGuide("verres-carafes-graves");
+  if (cat === "verres" || /gobelet/.test(nom)) return getGuide("verres-carafes-graves");
   if (cat === "bijoux") {
     if (sub === "homme") return getGuide("bijoux-homme-graves");
     if (sub === "femme") return getGuide("cadeau-femme-personnalise");

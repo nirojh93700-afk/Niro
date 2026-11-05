@@ -101,7 +101,7 @@ export const PRODUCT_DATES = {
   "porte-stylo-portugal-coupe-du-monde": "2026-07-03",
   "porte-stylo-argentine-coupe-du-monde": "2026-07-03",
   "porte-stylo-espagne-coupe-du-monde": "2026-07-03",
-  "gobelet-isotherme-40oz": "2026-07-22",
+  "gobelet-isotherme-40oz": "2026-11-05",
   "plaque-de-naissance": "2026-07-10",
   "plaque-de-naissance-coeur": "2026-07-11",
 };

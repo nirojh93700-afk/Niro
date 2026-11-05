@@ -68,7 +68,7 @@ export default function PageUnivers({ uid, rayons, pourqui, pourquiLabels, coffr
         const visibles = trier(cards).filter((c) => matchCarte(c, sel));
         return (
           <section className="ur rv in" id={r.id} key={r.id}>
-            <h3>{r.nom} <small>{r.bientot ? "bientôt" : `${cards.length} créations`}</small></h3>
+            <h3>{r.nom} <small>{r.bientot ? "bientôt" : `${cards.length} création${cards.length > 1 ? "s" : ""}`}</small></h3>
             <div className="ug">
               {r.bientot === "cristaux" ? <BientotCristaux /> : null}
               {trier(cards).map((c) => <Carte key={c.slug} c={c} style={matchCarte(c, sel) ? undefined : { display: "none" }} />)}

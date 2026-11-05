@@ -61,6 +61,8 @@ import TrustSection from "./TrustSection";
 import WishlistButton from "@/components/WishlistButton";
 import GobeletComposer from "./GobeletComposer";
 import GobeletPreview from "./GobeletPreview";
+import GobeletParcours from "./GobeletParcours";
+import { gobeletEtat, gobeletResume } from "@/lib/gobeletParcours";
 
 // Couleur d'aperçu de la gravure (foncé, pour la lisibilité à l'écran). Le rendu
 // réel dépoli/givré est montré au client via une vraie photo d'exemple.
@@ -456,7 +458,7 @@ export default function ProductDetail({ product, realisations = [] }) {
     if (r && r !== fieldValues["textePos"]) setField("textePos", r);
   }
   // Parcours guidé (carafe…) : la gravure doit être COMPLÈTE pour ajouter au panier.
-  const parcours = product.parcoursGuide ? parcoursEtat(product, fieldValues) : null;
+  const parcours = product.parcoursGuide ? parcoursEtat(product, fieldValues) : product.gobeletParcours ? gobeletEtat(fieldValues) : null;
   const parcoursBloque = Boolean(parcours) && !parcours.ok;
 
   // Libellé lisible d'une valeur (police, couleur, liste déroulante).
@@ -641,7 +643,7 @@ export default function ProductDetail({ product, realisations = [] }) {
   // la cliente voit ce qu'elle a sélectionné, l'atelier sait quoi graver
   // (commande 0ZH3LP9M du 11/10/2026 arrivée sans police). Le parcours guidé
   // gère sa police lui-même (un modèle décoré n'en a pas).
-  const policesVides = product.parcoursGuide ? "" : visibleFields
+  const policesVides = (product.parcoursGuide || product.gobeletParcours) ? "" : visibleFields
     .filter((f) => f.type === "font" && !fieldValues[f.key]).map((f) => f.key).join(",");
   useEffect(() => {
     if (!policesVides) return;
@@ -1247,7 +1249,7 @@ export default function ProductDetail({ product, realisations = [] }) {
       // Lignes du texte telles que l'aperçu 3D les a montrées (« Axandre / Maxim ») : l'atelier grave pareil.
       apercuLignes: any3d ? lignesPourChamps(fieldValues) : null,
       perGlass: perGlass ? syncedGlassConfigs() : null, // détail par verre (lot personnalisé)
-      personalization: perGlass ? perGlassText(false) : [composition?.summary, buildPersonalization()].filter(Boolean).join(" · "),
+      personalization: perGlass ? perGlassText(false) : product.gobeletParcours ? gobeletResume(fieldValues) : [composition?.summary, buildPersonalization()].filter(Boolean).join(" · "),
       composition: composition || null, // configurateur gobelet (côté + motifs) pour l'atelier
       packaging: pkg.labels.length ? pkg.labels.join(", ") : null, // emballage pour la fiche atelier
       packagingNoel: pkgN.id ? pkgN.label.replace(/^Emballage de Noël : /, "").replace(/ \(\+[^)]*\)/, "").replace(/ · étiquette.*$/, "") : null,
@@ -1261,8 +1263,8 @@ export default function ProductDetail({ product, realisations = [] }) {
       // Vignette panier = le visuel composé ; sinon l'image/design choisi ; sinon photo produit.
       image: previewImage || photoSrc || artworkImage || images[0] || null,
       // Côté cliente : récap court (les détails techniques restent pour l'atelier).
-      personalization: [perGlass ? perGlassText(true) : [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "), gravVerres && gravVerres.lignes.length ? `Gravure : ${detailEnTexte(gravVerres)}` : ""].filter(Boolean).join(" · "),
-      fields: (product.engravingPricing || product.motifComposer) ? { ...fieldValues, ...(product.motifComposer ? { motifCount: composition?.count || 0 } : {}) } : undefined,
+      personalization: [perGlass ? perGlassText(true) : product.gobeletParcours ? gobeletResume(fieldValues) : [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "), gravVerres && gravVerres.lignes.length ? `Gravure : ${detailEnTexte(gravVerres)}` : ""].filter(Boolean).join(" · "),
+      fields: (product.engravingPricing || product.motifComposer || product.gobeletParcours) ? { ...fieldValues, ...(product.motifComposer ? { motifCount: composition?.count || 0 } : {}) } : undefined,
       packaging: pkg.chosen, // emballages choisis (ids) → recalcul serveur au paiement
       packagingNoel: pkgN.id ? { id: pkgN.id, couleur: pkgN.couleur } : undefined, // 🎄 recalcul serveur au paiement
       perGlass: perGlass ? syncedGlassConfigs() : null, // lot personnalisé : options comptées PAR verre au paiement
@@ -1646,7 +1648,7 @@ export default function ProductDetail({ product, realisations = [] }) {
             </>
           )}
 
-          {product.motifComposer && isWide && (
+          {(product.motifComposer || product.gobeletParcours) && isWide && (
             <>
               <div className="engrave3d-sticky">
                 <GobeletPreview image={variant?.image || images[activeImg]} composition={composition} />
@@ -1661,8 +1663,8 @@ export default function ProductDetail({ product, realisations = [] }) {
           <div className="breadcrumb">
             <Link href="/boutique">Boutique</Link>
             {" / "}
-            <Link href={lienCategorie(product.category)}>
-              {getCategoryLabel(product.category)}
+            <Link href={lienCategorie(product.categorieAffichee || product.category)}>
+              {getCategoryLabel(product.categorieAffichee || product.category)}
             </Link>
           </div>
           <div className="pd-titrerow">
@@ -1808,7 +1810,16 @@ export default function ProductDetail({ product, realisations = [] }) {
           )}
 
           {/* Parcours guidé en 4 étapes (carafe) : remplace onglets + champs + aperçu témoin. */}
-          {product.parcoursGuide ? (
+          {product.gobeletParcours ? (
+            <GobeletParcours
+              product={product}
+              fieldValues={fieldValues}
+              setFieldValues={setFieldValues}
+              unitPrice={unitPrice * quantity}
+              couleur={variant?.title || ""}
+              onComposition={setComposition}
+            />
+          ) : product.parcoursGuide ? (
             <>
             {/* Lot de N verres : chaque verre identique ou personnalisé différemment (inchangé) */}
             {supportsPerGlass && (
@@ -2525,7 +2536,7 @@ export default function ProductDetail({ product, realisations = [] }) {
         </div>
       )}
 
-      {product.motifComposer && !isWide && composition?.motifs?.length > 0 && (
+      {(product.motifComposer || product.gobeletParcours) && !isWide && composition?.motifs?.length > 0 && (
         <div className="engrave3d-mini gp-mini-wrap">
           <GobeletPreview image={variant?.image || images[activeImg]} composition={composition} mini />
         </div>

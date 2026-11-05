@@ -77,7 +77,25 @@ async function fsWriteDoc(name, value) {
   }
 }
 
+// STOCK DE DÉPART posé par le code (05/11/2026, gobelet : « le stock c'est pour admin… dès que c'est vendu, il faut qu'il
+// soit en rupture ») : une ligne ABSENTE du stock prend cette quantité ; dès que le stock est réécrit (vente, Gestion),
+// elle y est enregistrée et vit sa vie. Une ligne déjà présente n'est JAMAIS touchée. Jamais affiché aux clientes.
+export const STOCK_DEPART = {
+  "gobelet-40oz-creme": 1,
+  "gobelet-40oz-rose": 2,
+  "gobelet-40oz-marine": 2,
+  "gobelet-40oz-blanc": 3,
+};
+export function avecStockDepart(map) {
+  const m = map && typeof map === "object" ? map : {};
+  for (const [id, n] of Object.entries(STOCK_DEPART)) if (typeof m[id] !== "number") m[id] = n;
+  return m;
+}
+
 export async function getStockMap() {
+  return avecStockDepart(await lireStockBrut());
+}
+async function lireStockBrut() {
   if (useFirestore()) {
     if (fsCache.stock && Date.now() - fsCache.stockAt < FS_CACHE_TTL) return cacheCopy(fsCache.stock);
     const data = await fsReadDoc(KEY);
@@ -2901,7 +2919,7 @@ const RATES_KEEP = 1000;
 async function lireStockFrais() {
   if (useFirestore()) {
     const data = await fsReadDoc(KEY);
-    return data || {};
+    return avecStockDepart(data || {});
   }
   return getStockMap();
 }

@@ -152,8 +152,10 @@ export default async function ProductPage({ params, searchParams }) {
 
   // Fil d'Ariane (BreadcrumbList) : « Accueil › Boutique › Catégorie › Produit »
   // → affiché par Google à la place de l'URL brute (meilleur taux de clic).
-  const catLabel = product.marquePages ? "Marque-pages" : (getCategoryLabel(product.category) || "Boutique");
-  const catUrl = product.marquePages ? "/boutique/marque-pages" : categoryUrl(product.category);
+  // categorieAffichee : un produit rangé dans un autre univers que sa catégorie (gobelet → Verres, Carafes & Gobelet).
+  const catAff = product.categorieAffichee || product.category;
+  const catLabel = product.marquePages ? "Marque-pages" : (getCategoryLabel(catAff) || "Boutique");
+  const catUrl = product.marquePages ? "/boutique/marque-pages" : categoryUrl(catAff);
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

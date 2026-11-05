@@ -91,6 +91,8 @@ export function supplementsPayes(product) {
     if (product.marquePages.gravure) for (const x of [MP_PRIX.texte, MP_PRIX.dessin, MP_PRIX.photo, MP_PRIX.texteCadre]) out.add(x);
     for (const b of Object.values(MP_BOITES)) out.add(b.prix);
   }
+  // Gobelet (05/11/2026) : chaque élément en plus du centre, chiffré par src/lib/gobeletParcours.js (même calcul au paiement).
+  if (product.gobeletParcours) out.add(arrondi(Number(product.gobeletParcours.extra) || 3));
   const vars = Array.isArray(product.variants) && product.variants.length ? product.variants : [{ id: null, title: "" }];
   const champs = product.personalizationFields || [];
   for (const v of vars) {

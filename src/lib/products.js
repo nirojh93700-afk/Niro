@@ -13,7 +13,7 @@ export const CATEGORIES = [
   { slug: "bijoux", label: "Bijoux", short: "Bijoux" },
   { slug: "cristal", label: "Cristal Photo 3D", short: "Cristal" },
   { slug: "naissance", label: "Naissance", short: "Naissance" },
-  { slug: "verres", label: "Verres & Carafes", short: "Verres & Carafes" },
+  { slug: "verres", label: "Verres, Carafes & Gobelet", short: "Verres, Carafes & Gobelet" },
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
   { slug: "deco", label: "Déco & Maison", short: "Déco & Maison" },
   { slug: "cadeaux", label: "Cadeaux & Accessoires", short: "Cadeaux" },
@@ -4328,63 +4328,94 @@ export const products = [
 <li>Livré à plat (montage simple, quelques secondes)</li>
 </ul>`,
   },
-  // ------------------- GOBELET ISOTHERME 40 oz (MASQUÉ, prêt à publier) -------
-  // PAS ENCORE PUBLIÉ (hidden:true). Pour le mettre en ligne : passer hidden:false
-  // (ou Gestion → Catalogue). Reste à finaliser avec la gérante : stock par
-  // coloris + éventuel prix barré (promo −20 %) + remplacer les rendus gravés
-  // « Follow the Stars » / « The Future is Bright » (textes de démo anglais).
+  // ------------------- GOBELET ISOTHERME 40 oz — ÉDITION LIMITÉE (en ligne le 05/11/2026) -----------
+  // Maquette validée « parcours guidé » (03/10/2026) + exemples gravés (05/11/2026) + « Mets en ligne »
+  // du 05/11/2026. 47,90 € NET (pas de prix barré), livraison en plus (colis, catégorie « cadeaux » :
+  // PAS le tarif des verres fragiles). 1 élément compris (le centre), chaque élément en plus +3 €
+  // (src/lib/gobeletParcours.js, même calcul fiche + paiement). Rangé dans l'univers « Verres, Carafes &
+  // Gobelet » (src/lib/univers.js). Stock par couleur dans Gestion SEULEMENT (jamais montré aux clientes) :
+  // crème 1 · rose 2 · bleu marine 2 · blanc 3 au 05/11 ; une couleur à 0 = « Épuisé ».
   {
     slug: "gobelet-isotherme-40oz",
-    hidden: true,
-    badge: "Nouveau",
+    badge: "Édition limitée",
     name: "Gobelet isotherme 40 oz",
     weight: 700, // gobelet acier double paroi + accessoires (emballé) → colis
     pickup: false,
     letter: false,
-    category: "cadeaux",
+    category: "cadeaux", // le port reste celui d'un colis au poids (pas la grille des verres)
+    categorieAffichee: "verres", // rangé et affiché dans « Verres, Carafes & Gobelet »
     type: "Gobelet à graver",
-    tagline: "Grand gobelet isotherme 40 oz (1,1 L) avec anse et paille — gravé selon vos envies.",
+    tagline: "Grand gobelet isotherme 40 oz (1,1 L) avec anse et paille — gravé à votre prénom, à votre dessin ou à votre photo. Édition limitée.",
     personalizable: true,
-    personalizationLabel: "Gravure personnalisée (motifs, texte, logo ou photo)",
-    // Configurateur de gravure : côté + motifs par zone (choisis au numéro dans les
-    // planches). 4 motifs inclus, +2,90 € au-delà. Recalcul serveur via motifCount.
-    motifComposer: { included: 4, extra: 2.9, maxNum: 79, planches: [
-      "/motifs/planche-01.png", "/motifs/planche-02.png", "/motifs/planche-03.png", "/motifs/planche-04.png", "/motifs/planche-05.png",
-      "/motifs/planche-06.png", "/motifs/planche-07.png", "/motifs/planche-08.png", "/motifs/planche-09.png", "/motifs/planche-10.png",
-    ] },
+    personalizationLabel: "Gravure personnalisée (dessin, texte, photo ou logo)",
+    noEngravePreview: true,
+    // Parcours guidé (GobeletParcours.jsx) : remplace l'ancien configurateur (4 motifs inclus, +2,90 €).
+    gobeletParcours: {
+      inclus: 1,
+      extra: 3,
+      imagePhoto: "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg",
+      alphabet: "/produits/alphabet-fleuri.jpg",
+      dessins: [
+        { src: "/produits/gobelet/planche-dessins-01.jpg", nums: "1–10", legende: "Fleurs & papillons" },
+        { src: "/produits/gobelet/planche-dessins-02.jpg", nums: "11–27", legende: "Roses" },
+        { src: "/produits/gobelet/planche-dessins-03.jpg", nums: "28–36", legende: "Volutes & arabesques" },
+        { src: "/produits/gobelet/planche-dessins-04.jpg", nums: "37–45", legende: "Cœurs & tiges fleuries" },
+        { src: "/produits/gobelet/planche-dessins-05.jpg", nums: "46–51", legende: "Fées & clé de sol" },
+        { src: "/produits/gobelet/planche-dessins-06.jpg", nums: "52–55", legende: "Fée & coins fleuris" },
+        { src: "/produits/gobelet/planche-dessins-07.jpg", nums: "56–58", legende: "Cœurs de couple (prénoms)" },
+        { src: "/produits/gobelet/planche-dessins-08.jpg", nums: "59–64", legende: "Cœur prénom, plumes, colibri" },
+        { src: "/produits/gobelet/planche-dessins-09.jpg", nums: "65–70", legende: "Animaux & oiseaux" },
+        { src: "/produits/gobelet/planche-dessins-10.jpg", nums: "71–74", legende: "Colibri, fée, musique" },
+      ],
+      cadres: [
+        { src: "/produits/gobelet/planche-cadres-01.jpg", nums: "75–79", legende: "Cadres fleuris" },
+        { src: "/produits/gobelet/planche-cadres-02.jpg", nums: "80–81", legende: "Banderoles fleuries" },
+        { src: "/produits/gobelet/planche-cadres-03.jpg", nums: "82–91", legende: "Banderoles" },
+        { src: "/produits/gobelet/planche-cadres-04.jpg", nums: "92–95", legende: "Cadres classiques" },
+        { src: "/produits/gobelet/planche-cadres-05.jpg", nums: "96, 98, 100, 101", legende: "Filets" },
+        { src: "/produits/gobelet/planche-cadres-06.jpg", nums: "102", legende: "Volute" },
+      ],
+    },
+    // Clés lues par l'atelier (consignesGravure) et le panier ; tout est rempli par le parcours guidé.
     personalizationFields: [
-      { key: "note", type: "note", text: "Choisissez vos motifs ci-dessus (par numéro), et/ou ajoutez un texte à graver." },
-      { key: "texte", label: "Texte à graver (optionnel)", placeholder: "Prénom, date, petit message…", maxLength: 30, optional: true },
-      { key: "police", type: "font", label: "Police de gravure", optional: true },
-      { key: "photo", type: "photo", label: "Ou envoyez un logo / une photo (optionnel)", optional: true, text: "Optionnel : un logo ou une photo à graver. Vous pouvez aussi nous l'envoyer par message après la commande." },
+      { key: "mode", type: "select", label: "Gravure au centre", optional: true, options: [
+        { value: "dessin", label: "Un dessin" }, { value: "texte", label: "Mon propre texte" }, { value: "photo", label: "Ma photo ou mon logo" } ] },
+      { key: "dessin", label: "Dessin au centre (n°)", optional: true },
+      { key: "texte", label: "Texte au centre", optional: true, maxLength: 30 },
+      { key: "photo", type: "photo", label: "Photo ou logo au centre", optional: true },
+      { key: "texteSousPhoto", label: "Texte sous la photo", optional: true, maxLength: 30 },
+      { key: "police", type: "font", label: "Écriture", optional: true },
+      { key: "autour", type: "textarea", label: "Autour de la gravure", optional: true },
     ],
-    title: "Gobelet isotherme 40 oz à graver — personnalisé (anse + paille)",
-    // Galerie initiale = coloris Crème (variante par défaut). Chaque coloris a sa
-    // propre galerie (gravé / vierge / accessoires) dans variants[].gallery.
-    images: [
-      "/produits/gobelet-creme-grave.png",
-      "/produits/gobelet-creme-vierge.png",
-      "/produits/gobelet-creme-accessoires.png",
-    ],
+    title: "Gobelet isotherme 40 oz gravé — édition limitée, personnalisé (anse + paille)",
+    // Galerie initiale = coloris Crème (variante par défaut). Chaque coloris a sa propre galerie :
+    // son exemple gravé, vierge, gravé fournisseur, accessoires, puis les autres exemples.
+    images: ["/produits/gobelet/ex1-creme-papillon-camille.jpg", "/produits/gobelet-creme-vierge.png", "/produits/gobelet-creme-grave.png", "/produits/gobelet-creme-accessoires.png", "/produits/gobelet/ex2-marine-cheval-paul.jpg", "/produits/gobelet/ex3-rose-rose-lea.jpg", "/produits/gobelet/ex4-blanc-colibri-ines.jpg", "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg", "/produits/gobelet/ex6-marine-texte-super-papy.jpg", "/produits/gobelet/ex7-rose-photo-couple.jpg", "/produits/gobelet/ex8-blanc-photo-maman.jpg", "/produits/gobelet/ex9-marine-plusieurs-images.jpg"],
     variants: [
-      { id: "gobelet-40oz-creme", title: "Crème", price: 39.90, image: "/produits/gobelet-creme-vierge.png",
-        gallery: ["/produits/gobelet-creme-grave.png", "/produits/gobelet-creme-vierge.png", "/produits/gobelet-creme-accessoires.png"] },
-      { id: "gobelet-40oz-blanc", title: "Blanc", price: 39.90, image: "/produits/gobelet-blanc-vierge.png",
-        gallery: ["/produits/gobelet-blanc-grave.png", "/produits/gobelet-blanc-vierge.png", "/produits/gobelet-blanc-accessoires.png"] },
-      { id: "gobelet-40oz-marine", title: "Bleu marine", price: 39.90, image: "/produits/gobelet-marine-vierge.png",
-        gallery: ["/produits/gobelet-marine-grave.png", "/produits/gobelet-marine-vierge.png", "/produits/gobelet-marine-accessoires.png"] },
-      { id: "gobelet-40oz-rose", title: "Rose", price: 39.90, image: "/produits/gobelet-rose-vierge.png",
-        gallery: ["/produits/gobelet-rose-grave.png", "/produits/gobelet-rose-vierge.png", "/produits/gobelet-rose-accessoires.png"] },
+      { id: "gobelet-40oz-creme", title: "Crème", price: 47.90, image: "/produits/gobelet-creme-vierge.png",
+        gallery: ["/produits/gobelet/ex1-creme-papillon-camille.jpg", "/produits/gobelet-creme-vierge.png", "/produits/gobelet-creme-grave.png", "/produits/gobelet-creme-accessoires.png", "/produits/gobelet/ex2-marine-cheval-paul.jpg", "/produits/gobelet/ex3-rose-rose-lea.jpg", "/produits/gobelet/ex4-blanc-colibri-ines.jpg", "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg", "/produits/gobelet/ex6-marine-texte-super-papy.jpg", "/produits/gobelet/ex7-rose-photo-couple.jpg", "/produits/gobelet/ex8-blanc-photo-maman.jpg", "/produits/gobelet/ex9-marine-plusieurs-images.jpg"] },
+      { id: "gobelet-40oz-blanc", title: "Blanc", price: 47.90, image: "/produits/gobelet-blanc-vierge.png",
+        gallery: ["/produits/gobelet/ex4-blanc-colibri-ines.jpg", "/produits/gobelet-blanc-vierge.png", "/produits/gobelet-blanc-grave.png", "/produits/gobelet-blanc-accessoires.png", "/produits/gobelet/ex1-creme-papillon-camille.jpg", "/produits/gobelet/ex2-marine-cheval-paul.jpg", "/produits/gobelet/ex3-rose-rose-lea.jpg", "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg", "/produits/gobelet/ex6-marine-texte-super-papy.jpg", "/produits/gobelet/ex7-rose-photo-couple.jpg", "/produits/gobelet/ex8-blanc-photo-maman.jpg", "/produits/gobelet/ex9-marine-plusieurs-images.jpg"] },
+      { id: "gobelet-40oz-marine", title: "Bleu marine", price: 47.90, image: "/produits/gobelet-marine-vierge.png",
+        gallery: ["/produits/gobelet/ex2-marine-cheval-paul.jpg", "/produits/gobelet-marine-vierge.png", "/produits/gobelet-marine-grave.png", "/produits/gobelet-marine-accessoires.png", "/produits/gobelet/ex1-creme-papillon-camille.jpg", "/produits/gobelet/ex3-rose-rose-lea.jpg", "/produits/gobelet/ex4-blanc-colibri-ines.jpg", "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg", "/produits/gobelet/ex6-marine-texte-super-papy.jpg", "/produits/gobelet/ex7-rose-photo-couple.jpg", "/produits/gobelet/ex8-blanc-photo-maman.jpg", "/produits/gobelet/ex9-marine-plusieurs-images.jpg"] },
+      { id: "gobelet-40oz-rose", title: "Rose", price: 47.90, image: "/produits/gobelet-rose-vierge.png",
+        gallery: ["/produits/gobelet/ex3-rose-rose-lea.jpg", "/produits/gobelet-rose-vierge.png", "/produits/gobelet-rose-grave.png", "/produits/gobelet-rose-accessoires.png", "/produits/gobelet/ex1-creme-papillon-camille.jpg", "/produits/gobelet/ex2-marine-cheval-paul.jpg", "/produits/gobelet/ex4-blanc-colibri-ines.jpg", "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg", "/produits/gobelet/ex6-marine-texte-super-papy.jpg", "/produits/gobelet/ex7-rose-photo-couple.jpg", "/produits/gobelet/ex8-blanc-photo-maman.jpg", "/produits/gobelet/ex9-marine-plusieurs-images.jpg"] },
     ],
-    descriptionHtml: `<p><strong>Un grand gobelet isotherme 40 oz (1,1 L)</strong> en acier inoxydable double paroi, avec anse et paille. Il garde vos boissons <strong>chaudes ou froides pendant des heures</strong> et se glisse dans le porte-gobelet de la voiture.</p>
+    descriptionHtml: `<p><strong>Un grand gobelet isotherme 40 oz (1,1 L), gravé à votre façon — édition limitée.</strong> En acier inoxydable double paroi, avec anse et paille, il garde vos boissons <strong>chaudes ou froides pendant des heures</strong> et se glisse dans le porte-gobelet de la voiture.</p>
+<h3>Votre gravure</h3>
+<ul>
+<li><strong>Au centre</strong> : un de nos 74 dessins numérotés, votre propre texte, ou votre photo / votre logo — compris dans le prix</li>
+<li><strong>Autour</strong>, si vous voulez : un cadre ou une banderole avec un prénom, une lettre fleurie, un 2ᵉ dessin, une date… <strong>+3 € par élément</strong></li>
+<li>La gravure prend la couleur de la bande du haut : <strong>dorée</strong> sur le crème et le rose, <strong>irisée</strong> sur le bleu marine et le blanc</li>
+<li>Plusieurs images, photos ou logos ? Nous préparons la mise en page et vous envoyons un aperçu à valider avant la gravure</li>
+</ul>
 <h3>Détails</h3>
 <ul>
+<li><strong>Édition limitée</strong> — série gravée à la main, en quantité limitée</li>
 <li><strong>Coloris :</strong> Crème, Blanc, Bleu marine, Rose</li>
-<li><strong>Gravure au laser</strong> personnalisée : prénom, date, message, initiales, logo…</li>
 <li>Couvercle avec paille réutilisable + goupillon inclus</li>
 <li>Gravé à la commande, dans notre atelier en France</li>
-</ul>
-<p><em>Envoyez votre idée ou votre photo par message, on s'occupe du reste.</em></p>`,
+</ul>`,
   },
   // --------------------------- NAISSANCE -------------------------------------
   // Plaque de naissance en bois gravé : UN produit, 2 modèles (Fille / Garçon)

@@ -1551,7 +1551,7 @@ Un souci à la réception ?
     material:
       "Gobelet isotherme 40 oz (1,1 L) en acier inoxydable double paroi.\nLivré avec son couvercle, sa paille réutilisable et un goupillon de nettoyage.\nAnse intégrée, base étudiée pour entrer dans un porte-gobelet de voiture.\nQuatre coloris : Crème, Blanc, Bleu marine, Rose.",
     usage:
-      "Gravure laser personnalisée : prénom, date, message, initiales ou logo — creusée dans l'acier, elle ne s'efface pas.\nGarde les boissons chaudes ou froides pendant des heures.\nLavez le gobelet à la main : ne le passez pas au lave-vaisselle et ne le mettez ni au micro-ondes ni au congélateur (double paroi isotherme).\nLe couvercle, la paille et le goupillon se lavent séparément.",
+      "Gravure laser personnalisée : au centre, un de nos dessins numérotés, votre texte ou votre photo / logo (compris dans le prix) ; autour, si vous le souhaitez, un cadre avec un prénom, une lettre fleurie, un autre dessin ou un texte (+3 € par élément).\nLa gravure est creusée au laser : elle ne s'efface pas.\nGarde les boissons chaudes ou froides pendant des heures.\nLavez le gobelet à la main : ne le passez pas au lave-vaisselle et ne le mettez ni au micro-ondes ni au congélateur (double paroi isotherme).\nLe couvercle, la paille et le goupillon se lavent séparément.",
     returns:
       "Expédié en colis suivi, à domicile ou en point relais.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
   },

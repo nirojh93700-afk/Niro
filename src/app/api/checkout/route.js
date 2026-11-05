@@ -1,3 +1,4 @@
+import { gobeletSupplement } from "@/lib/gobeletParcours";
 import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
@@ -304,6 +305,13 @@ export async function POST(req) {
       motifExtraCount = Math.max(0, mc - inc);
       motifExtra = Math.round(motifExtraCount * per * 100) / 100;
     }
+    // Gobelet (parcours guidé) : 1 élément compris (le centre), chaque élément en plus +3 € —
+    // le MÊME calcul que la fiche (src/lib/gobeletParcours.js).
+    if (product.gobeletParcours) {
+      const sup = gobeletSupplement(item.fields || {}, product.gobeletParcours);
+      motifExtraCount = sup.enPlus;
+      motifExtra = sup.montant;
+    }
     let unitPrice = basePrice + extra.amount + pkg.amount + pkgN.amount + motifExtra;
     // Verres : si la gravure de la ligne ne se partage pas au centime entre les verres, la ligne
     // part en UNE seule ligne Stripe (quantité 1, vraie quantité dans metadata.qte) : le montant
@@ -339,7 +347,7 @@ export async function POST(req) {
       descriptionParts.push(`${extra.pages} gravure(s) en plus (+${extra.amount.toFixed(2)} €)`);
     }
     if (motifExtra > 0) {
-      descriptionParts.push(`${motifExtraCount} motif(s) en plus (+${motifExtra.toFixed(2)} €)`);
+      descriptionParts.push(`${motifExtraCount} ${product.gobeletParcours ? "élément(s) de gravure" : "motif(s)"} en plus (+${motifExtra.toFixed(2)} €)`);
     }
     if (pkg.labels.length) {
       descriptionParts.push(`Emballage : ${pkg.labels.join(", ")}`);

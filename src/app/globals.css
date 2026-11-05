@@ -6039,3 +6039,23 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .fq-card .mp-pack .btn{padding:6px 12px;font-size:12px}
 .fc-jump a{flex:none}
 .fc-deadline .fp-delai{margin:0}
+
+/* ── Gobelet isotherme : parcours guidé (GobeletParcours.jsx, 05/11/2026) — complète les classes .prc-* ── */
+.gbp .prc-cards.gbp-trois{grid-template-columns:repeat(3,1fr)}
+@media (max-width:640px){.gbp .prc-cards.gbp-trois{grid-template-columns:1fr}}
+.gbp-cimg-planche img{width:100%;height:100%;object-fit:cover;mix-blend-mode:normal}
+.gbp-grid{grid-template-columns:repeat(2,1fr)}
+.gbp-grid .prc-mimg img{object-fit:contain}
+.gbp-rouge{display:block;margin-top:6px;color:#b42318;font-weight:600}
+.gbp-miseenpage{color:#b42318;font-weight:600}
+.gbp-apercu{margin:10px 0 0;padding:12px 14px;border:1px dashed var(--line);border-radius:10px;background:var(--paper);font-size:1.6rem;line-height:1.25;text-align:center;color:var(--ink);overflow-wrap:anywhere}
+.gbp-xlist{list-style:none;margin:10px 0;padding:0;display:grid;gap:6px}
+.gbp-xlist li{display:flex;align-items:center;gap:10px;padding:9px 10px 9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-size:.88rem;min-width:0}
+.gbp-xlist li span{flex:1;min-width:0;overflow-wrap:anywhere}
+.gbp-xlist li .p{color:var(--gold-dark);white-space:nowrap}
+.gbp-xlist li button{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:1.1rem;line-height:1;cursor:pointer;color:var(--ink)}
+.gbp-extra{margin-top:10px;padding:12px;border:1.5px solid var(--gold);border-radius:14px;background:#fffaf0}
+.gbp-zones{margin-top:8px}
+.gbp-xmsg{margin:6px 0 0;color:#b42318;font-size:.86rem;font-weight:600}
+.gbp-xbtns{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+.gbp-xadd{padding:11px 16px;border:0;border-radius:999px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff;font:inherit;font-weight:700;cursor:pointer}
