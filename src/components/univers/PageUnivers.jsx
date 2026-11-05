@@ -59,7 +59,7 @@ export default function PageUnivers({ uid, rayons, pourqui, pourquiLabels, coffr
             <Sel k="budget" label="Budget" items={BUD} />
           </div>
           <label className="uf-sort"><span className="vh">Trier</span>
-            <select value={tri} onChange={(e) => setTri(e.target.value)}><option value="">Trier</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option></select>
+            <select aria-label="Trier les créations" value={tri} onChange={(e) => setTri(e.target.value)}><option value="">Trier</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option></select>
           </label>
         </div>
       </div>

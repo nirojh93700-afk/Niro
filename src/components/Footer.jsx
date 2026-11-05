@@ -88,7 +88,7 @@ export default function Footer({ masques = [] }) {
           <span>© {new Date().getFullYear()} Niv Création — Tous droits réservés.</span>
           <span>
             Paiement sécurisé par Stripe ·{" "}
-            <Link href="/gestion" style={{ color: "inherit", textDecoration: "underline" }}>
+            <Link href="/gestion" style={{ color: "inherit", textDecoration: "underline", padding: "4px 0" }}>
               Espace gestion
             </Link>
           </span>

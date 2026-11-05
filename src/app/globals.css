@@ -685,7 +685,7 @@ img {
 .variant-swatch .vs-old {
   text-decoration: line-through;
   color: var(--ink-soft);
-  opacity: 0.7;
+  opacity: 0.82; /* 0.7 → 0.82 : contraste 4,7 (audit 05/11/2026) */
 }
 .variant-swatch .vs-now {
   color: var(--gold-dark);
@@ -722,7 +722,7 @@ img {
 }
 .perso-hint {
   font-size: 0.8rem;
-  color: var(--wood);
+  color: #8f6038; /* bois un peu plus foncé : contraste 5 (audit 05/11/2026) */
   background: var(--cream);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1571,7 +1571,7 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .site-rating strong { font-size: 1.05rem; color: var(--ink); }
 .site-rating .sr-count { color: var(--ink-soft); }
 .site-rating .sr-verified {
-  font-size: 0.72rem; font-weight: 700; color: #3f7d55; background: #eaf5ee;
+  font-size: 0.72rem; font-weight: 700; color: #387550; background: #eaf5ee;
   padding: 3px 9px; border-radius: 999px;
 }
 
@@ -2163,7 +2163,9 @@ a.site-rating:hover { box-shadow: 0 8px 22px rgba(120,95,30,0.14); transform: tr
 .footer a {
   display: block;
   color: rgba(250, 246, 239, 0.72);
-  margin-bottom: 9px;
+  /* zone à toucher ≥ 24 px, même espacement qu'avant (23 + 9 = 24 + 8) — audit 05/11/2026 */
+  min-height: 24px;
+  margin-bottom: 8px;
   transition: color 0.2s;
 }
 .footer a:hover {
@@ -4280,6 +4282,7 @@ body:has(.ash) > main { padding: 0; margin: 0; }
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  min-height: 24px; /* zone à toucher ≥ 24 px (audit 05/11/2026) */
   margin: 10px 0 0;
   padding: 0;
   background: none;
@@ -5444,8 +5447,8 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .pjm{margin:2px 0 4px;display:grid;gap:8px}
 .pjm-add{display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;border:1.5px dashed #c9a24b;background:#fffaf0;border-radius:12px;padding:12px 14px;cursor:pointer;color:#3a2d12;font:inherit;font-size:14.5px;line-height:1.35;text-align:left}
 .pjm-add:hover{background:#fbf1dc}
-.pjm-add i{font-style:normal;color:#8a7a56;font-weight:400}
-.pjm-add small{display:block;color:#8a7a56;font-size:12.5px;margin-top:2px}
+.pjm-add i{font-style:normal;color:#7c6d4e;font-weight:400}
+.pjm-add small{display:block;color:#7c6d4e;font-size:12.5px;margin-top:2px}
 .pjm-ic{font-size:22px;flex:0 0 auto}
 .pjm-c{padding:9px 11px;font-size:13.5px}
 .pjm-list{display:flex;flex-wrap:wrap;gap:10px}
