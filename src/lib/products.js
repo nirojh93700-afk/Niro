@@ -4355,8 +4355,9 @@ export const products = [
       extra: 3,
       imagePhoto: "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg",
       alphabet: "/produits/alphabet-fleuri.jpg",
-      // Un fichier par dessin (01.webp … 74.webp), découpé des planches : les clientes VOIENT chaque dessin avec son numéro.
-      dessinUnite: "/produits/gobelet/dessins/",
+      // dessinUnite: "/produits/gobelet/dessins/" → les dessins en tuiles (un fichier par dessin). Retiré le 05/11 : les
+      // découpes faites sur les planches numérotées perdent ce que les numéros cachent. À remettre quand les images
+      // d'origine (sans numéro) seront redécoupées. En attendant : planches numérotées, ouvertes en grand.
       dessins: [
         { src: "/produits/gobelet/planche-dessins-01.jpg", nums: "1–10", legende: "Fleurs & papillons" },
         { src: "/produits/gobelet/planche-dessins-02.jpg", nums: "11–27", legende: "Roses" },
@@ -4380,13 +4381,19 @@ export const products = [
     },
     // Clés lues par l'atelier (consignesGravure) et le panier ; tout est rempli par le parcours guidé.
     personalizationFields: [
-      { key: "mode", type: "select", label: "Gravure au centre", optional: true, options: [
-        { value: "dessin", label: "Un dessin" }, { value: "texte", label: "Mon propre texte" }, { value: "photo", label: "Ma photo ou mon logo" } ] },
-      { key: "cote", type: "select", label: "Emplacement de la gravure principale", optional: true, options: [
-        { value: "face", label: "Face (devant)" }, { value: "gauche", label: "Côté gauche" }, { value: "droite", label: "Côté droit" } ] },
-      { key: "dessin", label: "Dessin principal (n°)", optional: true },
-      { key: "texte", label: "Texte principal", optional: true, maxLength: 30 },
-      { key: "photo", type: "photo", label: "Photo ou logo (gravure principale)", optional: true },
+      { key: "mode", type: "select", label: "1er élément (compris)", optional: true, options: [
+        { value: "dessin", label: "Un dessin" }, { value: "cadre", label: "Un cadre ou une banderole + nom" }, { value: "lettre", label: "Une lettre fleurie + nom" },
+        { value: "texte", label: "Mon texte" }, { value: "photo", label: "Ma photo ou mon logo" } ] },
+      { key: "cote", type: "select", label: "1er élément : côté", optional: true, options: [
+        { value: "face", label: "Face (devant)" }, { value: "gauche", label: "Côté gauche" }, { value: "droite", label: "Côté droit" }, { value: "tour", label: "Tout autour" } ] },
+      { key: "place", type: "select", label: "1er élément : place", optional: true, options: [
+        { value: "milieu", label: "Au milieu" }, { value: "haut", label: "En haut" }, { value: "bas", label: "En bas" }, { value: "gauche", label: "À gauche" }, { value: "droite", label: "À droite" } ] },
+      { key: "dessin", label: "Dessin (n°)", optional: true },
+      { key: "cadre", label: "Cadre ou banderole (n°)", optional: true },
+      { key: "lettre", label: "Lettre fleurie", optional: true, maxLength: 1 },
+      { key: "nom", label: "Nom dans le cadre / la lettre", optional: true, maxLength: 30 },
+      { key: "texte", label: "Texte", optional: true, maxLength: 30 },
+      { key: "photo", type: "photo", label: "Photo ou logo", optional: true },
       { key: "texteSousPhoto", label: "Texte sous la photo", optional: true, maxLength: 30 },
       { key: "police", type: "font", label: "Écriture", optional: true },
       { key: "autour", type: "textarea", label: "Éléments en plus", optional: true },

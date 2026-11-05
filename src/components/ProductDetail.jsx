@@ -1249,7 +1249,7 @@ export default function ProductDetail({ product, realisations = [] }) {
       // Lignes du texte telles que l'aperçu 3D les a montrées (« Axandre / Maxim ») : l'atelier grave pareil.
       apercuLignes: any3d ? lignesPourChamps(fieldValues) : null,
       perGlass: perGlass ? syncedGlassConfigs() : null, // détail par verre (lot personnalisé)
-      personalization: perGlass ? perGlassText(false) : product.gobeletParcours ? gobeletResume(fieldValues) : [composition?.summary, buildPersonalization()].filter(Boolean).join(" · "),
+      personalization: perGlass ? perGlassText(false) : product.gobeletParcours ? gobeletResume(fieldValues, product.gobeletParcours) : [composition?.summary, buildPersonalization()].filter(Boolean).join(" · "),
       composition: composition || null, // configurateur gobelet (côté + motifs) pour l'atelier
       packaging: pkg.labels.length ? pkg.labels.join(", ") : null, // emballage pour la fiche atelier
       packagingNoel: pkgN.id ? pkgN.label.replace(/^Emballage de Noël : /, "").replace(/ \(\+[^)]*\)/, "").replace(/ · étiquette.*$/, "") : null,
@@ -1263,7 +1263,7 @@ export default function ProductDetail({ product, realisations = [] }) {
       // Vignette panier = le visuel composé ; sinon l'image/design choisi ; sinon photo produit.
       image: previewImage || photoSrc || artworkImage || images[0] || null,
       // Côté cliente : récap court (les détails techniques restent pour l'atelier).
-      personalization: [perGlass ? perGlassText(true) : product.gobeletParcours ? gobeletResume(fieldValues) : [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "), gravVerres && gravVerres.lignes.length ? `Gravure : ${detailEnTexte(gravVerres)}` : ""].filter(Boolean).join(" · "),
+      personalization: [perGlass ? perGlassText(true) : product.gobeletParcours ? gobeletResume(fieldValues, product.gobeletParcours) : [composition?.summary, buildPersonalization(true)].filter(Boolean).join(" · "), gravVerres && gravVerres.lignes.length ? `Gravure : ${detailEnTexte(gravVerres)}` : ""].filter(Boolean).join(" · "),
       fields: (product.engravingPricing || product.motifComposer || product.gobeletParcours) ? { ...fieldValues, ...(product.motifComposer ? { motifCount: composition?.count || 0 } : {}) } : undefined,
       packaging: pkg.chosen, // emballages choisis (ids) → recalcul serveur au paiement
       packagingNoel: pkgN.id ? { id: pkgN.id, couleur: pkgN.couleur } : undefined, // 🎄 recalcul serveur au paiement

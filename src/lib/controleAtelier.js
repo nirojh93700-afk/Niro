@@ -73,6 +73,17 @@ export function oubliesAtelier(item) {
   for (let [cle, valeur] of Object.entries(champs)) {
     if (IGNORES.has(cle)) continue;
     if (cle === "mp" && produit?.marquePages) continue; // marque-pages : rangés pièce par pièce par consignesGravure
+    // Gobelet : chaque élément (1er compris + chaque ligne « en plus ») doit apparaître dans les blocs par côté.
+    if (produit?.gobeletParcours && champs.mode && ["autour", "cote", "place", "dessin", "cadre", "lettre", "nom", "texte", "texteSousPhoto"].includes(cle)) {
+      if (cle === "autour") {
+        for (const l of String(valeur || "").split("\n").map((x) => x.trim()).filter(Boolean)) {
+          const quoi = l.split(" — ")[0];
+          if (!vu(quoi)) out.push({ cle, libelle: "Élément en plus", valeur: l, photo: false });
+        }
+        continue;
+      }
+      if (cle === "cote" || cle === "place") continue; // écrits en clair (« Face », « Au milieu ») dans les blocs
+    }
     const f = defs.get(cle);
     if (f && (f.type === "note" || f.type === "font")) continue;
     const libelle = String(f?.label || cle).replace(/\s*\(\+[^)]*\)/g, "").trim();

@@ -6109,3 +6109,15 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 @media (max-width:900px){.engrave3d-mini.gp-mini-wrap{width:92px;padding:4px!important;bottom:84px}.gp-mini-wrap .gp-cap{display:none}.gp-mini-wrap .gp-stage{max-width:84px}}
 .gbp-extra>*,.gbp-extra .field,.gbp-tuiles-wrap{min-width:0}
 .gbp .field{min-width:0}
+/* Gobelet v3 (05/11 soir) : une seule étape, liste « Votre gravure », choix en cartes, planches qu'on ouvre en grand */
+.gbp-liste{margin:4px 0 12px;padding:10px 12px;border:1.5px solid var(--gold);border-radius:14px;background:#fffaf0}
+.gbp-liste-t{margin:0 0 6px;font-weight:800}
+.gbp-liste .gbp-xlist{margin:0}
+.gbp-xlist li small{color:var(--ink-soft)}
+.gbp .prc-cards.gbp-choix{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+@media (max-width:640px){.gbp .prc-cards.gbp-choix{grid-template-columns:1fr}.gbp-choix .prc-card{flex-direction:row;text-align:left}}
+.gbp-choix .prc-card{position:relative}
+.gbp-prix{position:absolute;top:8px;right:10px;font-size:.78rem;font-weight:800;color:var(--gold-dark)}
+.gbp-lettre-ic{font-family:var(--font-display),Georgia,serif;font-size:2.4rem;font-weight:700;color:var(--gold-dark);font-style:italic}
+.gbp-sous-label{display:block;margin:10px 0 4px;font-weight:700}
+.gbp-planche span em{font-style:normal;color:var(--gold-dark);font-weight:700;margin-left:4px}

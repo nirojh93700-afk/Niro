@@ -24,6 +24,7 @@ import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
 import { MODELES, layoutLabel, imageDesign } from "@/lib/modeles";
 import { mpFormat, mpBoitesTexte, mpLignes } from "@/lib/marquePages";
 import { NOEL_IMAGES } from "@/lib/fetes";
+import { gobeletElements, quoiElement, plancheDuNumero, GOB_COTES, GOB_PLACES } from "@/lib/gobeletParcours";
 
 function champVisible(f, champs, variantTitle) {
   if (f.showIfField && String(champs[f.showIfField] || "") !== String(f.showIfValue)) return false;
@@ -144,10 +145,37 @@ function consignesMarquePages(produit, mp) {
   return { general, faces, autres, placement: [] };
 }
 
+// Gobelet (05/11/2026, gérant : « il faut que ça soit bien détaillé dans la commande pour que je sache où graver quoi ») :
+// UN BLOC PAR CÔTÉ du gobelet (face, côté gauche, côté droit, tout autour), côtés sans gravure compris ; chaque élément
+// avec sa place, ce qu'il faut graver (n°, nom, écriture), compris ou +3 €, et la planche où trouver le numéro.
+function consignesGobelet(produit, champs) {
+  const cfg = produit.gobeletParcours;
+  const extra = String(Number(cfg?.extra) || 3).replace(".", ",");
+  const els = gobeletElements(champs);
+  const faces = Object.keys(GOB_COTES).map((c) => ({ nom: GOB_COTES[c] === "Face" ? "Face (devant)" : GOB_COTES[c], vide: true, lignes: [] }));
+  els.forEach((e, i) => {
+    const f = faces[Object.keys(GOB_COTES).indexOf(e.side)] || faces[0];
+    f.vide = false;
+    const ecr = ["cadre", "lettre", "texte", "sous"].includes(e.kind) && e.police ? ` — écriture ${getFontLabel(e.police).split(" — ")[0]}` : "";
+    const img = e.kind === "dessin" || e.kind === "cadre" ? plancheDuNumero(cfg, e.num) : e.kind === "lettre" ? cfg?.alphabet : e.kind === "photo" ? e.photo : null;
+    f.lignes.push({
+      k: `${i + 1}. ${(GOB_PLACES[e.zone] || "au milieu").replace(/^./, (x) => x.toUpperCase())} · ${e.compris ? "compris" : `+${extra} €`}`,
+      v: `${quoiElement(e)}${ecr}`,
+      texte: ["cadre", "lettre", "texte", "sous"].includes(e.kind),
+      img,
+    });
+  });
+  // Côtés vides en dernier, pour que l'atelier voie d'abord ce qui se grave.
+  faces.sort((a, b) => Number(a.vide) - Number(b.vide));
+  const general = [{ k: "Éléments", v: `${els.length} (1 compris${els.length > 1 ? ` + ${els.length - 1} × ${extra} €` : ""})`, fort: true }];
+  return { general, faces, autres: [], placement: [] };
+}
+
 export function consignesGravure(item) {
   const produit = getProductBySlug(item?.slug);
   const champs = item?.fields || {};
   if (produit?.marquePages && champs.mp && typeof champs.mp === "object") return consignesMarquePages(produit, champs.mp);
+  if (produit?.gobeletParcours && champs.mode) return consignesGobelet(produit, champs);
   const vus = (produit?.personalizationFields || []).filter((f) => champVisible(f, champs, item?.variantTitle));
   const general = [];
   const autres = [];
