@@ -25,6 +25,7 @@
     "test-devis-panier": "node --import ./tools/alias-register.mjs tools/tests/devis-panier.test.mjs",
     "test-materiel": "node --import ./tools/alias-register.mjs tools/tests/materiel.test.mjs",
     "audit-photos": "node --import ./tools/alias-register.mjs tools/audit-photos.mjs",
+    "audit-complet": "node tools/audit-complet.mjs",
     "vignettes": "node --import ./tools/alias-register.mjs tools/vignettes.mjs",
     "test-prix-verres": "node --import ./tools/alias-register.mjs tools/tests/prix-verres.test.mjs",
     "test-textes-prix": "node --import ./tools/alias-register.mjs tools/tests/textes-prix.test.mjs",

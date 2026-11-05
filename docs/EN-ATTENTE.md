@@ -675,3 +675,14 @@ En attente de SA décision :
   nos envois (les mails d'avant 19 h étaient passés). Ne plus écrire à cette adresse ; à voir avec le gérant : téléphone 07 77 49 14 95,
   ou l'adresse écrite sur la commande `chloe.faussone@melia.com` (avec un point) SEULEMENT s'il le décide.
 - ⛔ Le mail long (texte dans `chloe.json` du scratchpad de la session du 03/11, et ci-dessus) ne repart QUE quand le gérant le redemande.
+
+## 🔍 AUDIT COMPLET DU 05/11/2026 — À TRANCHER PAR LE GÉRANT (rien corrigé, rapport `docs/audits/audit-2026-11-05.md`)
+- ❌ Médiateur de la consommation à nommer dans les CGV (adhésion à faire, obligatoire L612-1).
+- ❌ Tuile « Maison & Déco » (accueil + /boutique/maison) : photo de la Veilleuse Arbre de Vie Ronde, MASQUÉE (`src/lib/univers.js`, `img`).
+- ⚠️ Prix barré permanent des 38 bijoux (−10 %) : risque Omnibus L112-1-1 (le prix barré doit avoir été pratiqué dans les 30 jours).
+- ⚠️ « Acier inoxydable 316L hypoallergénique » sur le bandeau de toutes les fiches (TrustSection) alors que plusieurs bijoux sont en 304 ;
+  « hypoallergénique » = allégation santé ; « acier chirurgical » sur 2 fiches.
+- ⚠️ 8 fiches (numéros de table…) s'ouvrent sur un prix plus cher que le prix envoyé à Google (option la moins chère) : Merchant peut signaler.
+- ⚠️ Google Analytics sans demande d'accord (CNIL) — déjà noté.
+- ⚠️ Google : 78 titres > 70 caractères, 11 pages sans H1 ni adresse canonique (contact, offres, pages légales…), 4 descriptions trop longues.
+- ⚠️ Accessibilité : contrastes faibles (52 éléments), petites zones à toucher, 1 menu sans nom, contrôles imbriqués sur la fiche collier.

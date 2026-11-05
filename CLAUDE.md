@@ -1,3 +1,24 @@
+## 🔍🔍 « FAIS UN AUDIT » = L'AUDIT COMPLET, TOUJOURS TOUT (gérant, 05/11/2026 : « tu fais tout, tu enregistres tous ces paramètres quand je t'ai dit fais une audit »)
+> Avant, « vérifie mon site » ne lançait que `audit-site` + `audit-photos` (le site marche-t-il ?) : l'audit externe du 04/11 a trouvé des
+> problèmes de prix, de textes légaux, d'allégations, de vitesse et de sécurité que ces deux outils ne regardaient pas.
+- **Commande** : `npm run audit-complet` (`tools/audit-complet.mjs`, lecture seule, ~8 min ; `--rapide` sans navigateur). Il lance aussi
+  `audit-site` et `audit-photos`, lit TOUTES les pages du plan du site et écrit `docs/audits/audit-AAAA-MM-JJ.md`.
+- **Ce qu'il contrôle (9 parties)** : ① pages, photos, paiement, catalogue · ② sécurité : https, www, certificat, 5 en-têtes, CSP, contenu http,
+  API de Gestion fermée, Gestion en noindex · ③ légal : mentions (SIRET, adresse, e-mail, téléphone, hébergeur, directeur de la publication),
+  CGV (293 B, paiement, frais, 14 jours, L221-28, garantie de conformité, vices cachés, médiateur), retours, confidentialité (RGPD, CNIL,
+  cookies, conservation), Google Analytics déclaré et consentement, liens légaux du pied de page · ④ prix : « -0 % », promo ≥ barré, prix
+  donné à Google = prix de la fiche, prix barré permanent (Omnibus L112-1-1), fausse urgence, prix HT · ⑤ allégations : sans nickel, plaqué
+  or, cuir véritable, fait main en France, ne ternit pas, garanti à vie, livraison 24 h, textes techniques, Netlify, étanche, hypoallergénique,
+  acier chirurgical, « fait main » sur un bijou / verre / cristal · ⑥ Google : titres, descriptions, H1, canonique, noindex, langue, alt des
+  images, données produit, liens internes cassés, robots.txt, plan du site, flux Shopping · ⑦ vitesse (Mo, images, préchargées, LCP, CLS) ·
+  ⑧ téléphone : débordement, zones à toucher, erreurs JS, accessibilité axe-core · ⑨ Analytics et Search Console présents.
+- **Après l'outil, TOUJOURS** : relire chaque ⚠️ à la main (un outil se trompe : le 05/11, un « É » dans l'en-tête de l'outil faisait répondre
+  500 par Google, et la fiche cristal déjà gravé qui renvoie vers une autre page était comptée comme fiche), puis **chercher sur Internet si
+  une règle a changé** (CNIL, Omnibus, médiation, accessibilité, Google Merchant) et ajouter un contrôle à l'outil s'il manque quelque chose.
+- ⛔ L'audit ne corrige RIEN : il rapporte. Chaque correction suit la règle « montre-moi avant de pousser ». Ne jamais dire « tout va bien »
+  sans dire ce qui a été vérifié. Les points juridiques restent à faire valider par un professionnel.
+- ⛔ En-têtes HTTP envoyés par un outil = caractères ASCII seulement (un accent fait répondre 500 par Google Frontend).
+
 ## 🔎 AUDIT EXTERNE DU 04/11/2026 — CORRECTIONS MISES EN LIGNE LE SOIR MÊME (gérant : « commence par les prix, montre-moi avant de pousser »)
 - **Promotions** (4a3c9daa) : `/offres` lisait les promos BRUTES → 42 vieilles « remises rapides » bijoux de juin (ignorées partout ailleurs par
   `stripBijouxPromos`) donnaient « -0 % », « -1 % » et 15,90 → 15,92 €. La page passe par `stripBijouxPromos` comme la fiche et le paiement ;
@@ -803,7 +824,7 @@
   photo d'en-tête des pages univers (`R.lienPhoto`), photo de `/a-propos`, photo animée de `/cristaux` → liens vers leur fiche.
 - ✅ **CONTRÔLE AJOUTÉ À L'AUDIT : `npm run audit-photos`** (`tools/audit-photos.mjs`, `--site` possible) : lit tout le plan du site, signale
   ❌ toute photo d'un produit qui n'est pas en vente et ⚠️ toute photo de produit sans lien vers sa fiche (hors galerie de la fiche et tuiles
-  de choix). ⛔ **« Vérifie mon site » = `node tools/audit-site.mjs` ET `npm run audit-photos`**, les deux, toujours.
+  de choix). ⛔ **« Vérifie mon site » / « fais un audit » = `npm run audit-complet`** (il lance aussi audit-site et audit-photos), voir la règle du 05/11 en tête de fichier.
 
 ## 🍷 VERRE 1 : LOGO **OU** UN TEXTE OFFERT — 21/10/2026 (gérant : « si mettre qu'un texte c'est gratuit… il faut choisir entre logo ou texte »)
 - Complète la règle du 19/10 : sur le **verre 1**, UNE gravure est offerte — l'image / logo / modèle s'il y en a un, SINON le premier texte.
