@@ -120,10 +120,11 @@
   jamais sur un verre, une carafe, un cristal, un marque-page ni aucun autre produit, ni sur leur fiche, ni sur un devis, ni dans un mail.
   Un devis de verres ou de cristal = aucun emballage de Noël proposé. (Les DESSINS de Noël à graver sont une autre chose : verres, carafe, cristal.)
 
-## 💎 CRISTAL À DOMICILE = 9,90 € MINIMUM — ✅ EN LIGNE LE 03/11/2026 (gérant : « c'est minimum 1,5 kg », « juste pour les cristal »)
-- `portDomicileMini: 9.9` sur les blocs (vertical, horizontal, déjà gravé, pyramide, trophée) → `ajouterLignePort` / `optionsPort` / `homeOptions` :
-  le port à DOMICILE d'un panier qui contient un bloc ne descend jamais sous 9,90 € (Mondial Domicile 1–2 kg ≈ 8,71 € TTC). Relais, express,
-  livraison offerte, porte-clés et clé USB cristal : inchangés. Plus lourd (> 2 kg) : la grille par poids (14,90 €…) reste.
+## 💎 CRISTAL À DOMICILE = 14,90 € MINIMUM, TOUTES TAILLES — 05/11/2026, PRÉPARÉ, À POUSSER SUR SON MOT (gérant : « tu mets 14,90 € pour toutes les tailles »)
+- `portDomicileMini: 14.9` sur les blocs (vertical, horizontal, déjà gravé, pyramide, trophée) → `ajouterLignePort` / `optionsPort` / `homeOptions` :
+  le port à DOMICILE d'un panier qui contient un bloc ne descend jamais sous 14,90 € (le 05/11, étiquette > 11 € pour un horizontal Moyen + socle,
+  la cliente 1KC9OWWQ avait payé 8,90 €). Avant : 9,90 € (03/11). Relais, Express, porte-clés et clé USB cristal : inchangés.
+  Au-delà de 5 kg la grille par poids (22,90 €…) reste. XL : à lui de dire s'il le veut plus cher (question posée le 05/11).
 
 ## 🖼️ LE VISUEL EXACT DE LA CLIENTE DANS GESTION, POUR LES BIJOUX EN 3D — 05/11/2026 (commande 0BHBVOXK, gérant : « il me faut exactement le visuel ») — PRÉPARÉ, À POUSSER SUR SON MOT
 - Avant : verres, carafe, cocktail, support téléphone gardaient l'image de l'aperçu (`previewImage`) ; les bijoux en 3D rien (la fiche montrait la photo du

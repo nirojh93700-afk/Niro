@@ -21,7 +21,7 @@ export function nouvelEtatPort() {
     allColisThreshFree: true,
     colisThresh: Infinity,
     // Plancher du port à DOMICILE (03/11/2026, gérant : « juste pour les cristal », « minimum 1,5 kg ») :
-    // un bloc de cristal part en colis calé, jamais moins de 9,90 € à domicile. Point relais inchangé.
+    // un bloc de cristal part en colis calé, jamais moins de 14,90 € à domicile (05/11/2026). Point relais inchangé.
     portDomicileMini: 0,
   };
 }

@@ -1107,7 +1107,7 @@ export const products = [
   // ============== IMPORT CATALOGUE (test) ==============
   {
     slug: "pyramide-cristal-gravure-3d",
-    portDomicileMini: 9.9, // colis cristal à domicile : jamais moins de 9,90 € (gérant, 03/11/2026)
+    portDomicileMini: 14.9, // colis cristal à domicile : jamais moins de 14,90 € (gérant, 05/11/2026 ; avant 9,90 €)
     name: "Pyramide cristal — Gravure 3D",
     hidden: true, // masqué du site (demande gérante 10/07/2026) — republiable via Gestion → Catalogue
     weight: 320,
@@ -1242,7 +1242,7 @@ export const products = [
   // ===== Cristaux 3D =====
   {
     slug: "trophee-cristal-vierge-3d",
-    portDomicileMini: 9.9, // colis cristal à domicile : jamais moins de 9,90 € (gérant, 03/11/2026)
+    portDomicileMini: 14.9, // colis cristal à domicile : jamais moins de 14,90 € (gérant, 05/11/2026 ; avant 9,90 €)
     name: "Trophée cristal — Gravure 3D",
     hidden: true, // masqué du site (demande gérante 10/07/2026) — republiable via Gestion → Catalogue
     weight: 600, pickup: false, letter: false,
@@ -1264,7 +1264,7 @@ export const products = [
   },
   {
     slug: "cristal-photo-3d-vertical",
-    portDomicileMini: 9.9, // colis cristal à domicile : jamais moins de 9,90 € (gérant, 03/11/2026)
+    portDomicileMini: 14.9, // colis cristal à domicile : jamais moins de 14,90 € (gérant, 05/11/2026 ; avant 9,90 €)
     name: "Cristal Photo 3D — Vertical",
     weight: 900, pickup: false, letter: false,
     title: "Cristal photo 3D vertical (portrait) — gravure personnalisée en France",
@@ -1313,7 +1313,7 @@ export const products = [
   },
   {
     slug: "cristal-photo-3d-horizontal",
-    portDomicileMini: 9.9, // colis cristal à domicile : jamais moins de 9,90 € (gérant, 03/11/2026)
+    portDomicileMini: 14.9, // colis cristal à domicile : jamais moins de 14,90 € (gérant, 05/11/2026 ; avant 9,90 €)
     name: "Cristal Photo 3D — Horizontal",
     weight: 900, pickup: false, letter: false,
     title: "Cristal photo 3D horizontal (paysage) — gravure personnalisée en France",
@@ -1365,7 +1365,7 @@ export const products = [
     // dédiée /cristaux-graves (modèle, dessin ou signe du zodiaque, format, taille, texte, socle) : la fiche
     // /produit/cristal-deja-grave y redirige (pageDediee). Ce produit porte les PRIX DE CONFIANCE du paiement.
     slug: "cristal-deja-grave",
-    portDomicileMini: 9.9, // colis cristal à domicile : jamais moins de 9,90 € (gérant, 03/11/2026)
+    portDomicileMini: 14.9, // colis cristal à domicile : jamais moins de 14,90 € (gérant, 05/11/2026 ; avant 9,90 €)
     name: "Cristal déjà gravé",
     badge: "Nouveau",
     pageDediee: "/cristaux-graves",

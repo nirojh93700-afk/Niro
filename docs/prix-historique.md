@@ -314,3 +314,9 @@ Colis : EU1 ≤1 kg 16,90 · 2 kg 22,90 · 5 kg 32,90 · 10 kg 46,90 · + 74,90 
 CH 22,90 / 29,90 / 44,90 / 64,90 / 99,90.
 Après (même grille pour tous les pays) : lettre ≤100 g 8,90 · ≤250 g 15,90 · puis Colissimo ≤500 g 16,90 · 1 kg 20,90 ·
 2 kg 23,90 · 5 kg 30,90 · 10 kg 48,90 · 15 kg 69,90 · 30 kg 89,90. Points relais Europe inchangés.
+
+## 05/11/2026 — Livraison à domicile des cristaux (gérant : « tu mets 14,90 € pour toutes les tailles »)
+- Avant : un colis avec un bloc de cristal ne payait jamais moins de **9,90 €** à domicile (03/11/2026), puis la grille au poids
+  (≤ 2 kg 8,90 → ramené à 9,90 ; ≤ 5 kg 14,90). Étiquette réelle payée le 05/11 pour un horizontal Moyen + socle : plus de 11 €.
+- Maintenant : **14,90 € minimum** pour toutes les tailles (`portDomicileMini: 14.9`). Point relais et Express inchangés.
+- Pour revenir en arrière : remettre `portDomicileMini: 9.9` sur les 5 produits cristal de `src/lib/products.js`.
