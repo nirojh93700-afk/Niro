@@ -6052,7 +6052,16 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .gbp-cote{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);font:inherit;font-size:.82rem;font-weight:600;color:var(--ink);cursor:pointer;min-height:44px}
 .gbp-cote.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
 .gbp-cote:disabled{opacity:.4;cursor:not-allowed}
-.gbp-mini{width:44px;height:44px}
+.gbp-mini{width:46px;height:58px}
+.gbp-cotes{grid-template-columns:repeat(4,minmax(0,1fr))}
+.gbp-cote{padding:8px 3px 9px;line-height:1.2;text-align:center}
+.gbp-cote small{display:block;font-size:.7rem;font-weight:500;color:var(--muted,#6f6450);line-height:1.25}
+.gbp-cotes-aide{margin:2px 0 8px;font-size:.8rem;line-height:1.45;color:var(--muted,#6f6450)}
+.gbp-atelier{display:flex;align-items:flex-start;gap:10px;width:100%;margin:10px 0 2px;padding:11px 12px;border:1.5px dashed var(--gold-dark);border-radius:12px;background:var(--paper);font:inherit;text-align:left;color:var(--ink);cursor:pointer}
+.gbp-atelier b{display:block;font-size:.9rem}
+.gbp-atelier small{display:block;font-size:.8rem;line-height:1.4;color:var(--muted,#6f6450);margin-top:2px}
+.gbp-atelier.on{border-style:solid;box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
+.gbp-atelier-ic{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--gold-dark);color:#fff;font-size:.85rem}
 /* Les dessins : une tuile par dessin, numéro bien lisible */
 .gbp-fams{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin-bottom:4px;scrollbar-width:thin}
 .gbp-fams .prc-chip{flex:none;font-size:.82rem;padding:9px 12px}

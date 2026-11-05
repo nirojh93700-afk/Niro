@@ -25,9 +25,12 @@ export const dessinValide = (n) => Number.isInteger(n) && n >= 1 && n <= GOB_DES
 
 const t = (v) => (typeof v === "string" ? v.trim() : "");
 
-export const GOB_COTES = { face: "Face", gauche: "Côté gauche", droite: "Côté droit", tour: "Tout autour" };
+// « atelier » (gérant, 05/11/2026) : la cliente ne sait pas où placer l'élément → l'atelier le place au mieux et lui envoie
+// un aperçu à valider avant de graver (pas de place précise : zone vide).
+export const GOB_COTES = { face: "Face", gauche: "Côté gauche", droite: "Côté droit", tour: "Tout autour", atelier: "Endroit au choix de l'atelier" };
+export const GOB_ATELIER_APERCU = "aperçu à envoyer à la cliente avant de graver";
 export const GOB_PLACES = { milieu: "au milieu", haut: "en haut", bas: "en bas", gauche: "à gauche", droite: "à droite" };
-export const placesDuCote = (c) => (c === "tour" ? ["haut", "bas"] : c === "face" ? ["milieu", "haut", "bas", "gauche", "droite"] : ["milieu", "haut", "bas"]);
+export const placesDuCote = (c) => (c === "atelier" ? [] : c === "tour" ? ["haut", "bas"] : c === "face" ? ["milieu", "haut", "bas", "gauche", "droite"] : ["milieu", "haut", "bas"]);
 const ecritureCourte = (p) => (p ? getFontLabel(p).split(" — ")[0] : "");
 const COTE_PAR_LIBELLE = Object.fromEntries(Object.entries(GOB_COTES).map(([k, v]) => [v.toLowerCase(), k]));
 const PLACE_PAR_LIBELLE = Object.fromEntries(Object.entries(GOB_PLACES).map(([k, v]) => [v, k]));
@@ -55,7 +58,7 @@ export function quoiElement(e) {
   if (e.kind === "sous") return `Texte sous la photo « ${e.texte} »`;
   return "";
 }
-export const ouElement = (e) => `${GOB_COTES[e.side] || "Face"}, ${GOB_PLACES[e.zone] || "au milieu"}`;
+export const ouElement = (e) => (e.side === "atelier" ? GOB_COTES.atelier : `${GOB_COTES[e.side] || "Face"}, ${GOB_PLACES[e.zone] || "au milieu"}`);
 
 /** Une ligne de « autour » pour un élément en plus. */
 export function ligneElement(e) {
@@ -84,11 +87,13 @@ export function champsDepuisListe(liste) {
 
 /** Relit une ligne écrite par ligneElement (et les anciennes lignes « … — Face, en haut, écriture … »). */
 export function lireLigne(l) {
-  const m = /^(.*) — (Face|Côté gauche|Côté droit|Tout autour), (au milieu|au centre|en haut|en bas|à gauche|à droite)(?:, écriture (.+))?$/.exec(String(l || "").trim());
-  const quoi = m ? m[1] : String(l || "").trim();
-  const side = m ? COTE_PAR_LIBELLE[m[2].toLowerCase()] : "face";
-  const zone = m ? (PLACE_PAR_LIBELLE[m[3]] || "milieu") : "milieu";
-  const police = m ? POLICE_PAR_LIBELLE(m[4]) : "";
+  const brut = String(l || "").trim();
+  const a = /^(.*) — Endroit au choix de l'atelier(?:, écriture (.+))?$/.exec(brut);
+  const m = a ? null : /^(.*) — (Face|Côté gauche|Côté droit|Tout autour), (au milieu|au centre|en haut|en bas|à gauche|à droite)(?:, écriture (.+))?$/.exec(brut);
+  const quoi = a ? a[1] : m ? m[1] : brut;
+  const side = a ? "atelier" : m ? COTE_PAR_LIBELLE[m[2].toLowerCase()] : "face";
+  const zone = a ? "" : m ? (PLACE_PAR_LIBELLE[m[3]] || "milieu") : "milieu";
+  const police = a ? POLICE_PAR_LIBELLE(a[2]) : m ? POLICE_PAR_LIBELLE(m[4]) : "";
   let e = { kind: "texte", texte: quoi };
   let x;
   if ((x = /^Dessin n° (\d+)$/.exec(quoi))) e = { kind: "dessin", num: +x[1] };
@@ -105,7 +110,7 @@ export function premierElement(fields) {
   const kind = t(f.mode);
   if (!kind) return null;
   const side = GOB_COTES[t(f.cote)] ? t(f.cote) : "face";
-  const zone = GOB_PLACES[t(f.place)] && placesDuCote(side).includes(t(f.place)) ? t(f.place) : "milieu";
+  const zone = side === "atelier" ? "" : GOB_PLACES[t(f.place)] && placesDuCote(side).includes(t(f.place)) ? t(f.place) : "milieu";
   const base = { kind, side, zone, police: t(f.police) };
   if (kind === "dessin") return { ...base, num: parseInt(f.dessin, 10) };
   if (kind === "cadre") return { ...base, num: parseInt(f.cadre, 10), nom: t(f.nom) };
@@ -119,7 +124,7 @@ export function premierElement(fields) {
 export function champsPremier(e) {
   const vide = { mode: "", dessin: "", cadre: "", lettre: "", nom: "", texte: "", photo: "", texteSousPhoto: "", police: "", cote: "", place: "" };
   if (!e) return vide;
-  const out = { ...vide, mode: e.kind, cote: e.side || "face", place: e.zone || "milieu" };
+  const out = { ...vide, mode: e.kind, cote: e.side || "face", place: e.side === "atelier" ? "" : (e.zone || "milieu") };
   if (e.kind === "dessin") out.dessin = String(e.num);
   if (e.kind === "cadre") { out.cadre = String(e.num); out.nom = e.nom || ""; out.police = e.police || ""; }
   if (e.kind === "lettre") { out.lettre = e.lettre || ""; out.nom = e.nom || ""; out.police = e.police || ""; }
@@ -205,3 +210,6 @@ export function plancheDuNumero(cfg, n) {
   }
   return null;
 }
+
+/** Au moins un élément placé par l'atelier → un aperçu est à envoyer à la cliente avant de graver. */
+export const gobeletApercuAEnvoyer = (fields) => gobeletElements(fields).some((e) => e.side === "atelier");

@@ -38,20 +38,26 @@ function familles(cfg) {
 }
 const srcDessin = (cfg, n) => `${cfg.dessinUnite}${String(n).padStart(2, "0")}.webp`;
 
-// Petit gobelet dessiné : montre la face, le côté gauche, le côté droit, le tour.
+// Petit gobelet vu de côté, tourné comme la cliente le verra (gérant, 05/11 : « l'anse est tout le temps du même côté,
+// comment tu veux qu'il sache »). Face = opposé à l'anse (anse cachée derrière, donc pas dessinée) ; côté gauche = anse à gauche ;
+// côté droit = anse à droite ; tout autour = bande tout le tour. En doré : l'endroit gravé.
 function MiniGobelet({ cote }) {
-  const c = "var(--gold-dark)";
+  const g = "var(--gold-dark)";
+  const trait = "#8a7a5c";
+  const anse = cote === "gauche" ? "M20 25h-6a4 4 0 0 0-4 4v19a4 4 0 0 0 4 4h7.5" : cote === "face" ? null : "M44 25h6a4 4 0 0 1 4 4v19a4 4 0 0 1-4 4h-7.5";
   return (
-    <svg className="gbp-mini" viewBox="0 0 64 64" aria-hidden="true">
-      <path d="M18 10h28l-3 46H21z" fill="#fbf7ee" stroke="#8a7a5c" strokeWidth="2" strokeLinejoin="round" />
-      <path d="M46 20c9 0 9 18 0 18" fill="none" stroke="#8a7a5c" strokeWidth="3" />
-      {cote === "face" && <circle cx="32" cy="32" r="7" fill={c} />}
-      {cote === "gauche" && <rect x="19" y="24" width="5" height="16" rx="2" fill={c} />}
-      {cote === "droite" && <rect x="40" y="24" width="5" height="16" rx="2" fill={c} />}
-      {cote === "tour" && <rect x="19" y="44" width="26" height="5" rx="2" fill={c} />}
+    <svg className="gbp-mini" viewBox="0 0 64 80" aria-hidden="true">
+      {anse && <path d={anse} fill="none" stroke={trait} strokeWidth="4" strokeLinecap="round" />}
+      <path d="M36 12l4-9" stroke={trait} strokeWidth="2.4" strokeLinecap="round" />
+      <rect x="18" y="11" width="28" height="8" rx="2.5" fill="#efe7d6" stroke={trait} strokeWidth="1.8" />
+      <path d="M19 19h26l-2.6 30-3 26H24.6l-3-26z" fill="#fbf7ee" stroke={trait} strokeWidth="1.8" strokeLinejoin="round" />
+      {cote === "tour"
+        ? <path d="M20.2 33h23.6l-.9 12H21.1z" fill={g} />
+        : <rect x="26" y="29" width="12" height="18" rx="2.5" fill={g} />}
     </svg>
   );
 }
+const SOUS_COTE = { face: "à l'opposé de l'anse", gauche: "l'anse à gauche", droite: "l'anse à droite", tour: "tout le tour" };
 
 function Polices({ value, onChange }) {
   return (
@@ -193,7 +199,7 @@ function Fenetre({ v, cfg, onClose, onPick }) {
 }
 
 const VIDE = { kind: "", num: "", lettre: "", nom: "", texte: "", photo: "", sous: "", police: "great-vibes", side: "", zone: "" };
-const LIBELLE_PLACE = (c, z) => `${GOB_COTES[c]} — ${GOB_PLACES[z]}`;
+const LIBELLE_PLACE = (c, z) => (c === "atelier" ? "Au choix de l'atelier (aperçu envoyé)" : `${GOB_COTES[c]} — ${GOB_PLACES[z]}`);
 
 export default function GobeletParcours({ product, fieldValues, setFieldValues, unitPrice, couleur, onComposition }) {
   const cfg = product.gobeletParcours;
@@ -243,7 +249,8 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
   }
 
   // Cadre, lettre, texte, photo : on remplit puis « Ajouter à ma gravure ».
-  const place = (ed.side && ed.zone && !liste.some((e) => e.side === ed.side && e.zone === ed.zone)) ? { side: ed.side, zone: ed.zone } : premiereLibre(liste);
+  const place = ed.side === "atelier" ? { side: "atelier", zone: "" }
+    : (ed.side && ed.zone && !liste.some((e) => e.side === ed.side && e.zone === ed.zone)) ? { side: ed.side, zone: ed.zone } : premiereLibre(liste);
   function ajouter() {
     const e = {
       kind: ed.kind, police: AVEC_ECRITURE.includes(ed.kind) || (ed.kind === "photo" && ed.sous.trim()) ? ed.police : "",
@@ -269,7 +276,7 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
   const extra = prix(cfg.extra);
   const extraPhoto = prix(cfg.extraPhoto || 6);
   const prochain = liste.length === 0 ? "compris" : `+${ed.kind === "photo" ? extraPhoto : extra} €`;
-  const placesDispo = (i) => ORDRE_PLACES.filter(([c, z]) => !liste.some((e, k) => k !== i && e.side === c && e.zone === z));
+  const placesDispo = (i) => [...ORDRE_PLACES.filter(([c, z]) => !liste.some((e, k) => k !== i && e.side === c && e.zone === z)), ["atelier", ""]];
 
   return (
     <div className="prc gbp" id="gobelet-parcours">
@@ -372,17 +379,22 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
               <>
                 <div className="field"><label>Où le graver sur le gobelet ?</label>
                   <div className="gbp-cotes">
-                    {Object.keys(GOB_COTES).map((c) => (
+                    {["face", "gauche", "droite", "tour"].map((c) => (
                       <button type="button" key={c} className={`gbp-cote${(place?.side || "face") === c ? " on" : ""}`} onClick={() => maj({ side: c, zone: placesDuCote(c).find((z) => !liste.some((e) => e.side === c && e.zone === z)) || "" })}>
-                        <MiniGobelet cote={c} /><span>{GOB_COTES[c]}</span>
+                        <MiniGobelet cote={c} /><span>{GOB_COTES[c]}</span><small>{SOUS_COTE[c]}</small>
                       </button>
                     ))}
                   </div>
-                  <div className="prc-chips gbp-zones">{placesDuCote(place?.side || "face").map((z) => {
+                  <p className="gbp-cotes-aide">Chaque dessin montre le gobelet tourné vers vous : en doré, l&apos;endroit gravé. La face est à l&apos;opposé de l&apos;anse.</p>
+                  {place?.side !== "atelier" && <div className="prc-chips gbp-zones">{placesDuCote(place?.side || "face").map((z) => {
                     const prise = liste.some((e) => e.side === (place?.side || "face") && e.zone === z);
                     return <button type="button" key={z} disabled={prise} className={`prc-chip${place?.zone === z ? " on" : ""}`} onClick={() => maj({ side: place?.side || "face", zone: z })}>{GOB_PLACES[z].charAt(0).toUpperCase() + GOB_PLACES[z].slice(1)}{prise ? " (pris)" : ""}</button>;
-                  })}</div>
-                  <p className="prc-opt">La face est le côté opposé à l&apos;anse : celui qu&apos;on voit quand on tient le gobelet de la main droite.</p>
+                  })}</div>}
+                  <button type="button" className={`gbp-atelier${place?.side === "atelier" ? " on" : ""}`} onClick={() => maj({ side: place?.side === "atelier" ? "" : "atelier", zone: "" })}>
+                    <span className="gbp-atelier-ic" aria-hidden="true">✦</span>
+                    <span><b>Je ne sais pas où le placer</b><small>L&apos;atelier choisit le meilleur endroit et vous envoie un aperçu à valider avant de graver.</small></span>
+                  </button>
+
                 </div>
                 <div className="gbp-xbtns">
                   <button type="button" className="gbp-xadd" onClick={ajouter}>Ajouter à ma gravure ({prochain})</button>
