@@ -362,7 +362,7 @@ export default function FicheCommandePage() {
           <Carte id="fc-articles" ic="pen" titre="À graver — à l'identique de ce que la cliente a vu">
             {lignes.map(({ it, s }, i) => {
               const photo = it.image || getProductBySlug(it.slug)?.images?.[0] || "";
-              const apercu = s?.previewImage || s?.artworkImage || s?.photoSrc || "";
+              const apercu = s?.previewImage || s?.apercu3dImage || s?.artworkImage || s?.photoSrc || "";
               return (
                 <div className="fc-art" key={i}>
                   <div className="co-art-photo">

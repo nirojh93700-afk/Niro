@@ -1182,6 +1182,29 @@ export default function ProductDetail({ product, realisations = [] }) {
       setPreparing(false);
     }
 
+    // Bijou à aperçu 3D : on garde l'IMAGE EXACTE de l'aperçu tel que la cliente le voit au moment
+    // d'ajouter au panier (même angle, même texte, même finition) — 05/11/2026, gérant : « il me faut
+    // exactement le visuel ». Jamais bloquant : si la capture échoue, la commande part sans elle.
+    let apercu3dImage = null;
+    if (any3d && Object.values(fieldValues).some((v) => typeof v === "string" && v.trim())) {
+      try {
+        const cvs = [...document.querySelectorAll("canvas[data-apercu3d]")].filter((c) => c.getClientRects().length && c.width > 0 && c.height > 0);
+        cvs.sort((a, b) => b.width * b.height - a.width * a.height);
+        const src = cvs[0];
+        if (src) {
+          setPreparing(true);
+          const out = document.createElement("canvas");
+          out.width = src.width; out.height = src.height;
+          const ctx = out.getContext("2d");
+          ctx.fillStyle = "#f7f3ea";
+          ctx.fillRect(0, 0, out.width, out.height);
+          ctx.drawImage(src, 0, 0);
+          apercu3dImage = await uploadDataUrl(out.toDataURL("image/jpeg", 0.9));
+          setPreparing(false);
+        }
+      } catch { apercu3dImage = null; setPreparing(false); }
+    }
+
     // Fiche atelier : tous les réglages choisis (emplacement, taille, position,
     // textes, polices, motif, fond, options, photo…) pour graver à l'identique.
     const itemSpec = {
@@ -1194,6 +1217,7 @@ export default function ProductDetail({ product, realisations = [] }) {
       modele: modeleField ? modeleVal : null,
       photoSrc: photoSrc || null,
       previewImage, previewImageFond, artworkImage, artworkImageFond,
+      apercu3dImage,
       layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null, motifFond: motifLayoutFond || null, crystalText: crystalTextPos || null },
       // on évite de stocker deux fois le modèle (déjà dans "modele")
       fields: (() => { const { modele, ...rest } = fieldValues; return rest; })(),

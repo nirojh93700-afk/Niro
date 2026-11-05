@@ -468,7 +468,7 @@ export async function POST(req) {
       let pol = null;
       try { pol = policeDeGravure(it); } catch { pol = null; }
       // Visuel exact préparé par le client (capture) ; sinon la photo brute envoyée.
-      const visuals = [it.previewImage, it.previewImageFond].filter(Boolean);
+      const visuals = [it.previewImage || it.apercu3dImage, it.previewImageFond].filter(Boolean);
       const imagesHtml = visuals.length
         ? visuals.map((u, i) => imgTag(u, i === 0 ? "Gravure face — placée par le client" : "Gravure fond — placée par le client")).join("")
         : imgTag(it.photoSrc, "Photo / logo envoyé par le client");

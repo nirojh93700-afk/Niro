@@ -125,6 +125,13 @@
   le port à DOMICILE d'un panier qui contient un bloc ne descend jamais sous 9,90 € (Mondial Domicile 1–2 kg ≈ 8,71 € TTC). Relais, express,
   livraison offerte, porte-clés et clé USB cristal : inchangés. Plus lourd (> 2 kg) : la grille par poids (14,90 €…) reste.
 
+## 🖼️ LE VISUEL EXACT DE LA CLIENTE DANS GESTION, POUR LES BIJOUX EN 3D — 05/11/2026 (commande 0BHBVOXK, gérant : « il me faut exactement le visuel ») — PRÉPARÉ, À POUSSER SUR SON MOT
+- Avant : verres, carafe, cocktail, support téléphone gardaient l'image de l'aperçu (`previewImage`) ; les bijoux en 3D rien (la fiche montrait la photo du
+  bijou avec le texte posé dessus, sur la mauvaise face). Maintenant : à l'ajout au panier, l'aperçu 3D affiché est photographié (`canvas[data-apercu3d]`,
+  `preserveDrawingBuffer`) et envoyé (`spec.apercu3dImage`) ; Gestion (fiche atelier écran, fiche commande, liste) montre cette image + le même aperçu 3D
+  redessiné à faire tourner (`Apercu3DCommande.jsx`) ; l'e-mail 🛎️ la joint. Anciennes commandes : aperçu 3D redessiné. Fiche papier : inchangée.
+- Restent sans visuel enregistré : cristaux photo (Gestion les redessine, `CristalPreview`) et bijoux sans aperçu 3D (la cliente ne voit que le texte).
+
 ## 📐 DISPOSITION DE L'APERÇU 3D ENREGISTRÉE AVEC LA COMMANDE — 03/11/2026 (commande 0QEIXDI5, Vanessa Gorgol : l'aperçu montrait « AXANDRE / MAXIM » sur deux lignes, l'atelier l'a lu côte à côte ; gérant : « il faut que ce soit comme le client veut, regarde les photos qu'il a envoyées ») — PRÉPARÉ, À POUSSER SUR SON MOT
 - Chaque aperçu 3D (plaque, enveloppe, médaillons livre / cœur, gourmette) note les lignes qu'il dessine (`noterLignes`, `src/lib/apercuLignes.js`) ;
   à l'ajout au panier la fiche range `spec.apercuLignes = { recto: ["Axandre","Maxim"], … }`. Atelier : bloc « 📐 Disposition vue par la cliente

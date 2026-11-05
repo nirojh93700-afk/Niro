@@ -83,6 +83,16 @@ export default function Apercu3DCommande({ item, hauteur = 300 }) {
       <div style={{ fontSize: "0.78rem", fontWeight: 700, color: "#8a6d1f", padding: "2px 4px 4px" }}>
         Aperçu 3D vu par la cliente à la commande
       </div>
+      {item.apercu3dImage ? (
+        <>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={item.apercu3dImage} alt="Aperçu enregistré à la commande" style={{ width: "100%", display: "block", borderRadius: 8 }} />
+          <div style={{ fontSize: "0.72rem", color: "#7a7268", textAlign: "center", margin: "4px 0 6px" }}>
+            Image exacte enregistrée quand elle a ajouté au panier.
+          </div>
+          <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#8a6d1f", padding: "2px 4px" }}>Le même aperçu, à faire tourner</div>
+        </>
+      ) : null}
       {rendu}
       <div style={{ fontSize: "0.72rem", color: "#7a7268", textAlign: "center", marginTop: 4 }}>
         Faites-le tourner avec la souris ou le doigt pour voir chaque face.

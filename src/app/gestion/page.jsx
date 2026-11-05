@@ -600,7 +600,7 @@ export default function GestionPage({ onglet = "" } = {}) {
   // identifiant produit renvoyait le même sur deux lignes du même produit.
   const apercuAtelier = (s) => {
     if (!s) return "";
-    return s.previewImage || s.artworkImage || s.photoSrc || s.previewImageFond || "";
+    return s.previewImage || s.apercu3dImage || s.artworkImage || s.photoSrc || s.previewImageFond || "";
   };
 
   // Couleur / modèle commandé (Argent, Doré, Moyen…). Il était noyé au début de

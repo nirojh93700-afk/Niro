@@ -162,7 +162,9 @@ export default function EngraveHeart3D({
       const mount = mountRef.current;
       const width = mount.clientWidth || 320;
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+      // Repère pour la capture de l'aperçu à l'ajout au panier (image exacte gardée avec la commande, 05/11/2026).
+      renderer.domElement.setAttribute("data-apercu3d", "1");
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(width, height);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;

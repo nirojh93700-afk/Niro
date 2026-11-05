@@ -100,6 +100,7 @@ export function eclaterParVerre(item) {
       artworkImageFond: tete ? item.artworkImageFond || null : null,
       previewImage: tete ? item.previewImage || null : null,
       previewImageFond: tete ? item.previewImageFond || null : null,
+      apercu3dImage: tete ? item.apercu3dImage || null : null,
       personalization: segments[i] || `Verre ${i + 1}`,
     };
   });
