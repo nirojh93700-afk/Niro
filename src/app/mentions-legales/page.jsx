@@ -1,4 +1,5 @@
 export const metadata = {
+  alternates: { canonical: "/mentions-legales" },
   title: "Mentions légales",
   description: "Mentions légales du site Niv Création : éditeur, hébergement, propriété intellectuelle.",
 };
@@ -26,7 +27,7 @@ export default function MentionsLegalesPage() {
       <div className="container" style={{ maxWidth: 780 }}>
         <div className="section-head" style={{ marginBottom: 28 }}>
           <span className="eyebrow">Informations</span>
-          <h2>Mentions légales</h2>
+          <h1>Mentions légales</h1>
         </div>
         <div
           className="product-desc"

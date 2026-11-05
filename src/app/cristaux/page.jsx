@@ -9,6 +9,7 @@ import "../cristaux-blocs.css";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
+  alternates: { canonical: "/cristaux" },
   title: "Cristal Photo 3D personnalisé — Gravure photo dans le cristal",
   description: "Votre photo gravée en 3D au cœur d'un cristal K9, dans notre atelier en France. Bloc vertical ou horizontal, plusieurs tailles. Un cadeau qui capte la lumière.",
 };

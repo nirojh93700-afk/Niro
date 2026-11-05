@@ -6,7 +6,8 @@ import { getSettings } from "@/lib/stock";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "À propos — l'atelier Niv Création",
+  alternates: { canonical: "/a-propos" },
+  title: "À propos — notre atelier de gravure",
   description:
     "Niv Création, atelier artisanal français de gravure et découpe laser. Notre histoire, nos matériaux et notre engagement pour des créations personnalisées et durables.",
 };

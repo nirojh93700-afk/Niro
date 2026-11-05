@@ -3,7 +3,7 @@ import CarteCadeauForm from "@/components/CarteCadeauForm";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Carte cadeau Niv Création — offrez le choix",
+  title: "Carte cadeau — offrez le choix",
   description:
     "Offrez une carte cadeau Niv Création : bijoux gravés, verres personnalisés, cristal photo 3D. Envoyée par e-mail avec votre petit mot, valable un an sur toute la boutique.",
   alternates: { canonical: "/carte-cadeau" },
@@ -19,7 +19,7 @@ export default function CarteCadeauPage() {
       <div className="container" style={{ maxWidth: 860 }}>
         <div className="section-head">
           <span className="eyebrow">Offrir</span>
-          <h2>La Carte Cadeau Niv Création</h2>
+          <h1>La Carte Cadeau Niv Création</h1>
           <p>
             Quand on veut offrir une pièce gravée mais laisser le choix : la carte arrive par e-mail,
             avec votre petit mot et son code personnel. Valable un an, en une ou plusieurs fois, sur

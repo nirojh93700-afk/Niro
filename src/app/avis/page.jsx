@@ -5,7 +5,8 @@ import { getCatalog } from "@/lib/catalog";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Avis clients — Niv Création",
+  alternates: { canonical: "/avis" },
+  title: "Avis clients",
   description: "Les avis vérifiés de nos clients sur les créations personnalisées Niv Création.",
 };
 

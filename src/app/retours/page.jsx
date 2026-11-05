@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
+  alternates: { canonical: "/retours" },
   title: "Politique de retour",
   description:
     "Politique de retour et de remboursement de Niv Création : annulation, articles personnalisés, conditions par catégorie de produit, défauts et délais.",
@@ -63,7 +64,7 @@ export default function RetoursPage() {
       <div className="container" style={{ maxWidth: 780 }}>
         <div className="section-head" style={{ marginBottom: 28 }}>
           <span className="eyebrow">Informations</span>
-          <h2>Politique de retour</h2>
+          <h1>Politique de retour</h1>
           <p>Dernière mise à jour : novembre 2026</p>
         </div>
         <div

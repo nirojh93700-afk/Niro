@@ -1,4 +1,5 @@
 export const metadata = {
+  alternates: { canonical: "/cgv" },
   title: "Conditions Générales de Vente",
   description:
     "Conditions Générales de Vente de Niv Création : commande, prix, paiement, personnalisation, délais, droit de rétractation et garanties.",
@@ -69,7 +70,7 @@ export default async function CGVPage() {
       <div className="container" style={{ maxWidth: 780 }}>
         <div className="section-head" style={{ marginBottom: 28 }}>
           <span className="eyebrow">Informations</span>
-          <h2>Conditions Générales de Vente</h2>
+          <h1>Conditions Générales de Vente</h1>
         </div>
         <div
           className="product-desc"

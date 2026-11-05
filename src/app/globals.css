@@ -346,6 +346,8 @@ img {
   color: var(--gold-dark);
   font-weight: 700;
 }
+/* h1 : titre principal des pages simples (contact, CGV, offres…), même rendu que l'ancien h2 (audit 05/11/2026). */
+.section-head h1,
 .section-head h2 {
   font-size: clamp(1.8rem, 3.5vw, 2.5rem);
   margin: 12px 0 14px;

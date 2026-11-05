@@ -5,6 +5,7 @@ import { vacationActive } from "@/lib/vacation";
 import { FAQ } from "@/lib/faq";
 
 export const metadata = {
+  alternates: { canonical: "/faq" },
   title: "Questions fréquentes (FAQ)",
   description:
     "Toutes les réponses sur la personnalisation, la gravure, les délais, la livraison et les retours chez Niv Création.",

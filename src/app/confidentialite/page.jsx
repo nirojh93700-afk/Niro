@@ -1,4 +1,5 @@
 export const metadata = {
+  alternates: { canonical: "/confidentialite" },
   title: "Politique de confidentialité",
   description:
     "Politique de confidentialité de Niv Création : données collectées, finalités, conservation, vos droits RGPD, cookies et sécurité des paiements.",
@@ -47,7 +48,7 @@ export default function ConfidentialitePage() {
       <div className="container" style={{ maxWidth: 780 }}>
         <div className="section-head" style={{ marginBottom: 28 }}>
           <span className="eyebrow">Informations</span>
-          <h2>Politique de confidentialité</h2>
+          <h1>Politique de confidentialité</h1>
           <p>Dernière mise à jour : novembre 2026</p>
         </div>
         <div
