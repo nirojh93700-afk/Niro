@@ -7,7 +7,8 @@ import { getCatalog } from "@/lib/catalog";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Offres spéciales — promotions Niv Création",
+  alternates: { canonical: "/offres" },
+  title: "Offres spéciales — promotions",
   description: "Profitez de nos promotions du moment sur une sélection de créations personnalisées Niv Création.",
 };
 
@@ -37,7 +38,7 @@ export default async function OffresPage() {
       <div className="container">
         <div className="section-head">
           <span className="eyebrow">Bons plans</span>
-          <h2>Offres spéciales</h2>
+          <h1>Offres spéciales</h1>
           <p>Nos promotions du moment.</p>
         </div>
 

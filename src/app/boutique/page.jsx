@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "Boutique — toutes nos créations personnalisées",
   description:
-    "Découvrez tous les bijoux (femme & homme), cristaux photo 3D, verres gravés, cadeaux de naissance, décorations de mariage et cadeaux personnalisés Niv Création, gravés au laser dans notre atelier français.",
+    "Bijoux femme et homme, cristaux photo 3D, verres gravés, cadeaux de naissance, déco de mariage et cadeaux personnalisés, gravés dans notre atelier en France.",
   alternates: { canonical: "/boutique" },
 };
 

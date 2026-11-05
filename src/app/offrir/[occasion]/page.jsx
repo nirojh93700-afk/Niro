@@ -38,7 +38,7 @@ export default async function OccasionPage({ params }) {
         </nav>
         <div className="section-head">
           <span className="eyebrow">Offrir · {o.label}</span>
-          <h2>{o.titre}</h2>
+          <h1>{o.titre}</h1>
           <p>{o.intro}</p>
         </div>
 

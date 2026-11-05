@@ -9,8 +9,8 @@ export const dynamic = "force-dynamic";
 const META = {
   bijoux: { t: "Bijoux personnalisés gravés — femme & homme", d: "Colliers, bracelets et bijoux personnalisés en acier inoxydable, gravés au laser dans notre atelier français." },
   cristal: { t: "Cristal photo 3D personnalisé — tous nos modèles", d: "Blocs, porte-clés et clé USB en cristal, votre photo gravée en 3D à l'intérieur. Réalisé dans notre atelier en France." },
-  verres: { t: "Verres gravés personnalisés — vin, champagne, whisky, cocktail", d: "Verres à whisky, à cocktail, à vin, flûtes à champagne et carafe gravés à votre prénom, date ou message. Gravure laser permanente." },
-  enfants: { t: "Bébé & Enfant — cadeaux personnalisés au prénom de votre enfant", d: "Plaques de naissance, cartes étapes, couverts, veilleuse et plaque de porte personnalisés, gravés dans notre atelier français." },
+  verres: { t: "Verres gravés personnalisés : vin, champagne, whisky", d: "Verres à whisky, à cocktail, à vin, flûtes à champagne et carafe gravés à votre prénom, date ou message. Gravure laser permanente." },
+  enfants: { t: "Cadeaux bébé & enfant personnalisés au prénom", d: "Plaques de naissance, cartes étapes, couverts, veilleuse et plaque de porte personnalisés, gravés dans notre atelier français." },
   mariage: { t: "Décorations de mariage personnalisées", d: "Numéros de table, menus, ronds de serviette et verres de réception personnalisés, gravés et découpés au laser." },
   maison: { t: "Maison & Déco — lampes, veilleuses et bougeoirs gravés", d: "Lampes, veilleuses et bougeoirs personnalisés, gravés au laser dans notre atelier français." },
   cadeaux: { t: "Petits cadeaux personnalisés gravés", d: "Clés USB, porte-clés, pièce à graver et accessoires de bureau personnalisés, faits en France." },

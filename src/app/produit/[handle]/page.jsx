@@ -7,7 +7,8 @@ import { realisationsVisibles } from "@/components/TrustSection";
 import { guidePourProduit } from "@/lib/guides";
 import ProductReviews from "@/components/ProductReviews";
 import ProductCard from "@/components/ProductCard";
-import { getCatalogBySlug, getCatalog, getCatalogAdmin, priceFrom } from "@/lib/catalog";
+import { getCatalogBySlug, getCatalog, getCatalogAdmin, prixOuverture } from "@/lib/catalog";
+import { titreGoogle } from "@/lib/titresGoogle";
 import { getCategoryLabel } from "@/lib/products";
 
 // Jeton d'aperçu privé : permet d'afficher une fiche d'un produit caché
@@ -29,7 +30,8 @@ export async function generateMetadata({ params }) {
   if (!product) return {};
   const text = (product.descriptionHtml || "").replace(/<[^>]+>/g, " ").trim().slice(0, 155);
   return {
-    title: product.title,
+    // Ligne bleue de Google : titre court (table titresGoogle) ; le H1 de la fiche garde `title`.
+    title: titreGoogle(product),
     description: text,
     alternates: { canonical: `/produit/${params.handle}` },
     openGraph: {
@@ -139,7 +141,7 @@ export default async function ProductPage({ params, searchParams }) {
     offers: {
       "@type": "Offer",
       priceCurrency: "EUR",
-      price: priceFrom(product).toFixed(2),
+      price: prixOuverture(product).toFixed(2),
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
       url: `https://nivcreation.fr/produit/${product.slug}`,
@@ -191,11 +193,11 @@ export default async function ProductPage({ params, searchParams }) {
       {SLUGS_ECRIN.includes(product.slug) ? <EcrinFicheCristal product={product} /> : null}
       {/* Fil d'Ariane visible (bon pour la cliente ET pour Google). */}
       <nav className="container" aria-label="Fil d'Ariane" style={{ fontSize: "0.82rem", color: "var(--ink-soft)", padding: "12px 0 0" }}>
-        <a href="/" style={{ color: "inherit", textDecoration: "none" }}>Accueil</a>
+        <a href="/" style={{ color: "inherit", textDecoration: "none", padding: "4px 0" }}>Accueil</a>
         <span style={{ margin: "0 6px" }}>›</span>
-        <a href="/boutique" style={{ color: "inherit", textDecoration: "none" }}>Boutique</a>
+        <a href="/boutique" style={{ color: "inherit", textDecoration: "none", padding: "4px 0" }}>Boutique</a>
         <span style={{ margin: "0 6px" }}>›</span>
-        <a href={catUrl} style={{ color: "inherit", textDecoration: "none" }}>{catLabel}</a>
+        <a href={catUrl} style={{ color: "inherit", textDecoration: "none", padding: "4px 0" }}>{catLabel}</a>
       </nav>
       {isPreview && (
         <div style={{ background: "#fbeec9", color: "#5a4a1d", textAlign: "center", padding: "10px 16px", fontSize: "0.9rem", fontWeight: 600, borderBottom: "1px solid #e7d6a8" }}>

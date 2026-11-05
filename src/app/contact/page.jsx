@@ -1,7 +1,8 @@
 import ContactForm from "@/components/ContactForm";
 
 export const metadata = {
-  title: "Contact — Niv Création",
+  alternates: { canonical: "/contact" },
+  title: "Contact",
   description:
     "Une question, un projet sur mesure, une demande de devis pour un mariage ? Contactez l'atelier Niv Création.",
 };
@@ -12,7 +13,7 @@ export default function ContactPage() {
       <div className="container" style={{ maxWidth: 620 }}>
         <div className="section-head">
           <span className="eyebrow">Contact</span>
-          <h2>Parlons de votre projet</h2>
+          <h1>Parlons de votre projet</h1>
           <p>
             Une idée de cadeau, une demande sur mesure ou un devis pour votre
             mariage ? Écrivez-nous, nous répondons avec plaisir.

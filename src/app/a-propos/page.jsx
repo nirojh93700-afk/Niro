@@ -6,7 +6,8 @@ import { getSettings } from "@/lib/stock";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "À propos — l'atelier Niv Création",
+  alternates: { canonical: "/a-propos" },
+  title: "À propos — notre atelier de gravure",
   description:
     "Niv Création, atelier artisanal français de gravure et découpe laser. Notre histoire, nos matériaux et notre engagement pour des créations personnalisées et durables.",
 };
@@ -61,7 +62,7 @@ export default async function AProposPage() {
               <div className="sf-card">
                 <div className="sf-ic">🌿</div>
                 <h3>Des matériaux choisis avec soin</h3>
-                <p>Des matériaux nobles et durables : bois clairs, acier inoxydable 316L hypoallergénique, acrylique premium. Des pièces conçues pour traverser le temps et rester aussi belles qu'au premier jour.</p>
+                <p>Des matériaux nobles et durables : bois clairs, acier inoxydable, acrylique premium. Des pièces conçues pour traverser le temps et rester aussi belles qu'au premier jour.</p>
               </div>
               <div className="sf-card">
                 <div className="sf-ic">✏️</div>

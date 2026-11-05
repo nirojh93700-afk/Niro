@@ -89,7 +89,7 @@ export const productInfo = {
 - Fabrication 3 à 5 jours ouvrés, puis expédiée en colis suivi (le délai de livraison dépend du transporteur).`,
   },
   "collier-enveloppe-message-secret": {
-    material: `Acier inoxydable 316L hypoallergénique (acier chirurgical)
+    material: `Acier inoxydable 316L
 
 Pourquoi le 316L
 - Acier de bijouterie, qui convient généralement aux peaux sensibles.
@@ -130,7 +130,7 @@ Un souci à la réception ?
   },
 
   "collier-medaillon-coeur-ouvrable": {
-    material: `Acier inoxydable 316L hypoallergénique
+    material: `Acier inoxydable 316L
 
 - Acier de bijouterie, qui convient généralement aux peaux sensibles.
 - Médaillon cœur ouvrable, 5 faces gravables.
@@ -163,12 +163,12 @@ Un souci à la réception ?
   },
 
   "bracelet-homme-identite-gourmette": {
-    material: `Acier inoxydable 316L (qualité chirurgicale)
+    material: `Acier inoxydable 316L
 
 - Chaîne gourmette à gros maillons cubains.
 - Plaque rectangulaire lisse, gravable au laser.
 - Fermoir mousqueton sécurisé.
-- Hypoallergénique, ne noircit pas, résiste à l'oxydation.`,
+- Ne noircit pas, résiste à l'oxydation.`,
     usage: `Personnalisation & entretien
 
 Personnalisation
@@ -195,8 +195,7 @@ Un souci à la réception ?
     material: `Acier inoxydable + gel de silicone souple
 
 - Plaque argentée ou noire au choix, gravable au laser.
-- Bracelet silicone confortable au quotidien.
-- Hypoallergénique.`,
+- Bracelet silicone confortable au quotidien.`,
     usage: `Personnalisation & entretien
 
 Personnalisation
@@ -224,7 +223,7 @@ Un souci à la réception ?
 
 - Plaque gravable au laser (argentée, dorée ou noire).
 - Longueur 19,5 cm, boucle de sécurité acier.
-- Hypoallergénique, ne noircit pas, résiste à l'oxydation.`,
+- Ne noircit pas, résiste à l'oxydation.`,
     usage: `Personnalisation & entretien
 
 Personnalisation
@@ -1040,7 +1039,7 @@ Un souci à la réception ?
 
   "bracelet-homme-chaine-acier": {
     material: `Taille & Matériaux
-- Bracelet homme en acier inoxydable 316L hypoallergénique, finition argentée.
+- Bracelet homme en acier inoxydable 316L, finition argentée.
 - Chaîne solide + plaque gravable au laser.
 - Fermoir sécurisé. Style élégant et intemporel.`,
     usage: `Personnalisation & Entretien
@@ -1057,7 +1056,7 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Bracelet femme fin en acier inoxydable doré.
 - Surface gravable au laser (gravure fine).
-- Acier 316L hypoallergénique, adapté aux peaux sensibles.`,
+- Acier 316L.`,
     usage: `Personnalisation & Entretien
 - Gravez un prénom, une date ou un petit mot.
 - Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
@@ -1070,7 +1069,7 @@ Un souci à la réception ?
 
   "bracelet-empreinte-pied-bebe": {
     material: `Taille & Matériaux
-- Bracelet en acier inoxydable hypoallergénique, orné d'une empreinte de pied de bébé.
+- Bracelet en acier inoxydable, orné d'une empreinte de pied de bébé.
 - Finition argentée ou dorée.
 - Le souvenir d'une naissance, à porter sur soi.`,
     usage: `Personnalisation & Entretien
@@ -1086,7 +1085,7 @@ Un souci à la réception ?
   "bracelet-femme-coeur": {
     material: `Taille & Matériaux
 - Bracelet femme en acier inoxydable doré, breloque cœur gravable.
-- Acier 316L hypoallergénique, adapté aux peaux sensibles.
+- Acier 316L.
 - Romantique et délicat.`,
     usage: `Personnalisation & Entretien
 - Gravez un prénom, une date ou un message sur le cœur.
@@ -1102,7 +1101,7 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Bracelet femme orné d'un papillon ajouré en acier inoxydable.
 - Finitions : argenté, doré, noir ou or rose.
-- Acier 316L hypoallergénique, adapté aux peaux sensibles.`,
+- Acier 316L.`,
     usage: `Personnalisation & Entretien
 - Gravez un prénom, une date ou un petit mot.
 - Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
@@ -1117,7 +1116,7 @@ Un souci à la réception ?
     material: `Taille & Matériaux
 - Lot de 2 colliers en acier inoxydable, finition or rose.
 - Les deux pendentifs forment un cœur une fois réunis, à graver chacun.
-- Acier 316L hypoallergénique, adapté aux peaux sensibles.`,
+- Acier 316L.`,
     usage: `Personnalisation & Entretien
 - Gravez chaque moitié (prénoms, date, petit mot) — le cadeau parfait pour les amoureux.
 - Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.

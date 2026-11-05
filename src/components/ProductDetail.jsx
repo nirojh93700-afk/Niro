@@ -2175,7 +2175,7 @@ export default function ProductDetail({ product, realisations = [] }) {
                       onClick={() => setPkgSel([o.id])}
                       style={{ display: "flex", alignItems: "center", gap: 11, textAlign: "left", cursor: "pointer", font: "inherit", border: on ? "1.5px solid var(--gold)" : "1.5px solid var(--line)", background: on ? "#fffaf0" : (isPack ? "linear-gradient(180deg,#fffaf0,#fff)" : "var(--paper)"), borderRadius: 12, padding: "11px 13px", boxShadow: on ? "0 0 0 2px rgba(194,161,78,.22)" : "none" }}
                     >
-                      {o.photo ? <ZoomThumb photo={o.photo} label={clientName} size={40} /> : <span style={{ fontSize: "1.3rem" }}>{isPack ? "✨" : "🎁"}</span>}
+                      {o.photo ? <ZoomThumb photo={o.photo} label={clientName} size={40} inButton /> : <span style={{ fontSize: "1.3rem" }}>{isPack ? "✨" : "🎁"}</span>}
                       <span style={{ minWidth: 0 }}>
                         <strong style={{ display: "block", fontSize: "0.9rem" }}>{on ? "✓ " : ""}{clientName}{isPack && <span style={{ display: "inline-block", whiteSpace: "nowrap", background: "var(--gold)", color: "#1a1206", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".2px", borderRadius: 20, padding: "2px 8px", marginLeft: 6, verticalAlign: "middle" }}>MEILLEUR CHOIX</span>}</strong>
                         {o.desc && <span style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>{o.desc}</span>}
@@ -2225,7 +2225,7 @@ export default function ProductDetail({ product, realisations = [] }) {
             }
             const opt = (o, on, onClick, rupture) => (
               <button type="button" key={o.id || "none"} className={on ? "on" : ""} onClick={onClick} disabled={rupture} style={rupture ? { opacity: 0.45 } : undefined}>
-                {o.photo ? <ZoomThumb photo={thumb(o)} label={o.nom} size={40} /> : <span className="ico">✖️</span>}
+                {o.photo ? <ZoomThumb photo={thumb(o)} label={o.nom} size={40} inButton /> : <span className="ico">✖️</span>}
                 <span style={{ minWidth: 0 }}><strong>{on ? "✓ " : ""}{o.nom}{o.meil ? <span className="meil noel">🎄 NOËL</span> : null}</strong>
                   <span className="d">{o.d}{o.id ? (o.colis ? " · part en colis" : " · reste en lettre suivie") : ""}{rupture ? " · épuisé" : ""}</span></span>
                 <span className="px">{o.barre ? <span className="barre">{formatEuro(o.barre)}</span> : null}{o.prix ? `+${formatEuro(o.prix)}` : "0 €"}</span>

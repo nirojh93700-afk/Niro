@@ -218,3 +218,16 @@ export function priceFrom(product) {
   if (!product?.variants?.length) return 0;
   return Math.min(...product.variants.map((v) => v.price));
 }
+
+// Prix que la fiche affiche à l'ouverture : la PREMIÈRE option (celle que la fiche
+// sélectionne d'office ; pour un produit à tailles, la 1re option de la 1re taille).
+// C'est ce prix qui part à Google (données structurées + flux Shopping) : Merchant
+// Center compare le prix envoyé au prix lu sur la page (audit du 05/11/2026 :
+// 8 fiches s'ouvraient plus cher que le prix « à partir de » envoyé à Google).
+export function prixOuverture(product) {
+  const vs = product?.variants || [];
+  if (!vs.length) return 0;
+  const t0 = product?.tailles?.options?.[0]?.id;
+  const v = (t0 && vs.find((x) => x.taille === t0)) || vs[0];
+  return Number(v.price) || priceFrom(product);
+}

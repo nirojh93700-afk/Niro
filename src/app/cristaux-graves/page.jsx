@@ -12,7 +12,7 @@ import "../cristaux-graves.css";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Cristaux déjà gravés — modèles, dessins et signes du zodiaque",
+  title: "Cristaux déjà gravés — modèles et zodiaque",
   description: "Des cristaux déjà gravés, prêts à offrir : un modèle, un dessin ou votre signe du zodiaque gravé en 3D au cœur d'un cristal optique K9, dans notre atelier en France.",
   alternates: { canonical: "/cristaux-graves" },
 };

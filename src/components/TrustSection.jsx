@@ -8,7 +8,7 @@ const BADGES = [
   { ic: "🇫🇷", t: "Gravé en France", d: "Dans notre atelier du Val-d'Oise (95)" },
   { ic: "🔒", t: "Paiement 100 % sécurisé", d: "CB, PayPal, Klarna — via Stripe" },
   { ic: "✋", t: "Fait à la commande", d: "Chaque pièce personnalisée rien que pour vous" },
-  { ic: "💎", t: "Matériaux nobles", d: "Acier inoxydable 316L hypoallergénique, bois, cristal" },
+  { ic: "💎", t: "Matériaux nobles", d: "Acier inoxydable, bois, cristal" },
   { ic: "🎁", t: "Emballage soigné", d: "Livré protégé, prêt à offrir" },
   { ic: "💬", t: "On vous accompagne", d: "Une question ? Réponse rapide par message" },
 ];

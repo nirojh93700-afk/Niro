@@ -7,7 +7,10 @@ import { createPortal } from "react-dom";
 // (pas au milieu de l'écran) avec l'image agrandie. Utilisé pour les photos
 // d'emballage sur la fiche produit. Le clic n'active PAS le bouton parent
 // (stopPropagation) — il ne fait qu'ouvrir/fermer l'aperçu.
-export default function ZoomThumb({ photo, label, size = 40 }) {
+// inButton : la photo est DANS un bouton (choix d'emballage). Elle reste touchable pour
+// agrandir, mais n'est plus un 2e contrôle focalisable dans le bouton (règle
+// d'accessibilité « nested-interactive », audit 05/11/2026) : le clavier choisit l'option.
+export default function ZoomThumb({ photo, label, size = 40, inButton = false }) {
   const [pos, setPos] = useState(null); // {left, top} ou null (fermé)
   const [mounted, setMounted] = useState(false);
   const thumbRef = useRef(null);
@@ -70,10 +73,14 @@ export default function ZoomThumb({ photo, label, size = 40 }) {
       <span
         ref={thumbRef}
         onClick={open}
-        role="button"
-        tabIndex={0}
-        aria-label={`Agrandir la photo${label ? " : " + label : ""}`}
-        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") open(e); }}
+        {...(inButton
+          ? { "aria-hidden": true }
+          : {
+              role: "button",
+              tabIndex: 0,
+              "aria-label": `Agrandir la photo${label ? " : " + label : ""}`,
+              onKeyDown: (e) => { if (e.key === "Enter" || e.key === " ") open(e); },
+            })}
         style={{ position: "relative", flex: `0 0 ${size}px`, width: size, height: size, borderRadius: 8, overflow: "hidden", cursor: "zoom-in", display: "block" }}
       >
         <img src={photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
