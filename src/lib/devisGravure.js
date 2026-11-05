@@ -56,6 +56,29 @@ export const FICHIERS_DEVIS = {
     },
     { texte: "Eugenio", note: "Ce n'est pas une 2ᵉ pièce : c'est le prénom gravé sur le MÊME verre (ligne 1), sous la rose des vents." },
   ],
+  // Devis DEV-1544, Coline Goossens (05/11/2026) : un seul verre à whisky, choix confirmés par e-mail les 04 et 05/11.
+  "DEV-1544": [
+    {
+      fichier: "/api/img/aXG1xtzUAibr4Vo2Y3Op",
+      texte: "Photo (papa et bébé)",
+      emplacement: "Face avant du verre, à GAUCHE",
+      note: "Photo déjà préparée pour la gravure. La cliente accepte qu'on coupe un peu le bras en bas pour laisser de la place aux deux phrases.",
+    },
+    {
+      fichier: "/api/img/rAIF09rquHPiuOpYnsm8",
+      texte: "Notre plus belle aventure",
+      emplacement: "Face avant, à DROITE de la photo, en haut",
+      note: "Fichier = les deux phrases ensemble, séparées par un petit trait avec un cœur. Elles doivent rester bien lisibles.",
+    },
+    { texte: "C'est ça, le bonheur.", emplacement: "Face avant, à droite de la photo, sous le cœur", note: "Déjà dans le fichier de la ligne 2." },
+    { texte: "Gravure face + fond", note: "Ce n'est pas une pièce : le même verre est gravé sur la face ET au fond." },
+    {
+      fichier: "/api/img/2ulsQ6gLHEyca2N2Eil3",
+      texte: "C'est chic !",
+      emplacement: "FOND du verre",
+      note: "Présentation B choisie par la cliente (trait courbe + petit cœur dessous). Fichier à l'endroit.",
+    },
+  ],
 };
 
 // Lignes d'envoi (pas des pièces à fabriquer) : « Livraison… », « Lettre suivie La Poste », « Colis suivi ».
