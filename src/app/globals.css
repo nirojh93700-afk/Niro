@@ -6056,7 +6056,8 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 /* Les dessins : une tuile par dessin, numéro bien lisible */
 .gbp-fams{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin-bottom:4px;scrollbar-width:thin}
 .gbp-fams .prc-chip{flex:none;font-size:.82rem;padding:9px 12px}
-.gbp-tuiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;max-height:560px;overflow-y:auto;padding:2px;overscroll-behavior:contain}
+/* Pas de zone qui défile À L'INTÉRIEUR de la page (sur iPhone, le 1er toucher arrêtait ce défilement au lieu de choisir). */
+.gbp-tuiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;padding:2px}
 .gbp-tuile.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold)}
 /* Case d'un dessin : hauteurs EXPLICITES (pas d'aspect-ratio ni de height:100% — Safari iPhone les ignorait et les cases
    se chevauchaient, 05/11 soir). Image 104 px de haut, numéro dessous. */

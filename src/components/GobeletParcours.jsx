@@ -84,7 +84,11 @@ function Planches({ items, onOpen }) {
 // la loupe 🔍 l'ouvre en grand (on peut aussi y choisir).
 function TuilesDessins({ cfg, choisi, onPick, onView }) {
   const fam = useMemo(() => familles(cfg), [cfg]);
-  const [f, setF] = useState(-1);
+  // Une famille à la fois (celle du dessin choisi, sinon la 1re) : moins d'images chargées d'un coup.
+  const [f, setF] = useState(() => {
+    const i = choisi ? fam.findIndex((x) => choisi >= x.de && choisi <= x.a) : -1;
+    return i >= 0 ? i : 0;
+  });
   const nums = [];
   const de = f < 0 ? 1 : fam[f].de, a = f < 0 ? GOB_DESSINS_MAX : fam[f].a;
   for (let n = de; n <= a; n++) nums.push(n);
@@ -99,7 +103,7 @@ function TuilesDessins({ cfg, choisi, onPick, onView }) {
           <div key={n} className={`gbp-tuile${choisi === n ? " on" : ""}`}>
             <button type="button" className="gbp-tuile-btn" onClick={() => onPick(n)} aria-pressed={choisi === n} aria-label={`Choisir le dessin n° ${n}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={srcDessin(cfg, n)} alt="" loading="lazy" />
+              <img src={srcDessin(cfg, n)} alt="" loading="lazy" decoding="async" width="120" height="104" />
               <span className="gbp-tnum">{choisi === n ? "✓ " : ""}n° {n}</span>
             </button>
             <button type="button" className="gbp-loupe" onClick={() => onView(n, nums)} aria-label={`Voir le dessin n° ${n} en grand`}>🔍</button>
@@ -110,8 +114,8 @@ function TuilesDessins({ cfg, choisi, onPick, onView }) {
   );
 }
 
-// Grande fenêtre (planche à agrandir, ou dessin seul à choisir). Fermer : bouton en haut, fond, glisser vers le bas,
-// Échap, bouton retour du téléphone.
+// Grande fenêtre (planche à agrandir, ou dessin seul à choisir). Fermer : bouton en haut, fond, glisser vers le bas, Échap.
+// (Pas de manipulation de l'historique : risque de conflit avec le routeur du site sur iPhone, 05/11 soir.)
 function Fenetre({ v, cfg, onClose, onPick }) {
   const [i, setI] = useState(v.list ? Math.max(0, v.list.indexOf(v.n)) : 0);
   const [gros, setGros] = useState(false);
@@ -130,15 +134,9 @@ function Fenetre({ v, cfg, onClose, onPick }) {
       else if (e.key === "ArrowRight") setI((k) => (v.list ? (k + 1) % v.list.length : k));
     };
     window.addEventListener("keydown", esc);
-    let pushed = false;
-    try { history.pushState({ ...(history.state || {}), gbpFenetre: 1 }, ""); pushed = true; } catch { /* ignore */ }
-    const pop = () => { pushed = false; closeRef.current(); };
-    window.addEventListener("popstate", pop);
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", esc);
-      window.removeEventListener("popstate", pop);
-      if (pushed) { try { history.back(); } catch { /* ignore */ } }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
