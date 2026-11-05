@@ -80,8 +80,9 @@ function Planches({ items, onOpen }) {
   );
 }
 
-// Tuiles (un fichier par dessin), utilisées seulement si cfg.dessinUnite existe.
-function TuilesDessins({ cfg, choisi, onView }) {
+// Tuiles (un fichier par dessin), utilisées seulement si cfg.dessinUnite existe. Toucher la case = le dessin est choisi ;
+// la loupe 🔍 l'ouvre en grand (on peut aussi y choisir).
+function TuilesDessins({ cfg, choisi, onPick, onView }) {
   const fam = useMemo(() => familles(cfg), [cfg]);
   const [f, setF] = useState(-1);
   const nums = [];
@@ -95,11 +96,14 @@ function TuilesDessins({ cfg, choisi, onView }) {
       </div>
       <div className="gbp-tuiles">
         {nums.map((n) => (
-          <button type="button" key={n} className={`gbp-tuile${choisi === n ? " on" : ""}`} onClick={() => onView(n, nums)} aria-label={`Voir le dessin n° ${n}`}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={srcDessin(cfg, n)} alt="" loading="lazy" />
-            <span className="gbp-tnum">n° {n}</span>
-          </button>
+          <div key={n} className={`gbp-tuile${choisi === n ? " on" : ""}`}>
+            <button type="button" className="gbp-tuile-btn" onClick={() => onPick(n)} aria-pressed={choisi === n} aria-label={`Choisir le dessin n° ${n}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={srcDessin(cfg, n)} alt="" loading="lazy" />
+              <span className="gbp-tnum">{choisi === n ? "✓ " : ""}n° {n}</span>
+            </button>
+            <button type="button" className="gbp-loupe" onClick={() => onView(n, nums)} aria-label={`Voir le dessin n° ${n} en grand`}>🔍</button>
+          </div>
         ))}
       </div>
     </div>
@@ -336,14 +340,21 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
             {ed.kind === "dessin" && (
               <div className="field"><label>1. Choisissez le dessin</label>
                 {cfg.dessinUnite ? (
-                  <TuilesDessins cfg={cfg} choisi={parseInt(ed.num, 10)} onView={(n, list) => setFen({ n, list })} />
+                  <TuilesDessins cfg={cfg} choisi={parseInt(ed.num, 10)} onPick={(n) => maj({ num: String(n) })} onView={(n, list) => setFen({ n, list })} />
                 ) : (
                   <>
                     <p className="prc-opt">Touchez une planche pour l&apos;ouvrir en grand et lire les numéros.</p>
                     <Planches items={cfg.dessins} onOpen={(p) => setFen({ src: p.src, titre: `${p.legende} — n° ${p.nums}` })} />
                   </>
                 )}
-                <label htmlFor="gbp-num" className="gbp-sous-label">Numéro du dessin (1 à {GOB_DESSINS_MAX})</label>
+                {cfg.dessinUnite && parseInt(ed.num, 10) >= 1 && parseInt(ed.num, 10) <= GOB_DESSINS_MAX && (
+                  <div className="gbp-choisi">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={srcDessin(cfg, parseInt(ed.num, 10))} alt="" />
+                    <p>Dessin n° {ed.num} choisi ✓<br /><span>Choisissez maintenant où le graver, plus bas.</span></p>
+                  </div>
+                )}
+                <label htmlFor="gbp-num" className="gbp-sous-label">{cfg.dessinUnite ? "Ou tapez le numéro" : `Numéro du dessin (1 à ${GOB_DESSINS_MAX})`}</label>
                 <input id="gbp-num" type="number" min="1" max={GOB_DESSINS_MAX} inputMode="numeric" placeholder="Ex : 12" value={ed.num} onChange={(e) => maj({ num: e.target.value })} />
               </div>
             )}

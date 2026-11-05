@@ -6121,3 +6121,9 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .gbp-lettre-ic{font-family:var(--font-display),Georgia,serif;font-size:2.4rem;font-weight:700;color:var(--gold-dark);font-style:italic}
 .gbp-sous-label{display:block;margin:10px 0 4px;font-weight:700}
 .gbp-planche span em{font-style:normal;color:var(--gold-dark);font-weight:700;margin-left:4px}
+.gbp-tuile{padding:0;overflow:hidden}
+.gbp-tuile-btn{display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:4px;width:100%;height:100%;padding:8px 6px 6px;border:0;background:transparent;cursor:pointer;font:inherit}
+.gbp-tuile-btn img{flex:1;min-height:0;width:100%;object-fit:contain}
+.gbp-loupe{position:absolute;top:4px;right:4px;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:.9rem;line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+@media print{.tg-dl{display:none!important}}
+.gbp-loupe{width:28px;height:28px;font-size:.78rem;background:rgba(255,255,255,.85)}

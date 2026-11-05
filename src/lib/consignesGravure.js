@@ -157,7 +157,10 @@ function consignesGobelet(produit, champs) {
     const f = faces[Object.keys(GOB_COTES).indexOf(e.side)] || faces[0];
     f.vide = false;
     const ecr = ["cadre", "lettre", "texte", "sous"].includes(e.kind) && e.police ? ` — écriture ${getFontLabel(e.police).split(" — ")[0]}` : "";
-    const img = e.kind === "dessin" || e.kind === "cadre" ? plancheDuNumero(cfg, e.num) : e.kind === "lettre" ? cfg?.alphabet : e.kind === "photo" ? e.photo : null;
+    // L'image EXACTE à graver (gérant, 05/11 : « tu dois me donner l'image qu'elle sélectionne dans admin pour graver ») :
+    // le dessin découpé en pleine résolution ; pour un cadre, la planche où se trouve son numéro.
+    const img = e.kind === "dessin" ? (cfg?.dessinUnite ? `${cfg.dessinUnite}${String(e.num).padStart(2, "0")}.webp` : plancheDuNumero(cfg, e.num))
+      : e.kind === "cadre" ? plancheDuNumero(cfg, e.num) : e.kind === "lettre" ? cfg?.alphabet : e.kind === "photo" ? e.photo : null;
     f.lignes.push({
       k: `${i + 1}. ${(GOB_PLACES[e.zone] || "au milieu").replace(/^./, (x) => x.toUpperCase())} · ${e.compris ? "compris" : `+${extra} €`}`,
       v: `${quoiElement(e)}${ecr}`,

@@ -134,10 +134,13 @@ function Consignes({ item, avecPlacement = true }) {
                   <div style={{ fontSize: "0.75rem", color: "#777" }}>{l.k}</div>
                   <div style={{ fontWeight: 700, fontSize: l.texte ? "1.15rem" : "0.95rem", overflowWrap: "anywhere" }}>{l.v}</div>
                   {l.img ? (
-                    <a href={l.img} target="_blank" rel="noreferrer">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={l.img} alt="" style={{ width: 72, height: 72, objectFit: "contain", border: "1px solid #ddd", borderRadius: 6, background: "#fff", marginTop: 4 }} />
-                    </a>
+                    <div style={{ display: "flex", alignItems: "flex-end", gap: 8, marginTop: 4, flexWrap: "wrap" }}>
+                      <a href={l.img} target="_blank" rel="noreferrer" title="Ouvrir l'image en grand">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={l.img} alt="" style={{ width: 120, height: 120, objectFit: "contain", border: "1px solid #ddd", borderRadius: 6, background: "#fff" }} />
+                      </a>
+                      <a className="tg-dl" href={l.img} download style={{ fontSize: "0.8rem", fontWeight: 700, color: "#8a6d1f" }}>⬇ Télécharger l&apos;image</a>
+                    </div>
                   ) : null}
                 </div>
               ))}

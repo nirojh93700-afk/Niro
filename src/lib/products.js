@@ -4355,9 +4355,10 @@ export const products = [
       extra: 3,
       imagePhoto: "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg",
       alphabet: "/produits/alphabet-fleuri.jpg",
-      // dessinUnite: "/produits/gobelet/dessins/" → les dessins en tuiles (un fichier par dessin). Retiré le 05/11 : les
-      // découpes faites sur les planches numérotées perdent ce que les numéros cachent. À remettre quand les images
-      // d'origine (sans numéro) seront redécoupées. En attendant : planches numérotées, ouvertes en grand.
+      // Un fichier par dessin (01.webp … 74.webp) : la cliente touche le dessin pour le choisir. 1–36 découpés dans les images
+      // d'origine SANS numéro données par le gérant le 05/11 (tools/maquettes/gobelet-decoupe-origines.py) ; 37–74 = découpe
+      // des planches à petits numéros dans les coins, à refaire dès qu'il redonne leurs images d'origine.
+      dessinUnite: "/produits/gobelet/dessins/",
       dessins: [
         { src: "/produits/gobelet/planche-dessins-01.jpg", nums: "1–10", legende: "Fleurs & papillons" },
         { src: "/produits/gobelet/planche-dessins-02.jpg", nums: "11–27", legende: "Roses" },
