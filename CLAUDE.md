@@ -1031,6 +1031,9 @@
   demande de montrer un mail, **RIEN NE PART** tant qu'il n'a pas écrit « envoie » dans un message qui ne demande pas
   aussi de le montrer. En cas de doute : montrer, ne pas envoyer.
 
+- ⛔⛔ **UNE PHRASE QUI DÉCRIT UN MAIL N'EST PAS UN « ENVOIE » (05/11/2026, Coline Goossens, devis DEV-1544 envoyé sans son accord ; gérant :
+  « je t'ai pas demandé d'envoyer »)**. « Tu envoies un mail en disant… et tu mets le devis » = il DÉCRIT le contenu → je prépare, je MONTRE,
+  et j'attends un « envoie » seul. Ça vaut aussi pour le bouton « Envoyer » d'un devis dans Gestion (`action:"send"`) : jamais sans son « envoie ».
 - ⛔ **« ENVOIE AVEC LE DEVIS » = LES DEUX ENSEMBLE, OU RIEN (19/10/2026, Kim Martins)** : le gérant a dit « envoie avec le devis et la
   nouvelle image » ; je ne pouvais pas créer le devis (clé admin refusée) et j'ai quand même envoyé le mail qui annonce « nous vous
   envoyons votre devis ». Si une partie de ce qu'il demande est impossible : NE RIEN ENVOYER, le dire en une phrase, attendre.
