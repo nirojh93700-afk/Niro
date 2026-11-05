@@ -6057,9 +6057,12 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .gbp-fams{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;margin-bottom:4px;scrollbar-width:thin}
 .gbp-fams .prc-chip{flex:none;font-size:.82rem;padding:9px 12px}
 .gbp-tuiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;max-height:560px;overflow-y:auto;padding:2px;overscroll-behavior:contain}
-.gbp-tuile{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:4px;aspect-ratio:3/4;padding:8px 6px 6px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font:inherit}
-.gbp-tuile img{flex:1;min-height:0;width:100%;object-fit:contain}
 .gbp-tuile.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold)}
+/* Case d'un dessin : hauteurs EXPLICITES (pas d'aspect-ratio ni de height:100% — Safari iPhone les ignorait et les cases
+   se chevauchaient, 05/11 soir). Image 104 px de haut, numéro dessous. */
+.gbp-tuile{position:relative;border:1.5px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;min-width:0}
+.gbp-tuile-btn{display:block;width:100%;padding:10px 6px 8px;border:0;background:transparent;cursor:pointer;font:inherit;text-align:center}
+.gbp-tuile-btn img{display:block;width:100%;height:104px;object-fit:contain;margin:0 auto 8px}
 .gbp-tnum{font-weight:800;font-size:.95rem;color:#fff;background:var(--ink);border-radius:999px;padding:3px 10px;line-height:1.2}
 .gbp-tuile.on .gbp-tnum{background:var(--gold-dark)}
 .gbp-numdirect{margin-top:10px}
@@ -6121,9 +6124,6 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .gbp-lettre-ic{font-family:var(--font-display),Georgia,serif;font-size:2.4rem;font-weight:700;color:var(--gold-dark);font-style:italic}
 .gbp-sous-label{display:block;margin:10px 0 4px;font-weight:700}
 .gbp-planche span em{font-style:normal;color:var(--gold-dark);font-weight:700;margin-left:4px}
-.gbp-tuile{padding:0;overflow:hidden}
-.gbp-tuile-btn{display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:4px;width:100%;height:100%;padding:8px 6px 6px;border:0;background:transparent;cursor:pointer;font:inherit}
-.gbp-tuile-btn img{flex:1;min-height:0;width:100%;object-fit:contain}
 .gbp-loupe{position:absolute;top:4px;right:4px;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:.9rem;line-height:1;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}
 @media print{.tg-dl{display:none!important}}
 .gbp-loupe{width:28px;height:28px;font-size:.78rem;background:rgba(255,255,255,.85)}
