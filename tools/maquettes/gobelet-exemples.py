@@ -105,7 +105,7 @@ EXEMPLES = [
     ("marine", [{"t": "Super Papy", "f": "gv", "s": 66, "cy": 262}, {"t": "DEPUIS 2026", "f": "ci", "s": 26, "cy": 322}], "ex6-marine-texte-super-papy.jpg"),
     ("rose",   [{"p": "/home/user/Niro/docs/maquettes/assets/marque-pages/exemples/portraits/couple.jpg", "h": 205, "cy": 272}, {"t": "Léa & Paul", "f": "gv", "s": 50, "cy": 400}, {"t": "12.06.2026", "f": "ci", "s": 22, "cy": 436}], "ex7-rose-photo-couple.jpg"),
     ("blanc",  [{"p": "/home/user/Niro/docs/maquettes/assets/marque-pages/exemples/portraits/femme.jpg", "h": 210, "cy": 272}, {"t": "Maman", "f": "gv", "s": 60, "cy": 405}], "ex8-blanc-photo-maman.jpg"),
-    ("marine", [{"n": 13, "h": 26, "cy": 175}, {"n": 64, "h": 150, "cy": 262}, {"n": 89, "h": 88, "cy": 388}, {"t": "Camille", "f": "gv", "s": 30, "cy": 381}, {"n": 3, "h": 38, "cy": 445}], "ex9-marine-plusieurs-images.jpg"),
+    ("marine", [{"n": 13, "h": 26, "cy": 175}, {"n": 64, "h": 150, "cy": 262}, {"n": 89, "h": 88, "cy": 388}, {"t": "Camille", "f": "gv", "s": 30, "cy": 381}], "ex9-marine-plusieurs-images.jpg"),
     ("blanc",  [{"n": 71, "h": 175, "cy": 268}, {"t": "Inès", "f": "al", "s": 72, "cy": 395}], "ex4-blanc-colibri-ines.jpg"),
 ]
 for c, els, out in EXEMPLES:
