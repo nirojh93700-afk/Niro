@@ -71,7 +71,12 @@ export const FICHIERS_DEVIS = {
       note: "Fichier = les deux phrases ensemble, séparées par un petit trait avec un cœur. Elles doivent rester bien lisibles.",
     },
     { texte: "C'est ça, le bonheur.", emplacement: "Face avant, à droite de la photo, sous le cœur", note: "Déjà dans le fichier de la ligne 2." },
-    { texte: "Gravure face + fond", note: "Ce n'est pas une pièce : le même verre est gravé sur la face ET au fond." },
+    {
+      fichier: "/gravures/DEV-1544/sous-la-photo-cest-chic.png",
+      texte: "C'est chic ! (sous la photo)",
+      emplacement: "Face avant, SOUS la photo, en bas du verre",
+      note: "Ligne « gravure face + fond » du devis : le même verre est gravé sur la face ET au fond.",
+    },
     {
       fichier: "/gravures/DEV-1544/fond-cest-chic.png",
       texte: "C'est chic !",
