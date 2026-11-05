@@ -59,8 +59,11 @@ function sideConfig(item, side) {
   if (!p) return null;
   const cfg = side === "fond" ? p.engraveFond : p.engrave;
   if (!cfg || !cfg.box) return null;
-  const rawSrc = side === "fond" ? item.artworkImageFond : item.artworkImage;
-  const rawPrev = side === "fond" ? item.previewImageFond : item.previewImage;
+  // Design image (Jack Daniel's…) d'une commande d'avant le 05/11/2026 : les images enregistrées montraient
+  // le mauvais modèle (0SJAY2KK) → on repart du design choisi, le prénom / la date sont dans le tableau.
+  const ancienDesign = side !== "fond" && !item.designCapture && Boolean(designFromSpec(item));
+  const rawSrc = ancienDesign ? null : side === "fond" ? item.artworkImageFond : item.artworkImage;
+  const rawPrev = ancienDesign ? null : side === "fond" ? item.previewImageFond : item.previewImage;
   // Source pour le fichier à graver : l'artwork enregistré, sinon le design
   // reconstitué, sinon la photo du client (face uniquement).
   const derived = side === "fond" ? null : (designFromSpec(item) || (isUrl(item.photoSrc) ? item.photoSrc : null));

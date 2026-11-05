@@ -508,13 +508,17 @@ export default function ProductDetail({ product, realisations = [] }) {
               .filter((l) => !l.below || mv.addText !== false)
               .map((l) => {
                 const t = (mv.text[l.key] || "").trim();
-                return t ? `${t} (${getFontLabel((mv.fonts || {})[l.key] || l.font)})` : null;
+                // Police enregistrée comme classe (« fnt-pacifico ») : on la lit sans le préfixe, sinon
+                // la commande écrivait « Robson () » sans la police (0SJAY2KK, 05/11/2026).
+                const fk = String((mv.fonts || {})[l.key] || l.font || "").replace(/^fnt-/, "");
+                return t ? `${t} (${getFontLabel(fk) || fk})` : null;
               })
               .filter(Boolean);
             if (lines.length) parts.push(`Modèle « ${tpl.label} »${styleLabel ? ` (${styleLabel})` : ""} : ${lines.join(" / ")}`);
             else parts.push(`Modèle « ${tpl.label} » (${styleLabel})`);
             if (mLayout === "badge") parts.push(`Fond du badge : ${mv.bg === "plein" ? "plein" : "sans fond (au trait)"}`);
-            if (mv.motif && mv.motif !== "aucun") {
+            // Un design image (Jack Daniel's…) n'a pas de motif : ne pas écrire « Motif : Ancre » (motif par défaut, jamais vu).
+            if (mv.motif && mv.motif !== "aucun" && !imageDesign(tpl, mLayout)) {
               parts.push(`Motif : ${(MOTIF_LIST.find((x) => x.id === mv.motif) || {}).label || mv.motif}`);
             }
             if (modeleLayout?.label) parts.push(modeleLayout.label.charAt(0).toUpperCase() + modeleLayout.label.slice(1));
@@ -1233,6 +1237,9 @@ export default function ProductDetail({ product, realisations = [] }) {
       modele: modeleField ? modeleVal : null,
       photoSrc: photoSrc || null,
       previewImage, previewImageFond, artworkImage, artworkImageFond,
+      // Capture refaite le 05/11/2026 : un design image (Jack Daniel's…) est bien dessiné dans les images
+      // ci-dessus. Sans cette marque (anciennes commandes), l'atelier ne s'y fie pas pour un design image.
+      ...(modeleField && modeleVal && imageDesign(modeleTemplate, modeleVal.layout) ? { designCapture: 2 } : {}),
       apercu3dImage,
       layout: { photo: photoLayout || null, text: textLayout || null, modele: modeleLayout || null, photoFond: photoLayoutFond || null, textFond: textLayoutFond || null, motifFond: motifLayoutFond || null, crystalText: crystalTextPos || null },
       // on évite de stocker deux fois le modèle (déjà dans "modele")

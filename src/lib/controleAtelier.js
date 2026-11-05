@@ -17,7 +17,7 @@ import { getProductBySlug } from "@/lib/products";
 import { consignesGravure } from "@/lib/consignesGravure";
 import { photosEnvoyees } from "@/lib/apercuCote";
 import { optionsArticle } from "@/lib/optionsVendues";
-import { MODELES } from "@/lib/modeles";
+import { MODELES, imageDesign } from "@/lib/modeles";
 import { texteAvecDecor } from "@/lib/decorTexte";
 
 const IGNORES = new Set(["emplacement", "mode", "police", "deuxEmplacement"]);
@@ -70,7 +70,7 @@ export function oubliesAtelier(item) {
   const { textes, photos } = affiche(item);
   const vu = (s) => { const n = norme(s); return !n || textes.some((t) => t.includes(n)); };
   const out = [];
-  for (const [cle, valeur] of Object.entries(champs)) {
+  for (let [cle, valeur] of Object.entries(champs)) {
     if (IGNORES.has(cle)) continue;
     if (cle === "mp" && produit?.marquePages) continue; // marque-pages : rangés pièce par pièce par consignesGravure
     const f = defs.get(cle);
@@ -89,6 +89,10 @@ export function oubliesAtelier(item) {
       continue;
     }
     // Valeur composée (modèle, couverts, motifs…) : chaque texte qu'elle contient doit être affiché.
+    // Design image (Jack Daniel's…) : son motif par défaut n'est ni vu ni gravé, il ne compte pas.
+    if (cle === "modele" && valeur && typeof valeur === "object" && imageDesign(item.modeleTemplate, valeur.layout)) {
+      const { motif, ...reste } = valeur; void motif; valeur = reste;
+    }
     const manquants = feuilles(valeur).filter((x) => !estUrl(x) && !vu(x));
     if (manquants.length) out.push({ cle, libelle, valeur: manquants.join(" · "), photo: false });
   }

@@ -1,5 +1,6 @@
 "use client";
 
+import { imageDesign } from "@/lib/modeles";
 import HistoriqueCommande from "@/components/admin/HistoriqueCommande";
 import { lienSuivi } from "@/lib/suiviColis";
 import DelaiCommande from "@/components/admin/DelaiCommande";
@@ -600,7 +601,8 @@ export default function GestionPage({ onglet = "" } = {}) {
   // identifiant produit renvoyait le même sur deux lignes du même produit.
   const apercuAtelier = (s) => {
     if (!s) return "";
-    return s.previewImage || s.apercu3dImage || s.artworkImage || s.photoSrc || s.previewImageFond || "";
+    const dAncien = !s.designCapture && s.modele ? imageDesign(s.modeleTemplate, s.modele.layout) : null; // 0SJAY2KK : image enregistrée fausse
+    return (dAncien && dAncien.dark) || s.previewImage || s.apercu3dImage || s.artworkImage || s.photoSrc || s.previewImageFond || "";
   };
 
   // Couleur / modèle commandé (Argent, Doré, Moyen…). Il était noyé au début de

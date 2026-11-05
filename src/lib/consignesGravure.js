@@ -21,7 +21,7 @@ import { texteAvecDecor } from "@/lib/decorTexte";
 import { getProductBySlug } from "@/lib/products";
 import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
-import { MODELES, layoutLabel } from "@/lib/modeles";
+import { MODELES, layoutLabel, imageDesign } from "@/lib/modeles";
 import { mpFormat, mpBoitesTexte, mpLignes } from "@/lib/marquePages";
 import { NOEL_IMAGES } from "@/lib/fetes";
 
@@ -228,7 +228,9 @@ export function consignesGravure(item) {
       const fonte = String((mv.fonts || {})[l.key] || l.font || "").replace(/^fnt-/, "");
       autres.push({ k: l.below ? "Texte ajouté" : l.label, v: fonte ? `${t}  (écriture ${getFontLabel(fonte) || fonte})` : t, texte: true });
     }
-    if (mv.motif && mv.motif !== "aucun") autres.push({ k: "Motif", v: String(mv.motif), texte: false });
+    // Un design image (Jack Daniel's…) ne porte pas de motif : celui des réglages est le motif par défaut,
+    // jamais vu par la cliente (0SJAY2KK, 05/11/2026) → on ne l'écrit pas.
+    if (mv.motif && mv.motif !== "aucun" && !imageDesign(tpl, style)) autres.push({ k: "Motif", v: String(mv.motif), texte: false });
   }
   // 🎄 Modèle de Noël (Gestion → Fêtes) : son numéro « Noël n° X », son nom et sa vignette — le même
   // numéro dans Gestion, sur la fiche et ici (gérant, 28/10/2026).
