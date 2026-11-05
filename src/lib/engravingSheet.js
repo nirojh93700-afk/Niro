@@ -10,6 +10,7 @@
 // (incident #1LTYHZ6D du 30/09/2026, voir `eclaterParVerre`).
 // =============================================================================
 import { getProductBySlug } from "@/lib/products";
+import { texteAvecDecor } from "@/lib/decorTexte";
 import { getFontLabel } from "@/lib/fonts";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import VarBadge from "@/components/admin/VarBadge";
@@ -70,6 +71,7 @@ export function lignesGravure(item) {
     let texte = brut.trim();
     if (f.type === "select") texte = (f.options || []).find((o) => o.value === texte)?.label || texte;
     else if (f.type === "stylepicker") texte = `n° ${texte}`; // renvoie aux dessins numérotés de la fiche
+    else texte = texteAvecDecor(f.key, texte, champs); // ♥ texte ♥ si un décor est choisi (05/11/2026)
     lignes.push({ face, texte, police: false });
   }
   return lignes;

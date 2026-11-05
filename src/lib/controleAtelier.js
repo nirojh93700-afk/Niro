@@ -18,6 +18,7 @@ import { consignesGravure } from "@/lib/consignesGravure";
 import { photosEnvoyees } from "@/lib/apercuCote";
 import { optionsArticle } from "@/lib/optionsVendues";
 import { MODELES } from "@/lib/modeles";
+import { texteAvecDecor } from "@/lib/decorTexte";
 
 const IGNORES = new Set(["emplacement", "mode", "police", "deuxEmplacement"]);
 const estUrl = (s) => typeof s === "string" && /^(\/api\/img\/|https?:\/\/|data:image\/|\/produits\/)/.test(s);
@@ -90,6 +91,13 @@ export function oubliesAtelier(item) {
     // Valeur composée (modèle, couverts, motifs…) : chaque texte qu'elle contient doit être affiché.
     const manquants = feuilles(valeur).filter((x) => !estUrl(x) && !vu(x));
     if (manquants.length) out.push({ cle, libelle, valeur: manquants.join(" · "), photo: false });
+  }
+  // Un choix qui MODIFIE un texte (décor ♥ ★… autour du texte) : il ne suffit pas qu'il soit
+  // écrit sur une ligne à part, le texte doit être affiché AVEC lui (05/11/2026, commande
+  // 1K8QTJYM : « ♥ texte ♥ » choisi, l'atelier écrivait le texte sans les cœurs).
+  const avecDecor = texteAvecDecor("texte", champs.texte, champs);
+  if (typeof champs.texte === "string" && avecDecor !== String(champs.texte).trim() && !vu(avecDecor)) {
+    out.push({ cle: "decor", libelle: "Texte avec son décor", valeur: avecDecor, photo: false });
   }
   return out;
 }

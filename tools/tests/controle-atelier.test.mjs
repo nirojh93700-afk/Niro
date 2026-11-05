@@ -1,3 +1,4 @@
+import { optionsArticle } from "@/lib/optionsVendues";
 // npm run test-controle-atelier — tout ce que la cliente a choisi apparaît dans l'atelier (16/10/2026).
 import { oubliesAtelier, controleProduitAtelier } from "../../src/lib/controleAtelier.js";
 import { consignesGravure } from "../../src/lib/consignesGravure.js";
@@ -30,6 +31,15 @@ const th = cf.themes[0];
 const couv = { slug: pc.slug, variantTitle: pc.variants[0].title, fields: { prenom: "Léo", [cf.key]: { theme: th.key, animals: { [cf.pieces[0].key]: th.animals[0].key } } } };
 t("couverts : animal dans le tableau", consignesGravure(couv).autres.some((l) => l.v === th.animals[0].label));
 t("couverts : rien d'oublié", oubliesAtelier(couv).length === 0);
+
+// Commande 1K8QTJYM : décor « ♥ » choisi sur le verre à whisky → le texte doit apparaître AVEC les cœurs.
+const papy = { slug: "verre-a-whisky-grave", variantId: "verre-whisky-grave", fields: { mode: "photo", emplacement: "face", police: "pacifico", texte: "Super Papy d’Eloann", decor: "♥", photo: "/api/img/X" } };
+t("décor : texte affiché avec les cœurs, rien d'oublié", oubliesAtelier(papy).length === 0);
+t("décor : « Vendu en plus » écrit ♥ texte ♥", optionsArticle(papy).some((o) => o.detail.includes("♥ Super Papy d’Eloann ♥")));
+for (const slug of ["verre-a-vin-grave", "flute-a-champagne-gravee", "verre-tumbler-cristal-grave", "carafe-a-whisky-gravee", "verre-a-cocktail-grave"]) {
+  const it = { slug, fields: { mode: "texte", texte: "Super Mamie", decor: "♥" } };
+  t(`décor ${slug} : ♥ Super Mamie ♥ dans le tableau`, oubliesAtelier(it).length === 0 && JSON.stringify(consignesGravure(it)).includes("♥ Super Mamie ♥"));
+}
 
 // Tout le catalogue : aucun produit dont un champ rempli serait invisible à l'atelier.
 const fautifs = products.map((p) => [p.slug, controleProduitAtelier(p)]).filter(([, m]) => m.length);

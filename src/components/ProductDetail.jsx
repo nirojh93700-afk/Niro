@@ -1,5 +1,6 @@
 "use client";
 
+import { texteAvecDecor } from "@/lib/decorTexte";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -482,7 +483,9 @@ export default function ProductDetail({ product, realisations = [] }) {
         .map((f) => {
           const raw = (fieldValues[f.key] || "").toString().trim();
           if (!raw) return null;
-          return forClient ? valueLabel(f, raw) : `${f.label} : ${valueLabel(f, raw)}`;
+          // Décor choisi (♥ ★…) écrit AUTOUR du texte, comme sur l'aperçu (05/11/2026, commande 1K8QTJYM).
+          const val = texteAvecDecor(f.key, valueLabel(f, raw), fieldValues);
+          return forClient ? val : `${f.label} : ${val}`;
         })
         .filter(Boolean);
       // Modèle de gravure.
@@ -579,7 +582,7 @@ export default function ProductDetail({ product, realisations = [] }) {
     if ((fv.lettreFleurie || "").trim()) p.push(`lettre fleurie « ${fv.lettreFleurie.trim()} »`);
     if (fv.photo) p.push("photo/logo fourni");
     if ((fv.prenom || "").trim()) p.push(`« ${fv.prenom.trim()} »`);
-    if ((fv.texte || "").trim()) p.push(`« ${fv.texte.trim()} »`);
+    if ((fv.texte || "").trim()) p.push(`« ${texteAvecDecor("texte", fv.texte, fv)} »`);
     if ((fv.initiale || "").trim()) p.push(`initiale ${fv.initiale.trim()}`);
     if ((fv.date || "").trim()) p.push(`date ${fv.date.trim()}`);
     if ((fv.texte2 || "").trim()) p.push(`date ${fv.texte2.trim()}`);

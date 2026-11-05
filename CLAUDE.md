@@ -120,6 +120,17 @@
   jamais sur un verre, une carafe, un cristal, un marque-page ni aucun autre produit, ni sur leur fiche, ni sur un devis, ni dans un mail.
   Un devis de verres ou de cristal = aucun emballage de Noël proposé. (Les DESSINS de Noël à graver sont une autre chose : verres, carafe, cristal.)
 
+## ♥ CE QUE LA CLIENTE CHOISIT SE LIT PARTOUT DANS GESTION, TEL QU'ELLE L'A VU — 05/11/2026 (commande 1K8QTJYM, gérant : « je veux plus d'erreur comme ça… il faut que ça soit marqué dans toute l'admin pour tous les produits ») — PRÉPARÉ, À POUSSER SUR SON MOT
+- La cliente avait choisi « Cœurs » autour du texte du verre à whisky : l'aperçu montrait « ♥ Super Papy d'Eloann ♥ », mais « Vendu en plus »
+  et le tableau « À graver » écrivaient le texte SANS les cœurs (le décor était sur une ligne à part). Maintenant `texteAvecDecor` (`src/lib/decorTexte.js`)
+  écrit le texte AVEC son décor partout : « Vendu en plus » (`optionsVendues`), « À graver » (`consignesGravure`), fiche papier (`lignesGravure`),
+  résumé de la commande et résumé par verre (`ProductDetail`), résumé de la fiche (`parcoursGuide.js`).
+- ⛔ Filet de sécurité : `oubliesAtelier` (`controleAtelier.js`) signale en rouge tout texte affiché sans le décor choisi, sur chaque commande
+  et dans la surveillance du catalogue (simulation de tous les produits). Tout nouveau choix qui MODIFIE un autre (décor, cadre autour d'un
+  texte…) doit être écrit DANS le texte qu'il modifie, et ajouté à ce contrôle. Test : `npm run test-controle-atelier`.
+- Menu « Décor autour du texte ? » (Aucun · ★ · ♥ · ✿ · ◆ · •, gratuit) ajouté au verre à vin, à la flûte, au tumbler et à la carafe
+  (`DECORS_TEXTE` / `CHAMP_DECOR` dans `products.js`, puces dans `ParcoursGuide.jsx` pour « Mon propre texte » et « texte sous la photo »).
+
 ## 💎 CRISTAL À DOMICILE = 14,90 € MINIMUM, TOUTES TAILLES — 05/11/2026, PRÉPARÉ, À POUSSER SUR SON MOT (gérant : « tu mets 14,90 € pour toutes les tailles »)
 - `portDomicileMini: 14.9` sur les blocs (vertical, horizontal, déjà gravé, pyramide, trophée) → `ajouterLignePort` / `optionsPort` / `homeOptions` :
   le port à DOMICILE d'un panier qui contient un bloc ne descend jamais sous 14,90 € (le 05/11, étiquette > 11 € pour un horizontal Moyen + socle,
