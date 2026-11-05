@@ -720,3 +720,20 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #nouveaute #cadeaupersonnalise #gravure #ideecadeau
+
+## Vidéo 47 — Gobelets, bijoux, cristal, verres, marque-pages en alternance (05/11/2026)
+- Demande du gérant : « gobelets, bijoux, marque-pages, verres et cristal, un truc qui change tout le temps : une image de bijoux, après
+  cristal, après ça revient… un truc de montage ». 20 pièces GRAVÉES en alternance (gobelet, bijou, cristal, verre, marque-page, et ça
+  recommence), chaque pièce entre d'une façon différente (chute, glissé gauche / droite, zoom, rotation) avec un éclair doré, nom de la
+  famille en haut, ce qui est gravé en bas. Gobelets = les 6 exemples gravés du site (jamais vus en vidéo) ; bijoux moins vus (Cœur &
+  plaques photo 2, Bracelet cordon à plaque, Collier Cœur gravé photo 2) ; cristaux déjà gravés cheval, colibri, panda + cristal photo
+  couple ; flûtes, whisky au logo, verre à vin « Dale » ; marque-pages bois ex4 / ex7, ajouré ex1, métal Iris pompon doré.
+  Effets de la 41, habillage encre et or. 33,2 s, sans son, 1080 × 1920 (9,5 Mo) et 720 × 1280 (3,1 Mo). Aucun prix.
+- Script : `python3 tools/video/pub_melange_47.py <dossier>` (`--apercu`). Fichiers `docs/videos/47-melange-*.mp4`.
+
+**Vidéo 47 — Gravé pour vous, de toutes les façons** (Gobelet isotherme 40 oz, Collier Cœur & plaques, Bracelet cordon à plaque, Collier Cœur gravé, Cristal déjà gravé, Cristal photo 3D, Flûtes à champagne, Verre à whisky, Verre à vin, Marque-page en bois, Marque-page ajouré, Marque-page en métal)
+> ✨ Un gobelet, un bijou, un cristal, un verre, un marque-page… on grave votre prénom, votre photo ou votre dessin dessus 💛
+> Nouveau : notre gobelet isotherme à personnaliser 🥤 Gravé dans notre atelier
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gravure #gobeletpersonnalise #ideecadeau
