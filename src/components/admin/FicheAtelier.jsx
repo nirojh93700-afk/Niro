@@ -18,6 +18,7 @@ import OptionsVendues from "@/components/admin/OptionsVendues";
 import { positionTexteCristal, LIBELLE_POSITION } from "@/lib/cristalTexte";
 import VarBadge from "@/components/admin/VarBadge";
 import ApercuClient from "@/components/admin/ApercuClient";
+import Apercu3DCommande, { a3D } from "@/components/admin/Apercu3DCommande";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
@@ -64,8 +65,11 @@ function CristalPreview({ item, p }) {
   );
 }
 
-export function GlassPreview({ item }) {
+export function GlassPreview({ item, papier = false }) {
   const p = getProductBySlug(item.slug);
+  // Bijou à aperçu 3D : à l'écran, le MÊME aperçu 3D que la cliente a vu (05/11/2026, 0BHBVOXK).
+  // Sur papier, la photo d'avant (un dessin 3D ne s'imprime pas).
+  if (!papier && a3D(p)) return <Apercu3DCommande item={item} />;
   if (p?.crystal3d && (item.photoSrc || textLinesOf(item, p).lines.length)) return <CristalPreview item={item} p={p} />;
   // Verre face / fond / les deux (whisky, cocktail) : chaque côté tel que la cliente l'a vu.
   if (aEmplacement(p) && !item.modele) {

@@ -95,7 +95,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
   const grille = visuelsItems.length >= 3;
   const visuels = visuelsItems.map((item, i) => (
     <div key={i} className="fp-visuel">
-      <GlassPreview item={item} />
+      <GlassPreview item={item} papier />
       <div className="fp-legende">
         {item.name}<VarBadge texte={item.variantDetail || item.variantTitle} />
         {item.verre ? <strong> · Verre {item.verre} / {item.verres}</strong> : null}
