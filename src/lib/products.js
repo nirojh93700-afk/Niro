@@ -4353,6 +4353,7 @@ export const products = [
     gobeletParcours: {
       inclus: 1,
       extra: 3,
+      extraPhoto: 6, // une photo en plus : +6 € (gérant, 05/11/2026)
       imagePhoto: "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg",
       alphabet: "/produits/alphabet-fleuri.jpg",
       // Un fichier par dessin (01.webp … 74.webp) : la cliente touche le dessin pour le choisir. 1–36 découpés dans les images

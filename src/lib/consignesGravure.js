@@ -24,7 +24,7 @@ import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
 import { MODELES, layoutLabel, imageDesign } from "@/lib/modeles";
 import { mpFormat, mpBoitesTexte, mpLignes } from "@/lib/marquePages";
 import { NOEL_IMAGES } from "@/lib/fetes";
-import { gobeletElements, quoiElement, plancheDuNumero, GOB_COTES, GOB_PLACES } from "@/lib/gobeletParcours";
+import { gobeletElements, gobeletSupplement, prixElement, quoiElement, plancheDuNumero, GOB_COTES, GOB_PLACES } from "@/lib/gobeletParcours";
 
 function champVisible(f, champs, variantTitle) {
   if (f.showIfField && String(champs[f.showIfField] || "") !== String(f.showIfValue)) return false;
@@ -162,7 +162,7 @@ function consignesGobelet(produit, champs) {
     const img = e.kind === "dessin" ? (cfg?.dessinUnite ? `${cfg.dessinUnite}${String(e.num).padStart(2, "0")}.webp` : plancheDuNumero(cfg, e.num))
       : e.kind === "cadre" ? plancheDuNumero(cfg, e.num) : e.kind === "lettre" ? cfg?.alphabet : e.kind === "photo" ? e.photo : null;
     f.lignes.push({
-      k: `${i + 1}. ${(GOB_PLACES[e.zone] || "au milieu").replace(/^./, (x) => x.toUpperCase())} · ${e.compris ? "compris" : `+${extra} €`}`,
+      k: `${i + 1}. ${(GOB_PLACES[e.zone] || "au milieu").replace(/^./, (x) => x.toUpperCase())} · ${e.compris ? "compris" : `+${String(prixElement(e, cfg)).replace(".", ",")} €`}`,
       v: `${quoiElement(e)}${ecr}`,
       texte: ["cadre", "lettre", "texte", "sous"].includes(e.kind),
       img,
@@ -170,7 +170,8 @@ function consignesGobelet(produit, champs) {
   });
   // Côtés vides en dernier, pour que l'atelier voie d'abord ce qui se grave.
   faces.sort((a, b) => Number(a.vide) - Number(b.vide));
-  const general = [{ k: "Éléments", v: `${els.length} (1 compris${els.length > 1 ? ` + ${els.length - 1} × ${extra} €` : ""})`, fort: true }];
+  const sup = gobeletSupplement(champs, cfg);
+  const general = [{ k: "Éléments", v: `${els.length} (1 compris${sup.enPlus ? ` + ${sup.enPlus} en plus = ${String(sup.montant.toFixed(2)).replace(".", ",")} €` : ""})`, fort: true }];
   return { general, faces, autres: [], placement: [] };
 }
 

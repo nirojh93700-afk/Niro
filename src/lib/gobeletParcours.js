@@ -174,20 +174,24 @@ export function gobeletNbElements(fields) {
 }
 
 /** Supplément de gravure : 1 élément compris, chaque élément en plus au prix `extra` (3 €). */
+/** Prix d'un élément EN PLUS : une photo +6 € (gérant, 05/11 : « gravure de photos c'est plus cher »), le reste +3 €. */
+export function prixElement(e, cfg = {}) {
+  return e && e.kind === "photo" ? (Number(cfg.extraPhoto) || 6) : (Number(cfg.extra) || 3);
+}
+
+/** Supplément de gravure : le 1er élément compris (photo comprise), chaque élément en plus à son prix. */
 export function gobeletSupplement(fields, cfg = {}) {
-  const inclus = Number(cfg.inclus) || 1;
-  const extra = Number(cfg.extra) || 3;
-  const n = gobeletNbElements(fields);
-  const enPlus = Math.max(0, n - inclus);
-  return { n, enPlus, montant: Math.round(enPlus * extra * 100) / 100 };
+  const els = gobeletElements(fields).slice(0, GOB_ELEMENTS_MAX + 2);
+  const enPlusEls = els.filter((e) => !e.compris);
+  const montant = enPlusEls.reduce((t, e) => t + prixElement(e, cfg), 0);
+  return { n: els.length, enPlus: enPlusEls.length, photosEnPlus: enPlusEls.filter((e) => e.kind === "photo").length, montant: Math.round(montant * 100) / 100 };
 }
 
 /** Résumé lisible (panier, paiement, e-mails) : « 1. Dessin n° 12 — Face, au milieu (compris) · 2. … (+3 €) ». */
 export function gobeletResume(fields, cfg = {}) {
-  const extra = String(Number(cfg.extra) || 3).replace(".", ",");
   return gobeletElements(fields).map((e, i) => {
     const ecr = ["cadre", "lettre", "texte", "sous"].includes(e.kind) && e.police ? `, écriture ${ecritureCourte(e.police)}` : "";
-    return `${i + 1}. ${quoiElement(e)} — ${ouElement(e)}${ecr} (${e.compris ? "compris" : `+${extra} €`})`;
+    return `${i + 1}. ${quoiElement(e)} — ${ouElement(e)}${ecr} (${e.compris ? "compris" : `+${String(prixElement(e, cfg)).replace(".", ",")} €`})`;
   }).join(" · ");
 }
 

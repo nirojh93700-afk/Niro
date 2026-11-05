@@ -92,7 +92,7 @@ export function supplementsPayes(product) {
     for (const b of Object.values(MP_BOITES)) out.add(b.prix);
   }
   // Gobelet (05/11/2026) : chaque élément en plus du centre, chiffré par src/lib/gobeletParcours.js (même calcul au paiement).
-  if (product.gobeletParcours) out.add(arrondi(Number(product.gobeletParcours.extra) || 3));
+  if (product.gobeletParcours) { out.add(arrondi(Number(product.gobeletParcours.extra) || 3)); out.add(arrondi(Number(product.gobeletParcours.extraPhoto) || 6)); }
   const vars = Array.isArray(product.variants) && product.variants.length ? product.variants : [{ id: null, title: "" }];
   const champs = product.personalizationFields || [];
   for (const v of vars) {
