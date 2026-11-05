@@ -13,7 +13,7 @@ export const CATEGORIES = [
   { slug: "bijoux", label: "Bijoux", short: "Bijoux" },
   { slug: "cristal", label: "Cristal Photo 3D", short: "Cristal" },
   { slug: "naissance", label: "Naissance", short: "Naissance" },
-  { slug: "verres", label: "Verres, Carafes & Gobelet", short: "Verres, Carafes & Gobelet" },
+  { slug: "verres", label: "Verres & Carafes & Gobelet", short: "Verres & Carafes & Gobelet" },
   { slug: "mariage", label: "Mariage & Réception", short: "Mariage" },
   { slug: "deco", label: "Déco & Maison", short: "Déco & Maison" },
   { slug: "cadeaux", label: "Cadeaux & Accessoires", short: "Cadeaux" },
@@ -4343,7 +4343,7 @@ export const products = [
     pickup: false,
     letter: false,
     category: "cadeaux", // le port reste celui d'un colis au poids (pas la grille des verres)
-    categorieAffichee: "verres", // rangé et affiché dans « Verres, Carafes & Gobelet »
+    categorieAffichee: "verres", // rangé et affiché dans « Verres & Carafes & Gobelet »
     type: "Gobelet à graver",
     tagline: "Grand gobelet isotherme 40 oz (1,1 L) avec anse et paille — gravé à votre prénom, à votre dessin ou à votre photo. Édition limitée.",
     personalizable: true,
