@@ -16,6 +16,11 @@
   longue sur une ligne sort minuscule, le site plafonne), bijoux à aperçu 3D = captures du site, gobelets = moteur `gobelet-exemples.py` (`rendu()`
   avec Noto Serif Tamil), bijoux sans aperçu (cœur ouvrable, cœur, médaillon pivotant, Quatre Mots, cordon, enveloppe, gourmette et cuir sur photo)
   = texte gravé posé sur la photo (`grave_metal`). Pas de prix, pas de nombre, « Gravé en France ». Rien sur le site.
+- **AUTRES LANGUES (06/11, gérant, rapport « Marché tamoul » v2 : « dans les autres langues que je te donne… l'amour, bonne fête, bonne année…
+  tu fais quelques ») : 9 images réseaux** arabe / hébreu / chinois (3 chacune), galerie https://claude.ai/artifact/6V72kBbs6fxzkMn88Uevke,
+  générateur `tools/maquettes/langues-reseaux.py <scratch> <sortie>` (mêmes captures du site, polices Noto Naskh Arabic / Sans Hebrew
+  [axes Weight puis Width] / Sans SC dans `~/.fonts`). ⚠️ La plaque acier en 3D n'affiche PAS l'arabe (remplacée par le bracelet chaîne).
+  Phrases à faire relire par un locuteur natif. + **vidéo 49** (tamoul + les 3 langues, `tools/video/langues_49.py`). Rien sur le site.
 - ⚠️ Constats pour le « applique » : Quatre Mots et pendentif géométrique EMPILENT les lettres à la verticale → en tamoul les signes de voyelle se
   détachent (ரே → ர + ே, rond pointillé) : tourner le mot entier avant de les proposer en tamoul · cœur ouvrable, médaillon livre, enveloppe
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
