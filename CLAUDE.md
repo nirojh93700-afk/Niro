@@ -1,3 +1,8 @@
+## 🔤 TITRES GOOGLE DU GOBELET ET DE /naissance — 06/11/2026 (audit : titre de 92 caractères, titres en double) — ✅ EN LIGNE
+- Gobelet : `title` « Gobelet isotherme gravé 40 oz : prénom, dessin ou photo » (55 + « | Niv Création » = 70) ; c'est aussi le H1 de la fiche.
+- `/naissance` : « Plaque de naissance en bois gravée, fille ou garçon » (la fiche `plaque-de-naissance` garde son titre).
+- Règle : un `title` ≤ 55 caractères (le site ajoute « | Niv Création »), choisi par le gérant parmi des propositions.
+
 ## 🏠 ACCUEIL : VERRES JUSTE APRÈS LES BIJOUX, MARQUE-PAGES APRÈS LES NOUVEAUTÉS, GOBELET 2ᵉ — ✅ EN LIGNE LE 06/11/2026 (« tu peux mettre en ligne »)
 - Ordre : cristal → ruban → bijoux → **Verres, carafes & gobelet** (titre, phrase et lien renommés avec le gobelet, `page.jsx` + libellé de
   l'interrupteur dans `AppearanceAdmin`) → Les dernières sorties (**verre à whisky, gobelet, puzzle Savane** en tête, puis par date) → marque-pages →

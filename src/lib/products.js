@@ -4400,7 +4400,7 @@ export const products = [
       { key: "police", type: "font", label: "Écriture", optional: true },
       { key: "autour", type: "textarea", label: "Éléments en plus", optional: true },
     ],
-    title: "Gobelet isotherme 40 oz gravé — édition limitée, personnalisé (anse + paille)",
+    title: "Gobelet isotherme gravé 40 oz : prénom, dessin ou photo",
     // Galerie initiale = coloris Crème (variante par défaut). Chaque coloris a sa propre galerie :
     // son exemple gravé, vierge, gravé fournisseur, accessoires, puis les autres exemples.
     images: ["/produits/gobelet/ex1-creme-papillon-camille.jpg", "/produits/gobelet-creme-vierge.jpg", "/produits/gobelet-creme-grave.jpg", "/produits/gobelet-creme-accessoires.jpg", "/produits/gobelet/ex2-marine-cheval-paul.jpg", "/produits/gobelet/ex3-rose-rose-lea.jpg", "/produits/gobelet/ex4-blanc-colibri-ines.jpg", "/produits/gobelet/ex5-creme-photo-meilleur-ami.jpg", "/produits/gobelet/ex6-marine-texte-super-papy.jpg", "/produits/gobelet/ex7-rose-photo-couple.jpg", "/produits/gobelet/ex8-blanc-photo-maman.jpg", "/produits/gobelet/ex9-marine-plusieurs-images.jpg"],

@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   alternates: { canonical: "/naissance" },
-  title: "Plaque de naissance personnalisée en bois",
+  title: "Plaque de naissance en bois gravée, fille ou garçon",
   description:
     "Plaque de naissance en bois gravé, personnalisée aux informations de bébé (prénom, date, poids, heure, taille). Modèle fille ou garçon, faite main en France.",
 };
