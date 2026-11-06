@@ -21,6 +21,19 @@
   générateur `tools/maquettes/langues-reseaux.py <scratch> <sortie>` (mêmes captures du site, polices Noto Naskh Arabic / Sans Hebrew
   [axes Weight puis Width] / Sans SC dans `~/.fonts`). ⚠️ La plaque acier en 3D n'affiche PAS l'arabe (remplacée par le bracelet chaîne).
   Phrases à faire relire par un locuteur natif. + **vidéo 49** (tamoul + les 3 langues, `tools/video/langues_49.py`). Rien sur le site.
+- **MAQUETTE « GRAVURE TRADUITE DANS LA LANGUE DE LA CLIENTE » (06/11, gérant : « ils tapent le texte, ils choisissent la langue, ça traduit
+  automatiquement et ça s'affiche sur le verre… fais la maquette ») — EN ATTENTE DE SON AVIS, RIEN en ligne** : https://claude.ai/artifact/QGcb9tgJsgt7wBvcyvLQFj
+  · générateur `tools/maquettes/gravure-traduction.py <vin-src.html> <dossier css> <sortie>` (capture = `npx next start -p 3140` + curl de la fiche
+  du verre à vin ; ⚠️ les css se copient depuis `.next/static/css/`, un `\` traînait dans les URL curl et les 404 avaient été pris pour du CSS) ·
+  sortie `docs/maquettes/gravure-traduction.html` (ignorée par git). Fiche du verre à vin telle quelle ; « Mon propre texte » ouvre l'étape 2 :
+  pastilles Français · Tamoul · Arabe · Hébreu · Chinois, texte en français → traduit (phrases connues = dictionnaire `PHRASES` ; autre texte =
+  Claude en direct par la capacité `sample` de l'artifact, avec consigne « prénoms transcrits, pas traduits ») → posé sur la grande photo du verre
+  vierge dans le cadre `engrave.box` lu dans la capture (police Noto de la langue, taille ajustée, rtl pour arabe / hébreu), les deux textes côte à
+  côte, case obligatoire « J'ai vérifié la traduction », case « Je colle moi-même mon texte dans ma langue » ; date +3 € ; résumé ; tableau « ce que
+  l'atelier verra » (texte tapé, langue, texte gravé, écriture Noto, contrôle). Prix lus dans la capture. Vérifié Chromium 390 / 1280 : 0 erreur JS,
+  0 débordement. **Au « applique »** : traduction par la clé Claude du site (`/api/traduire`, cache), 9ᵉ à 12ᵉ écritures Noto (fiche + atelier +
+  fichier de gravure), `spec.langue` + `spec.texteSource` + « traduction relue par la cliente » dans `consignesGravure` / alerte 🛎️, plaque 3D
+  à corriger pour l'arabe. Toujours un garde-fou : aucune gravure traduite sans la case cochée.
 - ⚠️ Constats pour le « applique » : Quatre Mots et pendentif géométrique EMPILENT les lettres à la verticale → en tamoul les signes de voyelle se
   détachent (ரே → ர + ே, rond pointillé) : tourner le mot entier avant de les proposer en tamoul · cœur ouvrable, médaillon livre, enveloppe
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
