@@ -1,4 +1,7 @@
 # 📋 TOUT CE QUI EST EN ATTENTE — inventaire de reprise
+- **06/11 — Maquette « Gravure en tamoul »** (https://claude.ai/artifact/A1LsiJozYynsZoRGYnrjcx) : 7 verres + 7 bijoux gravés en tamoul, 19 phrases.
+  En attente de son avis : quels produits / phrases garder, relecture des phrases (Noël, meilleur papa / maman composées par moi), puis « applique »
+  (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
 
 ## 🖼️ GOOGLE MERCHANT : 8 PHOTOS DE PRODUITS < 500 × 500 px — À DÉCIDER AVANT LE 31/01/2027 (gérant, 04/11/2026 : « mets une alerte, tu me rappelleras, on décidera »)
 - Mail Merchant Center (ID 5840330121) : dès le 31/01/2027, une photo principale < 500 × 500 px = produit refusé dans Google Shopping.

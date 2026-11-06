@@ -1,3 +1,15 @@
+## 🪔 MAQUETTE « GRAVURE EN TAMOUL » — 06/11/2026 (gérant, après le rapport « Marché tamoul » : « prépare-moi des verres, des bijoux… avec le texte tamoul traditionnel : joyeux anniversaire, joyeux Noël pour les verres ; pour les bijoux des messages pour les parents ou les amoureux ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- Artifact https://claude.ai/artifact/A1LsiJozYynsZoRGYnrjcx · générateur `tools/maquettes/gravure-tamoul.py <dossier polices> <sortie>` (polices Noto Sans /
+  Serif Tamil, OFL, téléchargées depuis `raw.githubusercontent.com/google/fonts/main/ofl/` ; Pillow + raqm pour l'écriture tamoule) · sortie
+  `docs/maquettes/gravure-tamoul.html` (1,7 Mo, ignorée par git). Photos VIERGES du site gravées : 7 verres (whisky anniversaire · cocktail Noël ·
+  vin Deepavali · flûte mariage · carafe Pongal · tumbler Nouvel An tamoul · gobelet crème anniversaire + prénom, en doré) et 7 bijoux (plaque
+  acier அம்மா · gourmette அப்பா · bracelet cuir & plaque « meilleur papa du monde » · Quatre Mots என் உயிரே · bracelet femme என் அன்பே · cordon அன்பு ·
+  médaillon « je t'aime »), + tableau de 19 phrases (tamoul · prononciation · sens · occasion · produit).
+- ⚠️ « Joyeux Noël » (இனிய கிறிஸ்துமஸ் வாழ்த்துகள்) et « meilleur papa / meilleure maman du monde » ne sont PAS dans le rapport : composés par moi, à faire
+  relire. Toutes les phrases sont à faire relire par un locuteur natif avant la première gravure (une faute gravée ne se rattrape pas).
+- Au « applique » : 9ᵉ écriture « Tamoul » (Noto Serif Tamil verres / Noto Sans Tamil bijoux) dans `fonts.js` + aperçu + fiche atelier + fichier de
+  gravure ; phrases prêtes à cocher sur les fiches ; page « Gravure en tamoul » ; vidéos Deepavali / Pongal / Puthandu (conseils du rapport).
+
 ## 🔤 TITRES GOOGLE DU GOBELET ET DE /naissance — 06/11/2026 (audit : titre de 92 caractères, titres en double) — ✅ EN LIGNE
 - Gobelet : `title` « Gobelet isotherme gravé 40 oz : prénom, dessin ou photo » (55 + « | Niv Création » = 70) ; c'est aussi le H1 de la fiche.
 - `/naissance` : « Plaque de naissance en bois gravée, fille ou garçon » (la fiche `plaque-de-naissance` garde son titre).
