@@ -687,3 +687,10 @@ En attente de SA décision :
 - ⚠️ Google Analytics sans demande d'accord (CNIL) — déjà noté.
 - ⚠️ Google : 78 titres > 70 caractères, 11 pages sans H1 ni adresse canonique (contact, offres, pages légales…), 4 descriptions trop longues.
 - ⚠️ Accessibilité : contrastes faibles (52 éléments), petites zones à toucher, 1 menu sans nom, contrôles imbriqués sur la fiche collier.
+
+## 🧾 MAQUETTE « OPTIONS À COCHER SUR LA PAGE DU DEVIS » — 06/11/2026 (gérant, devis DEV-1549 d'Alissia : « dans le devis, qu'elle puisse cocher les socles ou ajouter une gravure ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- https://claude.ai/artifact/1D7veQp2RzCVybjz9dr6te · générateur `tools/maquettes/devis-options.py <dossier capture> <sortie>` (capture = curl de
+  /document/<id> + 3 CSS du site + socle.jpg). Bloc « Options de votre cristal » sous le devis : socle LED +14,90 € (petit socle carré), texte gravé
+  +5 € (champ 40 car., 8 écritures, aperçu) ; lignes ajoutées au tableau, total et encadré « Articles » mis à jour ; bouton payer grisé si texte coché vide.
+- Au « applique » : options lues dans `engravingPricing.flatExtras` du produit de la 1re ligne rattachée (`variantId`), prix recalculés côté serveur
+  (`devisEffectif` / quote-pay / checkout), stock du socle décompté, poids ajouté au port, texte écrit dans la commande (atelier « À graver »).
