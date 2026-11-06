@@ -21,8 +21,8 @@ export const metadata = { alternates: { canonical: "/" } };
 // =============================================================================
 // PAGE D'ACCUEIL — maquette « accueil + univers », direction « Mélange »
 // (validée « applique » par le gérant le 09/10/2026, version avec puzzles) :
-// écrin cristal → ruban → bijoux sur photo → dernières sorties → verres & carafes (notre
-// spécialité, placée ici à la demande du gérant le 09/10 soir) → Bébé & Enfant →
+// écrin cristal → ruban → bijoux sur photo → verres, carafes & gobelet (juste après les bijoux,
+// gérant 06/11/2026) → dernières sorties → marque-pages (après les nouveautés, 06/11) → Bébé & Enfant →
 // « Trouver le bon cadeau » en deux étapes → coffret → carafe édition limitée →
 // verres en mosaïque → Noël → nos univers → l'atelier → le mur → avis → sur mesure.
 // Tout est lu dans le catalogue en direct ; l'en-tête et le pied de page du site
@@ -68,12 +68,14 @@ export default async function HomePage() {
   // puzzle ici, les 9 ensemble rempliraient la rangée), puis les dernières créations par date
   // d'ajout — 10 en tout, sur DEUX lignes qui glissent (maquette B validée le 09/10/2026).
   // Le verre à whisky en premier (gérant, 10/10/2026 : « tu peux mettre le verre de whisky en premier »).
+  // Le gobelet juste après le verre à whisky (gérant, 06/11/2026 : « tu peux le mettre après le verre de whisky »).
   const whisky = C("verre-a-whisky-grave");
+  const gobelet = C("gobelet-isotherme-40oz");
   const puzzle = C("puzzle-savane");
   const BIJOUX_PHOTOS = [["collier-3coeurs-1.jpg", "Collier 3 Cœurs, porté", "collier-3coeurs"], ["bracelet-femme-acier-porte.jpg", "Bracelet gravé", "bracelet-femme-acier"], ["bracelet-cordon-plaque-4.jpg", "Bracelets homme gravés", "bracelet-cordon-plaque"]];
-  const tete = [whisky, puzzle].filter(Boolean);
+  const tete = [whisky, gobelet, puzzle].filter(Boolean);
   const nouveaux = [...tete,
-    ...dernieresSorties(R.cartes.filter((c) => c.slug !== "verre-a-whisky-grave" && (c.slug === "puzzle-photo-grave" || !String(c.slug).startsWith("puzzle-"))), 10 - tete.length)];
+    ...dernieresSorties(R.cartes.filter((c) => !tete.some((t) => t.slug === c.slug) && (c.slug === "puzzle-photo-grave" || !String(c.slug).startsWith("puzzle-"))), 10 - tete.length)];
   const moitie = Math.ceil(nouveaux.length / 2);
   const lignesNouveautes = [nouveaux.slice(0, moitie), nouveaux.slice(moitie)].filter((l) => l.length);
   const nouveautesToast = nouveaux.filter((c) => !c.soon).map((c) => ({ slug: c.slug, name: c.name, image: c.image }));
@@ -107,29 +109,6 @@ export default async function HomePage() {
         </section>
         <div className="ruban" aria-hidden="true"><div className="ruban-t">{[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((k) => ruban.map((t) => <span key={`${k}-${t}`} style={{ display: "contents" }}><span>{t}</span><i>✦</i></span>))}</div></div>
 
-        {/* MARQUE-PAGES — bande encre & or (maquette validée le 27/10/2026 : « J'aime bien… applique la maquette sur l'accueil »).
-            Les photos mènent à la page Marque-pages (gérant, 27/10 : « s'il clique sur les photos, ils vont directement dans les marque-pages »). */}
-        {mpBois && mpOiseau && mpMetal ? (
-          <section className="mpb rv" aria-labelledby="t-mpb">
-            <div className="mpb-in">
-              <div className="mpb-pics">
-                <span className="mpb-pic p1"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex1.jpg" alt="Marque-page en bois gravé « Camille » et papillons" loading="lazy" /></Link></span>
-                <span className="mpb-pic p2"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m2/exemple-ex2.jpg" alt="Marque-page ajouré, oiseau et magnolia, gravé « Léa »" loading="lazy" /></Link></span>
-                <span className="mpb-pic p3"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex7.jpg" alt="Marque-page en bois gravé d'une photo et « Pour Mamie »" loading="lazy" /></Link></span>
-                <span className="mpb-pic p4"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg" alt="Marque-page en métal doré émaillé, Nymphéas de Monet, pompon doré" loading="lazy" /></Link></span>
-              </div>
-              <div className="mpb-copy">
-                <span className="mpb-pill"><i></i>Nouveau à l&apos;atelier</span>
-                <h2 id="t-mpb">Nos marque-pages <em>gravés</em> sont arrivés</h2>
-                <p>En bois, gravés d&apos;un prénom, d&apos;un dessin ou même d&apos;une photo, sur la face comme au dos. Et des marque-pages en métal doré, d&apos;après Van Gogh et Monet.</p>
-                <ul className="mpb-pts"><li>Gravés dans notre atelier en France</li><li>Seuls, en boîte cadeau ou en coffret de 2 ou 4</li><li>Un cadeau pour tous ceux qui aiment lire</li></ul>
-                <p className="mpb-price"><span>à partir de</span><b>{prixTexte(mpBois).replace(/^dès /, "")}</b></p>
-                <Bouton href="/boutique/marque-pages">Découvrir les marque-pages</Bouton>
-              </div>
-            </div>
-          </section>
-        ) : null}
-
         {/* BIJOUX — photo plein cadre et panneau de verre (piste B) */}
         {show.featured && bijoux.length ? (
           <section className="mxband bij bij2 rv" aria-labelledby="t-bij">
@@ -156,18 +135,12 @@ export default async function HomePage() {
           </section>
         ) : null}
 
-        {/* LES DERNIÈRES SORTIES — rail */}
-        {show.newArrivals && nouveaux.length ? (
-          <Rail titre={<>Les dernières sorties <em>de l’atelier</em></>} sous="Nos créations ajoutées ces derniers jours."
-            lignes={lignesNouveautes.map((l) => l.map((c) => <Carte key={c.slug} c={c} />))} />
-        ) : null}
-
-        {/* VERRES — mosaïque */}
+        {/* VERRES, CARAFES & GOBELET — mosaïque, juste après les bijoux (gérant, 06/11/2026) */}
         {show.verresBand && verres.length ? (
           <section className="sec verres rv" aria-labelledby="t-verres">
             <div className="sec-head">
-              <div><h2 id="t-verres">Verres &amp; carafes gravés, <em>notre spécialité</em></h2><p className="sub">Whisky, vin, champagne, cocktail et carafe, gravés à la commande dans notre atelier.</p></div>
-              <Link className="link" href="/boutique/verres">Voir tous les verres et carafes <Ic n="arrow" /></Link>
+              <div><h2 id="t-verres">Verres, carafes &amp; gobelet gravés, <em>notre spécialité</em></h2><p className="sub">Whisky, vin, champagne, cocktail, carafe et gobelet isotherme, gravés à la commande dans notre atelier.</p></div>
+              <Link className="link" href="/boutique/verres">Voir tous les verres, carafes et gobelet <Ic n="arrow" /></Link>
             </div>
             <div className="bento-v">
               {verres.map((c, i) => (
@@ -177,6 +150,35 @@ export default async function HomePage() {
                   <span className="mxbt-lab"><span className="mxbt-name">{c.name}</span><span className="mxbt-price">{prixTexte(c)}</span></span>
                 </Link>
               ))}
+            </div>
+          </section>
+        ) : null}
+
+        {/* LES DERNIÈRES SORTIES — rail */}
+        {show.newArrivals && nouveaux.length ? (
+          <Rail titre={<>Les dernières sorties <em>de l’atelier</em></>} sous="Nos créations ajoutées ces derniers jours."
+            lignes={lignesNouveautes.map((l) => l.map((c) => <Carte key={c.slug} c={c} />))} />
+        ) : null}
+
+        {/* MARQUE-PAGES — bande encre & or, après les nouveautés (gérant, 06/11/2026) (maquette validée le 27/10/2026 : « J'aime bien… applique la maquette sur l'accueil »).
+            Les photos mènent à la page Marque-pages (gérant, 27/10 : « s'il clique sur les photos, ils vont directement dans les marque-pages »). */}
+        {mpBois && mpOiseau && mpMetal ? (
+          <section className="mpb rv" aria-labelledby="t-mpb">
+            <div className="mpb-in">
+              <div className="mpb-pics">
+                <span className="mpb-pic p1"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex1.jpg" alt="Marque-page en bois gravé « Camille » et papillons" loading="lazy" /></Link></span>
+                <span className="mpb-pic p2"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m2/exemple-ex2.jpg" alt="Marque-page ajouré, oiseau et magnolia, gravé « Léa »" loading="lazy" /></Link></span>
+                <span className="mpb-pic p3"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex7.jpg" alt="Marque-page en bois gravé d'une photo et « Pour Mamie »" loading="lazy" /></Link></span>
+                <span className="mpb-pic p4"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg" alt="Marque-page en métal doré émaillé, Nymphéas de Monet, pompon doré" loading="lazy" /></Link></span>
+              </div>
+              <div className="mpb-copy">
+                <span className="mpb-pill"><i></i>Nouveau à l&apos;atelier</span>
+                <h2 id="t-mpb">Nos marque-pages <em>gravés</em> sont arrivés</h2>
+                <p>En bois, gravés d&apos;un prénom, d&apos;un dessin ou même d&apos;une photo, sur la face comme au dos. Et des marque-pages en métal doré, d&apos;après Van Gogh et Monet.</p>
+                <ul className="mpb-pts"><li>Gravés dans notre atelier en France</li><li>Seuls, en boîte cadeau ou en coffret de 2 ou 4</li><li>Un cadeau pour tous ceux qui aiment lire</li></ul>
+                <p className="mpb-price"><span>à partir de</span><b>{prixTexte(mpBois).replace(/^dès /, "")}</b></p>
+                <Bouton href="/boutique/marque-pages">Découvrir les marque-pages</Bouton>
+              </div>
             </div>
           </section>
         ) : null}

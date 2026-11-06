@@ -1,3 +1,9 @@
+## 🏠 ACCUEIL : VERRES JUSTE APRÈS LES BIJOUX, MARQUE-PAGES APRÈS LES NOUVEAUTÉS, GOBELET 2ᵉ — ✅ EN LIGNE LE 06/11/2026 (« tu peux mettre en ligne »)
+- Ordre : cristal → ruban → bijoux → **Verres, carafes & gobelet** (titre, phrase et lien renommés avec le gobelet, `page.jsx` + libellé de
+  l'interrupteur dans `AppearanceAdmin`) → Les dernières sorties (**verre à whisky, gobelet, puzzle Savane** en tête, puis par date) → marque-pages →
+  Bébé & Enfant… Maquette https://claude.ai/artifact/Y1eExUKqQ69UJkf9za54L3 (`tools/maquettes/accueil-mpb-apres-nouveautes.py`).
+  Les 5 photos du bloc des verres restent whisky · cocktail · vin · flûte · carafe (question posée : ajouter le gobelet en photo ?).
+
 ## 🧾 DEVIS DE CRISTAL : SOCLE ET TEXTE À COCHER PAR LA CLIENTE — 06/11/2026 (gérant, devis DEV-1549 d'Alissia : « tu peux appliquer… si le client a déjà choisi le socle et que dans le devis il y est, il faut pas que ça s'affiche, pareil pour le texte »)
 - Page `/document/<id>` d'un devis dont une ligne est rattachée à un cristal (`variantId` d'un produit `crystal3d`), à nombre fixe : bloc
   « Options de votre cristal » (`DevisOptions.jsx`) = socle LED (prix et socle de la FICHE selon la taille : petit carré 14,90 / grand
