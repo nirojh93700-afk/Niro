@@ -44,7 +44,19 @@ assert len(tetes) == 2, tetes
 m = (len(nouvel) + 1) // 2
 debut = rail.find(tetes[0]); fin = rail.rfind("</section>")
 rail_neuf = rail[:debut] + tetes[0] + "".join(nouvel[:m]) + "</div>" + tetes[1] + "".join(nouvel[m:]) + "</div>" + rail[fin:]
-h = h[:a2] + rail_neuf + '<div class="mq-fleche">▼ bloc « marque-pages » déplacé ici ▼</div>' + mpb + h[b2:]
+h = h[:a2] + rail_neuf + '<div class="mq-fleche">▼ bloc « marque-pages » déplacé ici, après les nouveautés ▼</div>' + mpb + h[b2:]
+
+# 2 bis. Le bloc « Verres & carafes » remonte juste après les bijoux, avec le gobelet dans son titre
+# (gérant, 06/11/2026 : « tu mets les verres juste après les bijoux… il faut changer pour le gobelet »).
+a3, b3 = bloc(h, '<section class="sec verres rv"')
+verres = h[a3:b3]
+verres = verres.replace("Verres &amp; carafes gravés, <em>notre spécialité</em>", "Verres, carafes &amp; gobelet gravés, <em>notre spécialité</em>")
+verres = verres.replace("Whisky, vin, champagne, cocktail et carafe, gravés à la commande dans notre atelier.",
+                        "Whisky, vin, champagne, cocktail, carafe et gobelet isotherme, gravés à la commande dans notre atelier.")
+verres = verres.replace("Voir tous les verres et carafes", "Voir tous les verres, carafes et gobelet")
+h = h[:a3] + h[b3:]
+a4, b4 = bloc(h, '<section class="mxband bij')
+h = h[:b4] + '<div class="mq-fleche">▼ bloc « Verres, carafes &amp; gobelet » remonté ici, juste après les bijoux (titre changé) ▼</div>' + verres + h[b4:]
 
 # 3. Page figée : feuilles du site intégrées, scripts retirés, photos en data URI (réduites).
 css = ""
@@ -77,7 +89,7 @@ style = "<style>" + css + """
 </style>"""
 h = h.replace("</head>", style + "</head>", 1)
 h = h.replace("<body", '<body data-maquette="1"', 1)
-h = re.sub(r"(<body[^>]*>)", r'\1<div class="mq-bandeau">MAQUETTE · bloc marque-pages après « Les dernières sorties » · gobelet juste après le verre à whisky</div>', h, count=1)
-h = re.sub(r"<title>.*?</title>", "<title>Accueil : marque-pages après les nouveautés</title>", h, count=1, flags=re.S)
+h = re.sub(r"(<body[^>]*>)", r'\1<div class="mq-bandeau">MAQUETTE · verres juste après les bijoux (titre avec le gobelet) · marque-pages après les nouveautés · gobelet 2ᵉ des nouveautés</div>', h, count=1)
+h = re.sub(r"<title>.*?</title>", "<title>Accueil : verres après les bijoux</title>", h, count=1, flags=re.S)
 open(sortie, "w", encoding="utf-8").write(h)
 print(sortie, len(h) // 1024, "Ko ; ordre des nouveautés :", [slug(c) for c in nouvel])
