@@ -22,7 +22,7 @@
   [axes Weight puis Width] / Sans SC dans `~/.fonts`). ⚠️ La plaque acier en 3D n'affiche PAS l'arabe (remplacée par le bracelet chaîne).
   Phrases à faire relire par un locuteur natif. + **vidéo 49** (tamoul + les 3 langues, `tools/video/langues_49.py`). Rien sur le site.
 - **MAQUETTE « GRAVURE TRADUITE DANS LA LANGUE DE LA CLIENTE » (06/11, gérant : « ils tapent le texte, ils choisissent la langue, ça traduit
-  automatiquement et ça s'affiche sur le verre… fais la maquette ») — EN ATTENTE DE SON AVIS, RIEN en ligne** : https://claude.ai/artifact/QGcb9tgJsgt7wBvcyvLQFj
+  automatiquement et ça s'affiche sur le verre… fais la maquette ») — ✅ ENREGISTRÉE TELLE QUELLE LE 06/11/2026 (« Enregistre la maquette telle quelle », VERSION 4 de l'artifact = CELLE à reproduire au « applique », ne plus la modifier sans sa demande), RIEN en ligne** : https://claude.ai/artifact/QGcb9tgJsgt7wBvcyvLQFj
   · générateur `tools/maquettes/gravure-traduction.py <vin-src.html> <dossier css> <sortie> <etape2.json>` (capture = `npx next start -p 3140` + curl de la fiche
   du verre à vin ; ⚠️ les css se copient depuis `.next/static/css/`, un `\` traînait dans les URL curl et les 404 avaient été pris pour du CSS) ·
   sortie `docs/maquettes/gravure-traduction.html` (ignorée par git). Fiche du verre à vin telle quelle ; ⛔ **v2 (06/11, gérant : « tu laisses comme c'est en ce moment, tu touches pas, juste en dessous du texte,
