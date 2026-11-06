@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
-"""Maquette (06/11/2026) : verres et bijoux du site gravés avec un texte en TAMOUL traditionnel.
-Usage : python3 tools/maquettes/gravure-tamoul.py <dossier polices Noto Tamil> <sortie.html>
-Rien n'est touché sur le site : les photos VIERGES de public/produits/ reçoivent le texte en rendu
-« gravé » (givré blanc sur le verre, sombre sur le métal, doré sur le gobelet crème).
-Les polices (NotoSansTamil.ttf, NotoSerifTamil.ttf, variables) viennent de google/fonts (OFL).
+"""Maquette (06/11/2026) : verres et bijoux du site gravés avec un texte en TAMOUL traditionnel,
+rendus PAR LE SITE LUI-MÊME (aperçu de chaque fiche en local, texte tamoul tapé dans le champ, capture).
+Usage : python3 tools/maquettes/gravure-tamoul.py <dossier des captures> <sortie.html>
+Captures : `npx next start -p 3140` + `node capture2.cjs` (scratchpad, Playwright : ouvre /produit/<slug>, choisit
+« Mon propre texte », tape le texte, pousse le curseur de taille au maximum, capture .gallery-main ; bijoux à aperçu 3D :
+capture du canvas[data-apercu3d]) → recadrées sur le produit → <dossier>/<id>.jpg. Polices Noto Tamil installées dans
+~/.fonts pour que Chromium trouve les lettres tamoules (les 8 écritures du site ne les ont pas). Rien n'est touché sur le site.
 """
-import base64, io, json, sys, os
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+import base64, io, os, sys
+from PIL import Image
 
-FONTS, OUT = sys.argv[1], sys.argv[2]
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-PROD = os.path.join(ROOT, "public", "produits")
+CAP, OUT = sys.argv[1], sys.argv[2]
 
-# ───────── Les phrases (tamoul · prononciation · sens · occasion · note) ─────────
 PHRASES = {
   "anniv":   ("பிறந்தநாள் வாழ்த்துகள்", "Piṟantanāḷ vāḻttukaḷ", "Joyeux anniversaire", "Anniversaire", ""),
   "noel":    ("இனிய கிறிஸ்துமஸ் வாழ்த்துகள்", "Iṉiya kiṟistumas vāḻttukaḷ", "Joyeux Noël", "Noël", "pas dans le rapport : formule composée, à relire"),
@@ -35,156 +34,54 @@ PHRASES = {
   "sellam":  ("என் செல்லம்", "Eṉ cellam", "Mon chéri, mon petit trésor", "Bébé, enfant", ""),
 }
 
-# ───────── Où et comment poser le texte sur chaque photo ─────────
-# cx, cy = centre du texte (fraction de la photo) · w, h = place maxi (fractions) · angle = rotation (° antihoraire)
-# style : glass (givré blanc) · metal (gravé sombre) · gold (doré, gobelet crème)
+# id = fichier de capture · prod = fiche du site · key = phrase · fond = couleur de fond de la capture
 ITEMS = [
-  # ─ verres ─
-  dict(id="whisky", prod="Verre à whisky gravé", photo="verre_a_whisky_grave_vide.jpg", lines=["பிறந்தநாள்", "வாழ்த்துகள்"], key="anniv",
-       cx=.50, cy=.46, w=.50, h=.32, style="glass", font="serif", crop=(.05,.0,.95,1)),
-  dict(id="cocktail", prod="Verre à cocktail gravé", photo="verre_a_cocktail_vierge.jpg", lines=["இனிய", "கிறிஸ்துமஸ்", "வாழ்த்துகள்"], key="noel",
-       cx=.50, cy=.40, w=.27, h=.34, style="glass", font="serif", crop=(.2,0,.8,1)),
-  dict(id="vin", prod="Verre à vin gravé", photo="verre_vin_vierge.jpg", lines=["இனிய தீபாவளி", "நல்வாழ்த்துகள்"], key="deepa",
-       cx=.50, cy=.28, w=.38, h=.16, style="glass", font="serif", crop=(.1, .02, .9, .55)),
-  dict(id="flute", prod="Flûte à champagne gravée", photo="flute_vierge.jpg", lines=["திருமண", "நல்வாழ்த்துகள்"], key="mariage",
-       cx=.50, cy=.27, w=.33, h=.17, style="glass", font="serif", crop=(.15, .02, .85, .45)),
-  dict(id="carafe", prod="Carafe à whisky gravée", photo="carafe_vierge.jpg", lines=["இனிய பொங்கல்", "நல்வாழ்த்துகள்"], key="pongal",
-       cx=.50, cy=.58, w=.30, h=.18, style="glass", font="serif", crop=(.2,.1,.8,.95)),
-  dict(id="tumbler", prod="Verre tumbler en cristal gravé", photo="verre_tumbler_37_vierge.jpg", lines=["இனிய தமிழ் புத்தாண்டு", "நல்வாழ்த்துகள்"], key="puthandu",
-       cx=.50, cy=.40, w=.44, h=.22, style="glass", font="serif"),
-  dict(id="gobelet", prod="Gobelet isotherme 40 oz gravé", photo="gobelet-creme-vierge.jpg", lines=["பிறந்தநாள்", "வாழ்த்துகள்", "பிரியா"], key="anniv",
-       cx=.56, cy=.60, w=.30, h=.30, style="gold", font="serif", extra="+ le prénom « Priya » (பிரியா)"),
-  # ─ bijoux ─
-  dict(id="plaque", prod="Collier Plaque acier gravé (doré)", photo="collier_plaque_a_graver_dore.jpg", lines=["அம்மா"], key="amma",
-       cx=.56, cy=.55, w=.25, h=.14, style="metal", font="sans", angle=-8, crop=(.2,.15,.9,.9)),
-  dict(id="gourmette", prod="Bracelet gourmette à plaque gravée", photo="bracelet-gourmette-plaque-1.jpg", lines=["அப்பா"], key="appa",
-       cx=.71, cy=.60, w=.26, h=.09, style="metal", font="sans", angle=34, crop=(.35,.33,.98,.9)),
-  dict(id="homme-plaque", prod="Bracelet homme cuir & plaque", photo="bracelet-homme-plaque-1.jpg", lines=["உலகின் சிறந்த அப்பா"], key="best-appa",
-       cx=.59, cy=.49, w=.26, h=.045, style="metal", font="sans", angle=-90, crop=(.25,.2,.85,.8)),
-  dict(id="quatre-mots", prod="Collier Quatre Mots (barre à 4 faces)", photo="collier-quatre-mots-1.jpg", lines=["என் உயிரே"], key="uyire",
-       cx=.50, cy=.68, w=.36, h=.045, style="metal", font="sans", angle=-90, crop=(.2,.28,.8,.95)),
-  dict(id="femme", prod="Bracelet femme acier gravé", photo="bracelet_a_graver_dore.jpg", lines=["என் அன்பே"], key="anbe",
-       cx=.57, cy=.585, w=.40, h=.07, style="metal", font="sans", angle=20, crop=(.1,.3,1,.9)),
-  dict(id="cordon", prod="Bracelet cordon à plaque gravée", photo="bracelet-cordon-plaque-2.jpg", lines=["அன்பு"], key="anbu",
-       cx=.39, cy=.65, w=.15, h=.055, style="metal", font="sans", crop=(.15,.35,.75,.85)),
-  dict(id="medaillon", prod="Médaillon pivotant gravé", photo="collier-medaillon-pivotant-1.jpg", lines=["உன்னை", "காதலிக்கிறேன்"], key="kadhal",
-       cx=.555, cy=.575, w=.25, h=.18, style="metal", font="sans", crop=(.15,.15,.95,.95)),
+  dict(id="whisky", prod="Verre à whisky gravé", slug="verre-a-whisky-grave", key="anniv", groupe="verres"),
+  dict(id="cocktail", prod="Verre à cocktail gravé", slug="verre-a-cocktail-grave", key="noel", groupe="verres"),
+  dict(id="vin", prod="Verre à vin gravé", slug="verre-a-vin-grave", key="deepa", groupe="verres"),
+  dict(id="flute", prod="Flûte à champagne gravée", slug="flute-a-champagne-gravee", key="mariage", groupe="verres"),
+  dict(id="carafe", prod="Carafe à whisky gravée", slug="carafe-a-whisky-gravee", key="pongal", groupe="verres"),
+  dict(id="tumbler", prod="Verre tumbler en cristal gravé", slug="verre-tumbler-cristal-grave", key="puthandu", groupe="verres"),
+  dict(id="whisky-court", prod="Verre à whisky gravé", slug="verre-a-whisky-grave", key="appa", groupe="courts"),
+  dict(id="tumbler-court", prod="Verre tumbler en cristal gravé", slug="verre-tumbler-cristal-grave", key="nandri", groupe="courts"),
+  dict(id="vin-court", prod="Verre à vin gravé", slug="verre-a-vin-grave", key="anbu", groupe="courts"),
+  dict(id="plaque", prod="Collier Plaque acier gravé (doré)", slug="collier-plaque-acier", key="amma", groupe="bijoux"),
+  dict(id="gourmette", prod="Bracelet Homme Identité (gourmette)", slug="bracelet-homme-identite-gourmette", key="appa", groupe="bijoux"),
+  dict(id="chaine", prod="Bracelet homme chaîne acier", slug="bracelet-homme-chaine-acier", key="best-appa", groupe="bijoux"),
+  dict(id="silicone", prod="Bracelet homme acier & silicone", slug="bracelet-homme-acier-silicone", key="appa", groupe="bijoux"),
+  dict(id="papillon", prod="Bracelet femme papillon ajouré", slug="bracelet-femme-papillon", key="anbe", groupe="bijoux"),
 ]
 
-def font(kind, size, weight):
-    path = os.path.join(FONTS, "NotoSerifTamil.ttf" if kind == "serif" else "NotoSansTamil.ttf")
-    f = ImageFont.truetype(path, size, layout_engine=ImageFont.Layout.RAQM)
-    try:
-        f.set_variation_by_axes([100, weight])  # axes : wdth, wght
-    except Exception:
-        pass
-    return f
+def uri(path):
+    im = Image.open(path).convert("RGB"); im.thumbnail((900, 900))
+    o = io.BytesIO(); im.save(o, "JPEG", quality=84); return "data:image/jpeg;base64," + base64.b64encode(o.getvalue()).decode()
 
-def mesure(f, lines):
-    d = ImageDraw.Draw(Image.new("L", (10, 10)))
-    ws, hs = [], []
-    for t in lines:
-        x0, y0, x1, y1 = d.textbbox((0, 0), t, font=f)
-        ws.append(x1 - x0); hs.append(y1 - y0)
-    return max(ws), hs
-
-def rendu_texte(it, maxw, maxh):
-    """Calque RGBA du texte (ajusté à maxw × maxh), avant rotation."""
-    weight = 500 if it["style"] == "metal" else 400
-    size = 300
-    for _ in range(40):
-        f = font(it["font"], size, weight)
-        w, hs = mesure(f, it["lines"])
-        inter = int(size * 0.32)
-        h = sum(int(size * 1.15) for _ in hs) + inter * (len(hs) - 1)
-        if w <= maxw and h <= maxh: break
-        size = int(size * min(maxw / max(w, 1), maxh / max(h, 1)) * 0.97)
-    lh = int(size * 1.15); inter = int(size * 0.32)
-    W, H = int(maxw * 1.4) + 40, lh * len(it["lines"]) + inter * (len(it["lines"]) - 1) + 40
-    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    d = ImageDraw.Draw(lay)
-    y = 20
-    for t in it["lines"]:
-        x0, y0, x1, y1 = d.textbbox((0, 0), t, font=f)
-        d.text(((W - (x1 - x0)) / 2 - x0, y - y0 + (lh - (y1 - y0)) / 2), t, font=f, fill=(255, 255, 255, 255))
-        y += lh + inter
-    return lay
-
-def grave(im, it):
-    W, H = im.size
-    lay = rendu_texte(it, it["w"] * W, it["h"] * H)
-    ang = it.get("angle", 0)
-    if ang: lay = lay.rotate(ang, expand=True, resample=Image.BICUBIC)
-    a = lay.split()[3]
-    cx, cy = it["cx"] * W, it["cy"] * H
-    pos = (int(cx - lay.width / 2), int(cy - lay.height / 2))
-    st = it["style"]
-    if st == "glass":
-        k = max(1, W // 600)
-        sh = Image.new("RGBA", lay.size, (70, 76, 86, 0)); sh.putalpha(a.filter(ImageFilter.GaussianBlur(k * 1.5)).point(lambda v: int(v * 0.6)))
-        im.paste(sh, (pos[0] + k, pos[1] + k), sh)
-        bord = Image.new("RGBA", lay.size, (120, 128, 140, 0)); bord.putalpha(a.filter(ImageFilter.MaxFilter(3)).point(lambda v: int(v * 0.5)))
-        im.paste(bord, pos, bord)
-        txt = Image.new("RGBA", lay.size, (246, 248, 251, 0)); txt.putalpha(a.point(lambda v: int(v * 0.97)))
-        im.paste(txt, pos, txt)
-    else:
-        col = (176, 130, 48) if st == "gold" else (38, 29, 20)
-        hi = Image.new("RGBA", lay.size, (255, 255, 255, 0)); hi.putalpha(a.point(lambda v: int(v * 0.55)))
-        im.paste(hi, (pos[0] + 1, pos[1] + 1), hi)
-        sh = Image.new("RGBA", lay.size, (0, 0, 0, 0)); sh.putalpha(a.filter(ImageFilter.GaussianBlur(1)).point(lambda v: int(v * 0.35)))
-        im.paste(sh, (pos[0] - 1, pos[1] - 1), sh)
-        txt = Image.new("RGBA", lay.size, col + (0,)); txt.putalpha(a.point(lambda v: int(v * 0.96)))
-        im.paste(txt, pos, txt)
-    return im
-
-def uri(im, q=82):
-    o = io.BytesIO(); im.save(o, "JPEG", quality=q); return "data:image/jpeg;base64," + base64.b64encode(o.getvalue()).decode()
-
-cards = []
 for it in ITEMS:
-    im = Image.open(os.path.join(PROD, it["photo"])).convert("RGB")
-    im = grave(im, it)
-    if "crop" in it:
-        l, t, r, b = it["crop"]; im = im.crop((int(l * im.width), int(t * im.height), int(r * im.width), int(b * im.height)))
-    # carré pour la carte (fond blanc), 900 px
-    s = max(im.size); sq = Image.new("RGB", (s, s), (255, 255, 255)); sq.paste(im, ((s - im.width) // 2, (s - im.height) // 2))
-    sq.thumbnail((900, 900))
     ta, tr, sens, occ, note = PHRASES[it["key"]]
-    it["img"] = uri(sq); it["ta"], it["tr"], it["sens"], it["occ"], it["note"] = ta, tr, sens, occ, note
-    print(it["id"], "ok")
-
-# ───────── polices intégrées pour l'affichage du tableau ─────────
-def b64(p): return base64.b64encode(open(p, "rb").read()).decode()
-fonts_css = f"""
-@font-face{{font-family:'Tamil Serif';src:url(data:font/ttf;base64,{b64(os.path.join(FONTS,'NotoSerifTamil.ttf'))}) format('truetype');font-weight:100 900}}
-@font-face{{font-family:'Tamil Sans';src:url(data:font/ttf;base64,{b64(os.path.join(FONTS,'NotoSansTamil.ttf'))}) format('truetype');font-weight:100 900}}
-"""
+    it.update(img=uri(os.path.join(CAP, it["id"] + ".jpg")), ta=ta, tr=tr, sens=sens, occ=occ, note=note)
 
 def card(it):
-    extra = f'<p class="ex">{it["extra"]}</p>' if it.get("extra") else ""
     note = f'<p class="note">⚠ {it["note"]}</p>' if it["note"] else ""
     return f"""<figure class="card rv">
   <img src="{it['img']}" alt="{it['prod']} : {it['sens']} en tamoul">
   <figcaption>
-    <p class="prod">{it['prod']}</p>
+    <p class="prod"><a href="https://nivcreation.fr/produit/{it['slug']}" target="_blank" rel="noopener">{it['prod']}</a></p>
     <p class="ta" lang="ta">{it['ta']}</p>
     <p class="tr">{it['tr']}</p>
-    <p class="sens">{it['sens']} · <span>{it['occ']}</span></p>{extra}{note}
+    <p class="sens">{it['sens']} · <span>{it['occ']}</span></p>{note}
   </figcaption>
 </figure>"""
 
-verres = "".join(card(i) for i in ITEMS if i["style"] != "metal")
-bijoux = "".join(card(i) for i in ITEMS if i["style"] == "metal")
-
+grp = lambda g: "".join(card(i) for i in ITEMS if i["groupe"] == g)
 rows = ""
 for k, (ta, tr, sens, occ, note) in PHRASES.items():
-    prods = ", ".join(i["prod"].split(" (")[0] for i in ITEMS if i["key"] == k) or "—"
+    prods = ", ".join(dict.fromkeys(i["prod"].split(" (")[0] for i in ITEMS if i["key"] == k)) or "—"
     n = f' <em class="note">⚠ {note}</em>' if note else ""
     rows += f'<tr><td lang="ta" class="ta">{ta}</td><td class="tr">{tr}</td><td>{sens}{n}</td><td>{occ}</td><td>{prods}</td></tr>'
 
 html = f"""<meta charset="utf-8"><title>Gravure tamoule</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=Inter:wght@400;600&family=Noto+Serif+Tamil:wght@400;600&display=swap">
 <style>
-{fonts_css}
 :root{{--bg:#fbf7ee;--fg:#1a1206;--muted:#6b5e4a;--or:#c9a24b;--or2:#7c6120;--card:#ffffff;--line:#eadfc8;--encre:#1a1206;--sable:#f3e8d3}}
 @media (prefers-color-scheme: dark){{:root:not([data-theme="light"]){{--bg:#17120b;--fg:#f3e8d3;--muted:#c2b394;--or2:#e2c67e;--card:#231b10;--line:#3a2e1c;--sable:#2a2114;color-scheme:dark}}}}
 :root[data-theme="dark"]{{--bg:#17120b;--fg:#f3e8d3;--muted:#c2b394;--or2:#e2c67e;--card:#231b10;--line:#3a2e1c;--sable:#2a2114;color-scheme:dark}}
@@ -194,20 +91,19 @@ body{{background:var(--bg);color:var(--fg);font-family:Inter,system-ui,sans-seri
 .bandeau h1{{font-family:'Playfair Display',Georgia,serif;font-weight:500;font-size:clamp(1.7rem,4vw,2.6rem);margin:0 0 8px;text-wrap:balance}}
 .bandeau h1 em{{font-style:italic;color:var(--or)}}
 .bandeau p{{max-width:62ch;margin:0 auto;color:#d9c9a5;font-size:.98rem}}
-.bandeau .ta{{font-family:'Tamil Serif',serif;font-size:1.5rem;color:#fff;margin-top:12px}}
+.bandeau .ta{{font-family:'Noto Serif Tamil',serif;font-size:1.5rem;color:#fff;margin-top:12px}}
 .kicker{{display:inline-block;border:1px solid var(--or);color:var(--or);border-radius:999px;padding:3px 12px;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}}
 h2{{font-family:'Playfair Display',Georgia,serif;font-weight:500;font-size:1.6rem;margin:44px 0 6px;text-wrap:balance}}
 h2 em{{font-style:italic;color:var(--or2)}}
-.sub{{color:var(--muted);margin:0 0 18px;max-width:70ch}}
+.sub{{color:var(--muted);margin:0 0 18px;max-width:72ch}}
 .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}}
 .card{{margin:0;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-width:0}}
-.card img{{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#fff}}
+.card img{{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#faf7f1}}
 .card figcaption{{padding:12px 14px 14px}}
-.prod{{margin:0;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}}
-.ta{{font-family:'Tamil Serif',serif;font-size:1.35rem;margin:4px 0 0;line-height:1.35}}
+.prod{{margin:0;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}} .prod a{{color:inherit;text-decoration:none;border-bottom:1px dotted var(--or)}}
+.ta{{font-family:'Noto Serif Tamil',serif;font-size:1.35rem;margin:4px 0 0;line-height:1.35}}
 .tr{{margin:0;font-style:italic;color:var(--muted);font-size:.9rem}}
 .sens{{margin:6px 0 0;font-size:.95rem}} .sens span{{color:var(--muted)}}
-.ex{{margin:4px 0 0;font-size:.85rem;color:var(--muted)}}
 .note{{color:#b3261e;font-size:.82rem;margin:6px 0 0}}
 table{{border-collapse:collapse;width:100%;font-size:.92rem;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}}
 th,td{{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}}
@@ -220,36 +116,40 @@ td.ta{{font-size:1.15rem;white-space:nowrap}} td.tr{{font-style:italic;color:var
 @media (prefers-reduced-motion: reduce){{.rv{{opacity:1;transform:none;transition:none}}}}
 @media (max-width:480px){{.grid{{grid-template-columns:1fr 1fr;gap:10px}} .card figcaption{{padding:10px}} .ta{{font-size:1.1rem}}}}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;1,500&family=Inter:wght@400;600&display=swap">
 <div class="wrap">
 <div class="bandeau">
   <span class="kicker">Maquette · rien n'est en ligne</span>
   <h1>Nos gravures en <em>tamoul</em></h1>
-  <p>Les verres et les bijoux du site, gravés avec un texte en tamoul traditionnel : vœux d'anniversaire, de Noël et des grandes fêtes sur les verres, mots pour les parents et les amoureux sur les bijoux.</p>
+  <p>Chaque image est l'aperçu du SITE lui-même : la fiche ouverte, le texte tamoul tapé dans le champ « Mon propre texte », la taille poussée au maximum, exactement ce que la cliente verra avant de commander.</p>
   <p class="ta" lang="ta">வாழ்க வளமுடன்</p>
 </div>
 
 <h2>Les verres : <em>un vœu pour chaque fête</em></h2>
-<p class="sub">Rendu givré blanc, comme nos gravures sur verre. Le texte tamoul se compte comme n'importe quel texte gravé, au tarif de la fiche.</p>
-<div class="grid">{verres}</div>
+<p class="sub">Aperçu du site sur chaque verre. Une phrase longue sort petite : le site plafonne la taille du texte sur le verre. Le texte tamoul se compte comme n'importe quel texte gravé, au tarif de la fiche.</p>
+<div class="grid">{grp("verres")}</div>
+
+<h2>Un mot court : <em>plus grand, plus lisible</em></h2>
+<p class="sub">Les mêmes verres avec un seul mot : la gravure prend toute la place que le site autorise.</p>
+<div class="grid">{grp("courts")}</div>
 
 <h2>Les bijoux : <em>pour les parents, pour les amoureux</em></h2>
-<p class="sub">Gravure sombre sur l'acier, comme sur nos bijoux. Un mot court se lit mieux qu'une phrase : அம்மா, அப்பா, அன்பு tiennent sur toutes les plaques.</p>
-<div class="grid">{bijoux}</div>
+<p class="sub">Aperçu 3D du site, tel que la cliente le fait tourner sur la fiche. Seuls les bijoux dont le site dessine l'aperçu 3D sont montrés ici.</p>
+<div class="grid">{grp("bijoux")}</div>
 
 <h2>Toutes les phrases <em>proposées</em></h2>
-<p class="sub">Tamoul · prononciation · sens · occasion · produit conseillé. Les lignes marquées ⚠ sont de ma composition et demandent une relecture.</p>
+<p class="sub">Tamoul · prononciation · sens · occasion · produit. Les lignes marquées ⚠ sont de ma composition et demandent une relecture.</p>
 <div class="tablew"><table>
-<thead><tr><th>Tamoul</th><th>Prononciation</th><th>Sens</th><th>Occasion</th><th>Produit</th></tr></thead>
+<thead><tr><th>Tamoul</th><th>Prononciation</th><th>Sens</th><th>Occasion</th><th>Produit montré</th></tr></thead>
 <tbody>{rows}</tbody></table></div>
 
 <div class="avis">
-  <h3>Avant de mettre quoi que ce soit en ligne</h3>
+  <h3>Ce que le site fait déjà, et ce qu'il faudra changer</h3>
   <ul>
-    <li><b>Relecture.</b> Les phrases viennent du rapport « Marché tamoul » (sauf « Joyeux Noël », « meilleur papa / meilleure maman », composées par moi). Une faute dans une gravure ne se rattrape pas : chaque texte est à faire relire par un locuteur natif avant la première gravure.</li>
-    <li><b>Écriture.</b> Les 8 écritures du site n'ont pas les lettres tamoules. Il faudra une 9ᵉ écriture (Noto Serif Tamil pour les verres, Noto Sans Tamil pour les bijoux, gratuites et libres) pour l'aperçu de la fiche, la fiche atelier et le fichier de gravure.</li>
-    <li><b>Longueur.</b> « இனிய தமிழ் புத்தாண்டு நல்வாழ்த்துகள் » fait deux lignes sur un verre ; sur une plaque de bracelet, un seul mot (அம்மா, அப்பா, அன்பு) reste lisible.</li>
-    <li><b>Où le dire aux clientes.</b> Une page « Gravure en tamoul » avec ces exemples, les phrases prêtes à cocher sur les fiches, et des vidéos autour de Deepavali, Pongal et du Nouvel An tamoul : c'est ce que le rapport conseille.</li>
+    <li><b>Ça marche tel quel</b> sur les verres (whisky, cocktail, vin, flûte, carafe, tumbler) et sur les bijoux à plaque (plaque acier, gourmette, chaîne acier, silicone, papillon) : le texte tamoul se tape dans le champ, l'aperçu l'affiche, à condition que l'appareil de la cliente ait une police tamoule (iPhone, Android et Windows en ont une). Le fichier de gravure doit lui aussi avoir la police.</li>
+    <li><b>Les 8 écritures du site n'ont pas les lettres tamoules</b> : l'aperçu retombe sur la police tamoule de l'appareil. Pour un rendu maîtrisé (fiche, atelier, gravure) : ajouter une 9ᵉ écriture « Tamoul » (Noto Serif Tamil, gratuite et libre).</li>
+    <li><b>Collier Quatre Mots et pendentif géométrique : à corriger avant de les proposer en tamoul.</b> Le site empile les lettres une par une à la verticale ; en tamoul, les signes de voyelle se détachent (ரே devient ர + ே, avec un rond pointillé) : il faudra tourner le mot entier au lieu d'empiler les lettres.</li>
+    <li><b>Cœur ouvrable, médaillon livre, enveloppe, gobelet</b> : pas montrés, leur aperçu n'affiche pas le texte dans la vue de départ (ou pas d'aperçu du texte sur la photo pour le gobelet).</li>
+    <li><b>Relecture.</b> Les phrases viennent du rapport « Marché tamoul », sauf « Joyeux Noël » et « meilleur papa / meilleure maman du monde », composées par moi. Chaque texte est à faire relire avant la première gravure.</li>
   </ul>
 </div>
 </div>

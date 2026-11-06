@@ -1,14 +1,18 @@
 ## 🪔 MAQUETTE « GRAVURE EN TAMOUL » — 06/11/2026 (gérant, après le rapport « Marché tamoul » : « prépare-moi des verres, des bijoux… avec le texte tamoul traditionnel : joyeux anniversaire, joyeux Noël pour les verres ; pour les bijoux des messages pour les parents ou les amoureux ») — EN ATTENTE DE SON AVIS, RIEN en ligne
-- Artifact https://claude.ai/artifact/A1LsiJozYynsZoRGYnrjcx · générateur `tools/maquettes/gravure-tamoul.py <dossier polices> <sortie>` (polices Noto Sans /
-  Serif Tamil, OFL, téléchargées depuis `raw.githubusercontent.com/google/fonts/main/ofl/` ; Pillow + raqm pour l'écriture tamoule) · sortie
-  `docs/maquettes/gravure-tamoul.html` (1,7 Mo, ignorée par git). Photos VIERGES du site gravées : 7 verres (whisky anniversaire · cocktail Noël ·
-  vin Deepavali · flûte mariage · carafe Pongal · tumbler Nouvel An tamoul · gobelet crème anniversaire + prénom, en doré) et 7 bijoux (plaque
-  acier அம்மா · gourmette அப்பா · bracelet cuir & plaque « meilleur papa du monde » · Quatre Mots என் உயிரே · bracelet femme என் அன்பே · cordon அன்பு ·
-  médaillon « je t'aime »), + tableau de 19 phrases (tamoul · prononciation · sens · occasion · produit).
-- ⚠️ « Joyeux Noël » (இனிய கிறிஸ்துமஸ் வாழ்த்துகள்) et « meilleur papa / meilleure maman du monde » ne sont PAS dans le rapport : composés par moi, à faire
-  relire. Toutes les phrases sont à faire relire par un locuteur natif avant la première gravure (une faute gravée ne se rattrape pas).
-- Au « applique » : 9ᵉ écriture « Tamoul » (Noto Serif Tamil verres / Noto Sans Tamil bijoux) dans `fonts.js` + aperçu + fiche atelier + fichier de
-  gravure ; phrases prêtes à cocher sur les fiches ; page « Gravure en tamoul » ; vidéos Deepavali / Pongal / Puthandu (conseils du rapport).
+- Artifact https://claude.ai/artifact/A1LsiJozYynsZoRGYnrjcx (v2) · générateur `tools/maquettes/gravure-tamoul.py <dossier captures> <sortie>` · sortie
+  `docs/maquettes/gravure-tamoul.html` (ignorée par git). ⛔ La v1 (textes posés avec Pillow sur les photos) a été REFUSÉE (« très moche… il faut que
+  ça soit vraiment comme sur le site ») : **toute image de gravure dans une maquette = l'aperçu du SITE** (fiche ouverte en local avec
+  `npx next start -p 3140`, texte tapé dans le champ, curseur de taille au maximum via le setter natif de l'`input[type=range]` de
+  `.ee-toolbar`, capture de `.gallery-main` ou du `canvas[data-apercu3d]`, recadrage sur le produit), jamais un rendu maison.
+  Polices Noto Sans / Serif Tamil (OFL, `raw.githubusercontent.com/google/fonts/main/ofl/`) copiées dans `~/.fonts` + `fc-cache` pour que
+  Chromium trouve les lettres tamoules.
+- Montré : 6 verres (whisky anniversaire · cocktail Noël · vin Deepavali · flûte mariage · carafe Pongal · tumbler Nouvel An tamoul) + 3 verres
+  avec un mot court (அப்பா, நன்றி, அன்பு : plus grand, le site plafonne la taille d'une phrase longue à 14 %) + 5 bijoux à aperçu 3D (plaque acier doré
+  அம்மா · gourmette identité அப்பா · chaîne acier « meilleur papa du monde » · silicone அப்பா · papillon என் அன்பே) + tableau de 19 phrases.
+- ⚠️ Constats pour le « applique » : Quatre Mots et pendentif géométrique EMPILENT les lettres à la verticale → en tamoul les signes de voyelle se
+  détachent (ரே → ர + ே, rond pointillé) : tourner le mot entier avant de les proposer en tamoul · cœur ouvrable, médaillon livre, enveloppe
+  n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
+  « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
 ## 🔤 TITRES GOOGLE DU GOBELET ET DE /naissance — 06/11/2026 (audit : titre de 92 caractères, titres en double) — ✅ EN LIGNE
 - Gobelet : `title` « Gobelet isotherme gravé 40 oz : prénom, dessin ou photo » (55 + « | Niv Création » = 70) ; c'est aussi le H1 de la fiche.
