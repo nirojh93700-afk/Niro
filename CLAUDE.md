@@ -56,7 +56,7 @@
   (fond aplati en blanc, image ×3, seuil Otsu, `potrace` installé par `apt install potrace`) sur 6 dessins (verre couple, Elli & Ben, Noël 2 et 9,
   gobelet 12 et 48) → `docs/maquettes/assets/vectoriel/` + `comparaison.png` : fidèles, 12 à 112 Ko. En attente de son essai dans le logiciel du laser
   avant de vectoriser tous les dessins et de les ranger dans le dossier de la commande (Images d'origine).
-  ✅ **TOUS LES DESSINS VECTORISÉS LE 06/11 SOIR (« fais tous les dessins en vectoriel »), PRÉPARÉ EN LOCAL, PAS EN LIGNE** : 236 dessins
+  ✅ **TOUS LES DESSINS VECTORISÉS LE 06/11 SOIR (« fais tous les dessins en vectoriel »), ✅ EN LIGNE LE 06/11/2026 SOIR (« Oui », bcbd701d, déploiement réussi)** : 236 dessins
   (`node --import ./tools/alias-register.mjs tools/gravure/inventaire-dessins.mjs` → `python3 tools/gravure/vectoriser-tout.py <inventaire>`)
   → `public/vectoriel/<même chemin>.svg` (13 Mo) + liste `src/lib/vectoriel.js` ; bouton « ⬇ SVG vectoriel (pour le laser) » sous chaque image
   d'origine (`svgPour`, imagesOrigine.js). Exclus : photos (lettres en bois, cristaux modèles). À revoir : ange (lueur), clé de sol (point), zodiaque (silhouettes pleines).
