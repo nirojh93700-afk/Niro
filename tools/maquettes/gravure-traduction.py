@@ -115,10 +115,21 @@ LANGUE = ('<div class="field mqt-langue"><label>Langue de la gravure</label>'
   '<div><small>Vous avez écrit</small><b id="mqt-fr"></b></div>'
   '<div><small id="mqt-lab">Gravé en tamoul</small><b id="mqt-out" class="mqt-script"></b></div></div>'
   '<p class="mqt-etat" id="mqt-etat"></p>'
-  '<label class="mqt-check"><input type="checkbox" id="mqt-ok"> <span><b>J’ai vérifié la traduction</b> (ou je l’ai fait relire par un proche qui parle la langue). La gravure est définitive.</span></label>'
+  '<p class="mqt-conseil">Un doute ? Faites-le relire par une personne qui parle cette langue avant de commander.</p>'
+  '<label class="mqt-check"><input type="checkbox" id="mqt-ok"> <span><b>J’ai relu le texte traduit.</b> Il sera gravé exactement comme il s’affiche ci-dessus et ne pourra plus être modifié.</span></label>'
   '</div></div>')
 k = ETAPE.find('id="mqt-count"'); k = ETAPE.find('</div>', k) + len('</div>')
 ETAPE = ETAPE[:k] + LANGUE + ETAPE[k:]
+# où mettre le décor : juste sous les puces du décor du site
+PLACE = ('<div class="mqt-place" id="mqt-place" hidden><span class="mqt-plab">Où mettre le décor ?</span>'
+  '<div class="prc-chips"><button type="button" class="prc-chip mqt-pl on" data-pl="texte">Autour du texte</button>'
+  '<button type="button" class="prc-chip mqt-pl" data-pl="date">Autour de la date</button>'
+  '<button type="button" class="prc-chip mqt-pl" data-pl="deux">Les deux</button></div>'
+  '<p class="mqt-note" id="mqt-pnote" hidden>Ajoutez une date plus haut pour y mettre le décor.</p></div>')
+k = ETAPE.find('prc-decors'); k = ETAPE.find('</div>', k) + len('</div>')
+if k < len('</div>'): sys.exit('décor du site introuvable')
+ETAPE = ETAPE[:k] + PLACE + ETAPE[k:]
+ETAPE = ETAPE.replace('<label>Décor autour du texte <span', '<label>Décor autour du texte ou de la date <span', 1)
 
 # insérer l'étape 2 avant le résumé, renuméroter le résumé
 i = h.find('<section class="prc-step"><div class="prc-sh"><span class="prc-num">3</span><h3>Résumé')
@@ -157,6 +168,9 @@ CSS = '''<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=A
 .mqt-lang{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font:600 .88rem Inter,system-ui,sans-serif;color:var(--ink);cursor:pointer}
 .mqt-lang.on{border-color:var(--gold-dark);background:#fffaf0;box-shadow:0 0 0 2px var(--gold)}
 .mqt-note{font-size:.8rem;color:var(--ink-soft);margin:6px 0 0;line-height:1.45}
+.mqt-place{margin:10px 0 0;display:flex;flex-direction:column;gap:8px}
+.mqt-plab{font-size:.86rem;color:var(--ink-soft)}
+.mqt-conseil{font-size:.84rem;color:var(--ink-soft);margin:6px 0 8px}
 .mqt .field label.mqt-swap{display:flex!important;flex-direction:row;gap:10px;align-items:flex-start;font-size:.86rem;font-weight:400;margin:0 0 12px;color:var(--ink-soft);cursor:pointer}
 .mqt .field label.mqt-swap[hidden]{display:none!important}
 .mqt .field .mqt-swap input{width:auto!important;flex:none;margin:3px 0 0;padding:0;accent-color:var(--gold-dark)}
@@ -193,10 +207,13 @@ var taille="36", carte=null, lang="fr", trad="", etat="", enCours=0, sample=null
 if(window.claude&&claude.use) claude.use("sample").then(function(s){sample=s;sampleOk=!!s;majEtat();}).catch(function(){sampleOk=false;majEtat();}); else sampleOk=false;
 var $=function(id){return document.getElementById(id)};
 function eur(x){return x.toFixed(2).replace(".",",")+"\\u00a0€"}
-var txt=$("mqt-txt"), date=$("mqt-date"), ok=$("mqt-ok"), direct=$("mqt-direct"), police="playfair", policeNom="Playfair", decor="";
+var txt=$("mqt-txt"), date=$("mqt-date"), ok=$("mqt-ok"), direct=$("mqt-direct"), police="playfair", policeNom="Playfair", decor="", place="texte";
+function orne(x,on){ return (on&&decor&&x) ? decor+"\\u00a0"+x+"\\u00a0"+decor : x; }
+function surTexte(){ return place!=="date"; } function surDate(){ return place!=="texte"; }
 // écriture et décor : les boutons du SITE, inchangés
 [].forEach.call(document.querySelectorAll(".mqt .prc-pol"),function(b){b.addEventListener("click",function(){[].forEach.call(document.querySelectorAll(".mqt .prc-pol"),function(x){x.classList.toggle("on",x===b)}); police=(b.className.match(/fnt-([a-z-]+)/)||[,"playfair"])[1]; policeNom=b.title||b.textContent; maj();});});
 [].forEach.call(document.querySelectorAll(".mqt .prc-decors .prc-chip"),function(b){b.addEventListener("click",function(){[].forEach.call(document.querySelectorAll(".mqt .prc-decors .prc-chip"),function(x){x.classList.toggle("on",x===b)}); var t=b.textContent.trim(); decor = /^Aucun/.test(t)?"":t.charAt(0); maj();});});
+[].forEach.call(document.querySelectorAll(".mqt-pl"),function(b){b.addEventListener("click",function(){[].forEach.call(document.querySelectorAll(".mqt-pl"),function(x){x.classList.toggle("on",x===b)}); place=b.dataset.pl; maj();});});
 var gal=document.querySelector(".gallery-main"), bg=document.querySelector(".gallery-bg"), bg0=bg.getAttribute("src"), layer=$("mqt-layer"), glass=$("mqt-glass");
 // taille 36 / 47
 var sw=[].slice.call(document.querySelectorAll(".variant-swatches"));
@@ -219,7 +236,7 @@ function traduire(){
   var v=txt.value.trim(); trad=""; etat="";
   if(lang==="fr"||direct.checked||!v){ maj(); return; }
   var k=v.toLowerCase().replace(/\\s+/g," ").replace(/[’]/g,"'");
-  if(PH[k]&&PH[k][lang]){ trad=PH[k][lang]; etat="Phrase relue par nous ✓"; maj(); return; }
+  if(PH[k]&&PH[k][lang]){ trad=PH[k][lang]; etat="Phrase courante de notre liste"; maj(); return; }
   if(!sample){ etat = sampleOk===false ? "Traduction en direct indisponible dans cet aperçu (sur le site : traduite en 1 à 2 s). Essayez « Joyeux anniversaire », « Je t'aime », « Maman », « Merci »…" : "Traduction en cours…"; maj(); return; }
   clearTimeout(tmr); etat="Traduction en cours…"; maj();
   tmr=setTimeout(function(){
@@ -242,7 +259,7 @@ function apercu(){
   var b=BOX[taille][0], mw=BOX[taille][1], W=gal.clientWidth, Hh=gal.clientHeight;
   glass.style.left=(b.left*100)+"%%"; glass.style.top=(b.top*100)+"%%"; glass.style.width=(b.width*100)+"%%"; glass.style.height=(b.height*100)+"%%";
   var fam = !l[2] ? FONTS[police] : l[2];
-  var gt=$("mqt-gt"); glass.style.fontFamily=fam; glass.dir=l[3]; gt.textContent = (g ? (decor? decor+" "+g+" "+decor : g) : "") + (d? "\\n"+d : "");
+  var gt=$("mqt-gt"); glass.style.fontFamily=fam; glass.dir=l[3]; gt.textContent = orne(g,surTexte()) + (g&&d? "\\n":"") + orne(d,surDate());
   // la plus grande taille qui tient dans le cadre (largeur plafonnée comme sur le site : maxWidthFrac)
   var maxW=Math.min(b.width,mw)*W, maxH=b.height*Hh;
   var fs=Math.round(Math.min(32, maxH/3.2)); glass.style.fontSize=fs+"px";
@@ -251,7 +268,7 @@ function apercu(){
 function maj(){
   var v=txt.value.trim(), l=L(), g=texteGrave(), d=date.value.trim(), ouvert = carte===cards[2];
   $("mqt-swap").hidden = lang==="fr";
-  $("mqt-lnote").textContent = lang==="fr" ? "Votre texte est gravé tel que vous l'écrivez." : (direct.checked ? "Écrivez votre texte en "+l[1].toLowerCase()+" : il est gravé tel quel." : "Écrivez en français : nous traduisons en "+l[1].toLowerCase()+(l[2] ? " et le verre est gravé dans l'écriture de la langue (l'écriture choisie plus bas sert au français et à l'anglais)." : "."));
+  $("mqt-lnote").textContent = lang==="fr" ? "Votre texte est gravé tel que vous l'écrivez." : (direct.checked ? "Écrivez votre texte en "+l[1].toLowerCase()+" : il est gravé tel quel." : "Écrivez en français, nous le traduisons en "+l[1].toLowerCase()+"."+(l[2] ? " Le "+l[1].toLowerCase()+" a son propre alphabet : le choix « Écriture » plus bas ne change pas ce texte." : ""));
   var c=$("mqt-count"); if(c) c.textContent=txt.value.length+"/40";
   txt.dir = (direct.checked && l[3]==="rtl") ? "rtl" : "ltr";
   var showTrad = lang!=="fr" && !direct.checked && !!v;
@@ -266,16 +283,17 @@ function maj(){
   if(carte&&carte!==cards[2]){ sg.textContent=carte.querySelector("b").textContent; sg.classList.remove("prc-miss"); }
   else if(ouvert&&g){ sg.textContent="Mon propre texte"+(lang!=="fr"?" · en "+l[1].toLowerCase():"")+" · offert (verre 1)"; sg.classList.remove("prc-miss"); }
   else { sg.textContent="à choisir (étape 1)"; sg.classList.add("prc-miss"); }
-  $("mqt-srow").hidden=!(ouvert&&g); var sp=$("mqt-sp"); sp.textContent="« "+g+" »"; sp.style.fontFamily=l[2]||""; sp.dir=l[3]; if(decor&&g) sp.textContent="« "+decor+" "+g+" "+decor+" »";
-  $("mqt-sdate").hidden=!(ouvert&&d); $("mqt-sd").textContent=d+" · +"+eur(TXT);
+  $("mqt-srow").hidden=!(ouvert&&g); var sp=$("mqt-sp"); sp.textContent="« "+g+" »"; sp.style.fontFamily=l[2]||""; sp.dir=l[3]; if(g) sp.textContent="« "+orne(g,surTexte())+" »";
+  $("mqt-sdate").hidden=!(ouvert&&d); $("mqt-sd").textContent=orne(d,surDate())+" · +"+eur(TXT);
+  $("mqt-place").hidden=!decor; $("mqt-pnote").hidden=!(decor&&surDate()&&!d);
   var add=$("mqt-add"), hint=$("mqt-hint"), okAll = valide || (carte&&carte!==cards[2]);
   add.disabled=!okAll; add.classList.toggle("prc-off",!okAll);
-  hint.textContent = okAll ? "Maquette : le bouton n'ajoute rien au panier." : (besoinOk && !ok.checked ? "Cochez « J'ai vérifié la traduction » pour continuer." : (ouvert && lang!=="fr" && v && !trad ? "La traduction arrive…" : "Choisissez votre gravure (étape 1)."));
+  hint.textContent = okAll ? "Maquette : le bouton n'ajoute rien au panier." : (besoinOk && !ok.checked ? "Cochez « J'ai relu le texte traduit » pour continuer." : (ouvert && lang!=="fr" && v && !trad ? "La traduction arrive…" : "Choisissez votre gravure (étape 1)."));
   // atelier
   $("mqt-a1").textContent = v||"—"; $("mqt-a2").textContent = l[1];
-  var a3=$("mqt-a3"); a3.textContent = g ? "« "+g+" »" : "—"; a3.style.fontFamily=l[2]||""; a3.dir=l[3]; if(decor&&g) a3.textContent="« "+decor+" "+g+" "+decor+" »"; var a3d=$("mqt-a3d"); a3d.textContent = d ? "Date : "+d : "";
+  var a3=$("mqt-a3"); a3.textContent = g ? "« "+g+" »" : "—"; a3.style.fontFamily=l[2]||""; a3.dir=l[3]; if(g) a3.textContent="« "+orne(g,surTexte())+" »"; var a3d=$("mqt-a3d"); a3d.textContent = d ? "Date : "+orne(d,surDate()) : "";
   $("mqt-a4").textContent = !l[2] ? policeNom : "Écriture "+l[1].toLowerCase()+" (Noto) — police fournie avec le fichier de gravure";
-  $("mqt-a5").textContent = lang==="fr" ? "—" : (direct.checked ? "Texte fourni par la cliente dans sa langue, gravé tel quel" : (PH[(v||"").toLowerCase()]&&PH[(v||"").toLowerCase()][lang] ? "Phrase de notre liste relue ✓" : "⚠️ Traduction automatique, relue et validée par la cliente (case cochée) — à relire avant de graver"));
+  $("mqt-a5").textContent = lang==="fr" ? "—" : (direct.checked ? "Texte fourni par la cliente dans sa langue, gravé tel quel" : (PH[(v||"").toLowerCase()]&&PH[(v||"").toLowerCase()][lang] ? "Phrase de notre liste" : "⚠️ Traduction automatique, relue et validée par la cliente (case cochée) — à relire avant de graver"));
   apercu();
 }
 txt.addEventListener("input",function(){ok.checked=false;traduire();}); direct.addEventListener("change",function(){ok.checked=false;traduire();});
