@@ -116,7 +116,7 @@ LANGUE = ('<div class="field mqt-langue"><label>Langue de la gravure</label>'
   '<div><small id="mqt-lab">Gravé en tamoul</small><b id="mqt-out" class="mqt-script"></b></div></div>'
   '<p class="mqt-etat" id="mqt-etat"></p>'
   '<p class="mqt-conseil">Un doute ? Faites-le relire par une personne qui parle cette langue avant de commander.</p>'
-  '<label class="mqt-check"><input type="checkbox" id="mqt-ok"> <span><b>J’ai relu le texte traduit.</b> Il sera gravé exactement comme il s’affiche ci-dessus et ne pourra plus être modifié.</span></label>'
+  '<label class="mqt-check"><input type="checkbox" id="mqt-ok"> <span><b>J’ai relu le texte traduit et je confirme qu’il est exact.</b> Il sera gravé exactement comme il s’affiche ci-dessus et ne pourra plus être modifié.</span></label>'
   '</div></div>')
 k = ETAPE.find('id="mqt-count"'); k = ETAPE.find('</div>', k) + len('</div>')
 ETAPE = ETAPE[:k] + LANGUE + ETAPE[k:]
@@ -236,7 +236,7 @@ function traduire(){
   var v=txt.value.trim(); trad=""; etat="";
   if(lang==="fr"||direct.checked||!v){ maj(); return; }
   var k=v.toLowerCase().replace(/\\s+/g," ").replace(/[’]/g,"'");
-  if(PH[k]&&PH[k][lang]){ trad=PH[k][lang]; etat="Phrase courante de notre liste"; maj(); return; }
+  if(PH[k]&&PH[k][lang]){ trad=PH[k][lang]; etat="Traduction automatique : à vérifier avant de commander"; maj(); return; }
   if(!sample){ etat = sampleOk===false ? "Traduction en direct indisponible dans cet aperçu (sur le site : traduite en 1 à 2 s). Essayez « Joyeux anniversaire », « Je t'aime », « Maman », « Merci »…" : "Traduction en cours…"; maj(); return; }
   clearTimeout(tmr); etat="Traduction en cours…"; maj();
   tmr=setTimeout(function(){
@@ -293,7 +293,7 @@ function maj(){
   $("mqt-a1").textContent = v||"—"; $("mqt-a2").textContent = l[1];
   var a3=$("mqt-a3"); a3.textContent = g ? "« "+g+" »" : "—"; a3.style.fontFamily=l[2]||""; a3.dir=l[3]; if(g) a3.textContent="« "+orne(g,surTexte())+" »"; var a3d=$("mqt-a3d"); a3d.textContent = d ? "Date : "+orne(d,surDate()) : "";
   $("mqt-a4").textContent = !l[2] ? policeNom : "Écriture "+l[1].toLowerCase()+" (Noto) — police fournie avec le fichier de gravure";
-  $("mqt-a5").textContent = lang==="fr" ? "—" : (direct.checked ? "Texte fourni par la cliente dans sa langue, gravé tel quel" : (PH[(v||"").toLowerCase()]&&PH[(v||"").toLowerCase()][lang] ? "Phrase de notre liste" : "⚠️ Traduction automatique, relue et validée par la cliente (case cochée) — à relire avant de graver"));
+  $("mqt-a5").textContent = lang==="fr" ? "—" : (direct.checked ? "Texte fourni par la cliente dans sa langue, gravé tel quel" : (PH[(v||"").toLowerCase()]&&PH[(v||"").toLowerCase()][lang] ? "⚠️ Traduction automatique (phrase de notre liste), relue et validée par la cliente (case cochée) — à relire avant de graver" : "⚠️ Traduction automatique, relue et validée par la cliente (case cochée) — à relire avant de graver"));
   apercu();
 }
 txt.addEventListener("input",function(){ok.checked=false;traduire();}); direct.addEventListener("change",function(){ok.checked=false;traduire();});

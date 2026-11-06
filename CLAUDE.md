@@ -31,11 +31,12 @@
   pastilles Anglais · Arabe · Chinois · Français · Hébreu · Tamoul (alphabétique, Français par défaut = rien ne change), texte en français → traduit (phrases connues = dictionnaire `PHRASES` ; autre texte =
   Claude en direct par la capacité `sample` de l'artifact, avec consigne « prénoms transcrits, pas traduits ») → posé sur la grande photo du verre
   vierge dans le cadre `engrave.box` lu dans la capture (police Noto de la langue, taille ajustée, rtl pour arabe / hébreu), les deux textes côte à
-  côte, case obligatoire « J'ai relu le texte traduit. Il sera gravé exactement comme il s'affiche ci-dessus et ne pourra plus être modifié. »
+  côte, case obligatoire « J'ai relu le texte traduit et je confirme qu'il est exact. Il sera gravé exactement comme il s'affiche ci-dessus et ne pourra plus être modifié. »
   (v3 du 06/11, reformulée : aucune boutique n'a de case type, la pratique est « relire + gravé tel quel + plus de modification » ; au-dessus
   « Un doute ? Faites-le relire par une personne qui parle cette langue ») ; v3 aussi : **« Où mettre le décor ? » Autour du texte / Autour de
   la date / Les deux** (sous les puces du décor, titre « Décor autour du texte ou de la date » ; gérant : « des étoiles ou un cœur juste pour le
-  texte… pour le chiffre… pour les deux ») ; à l'« applique » : champ `decorPlace`, `texteAvecDecor` étendu à la date, contrôle `oubliesAtelier`, case « Je colle moi-même mon texte dans ma langue » ; date +3 € ; résumé ; tableau « ce que
+  texte… pour le chiffre… pour les deux ») ; à l'« applique » : champ `decorPlace`, `texteAvecDecor` étendu à la date, contrôle `oubliesAtelier` ; v4 (06/11, son choix) : les phrases de la liste `PHRASES` portent la MÊME mention que la traduction en direct
+  (« Traduction automatique : à vérifier avant de commander ») tant qu'un locuteur ne les a pas relues, case « Je colle moi-même mon texte dans ma langue » ; date +3 € ; résumé ; tableau « ce que
   l'atelier verra » (texte tapé, langue, texte gravé, écriture Noto, contrôle). Prix lus dans la capture. Vérifié Chromium 390 / 1280 : 0 erreur JS,
   0 débordement. **Au « applique »** : traduction par la clé Claude du site (`/api/traduire`, cache), 9ᵉ à 12ᵉ écritures Noto (fiche + atelier +
   fichier de gravure), `spec.langue` + `spec.texteSource` + « traduction relue par la cliente » dans `consignesGravure` / alerte 🛎️, plaque 3D
