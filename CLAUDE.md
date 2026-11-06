@@ -186,6 +186,8 @@
   rouge 3,90 · **Pack de Noël 7,90 € barré 8,80**) : fiche (nouveau bijou compris, automatique par `emballagesNoelPourProduit`, catégorie
   bijoux), page du devis (`DevisPanier`), et **chaque mail client qui parle d'un bijou, d'un devis de bijou ou d'un emballage : citer le Pack
   de Noël et les autres emballages de Noël** (oublié dans le mail de Manuel le 02/11). Prix à relire en ligne avant d'écrire.
+- ⛔ **EXCEPTION (gérant, 06/11/2026, Yolande demandait la longueur d'un bracelet : « parle pas d'emballage et tout »)** : une réponse à une
+  simple question (mesure, matière…) répond à la question SEULEMENT, sans emballage ni Pack de Noël. Dans le doute, lui demander.
 - Vérifié le 02/11 : les 34 bijoux en ligne ont les 6 emballages. Après tout ajout de bijou : relire sa fiche en ligne (« Pack de Noël » présent).
 - S'arrête QUAND le gérant éteint Noël dans Gestion → Fêtes (alors plus un mot de Noël nulle part).
 - ⛔ **EMBALLAGES DE NOËL = BIJOUX SEULEMENT (gérant, 02/11/2026, rappel ferme : « Noël c'est que pour les bijoux, je t'ai déjà dit »)** :
