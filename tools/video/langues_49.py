@@ -137,8 +137,8 @@ SECTIONS = [  # (titre, langue, [(dossier, image, phrase, sens, produit)])
     (T, "12-gobelet-rose-amma-amma.jpg", "அம்மா", "Maman", "Gobelet isotherme"),
     (T, "18-papillon-anbe.jpg", "என் அன்பே", "Mon amour", "Bracelet papillon")]),
   ("En arabe", "ar", [
-    (L, "01-ar-whisky.jpg", "عيد مبارك", "Bonne fête de l'Aïd", "Verre à whisky"),
     (L, "02-ar-vin.jpg", "أحبك", "Je t'aime", "Verre à vin"),
+    (L, "01-ar-whisky.jpg", "عيد مبارك", "Bonne fête de l'Aïd", "Verre à whisky"),
     (L, "03-ar-chaine.jpg", "أبي", "Mon papa", "Bracelet chaîne acier")]),
   ("En hébreu", "he", [
     (L, "04-he-flute.jpg", "מזל טוב", "Félicitations", "Flûte à champagne"),
@@ -146,8 +146,8 @@ SECTIONS = [  # (titre, langue, [(dossier, image, phrase, sens, produit)])
     (L, "06-he-papillon.jpg", "אהבה", "Amour", "Bracelet papillon")]),
   ("En chinois", "zh", [
     (L, "07-zh-cocktail.jpg", "新年快乐", "Bonne année", "Verre à cocktail"),
-    (L, "08-zh-vin.jpg", "生日快乐", "Joyeux anniversaire", "Verre à vin"),
-    (L, "09-zh-silicone.jpg", "爸爸", "Papa", "Bracelet acier & silicone")]),
+    (L, "09-zh-silicone.jpg", "爸爸", "Papa", "Bracelet acier & silicone"),
+    (L, "08-zh-vin.jpg", "生日快乐", "Joyeux anniversaire", "Verre à vin")]),
 ]
 C_SEC = [(titre, lang, [(carte(photo(dos, n), CW, CH), ta, fr, p) for dos, n, ta, fr, p in items]) for titre, lang, items in SECTIONS]
 C_TAMP = carte(photo(T, "09-vin-court-anbu.jpg"), CW, CH)
@@ -181,26 +181,39 @@ def s_intro(im, t, d):
         texte_centre(im, 1060, "« Amour »", FT_SOUS, CREAM, a)
     if t > 2.5: pilule(im, W / 2, 1210, "Tamoul · arabe · hébreu · chinois", FT_PIL, GOLD, ENCRE, s=rebond((t - 2.5) / 0.5))
 
-def scene_langue(k):
-    titre, lang, cartes = C_SEC[k]
-    def fn(im, t, d):
-        pas = d / len(cartes); i = min(len(cartes) - 1, int(t / pas)); u = (t - i * pas) / pas
-        a0 = int(255 * ease(t / 0.4))
-        texte_centre(im, 230, titre, FT_NOM, CREAM, a0)
-        c, ta, fr, nom = cartes[i]
-        if i == 0:  # la carte pivote en entrant
-            e = ease(u / 0.3)
-            if e < 1: coller(im, c.resize((max(2, int(CW * e)), CH), Image.BILINEAR), W / 2, 860, rot=(1 - e) * 8)
-            else: coller(im, c, W / 2, 860, s=1 + 0.03 * (u - 0.3))
-        elif u < 0.25:  # la précédente glisse à gauche, la nouvelle arrive de droite
-            e = ease(u / 0.25)
-            coller(im, cartes[i - 1][0], W / 2 - W * e, 860, alpha=1 - e)
-            coller(im, c, W / 2 + W * (1 - e), 860, rot=(1 - e) * -4)
-        else: coller(im, c, W / 2, 860, s=1 + 0.02 * (u - 0.25))
-        a = int(255 * ease((u - 0.2) / 0.2)) if i else int(255 * ease((u - 0.25) / 0.2))
-        phrase(im, 1300, lang, ta, fr, alpha=a)
-        pilule(im, W / 2, 1640, nom, FT_PIL, BRUN, CREAM, alpha=a)
-    return fn
+# Les langues TOURNENT : jamais deux images de la même langue à la suite (gérant, 06/11/2026 :
+# « tu commences par le tamoul, l'image d'après l'arabe ou le chinois… chaque langue ça tourne »).
+TOURS = [("ta", "ar", "zh", "he"), ("ta", "zh", "he", "ar"), ("ta", "he", "ar", "zh"), ("ta",)]
+def _rotation():
+    pile = {lang: [(titre, lang) + x for x in cartes] for titre, lang, cartes in C_SEC}
+    out = [pile[l].pop(0) for tour in TOURS for l in tour if pile[l]]
+    assert sum(len(v) for v in pile.values()) == 0, "carte oubliée"
+    assert all(a[1] != b[1] for a, b in zip(out, out[1:])), "deux fois la même langue de suite"
+    assert all(a[5] != b[5] for a, b in zip(out, out[1:])), "deux fois le même produit de suite"
+    return out
+ROTATION = _rotation()  # (titre, langue, carte, phrase, sens, produit)
+PAS = 2.5
+
+def s_tour(im, t, d):
+    i = min(len(ROTATION) - 1, int(t / PAS)); u = (t - i * PAS) / PAS
+    titre, lang, c, ta, fr, nom = ROTATION[i]
+    if i == 0:  # la 1re carte pivote en entrant
+        e = ease(u / 0.3)
+        if e < 1: coller(im, c.resize((max(2, int(CW * e)), CH), Image.BILINEAR), W / 2, 860, rot=(1 - e) * 8)
+        else: coller(im, c, W / 2, 860, s=1 + 0.03 * (u - 0.3))
+        texte_centre(im, 230, titre, FT_NOM, CREAM, int(255 * ease(u / 0.15)))
+    elif u < 0.25:  # la précédente glisse à gauche, la nouvelle arrive de droite, le titre de langue change
+        e = ease(u / 0.25); prev = ROTATION[i - 1]
+        coller(im, prev[2], W / 2 - W * e, 860, alpha=1 - e)
+        coller(im, c, W / 2 + W * (1 - e), 860, rot=(1 - e) * -4)
+        if e < 0.5: texte_centre(im, 230, prev[0], FT_NOM, CREAM, int(255 * (1 - 2 * e)))
+        else: texte_centre(im, 230, titre, FT_NOM, CREAM, int(255 * (2 * e - 1)))
+    else:
+        coller(im, c, W / 2, 860, s=1 + 0.02 * (u - 0.25))
+        texte_centre(im, 230, titre, FT_NOM, CREAM)
+    a = int(255 * ease((u - 0.2) / 0.2)) if i else int(255 * ease((u - 0.25) / 0.2))
+    phrase(im, 1300, lang, ta, fr, alpha=a)
+    pilule(im, W / 2, 1640, nom, FT_PIL, BRUN, CREAM, alpha=a)
 
 TAMPONS = [("Votre texte dans votre langue", GOLD, ENCRE), ("Gravé dans notre atelier", BRUN, CREAM), ("Pour toute la famille", (60, 40, 18), GOLD2)]
 def s_tampons(im, t, d):
@@ -220,7 +233,7 @@ def s_fin(im, t, d):
     texte_centre(im, 1350, "NiV CRÉATION", FT_MARQUE, GOLD2, int(220 * ease((t - 1.2) / 0.5)))
     texte_centre(im, 1430, "Gravé en France", INTER(34), CREAM, int(220 * ease((t - 1.4) / 0.5)))
 
-SCENES = [(3.8, s_intro)] + [(2.5 * len(C_SEC[k][2]) + 0.3, scene_langue(k)) for k in range(len(C_SEC))] + [(2.8, s_tampons), (4.0, s_fin)]
+SCENES = [(3.8, s_intro), (PAS * len(ROTATION) + 0.3, s_tour), (2.8, s_tampons), (4.0, s_fin)]
 def image(t):
     acc = 0
     for d, fn in SCENES:

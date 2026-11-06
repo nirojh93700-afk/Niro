@@ -765,8 +765,10 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
   (aperçus du SITE capturés en local, `tools/maquettes/langues-reseaux.py`) : arabe = whisky « عيد مبارك » (Bonne fête de l'Aïd),
   vin « أحبك » (Je t'aime), chaîne « أبي » (Mon papa) ; hébreu = flûte « מזל טוב » (Félicitations), tumbler « שנה טובה » (Bonne année),
   papillon « אהבה » (Amour) ; chinois = cocktail « 新年快乐 » (Bonne année), vin « 生日快乐 » (Joyeux anniversaire), silicone « 爸爸 » (Papa).
-  Scènes : titre « Vos mots dans votre langue, gravés pour toujours » + Amour en 4 langues · une scène par langue · tampons · fin Merci
-  en 4 langues + nivcreation.fr. Effets de la 41 sans neige. 44,3 s, sans son, 1080 × 1920 (5,1 Mo) et 720 × 1280 (2,0 Mo). Aucun prix.
+  Scènes : titre « Vos mots dans votre langue, gravés pour toujours » + Amour en 4 langues · les 13 pièces où les LANGUES TOURNENT
+  (refaite le 06/11 à sa demande : tamoul → arabe → chinois → hébreu → tamoul → chinois → hébreu → arabe → tamoul → hébreu → arabe → chinois
+  → tamoul ; jamais deux fois la même langue ni le même produit de suite) · tampons · fin Merci en 4 langues + nivcreation.fr. Effets de
+  la 41 sans neige. 43,4 s, sans son, 1080 × 1920 et 720 × 1280. Aucun prix.
 - Script : `python3 tools/video/langues_49.py <images tamoules> <images langues> <polices> <sortie>` (`--apercu`).
   Fichiers `docs/videos/49-langues-*.mp4`. Phrases arabes, hébraïques et chinoises à faire relire par un locuteur natif.
 
