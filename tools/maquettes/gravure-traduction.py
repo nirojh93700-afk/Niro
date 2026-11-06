@@ -154,6 +154,7 @@ ATELIER = '''<div class="container mqt-atel"><p class="mqt-atel-t">Ce que l’at
 <tr><th>Texte à graver</th><td><b id="mqt-a3" class="mqt-script">—</b><div id="mqt-a3d"></div></td></tr>
 <tr><th>Écriture</th><td id="mqt-a4">Playfair</td></tr>
 <tr><th>Contrôle</th><td id="mqt-a5">—</td></tr>
+<tr><th>Fichier à graver<br><small>rangé dans le dossier de la commande</small></th><td><canvas id="mqt-cv" class="mqt-cv" width="600" height="300"></canvas><div class="mqt-fic"><b id="mqt-fn">—</b><span>SVG à l’échelle (lettres en tracés : aucune police à installer dans le logiciel du laser) · aussi en PNG et PDF</span></div></td></tr>
 </tbody></table></div>'''
 h = h.replace("<footer", ATELIER + "<footer", 1)
 BANDEAU = '<div class="mqt-band"><b>Maquette</b> · gravure traduite dans la langue de la cliente, sur le verre à vin. Rien n’est en ligne. Les prix viennent de la fiche.</div>'
@@ -190,6 +191,9 @@ CSS = '''<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=A
 .mqt-layer i{font-style:normal;display:inline-block;white-space:pre-wrap;overflow-wrap:normal;word-break:keep-all;max-width:100%}
 .gallery-main{position:relative}
 .mqt-atel{margin:28px auto}
+.mqt-cv{display:block;width:100%;max-width:300px;aspect-ratio:2/1;background:#fff;border:1px solid #c9a24b;border-radius:6px}
+.mqt-fic{margin-top:6px;display:flex;flex-direction:column;gap:2px;font-size:.84rem;color:var(--ink-soft)}
+.mqt-fic b{color:var(--ink);word-break:break-all}
 .mqt-atel-t{font-weight:600;margin:0 0 8px}
 .mqt-tab{border-collapse:collapse;width:100%;max-width:640px;font-size:.9rem;background:#fff}
 .mqt-tab th,.mqt-tab td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
@@ -265,6 +269,18 @@ function apercu(){
   var fs=Math.round(Math.min(32, maxH/3.2)); glass.style.fontSize=fs+"px";
   while(fs>9 && (gt.scrollWidth>maxW+1 || gt.offsetHeight>maxH)){ fs-=1; glass.style.fontSize=fs+"px"; }
 }
+// fichier à graver (aperçu) : 60 × 30 mm, noir sur blanc, texte + date plus petite, comme le fichier rangé dans la commande
+function fichier(t1, t2, fam, dir){
+  var cv=$("mqt-cv"), c=cv.getContext("2d"), W=cv.width, H=cv.height; c.fillStyle="#fff"; c.fillRect(0,0,W,H);
+  var fn=$("mqt-fn"), l=L();
+  if(!t1 && !t2){ fn.textContent="—"; return; }
+  fn.textContent="gravure-<réf>-verre1-"+l[1].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")+"-60x30mm.svg";
+  c.fillStyle="#000"; c.textAlign="center"; c.textBaseline="middle"; c.direction=dir||"ltr";
+  var lignes=[]; if(t1) lignes.push([t1,1]); if(t2) lignes.push([t2,0.62]);
+  var fs=200; function mesure(){ var w=0,h=0; lignes.forEach(function(x){ c.font=Math.round(fs*x[1])+"px "+fam; w=Math.max(w,c.measureText(x[0]).width); h+=fs*x[1]*1.3; }); return [w,h]; }
+  var m=mesure(); while(fs>6 && (m[0]>W*0.92 || m[1]>H*0.92)){ fs-=2; m=mesure(); }
+  var y=(H-m[1])/2; lignes.forEach(function(x){ var s=fs*x[1]; c.font=Math.round(s)+"px "+fam; y+=s*0.65; c.fillText(x[0],W/2,y); y+=s*0.65; });
+}
 function maj(){
   var v=txt.value.trim(), l=L(), g=texteGrave(), d=date.value.trim(), ouvert = carte===cards[2];
   $("mqt-swap").hidden = lang==="fr";
@@ -292,7 +308,8 @@ function maj(){
   // atelier
   $("mqt-a1").textContent = v||"—"; $("mqt-a2").textContent = l[1];
   var a3=$("mqt-a3"); a3.textContent = g ? "« "+g+" »" : "—"; a3.style.fontFamily=l[2]||""; a3.dir=l[3]; if(g) a3.textContent="« "+orne(g,surTexte())+" »"; var a3d=$("mqt-a3d"); a3d.textContent = d ? "Date : "+orne(d,surDate()) : "";
-  $("mqt-a4").textContent = !l[2] ? policeNom : "Écriture "+l[1].toLowerCase()+" (Noto) — police fournie avec le fichier de gravure";
+  fichier(orne(g,surTexte()), orne(d,surDate()), !l[2] ? FONTS[police] : l[2], l[3]);
+  $("mqt-a4").textContent = !l[2] ? policeNom : "Écriture "+l[1].toLowerCase()+" (Noto) — déjà tracée dans le fichier à graver";
   $("mqt-a5").textContent = lang==="fr" ? "—" : (direct.checked ? "Texte fourni par la cliente dans sa langue, gravé tel quel" : (PH[(v||"").toLowerCase()]&&PH[(v||"").toLowerCase()][lang] ? "⚠️ Traduction automatique (phrase de notre liste), relue et validée par la cliente (case cochée) — à relire avant de graver" : "⚠️ Traduction automatique, relue et validée par la cliente (case cochée) — à relire avant de graver"));
   apercu();
 }

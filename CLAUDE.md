@@ -41,6 +41,13 @@
   0 débordement. **Au « applique »** : traduction par la clé Claude du site (`/api/traduire`, cache), 9ᵉ à 12ᵉ écritures Noto (fiche + atelier +
   fichier de gravure), `spec.langue` + `spec.texteSource` + « traduction relue par la cliente » dans `consignesGravure` / alerte 🛎️, plaque 3D
   à corriger pour l'arabe. Toujours un garde-fou : aucune gravure traduite sans la case cochée.
+- ✅ **FICHIER À GRAVER DANS LE DOSSIER DE LA COMMANDE (gérant, 06/11 : « quand la cliente commande un texte, il faut que je l'aie en format pour graver… dans le dossier »)** :
+  maquette v5 = ligne « Fichier à graver — rangé dans le dossier de la commande » dans « ce que l'atelier verra » (aperçu noir sur blanc + nom
+  `gravure-<réf>-verre1-<langue>-60x30mm.svg`). Au « applique » : à la commande, le SERVEUR fabrique un SVG à la taille réelle (mm), LETTRES EN
+  TRACÉS (HarfBuzz : `harfbuzzjs`, mise en forme tamoule / arabe liée / droite à gauche correcte, aucune police à installer dans le logiciel du
+  laser), mêmes lignes que l'aperçu (date plus petite, décor compris), + PNG et PDF, rangé avec la commande et téléchargeable depuis Gestion →
+  Atelier et la fiche commande. Prototype : `tools/maquettes/gravure-fichier.js` (`HB=<chemin harfbuzzjs> node … <dossier>`), exemples
+  `docs/maquettes/assets/gravure-traduction/fichiers/` (tamoul, arabe, hébreu, chinois : glyphes vérifiés identiques au navigateur).
 - ✅ **OÙ METTRE LA TRADUCTION (gérant, 06/11 : « tu peux mettre partout, normalement partout il y a les textes »)** : au « applique », le choix
   « Langue de la gravure » va sur TOUS les produits qui ont un texte à graver (verres, carafe, cristal, gobelet, bijoux, bois, mariage,
   naissance, puzzles…), sous chaque champ de texte, comme la maquette v4. Les points ci-dessous ne retirent aucun produit : ils sont à
