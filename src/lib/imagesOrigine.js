@@ -11,6 +11,14 @@ import { MODELES, imageDesign } from "@/lib/modeles";
 import { NOEL_IMAGES } from "@/lib/fetes";
 import { CG_MODELES, CG_DESSINS, CG_ZODIAQUE, CG_DOSSIER } from "@/lib/cristauxGraves";
 import { mpLignes } from "@/lib/marquePages";
+import VECTORIEL from "@/lib/vectoriel";
+
+// Dessins du site redessinés en traits (tools/gravure/vectoriser-tout.py) : public/vectoriel/<même chemin>.svg.
+const VEC = new Set(VECTORIEL);
+export function svgPour(src) {
+  const k = String(src || "").split("?")[0].replace(/\.[a-z0-9]+$/i, "");
+  return VEC.has(k) ? `/vectoriel${k}.svg` : null;
+}
 
 // Fichiers d'origine plus grands que ceux de la fiche (copiés tels quels depuis docs/maquettes/assets).
 const NOEL_ORIGINE = { 26: "/origines/noel/noel-26.jpg", 27: "/origines/noel/noel-27.jpg" };
@@ -26,7 +34,7 @@ const estSite = (src) => typeof src === "string" && src.startsWith("/") && !src.
 function noel(n) {
   const im = NOEL_IMAGES.find((m) => String(m.n) === String(n).trim());
   if (!im) return null;
-  return { titre: `Modèle de Noël n° ${im.n} — ${im.nom}`, src: NOEL_ORIGINE[im.n] || im.src, nom: nomFichier(im.src, `noel-${im.n}-${im.nom}`) };
+  return { titre: `Modèle de Noël n° ${im.n} — ${im.nom}`, src: NOEL_ORIGINE[im.n] || im.src, svg: svgPour(im.src), nom: nomFichier(im.src, `noel-${im.n}-${im.nom}`) };
 }
 
 // Une série de réglages (un verre, ou l'article entier) → ses images du site.
@@ -97,5 +105,6 @@ export function imagesOrigineArticle(item) {
   if (d) out.push({ titre: `Design « ${d.name} »`, src: d.dark, nom: nomFichier(d.dark, `design-${d.id}`), note: "Le fichier du design utilisé par le site (traits foncés, fond transparent)." });
   // Une même image demandée deux fois (deux verres au même modèle) : une seule ligne.
   const vus = new Set();
-  return out.filter((x) => estSite(x.src) && !vus.has(x.titre + x.src) && vus.add(x.titre + x.src));
+  return out.filter((x) => estSite(x.src) && !vus.has(x.titre + x.src) && vus.add(x.titre + x.src))
+    .map((x) => ({ ...x, svg: x.svg || svgPour(x.src) }));
 }

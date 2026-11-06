@@ -24,6 +24,13 @@ function Tuile({ im, compact }) {
         style={{ padding: "6px 10px", fontSize: "0.78rem", textAlign: "center", textDecoration: "none", display: "block" }}>
         ⬇ Télécharger l'image d'origine
       </a>
+      {im.svg ? (
+        <a href={im.svg} download={im.nom.replace(/\.[a-z0-9]+$/i, "") + "-vectoriel.svg"} className="btn"
+          title="Le même dessin en traits (SVG, 60 mm de large) : s'ouvre dans le logiciel du laser à n'importe quelle taille."
+          style={{ padding: "6px 10px", fontSize: "0.78rem", textAlign: "center", textDecoration: "none", display: "block", border: "1px solid #c9a24b", color: "#7c6120", background: "#fff" }}>
+          ⬇ SVG vectoriel (pour le laser)
+        </a>
+      ) : null}
       {im.note ? <span style={{ fontSize: "0.72rem", color: "#7a6a48", lineHeight: 1.35 }}>{im.note}</span> : null}
     </div>
   );

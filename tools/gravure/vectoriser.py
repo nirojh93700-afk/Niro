@@ -22,10 +22,18 @@ def otsu(img):
 
 def vectoriser(src, out, largeur_mm=60.0):
     im = Image.open(src)
-    if im.mode in ("RGBA", "LA", "P"):
-        im = im.convert("RGBA"); fond = Image.new("RGBA", im.size, "white"); fond.alpha_composite(im); im = fond
+    a = None
+    if im.mode in ("RGBA", "LA", "P") or "transparency" in im.info:
+        im = im.convert("RGBA"); a = im.getchannel("A")
     g = ImageOps.grayscale(im.convert("RGB"))
-    if g.resize((1, 1)).getpixel((0, 0)) < 110: g = ImageOps.invert(g)  # dessin clair sur fond sombre → trait noir
+    if a is not None and a.getextrema()[0] < 250:
+        # Fond transparent : l'encre = ce qui est opaque. Dessin CLAIR sur transparent (cristaux, blanc) → encre = alpha × clarté.
+        lum = [v for v, al in zip(g.getdata(), a.getdata()) if al > 128]
+        clair = lum and sum(lum) / len(lum) > 150
+        from PIL import ImageChops
+        encre = ImageChops.multiply(a, g) if clair else ImageChops.multiply(a, ImageOps.invert(g))
+        g = ImageOps.invert(encre)
+    elif g.resize((1, 1)).getpixel((0, 0)) < 110: g = ImageOps.invert(g)  # dessin clair sur fond sombre → trait noir
     g = g.resize((g.width * 3, g.height * 3), Image.LANCZOS)
     t = otsu(g)
     bw = g.point(lambda p: 0 if p <= t else 255, "1")

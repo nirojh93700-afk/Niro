@@ -56,6 +56,10 @@
   (fond aplati en blanc, image ×3, seuil Otsu, `potrace` installé par `apt install potrace`) sur 6 dessins (verre couple, Elli & Ben, Noël 2 et 9,
   gobelet 12 et 48) → `docs/maquettes/assets/vectoriel/` + `comparaison.png` : fidèles, 12 à 112 Ko. En attente de son essai dans le logiciel du laser
   avant de vectoriser tous les dessins et de les ranger dans le dossier de la commande (Images d'origine).
+  ✅ **TOUS LES DESSINS VECTORISÉS LE 06/11 SOIR (« fais tous les dessins en vectoriel »), PRÉPARÉ EN LOCAL, PAS EN LIGNE** : 236 dessins
+  (`node --import ./tools/alias-register.mjs tools/gravure/inventaire-dessins.mjs` → `python3 tools/gravure/vectoriser-tout.py <inventaire>`)
+  → `public/vectoriel/<même chemin>.svg` (13 Mo) + liste `src/lib/vectoriel.js` ; bouton « ⬇ SVG vectoriel (pour le laser) » sous chaque image
+  d'origine (`svgPour`, imagesOrigine.js). Exclus : photos (lettres en bois, cristaux modèles). À revoir : ange (lueur), clé de sol (point), zodiaque (silhouettes pleines).
 - 🎄 **PHOTO DE L'EMBALLAGE DE NOËL SUR LA FICHE ATELIER (06/11 soir, capture : « il a choisi emballage Noël, je vois pas c'est quoi, il faut
   que j'aie la photo, je t'ai déjà dit »)** : `photosEmballageNoel` (fetes.js) + `PhotosNoel` (OptionsVendues.jsx, page Atelier) : la photo de
   l'emballage choisi (boîte à ruban à SA couleur, Pack = boîte + sac ; couleur non notée = les deux photos) + l'étiquette offerte, dans « Vendu en
