@@ -16,3 +16,6 @@
   « si le dessin ne vous plaît pas tout à fait, nous pouvons le refaire selon vos idées ». Ne plus relancer sans sa demande.
 - 06/11/2026 11 h 02 (heure de Paris) : elle demande « le prix pour le petit ». Gérant : **création du dessin = 6 €** → Petit 39,90 + 6 = **45,90 €**
   (texte +5 €, socle 14,90 € en option, livraison au paiement). Mail préparé, montré au gérant, NON envoyé (attendre « envoie »).
+- 06/11 : **devis DEV-1549 créé, NON envoyé** (id `y1gO3RAWVZNOMr48auxF`, 45,90 € : cristal vertical Petit 39,90 € `cristal-v-petit` / stock
+  `bloc-cristal-petit` + création du dessin 6 €, 1 g). Livraison testée : actif (domicile 14,90, relais 4,90, Express 14,90).
+  Mail prix + lien du devis préparé dans UN seul mail, attend « envoie ».
