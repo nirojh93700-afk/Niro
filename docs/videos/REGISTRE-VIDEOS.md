@@ -739,3 +739,21 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #gravure #gobeletpersonnalise #ideecadeau
+
+## Vidéo 48 — Gravure en tamoul : verres, gobelets, bijoux (06/11/2026)
+- Demande du gérant : « une vidéo pour les communautés tamoul avec les tags qui correspondent au tamoul… tu écris en français, comme
+  sur les visuels pour les bijoux, et en bas [la traduction] en français, la boutique c'est en français ». Pièces = les images réseaux
+  tamoules (aperçus du site, gobelets, bijoux gravés en tamoul) ; à l'écran : textes en français, la phrase tamoule en or et son sens
+  en français dessous. Scènes : titre « Vos mots en tamoul, gravés pour toujours » + அன்பு « Amour » · même verre à whisky, deux phrases
+  (anniversaire, Appa) · « Pour chaque fête » (Deepavali, Nouvel An tamoul, mariage, Noël, merci) · gobelets Appa et Amma en écran
+  partagé · « Et sur vos bijoux » (plaque Amma, chaîne « meilleur papa du monde », papillon « mon amour », cœur ouvrable « je t'aime »,
+  cœur « amour », gourmette Appa) · tampons · fin நன்றி « Merci » + nivcreation.fr. Effets de la 41 sans neige (encre et paillettes or).
+  42,2 s, sans son, 1080 × 1920 (5,5 Mo) et 720 × 1280 (2,0 Mo). Aucun prix.
+- Script : `python3 tools/video/tamoul_48.py <images réseaux> <polices> <sortie>` (`--apercu`). Fichiers `docs/videos/48-tamoul-*.mp4`.
+
+**Vidéo 48 — Vos mots en tamoul, gravés pour toujours** (Verre à whisky, Verre à vin, Verre tumbler en cristal, Flûte à champagne, Verre à cocktail, Gobelet isotherme 40 oz, Collier plaque acier, Bracelet chaîne acier, Bracelet papillon, Médaillon cœur ouvrable, Collier cœur gravé, Bracelet gourmette)
+> ✨ அன்பு, அம்மா, அப்பா… vos mots en tamoul, gravés sur un verre, un gobelet ou un bijou 💛
+> Pour Deepavali, le Nouvel An tamoul, un mariage ou un anniversaire 🪔 Gravé dans notre atelier en France
+> 👉 nivcreation.fr
+
+#nivcreation #tamil #tamilfrance #cadeaupersonnalise #ideecadeau
