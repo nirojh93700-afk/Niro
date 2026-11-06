@@ -59,7 +59,7 @@
 - 🎄 **PHOTO DE L'EMBALLAGE DE NOËL SUR LA FICHE ATELIER (06/11 soir, capture : « il a choisi emballage Noël, je vois pas c'est quoi, il faut
   que j'aie la photo, je t'ai déjà dit »)** : `photosEmballageNoel` (fetes.js) + `PhotosNoel` (OptionsVendues.jsx, page Atelier) : la photo de
   l'emballage choisi (boîte à ruban à SA couleur, Pack = boîte + sac ; couleur non notée = les deux photos) + l'étiquette offerte, dans « Vendu en
-  plus » (écran, papier, Atelier). Commit local f2b826b0, PRÉPARÉ, À POUSSER SUR SON MOT.
+  plus » (écran, papier, Atelier). ✅ EN LIGNE LE 06/11/2026 SOIR (« Mets en ligne », ad2a2baf, déploiement réussi).
 - ✅ **OÙ METTRE LA TRADUCTION (gérant, 06/11 : « tu peux mettre partout, normalement partout il y a les textes »)** : au « applique », le choix
   « Langue de la gravure » va sur TOUS les produits qui ont un texte à graver (verres, carafe, cristal, gobelet, bijoux, bois, mariage,
   naissance, puzzles…), sous chaque champ de texte, comme la maquette v4. Les points ci-dessous ne retirent aucun produit : ils sont à
