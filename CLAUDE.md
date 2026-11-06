@@ -1,3 +1,12 @@
+## 🧾 DEVIS DE CRISTAL : SOCLE ET TEXTE À COCHER PAR LA CLIENTE — 06/11/2026 (gérant, devis DEV-1549 d'Alissia : « tu peux appliquer… si le client a déjà choisi le socle et que dans le devis il y est, il faut pas que ça s'affiche, pareil pour le texte »)
+- Page `/document/<id>` d'un devis dont une ligne est rattachée à un cristal (`variantId` d'un produit `crystal3d`), à nombre fixe : bloc
+  « Options de votre cristal » (`DevisOptions.jsx`) = socle LED (prix et socle de la FICHE selon la taille : petit carré 14,90 / grand
+  rectangle 19,90) + « Un texte gravé en plus » (+5 €, 40 car., 8 écritures, aperçu). Lignes ajoutées au tableau, totaux à jour, bouton grisé
+  si texte coché vide. ⛔ Une ligne du devis qui contient « socle » (ou « texte ») = cette option N'EST PAS proposée (jamais deux fois).
+- Calcul `src/lib/devisOptions.js` (pur) branché dans `devisEffectif(q, n, options)` → quote-shipping, quote-promo, quote-pay, `/api/checkout`
+  (devis mis au panier : `devis.options`) : prix, port (socle 300 / 550 g), stock du socle décompté, lignes Stripe « Option : … » (lues par l'atelier).
+  État partagé côté page : `src/lib/devisChoixStore.js`. Pas d'options sur un devis à nombre modifiable.
+
 ## 🔍🔍 « FAIS UN AUDIT » = L'AUDIT COMPLET, TOUJOURS TOUT (gérant, 05/11/2026 : « tu fais tout, tu enregistres tous ces paramètres quand je t'ai dit fais une audit »)
 > Avant, « vérifie mon site » ne lançait que `audit-site` + `audit-photos` (le site marche-t-il ?) : l'audit externe du 04/11 a trouvé des
 > problèmes de prix, de textes légaux, d'allégations, de vitesse et de sécurité que ces deux outils ne regardaient pas.
