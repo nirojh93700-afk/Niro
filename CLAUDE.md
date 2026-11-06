@@ -52,6 +52,14 @@
   (`imagesOrigine.js` : modèles des verres, Noël, gobelet, cristaux gravés) sont des JPG / PNG / WebP (pixels) ; le bouton « SVG » de l'Atelier
   ne fait qu'emballer l'image dans un SVG (pas de tracés). Seuls les petits motifs des bijoux (`public/motifs/*.svg`) sont de vrais vecteurs.
   Proposé : vectoriser chaque dessin du site (tracés noirs, comme les textes traduits), à valider par lui avant de le faire.
+  ✅ **ESSAI FAIT le 06/11 soir (« fais-le sur quelques dessins pour voir »)** : `tools/gravure/vectoriser.py <image> <sortie.svg> [largeur_mm]`
+  (fond aplati en blanc, image ×3, seuil Otsu, `potrace` installé par `apt install potrace`) sur 6 dessins (verre couple, Elli & Ben, Noël 2 et 9,
+  gobelet 12 et 48) → `docs/maquettes/assets/vectoriel/` + `comparaison.png` : fidèles, 12 à 112 Ko. En attente de son essai dans le logiciel du laser
+  avant de vectoriser tous les dessins et de les ranger dans le dossier de la commande (Images d'origine).
+- 🎄 **PHOTO DE L'EMBALLAGE DE NOËL SUR LA FICHE ATELIER (06/11 soir, capture : « il a choisi emballage Noël, je vois pas c'est quoi, il faut
+  que j'aie la photo, je t'ai déjà dit »)** : `photosEmballageNoel` (fetes.js) + `PhotosNoel` (OptionsVendues.jsx, page Atelier) : la photo de
+  l'emballage choisi (boîte à ruban à SA couleur, Pack = boîte + sac ; couleur non notée = les deux photos) + l'étiquette offerte, dans « Vendu en
+  plus » (écran, papier, Atelier). Commit local f2b826b0, PRÉPARÉ, À POUSSER SUR SON MOT.
 - ✅ **OÙ METTRE LA TRADUCTION (gérant, 06/11 : « tu peux mettre partout, normalement partout il y a les textes »)** : au « applique », le choix
   « Langue de la gravure » va sur TOUS les produits qui ont un texte à graver (verres, carafe, cristal, gobelet, bijoux, bois, mariage,
   naissance, puzzles…), sous chaque champ de texte, comme la maquette v4. Les points ci-dessous ne retirent aucun produit : ils sont à
