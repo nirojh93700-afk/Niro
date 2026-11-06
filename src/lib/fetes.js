@@ -215,3 +215,27 @@ export function champsFicheAvecNoel(fields, noel) {
   }
   return out;
 }
+
+// Photos de l'emballage de Noël COMMANDÉ, pour les fiches de travail (06/11/2026, gérant, capture de la fiche d'un
+// Collier Enveloppe : « il a choisi pour emballage Noël, je vois pas c'est quoi, il faut que j'aie la photo »).
+// `texte` = ce que la commande a gardé (« Sachet rouge de Noël », « Pack de Noël · bleu nuit », ou la ligne Stripe
+// « Emballage de Noël : … (+0.90 €) · étiquette… »). Renvoie [{ nom, d, photo }] : l'emballage (la boîte à la couleur
+// choisie ; pour le Pack : la boîte ET le sac), puis l'étiquette offerte. Rien reconnu = [].
+export function photosEmballageNoel(texte) {
+  const n = (v) => String(v || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[«»"]/g, "").replace(/\s+/g, " ").trim();
+  const t = n(texte).replace(/^emballage de noel\s*:\s*/, "");
+  const e = NOEL_EMBALLAGES.find((x) => t.startsWith(n(x.nom))) || NOEL_EMBALLAGES.find((x) => t.includes(n(x.nom)));
+  if (!e) return [];
+  const coul = NOEL_COULEURS.find((c) => t.includes(n(c.nom))) || null;
+  const ruban = NOEL_EMBALLAGES.find((x) => x.id === "ruban");
+  const sac = NOEL_EMBALLAGES.find((x) => x.id === "sac");
+  // Boîte à ruban : la photo de la couleur choisie ; couleur non notée = les deux photos, pour ne jamais montrer la mauvaise.
+  const boites = (prefixe) => (coul
+    ? [{ nom: `${prefixe}${ruban.nom} — ${coul.nom.toLowerCase()}`, d: ruban.d, photo: coul.photo }]
+    : NOEL_COULEURS.map((c) => ({ nom: `${prefixe}${ruban.nom} — ${c.nom.toLowerCase()} ? (couleur non notée)`, d: ruban.d, photo: c.photo })));
+  const out = e.id === "pack" ? [...boites("Pack de Noël : "), { nom: `Pack de Noël : ${sac.nom}`, d: sac.d, photo: sac.photo }]
+    : e.id === "ruban" ? boites("")
+    : [{ nom: e.nom, d: e.d, photo: e.photo }];
+  out.push({ nom: "+ l'étiquette « Merry Christmas » et sa ficelle", d: NOEL_ETIQUETTE.d, photo: NOEL_ETIQUETTE.photo });
+  return out;
+}

@@ -9,6 +9,7 @@ import { optionsCommande } from "@/lib/optionsVendues";
 import { formatEuro } from "@/lib/format";
 import PhotosEmballage from "@/components/admin/PhotosEmballage";
 import VarBadge from "@/components/admin/VarBadge";
+import { photosEmballageNoel } from "@/lib/fetes";
 
 export default function OptionsVendues({ order, papier = false }) {
   if (!order) return null;
@@ -36,6 +37,7 @@ export default function OptionsVendues({ order, papier = false }) {
                   <b>{o.libelle}</b>{o.detail ? ` : ${o.detail}` : ""}
                   {o.montant > 0 ? <span className="ov-montant">+{formatEuro(o.montant)}</span> : null}
                   {o.libelle === "Emballage" ? <PhotosEmballage detail={o.detail} petit={papier} /> : null}
+                  {o.noel ? <PhotosNoel texte={o.noel} petit={papier} /> : null}
                 </li>
               ))}
             </ul>
@@ -52,5 +54,23 @@ export default function OptionsVendues({ order, papier = false }) {
         </div>
       ) : null}
     </div>
+  );
+}
+
+// 🎄 Photo de l'emballage de Noël choisi (06/11/2026, « je vois pas c'est quoi, il faut que j'aie la photo ») :
+// l'emballage (boîte à la couleur choisie, boîte + sac pour le Pack) et l'étiquette offerte, même cadre que PhotosEmballage.
+export function PhotosNoel({ texte, petit }) {
+  const fiches = photosEmballageNoel(texte);
+  if (!fiches.length) return null;
+  return (
+    <span className={`ov-emb${petit ? " petit" : ""}`}>
+      {fiches.map((e, i) => (
+        <figure key={i}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={e.photo} alt={e.nom} loading="eager" />
+          <figcaption><b>{e.nom}</b>{e.d}</figcaption>
+        </figure>
+      ))}
+    </span>
   );
 }

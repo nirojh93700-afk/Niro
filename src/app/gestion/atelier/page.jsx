@@ -26,6 +26,7 @@ import { lignesDevis } from "@/lib/devisGravure";
 import { optionsArticle, livraisonCommande } from "@/lib/optionsVendues";
 import { formatEuro } from "@/lib/format";
 import PhotosEmballage from "@/components/admin/PhotosEmballage";
+import { PhotosNoel } from "@/components/admin/OptionsVendues";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/Conditionnement";
 import BoutonRate, { RatesCommande } from "@/components/admin/Rates";
@@ -344,6 +345,7 @@ export default function AtelierPage() {
                                 <b>{op.libelle}</b>{op.detail ? ` : ${op.detail}` : ""}
                                 {op.montant > 0 ? <span className="ov-montant">+{formatEuro(op.montant)}</span> : null}
                                 {op.libelle === "Emballage" ? <PhotosEmballage detail={op.detail} petit /> : null}
+                                {op.noel ? <PhotosNoel texte={op.noel} petit /> : null}
                               </li>
                             ))}
                           </ul>
