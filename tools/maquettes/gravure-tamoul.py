@@ -112,8 +112,6 @@ td.ta{{font-size:1.15rem;white-space:nowrap}} td.tr{{font-style:italic;color:var
 .tablew{{overflow-x:auto;border-radius:14px}}
 .avis{{background:var(--sable);border-radius:16px;padding:18px 20px;margin-top:18px}}
 .avis h3{{margin:0 0 8px;font-size:1.05rem}} .avis ul{{margin:0;padding-left:20px}} .avis li{{margin:6px 0}}
-.rv{{opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s}} .rv.in{{opacity:1;transform:none}}
-@media (prefers-reduced-motion: reduce){{.rv{{opacity:1;transform:none;transition:none}}}}
 @media (max-width:480px){{.grid{{grid-template-columns:1fr 1fr;gap:10px}} .card figcaption{{padding:10px}} .ta{{font-size:1.1rem}}}}
 </style>
 <div class="wrap">
@@ -153,9 +151,6 @@ td.ta{{font-size:1.15rem;white-space:nowrap}} td.tr{{font-style:italic;color:var
   </ul>
 </div>
 </div>
-<script>
-(function(){{var io=new IntersectionObserver(function(es){{es.forEach(function(e){{if(e.isIntersecting){{e.target.classList.add('in');io.unobserve(e.target)}}}})}},{{threshold:.08}});document.querySelectorAll('.rv').forEach(function(el){{io.observe(el)}})}})();
-</script>
 """
 open(OUT, "w", encoding="utf-8").write(html)
 print(OUT, len(html) // 1024, "Ko")
