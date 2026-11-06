@@ -182,6 +182,8 @@ def compose(src, key, prod, out):
     assert M + largeur(d, pl, fp) <= 1080 - M - LOGO_W - 36 or y > ly + lg.height + 46, (out, pl)
     canvas.save(out, quality=92)
 
+RETIREES = {5, 10, 21, 23, 24}  # retirées par le gérant le 06/11 (carafe Pongal, gobelet crème, médaillon, gourmette et cuir sur photo)
 for i, (src, key, prod) in enumerate(IMGS, 1):
+    if i in RETIREES: continue
     name = f"{i:02d}-{os.path.splitext(os.path.basename(src))[0]}-{key}.jpg"
     compose(src, key, prod, f"{OUT}/{name}"); print(name)
