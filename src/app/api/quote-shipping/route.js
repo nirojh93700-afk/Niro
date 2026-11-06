@@ -13,7 +13,7 @@ export async function POST(req) {
   const q0 = body?.id ? await getQuote(body.id) : null;
   if (!q0 || q0.type === "facture" || q0.status === "paye") return Response.json({ actif: false });
   // Nombre de pièces choisi par la cliente (devis à quantité modifiable) : port calculé dessus.
-  const { q, index } = await devisEffectif(q0, body?.n);
+  const { q, index } = await devisEffectif(q0, body?.n, body?.options);
   if (!livraisonActive(q.items, index)) return Response.json({ actif: false });
   const settings = await getSettings();
   if (body?.method === "relais" || body?.method === "domicile") {

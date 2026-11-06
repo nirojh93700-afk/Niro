@@ -2,14 +2,21 @@
 
 import { useEffect, useState } from "react";
 import RelaisPicker from "@/components/RelaisPicker";
+import { useDevisChoix, choixPourServeur } from "@/lib/devisChoixStore";
 
 const euro = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(n || 0);
 const prixPort = (n) => (n === 0 ? "Offerte" : euro(n));
 
-export default function DocumentActions({ id, type, status, clientEmail = "", totalArticles = 0, livraison = false, n = null }) {
+export default function DocumentActions({ id, type, status, clientEmail = "", totalArticles: totalBase = 0, livraison = false, n = null, options = false }) {
   // `n` : nombre de pièces choisi par la cliente (devis à quantité modifiable, 01/11/2026) — envoyé
   // à chaque calcul (port, code promo, paiement) ; le serveur recalcule tout dessus.
-  const avecN = n != null ? { n } : {};
+  // Options cochées sur la page (socle, texte : 06/11/2026) : envoyées à chaque calcul, comme `n`.
+  const choix = useDevisChoix();
+  const optServeur = options ? choixPourServeur(choix) : undefined;
+  const cleOpt = JSON.stringify(optServeur || null);
+  const avecN = { ...(n != null ? { n } : {}), ...(optServeur ? { options: optServeur } : {}) };
+  const totalArticles = Math.round((Number(totalBase) + (options ? choix.extra || 0 : 0)) * 100) / 100;
+  const texteVide = options && choix.texteOn && !String(choix.texte || "").trim();
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   // Code promo (devis seulement) : le client s'inscrit, reçoit son code, le saisit ici.
@@ -34,12 +41,12 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
       .then((r) => r.json()).then((d) => { if (vivant && d.actif) setTarifs(d); }).catch(() => {});
     if (relais) choisirRelais(relais);
     return () => { vivant = false; };
-  }, [id, peutLivrer, n]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id, peutLivrer, n, cleOpt]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Nombre changé avec un code déjà appliqué : la remise est recalculée sur le nouveau devis.
+  // Nombre ou options changés avec un code déjà appliqué : la remise est recalculée sur le nouveau devis.
   useEffect(() => {
-    if (promo && n != null) appliquer(promo.code);
-  }, [n]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (promo && (n != null || options)) appliquer(promo.code);
+  }, [n, cleOpt]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function choisirRelais(p) {
     setRelais(p); setPortRelais(null); setErr("");
@@ -53,7 +60,7 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
   const port = !peutLivrer ? null : method === "relais" ? (relais ? portRelais : null) : (tarifs ? tarifs.domicile : null);
   const remise = promo ? promo.remise : 0;
   const total = peutLivrer && port != null ? Math.round((totalArticles - remise + port) * 100) / 100 : null;
-  const bloque = peutLivrer && (!tarifs || (method === "relais" && !relais) || port == null);
+  const bloque = texteVide || (peutLivrer && (!tarifs || (method === "relais" && !relais) || port == null));
 
   async function appliquer(codeForce) {
     const leCode = typeof codeForce === "string" ? codeForce : code;
@@ -201,6 +208,11 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
         <button className="btn btn-outline" onClick={() => window.print()}>Imprimer / Enregistrer en PDF</button>
         {err && <div className="notice" style={{ width: "100%" }}>{err}</div>}
       </div>
+      {texteVide && status !== "paye" && (
+        <p style={{ fontSize: "0.78rem", color: "#b4552f", background: "#fff5ee", border: "1px solid #f2cdb6", borderRadius: 10, padding: "8px 12px", margin: "10px 0 0" }}>
+          Écrivez le texte à graver, ou décochez l&apos;option « Un texte gravé en plus ».
+        </p>
+      )}
       {peutLivrer && method === "relais" && !relais && (
         <p style={{ fontSize: "0.78rem", color: "#b4552f", background: "#fff5ee", border: "1px solid #f2cdb6", borderRadius: 10, padding: "8px 12px", margin: "10px 0 0" }}>
           Choisissez votre point relais pour continuer.

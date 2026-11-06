@@ -14,10 +14,17 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/components/CartContext";
 import { emballagesNoelDispo } from "@/lib/fetes";
+import { useDevisChoix, choixPourServeur } from "@/lib/devisChoixStore";
 
 const euro = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(n || 0);
 
-export default function DevisPanier({ id, number, totalDevis, n = null, resume = "", grams = 0, principal = null, articles = [], children }) {
+export default function DevisPanier({ id, number, totalDevis, n = null, resume = "", grams = 0, principal = null, articles = [], options = false, children }) {
+  // Options cochées sur la page du devis (socle, texte : 06/11/2026) : comptées dans le total et
+  // envoyées avec le devis mis au panier (le serveur les recalcule).
+  const choix = useDevisChoix();
+  const optServeur = options ? choixPourServeur(choix) : undefined;
+  const extraOpt = options ? Number(choix.extra) || 0 : 0;
+  const texteVide = options && choix.texteOn && !String(choix.texte || "").trim();
   const router = useRouter();
   const { items, addItem, removeItem, setDrawerOpen } = useCart();
   const pk = principal?.packaging?.on && principal.packaging.options?.length ? principal.packaging : null;
@@ -32,7 +39,7 @@ export default function DevisPanier({ id, number, totalDevis, n = null, resume =
   const noelChoisi = noelDispo.find((o) => o.id === noel.id) || null;
   const coulDe = (o) => (o?.couleurs && noelCfg ? (noelCfg.couleurs.find((c) => c.id === noel.couleur) || noelCfg.couleurs[0]) : null);
   const extra = (Number(optPkg?.price) || 0) + (Number(noelChoisi?.prix) || 0);
-  const total = Math.round((Number(totalDevis) + extra) * 100) / 100;
+  const total = Math.round((Number(totalDevis) + extra + extraOpt) * 100) / 100;
   const enBoite = /boite|pack/i.test(String(pkgSel[0] || "")) || Boolean(noelChoisi?.colis);
   const avecEmballage = Boolean(optPkg) || Boolean(noelChoisi);
 
@@ -44,18 +51,19 @@ export default function DevisPanier({ id, number, totalDevis, n = null, resume =
 
   // Met le devis dans le panier (une seule ligne : un devis déjà présent est remplacé).
   function mettreAuPanier() {
+    if (texteVide) return false;
     for (const it of items) if (it?.devis?.id === id) removeItem(it.key);
     const emb = [optPkg ? `${/pack/i.test(optPkg.name) ? "Pack boîte cadeau" : optPkg.name} (+${euro(optPkg.price)})` : "",
       noelChoisi ? `Emballage de Noël : ${noelChoisi.nom}${coulDe(noelChoisi) ? ` · ${coulDe(noelChoisi).nom.toLowerCase()}` : ""} (+${euro(noelChoisi.prix)})` : ""].filter(Boolean).join(" · ");
     addItem({
       productSlug: principal?.slug || "",
       variantId: `devis:${id}`,
-      devis: { id, ...(n != null ? { n } : {}) },
+      devis: { id, ...(n != null ? { n } : {}), ...(optServeur ? { options: optServeur } : {}) },
       name: `Devis ${number}`,
       variantTitle: resume,
       price: total,
       image: principal?.image || null,
-      personalization: emb ? `Emballage : ${emb}` : "",
+      personalization: [emb ? `Emballage : ${emb}` : "", optServeur?.socle ? "Socle lumineux LED" : "", optServeur?.texte ? `Texte gravé : « ${optServeur.texte} »` : ""].filter(Boolean).join(" · "),
       packaging: pkgSel,
       packagingNoel: noelChoisi ? { id: noelChoisi.id, couleur: coulDe(noelChoisi)?.id || null } : undefined,
       verresFixe: true, // un devis = une ligne, quantité fixe (le nombre de pièces se règle sur la page du devis)
@@ -67,7 +75,7 @@ export default function DevisPanier({ id, number, totalDevis, n = null, resume =
 
   // Vers une autre page : le panier latéral ne reste pas ouvert par-dessus la fiche.
   function allerA(href) {
-    mettreAuPanier();
+    if (mettreAuPanier() === false) return;
     setDrawerOpen(false);
     router.push(href);
   }

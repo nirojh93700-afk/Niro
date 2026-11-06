@@ -21,7 +21,7 @@ export async function POST(req) {
   if (q0.status === "paye") return Response.json({ error: "Ce document est déjà payé." }, { status: 400 });
   // Devis à quantité modifiable (01/11/2026) : lignes et total RECALCULÉS ici pour le nombre choisi
   // (prix des lots de la fiche, gravure pièce par pièce) — jamais un prix venu du navigateur.
-  const { q, index, app } = await devisEffectif(q0, body?.n);
+  const { q, index, app } = await devisEffectif(q0, body?.n, body?.options);
   if (!(q.total > 0)) return Response.json({ error: "Montant invalide." }, { status: 400 });
 
   function resolveSiteUrl() {

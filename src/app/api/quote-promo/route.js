@@ -12,7 +12,7 @@ export async function POST(req) {
   try { body = await req.json(); } catch { return Response.json({ valid: false }); }
   const q0 = body?.id ? await getQuote(body.id) : null;
   if (!q0 || q0.type === "facture" || q0.status === "paye") return Response.json({ valid: false });
-  const { q } = await devisEffectif(q0, body?.n);
+  const { q } = await devisEffectif(q0, body?.n, body?.options);
   const email = String(body?.email || q.client?.email || "");
   const r = await verifierCodeDevis(body?.code, email, q.items);
   if (!r.valid) return Response.json(r);

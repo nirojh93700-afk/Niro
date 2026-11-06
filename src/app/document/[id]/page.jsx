@@ -9,6 +9,8 @@ import { LOGO_FICHIER } from "@/lib/photosLocales";
 import DevisPanier from "@/components/DevisPanier";
 import { getCatalog } from "@/lib/catalog";
 import { donneesPanier } from "@/lib/devisPanier";
+import { optionsDisponibles } from "@/lib/devisOptions";
+import DevisOptions, { DevisLignesOptions, DevisTotalOptions } from "@/components/DevisOptions";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +36,9 @@ export default async function DocumentPage({ params }) {
   // Devis dont la cliente choisit le nombre de pièces (01/11/2026) : page interactive.
   const cfg = !isFacture && q.status !== "paye" ? configQuantite(q, index) : null;
   const panier = donneesPanier(q, index, await getCatalog().catch(() => []));
-  const actions = <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={q.total} livraison={avecChoix} />;
+  // Options à cocher (socle, texte) sur un devis de cristal à nombre fixe (06/11/2026).
+  const opts = cfg ? null : optionsDisponibles(q, index);
+  const actions = <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={q.total} livraison={avecChoix} options={Boolean(opts)} />;
 
   return (
     <section className="section">
@@ -133,11 +137,12 @@ export default async function DocumentPage({ params }) {
                   <td style={{ padding: "8px 6px", textAlign: "right" }}>{euro(it.qty * it.price)}</td>
                 </tr>
               ))}
+              <DevisLignesOptions opts={opts} />
             </tbody>
           </table>
 
           <div style={{ textAlign: "right", marginTop: 16, fontSize: "1.2rem" }}>
-            <strong>{avecChoix ? "Total des articles" : "Total"} : {euro(q.total)}</strong>
+            <strong>{avecChoix ? "Total des articles" : "Total"} : {opts ? <DevisTotalOptions base={q.total} /> : euro(q.total)}</strong>
           </div>
           <div style={{ textAlign: "right", fontSize: "0.78rem", color: "var(--ink-soft)" }}>
             TVA non applicable, art. 293 B du CGI
@@ -154,7 +159,9 @@ export default async function DocumentPage({ params }) {
           )}
         </div>
 
-        {panier ? <DevisPanier {...panier} totalDevis={q.total}>{actions}</DevisPanier> : actions}
+        {opts ? <DevisOptions opts={opts} /> : null}
+
+        {panier ? <DevisPanier {...panier} totalDevis={q.total} options={Boolean(opts)}>{actions}</DevisPanier> : actions}
           </>
         )}
       </div>

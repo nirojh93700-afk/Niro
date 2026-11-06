@@ -175,7 +175,7 @@ export async function POST(req) {
       const q0 = await getQuote(String(item.devis.id || "").slice(0, 80));
       if (!q0) return Response.json({ error: "Le devis de votre panier n'existe plus : retirez-le pour continuer." }, { status: 400 });
       if (q0.status === "paye") return Response.json({ error: "Ce devis est déjà payé : retirez-le du panier." }, { status: 400 });
-      const { q, app } = await devisEffectif(q0, item.devis.n);
+      const { q, app } = await devisEffectif(q0, item.devis.n, item.devis.options);
       if (!devisPanierPossible(q, variantIndex)) {
         return Response.json({ error: "Ce devis se règle uniquement depuis son lien : retirez-le du panier." }, { status: 400 });
       }
