@@ -41,6 +41,10 @@
   0 débordement. **Au « applique »** : traduction par la clé Claude du site (`/api/traduire`, cache), 9ᵉ à 12ᵉ écritures Noto (fiche + atelier +
   fichier de gravure), `spec.langue` + `spec.texteSource` + « traduction relue par la cliente » dans `consignesGravure` / alerte 🛎️, plaque 3D
   à corriger pour l'arabe. Toujours un garde-fou : aucune gravure traduite sans la case cochée.
+- ✅ **OÙ METTRE LA TRADUCTION (gérant, 06/11 : « tu peux mettre partout, normalement partout il y a les textes »)** : au « applique », le choix
+  « Langue de la gravure » va sur TOUS les produits qui ont un texte à graver (verres, carafe, cristal, gobelet, bijoux, bois, mariage,
+  naissance, puzzles…), sous chaque champ de texte, comme la maquette v4. Les points ci-dessous ne retirent aucun produit : ils sont à
+  CORRIGER avant (mot tourné d'un bloc sur Quatre Mots / pendentif, texte visible dans l'aperçu des médaillons, arabe sur la plaque 3D).
 - ⚠️ Constats pour le « applique » : Quatre Mots et pendentif géométrique EMPILENT les lettres à la verticale → en tamoul les signes de voyelle se
   détachent (ரே → ர + ே, rond pointillé) : tourner le mot entier avant de les proposer en tamoul · cœur ouvrable, médaillon livre, enveloppe
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
