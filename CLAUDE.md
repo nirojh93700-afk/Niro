@@ -9,6 +9,13 @@
 - Montré : 6 verres (whisky anniversaire · cocktail Noël · vin Deepavali · flûte mariage · carafe Pongal · tumbler Nouvel An tamoul) + 3 verres
   avec un mot court (அப்பா, நன்றி, அன்பு : plus grand, le site plafonne la taille d'une phrase longue à 14 %) + 5 bijoux à aperçu 3D (plaque acier doré
   அம்மா · gourmette identité அப்பா · chaîne acier « meilleur papa du monde » · silicone அப்பா · papillon என் அன்பே) + tableau de 19 phrases.
+- **IMAGES POUR LES RÉSEAUX (06/11, gérant : « si y en a pas, tu crées des images comme t'as fait pour le gobelet… tu mets rien sur le site, c'est juste pour
+  les réseaux sociaux »)** : 26 images carrées 1080 × 1080 (bandeau encre & or : phrase tamoule, sens, produit, logo, nivcreation.fr), galerie
+  https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip `docs/maquettes/assets/tamoul-reseaux/gravure-tamoul-reseaux.zip` (non commité) + 3 exemples
+  commités. Générateur `tools/maquettes/tamoul-reseaux.py <scratch> <sortie>` : verres = captures du site en DEUX lignes (texte + date : une phrase
+  longue sur une ligne sort minuscule, le site plafonne), bijoux à aperçu 3D = captures du site, gobelets = moteur `gobelet-exemples.py` (`rendu()`
+  avec Noto Serif Tamil), bijoux sans aperçu (cœur ouvrable, cœur, médaillon pivotant, Quatre Mots, cordon, enveloppe, gourmette et cuir sur photo)
+  = texte gravé posé sur la photo (`grave_metal`). Pas de prix, pas de nombre, « Gravé en France ». Rien sur le site.
 - ⚠️ Constats pour le « applique » : Quatre Mots et pendentif géométrique EMPILENT les lettres à la verticale → en tamoul les signes de voyelle se
   détachent (ரே → ர + ே, rond pointillé) : tourner le mot entier avant de les proposer en tamoul · cœur ouvrable, médaillon livre, enveloppe
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
