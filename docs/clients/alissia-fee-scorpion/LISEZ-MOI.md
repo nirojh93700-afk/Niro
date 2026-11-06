@@ -14,3 +14,5 @@
 - ⏳ En attente de sa réponse. AVANT tout devis : demander au gérant le montant du supplément « image personnalisée ».
 - 04/11/2026 ~14 h 50 : 2ᵉ relance envoyée par le site sur demande du gérant (`mail-relance-04-11.json`), SANS l'image (déjà envoyée) :
   « si le dessin ne vous plaît pas tout à fait, nous pouvons le refaire selon vos idées ». Ne plus relancer sans sa demande.
+- 06/11/2026 11 h 02 (heure de Paris) : elle demande « le prix pour le petit ». Gérant : **création du dessin = 6 €** → Petit 39,90 + 6 = **45,90 €**
+  (texte +5 €, socle 14,90 € en option, livraison au paiement). Mail préparé, montré au gérant, NON envoyé (attendre « envoie »).
