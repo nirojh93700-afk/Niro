@@ -10,7 +10,7 @@
   avec un mot court (அப்பா, நன்றி, அன்பு : plus grand, le site plafonne la taille d'une phrase longue à 14 %) + 5 bijoux à aperçu 3D (plaque acier doré
   அம்மா · gourmette identité அப்பா · chaîne acier « meilleur papa du monde » · silicone அப்பா · papillon என் அன்பே) + tableau de 19 phrases.
 - **IMAGES POUR LES RÉSEAUX (06/11, gérant : « si y en a pas, tu crées des images comme t'as fait pour le gobelet… tu mets rien sur le site, c'est juste pour
-  les réseaux sociaux »)** : 26 images carrées 1080 × 1080 (bandeau encre & or : phrase tamoule, sens, produit, logo, nivcreation.fr), galerie
+  les réseaux sociaux »)** : 24 images carrées 1080 × 1080 (v2 du 06/11 : produit entier au-dessus du bandeau, textes contrôlés ; Quatre Mots et enveloppe retirés) (bandeau encre & or : phrase tamoule, sens, produit, logo, nivcreation.fr), galerie
   https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip `docs/maquettes/assets/tamoul-reseaux/gravure-tamoul-reseaux.zip` (non commité) + 3 exemples
   commités. Générateur `tools/maquettes/tamoul-reseaux.py <scratch> <sortie>` : verres = captures du site en DEUX lignes (texte + date : une phrase
   longue sur une ligne sort minuscule, le site plafonne), bijoux à aperçu 3D = captures du site, gobelets = moteur `gobelet-exemples.py` (`rendu()`
