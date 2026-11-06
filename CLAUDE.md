@@ -22,7 +22,7 @@
   [axes Weight puis Width] / Sans SC dans `~/.fonts`). ⚠️ La plaque acier en 3D n'affiche PAS l'arabe (remplacée par le bracelet chaîne).
   Phrases à faire relire par un locuteur natif. + **vidéo 49** (tamoul + les 3 langues, `tools/video/langues_49.py`). Rien sur le site.
 - **MAQUETTE « GRAVURE TRADUITE DANS LA LANGUE DE LA CLIENTE » (06/11, gérant : « ils tapent le texte, ils choisissent la langue, ça traduit
-  automatiquement et ça s'affiche sur le verre… fais la maquette ») — ✅ ENREGISTRÉE TELLE QUELLE LE 06/11/2026 (« Enregistre la maquette telle quelle », VERSION 4 de l'artifact = CELLE à reproduire au « applique », ne plus la modifier sans sa demande), RIEN en ligne** : https://claude.ai/artifact/QGcb9tgJsgt7wBvcyvLQFj
+  automatiquement et ça s'affiche sur le verre… fais la maquette ») — ✅ ENREGISTRÉE TELLE QUELLE LE 06/11/2026 (« Enregistre la maquette telle quelle », puis RÉ-ENREGISTRÉE le 06/11 soir en VERSION 5 = avec la ligne « Fichier à graver » ; c'est CELLE à reproduire au « applique », ne plus la modifier sans sa demande), RIEN en ligne** : https://claude.ai/artifact/QGcb9tgJsgt7wBvcyvLQFj
   · générateur `tools/maquettes/gravure-traduction.py <vin-src.html> <dossier css> <sortie> <etape2.json>` (capture = `npx next start -p 3140` + curl de la fiche
   du verre à vin ; ⚠️ les css se copient depuis `.next/static/css/`, un `\` traînait dans les URL curl et les 404 avaient été pris pour du CSS) ·
   sortie `docs/maquettes/gravure-traduction.html` (ignorée par git). Fiche du verre à vin telle quelle ; ⛔ **v2 (06/11, gérant : « tu laisses comme c'est en ce moment, tu touches pas, juste en dessous du texte,
@@ -48,6 +48,10 @@
   laser), mêmes lignes que l'aperçu (date plus petite, décor compris), + PNG et PDF, rangé avec la commande et téléchargeable depuis Gestion →
   Atelier et la fiche commande. Prototype : `tools/maquettes/gravure-fichier.js` (`HB=<chemin harfbuzzjs> node … <dossier>`), exemples
   `docs/maquettes/assets/gravure-traduction/fichiers/` (tamoul, arabe, hébreu, chinois : glyphes vérifiés identiques au navigateur).
+- ❓ **DESSINS DU SITE EN VECTORIEL ? (question du gérant, 06/11 soir)** : NON aujourd'hui. Les « images d'origine » d'une commande
+  (`imagesOrigine.js` : modèles des verres, Noël, gobelet, cristaux gravés) sont des JPG / PNG / WebP (pixels) ; le bouton « SVG » de l'Atelier
+  ne fait qu'emballer l'image dans un SVG (pas de tracés). Seuls les petits motifs des bijoux (`public/motifs/*.svg`) sont de vrais vecteurs.
+  Proposé : vectoriser chaque dessin du site (tracés noirs, comme les textes traduits), à valider par lui avant de le faire.
 - ✅ **OÙ METTRE LA TRADUCTION (gérant, 06/11 : « tu peux mettre partout, normalement partout il y a les textes »)** : au « applique », le choix
   « Langue de la gravure » va sur TOUS les produits qui ont un texte à graver (verres, carafe, cristal, gobelet, bijoux, bois, mariage,
   naissance, puzzles…), sous chaque champ de texte, comme la maquette v4. Les points ci-dessous ne retirent aucun produit : ils sont à
