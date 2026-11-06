@@ -23,10 +23,12 @@
   Phrases à faire relire par un locuteur natif. + **vidéo 49** (tamoul + les 3 langues, `tools/video/langues_49.py`). Rien sur le site.
 - **MAQUETTE « GRAVURE TRADUITE DANS LA LANGUE DE LA CLIENTE » (06/11, gérant : « ils tapent le texte, ils choisissent la langue, ça traduit
   automatiquement et ça s'affiche sur le verre… fais la maquette ») — EN ATTENTE DE SON AVIS, RIEN en ligne** : https://claude.ai/artifact/QGcb9tgJsgt7wBvcyvLQFj
-  · générateur `tools/maquettes/gravure-traduction.py <vin-src.html> <dossier css> <sortie>` (capture = `npx next start -p 3140` + curl de la fiche
+  · générateur `tools/maquettes/gravure-traduction.py <vin-src.html> <dossier css> <sortie> <etape2.json>` (capture = `npx next start -p 3140` + curl de la fiche
   du verre à vin ; ⚠️ les css se copient depuis `.next/static/css/`, un `\` traînait dans les URL curl et les 404 avaient été pris pour du CSS) ·
-  sortie `docs/maquettes/gravure-traduction.html` (ignorée par git). Fiche du verre à vin telle quelle ; « Mon propre texte » ouvre l'étape 2 :
-  pastilles Français · Tamoul · Arabe · Hébreu · Chinois, texte en français → traduit (phrases connues = dictionnaire `PHRASES` ; autre texte =
+  sortie `docs/maquettes/gravure-traduction.html` (ignorée par git). Fiche du verre à vin telle quelle ; ⛔ **v2 (06/11, gérant : « tu laisses comme c'est en ce moment, tu touches pas, juste en dessous du texte,
+  tu mets les langues… l'anglais aussi… dans l'ordre alphabétique »)** : l'étape 2 « Écrivez votre texte » est CELLE DU SITE, capturée telle quelle
+  (`etape2.json` = HTML relevé par Playwright après « Mon propre texte ») ; seul ajout = bloc « Langue de la gravure » SOUS le champ du texte :
+  pastilles Anglais · Arabe · Chinois · Français · Hébreu · Tamoul (alphabétique, Français par défaut = rien ne change), texte en français → traduit (phrases connues = dictionnaire `PHRASES` ; autre texte =
   Claude en direct par la capacité `sample` de l'artifact, avec consigne « prénoms transcrits, pas traduits ») → posé sur la grande photo du verre
   vierge dans le cadre `engrave.box` lu dans la capture (police Noto de la langue, taille ajustée, rtl pour arabe / hébreu), les deux textes côte à
   côte, case obligatoire « J'ai vérifié la traduction », case « Je colle moi-même mon texte dans ma langue » ; date +3 € ; résumé ; tableau « ce que
