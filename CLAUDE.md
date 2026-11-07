@@ -1590,6 +1590,9 @@ n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même compo
   commande. (Le fil Aperçu/BAT reste disponible dans Gestion si LUI décide d'envoyer un aperçu,
   mais on ne le promet plus à la cliente.) ⚠️ Une promesse d'aperçu a DÉJÀ été faite à Rose
   Catarino (#1Z17IKQ8, les 14 et 15/09) — celle-là est au choix du gérant : la tenir ou graver.
+  ⚠️ **Exception décidée par le gérant le 07/11/2026** : Cynthia Belkacem (cynthiabelkacem17@gmail.com, commande **05WMONLB**, cristal
+  horizontal Moyen + socle LED, photo montage avec inscription arabe, arche et mosquée) : « on enverra un visuel avant la gravure » → promis
+  dans le mail du 07/11 (11 h 35). Elle ne veut PAS l'inscription arabe. Envoyer l'aperçu (couple seul) par le fil Aperçu / BAT AVANT de graver.
   ⚠️ **Exception décidée par le gérant le 04/11/2026** : Agathe Barreau (agathebarreau61@gmail.com, devis **DEV-1541**, cristal horizontal Moyen,
   image « M ♥ A » + 2 lignes de texte, 64,90 € = 59,90 + texte 5 €) : « on lui enverra un aperçu avant la gravure » → promis dans le mail du 04/11.
   À sa commande : envoyer l'aperçu par le fil Aperçu / BAT AVANT de graver.
