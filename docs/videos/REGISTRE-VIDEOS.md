@@ -813,3 +813,25 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #gobeletpersonnalise #gravure #ideecadeau
+- ⛔ Refusée par le gérant (« je t'ai pas demandé que du gobelet, je veux tous les produits… change de style, tu mets tout le temps le même
+  fond, sois créative ») → vidéo 52.
+
+## Vidéo 52 — Tous nos produits, nouveau style « magazine » (07/11/2026)
+- ⛔ RÈGLE TIRÉE DE CETTE DEMANDE : « fais-moi une vidéo » sans thème = TOUS les univers ; et NE PLUS reprendre toujours le même habillage
+  (fond sombre à lumières floues + paillettes des vidéos 41 à 51) : changer de style d'une vidéo à l'autre.
+- Style neuf : fonds CLAIRS, une couleur par univers (bleu glacier, rose poudré, sauge, sable, abricot, terre cuite), grand numéro de
+  chapitre en contour, titre qui glisse + trait de couleur, photos en POLAROÏDS qui tombent et forment un collage, volet de couleur en
+  diagonale vers l'univers suivant, mosaïque de toutes les photos, fin encre avec les couleurs des univers. Intro « Gravé pour vous ».
+- Univers et photos (planche regardée, gravées sauf le marque-page en métal, jamais dit « gravé ») : Cristal (famille, enfant au chien,
+  Bouddha, porte-clés chien) · Bijoux (3 Cœurs, cœur & plaques, Enveloppe, bracelet cœur) · Verres & carafe (vin DALE, whisky Meilleur
+  papa, carafe, gobelet photo couple) · Papeterie (marque-pages bois ×2, carnet « Mes recettes », métal Nymphéas) · Bébé & enfant (puzzle
+  photo, couverts, plaque de naissance) · Mariage & maison (numéro de table, porte-serviettes colombes, étiquette serviette, porte-stylo coq).
+  40,2 s, sans son, 1080 × 1920 (5,7 Mo) et 720 × 1280 (1,6 Mo). Aucun prix. Fichiers à supprimer le 09/11.
+- Script : `python3 tools/video/collage_52.py <polices> <sortie> [--apercu]` (depuis la racine ; Playfair Display + Inter).
+
+**Vidéo 52 — Gravé pour vous** (Cristal photo 3D, Cristal déjà gravé, Porte-clés cristal, Collier 3 Cœurs, Collier cœur & plaques, Collier Enveloppe, Bracelet cœur, Verre à vin, Verre à whisky, Carafe, Gobelet isotherme, Marque-pages, Carnet A5, Puzzle photo, Couverts enfant, Plaque de naissance, Numéro de table, Porte-serviettes, Étiquette de serviette, Porte-stylo)
+> ✨ Cristal, bijoux, verres, papeterie, cadeaux pour les enfants et déco de mariage : tout est personnalisé dans notre atelier 💛
+> Un prénom, une date, une photo… et le cadeau devient le leur 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gravure #gravurelaser #ideecadeau
