@@ -5189,3 +5189,9 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   customerPhone?}` ; l'état d'avant est gardé une fois dans `livraisonCorrigeeDe`. La société (`shippingCompany`) s'affiche dans Boxtal (ligne
   « Société »), la file de production, la fiche commande, la fiche papier et les étiquettes La Poste.
 - 04AT1IG4 corrigée : Chloé Faussone · Hôtel Villa Marquis · 35 rue Jean Goujon, 75008 Paris · 07 77 49 14 95 (avant : « Chloe faussone », 06 19 12 30 49).
+
+## 🥤 « GOBELETS » AU PLURIEL + PLUS DE « SANS EMBALLAGE » SUR LES BIJOUX — ✅ EN LIGNE LE 07/11/2026 (« Pousse », 8df00070)
+- Catégorie « Verres & Carafes & Gobelets » (menu, onglets, fil d'Ariane, `univers.js` / `products.js` CATEGORIES), rayon « Gobelets isothermes »,
+  accroches « carafe et gobelets isothermes », accueil « Verres, carafes & gobelets gravés ». Le NOM du produit reste « Gobelet isotherme 40 oz ».
+- Bijoux (fiche `ProductDetail` + page devis `DevisPanier`) : la ligne « Sans emballage cadeau » est RETIRÉE (gérant : « retirer la proposition sans
+  emballage »). Rien de choisi = pas d'emballage (prix inchangé) ; toucher l'emballage choisi une 2ᵉ fois le retire (phrase sous « Votre emballage »).
