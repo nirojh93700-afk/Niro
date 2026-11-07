@@ -1,6 +1,6 @@
 // =============================================================================
 // Carnet A5 gravé (mis en vente le 07/11/2026, gérant : « Papeterie avec le carnet »).
-// Reproduit la maquette enregistrée v9 (artifact QSD8HCrAzEqrSEYA7viFMh) : 3 couleurs, 12,90 € ;
+// Reproduit la maquette enregistrée v9 (artifact QSD8HCrAzEqrSEYA7viFMh) : 3 couleurs, 15,90 € (12,90 € jusqu'au 07/11/2026) ;
 // QUATRE emplacements sur la couverture et QUATRE au dos (en haut · au milieu · en bas à gauche ·
 // en bas à droite), chacun = rien / un texte (2 lignes) / un de nos dessins ou cadres (n°) / mon logo.
 // Couverture gravée +7 € quel que soit le nombre d'emplacements remplis, dos gravé +7 € pareil.

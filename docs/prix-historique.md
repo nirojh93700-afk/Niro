@@ -320,3 +320,8 @@ Après (même grille pour tous les pays) : lettre ≤100 g 8,90 · ≤250 g 15,9
   (≤ 2 kg 8,90 → ramené à 9,90 ; ≤ 5 kg 14,90). Étiquette réelle payée le 05/11 pour un horizontal Moyen + socle : plus de 11 €.
 - Maintenant : **14,90 € minimum** pour toutes les tailles (`portDomicileMini: 14.9`). Point relais et Express inchangés.
 - Pour revenir en arrière : remettre `portDomicileMini: 9.9` sur les 5 produits cristal de `src/lib/products.js`.
+
+## 07/11/2026 — Carnet A5 gravé (gérant : « 15,90 € », réponse « Carnet seul à 15,90 € »)
+- Avant : carnet seul **12,90 €** (les 3 couleurs), couverture gravée +7 € → 19,90 €, les deux faces 26,90 €.
+- Maintenant : carnet seul **15,90 €**, gravure inchangée (+7 € par face) → 22,90 € / 29,90 €.
+- Pour revenir en arrière : remettre `price: 12.9` sur `carnet-marron`, `carnet-noir`, `carnet-gris` dans `src/lib/products.js`.

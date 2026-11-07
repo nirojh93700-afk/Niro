@@ -781,9 +781,9 @@ export const products = [
     personalizationLabel: "Gravure de la couverture et du dos : texte, dessin ou logo",
     images: ["/carnet/couverture-marron.jpg", "/carnet/couverture-noir.jpg", "/carnet/couverture-gris.jpg", "/carnet/exemple-ex1.jpg", "/carnet/exemple-ex2.jpg", "/carnet/exemple-ex3.jpg", "/carnet/exemple-ex4.jpg", "/carnet/exemple-ex5.jpg", "/carnet/exemple-ex6.jpg", "/carnet/fournisseur-couleurs.jpg", "/carnet/fournisseur-pile.jpg"],
     variants: [
-      { id: "carnet-marron", title: "Marron", price: 12.9, image: "/carnet/couverture-marron.jpg" },
-      { id: "carnet-noir", title: "Noir", price: 12.9, image: "/carnet/couverture-noir.jpg" },
-      { id: "carnet-gris", title: "Gris", price: 12.9, image: "/carnet/couverture-gris.jpg" },
+      { id: "carnet-marron", title: "Marron", price: 15.9, image: "/carnet/couverture-marron.jpg" },
+      { id: "carnet-noir", title: "Noir", price: 15.9, image: "/carnet/couverture-noir.jpg" },
+      { id: "carnet-gris", title: "Gris", price: 15.9, image: "/carnet/couverture-gris.jpg" },
     ],
     descriptionHtml: `<p><strong>Un carnet qu'on garde.</strong> Couverture rigide aspect cuir, élastique de fermeture, 200 pages : le carnet de tous les jours devient le sien, avec son prénom, ses initiales ou votre logo gravés au laser sur la couverture.</p>
 <h3>Caractéristiques</h3>

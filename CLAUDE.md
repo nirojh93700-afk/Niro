@@ -91,7 +91,7 @@
   `/boutique/marque-pages` redirige vers `/boutique/papeterie` (next.config.js). Générateur de la maquette : `tools/maquettes/papeterie.py`.
 - Fiche `carnet-a5-grave` (`carnet: true`) = la maquette v9 : `src/components/carnet/CarnetFiche.jsx` (3 couleurs, quatre emplacements
   couverture + quatre au dos, menus Rien / Un texte (2 lignes) / Un de nos dessins ou cadres (n°) / Mon logo, 8 écritures, gravure posée sur la
-  grande photo, vignette « Dos ») · calcul pur `src/lib/carnet.js` (12,90 €, +7 € par face gravée, `cnNormaliser` aussi au paiement) ·
+  grande photo, vignette « Dos ») · calcul pur `src/lib/carnet.js` (**15,90 € depuis le 07/11/2026**, avant 12,90 € ; +7 € par face gravée, `cnNormaliser` aussi au paiement) ·
   branche dans `/api/checkout` · atelier `consignesCarnet` (une face par bloc, vignette du dessin), « Vendu en plus », images d'origine ·
   guide « Marque-pages personnalisés » (paragraphe « Et le carnet qui va avec »). Planches / envoi de photo repris de `MarquePagesFiche`.
 - ⚠️ Photos = couvertures DESSINÉES de la maquette + exemples (à remplacer par de vraies photos gravées) · poids 380 g ESTIMÉ (à peser) ·
