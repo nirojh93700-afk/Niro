@@ -51,7 +51,7 @@ export const UNIVERS = [
     rayons: [{ nom: "Blocs photo 3D", slugs: ["cristal-photo-3d-vertical", "cristal-photo-3d-horizontal"] },
              { nom: "Cristaux déjà gravés", slugs: ["cristal-deja-grave"] },
              { nom: "Porte-clés & USB", slugs: ["porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle", "cle-usb-cristal-3d"] }] },
-  { id: "verres", nom: "Verres & Carafes & Gobelet", short: "Verres & Carafes & Gobelet", pourqui: true, img: "/produits/verre_a_whisky_exemple_face.jpg",
+  { id: "verres", nom: "Verres & Carafes & Gobelets", short: "Verres & Carafes & Gobelets", pourqui: true, img: "/produits/verre_a_whisky_exemple_face.jpg",
     accroche: "Verres à whisky, à cocktail, à vin, flûtes, carafe et gobelet isotherme, gravés à la commande.",
     rayons: [{ nom: "Verres à whisky", slugs: ["verre-a-whisky-grave", "verre-tumbler-cristal-grave", "verre-a-whisky-fete-des-peres"] },
              { nom: "Vin, champagne, cocktail & carafe", slugs: ["verre-a-vin-grave", "flute-a-champagne-gravee", "verre-a-cocktail-grave", "carafe-a-whisky-gravee"] },

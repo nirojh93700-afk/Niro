@@ -153,7 +153,7 @@ export default async function ProductPage({ params, searchParams }) {
 
   // Fil d'Ariane (BreadcrumbList) : « Accueil › Boutique › Catégorie › Produit »
   // → affiché par Google à la place de l'URL brute (meilleur taux de clic).
-  // categorieAffichee : un produit rangé dans un autre univers que sa catégorie (gobelet → Verres & Carafes & Gobelet).
+  // categorieAffichee : un produit rangé dans un autre univers que sa catégorie (gobelet → Verres & Carafes & Gobelets).
   const catAff = product.categorieAffichee || product.category;
   const catLabel = product.marquePages || product.carnet ? "Papeterie" : (getCategoryLabel(catAff) || "Boutique");
   const catUrl = product.marquePages || product.carnet ? "/boutique/papeterie" : categoryUrl(catAff);
