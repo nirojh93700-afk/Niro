@@ -139,7 +139,7 @@ export default async function HomePage() {
         {show.verresBand && verres.length ? (
           <section className="sec verres rv" aria-labelledby="t-verres">
             <div className="sec-head">
-              <div><h2 id="t-verres">Verres, carafes &amp; gobelets gravés, <em>notre spécialité</em></h2><p className="sub">Whisky, vin, champagne, cocktail, carafe et gobelet isotherme, gravés à la commande dans notre atelier.</p></div>
+              <div><h2 id="t-verres">Verres, carafes &amp; gobelets gravés, <em>notre spécialité</em></h2><p className="sub">Whisky, vin, champagne, cocktail, carafe et gobelets isothermes, gravés à la commande dans notre atelier.</p></div>
               <Link className="link" href="/boutique/verres">Voir tous les verres, carafes et gobelets <Ic n="arrow" /></Link>
             </div>
             <div className="bento-v">
