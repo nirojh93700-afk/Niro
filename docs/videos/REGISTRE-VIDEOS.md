@@ -778,3 +778,22 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #gravure #multilingue #ideecadeau
+
+## Vidéo 50 — Langues et gravures classiques en alternance (07/11/2026)
+- Demande du gérant : « fais-moi une vidéo, tu mélanges les trucs que t'as faits pour les langues et avec des trucs normaux comme avant ».
+  Une gravure en langue (aperçus du site des vidéos 48-49), puis une pièce gravée classique (photos GRAVÉES du site, planche regardée), en
+  alternance ; jamais deux fois la même langue ni la même famille de suite. Langues : whisky « Joyeux anniversaire » (tamoul), vin « Je t'aime »
+  (arabe), cocktail « Bonne année » (chinois), flûte « Félicitations » (hébreu), gobelet rose « Maman » (tamoul), chaîne « Mon papa » (arabe),
+  tumbler « Bonne année » (hébreu), vin « Joyeux anniversaire » (chinois), whisky « Papa » (tamoul). Classiques : cristal photo famille,
+  Collier 3 Cœurs « Naomi », puzzle photo, cristal Bouddha, carafe gravée, carnet « Mes recettes / Léa », cristal enfant au chien, Collier
+  Enveloppe. Intro « Vos mots, vos photos, gravés pour toujours » + Amour en 5 langues, tampons, fin « Offrez un cadeau qui leur ressemble »
+  + Merci en 5 langues + nivcreation.fr. Effets de la 41 / 49 sans neige, entrées variées + éclair doré. 50,0 s, sans son,
+  1080 × 1920 (10,1 Mo) et 720 × 1280 (3,3 Mo). Aucun prix.
+- Script : `python3 tools/video/melange_langues_50.py <images tamoules> <images langues> <polices> <sortie>` (depuis la racine, `--apercu`).
+
+**Vidéo 50 — Vos mots, vos photos, gravés pour toujours** (Verre à whisky, Verre à vin, Verre à cocktail, Flûte à champagne, Verre tumbler en cristal, Gobelet isotherme 40 oz, Bracelet chaîne acier, Cristal photo 3D, Cristal déjà gravé, Collier 3 Cœurs, Collier Enveloppe, Puzzle photo gravé, Carafe à whisky, Carnet A5 gravé)
+> ✨ En français, en tamoul, en arabe, en hébreu ou en chinois : vos mots, vos photos et vos prénoms gravés sur un verre, un bijou, un cristal ou un carnet 💛
+> Un cadeau qui leur ressemble 🎁 Gravé dans notre atelier en France
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gravure #multilingue #ideecadeau
