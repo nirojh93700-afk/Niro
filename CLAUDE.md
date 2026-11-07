@@ -41,6 +41,19 @@
   0 débordement. **Au « applique »** : traduction par la clé Claude du site (`/api/traduire`, cache), 9ᵉ à 12ᵉ écritures Noto (fiche + atelier +
   fichier de gravure), `spec.langue` + `spec.texteSource` + « traduction relue par la cliente » dans `consignesGravure` / alerte 🛎️, plaque 3D
   à corriger pour l'arabe. Toujours un garde-fou : aucune gravure traduite sans la case cochée.
+- ✅✅ **EN LIGNE LE 07/11/2026 (« La maquette avec les langues tu peux mettre en ligne », 6f663891) — sur les fiches à parcours guidé
+  (verre à vin, flûte, whisky, cocktail, tumbler, carafe), modes « Mon propre texte » et « Texte sous la photo »** : `LangueGravure.jsx`
+  sous le champ (pastilles alphabétiques, Français par défaut = rien ne change, « J'écris directement… », deux colonnes, mention, case
+  obligatoire) · règles pures `src/lib/traductionGravure.js` (LANGUES, PHRASES, `manqueLangue` = bouton grisé via `parcoursEtat` ET
+  paiement refusé dans `/api/checkout`, `resumeLangue`) · champs `texte` (= texte GRAVÉ), `texteSource`, `langue`, `direct`, `tradOk`,
+  `decorPlace` · traduction `/api/traduire` (liste puis Claude, cache Firestore `traductions`, 40 / 10 min par IP) · écritures
+  `/api/police-gravure?l=&t=` (sous-ensemble Google Fonts servi par le site, classes `fnt-lang-ta/ar/he/zh`, `policeLangueClient.js`) ·
+  fichier à graver `/api/fichier-gravure?l=&t=&d=&nom=` (`fichierGravure.js`, HarfBuzz `harfbuzzjs`, lettres en tracés, chiffres gardés
+  de gauche à droite dans l'arabe / l'hébreu, ♥★ en Noto Sans Symbols 2) : aperçu + bouton dans « À graver » (`FichierGravure.jsx`,
+  TableGravure → fiche commande, Atelier, chaque verre d'un lot) et lien dans l'e-mail 🛎️ (encadré rouge « 🌐 Gravure en … ») ·
+  décor : `texteAvecDecor` accepte `date` / `texte2` selon `decorPlace` (aperçu, atelier, contrôle `oubliesAtelier`).
+  `npm run test-traduction` (17). Navigateur 390 / 1280 : 0 erreur, 0 débordement. ⚠️ PNG / PDF du fichier : PAS faits (SVG seul).
+  **RESTE (sur son mot) : le choix de langue sur les AUTRES produits à texte** (bijoux, cristal, bois…) avec les corrections listées plus bas.
 - ✅ **FICHIER À GRAVER DANS LE DOSSIER DE LA COMMANDE (gérant, 06/11 : « quand la cliente commande un texte, il faut que je l'aie en format pour graver… dans le dossier »)** :
   maquette v5 = ligne « Fichier à graver — rangé dans le dossier de la commande » dans « ce que l'atelier verra » (aperçu noir sur blanc + nom
   `gravure-<réf>-verre1-<langue>-60x30mm.svg`). Au « applique » : à la commande, le SERVEUR fabrique un SVG à la taille réelle (mm), LETTRES EN
