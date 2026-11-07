@@ -3216,6 +3216,14 @@ Scripts prêts : **`tools/video/pub_gratuite.py`** (montage GRATUIT, 0 crédit) 
   d'AUTRES bijoux. Bijoux à photo GRAVÉE encore peu utilisés : Collier Enveloppe (`il_fullxfull.7864685302_iebi.jpg`, `…7864685300_7l25.jpg`),
   Médaillon Cœur ouvrable (`il_fullxfull.8007460526_h2kk.jpg`), Collier 3 Cœurs « Naomi » (`collier-3coeurs-3.jpg`), Bracelet Cœur à graver
   (`bracelet-coeur-ot-dore.jpg`). Les autres photos de bijoux du site sont VIERGES (planche regardée le 31/10).
+- ⛔ **VIDÉO SANS THÈME = TOUS LES PRODUITS, ET UN STYLE DIFFÉRENT À CHAQUE FOIS (gérant, 07/11/2026 : « je t'ai pas demandé que du gobelet…
+  tu mets tout le temps le même fond, change de style, sois créative » ; puis « fais attention aux photos », « mets plusieurs photos de bijoux,
+  pas les mêmes produits »)** : « fais-moi une vidéo » = tous les univers (cristal, bijoux, verres / carafe / gobelet, papeterie, enfants,
+  maison & mariage). Ne plus reprendre toujours le fond sombre à lumières floues + paillettes (vidéos 41 à 51). Styles déjà faits : 41
+  (nuit, bokeh), 52 « magazine » (fonds clairs par univers, polaroïds, numéros — ✅ il AIME), 53 « stories » (plein écran flou, barres de
+  progression, autocollants). Photos : planche regardée EN GRAND avant ; jamais de badge « EXEMPLE », de texte anglais, de logo de marque /
+  football, de photo vierge ; bijoux = plusieurs photos et des produits différents de la vidéo précédente (peu de photos de bijoux sont
+  gravées : médaillon cœur ouvrable, bracelet femme acier gravé / porté, cordon à plaque, 3 Cœurs, cœur & plaques, Enveloppe, bracelet cœur).
 - ✅ **LES EFFETS DE LA VIDÉO 41 PLAISENT AU GÉRANT (29/10/2026 : « j'aime bien ce montage… je veux dire l'effet », à garder en mémoire)** :
   script `tools/video/noel_deco_verres_41.py` = la BOÎTE À EFFETS à réutiliser : fond de nuit avec lumières dorées floues (bokeh) + neige
   qui tombe sur toute la vidéo · titre qui s'écrit lettre par lettre · avant / après au rideau doré (vierge → gravé) · carrousel : le

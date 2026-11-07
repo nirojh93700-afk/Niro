@@ -835,3 +835,26 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #gravure #gravurelaser #ideecadeau
+- ✅ Le gérant aime ce style « magazine » (07/11/2026 : « j'aime bien aussi ce style, tu enregistreras ») : à garder dans les styles possibles.
+
+## Vidéo 53 — Tous nos produits, style « stories » (07/11/2026)
+- Demande : « fais-moi une autre vidéo et fais attention aux photos » + « enlève le football et la clé USB cristal, plusieurs photos de
+  bijoux, pas les mêmes produits ». Troisième style : chaque photo plein écran sur son fond flou, photo ENTIÈRE dans un cadre arrondi,
+  barres de progression en haut (une par univers), autocollant blanc de l'univers, légende qui s'écrit mot à mot, glissement avec zoom
+  d'une photo à l'autre, couleur d'accent tirée de chaque photo, fin en éventail + « Offrez un cadeau qui leur ressemble ».
+- Photos regardées en grand, toutes différentes de la 52 ; écartées : badges « EXEMPLE » (cocktail, tumbler), textes anglais (flûtes
+  « Mr & Mrs », vin « Geniet », colliers double cœur « Love you mom / grandma »), porte-stylo Espagne (logos de football), clé USB.
+  Les aperçus 3D des bijoux avec un prénom (capturés sur le site) faisaient trop « dessin » : non utilisés.
+- Cristal (couple, colibri déjà gravé, porte-clés cœur) · Bijoux (médaillon cœur ouvrable, bracelet femme gravé + porté avec la date,
+  bracelet cordon initiales) · Verres (whisky « Meilleur papa du monde », carafe, gobelet « Paul ») · Papeterie (marque-page ajouré,
+  carnet de voyage, marque-page métal Iris) · Bébé & enfant (puzzle savane, couverts animaux, plaque de naissance) · Maison & mariage
+  (numéro de table, support de téléphone photo, porte-serviettes). 39,4 s, sans son, 1080 × 1920 (9,3 Mo) et 720 × 1280 (2,6 Mo).
+  Aucun prix. Fichiers à supprimer le 09/11.
+- Script : `python3 tools/video/stories_53.py <polices> <sortie> [--apercu]` (depuis la racine).
+
+**Vidéo 53 — Des cadeaux qui portent leur histoire** (Cristal photo 3D, Cristal déjà gravé, Porte-clés cristal cœur, Médaillon cœur ouvrable, Bracelet femme gravé, Bracelet cordon à plaque, Verre à whisky, Carafe à whisky, Gobelet isotherme, Marque-page ajouré, Carnet A5, Marque-page en métal, Puzzle en bois, Couverts enfant, Plaque de naissance, Numéro de table, Support de téléphone, Porte-serviettes)
+> ✨ Une photo, un prénom, une date : chaque cadeau raconte une histoire 💛
+> Cristal, bijoux, verres, papeterie, enfants, maison et mariage 🎁 Gravé dans notre atelier en France
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gravure #cadeauunique #ideecadeau
