@@ -5055,7 +5055,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   à côté. ⛔ Tout nouvel endroit qui affiche un suivi passe par `lienSuivi` / `lienSuiviClient` AVEC la commande. `test-suivi` : 25 vérifs.
   Le lien Mondial Relay n'a pas pu être ouvert d'ici (site bloqué par le réseau) : format pris sur leur page de suivi publique.
 
-## 📦📦 PLUSIEURS NUMÉROS DE SUIVI POUR UNE COMMANDE — 07/11/2026 (gérant : « 2 ou 3 cartons… je pourrai pas mettre les deux numéros de suivi ») — PRÉPARÉ, À POUSSER SUR SON MOT
+## 📦📦 PLUSIEURS NUMÉROS DE SUIVI POUR UNE COMMANDE — 07/11/2026 (gérant : « 2 ou 3 cartons… je pourrai pas mettre les deux numéros de suivi ») — ✅ EN LIGNE LE 07/11/2026 (« Mets en ligne », e836cb16)
 - Formulaire d'expédition (`FormExpedition`, file de production ET fiche commande) : un champ par colis + « + Ajouter un autre colis » + ✕,
   transporteur reconnu par colis. Ancienne fiche (`/gestion`) : numéros séparés par une virgule dans la fenêtre.
 - Rangé dans le MÊME champ `tracking` (« n1, n2 ») : rien à migrer. Lecture / écriture UNIQUEMENT par `numerosSuivi` / `joindreSuivis`
