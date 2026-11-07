@@ -15,8 +15,9 @@ export async function GET(req) {
   const w = Math.min(400, Math.max(10, Number(u.searchParams.get("w")) || 60));
   const h = Math.min(400, Math.max(5, Number(u.searchParams.get("h")) || 30));
   const nom = (u.searchParams.get("nom") || "gravure.svg").replace(/[^A-Za-z0-9._-]/g, "-").slice(0, 120);
-  const svg = await svgGravure({ lignes: [t, d], langue: l, largeurMm: w, hauteurMm: h });
-  if (!svg) return new Response("Fichier indisponible pour l'instant, réessayez.", { status: 503 });
+  let svg = null, erreur = "";
+  try { svg = await svgGravure({ lignes: [t, d], langue: l, largeurMm: w, hauteurMm: h }); } catch (e) { erreur = String(e?.message || e).slice(0, 120); console.error("Fichier à graver:", erreur); }
+  if (!svg) return new Response("Fichier indisponible pour l'instant, réessayez.", { status: 503, headers: { "X-Raison": encodeURIComponent(erreur || "polices") } });
   const telecharger = u.searchParams.get("voir") !== "1";
   return new Response(svg, { headers: {
     "Content-Type": "image/svg+xml; charset=utf-8",

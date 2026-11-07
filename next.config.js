@@ -4,6 +4,9 @@ const nextConfig = {
   // firebase-admin ne doit pas être "bundlé" (sinon le build Netlify échoue).
   experimental: {
     serverComponentsExternalPackages: ["firebase-admin", "harfbuzzjs"],
+    // Fichier à graver (07/11/2026) : HarfBuzz lit hb.wasm à côté de son code ; sans ceci le fichier
+    // n'est pas copié dans le serveur en ligne (erreur 500 constatée sur /api/fichier-gravure).
+    outputFileTracingIncludes: { "/api/fichier-gravure": ["./node_modules/harfbuzzjs/*.wasm", "./node_modules/harfbuzzjs/*.js"] },
   },
   // CORS sur les images utilisées pour composer le visuel du verre (canvas).
   // Sans ça, sur iOS le canvas est "contaminé" (CDN = origine externe) et la

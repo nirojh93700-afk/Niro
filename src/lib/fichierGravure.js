@@ -6,8 +6,30 @@ import { sousEnsemble } from "@/lib/policeGravure";
 
 const DECORS = /[♥★✿◆•❤]/u;
 let hbPromesse = null;
+// HarfBuzz (WebAssembly). Le fichier hb.wasm est cherché à côté du paquet, sinon dans le serveur, sinon
+// sur le site (/vendor/hb.wasm, copie du même fichier) : en ligne, le premier chemin peut manquer.
+async function wasmHarfbuzz() {
+  const fs = await import("node:fs");
+  const path = await import("node:path");
+  for (const p of [path.join(process.cwd(), "node_modules/harfbuzzjs/hb.wasm"), path.join(process.cwd(), "public/vendor/hb.wasm")]) {
+    try { return fs.readFileSync(p); } catch { /* suivant */ }
+  }
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://nivcreation.fr";
+  const r = await fetch(`${base.replace(/\/$/, "")}/vendor/hb.wasm`, { cache: "no-store" });
+  if (!r.ok) throw new Error("hb.wasm introuvable");
+  return Buffer.from(await r.arrayBuffer());
+}
 async function harfbuzz() {
-  if (!hbPromesse) hbPromesse = import("harfbuzzjs").then((m) => m.default || m);
+  if (!hbPromesse) {
+    hbPromesse = (async () => {
+      const [factory, hbjs, wasmBinary] = await Promise.all([
+        import("harfbuzzjs/hb.js").then((m) => m.default || m),
+        import("harfbuzzjs/hbjs.js").then((m) => m.default || m),
+        wasmHarfbuzz(),
+      ]);
+      return hbjs(await factory({ wasmBinary }));
+    })().catch((e) => { hbPromesse = null; throw e; });
+  }
   return hbPromesse;
 }
 
