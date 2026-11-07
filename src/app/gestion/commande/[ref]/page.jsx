@@ -25,12 +25,12 @@ import DelaiCommande from "@/components/admin/DelaiCommande";
 import HistoriqueCommande from "@/components/admin/HistoriqueCommande";
 import { BlocConditionnement } from "@/components/admin/Conditionnement";
 import { RatesCommande } from "@/components/admin/Rates";
-import { FormExpedition, Pill } from "@/components/admin/CarteCommande";
+import { FormExpedition, Pill, LiensSuivi } from "@/components/admin/CarteCommande";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import { useAdminBack } from "@/components/admin/adminBack";
 import { imprimerFiche } from "@/lib/impression";
 import { apparierSpec } from "@/lib/orderSpec";
-import { lienSuivi } from "@/lib/suiviColis";
+import { lienSuivi, numerosSuivi } from "@/lib/suiviColis";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
 import { nomLivraisonDifferent } from "@/lib/nomLivraison";
 import { getProductBySlug } from "@/lib/products";
@@ -303,7 +303,7 @@ export default function FicheCommandePage() {
         <div className="row2">
           <span className="fc-pill ok"><Ic n="check" /> Payée · Stripe</span>
           {rang < 0 ? <Pill tone="bad">{info.lib}</Pill> : rang < 2 ? <Pill tone="warn"><i /> À préparer</Pill> : rang === 2 ? <Pill tone="gold"><i /> En fabrication</Pill> : <Pill tone="ok"><Ic n="check" /> Fabriquée</Pill>}
-          {rang >= 3 ? <Pill tone={rang === 4 ? "ok" : "info"}><Ic n={rang === 4 ? "check" : "truck"} /> {st === "remise_main_propre" ? "Remise en main propre" : rang === 4 ? "Livrée" : `Expédiée${o.tracking ? ` · suivi ${o.tracking}` : ""}`}</Pill> : rang >= 0 ? <Pill tone="grey"><Ic n="truck" /> Pas encore expédiée</Pill> : null}
+          {rang >= 3 ? <Pill tone={rang === 4 ? "ok" : "info"}><Ic n={rang === 4 ? "check" : "truck"} /> {st === "remise_main_propre" ? "Remise en main propre" : rang === 4 ? "Livrée" : `Expédiée${o.tracking ? ` · suivi ${numerosSuivi(o.tracking).join(" + ")}` : ""}`}</Pill> : rang >= 0 ? <Pill tone="grey"><Ic n="truck" /> Pas encore expédiée</Pill> : null}
           {rang >= 0 ? <span className="fc-pill lock">{verrou(o) ? "🔒 Verrouillée — fabrication lancée ou 24 h passées" : <><Ic n="clock" /> Annulable par la cliente (24 h)</>}</span> : null}
           {o.immediateStart ? <Pill tone="bad"><Ic n="bolt" /> Fabrication immédiate demandée</Pill> : null}
           {o.test ? <Pill tone="grey">🧪 Commande test (non comptée)</Pill> : null}
@@ -399,7 +399,7 @@ export default function FicheCommandePage() {
                 {!estPartie(o) && !finie ? <button type="button" className="fc-btn ghost" onClick={() => { setConfirm("exp"); window.scrollTo({ top: 0, behavior: "smooth" }); }}><Ic n="truck" /> Expédier…</button> : null}
               </div>
               {boxtal ? <div style={{ marginTop: 10 }}><BoxtalCopie order={o} /></div> : null}
-              {suivi ? <div className="fc-row" style={{ marginTop: 12 }}><Ic n="truck" /><b>Suivi {o.tracking}</b><a className="fc-lnk" href={suivi.url} target="_blank" rel="noreferrer">suivre sur {suivi.nom}</a>{suivi.autre ? <a className="fc-lnk" href={suivi.autre.url} target="_blank" rel="noreferrer">suivre sur {suivi.autre.nom}</a> : null}<button type="button" className="fc-lnk" onClick={() => { setConfirm("exp"); window.scrollTo({ top: 0, behavior: "smooth" }); }}>modifier</button>{o.shippedAt ? <span className="faint">expédiée le {dateFr(o.shippedAt)}</span> : null}</div> : null}
+              {suivi ? <div className="fc-row" style={{ marginTop: 12, flexWrap: "wrap" }}><Ic n="truck" /><b>Suivi</b><span><LiensSuivi o={o} sep={<br />} /></span><button type="button" className="fc-lnk" onClick={() => { setConfirm("exp"); window.scrollTo({ top: 0, behavior: "smooth" }); }}>modifier</button>{o.shippedAt ? <span className="faint">expédiée le {dateFr(o.shippedAt)}</span> : null}</div> : null}
             </div>
           </Carte>
 
@@ -411,7 +411,7 @@ export default function FicheCommandePage() {
             <div className="cb">
               <ul className="fc-tl">
                 <li className="ok">Payée · {formatEuro(total)}<small>{dateFr(o.createdAt)}</small></li>
-                {o.shippedAt ? <li className="ok">Expédiée{o.tracking ? ` · suivi ${o.tracking}` : ""}<small>{dateFr(o.shippedAt)}</small></li> : null}
+                {o.shippedAt ? <li className="ok">Expédiée{o.tracking ? ` · suivi ${numerosSuivi(o.tracking).join(" + ")}` : ""}<small>{dateFr(o.shippedAt)}</small></li> : null}
                 {o.remisAt ? <li className="ok">Remise en main propre<small>{dateFr(o.remisAt)}</small></li> : null}
                 {o.deliveredAt ? <li className="ok">Livrée<small>{dateFr(o.deliveredAt)}</small></li> : null}
                 {st === "annulee" ? <li className="bad">Annulée</li> : null}

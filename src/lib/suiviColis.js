@@ -84,3 +84,28 @@ export function lienSuiviClient(numero, order) {
   if (estNumeroMondialRelay(x, order)) return { nom: "Mondial Relay", url: lienMondialRelay(x, order) };
   return { nom: "suivi du colis", url: `https://parcelsapp.com/fr/tracking/${encodeURIComponent(x)}` };
 }
+
+// =============================================================================
+// PLUSIEURS COLIS POUR UNE COMMANDE (07/11/2026, gérant : « quand ils ont 2 ou 3 cartons… je pourrai pas
+// mettre les deux numéros de suivi »). Le champ `tracking` de la commande reste UN texte (rien à migrer,
+// les anciennes commandes ne bougent pas) : les numéros y sont séparés par « , ». Ces deux fonctions
+// sont la SEULE façon de les lire / de les écrire : tout écran qui affiche un suivi passe par
+// `numerosSuivi(order.tracking)` et montre un lien par numéro.
+// =============================================================================
+export function numerosSuivi(tracking) {
+  const liste = Array.isArray(tracking) ? tracking : String(tracking || "").split(/[,;\n]+/);
+  const vus = new Set();
+  const out = [];
+  for (const t of liste) {
+    const v = String(t || "").trim();
+    const k = nettoyerNumero(v);
+    if (!k || vus.has(k)) continue;
+    vus.add(k);
+    out.push(v);
+  }
+  return out;
+}
+
+export function joindreSuivis(liste) {
+  return numerosSuivi(liste).join(", ");
+}

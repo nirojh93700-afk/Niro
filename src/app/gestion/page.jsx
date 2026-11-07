@@ -2,7 +2,7 @@
 
 import { imageDesign } from "@/lib/modeles";
 import HistoriqueCommande from "@/components/admin/HistoriqueCommande";
-import { lienSuivi } from "@/lib/suiviColis";
+import { lienSuivi, numerosSuivi, joindreSuivis } from "@/lib/suiviColis";
 import DelaiCommande from "@/components/admin/DelaiCommande";
 import { nomLivraisonDifferent } from "@/lib/nomLivraison";
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -327,9 +327,9 @@ export default function GestionPage({ onglet = "" } = {}) {
 
   // Marquer expédiée : demande le n° de suivi (optionnel) et propose de prévenir la cliente.
   async function shipOrder(o) {
-    const input = window.prompt("Numéro de suivi du colis (laisse vide si tu n'en as pas encore) :", o.tracking || "");
+    const input = window.prompt("Numéro(s) de suivi (plusieurs colis : sépare-les par une virgule ; laisse vide si tu n'en as pas encore) :", o.tracking || "");
     if (input === null) return; // annulé
-    const tracking = input.trim();
+    const tracking = joindreSuivis(input);
     let notifyCustomer = false;
     if (tracking && o.customerEmail) {
       notifyCustomer = window.confirm(`Envoyer un e-mail à ${o.customerEmail} avec le numéro de suivi ?`);
@@ -1287,8 +1287,10 @@ export default function GestionPage({ onglet = "" } = {}) {
                   <>
                     {o.tracking && (
                       <div style={{ fontSize: "0.85rem", marginBottom: 8 }}>
-                        📦 Suivi : <strong>{o.tracking}</strong>{" "}
-                        <a href={lienSuivi(o.tracking, o).url} target="_blank" rel="noreferrer" title={`Ouvrir le suivi sur ${lienSuivi(o.tracking, o).nom}`}>suivre sur {lienSuivi(o.tracking, o).nom}</a>{lienSuivi(o.tracking, o).autre && <> · <a href={lienSuivi(o.tracking, o).autre.url} target="_blank" rel="noreferrer">suivre sur {lienSuivi(o.tracking, o).autre.nom}</a></>}
+                        {numerosSuivi(o.tracking).map((t, i, l) => { const s = lienSuivi(t, o); return (
+                          <div key={t}>📦 {l.length > 1 ? `Colis ${i + 1} : ` : "Suivi : "}<strong>{t}</strong>{" "}
+                            <a href={s.url} target="_blank" rel="noreferrer" title={`Ouvrir le suivi sur ${s.nom}`}>suivre sur {s.nom}</a>{s.autre && <> · <a href={s.autre.url} target="_blank" rel="noreferrer">suivre sur {s.autre.nom}</a></>}
+                          </div>); })}
                       </div>
                     )}
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>

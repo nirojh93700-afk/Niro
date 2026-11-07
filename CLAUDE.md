@@ -5055,6 +5055,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   à côté. ⛔ Tout nouvel endroit qui affiche un suivi passe par `lienSuivi` / `lienSuiviClient` AVEC la commande. `test-suivi` : 25 vérifs.
   Le lien Mondial Relay n'a pas pu être ouvert d'ici (site bloqué par le réseau) : format pris sur leur page de suivi publique.
 
+## 📦📦 PLUSIEURS NUMÉROS DE SUIVI POUR UNE COMMANDE — 07/11/2026 (gérant : « 2 ou 3 cartons… je pourrai pas mettre les deux numéros de suivi ») — PRÉPARÉ, À POUSSER SUR SON MOT
+- Formulaire d'expédition (`FormExpedition`, file de production ET fiche commande) : un champ par colis + « + Ajouter un autre colis » + ✕,
+  transporteur reconnu par colis. Ancienne fiche (`/gestion`) : numéros séparés par une virgule dans la fenêtre.
+- Rangé dans le MÊME champ `tracking` (« n1, n2 ») : rien à migrer. Lecture / écriture UNIQUEMENT par `numerosSuivi` / `joindreSuivis`
+  (`suiviColis.js`). Affichés un par un : carte (`LiensSuivi`), fiche commande, ancienne fiche, CRM, fiche papier, espace client
+  (« Suivre le colis 1 / 2 »), e-mail « expédiée » (« expédiée en 2 colis » + un bouton par colis), contexte de l'agent. `npm run test-suivi` (34).
+
 ## ⏱ DATE LIMITE D'EXPÉDITION EN JOURS OUVRÉS + CALENDAIRES — 26/10/2026 (gérant : « si j'envoie tout demain je suis dans les temps ? … affiche les deux, ouvrables et non ouvrables »)
 - La date affichée sur une commande = le jour du paiement ; Gestion ne calculait AUCUNE date limite. Maintenant `src/lib/delaiCommande.js`
   (pur, `npm run test-delai`, 13 vérifs) : promesse du site = 5 jours ouvrés de fabrication (lun.–ven., sans les jours fériés français,

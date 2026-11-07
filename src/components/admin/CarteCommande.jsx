@@ -17,7 +17,7 @@ import DelaiCommande from "@/components/admin/DelaiCommande";
 import { BlocConditionnement } from "@/components/admin/Conditionnement";
 import { RatesCommande } from "@/components/admin/Rates";
 import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
-import { lienSuivi } from "@/lib/suiviColis";
+import { lienSuivi, numerosSuivi, joindreSuivis } from "@/lib/suiviColis";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
 import { FLAGS, FLAG_PAR_ID, chipsDe, modeDe, statutDe, statutInfo, estActive, estFinie, euro, ageDe, dateFr, refDe, hrefFiche, adresseLigne } from "@/lib/fileCommandes";
 
@@ -29,24 +29,37 @@ export function Pill({ tone = "grey", ic, children, title }) {
 
 // Expédition dans la carte : n° de suivi, transporteur reconnu par lienSuivi (La Poste, Mondial Relay,
 // Chronopost…), case « prévenir la cliente » (e-mail avec le lien de suivi), ou remise en main propre.
+// 07/11/2026 : UN CHAMP PAR COLIS (« + Ajouter un autre colis ») quand la commande part en plusieurs
+// cartons ; les numéros sont rangés ensemble dans `tracking` (séparés par « , », voir joindreSuivis).
 export function FormExpedition({ o, onStatus, onClose, busy, titre = "Expédier" }) {
-  const [n, setN] = useState(o.tracking || "");
+  const depart = numerosSuivi(o.tracking);
+  const [nums, setNums] = useState(depart.length ? depart : [""]);
   const [notify, setNotify] = useState(Boolean(o.customerEmail));
   const [erreur, setErreur] = useState("");
-  const carrier = n.trim() ? lienSuivi(n.trim(), o).nom : "—";
   const mode = modeDe(o);
   const pays = paysDeLaCommande(o);
+  const changer = (i, v) => { setNums((l) => l.map((x, j) => (j === i ? v : x))); setErreur(""); };
+  const pleins = numerosSuivi(nums);
   return (
     <form className="fq-ship" onSubmit={async (e) => {
       e.preventDefault();
-      const t = n.trim();
+      const t = joindreSuivis(nums);
       if (!t && o.customerEmail && notify) { setErreur("Sans numéro de suivi, la cliente ne recevra pas de lien : décoche « Prévenir » ou saisis le numéro."); return; }
       await onStatus(o, "expediee", { tracking: t, notifyCustomer: Boolean(t && notify && o.customerEmail) });
       onClose();
     }}>
       <h3><Ic n="truck" /> {titre} #{refDe(o)}</h3>
-      <input type="text" value={n} onChange={(e) => { setN(e.target.value); setErreur(""); }} placeholder="N° de suivi (La Poste, Mondial Relay, Chronopost…)" autoFocus />
-      <div className="car">Transporteur reconnu : <b>{carrier}</b> · le lien de suivi envoyé sera le bon</div>
+      {nums.map((n, i) => (
+        <div key={i}>
+          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            <input type="text" style={{ flex: 1, minWidth: 0 }} value={n} onChange={(e) => changer(i, e.target.value)} placeholder={nums.length > 1 ? `N° de suivi du colis ${i + 1}` : "N° de suivi (La Poste, Mondial Relay, Chronopost…)"} autoFocus={i === 0} />
+            {nums.length > 1 ? <button type="button" className="fq-btn ghost" aria-label={`Retirer le colis ${i + 1}`} onClick={() => setNums((l) => l.filter((_, j) => j !== i))}>✕</button> : null}
+          </div>
+          <div className="car">{nums.length > 1 ? `Colis ${i + 1} · ` : ""}Transporteur reconnu : <b>{n.trim() ? lienSuivi(n.trim(), o).nom : "—"}</b></div>
+        </div>
+      ))}
+      <button type="button" className="fq-btn ghost" style={{ alignSelf: "flex-start" }} onClick={() => setNums((l) => [...l, ""])}>+ Ajouter un autre colis</button>
+      <div className="car">{pleins.length > 1 ? `${pleins.length} colis : la cliente recevra un lien de suivi pour chacun.` : "Le lien de suivi envoyé sera le bon."}</div>
       {o.customerEmail ? <label><input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} /> Prévenir la cliente par e-mail ({o.customerEmail})</label> : <div className="car">Pas d&apos;e-mail sur cette commande : aucun message ne partira.</div>}
       {mode.k === "relais" && o.relaisPoint ? <div className="car"><Ic n="pin" /> {o.relaisPoint}</div> : null}
       {mode.k === "express" ? <div className="car" style={{ color: "var(--ash-bad)", fontWeight: 700 }}><Ic n="bolt" /> Express payé : Chrono 18 à domicile</div> : null}
@@ -59,6 +72,20 @@ export function FormExpedition({ o, onStatus, onClose, busy, titre = "Expédier"
       </div>
     </form>
   );
+}
+
+// Liens de suivi d'une commande (un par colis), pour Gestion.
+export function LiensSuivi({ o, sep = " · " }) {
+  const nums = numerosSuivi(o.tracking);
+  return nums.map((t, i) => {
+    const s = lienSuivi(t, o);
+    return (
+      <span key={t}>
+        {i ? sep : null}{nums.length > 1 ? `Colis ${i + 1} : ` : ""}<span className="mono">{t}</span>
+        {s ? <> · <a href={s.url} target="_blank" rel="noreferrer">suivre ({s.nom})</a>{s.autre ? <> · <a href={s.autre.url} target="_blank" rel="noreferrer">{s.autre.nom}</a></> : null}</> : null}
+      </span>
+    );
+  });
 }
 
 export default function CarteCommande({ o, pos, inBoard = false, unread = false, selected = false, onSelect, onStatus, onAnnotate, mat, onCond, adminKey, onMat, busy = false, onToast, focus = false }) {
@@ -138,7 +165,7 @@ export default function CarteCommande({ o, pos, inBoard = false, unread = false,
       {o.demande ? <div className="fq-demande"><b>Sur mesure{o.quoteNumber ? ` · devis ${o.quoteNumber}` : ""} :</b> {o.demande}</div> : null}
 
       {!finie || st === "livree" ? <DelaiCommande order={o} style={{ margin: 0 }} /> : null}
-      {suivi ? <div className="fq-dead done"><Ic n="check" /><span>Suivi <span className="mono">{o.tracking}</span> · <a href={suivi.url} target="_blank" rel="noreferrer">suivre ({suivi.nom})</a>{suivi.autre ? <> · <a href={suivi.autre.url} target="_blank" rel="noreferrer">{suivi.autre.nom}</a></> : null}{o.shippedAt ? ` · expédiée le ${dateFr(o.shippedAt, false)}` : ""}</span></div> : null}
+      {suivi ? <div className="fq-dead done"><Ic n="check" /><span>Suivi <LiensSuivi o={o} />{o.shippedAt ? ` · expédiée le ${dateFr(o.shippedAt, false)}` : ""}</span></div> : null}
 
       <div className="fq-meta">
         {flags.map((f) => FLAG_PAR_ID[f] ? <button key={f} type="button" className={`fq-pill ${FLAG_PAR_ID[f].tone} btn`} title="Retirer cette étiquette" onClick={() => onAnnotate(o, { flags: flags.filter((x) => x !== f) })}><Ic n="tag" /> {FLAG_PAR_ID[f].label} ×</button> : null)}

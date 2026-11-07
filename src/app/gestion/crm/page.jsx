@@ -8,7 +8,7 @@
 // =============================================================================
 
 import PhotosMessage from "@/components/PhotosMessage";
-import { lienSuivi } from "@/lib/suiviColis";
+import { lienSuivi, numerosSuivi } from "@/lib/suiviColis";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
@@ -525,12 +525,11 @@ export default function CrmPage() {
                     <span style={{ color: "var(--ink-soft)" }}>{fmtDate(ord.createdAt)}</span>
                     <span style={{ color: col, fontWeight: 600 }}>{label}</span>
                     <span style={{ color: "var(--ink-soft)" }}>{euro(ord.total)}</span>
-                    {ord.tracking && (
-                      <a href={lienSuivi(ord.tracking, ord).url} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }} title={`Ouvrir le suivi sur ${lienSuivi(ord.tracking, ord).nom}`}>📍 Suivi {lienSuivi(ord.tracking, ord).nom}</a>
-                    )}
-                    {ord.tracking && lienSuivi(ord.tracking, ord).autre && (
-                      <a href={lienSuivi(ord.tracking, ord).autre.url} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }}>📍 Suivi La Poste</a>
-                    )}
+                    {numerosSuivi(ord.tracking).map((t, i, l) => { const s = lienSuivi(t, ord); const n = l.length > 1 ? ` colis ${i + 1}` : ""; return (
+                      <span key={t} style={{ display: "contents" }}>
+                        <a href={s.url} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }} title={`${t} · suivi sur ${s.nom}`}>📍 Suivi{n} {s.nom}</a>
+                        {s.autre && <a href={s.autre.url} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ padding: "3px 10px", fontSize: "0.8rem" }}>📍 Suivi{n} La Poste</a>}
+                      </span>); })}
                   </div>
                 );
               })}

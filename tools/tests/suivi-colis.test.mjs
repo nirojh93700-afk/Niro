@@ -41,3 +41,22 @@ w(lienSuiviClient("ABC123", cmd).url === "https://parcelsapp.com/fr/tracking/ABC
 w(lienSuiviClient("", cmd) === null, "cliente : pas de numéro → null");
 console.log(`${ok2}/${ok2 + ko2} vérifications Mondial Relay au vert`);
 if (ko2) process.exit(1);
+
+// --- Plusieurs colis pour une commande (07/11/2026) ---
+const { numerosSuivi, joindreSuivis } = await import("@/lib/suiviColis");
+const { shippedEmail } = await import("@/lib/email");
+let ok3 = 0, ko3 = 0;
+const p3 = (c, m) => { if (c) ok3++; else { ko3++; console.error("✗", m); } };
+p3(JSON.stringify(numerosSuivi("6A12345678901")) === '["6A12345678901"]', "un seul numéro : inchangé (anciennes commandes)");
+p3(JSON.stringify(numerosSuivi("6A12345678901, 74550444")) === '["6A12345678901","74550444"]', "deux numéros séparés par une virgule");
+p3(numerosSuivi("6A12345678901;74550444\n87001500427259Z").length === 3, "point-virgule et retour à la ligne acceptés");
+p3(numerosSuivi("6A 1234 5678 901, 6A12345678901").length === 1, "doublon (même numéro avec espaces) retiré");
+p3(numerosSuivi("").length === 0 && numerosSuivi(null).length === 0, "vide → aucun numéro");
+p3(joindreSuivis(["6A12345678901", " ", "74550444"]) === "6A12345678901, 74550444", "liste du formulaire → texte enregistré");
+p3(joindreSuivis("  6A12345678901  ") === "6A12345678901", "un numéro seul reste tel quel");
+const m1 = shippedEmail({ ref: "X1", customerName: "Léa Martin", items: [] }, "6A12345678901");
+p3(!m1.html.includes("Colis 1") && m1.html.includes("Suivre mon colis"), "e-mail un colis : comme avant");
+const m2 = shippedEmail({ ref: "X2", customerName: "Léa Martin", items: [] }, "6A12345678901, 6A12345678902");
+p3(m2.html.includes("en <strong>2 colis</strong>") && m2.html.includes("Suivre le colis 1") && m2.html.includes("Suivre le colis 2") && m2.html.includes("6A12345678902"), "e-mail deux colis : un bouton par colis");
+console.log(`${ok3}/${ok3 + ko3} vérifications plusieurs colis au vert`);
+if (ko3) process.exit(1);

@@ -5,6 +5,7 @@ import { devisDeLaCommande, imagesDuFil } from "@/lib/historiqueDevis";
 import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 import { sansAncienHebergeur } from "@/lib/photosLocales";
+import { joindreSuivis } from "@/lib/suiviColis";
 
 export const dynamic = "force-dynamic";
 
@@ -208,7 +209,7 @@ export async function POST(req) {
     return Response.json({ error: "Paramètres invalides." }, { status: 400 });
   }
   const patch = { status };
-  if (typeof tracking === "string") patch.tracking = tracking.trim();
+  if (typeof tracking === "string" || Array.isArray(tracking)) patch.tracking = joindreSuivis(tracking); // plusieurs colis : « n1, n2 »
   // Horodatage du changement de statut (sert aux règles auto « X jours après
   // expédition/livraison »). Chaîne ISO, comme createdAt.
   const nowIso = new Date().toISOString();

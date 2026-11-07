@@ -24,6 +24,7 @@
 // =============================================================================
 
 import { paysDeLaCommande } from "@/lib/paysLivraison";
+import { numerosSuivi } from "@/lib/suiviColis";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { GlassPreview, ReglagesItem } from "@/components/admin/FicheAtelier";
@@ -238,7 +239,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
                 <L k="Livrer à" v={[nomLivraison(order).complet, adresse].filter(Boolean).join(" — ")} />
                 <L k="Pays" v={pays.etranger ? `${pays.drapeau} ${pays.nom.toUpperCase()} (hors de France)` : `${pays.drapeau} ${pays.nom}`} />
                 <L k="Mode" v={livraison} />
-                <L k="Suivi" v={order.tracking} />
+                <L k={numerosSuivi(order.tracking).length > 1 ? "Suivis" : "Suivi"} v={numerosSuivi(order.tracking).join(" · ")} />
               </tbody>
             </table>
           </section>

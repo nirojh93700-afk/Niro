@@ -1,5 +1,5 @@
 import { LOGO_URL } from "./photosLocales";
-import { lienSuiviClient } from "./suiviColis";
+import { lienSuiviClient, numerosSuivi } from "./suiviColis";
 // =============================================================================
 // E-mails de marque Niv Création (or & crème) — utilisé pour les tests d'envoi.
 // Reprend la même mise en page que l'e-mail de confirmation client.
@@ -210,20 +210,28 @@ export function shippedEmail(order, tracking) {
   const name = order?.customerName ? order.customerName.split(" ")[0] : "";
   // 26/10/2026 (commande 15HSMV8X) : un numéro Mondial Relay ou La Poste ouvre le suivi du transporteur
   // (parcelsapp ne connaît pas un numéro Mondial Relay sans code postal : la cliente « ne voyait rien »).
-  const suivi = lienSuiviClient(tracking, order);
-  const trackUrl = suivi?.url || `https://parcelsapp.com/fr/tracking/${encodeURIComponent(tracking)}`;
+  // 07/11/2026 : une commande peut partir en PLUSIEURS colis (numéros séparés par « , ») → un bloc
+  // « numéro + bouton de suivi » par colis.
+  const nums = numerosSuivi(tracking);
+  const plusieurs = nums.length > 1;
+  const blocsSuivi = nums.map((t, i) => {
+    const suivi = lienSuiviClient(t, order);
+    const trackUrl = suivi?.url || `https://parcelsapp.com/fr/tracking/${encodeURIComponent(t)}`;
+    return `
+    <p style="margin:0 0 4px;">${plusieurs ? `Colis ${i + 1} sur ${nums.length}, numéro de suivi :` : "Numéro de suivi :"}</p>
+    <p style="margin:0 0 12px;font-size:18px;font-weight:bold;color:${BRAND.gold};">${escapeHtml(t)}</p>
+    <p style="margin:0 0 20px;">
+      <a href="${trackUrl}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-weight:bold;">${plusieurs ? `Suivre le colis ${i + 1}` : "Suivre mon colis"}${suivi?.nom && suivi.nom !== "suivi du colis" ? ` (${escapeHtml(suivi.nom)})` : ""}</a>
+    </p>`;
+  }).join("");
   const relais = order?.relaisPoint ? String(order.relaisPoint).replace(/^Mondial Relay\s*—\s*/i, "") : "";
   const items = (order?.items || [])
     .map((it) => `<tr><td style="padding:6px 0;border-bottom:1px solid #f0eadd;">${escapeHtml(`${it.quantity}× ${it.name}`)}</td></tr>`)
     .join("");
   const body = `
     <p style="margin:0 0 12px;">Bonjour${name ? " " + escapeHtml(name) : ""},</p>
-    <p style="margin:0 0 12px;">Bonne nouvelle : votre commande <strong>#${escapeHtml(ref)}</strong> vient d'être <strong>expédiée</strong> ! 📦</p>
-    <p style="margin:0 0 4px;">Numéro de suivi :</p>
-    <p style="margin:0 0 16px;font-size:18px;font-weight:bold;color:${BRAND.gold};">${escapeHtml(tracking)}</p>
-    <p style="margin:0 0 20px;">
-      <a href="${trackUrl}" style="display:inline-block;background:${BRAND.gold};color:#fff;text-decoration:none;padding:12px 22px;border-radius:8px;font-weight:bold;">Suivre mon colis${suivi?.nom && suivi.nom !== "suivi du colis" ? ` (${escapeHtml(suivi.nom)})` : ""}</a>
-    </p>
+    <p style="margin:0 0 12px;">Bonne nouvelle : votre commande <strong>#${escapeHtml(ref)}</strong> vient d'être <strong>expédiée</strong>${plusieurs ? ` en <strong>${nums.length} colis</strong>` : ""} ! 📦</p>
+${blocsSuivi}
     ${relais ? `<p style="margin:0 0 16px;color:#7a7268;">Point de retrait : ${escapeHtml(relais)}</p>` : ""}
     ${items ? `<table style="width:100%;border-collapse:collapse;font-size:14px;"><tbody>${items}</tbody></table>` : ""}
     <p style="margin:18px 0 0;">Merci pour votre confiance,<br>Niv Création</p>`;
