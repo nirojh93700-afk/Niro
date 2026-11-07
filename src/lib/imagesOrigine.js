@@ -11,6 +11,7 @@ import { MODELES, imageDesign } from "@/lib/modeles";
 import { NOEL_IMAGES } from "@/lib/fetes";
 import { CG_MODELES, CG_DESSINS, CG_ZODIAQUE, CG_DOSSIER } from "@/lib/cristauxGraves";
 import { mpLignes } from "@/lib/marquePages";
+import { CN_FACES, cnLignes } from "@/lib/carnet";
 import VECTORIEL from "@/lib/vectoriel";
 
 // Dessins du site redessinés en traits (tools/gravure/vectoriser-tout.py) : public/vectoriel/<même chemin>.svg.
@@ -94,6 +95,10 @@ export function imagesOrigineArticle(item) {
         if (estSite(l.img)) out.push({ titre: `Marque-page ${i + 1} · ${l.libelle} : ${l.valeur.replace(/,.*$/, "")}`, src: l.img, nom: nomFichier(l.img, `marque-page-${l.valeur.replace(/,.*$/, "")}`) });
       }
     });
+  } else if (produit?.carnet && champs.cn && typeof champs.cn === "object") {
+    for (const [s, nom] of CN_FACES) for (const l of cnLignes(champs.cn.v, s)) {
+      if (estSite(l.img)) out.push({ titre: `${nom} · ${l.libelle} : ${l.valeur.replace(/,.*$/, "")}`, src: l.img, nom: nomFichier(l.img, `carnet-${s}-${l.zone}`) });
+    }
   } else if (produit) {
     const verres = Array.isArray(item.perGlass) && item.perGlass.length > 1 ? item.perGlass : null;
     if (verres) verres.forEach((g, i) => { out.push(...depuisChamps(produit, g, `Verre ${i + 1}`)); });

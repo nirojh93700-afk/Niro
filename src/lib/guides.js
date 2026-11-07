@@ -138,7 +138,7 @@ export const GUIDES = [
   {
     // Marque-pages (27/10/2026) : tout produit dont le nom contient « marque-page » y entre tout seul.
     slug: "marque-pages-personnalises",
-    auto: { motCle: /marque-page/i },
+    auto: { motCle: /marque-page|carnet/i },
     nav: "Marque-pages",
     title: "Marque-pages personnalisés — gravés au prénom, dessin ou photo",
     titreGoogle: "Marque-pages personnalisés gravés",
@@ -197,7 +197,7 @@ export function guidePourProduit(product) {
 
   if (cat === "cristal" || nom.includes("cristal")) return getGuide("cristal-photo-3d");
   if (cat === "jeux") return getGuide("puzzles-bois-personnalises");
-  if (/marque-page/.test(nom)) return getGuide("marque-pages-personnalises");
+  if (/marque-page|carnet/.test(nom)) return getGuide("marque-pages-personnalises");
   if (/support t(é|e)l(é|e)phone/.test(nom)) return getGuide("support-telephone-personnalise");
   if (/porte-stylo/.test(nom)) return getGuide("porte-stylo-bois-personnalise");
   if (/usb/.test(nom)) return getGuide("cle-usb-personnalisee-gravee");

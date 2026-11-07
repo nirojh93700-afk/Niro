@@ -1,5 +1,6 @@
 import { gobeletSupplement } from "@/lib/gobeletParcours";
 import { manqueLangue } from "@/lib/traductionGravure";
+import { cnNormaliser, cnPrixGravure, cnResume } from "@/lib/carnet";
 import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
@@ -238,6 +239,31 @@ export async function POST(req) {
     const reglagesLigne = [item.fields || {}, ...(Array.isArray(item.perGlass) ? item.perGlass.slice(0, 60) : [])];
     if (reglagesLigne.some((fv) => fv && typeof fv === "object" && manqueLangue(fv))) {
       return Response.json({ error: "Un texte traduit de votre panier n'a pas été confirmé : ouvrez l'article, relisez la traduction et cochez « J'ai relu le texte traduit »." }, { status: 400 });
+    }
+
+    // Carnet A5 (07/11/2026) : couleur + gravure couverture / dos (+7 € par face gravée) — recalcul de confiance
+    // avec la même fonction que la fiche (src/lib/carnet.js).
+    if (product.carnet) {
+      const cn = cnNormaliser(product, item.fields?.cn);
+      if (!cn) return Response.json({ error: "Un carnet du panier n'est plus valable : retirez-le et composez-le à nouveau." }, { status: 400 });
+      const unit = variant.price + cnPrixGravure(cn.v);
+      if (!gravureOfferte && cnPrixGravure(cn.v)) gravureOfferte = 7; // code « gravure offerte » : une face
+      boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
+      ajouterLignePort(etatPort, { product, unitGrams: variant.weight || product.weight, unitPrice: unit, quantity });
+      lineItems.push({
+        quantity,
+        price_data: {
+          currency: "eur",
+          unit_amount: toCents(unit),
+          product_data: {
+            name: product.name,
+            description: cnResume(product, cn, variant.title).slice(0, 900),
+            images: [absoluteImage(variant.image || product.images[0])].filter(Boolean),
+            metadata: { slug: product.slug },
+          },
+        },
+      });
+      continue;
     }
 
     // Marque-pages (27/10/2026) : format, boîte, une couleur et une gravure PAR marque-page — recalcul de confiance

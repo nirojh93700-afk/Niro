@@ -86,6 +86,17 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
+## 📓 CARNET A5 GRAVÉ + ONGLET « PAPETERIE » — ✅ EN LIGNE LE 07/11/2026 (gérant : maquette https://claude.ai/artifact/8LUUWhWoLbd9hJZ9smto4s → « Papeterie avec le carnet »)
+- L'univers « Marque-pages » devient **« Papeterie »** (`src/lib/univers.js`, id `papeterie`) : marque-pages en bois, en métal, **Carnets** ;
+  `/boutique/marque-pages` redirige vers `/boutique/papeterie` (next.config.js). Générateur de la maquette : `tools/maquettes/papeterie.py`.
+- Fiche `carnet-a5-grave` (`carnet: true`) = la maquette v9 : `src/components/carnet/CarnetFiche.jsx` (3 couleurs, quatre emplacements
+  couverture + quatre au dos, menus Rien / Un texte (2 lignes) / Un de nos dessins ou cadres (n°) / Mon logo, 8 écritures, gravure posée sur la
+  grande photo, vignette « Dos ») · calcul pur `src/lib/carnet.js` (12,90 €, +7 € par face gravée, `cnNormaliser` aussi au paiement) ·
+  branche dans `/api/checkout` · atelier `consignesCarnet` (une face par bloc, vignette du dessin), « Vendu en plus », images d'origine ·
+  guide « Marque-pages personnalisés » (paragraphe « Et le carnet qui va avec »). Planches / envoi de photo repris de `MarquePagesFiche`.
+- ⚠️ Photos = couvertures DESSINÉES de la maquette + exemples (à remplacer par de vraies photos gravées) · poids 380 g ESTIMÉ (à peser) ·
+  stock NON suivi (illimité) tant que le gérant ne le saisit pas dans Gestion → Produits & stock (60 carnets reçus, répartition par couleur inconnue).
+
 ## 🔤 TITRES GOOGLE DU GOBELET ET DE /naissance — 06/11/2026 (audit : titre de 92 caractères, titres en double) — ✅ EN LIGNE
 - Gobelet : `title` « Gobelet isotherme gravé 40 oz : prénom, dessin ou photo » (55 + « | Niv Création » = 70) ; c'est aussi le H1 de la fiche.
 - `/naissance` : « Plaque de naissance en bois gravée, fille ou garçon » (la fiche `plaque-de-naissance` garde son titre).

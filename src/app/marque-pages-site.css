@@ -33,3 +33,18 @@
 .mp-fiche .mq-bst button:disabled{opacity:.35;cursor:default}
 .mp-fiche .mq-places{margin:2px 0 0;font-size:.84rem;color:#4f7a3a;font-weight:600}
 .mp-fiche .mq-places.warn{color:#9a5b00}
+
+/* ===== Carnet A5 gravé (07/11/2026, maquette v9) : gravure posée sur la couverture ===== */
+.cn-ov{position:absolute;inset:0;pointer-events:none;z-index:2}
+.cn-el{position:absolute;display:flex;flex-direction:column;justify-content:center}
+.cn-el.g{align-items:flex-start;text-align:left}.cn-el.c{align-items:center;text-align:center}.cn-el.d{align-items:flex-end;text-align:right}
+.cn-el .l1,.cn-el .l2{white-space:nowrap;line-height:1.05;text-shadow:0 1px 0 hsla(0,0%,100%,.35),0 -1px 1px rgba(0,0,0,.3)}.cn-el .l2{margin-top:.25em;letter-spacing:.03em}
+.gallery-main .cn-el img.d{position:absolute;object-fit:contain;mix-blend-mode:multiply;filter:grayscale(1) contrast(1.5);opacity:.9}
+.gallery-main .cn-ov.clair img.d{mix-blend-mode:screen;filter:grayscale(1) invert(1) contrast(1.3);opacity:.82}
+.gallery-main .cn-el img.g{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;filter:grayscale(1) contrast(1.4);opacity:.9}
+.gallery-main .cn-ov.clair img.g{mix-blend-mode:screen;filter:grayscale(1) contrast(1.15) brightness(.92);opacity:.9}
+.gallery-main .cn-el img.g.pos{object-position:left center}.gallery-main .cn-el img.g.posd{object-position:right center}
+.cn-el.cadre .t.c{position:absolute;width:max-content;white-space:nowrap;line-height:1;transform:translate(calc(-50% - var(--dx,0px)),calc(-50% - var(--dy,0px)));text-shadow:0 1px 0 hsla(0,0%,100%,.35),0 -1px 1px rgba(0,0,0,.3)}
+.cn-sub{font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:#7c6120;font-weight:700;margin:14px 0 8px}.cn-sub small{text-transform:none;letter-spacing:0;font-weight:400;color:#7a6c48}
+.mq-ed input.cn-empt2{margin-top:0}
+.gallery-thumbs .mq-thex{position:relative}

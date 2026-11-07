@@ -70,7 +70,7 @@ function compresser(file, maxDim = 1280, quality = 0.82) {
     r.onerror = reject; r.readAsDataURL(file);
   });
 }
-async function envoyerPhoto(file, productSlug) {
+export async function envoyerPhoto(file, productSlug) {
   const dataUrl = await compresser(file);
   const res = await fetch("/api/upload", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ dataUrl, productSlug }) });
   const d = await res.json().catch(() => ({}));
@@ -79,7 +79,7 @@ async function envoyerPhoto(file, productSlug) {
 }
 
 // --- Aperçu : un côté du marque-page, gravure posée dans ses zones (port de mqApercu) ------------------------------
-function ajuster(t, maxW, maxH) {
+export function ajuster(t, maxW, maxH) {
   let fs = maxH; t.style.fontSize = fs + "px"; let n = 0;
   while (n++ < 40 && fs > 4 && t.offsetWidth > maxW) { fs *= 0.9; t.style.fontSize = fs + "px"; }
   try { // centrage sur l'encre des lettres (24/10) : on mesure les lettres réelles et on compense
@@ -174,7 +174,7 @@ function Apercu({ modele, items, H, couleur }) {
 }
 
 // --- Planches numérotées du gobelet (classes .prc-* du site) ------------------------------------------------------
-function Planches({ valeur, onChoix, onFermer }) {
+export function Planches({ valeur, onChoix, onFermer }) {
   const [num, setNum] = useState(valeur ? String(valeur) : "");
   const [zoom, setZoom] = useState(null);
   const [on, setOn] = useState(-1);
@@ -484,7 +484,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
 
         <div className="product-info">
           <div className="breadcrumb">
-            <Link href="/boutique">Boutique</Link>{" / "}<Link href="/boutique/marque-pages">Marque-pages</Link>
+            <Link href="/boutique">Boutique</Link>{" / "}<Link href="/boutique/papeterie">Papeterie</Link>
           </div>
           <div className="pd-titrerow">
             <h1>{product.title}</h1>

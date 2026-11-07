@@ -71,10 +71,13 @@ export const UNIVERS = [
     rayons: [{ nom: "Lampes & veilleuses", slugs: ["arbre-de-vie-lumineux", "veilleuse-arbre-de-vie-ronde", "veilleuse-arbre-de-vie-prenom", "lampe-led-paris-saint-germain"] },
              { nom: "Bougeoirs", slugs: ["bougeoir-mandala-bois", "photophore-fee-bois", "bougeoir-fleur-de-lotus"] }] },
   // Marque-pages (27/10/2026, gérant : « tu fais pas un petit cadeau… change le nom dans le menu » → « Marque-pages »).
-  { id: "marque-pages", nom: "Marque-pages", short: "Marque-pages", neuf: true, img: "/marque-pages/m1/groupe.jpg",
-    accroche: "Des marque-pages en bois à graver d'un prénom, d'un dessin ou d'une photo, et des marque-pages en métal doré d'après Van Gogh et Monet.",
+  // 07/11/2026 (maquette https://claude.ai/artifact/8LUUWhWoLbd9hJZ9smto4s, « Papeterie avec le carnet ») : l'onglet devient
+  // « Papeterie » — marque-pages en bois, en métal, et le carnet A5 gravé. /boutique/marque-pages redirige ici.
+  { id: "papeterie", nom: "Papeterie", short: "Papeterie", neuf: true, img: "/marque-pages/m1/groupe.jpg",
+    accroche: "Des marque-pages et des carnets à graver d'un prénom, d'un dessin ou d'une photo, et des marque-pages en métal doré d'après Van Gogh et Monet.",
     rayons: [{ nom: "Marque-pages en bois", slugs: ["marque-page-bois-pompon", "marque-page-bois-oiseau"] },
-             { nom: "Marque-pages en métal", slugs: ["marque-page-metal-peinture"] }] },
+             { nom: "Marque-pages en métal", slugs: ["marque-page-metal-peinture"] },
+             { nom: "Carnets", slugs: ["carnet-a5-grave"] }] },
   { id: "cadeaux", nom: "Petits cadeaux", short: "Petits cadeaux", pourqui: true, img: "/produits/cle_usb_en_bois_4gb_avec_boite_en_bois.jpg",
     accroche: "Clés USB, porte-clés, pièce à graver et accessoires de bureau, personnalisés ou prêts à offrir.",
     rayons: [{ nom: "Clés USB", slugs: ["cle-usb-personnalisee", "cle-usb-bois-coffret", "cle-usb-cristal-3d"] },
@@ -103,7 +106,7 @@ const QUI_EXTRA = {
   "porte-cles-cuir-a-graver": ["lui"], "piece-ronde-laiton": ["lui"],
   "marque-page-bois-pompon": ["elle", "lui", "parents"], "marque-page-bois-oiseau": ["elle", "parents"], "marque-page-metal-peinture": ["elle", "parents"],
 };
-const QUI_UNIVERS = { "marque-pages": ["elle", "parents"], verres: ["lui"], maison: ["elle", "parents"], cristal: ["parents", "couple"], mariage: ["maries"], bijoux: ["elle"], enfants: ["enfant"], cadeaux: ["lui", "elle"] };
+const QUI_UNIVERS = { papeterie: ["elle", "lui", "parents"], verres: ["lui"], maison: ["elle", "parents"], cristal: ["parents", "couple"], mariage: ["maries"], bijoux: ["elle"], enfants: ["enfant"], cadeaux: ["lui", "elle"] };
 
 // Occasions d'un produit (règles d'occasions.js) ; sans occasion → anniversaire + Noël.
 export function occasionsDe(p) {

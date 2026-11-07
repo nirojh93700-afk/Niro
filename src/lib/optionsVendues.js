@@ -17,6 +17,7 @@
 // =============================================================================
 import { texteAvecDecor } from "@/lib/decorTexte";
 import { mpFormat, MP_BOITES } from "@/lib/marquePages";
+import { CN_FACES, CN_GRAVURE, cnFaceGravee, cnLignes } from "@/lib/carnet";
 import { getProductBySlug } from "@/lib/products";
 import { apparierSpec } from "@/lib/orderSpec";
 
@@ -66,6 +67,11 @@ export function optionsArticle(item) {
   if (item.packaging) out.push({ libelle: "Emballage", detail: String(item.packaging), montant: 0, physique: true });
   // 🎄 Emballage de Noël : un objet à mettre dans le colis, + l'étiquette « Merry Christmas » mise d'office.
   if (item.packagingNoel) out.push({ libelle: "🎄 Emballage de Noël", detail: `${String(item.packagingNoel)} — mettre l'étiquette « Merry Christmas » avec sa ficelle`, montant: 0, physique: true, noel: String(item.packagingNoel) });
+  // Carnet A5 (07/11/2026) : la gravure de chaque face, 7 € la face quel que soit le nombre d'emplacements.
+  if (produit?.carnet && champs.cn && typeof champs.cn === "object") {
+    for (const [s, nom] of CN_FACES) if (cnFaceGravee(champs.cn.v, s)) out.push({ libelle: `Gravure ${s === "face" ? "de la couverture" : "du dos"}`, detail: `${nom} : ${cnLignes(champs.cn.v, s).length} emplacement(s) gravé(s)`, montant: CN_GRAVURE, physique: false });
+    return out;
+  }
   // Marque-pages (27/10/2026) : la boîte cadeau du format + le nombre de pièces (une couleur chacune).
   if (produit?.marquePages && champs.mp && typeof champs.mp === "object") {
     const fmt = mpFormat(champs.mp.format);

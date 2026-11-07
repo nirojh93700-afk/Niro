@@ -166,10 +166,10 @@ export default async function HomePage() {
           <section className="mpb rv" aria-labelledby="t-mpb">
             <div className="mpb-in">
               <div className="mpb-pics">
-                <span className="mpb-pic p1"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex1.jpg" alt="Marque-page en bois gravé « Camille » et papillons" loading="lazy" /></Link></span>
-                <span className="mpb-pic p2"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m2/exemple-ex2.jpg" alt="Marque-page ajouré, oiseau et magnolia, gravé « Léa »" loading="lazy" /></Link></span>
-                <span className="mpb-pic p3"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex7.jpg" alt="Marque-page en bois gravé d'une photo et « Pour Mamie »" loading="lazy" /></Link></span>
-                <span className="mpb-pic p4"><Link href="/boutique/marque-pages" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg" alt="Marque-page en métal doré émaillé, Nymphéas de Monet, pompon doré" loading="lazy" /></Link></span>
+                <span className="mpb-pic p1"><Link href="/boutique/papeterie" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex1.jpg" alt="Marque-page en bois gravé « Camille » et papillons" loading="lazy" /></Link></span>
+                <span className="mpb-pic p2"><Link href="/boutique/papeterie" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m2/exemple-ex2.jpg" alt="Marque-page ajouré, oiseau et magnolia, gravé « Léa »" loading="lazy" /></Link></span>
+                <span className="mpb-pic p3"><Link href="/boutique/papeterie" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/m1/exemple-ex7.jpg" alt="Marque-page en bois gravé d'une photo et « Pour Mamie »" loading="lazy" /></Link></span>
+                <span className="mpb-pic p4"><Link href="/boutique/papeterie" className="lien-photo" aria-label="Voir les marque-pages">{/* eslint-disable-next-line @next/next/no-img-element */}<img src="/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg" alt="Marque-page en métal doré émaillé, Nymphéas de Monet, pompon doré" loading="lazy" /></Link></span>
               </div>
               <div className="mpb-copy">
                 <span className="mpb-pill"><i></i>Nouveau à l&apos;atelier</span>
@@ -177,7 +177,7 @@ export default async function HomePage() {
                 <p>En bois, gravés d&apos;un prénom, d&apos;un dessin ou même d&apos;une photo, sur la face comme au dos. Et des marque-pages en métal doré, d&apos;après Van Gogh et Monet.</p>
                 <ul className="mpb-pts"><li>Gravés dans notre atelier en France</li><li>Seuls, en boîte cadeau ou en coffret de 2 ou 4</li><li>Un cadeau pour tous ceux qui aiment lire</li></ul>
                 <p className="mpb-price"><span>à partir de</span><b>{prixTexte(mpBois).replace(/^dès /, "")}</b></p>
-                <Bouton href="/boutique/marque-pages">Découvrir les marque-pages</Bouton>
+                <Bouton href="/boutique/papeterie">Découvrir les marque-pages</Bouton>
               </div>
             </div>
           </section>

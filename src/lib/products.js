@@ -759,6 +759,49 @@ export const products = [
 <p>Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre. Le modèle Papillon arrive déjà dans son propre coffret à fenêtre.</p>`,
   },
 
+  // ----------------------------- CARNET A5 ------------------------------
+  // Mis en vente le 07/11/2026 (gérant : « Papeterie avec le carnet »). Fiche dédiée (src/components/carnet/CarnetFiche.jsx)
+  // = la maquette enregistrée v9 (artifact QSD8HCrAzEqrSEYA7viFMh) : 3 couleurs, quatre emplacements sur la couverture et
+  // quatre au dos, couverture gravée +7 €, dos +7 € (src/lib/carnet.js, le même calcul au paiement). Poids estimé 380 g
+  // (à peser). Photos : couvertures DESSINÉES de la maquette + exemples (vraies photos gravées à faire).
+  {
+    slug: "carnet-a5-grave",
+    name: "Carnet A5 gravé, couverture aspect cuir",
+    badge: "Nouveau",
+    carnet: true,
+    noEngravePreview: true,
+    weight: 380,
+    pickup: false,
+    letter: false,
+    title: "Carnet A5 personnalisé gravé — couverture rigide aspect cuir",
+    category: "cadeaux",
+    type: "Carnet personnalisé",
+    tagline: "Un carnet A5 à couverture rigide aspect cuir, gravé au prénom, aux initiales ou au logo de votre choix.",
+    personalizable: true,
+    personalizationLabel: "Gravure de la couverture et du dos : texte, dessin ou logo",
+    images: ["/carnet/couverture-marron.jpg", "/carnet/couverture-noir.jpg", "/carnet/couverture-gris.jpg", "/carnet/exemple-ex1.jpg", "/carnet/exemple-ex2.jpg", "/carnet/exemple-ex3.jpg", "/carnet/exemple-ex4.jpg", "/carnet/exemple-ex5.jpg", "/carnet/exemple-ex6.jpg", "/carnet/fournisseur-couleurs.jpg", "/carnet/fournisseur-pile.jpg"],
+    variants: [
+      { id: "carnet-marron", title: "Marron", price: 12.9, image: "/carnet/couverture-marron.jpg" },
+      { id: "carnet-noir", title: "Noir", price: 12.9, image: "/carnet/couverture-noir.jpg" },
+      { id: "carnet-gris", title: "Gris", price: 12.9, image: "/carnet/couverture-gris.jpg" },
+    ],
+    descriptionHtml: `<p><strong>Un carnet qu'on garde.</strong> Couverture rigide aspect cuir, élastique de fermeture, 200 pages : le carnet de tous les jours devient le sien, avec son prénom, ses initiales ou votre logo gravés au laser sur la couverture.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Format :</strong> A5, 21,2 × 14,5 cm</li>
+<li><strong>Couverture :</strong> rigide, aspect cuir, coins arrondis, élastique de fermeture</li>
+<li><strong>Intérieur :</strong> 100 feuilles (200 pages) de papier 80 g, reliure cousue</li>
+<li><strong>Coloris :</strong> marron, noir ou gris</li>
+<li><strong>Gravure :</strong> laser, réalisée sur commande dans notre atelier</li>
+</ul>
+<h3>Une idée pour</h3>
+<ul>
+<li>un cadeau de rentrée, de départ, de fin d'année pour une maîtresse</li>
+<li>un carnet de voyage, de recettes ou un journal</li>
+<li>un cadeau d'entreprise, gravé à votre logo</li>
+</ul>`,
+  },
+
   // ----------------------------- CADEAUX & DÉCO ------------------------------
   {
     slug: "puzzle-photo-grave",

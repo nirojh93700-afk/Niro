@@ -47,6 +47,8 @@ const nextConfig = {
       { source: "/boutique", has: [{ type: "query", key: "cat", value: "naissance" }], destination: "/boutique/enfants", permanent: true },
       { source: "/boutique", has: [{ type: "query", key: "cat", value: "jeux" }], destination: "/boutique/enfants#r-enfants-2", permanent: true },
       { source: "/boutique/deco", destination: "/boutique/maison", permanent: true },
+      // 07/11/2026 : l'onglet « Marque-pages » devient « Papeterie » (marque-pages + carnets).
+      { source: "/boutique/marque-pages", destination: "/boutique/papeterie", permanent: true },
       { source: "/boutique/naissance", destination: "/boutique/enfants", permanent: true },
       ...cats.map((c) => ({
         source: "/boutique",

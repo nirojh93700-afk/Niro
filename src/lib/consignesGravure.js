@@ -24,6 +24,7 @@ import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
 import { MODELES, layoutLabel, imageDesign } from "@/lib/modeles";
 import { mpFormat, mpBoitesTexte, mpLignes } from "@/lib/marquePages";
+import { CN_FACES, cnLignes } from "@/lib/carnet";
 import { NOEL_IMAGES } from "@/lib/fetes";
 import { gobeletElements, gobeletSupplement, prixElement, quoiElement, plancheDuNumero, GOB_COTES, GOB_PLACES, GOB_ATELIER_APERCU } from "@/lib/gobeletParcours";
 
@@ -146,6 +147,21 @@ function consignesMarquePages(produit, mp) {
   return { general, faces, autres, placement: [] };
 }
 
+// Carnet A5 (07/11/2026) : un bloc par face (couverture, dos), faces vides comprises ; chaque emplacement avec ce
+// qu'il faut graver et sa vignette (dessin, logo envoyé). Sur le noir, la gravure ressort claire.
+function consignesCarnet(produit, cn, item) {
+  const general = [];
+  const v = produit.variants.find((x) => x.id === item?.variantId) || produit.variants.find((x) => x.title === item?.variantTitle);
+  if (v) general.push({ k: "Couleur du carnet", v: v.title, fort: true });
+  let aDuTexte = false;
+  const faces = CN_FACES.map(([s, nom]) => {
+    const lignes = cnLignes(cn.v, s).map((l) => { if (l.texte) aDuTexte = true; return { k: l.libelle, v: l.valeur, texte: l.texte, img: l.img }; });
+    return { nom: `${nom} (+7 €)`, lignes, vide: !lignes.length };
+  });
+  if (aDuTexte) general.push({ k: "Police", v: getFontLabel(cn.police) || cn.police });
+  return { general, faces, autres: [], placement: [] };
+}
+
 // Gobelet (05/11/2026, gérant : « il faut que ça soit bien détaillé dans la commande pour que je sache où graver quoi ») :
 // UN BLOC PAR CÔTÉ du gobelet (face, côté gauche, côté droit, tout autour), côtés sans gravure compris ; chaque élément
 // avec sa place, ce qu'il faut graver (n°, nom, écriture), compris ou +3 €, et la planche où trouver le numéro.
@@ -185,6 +201,7 @@ export function consignesGravure(item) {
   const champs = item?.fields || {};
   if (produit?.marquePages && champs.mp && typeof champs.mp === "object") return consignesMarquePages(produit, champs.mp);
   if (produit?.gobeletParcours && champs.mode) return consignesGobelet(produit, champs);
+  if (produit?.carnet && champs.cn && typeof champs.cn === "object") return consignesCarnet(produit, champs.cn, item);
   const vus = (produit?.personalizationFields || []).filter((f) => champVisible(f, champs, item?.variantTitle));
   const general = [];
   const autres = [];
