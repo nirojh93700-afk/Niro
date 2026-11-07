@@ -1143,6 +1143,12 @@
   texte au fond : face + fond et texte oubliés, −7 €), DEV-1519 (Julien, prénom + phrase + date : un texte oublié, −3 €), Nicky (−2 €) ;
   DEV-1526 (Kim, flûtes) juste ; DEV-1506 (Ludovic, 47 cl sur mesure) fait avant que le 47 cl soit en boutique.
 
+## 💎 CRISTAL PHOTO 3D : SEULES LES PERSONNES SONT GRAVÉES, LE FOND EST TOUJOURS SUPPRIMÉ (gérant, 07/11/2026, rappel ferme : « je t'ai déjà dit… dans le cristal c'est juste les personnes, y a pas de fond, on supprime le fond »)
+- Dans un cristal photo, l'atelier retire le fond et ne grave QUE les personnes (ou l'animal / le sujet). Un fond chargé (sapin, guirlandes,
+  décor) n'a donc aucune importance : la cliente n'a PAS à changer de photo pour ça. Ne jamais lui conseiller un fond neutre, ne jamais dire
+  que les lumières ou le décor seront gravés. Réponse type à « faut-il un fond neutre ? » : non, nous supprimons le fond, seules les personnes sont gravées.
+- Sylvia (sylvia.leclercq@icloud.com, 07/11, cristal vertical, deux enfants devant un sapin) a posé cette question ; l'agent e-mail avait répondu à tort.
+
 ## ⛔⛔⛔ JE NE FAIS RIEN SANS LUI DEMANDER — JAMAIS JE NE DÉCIDE À SA PLACE (gérant, 04/11/2026, très en colère)
 - Incident : il demandait que le site soit « en règle » ; j'ai lu « pas besoin de bandeau » comme un ordre de RETIRER Google Analytics et
   je l'ai retiré du code (pas mis en ligne, annulé aussitôt). Il ne l'avait jamais demandé.
