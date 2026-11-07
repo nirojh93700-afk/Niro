@@ -797,3 +797,19 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #gravure #multilingue #ideecadeau
+
+## Vidéo 51 — Le gobelet isotherme gravé (07/11/2026)
+- Demande du gérant : « fais-moi une vidéo » (sans thème). Le gobelet isotherme 40 oz, édition limitée : 9 exemples GRAVÉS de la fiche
+  (`public/produits/gobelet/ex1…ex9`) + 2 photos d'ambiance gravées (crème, rose ; marine et blanc écartées : textes anglais de démo).
+  Planche regardée. Jamais deux fois la même couleur de suite. Intro « Votre gobelet isotherme, gravé pour vous » + « Édition limitée »
+  + « 40 oz · 1,1 L · 4 couleurs » ; tampons « Un dessin, un texte ou votre photo · Gravé dans notre atelier · Un cadeau qu'on garde au
+  quotidien » ; fin « Offrez un cadeau qui leur ressemble » + nivcreation.fr. Effets de la 41 / 50 sans neige. 37,3 s, sans son,
+  1080 × 1920 (6,6 Mo) et 720 × 1280 (2,2 Mo). Aucun prix, aucun stock. Fichiers à supprimer le 09/11.
+- Script : `python3 tools/video/gobelet_51.py <polices> <sortie> [--apercu]` (depuis la racine ; polices Playfair Display + Inter).
+
+**Vidéo 51 — Votre gobelet isotherme, gravé pour vous** (Gobelet isotherme 40 oz gravé : crème, rose, bleu marine, blanc)
+> ✨ Un dessin, un prénom, votre texte ou votre photo, gravés sur un grand gobelet isotherme 💛
+> Édition limitée, en 4 couleurs 🎁 Gravé dans notre atelier en France
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gobeletpersonnalise #gravure #ideecadeau
