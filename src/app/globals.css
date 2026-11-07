@@ -6174,3 +6174,32 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .dvo-manque{margin:8px 0 0;font-size:.82rem;color:#b3261e}
 @media (max-width:640px){.dvo-fonts{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}}
 @media (max-width:480px){.dvo-opt{grid-template-columns:22px 44px minmax(0,1fr)}.dvo-opt img,.dvo-ic{width:44px;height:44px}.dvo-px{grid-column:3}}
+
+/* ===== Gravure dans une autre langue (07/11/2026, maquette v5) ===== */
+.fnt-lang-ta{font-family:"NivGrav-ta","Noto Serif Tamil","Tamil Sangam MN","Latha",serif}
+.fnt-lang-ar{font-family:"NivGrav-ar","Noto Naskh Arabic","Geeza Pro","Arial",serif}
+.fnt-lang-he{font-family:"NivGrav-he","Noto Serif Hebrew","Arial Hebrew","Arial",serif}
+.fnt-lang-zh{font-family:"NivGrav-zh","Noto Serif SC","Songti SC","SimSun",serif}
+.mqt-langue{margin-top:-2px}
+.mqt-langs{display:flex;flex-wrap:wrap;gap:8px}
+.mqt-lang{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;font-size:.88rem;font-family:inherit;color:var(--ink);cursor:pointer;min-height:40px}
+.mqt-lang.on{border-color:var(--gold-dark);background:#fffaf0;box-shadow:0 0 0 2px var(--gold)}
+.mqt-note{font-size:.8rem;color:var(--ink-soft);margin:6px 0 0;line-height:1.45}
+.mqt-place{margin:10px 0 0;display:flex;flex-direction:column;gap:8px}
+.mqt-plab{font-size:.86rem;color:var(--ink-soft)}
+.mqt-conseil{font-size:.84rem;color:var(--ink-soft);margin:6px 0 8px}
+.prc .field label.mqt-swap{display:flex;flex-direction:row;gap:10px;align-items:flex-start;font-size:.86rem;font-weight:400;margin:10px 0 12px;color:var(--ink-soft);cursor:pointer}
+.prc .field .mqt-swap input{width:auto;flex:none;margin:3px 0 0;padding:0;accent-color:var(--gold-dark)}
+.mqt-trad{border:1.5px solid var(--line);border-radius:14px;padding:12px;background:#fff;margin:10px 0 12px}
+.mqt-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mqt-two>div{min-width:0}
+.mqt-two small{display:block;font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-bottom:4px}
+.mqt-two b{display:block;font-size:1.15rem;line-height:1.35;overflow-wrap:anywhere}
+.mqt-etat{font-size:.8rem;color:var(--ink-soft);margin:10px 0 0;min-height:1.2em}
+.mqt-etat.ko{color:#b0332a}
+.prc .field label.mqt-check{display:flex;flex-direction:row;gap:10px;align-items:flex-start;margin-top:10px;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:.86rem;font-weight:400;line-height:1.4;cursor:pointer;color:var(--ink)}
+.prc .field label.mqt-check:has(input:checked){border-color:var(--gold-dark);background:#fffaf0}
+.prc .field .mqt-check input{margin-top:3px;width:18px;height:18px;padding:0;accent-color:var(--gold-dark);flex:none}
+.prc .field label.mqt-check.attend{border-color:#b0332a}
+.prc .field label.mqt-check.off{opacity:.55;cursor:default}
+@media (max-width:640px){.mqt-two{grid-template-columns:1fr}}

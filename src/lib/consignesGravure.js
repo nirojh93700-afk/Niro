@@ -18,6 +18,7 @@
 // Module pur (pas de JSX) : testé par `npm run test-consignes`.
 // =============================================================================
 import { texteAvecDecor } from "@/lib/decorTexte";
+import { langueActive, langueDe, resumeLangue, ecritureLangue } from "@/lib/traductionGravure";
 import { getProductBySlug } from "@/lib/products";
 import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
@@ -294,9 +295,18 @@ export function consignesGravure(item) {
   const fonte = vus.find((f) => f.type === "font");
   // Gobelet : l'écriture n'existe que pour un texte (au centre ou sous la photo) ; chaque élément en plus porte la sienne dans sa ligne.
   const sansPoliceGobelet = Boolean(produit?.gobeletParcours) && !String(champs.police || "").trim();
+  // Texte dans une autre langue (07/11/2026) : la langue, le texte tapé en français et le contrôle.
+  // Une écriture Noto (tamoul, arabe, hébreu, chinois) remplace la police pour ce texte.
+  const enLangue = langueActive(champs) && String(champs.texte || "").trim();
+  if (enLangue) {
+    general.push({ k: "Langue de la gravure", v: resumeLangue(champs), fort: true, alerte: champs.direct !== "oui" });
+    if (champs.direct !== "oui" && String(champs.texteSource || "").trim()) autres.unshift({ k: "Texte tapé par la cliente (français)", v: String(champs.texteSource).trim(), texte: false });
+  }
+  const noto = enLangue ? ecritureLangue(champs) : "";
   if (fonte && aDuTexte && champs.mode !== "modele" && champs.mode !== "noel" && !sansPoliceGobelet) {
     const choisie = String(champs[fonte.key] || "").trim();
-    general.push({ k: "Police", v: choisie ? (getFontLabel(choisie) || choisie) : `${getFontLabel("playfair")} (police proposée, non changée)` });
+    if (noto) general.push({ k: "Écriture", v: `${langueDe(champs.langue).nom} (${noto}) pour le texte — déjà tracée dans le fichier à graver${champs.date || champs.texte2 ? ` · date : ${getFontLabel(choisie || "playfair") || choisie}` : ""}` });
+    else general.push({ k: "Police", v: choisie ? (getFontLabel(choisie) || choisie) : `${getFontLabel("playfair")} (police proposée, non changée)` });
   }
 
   const listeFaces = [...faces.entries()].map(([nom, lignes]) => ({ nom, lignes, vide: lignes.length === 0 }));

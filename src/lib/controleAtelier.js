@@ -19,9 +19,10 @@ import { photosEnvoyees } from "@/lib/apercuCote";
 import { optionsArticle } from "@/lib/optionsVendues";
 import { MODELES, imageDesign } from "@/lib/modeles";
 import { texteAvecDecor } from "@/lib/decorTexte";
+import { langueActive, langueDe } from "@/lib/traductionGravure";
 import { lireLigne, quoiElement } from "@/lib/gobeletParcours";
 
-const IGNORES = new Set(["emplacement", "mode", "police", "deuxEmplacement"]);
+const IGNORES = new Set(["emplacement", "mode", "police", "deuxEmplacement", "langue", "direct", "tradOk", "decorPlace"]);
 const estUrl = (s) => typeof s === "string" && /^(\/api\/img\/|https?:\/\/|data:image\/|\/produits\/)/.test(s);
 const norme = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
 
@@ -111,9 +112,15 @@ export function oubliesAtelier(item) {
   // Un choix qui MODIFIE un texte (décor ♥ ★… autour du texte) : il ne suffit pas qu'il soit
   // écrit sur une ligne à part, le texte doit être affiché AVEC lui (05/11/2026, commande
   // 1K8QTJYM : « ♥ texte ♥ » choisi, l'atelier écrivait le texte sans les cœurs).
-  const avecDecor = texteAvecDecor("texte", champs.texte, champs);
-  if (typeof champs.texte === "string" && avecDecor !== String(champs.texte).trim() && !vu(avecDecor)) {
-    out.push({ cle: "decor", libelle: "Texte avec son décor", valeur: avecDecor, photo: false });
+  for (const k of ["texte", "date", "texte2"]) {
+    const avecDecor = texteAvecDecor(k, champs[k], champs);
+    if (typeof champs[k] === "string" && avecDecor !== String(champs[k]).trim() && !vu(avecDecor)) {
+      out.push({ cle: "decor", libelle: k === "texte" ? "Texte avec son décor" : "Date avec son décor", valeur: avecDecor, photo: false });
+    }
+  }
+  // Texte dans une autre langue (07/11/2026) : la langue doit être écrite à l'atelier.
+  if (langueActive(champs) && String(champs.texte || "").trim() && !vu(langueDe(champs.langue).nom)) {
+    out.push({ cle: "langue", libelle: "Langue de la gravure", valeur: langueDe(champs.langue).nom, photo: false });
   }
   return out;
 }

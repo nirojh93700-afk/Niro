@@ -1,3 +1,4 @@
+import { manqueLangue, langueActive, resumeLangue } from "@/lib/traductionGravure";
 // Parcours guidé (carafe…) : règles PURES, testables sans navigateur.
 // - PARCOURS_CHAMPS : les champs qu'un modèle peut demander (clé de champ → libellé).
 //   Les 3 sortes d'initiales écrivent toutes dans la clé « initiale » (comme avant).
@@ -94,8 +95,13 @@ function etatVerre(product, fv) {
 /** @returns {{ok:boolean, grav:string|null, detail:string, manque:string}} */
 export function parcoursEtat(product, fv) {
   const cfg = product?.parcoursGuide || {};
-  if (cfg.emplacement) return etatVerre(product, fv);
-  return etatSimple(product, fv);
+  const e = cfg.emplacement ? etatVerre(product, fv) : etatSimple(product, fv);
+  // Texte dans une autre langue (07/11/2026) : la traduction doit être arrivée ET la case de relecture
+  // cochée ; sinon le bouton reste grisé avec la phrase de la maquette v5.
+  const m = fv && (fv.mode === "texte" || fv.mode === "photo") ? manqueLangue(fv) : null;
+  if (m && (e.ok || !v(fv, "texte"))) return { ...e, ok: false, grav: e.grav || "Mon propre texte", manque: m };
+  if (e.ok && langueActive(fv) && v(fv, "texte")) return { ...e, detail: [e.detail, resumeLangue(fv)].filter(Boolean).join(" · ") };
+  return e;
 }
 
 function etatSimple(product, fv) {

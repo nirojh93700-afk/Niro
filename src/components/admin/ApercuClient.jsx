@@ -10,6 +10,7 @@
 import { useEffect, useRef, useState } from "react";
 import { contenuCote } from "@/lib/apercuCote";
 import { getFontClass } from "@/lib/fonts";
+import { chargerPoliceLangue, classeLangue } from "@/lib/policeLangueClient";
 
 const COULEUR = "#3a2f1d"; // même teinte de gravure que la fiche produit
 
@@ -25,6 +26,17 @@ export default function ApercuClient({ item, side = "face", largeur = 240, titre
     ro.observe(el);
     return () => ro.disconnect();
   }, [largeur]);
+  // Texte dans une autre langue : son écriture Noto, chargée pour ces lettres (07/11/2026).
+  const [, setV] = useState(0);
+  const texteLangue = c.langue ? c.lines.join("") : "";
+  useEffect(() => {
+    if (!c.langue) return;
+    const f = () => setV((n) => n + 1);
+    window.addEventListener("niv-police-langue", f);
+    chargerPoliceLangue(c.langue, texteLangue + "0123456789.");
+    return () => window.removeEventListener("niv-police-langue", f);
+  }, [c.langue, texteLangue]);
+  const classeTexte = (c.langue && classeLangue(c.langue)) || getFontClass(c.fontKey);
   if (!c.glass) return null;
   const box = c.box || { left: 0.2, top: 0.2, width: 0.6, height: 0.6 };
   const pL = c.photoLayout || {};
@@ -53,7 +65,7 @@ export default function ApercuClient({ item, side = "face", largeur = 240, titre
         ) : null}
         {c.lines.length ? (
           <div className="apc-texte" style={{ left: `${tcx * 100}%`, top: `${tcy * 100}%`, fontSize: `${fs}px` }}>
-            {c.lines.map((l, i) => <span key={i} className={getFontClass(c.fontKey)} style={{ color: COULEUR }}>{l}</span>)}
+            {c.lines.map((l, i) => <span key={i} className={classeTexte} style={{ color: COULEUR }}>{l}</span>)}
           </div>
         ) : null}
       </div>

@@ -43,13 +43,15 @@
     "test-cumul": "node tools/tests/cumul-codes.mjs",
     "test-visibilite": "node --import ./tools/alias-register.mjs tools/tests/visibilite.mjs",
     "test-delai": "node --import ./tools/alias-register.mjs tools/tests/delai-commande.test.mjs",
-    "test-date-image": "node --import ./tools/alias-register.mjs tools/tests/date-image.test.mjs"
+    "test-date-image": "node --import ./tools/alias-register.mjs tools/tests/date-image.test.mjs",
+    "test-traduction": "node --import ./tools/alias-register.mjs tools/tests/traduction-gravure.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",
     "@netlify/blobs": "^8.1.0",
     "firebase-admin": "^13.10.0",
     "framer-motion": "^12.40.0",
+    "harfbuzzjs": "^0.4.3",
     "html-to-image": "^1.11.13",
     "jspdf": "^4.2.1",
     "next": "^14.2.35",

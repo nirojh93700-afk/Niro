@@ -1,4 +1,7 @@
 import Stripe from "stripe";
+import { texteAvecDecor } from "@/lib/decorTexte";
+import { langueActive, langueDe, ecritureLangue } from "@/lib/traductionGravure";
+import { lienFichierGravure } from "@/components/admin/FichierGravure";
 import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail, ensureReferralCode, setPromoCode, addScheduledEmail, hasAutoSent, markAutoSent, logComm } from "@/lib/stock";
 import { sendClientMail, brandedMessage, boutonRepondre } from "@/lib/clientMail";
 import { genCodeCadeau, texteEmailDestinataire, texteEmailAcheteur, CARTE_VALIDITE_JOURS } from "@/lib/carteCadeau";
@@ -436,6 +439,7 @@ export async function POST(req) {
           <div style="padding:8px 10px;">
             ${imgTag(v.photoSrc, `Photo du verre ${v.verre}`)}
             <p style="margin:0 0 4px;"><strong>Emplacement :</strong> ${escapeHtml(emplacementDe(v))}</p>
+            ${langueHtml(v)}
             ${rows ? `<table style="border-collapse:collapse;width:100%;font-size:14px;">${rows}</table>` : `<p style="margin:0;color:#7a7268;">${v.photoSrc ? "Photo / logo seul, sans texte" : "Sans gravure"}</p>`}
           </div>
         </div>`;
@@ -448,6 +452,18 @@ export async function POST(req) {
       if (!faces.length) return "";
       const rows = faces.map(([k, l]) => `<tr><td style="border:1px solid #d9cdb4;padding:4px 8px;font-weight:bold;width:30%;">${escapeHtml(k)}</td><td style="border:1px solid #d9cdb4;padding:4px 8px;font-size:16px;font-weight:bold;">${l.map((x) => escapeHtml(x)).join("<br>")}</td></tr>`).join("");
       return `<p style="margin:8px 0 4px;color:#8a6d1f;font-weight:bold;">📐 Disposition vue par la cliente sur l'aperçu (ligne par ligne, centré)</p><table style="border-collapse:collapse;width:100%;font-size:14px;">${rows}</table>`;
+    };
+    // Texte dans une autre langue (07/11/2026) : langue, texte tapé, texte gravé, contrôle + fichier à graver.
+    const langueHtml = (it) => {
+      const f = it?.fields || {};
+      if (!langueActive(f) || !String(f.texte || "").trim()) return "";
+      const lien = lienFichierGravure({ ...it, orderRef: typeof orderRef === "string" ? orderRef : "" });
+      return `<div style="margin:0 0 8px;padding:8px 10px;background:#fdecec;border:2px solid #d64545;border-radius:8px;">
+        <p style="margin:0 0 4px;color:#b32b2b;font-weight:bold;">🌐 Gravure en ${escapeHtml(langueDe(f.langue).nom.toLowerCase())} — ${f.direct === "oui" ? "texte fourni par la cliente dans sa langue" : "traduction automatique relue et validée par la cliente (case cochée) : à relire avant de graver"}</p>
+        ${f.direct !== "oui" && f.texteSource ? `<p style="margin:0 0 4px;"><strong>Texte tapé :</strong> ${escapeHtml(f.texteSource)}</p>` : ""}
+        <p style="margin:0 0 4px;"><strong>Texte à graver :</strong> <span dir="auto" style="font-size:18px;">${escapeHtml(texteAvecDecor("texte", f.texte, f))}</span></p>
+        ${lien ? `<p style="margin:0;"><a href="${BRAND.siteUrl}${lien.href}" style="color:${BRAND.gold};font-weight:bold;">⬇ ${escapeHtml(lien.nom)}</a> (lettres en tracés, prêt pour le laser)</p>` : ""}
+      </div>`;
     };
     const persoBlocks = specItems.map((it) => {
       // Variante EXACTE (taille du verre à vin comprise) — 13/10/2026.
@@ -477,7 +493,8 @@ export async function POST(req) {
           ${titre}
           ${imagesHtml}
           <p style="margin:0 0 4px;"><strong>Emplacement :</strong> ${escapeHtml(emplacementDe(it))}</p>
-          ${pol ? `<p style="margin:0 0 4px;"><strong>Police :</strong> ${escapeHtml(pol.label)}${pol.defaut ? " (police proposée, non changée par la cliente)" : ""}</p>` : ""}
+          ${langueHtml(it)}
+          ${pol && !(langueActive(it.fields || {}) && ecritureLangue(it.fields || {})) ? `<p style="margin:0 0 4px;"><strong>Police :</strong> ${escapeHtml(pol.label)}${pol.defaut ? " (police proposée, non changée par la cliente)" : ""}</p>` : ""}
           ${recap ? `<p style="margin:0;white-space:pre-line;">${escapeHtml(recap)}</p>` : ""}
           ${dispositionHtml(it)}
         </div>`;

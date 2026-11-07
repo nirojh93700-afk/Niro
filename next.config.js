@@ -3,7 +3,7 @@
 const nextConfig = {
   // firebase-admin ne doit pas être "bundlé" (sinon le build Netlify échoue).
   experimental: {
-    serverComponentsExternalPackages: ["firebase-admin"],
+    serverComponentsExternalPackages: ["firebase-admin", "harfbuzzjs"],
   },
   // CORS sur les images utilisées pour composer le visuel du verre (canvas).
   // Sans ça, sur iOS le canvas est "contaminé" (CDN = origine externe) et la

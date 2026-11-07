@@ -1,4 +1,5 @@
 import { gobeletSupplement } from "@/lib/gobeletParcours";
+import { manqueLangue } from "@/lib/traductionGravure";
 import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
@@ -232,6 +233,12 @@ export async function POST(req) {
     }
     const quantity = Math.min(Math.max(parseInt(item.quantity, 10) || 1, 1), 99);
     const { product, variant } = match;
+
+    // Gravure traduite (07/11/2026) : JAMAIS sans la case « J'ai relu le texte traduit » cochée.
+    const reglagesLigne = [item.fields || {}, ...(Array.isArray(item.perGlass) ? item.perGlass.slice(0, 60) : [])];
+    if (reglagesLigne.some((fv) => fv && typeof fv === "object" && manqueLangue(fv))) {
+      return Response.json({ error: "Un texte traduit de votre panier n'a pas été confirmé : ouvrez l'article, relisez la traduction et cochez « J'ai relu le texte traduit »." }, { status: 400 });
+    }
 
     // Marque-pages (27/10/2026) : format, boîte, une couleur et une gravure PAR marque-page — recalcul de confiance
     // avec la même fonction que la fiche (src/lib/marquePages.js) ; stock décompté pièce par pièce + la boîte.

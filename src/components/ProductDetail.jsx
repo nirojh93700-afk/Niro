@@ -1,6 +1,8 @@
 "use client";
 
 import { texteAvecDecor } from "@/lib/decorTexte";
+import { langueActive, langueDe, resumeLangue } from "@/lib/traductionGravure";
+import { classeLangue } from "@/lib/policeLangueClient";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -573,6 +575,11 @@ export default function ProductDetail({ product, realisations = [] }) {
       if (product.crystal3d && previewLines.length > 0 && crystalTextPos?.label) {
         parts.push(`Texte gravé placé : ${crystalTextPos.label}`);
       }
+      // Texte dans une autre langue (07/11/2026) : la langue, le texte tapé et la relecture.
+      if (langueActive(fieldValues) && (fieldValues.texte || "").trim()) {
+        const r = resumeLangue(fieldValues);
+        parts.push(forClient ? `en ${langueDe(fieldValues.langue).nom.toLowerCase()}` : `Langue : ${r}`);
+      }
       return parts.join(" · ");
     }
     return personalization.trim();
@@ -589,9 +596,10 @@ export default function ProductDetail({ product, realisations = [] }) {
     if (fv.photo) p.push("photo/logo fourni");
     if ((fv.prenom || "").trim()) p.push(`« ${fv.prenom.trim()} »`);
     if ((fv.texte || "").trim()) p.push(`« ${texteAvecDecor("texte", fv.texte, fv)} »`);
+    if ((fv.texte || "").trim() && langueActive(fv)) p.push(forClient ? `en ${langueDe(fv.langue).nom.toLowerCase()}` : `langue : ${resumeLangue(fv)}`);
     if ((fv.initiale || "").trim()) p.push(`initiale ${fv.initiale.trim()}`);
-    if ((fv.date || "").trim()) p.push(`date ${fv.date.trim()}`);
-    if ((fv.texte2 || "").trim()) p.push(`date ${fv.texte2.trim()}`);
+    if ((fv.date || "").trim()) p.push(`date ${texteAvecDecor("date", fv.date, fv)}`);
+    if ((fv.texte2 || "").trim()) p.push(`date ${texteAvecDecor("texte2", fv.texte2, fv)}`);
     if (!forClient && fv.emplacement && fv.emplacement !== "face") p.push(`emplacement : ${fv.emplacement}`);
     if (!forClient && (fv.police || "").trim()) p.push(`police ${getFontLabel(fv.police)}`);
     return p.join(" · ") || "à préciser";
@@ -693,21 +701,23 @@ export default function ProductDetail({ product, realisations = [] }) {
   // Matière de l'échantillon témoin (aperçu) selon le type de produit.
   const material =
     product.crystal3d ? "crystal" : product.category === "mariage" ? "wood" : "metal";
-  const previewFontClass = getFontClass(fieldValues[fontField?.key] || "playfair");
+  // Texte gravé dans une autre langue (07/11/2026) : son écriture Noto (tamoul, arabe, hébreu, chinois).
+  const previewFontClass = (langueActive(fieldValues) && classeLangue(fieldValues.langue)) || getFontClass(fieldValues[fontField?.key] || "playfair");
+  const [, setPoliceLangueVersion] = useState(0);
+  useEffect(() => {
+    const f = () => setPoliceLangueVersion((n) => n + 1);
+    window.addEventListener("niv-police-langue", f);
+    return () => window.removeEventListener("niv-police-langue", f);
+  }, []);
   const previewColor = (colorField && fieldValues[colorField.key]) || ENGRAVE_PREVIEW;
 
   // Lignes de texte à montrer dans l'aperçu (champs texte non vides).
   // (Le texte du FOND n'en fait pas partie : il ne s'affiche que côté fond, mode « les deux ».)
   const previewLines = visibleFields
     .filter((f) => (f.type === "text" || f.type === "textarea" || !f.type) && !f.noPreview && f.key !== "texteFond")
-    .flatMap((f) => (fieldValues[f.key] || "").split("\n"))
-    .map((l) => l.trim())
-    .filter(Boolean);
-  // Option « décor autour du texte » : encadre la 1re ligne du symbole choisi (★ ♥ ✿ ◆ •).
-  const decorSym = fieldValues["decor"];
-  if (decorSym && previewLines.length) {
-    previewLines[0] = `${decorSym} ${previewLines[0]} ${decorSym}`;
-  }
+    // Option « décor autour du texte » (★ ♥ ✿ ◆ •) : autour du texte, de la date ou des deux (07/11/2026),
+    // la MÊME règle que l'atelier (texteAvecDecor).
+    .flatMap((f) => (fieldValues[f.key] || "").split("\n").map((l) => l.trim()).filter(Boolean).map((l, i) => (i === 0 ? texteAvecDecor(f.key, l, fieldValues) : l)));
   // Verres SANS champ « emplacement » (vin, flûte, carafe) : dès que le client écrit
   // son premier texte, on bascule la galerie sur la photo du verre vierge pour montrer
   // la gravure en direct (même expérience que le verre à whisky). Une seule fois — le

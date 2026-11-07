@@ -20,6 +20,8 @@ import { texteOffertVerre1 } from "@/lib/prixVerres";
 import { parcoursEtat, modeleChoisi, noelChoisi, PARCOURS_CHAMPS } from "@/lib/parcoursGuide";
 import PhotoUpload, { GUIDE_PHOTO_GRAVURE } from "./PhotoUpload";
 import DateDansImage from "./DateDansImage";
+import LangueGravure, { valeurChampTexte, patchChampTexte } from "./LangueGravure";
+import { langueDe } from "@/lib/traductionGravure";
 
 const LETTRES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const MODES = (cfg, nbModeles) => [
@@ -134,14 +136,33 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
   const replieNoel = Boolean(noelM) && !grilleOuverte;
 
   // Décor autour du texte (♥ ★ ✿ ◆ •) : whisky et cocktail depuis toujours, tous les verres depuis le 05/11/2026.
+  // 07/11/2026 (maquette v5) : « Où mettre le décor ? » autour du texte, de la date ou des deux,
+  // seulement là où il y a une date (texte seul, et verres à date comme le whisky).
+  const avecDate = mode === "texte" || Boolean(E);
+  const dateRemplie = String(fieldValues[E ? dateKey : "date"] || "").trim();
+  const placeDecor = fieldValues.decorPlace || "texte";
   const decorChips = cfg.decors?.length > 0 ? (
-    <div className="field"><label>Décor autour du texte <span className="prc-opt">(facultatif)</span></label>
+    <div className="field"><label>{avecDate ? "Décor autour du texte ou de la date" : "Décor autour du texte"} <span className="prc-opt">(facultatif)</span></label>
       <div className="prc-chips prc-decors">
         {cfg.decors.map((d) => (
           <button type="button" key={d.value} className={`prc-chip${(fieldValues.decor || "") === d.value ? " on" : ""}`} onClick={() => set({ decor: d.value })}>{d.label}</button>
         ))}
-      </div></div>
+      </div>
+      {avecDate && fieldValues.decor && (
+        <div className="mqt-place"><span className="mqt-plab">Où mettre le décor ?</span>
+          <div className="prc-chips">
+            {[["texte", "Autour du texte"], ["date", "Autour de la date"], ["deux", "Les deux"]].map(([v, l]) => (
+              <button type="button" key={v} className={`prc-chip${placeDecor === v ? " on" : ""}`} onClick={() => set({ decorPlace: v === "texte" ? "" : v })}>{l}</button>
+            ))}
+          </div>
+          {placeDecor !== "texte" && !dateRemplie && <p className="mqt-note">Ajoutez une date plus haut pour y mettre le décor.</p>}
+        </div>
+      )}</div>
   ) : null;
+  // Champ du texte : en français quand il est traduit (le texte gravé = la traduction).
+  const langueL = langueDe(fieldValues.langue);
+  const dirSaisie = fieldValues.direct === "oui" && langueL?.dir === "rtl" ? "rtl" : "ltr";
+  const blocLangue = <LangueGravure fv={fieldValues} setFieldValues={setFieldValues} />;
 
   // Date, décor et écriture (verre à whisky) — un élément JSX, jamais un composant imbriqué
   // (sinon le champ perdrait le focus à chaque frappe).
@@ -372,8 +393,9 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
               <div className="prc-one">
                 <div className="prc-fields">
                   <div className="field"><label>Votre texte à graver{prixDe("texte", { mode: "texte" }) ? <span className="prc-opt"> ({px("texte", { mode: "texte" })})</span> : null}</label>
-                    <input type="text" maxLength={texteMax} placeholder={E ? "Prénom, message…" : "Ex. Stephan · Pour Papa · Merci"} value={fieldValues.texte || ""} onChange={(e) => set({ texte: e.target.value })} />
-                    <span className="prc-count">{(fieldValues.texte || "").length}/{texteMax}</span></div>
+                    <input type="text" dir={dirSaisie} maxLength={texteMax} placeholder={E ? "Prénom, message…" : "Ex. Stephan · Pour Papa · Merci"} value={valeurChampTexte(fieldValues)} onChange={(e) => set(patchChampTexte(fieldValues, e.target.value))} />
+                    <span className="prc-count">{valeurChampTexte(fieldValues).length}/{texteMax}</span></div>
+                  {blocLangue}
                   {commun || (
                     <>
                       <div className="field"><label>Date ou année <span className="prc-opt">(facultatif{prixDe("date", { mode: "texte", texte: "x" }) ? `, ${px("date", { mode: "texte", texte: "x" })}` : ""})</span></label>
@@ -396,7 +418,8 @@ export default function ParcoursGuide({ product, fieldValues, setFieldValues, un
                     <PhotoUpload value={fieldValues.photo || ""} onChange={(url) => set({ photo: url })} productSlug={product.slug} guide={guide} />
                     {caseDate("dateImage", "photo")}</div>
                   <div className="field"><label>Texte sous la photo <span className="prc-opt">(facultatif{prixDe("texte", { mode: "photo" }) ? `, ${px("texte", { mode: "photo" })}` : ""})</span></label>
-                    <input type="text" maxLength={texteMax} placeholder={E ? "Prénom, message…" : "Ex. Stephan · 1989"} value={fieldValues.texte || ""} onChange={(e) => set({ texte: e.target.value })} /></div>
+                    <input type="text" dir={dirSaisie} maxLength={texteMax} placeholder={E ? "Prénom, message…" : "Ex. Stephan · 1989"} value={valeurChampTexte(fieldValues)} onChange={(e) => set(patchChampTexte(fieldValues, e.target.value))} /></div>
+                  {valeurChampTexte(fieldValues) && blocLangue}
                   {commun || (fieldValues.texte && <>{decorChips}<div className="field"><label>Écriture du texte</label><Polices value={police} onChange={(p) => set({ police: p })} /></div></>)}
                 </div>
               </div>

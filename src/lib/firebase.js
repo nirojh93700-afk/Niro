@@ -652,6 +652,31 @@ export async function setImageReading(id, data) {
   }
 }
 
+// Traductions des gravures (07/11/2026) : une même phrase dans une même langue n'est demandée qu'une fois.
+export async function getTraduction(id) {
+  const a = getApp();
+  if (!a || !id) return null;
+  try {
+    const doc = await admin.firestore().collection("traductions").doc(String(id)).get();
+    return doc.exists ? doc.data() : null;
+  } catch (e) {
+    console.error("Traduction (cache):", e.message);
+    return null;
+  }
+}
+
+export async function setTraduction(id, data) {
+  const a = getApp();
+  if (!a || !id) return false;
+  try {
+    await admin.firestore().collection("traductions").doc(String(id)).set({ ...data, at: Date.now() });
+    return true;
+  } catch (e) {
+    console.error("Traduction (écriture):", e.message);
+    return false;
+  }
+}
+
 export async function getCustomerUpload(id) {
   const a = getApp();
   if (!a) return null;

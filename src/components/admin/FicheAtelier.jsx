@@ -4,6 +4,9 @@
 // choisis par la cliente (emplacement, taille, position, textes, polices, motif,
 // fond, options) + un visuel reconstruit du verre, pour graver à l'identique.
 
+import { texteAvecDecor } from "@/lib/decorTexte";
+import { langueActive } from "@/lib/traductionGravure";
+import { classeLangue } from "@/lib/policeLangueClient";
 import ImagesOrigine from "@/components/admin/ImagesOrigine";
 import { getProductBySlug } from "@/lib/products";
 import { MODELES, layoutLabel } from "@/lib/modeles";
@@ -27,12 +30,12 @@ function textLinesOf(item, product) {
   const fields = item.fields || {};
   const lines = (product?.personalizationFields || [])
     .filter((f) => (f.type === "text" || f.type === "textarea" || !f.type) && !f.noPreview)
-    .flatMap((f) => String(fields[f.key] || "").split("\n"))
-    .map((s) => s.trim())
-    .filter(Boolean);
+    .flatMap((f) => String(fields[f.key] || "").split("\n").map((s) => s.trim()).filter(Boolean).map((s, i) => (i === 0 ? texteAvecDecor(f.key, s, fields) : s)));
   const fontField = (product?.personalizationFields || []).find((f) => f.type === "font");
   const fontKey = fontField ? fields[fontField.key] : null;
-  return { lines, fontClass: getFontClass(fontKey || "playfair") };
+  // Texte dans une autre langue (07/11/2026) : son écriture Noto.
+  const cl = langueActive(fields) ? classeLangue(fields.langue) : "";
+  return { lines, fontClass: cl || getFontClass(fontKey || "playfair") };
 }
 
 const motifLabel = (id) => (MOTIF_LIST.find((m) => m.id === id) || {}).label || id;

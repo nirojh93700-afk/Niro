@@ -11,6 +11,8 @@
 // exactement comme l'éditeur de la fiche produit (ProductDetail : editPhotoSrc / editLines).
 // Pur (pas de JSX), utilisé par la fiche produit (capture), l'atelier et la fiche commande.
 // =============================================================================
+import { texteAvecDecor } from "@/lib/decorTexte";
+import { langueActive } from "@/lib/traductionGravure";
 import { getProductBySlug } from "@/lib/products";
 
 const estUrl = (s) => typeof s === "string" && (s.startsWith("/") || s.startsWith("http") || s.startsWith("data:"));
@@ -42,9 +44,8 @@ export function cotesDeLArticle(item) {
 export function lignesDuCote(fields, side, dual) {
   const f = fields || {};
   if (dual && side === "fond") return lignes(f.texteFond);
-  const l = ["texte", "texte2"].flatMap((k) => lignes(f[k]));
-  if (f.decor && l.length) l[0] = `${f.decor} ${l[0]} ${f.decor}`;
-  return l;
+  // Décor : autour du texte, de la date ou des deux (07/11/2026), la même règle que l'atelier.
+  return ["texte", "texte2"].flatMap((k) => lignes(f[k]).map((x, i) => (i === 0 ? texteAvecDecor(k, x, f) : x)));
 }
 
 /**
@@ -72,6 +73,7 @@ export function contenuCote(item, side, product = getProductBySlug(item?.slug)) 
     lines: lignesDuCote(f, side, dual),
     textLayout: textLayout || null,
     fontKey: f.police || "playfair",
+    langue: langueActive(f) ? f.langue : "",
   };
 }
 

@@ -17,6 +17,7 @@ import VarBadge from "@/components/admin/VarBadge";
 import { consignesGravure } from "@/lib/consignesGravure";
 import OubliesAtelier from "@/components/admin/OubliesAtelier";
 import DispositionApercu from "@/components/admin/DispositionApercu";
+import FichierGravure from "@/components/admin/FichierGravure";
 
 // Champ affiché à la cliente pour cette commande (même règles que la fiche :
 // « afficher si tel choix » et « seulement pour telle option »).
@@ -179,6 +180,7 @@ function BlocVerre({ item }) {
         ) : null}
         <div style={{ flex: "1 1 200px", minWidth: 0 }}>
           {lignes.length ? <Consignes item={item} avecPlacement={false} /> : null}
+          <FichierGravure item={item} />
           <OubliesAtelier item={item} />
           {!lignes.length && !item.photoSrc ? (
             <div style={{ color: "#777", fontSize: "0.85rem" }}>Sans gravure (verre vierge)</div>
@@ -219,6 +221,8 @@ export function TableGravure({ item, titre = true }) {
     <div style={{ marginBottom: 12 }}>
       {vide ? null : entete}
       {vide ? null : <Consignes item={item} />}
+      {/* Texte dans une autre langue : le fichier à graver, lettres en tracés (07/11/2026). */}
+      <FichierGravure item={item} />
       {/* Lignes du texte telles que l'aperçu 3D les a montrées à la cliente (03/11/2026, 0QEIXDI5). */}
       <DispositionApercu item={item} />
       {/* Filet de sécurité : tout choix de la cliente non affiché ci-dessus (controleAtelier.js). */}
