@@ -2215,21 +2215,10 @@ export default function ProductDetail({ product, realisations = [] }) {
             <div style={{ margin: "6px 0 18px" }}>
               <div style={{ fontWeight: 700, fontSize: "0.95rem", marginBottom: 3 }}>Votre emballage</div>
               <p style={{ margin: "0 0 10px", color: "var(--ink-soft)", fontSize: "0.83rem" }}>
-                Choisissez votre présentation cadeau.
+                Choisissez votre présentation cadeau. Touchez à nouveau l&apos;emballage choisi pour le retirer.
               </p>
               <div style={{ display: "grid", gap: 9 }}>
-                {/* Sans emballage (choix par défaut) */}
-                {(() => {
-                  const none = pkgSel.length === 0;
-                  return (
-                    <button type="button" onClick={() => setPkgSel([])}
-                      style={{ display: "flex", alignItems: "center", gap: 11, textAlign: "left", cursor: "pointer", font: "inherit", border: none ? "1.5px solid var(--gold)" : "1.5px solid var(--line)", background: none ? "#fffaf0" : "var(--paper)", borderRadius: 12, padding: "11px 13px", boxShadow: none ? "0 0 0 2px rgba(194,161,78,.22)" : "none" }}>
-                      <span style={{ fontSize: "1.3rem" }}>✖️</span>
-                      <span style={{ minWidth: 0 }}><strong style={{ display: "block", fontSize: "0.9rem" }}>{none ? "✓ " : ""}Sans emballage cadeau</strong><span style={{ color: "var(--ink-soft)", fontSize: "0.78rem" }}>Livré protégé, sans boîte</span></span>
-                      <span style={{ marginLeft: "auto", fontWeight: 700, fontSize: "0.85rem" }}>0 €</span>
-                    </button>
-                  );
-                })()}
+                {/* Plus de ligne « Sans emballage cadeau » (gérant, 07/11/2026) : rien de choisi = pas d'emballage ; toucher l'emballage choisi le retire. */}
                 {product.packaging.options.map((o) => {
                   const on = pkgSel[0] === o.id;
                   const isPack = /pack/i.test(o.name);
@@ -2240,7 +2229,7 @@ export default function ProductDetail({ product, realisations = [] }) {
                     <button
                       key={o.id}
                       type="button"
-                      onClick={() => setPkgSel([o.id])}
+                      onClick={() => setPkgSel(on ? [] : [o.id])}
                       style={{ display: "flex", alignItems: "center", gap: 11, textAlign: "left", cursor: "pointer", font: "inherit", border: on ? "1.5px solid var(--gold)" : "1.5px solid var(--line)", background: on ? "#fffaf0" : (isPack ? "linear-gradient(180deg,#fffaf0,#fff)" : "var(--paper)"), borderRadius: 12, padding: "11px 13px", boxShadow: on ? "0 0 0 2px rgba(194,161,78,.22)" : "none" }}
                     >
                       {o.photo ? <ZoomThumb photo={o.photo} label={clientName} size={40} inButton /> : <span style={{ fontSize: "1.3rem" }}>{isPack ? "✨" : "🎁"}</span>}

@@ -89,20 +89,14 @@ export default function DevisPanier({ id, number, totalDevis, n = null, resume =
       {pk && (
         <section className="dz no-print" id="dz-emb">
           <h3>Votre emballage</h3>
-          <p className="dz-lead">Choisissez la présentation de votre {principal.category === "bijoux" ? "bijou" : "commande"}. Le total se met à jour.</p>
+          <p className="dz-lead">Choisissez la présentation de votre {principal.category === "bijoux" ? "bijou" : "commande"}. Le total se met à jour. Touchez à nouveau l&apos;emballage choisi pour le retirer.</p>
           <div className="dz-embs" role="radiogroup" aria-label="Votre emballage">
-            <label className={`dz-emb${!optPkg ? " on" : ""}`}>
-              <input type="radio" name="dz-emb" checked={!optPkg} onChange={() => choisirPkg([])} />
-              <span className="dz-ph"><span className="dz-x">✕</span></span>
-              <span className="dz-tx"><b>Sans emballage cadeau</b><small>Livré protégé, sans boîte</small></span>
-              <span className="dz-pr">0 €</span>
-            </label>
             {pk.options.map((o) => {
               const isPack = /pack/i.test(o.name);
               const on = optPkg?.id === o.id;
               return (
                 <label key={o.id} className={`dz-emb${on ? " on" : ""}`}>
-                  <input type="radio" name="dz-emb" checked={on} onChange={() => choisirPkg([o.id])} />
+                  <input type="radio" name="dz-emb" checked={on} onChange={() => choisirPkg([o.id])} onClick={() => { if (on) choisirPkg([]); }} />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <span className="dz-ph">{o.photo ? <img src={o.photo} alt="" /> : <span className="dz-x">🎁</span>}</span>
                   <span className="dz-tx"><b>{isPack ? "Pack boîte cadeau" : o.name}{isPack ? <em className="dz-best">Meilleur choix</em> : null}</b>{o.desc ? <small>{o.desc}</small> : null}</span>
