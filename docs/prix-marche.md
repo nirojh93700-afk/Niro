@@ -209,3 +209,7 @@ Coût réel : 3,55 € le carnet (reçu Alibaba du 23/10, port compris).
 Lecture : sur le marché des particuliers, **la gravure est toujours comprise** et le carnet gravé se vend 12,50–19,90 €
 (39,90 € pour le cuir vegan « premium »). Notre 19,90 € gravé est dans le haut de la fourchette artisanale ; le 12,90 € seul
 n'a pas d'équivalent (personne ne vend le carnet vierge). Point de vigilance : « aspect cuir » et non « cuir ».
+**Complément du 07/11/2026** (carnet EN LIGNE à 12,90 € · couverture +7 € · dos +7 €) : YourSurprise carnet simili cuir 13 × 21 gravé laser
+17,99 € (14,39 € en promo) · Treizkot carnet de voyage cuir PU gravé + stylo 34,99 € · Manegane cuir véritable A5 110 € · objets pub simili
+cuir A5 5,88 à 9,87 € HT (logo, en quantité) · Amazon marketplace carnet A5 simili cuir rechargeable non gravé 12,99 €. Grand public : 14 à 40 €
+pour un carnet gravé, simili cuir ≈ 14–20 €.
