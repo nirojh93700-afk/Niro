@@ -86,6 +86,14 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
+## 📍 MAQUETTE « D'OÙ VIENNENT LES CLIENTES » — 08/11/2026 (gérant : « savoir les clients, ils viennent de quel lien de Google ou de Insta ou TikTok ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- https://claude.ai/artifact/NnZ6EaM69wqzcKwrhqGPB4 · générateur `tools/maquettes/provenance-commandes.py <dossier css du site> <sortie>` (sortie non commitée).
+  ① pastille « Venue de : Instagram » sur chaque carte de la file + filtre Provenance · ② bloc « Provenance de la cliente » dans la fiche commande
+  (1re visite, revenue avant d'acheter, nb de visites, lien marqué) · ③ Marketing › « D'où viennent les ventes » (commandes, CA, panier par source,
+  1re visite / dernière visite) + liens marqués à copier pour les bios (`?utm_source=instagram&utm_medium=bio`…) et lien par publication.
+- Aujourd'hui le site ne garde AUCUNE provenance par commande (seul Google Analytics, en global). Au « applique » : relever référent + utm + gclid/fbclid/ttclid
+  dans le navigateur (30 jours), l'envoyer au paiement (metadata Stripe), le ranger sur la commande, marquer tout seuls les liens des e-mails, ligne en plus dans Confidentialité.
+
 ## 🌐 GRAVURE DANS UNE AUTRE LANGUE SIGNALÉE PARTOUT DANS GESTION — 08/11/2026 (gérant : « si quelqu'un commande dans une autre langue, il faut que ce soit bien précisé pour moi ») — ✅ EN LIGNE LE 08/11/2026 (« Mets en ligne », 9e130c98, déploiement réussi)
 - `languesDeLaCommande(order)` / `nomsLangues` (`traductionGravure.js`, lit chaque article ET chaque verre d'un lot) → pastille rouge « 🌐 Gravure en TAMOUL… »
   sur la carte de la file (+ filtre « Autre langue ») et dans les alertes de la fiche commande · bandeau rouge « GRAVURE EN … — PAS EN FRANÇAIS » en tête de
