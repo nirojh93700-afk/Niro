@@ -86,6 +86,11 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
+## 🌐 GRAVURE DANS UNE AUTRE LANGUE SIGNALÉE PARTOUT DANS GESTION — 08/11/2026 (gérant : « si quelqu'un commande dans une autre langue, il faut que ce soit bien précisé pour moi ») — PRÉPARÉ, À POUSSER SUR SON MOT
+- `languesDeLaCommande(order)` / `nomsLangues` (`traductionGravure.js`, lit chaque article ET chaque verre d'un lot) → pastille rouge « 🌐 Gravure en TAMOUL… »
+  sur la carte de la file (+ filtre « Autre langue ») et dans les alertes de la fiche commande · bandeau rouge « GRAVURE EN … — PAS EN FRANÇAIS » en tête de
+  chaque tableau « À graver » (`TableGravure` : fiche commande, Atelier, papier) · encadré en tête de la fiche papier · objet de l'e-mail 🛎️ « 🌐 TAMOUL · ».
+
 ## 📓 CARNET A5 GRAVÉ + ONGLET « PAPETERIE » — ✅ EN LIGNE LE 07/11/2026 (gérant : maquette https://claude.ai/artifact/8LUUWhWoLbd9hJZ9smto4s → « Papeterie avec le carnet »)
 - L'univers « Marque-pages » devient **« Papeterie »** (`src/lib/univers.js`, id `papeterie`) : marque-pages en bois, en métal, **Carnets** ;
   `/boutique/marque-pages` redirige vers `/boutique/papeterie` (next.config.js). Générateur de la maquette : `tools/maquettes/papeterie.py`.

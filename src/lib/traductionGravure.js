@@ -98,3 +98,29 @@ export function decorSur(fv, cible) {
   if (cible === "date") return p === "date" || p === "deux";
   return p !== "date";
 }
+
+/**
+ * Langues (autres que le français) d'une commande, pour la signaler PARTOUT dans Gestion
+ * (gérant, 08/11/2026 : « si quelqu'un commande dans une autre langue, il faut que ce soit
+ * bien précisé »). Lit les réglages de chaque article ET de chaque verre d'un lot.
+ * → [{ code, nom, direct, article }] (une entrée par langue et par article).
+ */
+export function languesDeLaCommande(order) {
+  const spec = Array.isArray(order?.spec) ? order.spec : order?.spec ? [order.spec] : [];
+  const out = [];
+  for (const it of spec.filter(Boolean)) {
+    const lots = [it.fields || {}, ...(Array.isArray(it.perGlass) ? it.perGlass : [])];
+    for (const fv of lots) {
+      if (!langueActive(fv) || !String(fv.texte || "").trim()) continue;
+      const l = langueDe(fv.langue);
+      if (out.some((x) => x.code === l.code && x.article === it.name)) continue;
+      out.push({ code: l.code, nom: l.nom, direct: fv.direct === "oui", article: it.name || "" });
+    }
+  }
+  return out;
+}
+
+/** « TAMOUL » ou « ARABE + HÉBREU » ; vide si tout est en français. */
+export function nomsLangues(liste) {
+  return [...new Set((liste || []).map((x) => x.nom.toUpperCase()))].join(" + ");
+}

@@ -6,6 +6,7 @@
 // =============================================================================
 import { delaiCommande, jourFr } from "@/lib/delaiCommande";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
+import { languesDeLaCommande, nomsLangues } from "@/lib/traductionGravure";
 
 export const FLAGS = [
   { id: "urgent", label: "Urgente", tone: "bad" },
@@ -99,6 +100,8 @@ export function chipsDe(o, unread = false) {
   if (estExpress(o) && estActive(o)) c.push({ k: "express", tone: "bad", lib: "Express · à graver en priorité" });
   else if (o.immediateStart && estActive(o)) c.push({ k: "immediate", tone: "bad", lib: "Fabrication immédiate demandée" });
   if (pays.etranger) c.push({ k: "pays", tone: "bad", lib: `${pays.drapeau} À envoyer en ${pays.nom.toUpperCase()} · affranchir international` });
+  const langues = languesDeLaCommande(o);
+  if (langues.length) c.push({ k: "langue", tone: "bad", lib: `🌐 Gravure en ${nomsLangues(langues)} · pas en français : texte et fichier à graver dans « À graver »` });
   if (unread) c.push({ k: "reponse", tone: "info", lib: "Nouvelle réponse de la cliente" });
   if (o.cadeauChoix) c.push({ k: "cadeau", tone: "gold", lib: (o.cadeauPromis ? "Cadeau PROMIS : " : "Cadeau à glisser : ") + cadeauTexte(o) + (Number(o.total) >= 80 ? " · ≥ 80 € = deux cadeaux" : "") });
   if (Array.isArray(o.alerteImage) && o.alerteImage.length) c.push({ k: "dateimage", tone: "warn", lib: "Date dans l'image · à regarder avant de graver" });
@@ -120,6 +123,7 @@ export const FILTRES = [
   { id: "reponse", lib: "Réponse cliente", ic: "mail" },
   { id: "etranger", lib: "Hors France", ic: "flag" },
   { id: "alerte", lib: "Alerte", ic: "alert" },
+  { id: "langue", lib: "Autre langue", ic: "flag" },
 ];
 export function passeFiltre(o, f, unread) {
   switch (f) {
@@ -128,6 +132,7 @@ export function passeFiltre(o, f, unread) {
     case "cadeau": return Boolean(o.cadeauChoix) || (o.flags || []).includes("cadeau");
     case "reponse": return Boolean(unread);
     case "etranger": return paysDeLaCommande(o).etranger;
+    case "langue": return languesDeLaCommande(o).length > 0;
     case "alerte": return Boolean(o.alerteInterne) || (Array.isArray(o.alerteImage) && o.alerteImage.length > 0) || (o.flags || []).includes("urgent") || Boolean(o.alerteEmail || o.emailCorrigeDe);
     case "late": return etatDelai(o).k === "late";
     default: return true;

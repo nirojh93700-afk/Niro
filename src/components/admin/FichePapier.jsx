@@ -24,6 +24,7 @@
 // =============================================================================
 
 import { paysDeLaCommande } from "@/lib/paysLivraison";
+import { languesDeLaCommande, nomsLangues } from "@/lib/traductionGravure";
 import { numerosSuivi } from "@/lib/suiviColis";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -74,6 +75,7 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
   // on l'affiche seul ; sinon on affiche le mode de livraison choisi.
   const livraison = order.relaisPoint || order.shippingMethod || "";
   const pays = paysDeLaCommande(order);
+  const langues = languesDeLaCommande(order);
   const items = order.items || [];
   const spec = (order.spec || []).filter(Boolean);
 
@@ -140,6 +142,12 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
             <div className="fp-encadre alerte fp-pays-alerte">
               <strong>{pays.drapeau} À ENVOYER EN {pays.nom.toUpperCase()}</strong>
               <div>Envoi hors de France : affranchir pour l&apos;international, jamais un timbre France.</div>
+            </div>
+          ) : null}
+          {langues.length ? (
+            <div className="fp-encadre alerte">
+              <strong>🌐 GRAVURE EN {nomsLangues(langues)} — PAS EN FRANÇAIS</strong>
+              <div>{langues.map((l) => `${l.article} : ${l.nom.toLowerCase()} (${l.direct ? "écrit par la cliente dans sa langue" : "traduction relue et validée par la cliente"})`).join(" · ")}. Graver le fichier à graver, jamais le texte recopié à la main.</div>
             </div>
           ) : null}
           {order.alerteInterne ? (

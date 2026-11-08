@@ -18,6 +18,7 @@ import { consignesGravure } from "@/lib/consignesGravure";
 import OubliesAtelier from "@/components/admin/OubliesAtelier";
 import DispositionApercu from "@/components/admin/DispositionApercu";
 import FichierGravure from "@/components/admin/FichierGravure";
+import { languesDeLaCommande, nomsLangues } from "@/lib/traductionGravure";
 
 // Champ affiché à la cliente pour cette commande (même règles que la fiche :
 // « afficher si tel choix » et « seulement pour telle option »).
@@ -195,6 +196,21 @@ function BlocVerre({ item }) {
 }
 
 // Tableau prêt à afficher (même rendu partout : fiche imprimée + fiche commande + page Atelier).
+// Gravure dans une autre langue : bandeau rouge en tête (gérant, 08/11/2026 : « il faut que ça soit
+// bien précisé pour moi pour comprendre que c'est dans une autre langue »).
+function BandeauLangue({ item }) {
+  const l = languesDeLaCommande({ spec: [item] });
+  if (!l.length) return null;
+  return (
+    <div style={{ margin: "0 0 8px", padding: "8px 12px", background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, color: "#b32b2b", fontWeight: 700, fontSize: "0.95rem" }}>
+      🌐 GRAVURE EN {nomsLangues(l)} — PAS EN FRANÇAIS
+      <div style={{ fontWeight: 500, fontSize: "0.85rem", marginTop: 2 }}>
+        {l.some((x) => !x.direct) ? "Traduction relue et validée par la cliente. " : "Écrit par la cliente dans sa langue. "}Graver le fichier à graver ci-dessous, jamais le texte recopié à la main.
+      </div>
+    </div>
+  );
+}
+
 export function TableGravure({ item, titre = true }) {
   const verres = eclaterParVerre(item);
   const entete = titre ? (
@@ -207,6 +223,7 @@ export function TableGravure({ item, titre = true }) {
     return (
       <div style={{ marginBottom: 12 }}>
         {entete}
+        <BandeauLangue item={item} />
         <div style={{ margin: "0 0 8px", padding: "6px 10px", background: "#fdecec", border: "1px solid #d64545", borderRadius: 6, color: "#b32b2b", fontWeight: 700, fontSize: "0.9rem" }}>
           ⚠️ Lot de {verres.length} verres, CHACUN DIFFÉRENT — {verres.length} gravures à faire, une par verre (photo et texte propres à chaque verre).
         </div>
@@ -220,6 +237,7 @@ export function TableGravure({ item, titre = true }) {
   return (
     <div style={{ marginBottom: 12 }}>
       {vide ? null : entete}
+      <BandeauLangue item={item} />
       {vide ? null : <Consignes item={item} />}
       {/* Texte dans une autre langue : le fichier à graver, lettres en tracés (07/11/2026). */}
       <FichierGravure item={item} />

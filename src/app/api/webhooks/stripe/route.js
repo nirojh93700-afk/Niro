@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { texteAvecDecor } from "@/lib/decorTexte";
-import { langueActive, langueDe, ecritureLangue } from "@/lib/traductionGravure";
+import { langueActive, langueDe, ecritureLangue, languesDeLaCommande, nomsLangues } from "@/lib/traductionGravure";
 import { lienFichierGravure } from "@/components/admin/FichierGravure";
 import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail, ensureReferralCode, setPromoCode, addScheduledEmail, hasAutoSent, markAutoSent, logComm } from "@/lib/stock";
 import { sendClientMail, brandedMessage, boutonRepondre } from "@/lib/clientMail";
@@ -650,7 +650,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
     const ownerEmail = process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com";
     await sendEmail({
       to: ownerEmail,
-      subject: `${alertesImage.length ? "⚠️ " : ""}${paysAlerte.etranger ? `${paysAlerte.drapeau} ${paysAlerte.nom.toUpperCase()} · ` : ""}🛎️ Commande ${orderRef} — ${customer.name || "Client"} (${euro(session.amount_total, currency)})`,
+      subject: `${alertesImage.length ? "⚠️ " : ""}${nomsLangues(languesDeLaCommande({ spec: specItems })) ? `🌐 ${nomsLangues(languesDeLaCommande({ spec: specItems }))} · ` : ""}${paysAlerte.etranger ? `${paysAlerte.drapeau} ${paysAlerte.nom.toUpperCase()} · ` : ""}🛎️ Commande ${orderRef} — ${customer.name || "Client"} (${euro(session.amount_total, currency)})`,
       html,
       replyTo: customer.email || undefined,
     });
