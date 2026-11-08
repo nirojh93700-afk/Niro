@@ -14,6 +14,7 @@ import { getFontLabel, getFontClass } from "@/lib/fonts";
 import { MOTIF_LIST } from "@/components/Motif";
 import ModeleArt from "@/components/ModeleArt";
 import PhotosEmail from "@/components/admin/PhotosEmail";
+import ImagesEchangees from "@/components/admin/ImagesEchangees";
 import MessagesEmail from "@/components/admin/MessagesEmail";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { TableGravure, policeDeGravure } from "@/lib/engravingSheet";
@@ -265,6 +266,8 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
           </p>
         ) : null}
         {order.quoteEmballage ? <p style={{ margin: "0 0 8px", fontSize: "0.88rem" }}><strong>📦 Emballage du devis :</strong> {order.quoteEmballage}</p> : null}
+        {/* Dernière image échangée (aperçu validé / image reçue par le site), en grand (08/11/2026). */}
+        <ImagesEchangees order={order} print={print} />
         {/* Une carte par pièce du devis : quantité, texte, style, fichier à graver. */}
         <FicheDevis order={order} />
         <MessagesEmail email={order.customerEmail} depuis={order.createdAt} adminKey={adminKey} print={print} />
@@ -287,6 +290,8 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
           {order.alerteImage.map((l, i) => <div key={i}>{l}</div>)}
         </div>
       ) : null}
+      {/* Une image échangée APRÈS la commande (autre version envoyée par « Répondre », aperçu validé) prime sur celle du site (08/11/2026). */}
+      <ImagesEchangees order={order} print={print} compact />
       {items.map((it, i) => <ItemSheet key={i} item={it} />)}
       {/* Devis payé AVEC d'autres articles du site (02/11/2026) : la demande du devis aussi. */}
       {order?.surMesure ? (

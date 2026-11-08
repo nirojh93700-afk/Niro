@@ -34,11 +34,14 @@ export function devisDeLaCommande(order, quotes) {
   return out.sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)));
 }
 
-// Images du fil de la commande : envoyées par l'atelier (aperçus, planches…) et reçues de la cliente.
-export function imagesDuFil(thread) {
+// Images échangées avec la cliente (08/11/2026, commande 1COCUCLN de Stéphanie : « pourquoi y a pas l'image
+// qu'elle demande… je veux les dernières images qu'ils ont validées dans les commandes ») : le FIL de la
+// commande (aperçus BAT, e-mails rangés) ET le DOSSIER du site de la cliente (formulaire, page « Répondre »,
+// envois du site avec un aperçu dedans) — le dossier est rempli à l'instant même, le fil seulement au prochain
+// rangement : avec les deux, l'image est là dès la commande. La plus RÉCENTE en premier (c'est elle qui compte).
+export function imagesDuFil(thread, dossier = null) {
   const out = [];
-  for (const m of thread?.messages || []) {
-    const de = m.from === "atelier" ? "atelier" : "cliente";
+  const pousser = (m, de) => {
     const base = { at: Number(m.at) || 0, de, subject: String(m.subject || "").slice(0, 120) };
     const img = String(m.image || "").trim();
     if (img) {
@@ -48,7 +51,12 @@ export function imagesDuFil(thread) {
     for (const id of m.photos || []) {
       if (/^[A-Za-z0-9_-]{8,64}$/.test(String(id))) out.push({ ...base, src: `/api/img/${id}` });
     }
-  }
+  };
+  for (const m of thread?.messages || []) pousser(m, m.from === "atelier" ? "atelier" : "cliente");
+  for (const m of dossier?.messages || []) pousser(m, m.from === "nous" ? "atelier" : "cliente");
   const vus = new Set();
-  return out.filter((x) => (vus.has(x.src) ? false : (vus.add(x.src), true))).slice(0, 16);
+  return out
+    .filter((x) => (vus.has(x.src) ? false : (vus.add(x.src), true)))
+    .sort((a, b) => (b.at || 0) - (a.at || 0))
+    .slice(0, 16);
 }

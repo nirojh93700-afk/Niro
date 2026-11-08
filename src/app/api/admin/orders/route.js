@@ -1,5 +1,5 @@
 import { detaillerCommande } from "@/lib/detailProduit";
-import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder, getBatTousLesFils, deplacerCagnotte } from "@/lib/stock";
+import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder, getBatTousLesFils, deplacerCagnotte, getCommsAll } from "@/lib/stock";
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder, listQuotes } from "@/lib/firebase";
 import { devisDeLaCommande, imagesDuFil } from "@/lib/historiqueDevis";
 import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
@@ -20,10 +20,12 @@ export async function GET(req) {
     return Response.json({ orders: [], firebase: false });
   }
   // Historique (02/11/2026) : devis / factures liés et images échangées dans le fil de la commande.
-  const [quotes, fils] = await Promise.all([listQuotes(400).catch(() => null), getBatTousLesFils().catch(() => ({}))]);
+  // + le dossier du site de chaque cliente (08/11/2026) : l'image qu'elle a envoyée par le formulaire / « Répondre »
+  // et l'aperçu que l'atelier lui a envoyé sont là dès l'instant, sans attendre le rangement du fil.
+  const [quotes, fils, comms] = await Promise.all([listQuotes(400).catch(() => null), getBatTousLesFils().catch(() => ({})), getCommsAll().catch(() => ({}))]);
   const enrichir = (o) => {
     const devisLies = devisDeLaCommande(o, quotes || []);
-    const images = imagesDuFil(fils?.[o.id]);
+    const images = imagesDuFil(fils?.[o.id], comms?.[String(o.customerEmail || "").trim().toLowerCase()]);
     return { ...o, ...(devisLies.length ? { devisLies } : {}), ...(images.length ? { imagesEchangees: images } : {}) };
   };
   // Produit exact de chaque ligne (taille du verre à vin, etc.) pour tous les écrans de Gestion (13/10/2026).

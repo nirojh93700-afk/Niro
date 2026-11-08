@@ -23,6 +23,7 @@ import PhotosEmail from "@/components/admin/PhotosEmail";
 import MessagesEmail from "@/components/admin/MessagesEmail";
 import FicheDevis from "@/components/admin/FicheDevis";
 import HistoriqueCommande from "@/components/admin/HistoriqueCommande";
+import ImagesEchangees from "@/components/admin/ImagesEchangees";
 import { lignesDevis } from "@/lib/devisGravure";
 import { optionsArticle, livraisonCommande } from "@/lib/optionsVendues";
 import { formatEuro } from "@/lib/format";
@@ -263,6 +264,7 @@ export default function AtelierPage() {
                 </p>
               ) : null}
               {o.adminNote ? <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "#6b5a2e" }}>📝 {o.adminNote}</p> : null}
+              <ImagesEchangees order={o} compact />
               <FicheDevis order={o} />
               <HistoriqueCommande order={o} sansNote />
               <MessagesEmail email={o.customerEmail} depuis={o.createdAt} adminKey={key} />

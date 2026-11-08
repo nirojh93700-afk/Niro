@@ -86,6 +86,16 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
+## 🖼️ DERNIÈRE IMAGE ÉCHANGÉE EN GRAND DANS LA FICHE ATELIER — 08/11/2026 (commande 1COCUCLN, Stéphanie Ranchon, devis DEV-1547 ; gérant : « pourquoi y a pas l'image qu'elle demande… même si c'est un devis on a échangé par mail, je veux les dernières images qu'ils ont validées dans les commandes ») — PRÉPARÉ, EN ATTENTE DE SON « METS EN LIGNE »
+- **Cause** : `imagesEchangees` ne lisait que le FIL de la commande (`bat`), rempli seulement au rangement (ouverture des messages / 21 h) ;
+  Stéphanie a tout échangé par le SITE (formulaire + bouton « Répondre » avec photo, aperçu envoyé par `send-client-email`) → ces images
+  sont dans son DOSSIER (`comms`, `photos`), pas dans le fil → rien dans la fiche. Et même présentes, elles n'étaient qu'en vignettes tout en
+  bas (« Historique »), pas dans la fiche atelier ; `PhotosEmail` / `MessagesEmail` ne lisent que Gmail (aucun mail Gmail d'elle).
+- **Correction** : `imagesDuFil(thread, dossier)` fusionne fil + dossier du site, la plus récente EN PREMIER ; `/api/admin/orders` passe le
+  dossier (`getCommsAll`). Nouveau `ImagesEchangees.jsx` = bloc doré « 🖼️ Dernière image de l'échange — envoyée par l'atelier / la cliente le … »
+  EN GRAND + les précédentes en vignettes, dans `FicheAtelier` (branche devis ET branche normale, écran + papier) et dans les cartes devis de la
+  page Atelier. `HistoriqueCommande` garde ses vignettes. Vérifié 390 / 1280 : 0 erreur, 0 débordement.
+
 ## 🧭 LES 8 IDÉES DU 8 NOVEMBRE CONSTRUITES DANS GESTION — ✅ EN LIGNE LE 08/11/2026 (« Mets en ligne », puis « Tu reprends et tu finis »)
 - **Règle respectée** : seuls des écrans et des API ont été ajoutés ; AUCUNE donnée de Gestion n'a été touchée (pas de POST settings de ma part,
   pas de migration). Les nouveaux réglages (`settings.programmations`, `settings.notifications`, `settings.coutGravure`) et la section `journal`
