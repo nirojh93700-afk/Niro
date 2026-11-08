@@ -1,6 +1,8 @@
 import { isAdmin, getSettings, setFetes, getStockMap, setStock } from "@/lib/stock";
 import { FETES, prochaineFete, dateFr, configNoel, NOEL_STOCK_DEPART, NOEL_ETIQUETTE, FITS } from "@/lib/fetes";
 
+import { journaliser } from "@/lib/journal";
+
 export const dynamic = "force-dynamic";
 
 // Gestion → Fêtes de l'année (29/10/2026, maquette 215micVgntigmyRFXsG49e).
@@ -38,7 +40,9 @@ export async function POST(req) {
   if (a === "on") {
     const k = String(b.fete || "");
     if (!FETES.some((f) => f.k === k)) return Response.json({ error: "Fête inconnue" }, { status: 400 });
+    const avantOn = (await getSettings().catch(() => null))?.fetes?.[k]?.on === true;
     await setFetes((f) => ({ ...f, [k]: { ...(f[k] || {}), on: b.on === true, changeLe: Date.now() } }));
+    journaliser({ type: "fete", cible: k, label: `Fête « ${k} »`, avant: avantOn, apres: b.on === true, source: "fetes", retablir: { kind: "fete", fete: k, valeur: avantOn } }).catch(() => {});
     // Première fois que Noël s'allume : le stock des emballages de Noël = les quantités reçues le 28/10.
     if (k === "noel" && b.on === true) {
       const map = await getStockMap().catch(() => ({}));

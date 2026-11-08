@@ -47,6 +47,13 @@ const ICONES = {
   check: "M5 12l5 5 9-10",
   shield: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4",
   euro: "M18 6.5A7 7 0 1 0 18 17.5M4 10h10M4 14h10",
+  undo: "M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3",
+  img: "M4 5h16v14H4zM8 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M4 17l5-5 4 4 3-3 4 4",
+  dl: "M12 3v12m0 0 4-4m-4 4-4-4M4 17v3h16v-3",
+  copy: "M8 8h12v12H8zM4 16V4h12",
+  gift: "M3 11h18v10H3zM3 8h18v3H3zM12 8v13M12 8c-2-4-6-4-6-1s4 1 6 1c2 0 6 2 6-1s-4-3-6 1",
+  refresh: "M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5",
+  zip: "M4 4h12l4 4v12H4zM10 4v3h2V4M10 8h2v2h-2zM10 12h2v2h-2z",
 };
 export function Ico({ n, className = "ash-ico" }) {
   return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><path d={ICONES[n] || ICONES.more} /></svg>;
@@ -102,7 +109,12 @@ const SECTIONS = [
     { id: "reglages", t: "Boutique", href: "/gestion/parametres" },
     { id: "apparence", t: "Apparence du site", href: "/gestion/apparence" },
     { id: "livraison", t: "Livraison", href: "/gestion/livraison" },
-    { id: "agents", t: "Équipe d'agents", href: "/gestion/agents" } ] },
+    { id: "agents", t: "Équipe d'agents", href: "/gestion/agents" },
+    // 08/11/2026 : les 4 sous-onglets neufs de la maquette « idées rangées » — tous dans Réglages.
+    { id: "programmations", t: "Programmations", href: "/gestion/programmations" },
+    { id: "notifications", t: "Notifications & résumés", href: "/gestion/notifications" },
+    { id: "journal", t: "Journal d'activité", href: "/gestion/journal" },
+    { id: "etat", t: "État du système", href: "/gestion/etat" } ] },
 ];
 const ECRANS = SECTIONS.flatMap((s) => s.tabs.map((t) => ({ ...t, section: s.id, group: s.t, icon: s.ic })));
 const PAR_ID = Object.fromEntries(ECRANS.map((e) => [e.id, e]));

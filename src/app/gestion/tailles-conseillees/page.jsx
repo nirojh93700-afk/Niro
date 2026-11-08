@@ -7,6 +7,7 @@
 // TEMPS (découpe + gravure + finition). Les « prix conseillés » sont indicatifs.
 // =============================================================================
 import PageHead from "@/components/admin/PageHead";
+import CoutGravureForm from "@/components/admin/CoutGravureForm";
 
 const SHEET_PRICE = 2.4; // € par plaque A3 (42 × 30 cm)
 
@@ -64,7 +65,7 @@ export default function TaillesConseilleesPage() {
         <PageHead
           eyebrow="Catalogue"
           title="Tailles & coûts conseillés"
-          subtitle="Guide de référence pour tes produits en bois. Base : 1 plaque A3 (42 × 30 cm, tilleul 3 mm) = 2,40 € (lot de 15 à 35,99 €)."
+          subtitle="Guide de référence pour tes produits en bois (base : 1 plaque A3 de tilleul 3 mm = 2,40 €) et, plus bas, le coût réel de gravure par pièce déduit dans Bénéfices."
         />
 
         <div style={{ background: "#fbf4e6", border: "1px solid #e7d3a1", borderRadius: 12, padding: "14px 16px", margin: "12px 0 22px" }}>
@@ -108,6 +109,9 @@ export default function TaillesConseilleesPage() {
         <p style={{ color: "var(--ink-soft)", fontSize: "0.84rem" }}>
           Pour appliquer un prix conseillé, dis-le-moi (ou change-le toi-même dans <strong>Catalogue → Produits</strong>).
         </p>
+
+        {/* Coût réel de gravure par pièce (08/11/2026) : réglage lu par Finances › Bénéfices. */}
+        <CoutGravureForm />
       </div>
     </section>
   );

@@ -11,6 +11,8 @@ import { runFetesAlerte } from "@/lib/fetesAlerte";
 import { runUrssafAlerte } from "@/lib/urssafAlerte";
 import { runRangementMails, heureDuRangement } from "@/lib/rangementMails";
 import { runEnvoisApresLivraison } from "@/lib/envoisApresLivraison";
+import { runProgrammations } from "@/lib/programmations";
+import { runResumeMatin } from "@/lib/resumeMatin";
 
 const MIN = 60000;
 
@@ -88,5 +90,15 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("envoisApresLivraison", 30 * MIN)) out.apresLivraison = await runEnvoisApresLivraison();
   } catch (e) { out.apresLivraisonError = e.message; }
+  // ⏰ Programmations (08/11/2026) : un prix, une fête, un code, une visibilité qui changent à l'heure dite
+  // (Réglages › Programmations). Au plus toutes les 15 min ; chaque exécution se note dans le Journal d'activité.
+  try {
+    if (await claimJob("programmations", 15 * MIN)) out.programmations = await runProgrammations();
+  } catch (e) { out.programmationsError = e.message; }
+  // 🔔 Résumé du matin (08/11/2026) : e-mail au gérant à l'heure réglée (Réglages › Notifications). Ne fait rien
+  // tant que la case n'est pas cochée ; une seule fois par jour (jobNotes.resumeMatin).
+  try {
+    if (await claimJob("resumeMatin", 15 * MIN)) out.resumeMatin = await runResumeMatin();
+  } catch (e) { out.resumeMatinError = e.message; }
   return out;
 }

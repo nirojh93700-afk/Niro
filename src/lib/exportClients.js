@@ -41,8 +41,12 @@ function crc32(bytes) {
   return (c ^ 0xffffffff) >>> 0;
 }
 // Archive ZIP « stockée » (sans compression) : suffisant pour un classeur Excel.
-function zipStore(files) {
+// files = [[nom, contenu]] ; contenu = texte (string) OU octets (Uint8Array / ArrayBuffer) —
+// ce second cas sert au dossier de gravure du jour (images PNG / JPG dans le zip, 08/11/2026).
+// `type` = type MIME du Blob renvoyé (Excel par défaut : toXLSX l'appelle sans rien changer).
+export function zipStore(files, type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
   const enc = new TextEncoder();
+  const octets = (c) => (c instanceof Uint8Array ? c : c instanceof ArrayBuffer ? new Uint8Array(c) : enc.encode(c === null || c === undefined ? "" : String(c)));
   const parts = []; const central = []; let offset = 0;
   const now = new Date();
   const dosTime = ((now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1)) & 0xffff;
@@ -50,7 +54,7 @@ function zipStore(files) {
   const u16 = (n) => [n & 0xff, (n >> 8) & 0xff];
   const u32 = (n) => [n & 0xff, (n >> 8) & 0xff, (n >> 16) & 0xff, (n >>> 24) & 0xff];
   for (const [name, content] of files) {
-    const nameB = enc.encode(name); const data = enc.encode(content); const crc = crc32(data);
+    const nameB = enc.encode(name); const data = octets(content); const crc = crc32(data);
     const local = new Uint8Array([...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(dosTime), ...u16(dosDate), ...u32(crc), ...u32(data.length), ...u32(data.length), ...u16(nameB.length), ...u16(0), ...nameB]);
     parts.push(local, data);
     central.push(new Uint8Array([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(dosTime), ...u16(dosDate), ...u32(crc), ...u32(data.length), ...u32(data.length), ...u16(nameB.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(offset), ...nameB]));
@@ -58,7 +62,7 @@ function zipStore(files) {
   }
   const cdSize = central.reduce((s, c) => s + c.length, 0);
   const end = new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(files.length), ...u16(files.length), ...u32(cdSize), ...u32(offset), ...u16(0)]);
-  return new Blob([...parts, ...central, end], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  return new Blob([...parts, ...central, end], { type });
 }
 const xml = (s) => cell(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 function colName(i) { let s = ""; i++; while (i > 0) { const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }

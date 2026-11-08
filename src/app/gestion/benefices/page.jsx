@@ -156,7 +156,7 @@ export default function BeneficesPage() {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "8px 14px 60px" }}>
-      <PageHead eyebrow="Finances" title="Bénéfices" subtitle="Ce que tu gagnes réellement : ventes encaissées moins le coût d'achat des produits vendus et le matériel d'emballage utilisé, moins tes dépenses."
+      <PageHead eyebrow="Finances" title="Bénéfices" subtitle="Ce que tu gagnes réellement : ventes encaissées moins le coût d'achat des produits vendus, le matériel d'emballage utilisé et le coût de gravure (usure du laser, électricité, temps), moins tes dépenses."
         kpis={[
           { label: `Bénéfice net — ${periodLabel}`, value: euro(netProfit), tone: netProfit >= 0 ? "good" : "bad" },
           { label: "Bénéfice brut (avant dépenses)", value: euro(p.profit || 0) },
@@ -177,6 +177,11 @@ export default function BeneficesPage() {
         <Tile label="Coût d'achat" value={euro(p.cost)} sub="Produits vendus" />
         <Tile label="Matériel d'emballage" value={euro(p.materiel || 0)} sub="Commandes conditionnées" />
         <Tile label="Pièces ratées" value={euro(p.rates || 0)} sub="Pièces à refaire + colis renvoyés" />
+        {/* Coût réel de gravure (08/11/2026) : réglé dans Catalogue › Tailles & coûts ; 0 tant que rien n'est réglé. */}
+        <Tile label="Coût de gravure" value={euro(p.gravure || 0)}
+          sub={data.coutGravure?.regle
+            ? "usure laser + électricité + temps"
+            : <>non réglé — <a href="/gestion/tailles-conseillees" style={{ color: "var(--gold-dark)" }}>Catalogue › Tailles &amp; coûts</a></>} />
         <Tile label="Étiquettes d'envoi" value={euro(p.etiquettes || 0)} sub="Payées au transporteur" />
         <Tile label="Marge" value={p.margin + " %"} sub="Bénéfice / CA" accent="#a98935" />
       </div>
@@ -437,7 +442,7 @@ export default function BeneficesPage() {
       </div>
 
       <p style={{ color: "var(--ink-soft)", fontSize: "0.8rem" }}>
-        Calculé sur les commandes payées (hors tests, annulées et remboursées). Le coût est le prix d&apos;achat que tu renseignes sur chaque produit. Le <strong>bénéfice</strong> ne compte que produits vendus − coût d&apos;achat ; le <strong>bénéfice net</strong> déduit en plus tes <strong>dépenses &amp; charges</strong> saisies ci-dessus (fournitures, expédition…). La livraison encaissée reste à part (neutre).
+        Calculé sur les commandes payées (hors tests, annulées et remboursées). Le coût est le prix d&apos;achat que tu renseignes sur chaque produit. Le <strong>bénéfice</strong> compte produits vendus − coût d&apos;achat − matériel − pièces ratées − coût de gravure (réglé dans <a href="/gestion/tailles-conseillees">Catalogue › Tailles &amp; coûts</a> ; 0 tant que rien n&apos;est réglé) ; le <strong>bénéfice net</strong> déduit en plus tes <strong>dépenses &amp; charges</strong> saisies ci-dessus (fournitures, expédition…). La livraison encaissée reste à part (neutre).
       </p>
     </div>
   );

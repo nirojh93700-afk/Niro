@@ -6,6 +6,7 @@ import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/e
 import { sendClientMail } from "@/lib/clientMail";
 import { sansAncienHebergeur } from "@/lib/photosLocales";
 import { joindreSuivis } from "@/lib/suiviColis";
+import { journaliser } from "@/lib/journal";
 
 export const dynamic = "force-dynamic";
 
@@ -210,6 +211,8 @@ export async function POST(req) {
   }
   const patch = { status };
   if (typeof tracking === "string" || Array.isArray(tracking)) patch.tracking = joindreSuivis(tracking); // plusieurs colis : « n1, n2 »
+  // Journal d'activité (08/11/2026) : l'ancien statut est gardé pour « Rétablir ».
+  const avantStatut = await getSiteOrder(id).catch(() => null);
   // Horodatage du changement de statut (sert aux règles auto « X jours après
   // expédition/livraison »). Chaîne ISO, comme createdAt.
   const nowIso = new Date().toISOString();
@@ -219,6 +222,10 @@ export async function POST(req) {
   // On horodate remisAt ET deliveredAt (elle est "reçue") pour les règles auto.
   if (status === "remise_main_propre") { patch.remisAt = nowIso; patch.deliveredAt = nowIso; }
   const ok = await updateSiteOrder(id, patch);
+  if (ok && avantStatut && avantStatut.status !== status) {
+    journaliser({ type: "statut", cible: avantStatut.ref || id, label: `Commande #${avantStatut.ref || id}`, avant: avantStatut.status || "", apres: status, source: "commandes",
+      retablir: { kind: "statut", orderId: id, valeur: avantStatut.status || "a_preparer" } }).catch(() => {});
+  }
 
   // Commande annulée : la cagnotte suit. On retire le cashback gagné sur cette
   // commande et on restitue celle que la cliente avait dépensée dessus.

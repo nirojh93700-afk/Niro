@@ -2565,6 +2565,11 @@ export async function getSettings(fresh = false) {
     // 🎄 Fêtes de l'année (Gestion → Fêtes, 29/10/2026) : { noel: { on, images, produits, emballages } }.
     // Vide = toutes les fêtes éteintes (le site d'aujourd'hui, à l'identique). Voir src/lib/fetes.js.
     fetes: (s.fetes && typeof s.fetes === "object") ? s.fetes : {},
+    // ⚙️ Coût de gravure par pièce + 🔔 notifications (08/11/2026) : absents = rien ne change.
+    coutGravure: (s.coutGravure && typeof s.coutGravure === "object") ? s.coutGravure : null,
+    notifications: { resumeMatin: false, heure: "07:30", joursOff: [], ...(s.notifications || {}) },
+    // ⏰ Programmations (08/11/2026) : changements à une date (prix, fête, code, visibilité, bandeau). Liste.
+    programmations: Array.isArray(s.programmations) ? s.programmations : [],
     // Point relais (Boxtal). La CLÉ SECRÈTE n'est JAMAIS renvoyée (seulement
     // hasSecret = true/false). Lecture serveur via getBoxtalCreds().
     boxtal: {
@@ -3069,4 +3074,63 @@ export async function majEnvoiApresLivraison(id, patch) {
   data.envoisApresLivraison = cur;
   await persistCatalog(data, ["envoisApresLivraison"]);
   return true;
+}
+
+// =============================================================================
+// JOURNAL D'ACTIVITÉ (08/11/2026) : qui a changé quoi, avant → après, « Rétablir ».
+// Section `journal` = [{ id, at, type, cible, label, avant, apres, par, source, retabli }], la plus récente
+// en tête, 12 mois gardés (2000 lignes max). Écriture ciblée sur la seule section `journal` (jamais en bloc).
+// Jamais bloquant : une erreur de journal ne doit faire échouer aucune action.
+// =============================================================================
+const JOURNAL_MAX = 2000;
+const JOURNAL_JOURS = 365;
+export async function ajouterJournal(entree) {
+  try {
+    const data = await getCatalogRaw(true);
+    const liste = Array.isArray(data.journal) ? data.journal : [];
+    const limite = Date.now() - JOURNAL_JOURS * 86400000;
+    const e = {
+      id: "j_" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36),
+      at: Date.now(),
+      type: String(entree?.type || "autre").slice(0, 30),
+      cible: String(entree?.cible || "").slice(0, 160),
+      label: String(entree?.label || "").slice(0, 200),
+      avant: entree?.avant === undefined ? null : entree.avant,
+      apres: entree?.apres === undefined ? null : entree.apres,
+      par: String(entree?.par || "gérant").slice(0, 40),
+      source: String(entree?.source || "").slice(0, 60),
+      ...(entree?.retablir && typeof entree.retablir === "object" ? { retablir: entree.retablir } : {}),
+    };
+    // Une valeur trop volumineuse (réglage en bloc) est résumée : le journal doit rester dans un seul document.
+    for (const k of ["avant", "apres"]) {
+      const s = JSON.stringify(e[k]);
+      if (s && s.length > 1500) e[k] = { resume: s.slice(0, 300) + "…", taille: s.length };
+    }
+    data.journal = [e, ...liste.filter((x) => Number(x?.at) >= limite)].slice(0, JOURNAL_MAX);
+    await persistCatalog(data, ["journal"]);
+    return e;
+  } catch (err) {
+    console.error("journal:", err?.message || err);
+    return null;
+  }
+}
+export async function getJournal(fresh = false) {
+  const data = await getCatalogRaw(fresh);
+  return Array.isArray(data.journal) ? data.journal : [];
+}
+export async function marquerJournalRetabli(id, parId = "") {
+  const data = await getCatalogRaw(true);
+  const liste = Array.isArray(data.journal) ? data.journal : [];
+  const e = liste.find((x) => x.id === id);
+  if (!e) return null;
+  e.retabli = { at: Date.now(), par: parId || "" };
+  data.journal = liste;
+  await persistCatalog(data, ["journal"]);
+  return e;
+}
+
+// --- État du système (08/11/2026) : dernier passage de chaque tâche du battement (lecture seule) ------
+export async function getCronState(fresh = false) {
+  const data = await getCatalogRaw(fresh);
+  return data.cronState && typeof data.cronState === "object" ? { ...data.cronState } : {};
 }

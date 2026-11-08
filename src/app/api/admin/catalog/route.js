@@ -11,6 +11,9 @@ import {
 } from "@/lib/stock";
 import { products as baseProducts } from "@/lib/products";
 
+import { journaliser } from "@/lib/journal";
+import { getProductOverrides } from "@/lib/stock";
+
 export const dynamic = "force-dynamic";
 
 function slugify(s) {
@@ -125,7 +128,26 @@ export async function POST(req) {
         };
       });
     }
+    // Journal d'activité (08/11/2026) : prix des options, nom, masquage, coût — avant → après, rétablissables.
+    const avantOv = (await getProductOverrides().catch(() => ({})))?.[slug] || {};
     const saved = await saveProductEditAtomic(slug, overridePatch, promoUpdates);
+    try {
+      const nomProduit = (baseProducts.find((p) => p.slug === slug) || {}).name || slug;
+      if (overridePatch.prices && typeof overridePatch.prices === "object") {
+        for (const [vid, prix] of Object.entries(overridePatch.prices)) {
+          const av = avantOv.prices?.[vid] ?? null;
+          if (av !== prix) journaliser({ type: "prix", cible: slug, label: `${nomProduit} · ${vid}`, avant: av, apres: prix, source: "produits",
+            retablir: { kind: "override", slug, champ: "prices", valeur: avantOv.prices ?? null } }).catch(() => {});
+        }
+      }
+      for (const champ of ["name", "hidden", "cost", "title"]) {
+        if (champ in overridePatch && JSON.stringify(avantOv[champ] ?? null) !== JSON.stringify(overridePatch[champ] ?? null)) {
+          journaliser({ type: champ === "hidden" ? "produit" : champ === "cost" ? "prix" : "produit", cible: slug, label: `${nomProduit} · ${champ === "hidden" ? "visible sur le site" : champ === "cost" ? "coût d'achat" : champ}`,
+            avant: champ === "hidden" ? !avantOv.hidden : (avantOv[champ] ?? null), apres: champ === "hidden" ? !overridePatch.hidden : overridePatch[champ], source: "produits",
+            retablir: { kind: "override", slug, champ, valeur: avantOv[champ] ?? null } }).catch(() => {});
+        }
+      }
+    } catch { /* le journal ne bloque jamais */ }
     return Response.json({ ok: true, override: saved });
   }
 

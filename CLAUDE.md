@@ -86,6 +86,36 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
+## 🧭 LES 8 IDÉES DU 8 NOVEMBRE CONSTRUITES DANS GESTION — ✅ EN LIGNE LE 08/11/2026 (« Mets en ligne », puis « Tu reprends et tu finis »)
+- **Règle respectée** : seuls des écrans et des API ont été ajoutés ; AUCUNE donnée de Gestion n'a été touchée (pas de POST settings de ma part,
+  pas de migration). Les nouveaux réglages (`settings.programmations`, `settings.notifications`, `settings.coutGravure`) et la section `journal`
+  n'existent qu'à partir du premier clic du gérant ; absents = rien ne change (résumé du matin ÉTEINT, coût de gravure = 0, journal vide).
+- **Réglages → 4 sous-onglets neufs** (`AdminShell` NAV) : **Programmations** (`/gestion/programmations`, API `/api/admin/programmations`,
+  `src/lib/programmations.js` : prix d'une option · visibilité · fête · code promo · bandeau, à une date/heure de Paris, « À venir / Fait / Annulée /
+  Erreur », exécutées par le battement `runProgrammations` toutes les 15 min, chaque exécution journalisée « par : site ») · **Notifications & résumés**
+  (`/gestion/notifications`, API `/api/admin/notifications` GET aperçu + POST `{action:"envoyer"}` ; réglage par `/api/admin/settings {notifications}` ;
+  `src/lib/resumeMatin.js` : `construireResume` PUR, `runResumeMatin` par le battement, UNE fois par jour dans le quart d'heure après l'heure,
+  jamais un jour coché « sans résumé », e-mail à l'atelier seulement) · **Journal d'activité** (`/gestion/journal`, API `/api/admin/journal`,
+  `src/lib/journal.js` + `ajouterJournal/getJournal/marquerJournalRetabli` dans stock.js : chaque changement fait dans Gestion — statut de commande,
+  stock, prix / nom / masquage d'un produit, réglage clé par clé (hors crystalZones / motifTextZones / adminAuth), code promo, crédit de cagnotte,
+  fête — avec avant → après et « Rétablir » (10 s pour annuler, puis `retablirEntree` : kinds stock · statut · override · reglage · promo · cagnotte ·
+  fete), 12 mois, 2000 lignes max) · **État du système** (`/gestion/etat`, API `/api/admin/etat`, `src/lib/etatSysteme.js` : 11 feux lecture seule —
+  Firestore, Stripe, Resend, Gmail (jeton), Claude, battement (`getCronState`), boîte mail surveillée, programmations, résumé, matériel, réponses à valider).
+- **Ailleurs, à sa place** : Atelier → bouton **« Dossier de gravure du jour · .zip »** (`DossierGravureJour.jsx` + `src/lib/dossierGravure.js` :
+  un dossier par commande à préparer / en gravure : face/fond PNG, images d'origine (SVG vectoriel si présent), photos de la cliente, SVG du texte en
+  autre langue, consignes.txt ; + `gravure-du-jour.csv` + `LISEZ-MOI.txt` ; `zipStore` de exportClients accepte maintenant des octets) ·
+  formulaire « Expédier » (file + fiche) → **« Scanner l'étiquette »** (photo → `/api/admin/lire-etiquette` → `lectureEtiquette.js`, Claude vision,
+  numéro + transporteur, orange si incertain) · fiche commande « Plus d'actions » → **« Refaire la même commande (devis prérempli) »** et **« Créditer la
+  cagnotte (avoir) »** (`ActionsCommande.jsx`, API devis / cagnottes existantes) · Finances › Ventes → **« Posez une question sur vos chiffres »**
+  (`QuestionChiffres.jsx`, `/api/admin/question-chiffres`, `questionChiffres.js` : agrégats calculés sur les vraies commandes PUIS Claude rédige,
+  jamais l'inverse) · Catalogue › Tailles & coûts → **« Coût de gravure par pièce »** (`CoutGravureForm.jsx`, `coutGravure.js` : laser € ÷ heures de
+  vie + électricité €/h + main-d'œuvre, minutes par produit ; déduit dans Bénéfices, tuile « Coût de gravure », 0 sans réglage).
+- ⛔ **Idée ⑥ (accès limité pour une aide à l'atelier) : PAS construite**, gardée dans `docs/AMELIORATIONS.md` sur sa demande.
+- Vérifié : `npm run build` OK · tests existants (materiel, controle-atelier, options, consignes, orderspec) au vert · navigateur local 390 / 1280 sur
+  les 10 écrans (API simulées, aucune écriture) : 0 erreur JS, 0 débordement. ⚠️ Sur téléphone `.fq-chipbar` est un rail `nowrap` : les rangées de
+  puces qui doivent passer à la ligne portent `style={{ flexWrap: "wrap" }}`. Le loader de tests (`alias-loader.mjs`) ne résout pas les `.jsx` :
+  `dossierGravure.js` (qui importe `FichierGravure.jsx`) ne se teste qu'au build / navigateur.
+
 ## 🧭 MAQUETTE « LES 8 IDÉES DU 8 NOVEMBRE, RANGÉES DANS GESTION » — 08/11/2026 (gérant : « fais-moi une maquette avec tout, mais tu dois ranger dans admin, tu ajoutes pas n'importe comment, bien organisé, et pour le six tu gardes en mémoire pour après ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - https://claude.ai/artifact/9r4YN1hbK4cf8VTdJgTmgX (v1) · générateur `tools/maquettes/gestion-idees-08-11.py <dossier css du site> <sortie>` (coquille
   `gestion_coquille.py`, vraies classes `.ash-*` / `.fq-*` ; sortie `docs/maquettes/gestion-idees-08-11.html` ignorée par git). Vérifié Chromium 390 / 1280 :

@@ -12,6 +12,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import ImagesOrigine from "@/components/admin/ImagesOrigine";
+import DossierGravureJour from "@/components/admin/DossierGravureJour";
 import Link from "next/link";
 import { getProductBySlug, CATEGORIES, getCategoryLabel } from "@/lib/products";
 import { imageDesign } from "@/lib/modeles";
@@ -232,7 +233,11 @@ export default function AtelierPage() {
   return (
     <div className="container" style={{ padding: "30px 16px 80px" }}>
       <PageHead eyebrow="Commandes" title="Atelier — fichiers à graver" subtitle="Pour chaque commande : le visuel exact, les réglages, et le fichier prêt à graver (PNG, SVG, PDF à l'échelle)."
-        actions={<Link href="/gestion/commandes" className="btn btn-outline">🗂️ File de production</Link>} />
+        actions={<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {/* Dossier de gravure du jour (08/11/2026) : un zip par jour, un dossier par commande + gravure-du-jour.csv. */}
+          <DossierGravureJour orders={orders} sideConfig={sideConfig} sidesOf={sidesOf} adminKey={key} />
+          <Link href="/gestion/commandes" className="btn btn-outline">🗂️ File de production</Link>
+        </div>} />
       <p style={{ color: "var(--ink-soft)", fontSize: "0.9rem" }}>
         {orders.length} commande{orders.length > 1 ? "s" : ""} à graver — tous les produits (bijoux, cristaux, verres…). Tableau « quel texte sur quelle face », visuel du client, et fichier prêt à graver pour les verres (PNG / SVG / PDF à l'échelle réelle).
       </p>

@@ -26,6 +26,7 @@ import HistoriqueCommande from "@/components/admin/HistoriqueCommande";
 import { BlocConditionnement } from "@/components/admin/Conditionnement";
 import { RatesCommande } from "@/components/admin/Rates";
 import { FormExpedition, Pill, LiensSuivi } from "@/components/admin/CarteCommande";
+import { RefaireDevis, CrediterCagnotte } from "@/components/admin/ActionsCommande";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import { useAdminBack } from "@/components/admin/adminBack";
 import { imprimerFiche } from "@/lib/impression";
@@ -91,7 +92,7 @@ export default function FicheCommandePage() {
   const [condOpen, setCondOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [menu, setMenu] = useState(false);
-  const [confirm, setConfirm] = useState(""); // grav · exp · liv · cancel · refund · delete
+  const [confirm, setConfirm] = useState(""); // grav · exp · liv · cancel · refund · delete · devis · cagnotte
   const [boxtal, setBoxtal] = useState(false);
   const [papier, setPapier] = useState(false);
   const [toast, setToast] = useState("");
@@ -255,6 +256,10 @@ export default function FicheCommandePage() {
     <div className="fc-confirm" style={{ background: "var(--ash-bad-bg)", borderColor: "#f0c4bd" }}>{verrou(o) ? "⚠️ Produit personnalisé en fabrication ou 24 h dépassées : normalement PAS remboursable. " : ""}Rembourser <b>{formatEuro(total)}</b> sur la carte de la cliente (Stripe) ? Irréversible. <button type="button" className="fc-btn sm danger" disabled={busy} onClick={rembourser}>Rembourser</button><button type="button" className="fc-btn sm" onClick={() => setConfirm("")}>Non</button></div>
   ) : confirm === "delete" ? (
     <div className="fc-confirm" style={{ background: "var(--ash-bad-bg)", borderColor: "#f0c4bd" }}>Supprimer définitivement <b>#{refDe(o)}</b> ? À réserver aux commandes de test. Irréversible. <button type="button" className="fc-btn sm danger" onClick={supprimer}>Oui, supprimer</button><button type="button" className="fc-btn sm" onClick={() => setConfirm("")}>Non</button></div>
+  ) : confirm === "devis" ? (
+    <RefaireDevis o={o} lignes={lignes} adminKey={key} onToast={montrer} onClose={() => setConfirm("")} />
+  ) : confirm === "cagnotte" && o.customerEmail ? (
+    <CrediterCagnotte o={o} adminKey={key} onToast={montrer} onClose={() => setConfirm("")} />
   ) : null;
 
   const menuBox = menu ? (
@@ -270,6 +275,8 @@ export default function FicheCommandePage() {
       {st === "livree" ? <button type="button" onClick={() => setStatus(o, "expediee")}><Ic n="truck" /> Remettre expédiée</button> : null}
       {active || st === "expediee" ? <button type="button" onClick={() => setStatus(o, "remise_main_propre")}><Ic n="user" /> Remise en main propre</button> : null}
       {(estPartie(o) || st === "livree") && o.customerEmail ? <button type="button" onClick={demanderAvis}><Ic n="mail" /> Demander un avis à la cliente</button> : null}
+      <button type="button" onClick={() => setConfirm("devis")}><Ic n="copy" /> Refaire la même commande → devis…</button>
+      {o.customerEmail ? <button type="button" onClick={() => setConfirm("cagnotte")}><Ic n="gift" /> Créditer la cagnotte (avoir)…</button> : null}
       {st === "annulee" ? <button type="button" onClick={() => setStatus(o, "a_preparer")}><Ic n="undo" /> Rétablir la commande</button> : null}
       <button type="button" onClick={basculerTest}><Ic n="tag" /> {o.test ? "Ce n'est pas un test" : "Marquer comme commande test"}</button>
       <hr />

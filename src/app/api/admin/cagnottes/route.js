@@ -1,5 +1,7 @@
 import { isAdmin, listCagnottes, getSettings, getCagnotte, creditCagnotte, deplacerCagnotte, CAGNOTTE_EXPIRY_DAYS } from "@/lib/stock";
 
+import { journaliser } from "@/lib/journal";
+
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
@@ -43,7 +45,9 @@ export async function POST(req) {
   const reason = String(body?.reason || "Geste commercial").slice(0, 120);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ error: "Adresse invalide." }, { status: 400 });
   if (!Number.isFinite(amount) || amount <= 0 || amount > 100) return Response.json({ error: "Montant invalide (0,01 à 100 €)." }, { status: 400 });
+  const avantC = await getCagnotte(email).catch(() => null);
   await creditCagnotte(email, amount, reason, "");
   const c = await getCagnotte(email);
+  journaliser({ type: "cagnotte", cible: email, label: `Cagnotte de ${email} · ${reason}`, avant: avantC?.balance ?? 0, apres: c?.balance ?? null, source: "fidelite", retablir: { kind: "cagnotte", email, montant: amount } }).catch(() => {});
   return Response.json({ ok: true, email, balance: c?.balance ?? null });
 }

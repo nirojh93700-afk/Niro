@@ -23,6 +23,32 @@ import { FLAGS, FLAG_PAR_ID, chipsDe, modeDe, statutDe, statutInfo, estActive, e
 
 const MODE_IC = { express: "bolt", relais: "pin", retrait: "user", domicile: "home" };
 
+// Réduit la photo d'une étiquette dans le navigateur (1600 px max, JPEG) avant de l'envoyer à la
+// lecture — même méthode que `PhotosJointes.jsx`. → data URL.
+function reduirePhoto(file, maxDim = 1600, quality = 0.85) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * scale));
+        const h = Math.max(1, Math.round(img.height * scale));
+        const c = document.createElement("canvas");
+        c.width = w; c.height = h;
+        const ctx = c.getContext("2d");
+        ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        try { resolve(c.toDataURL("image/jpeg", quality)); } catch { resolve(r.result); }
+      };
+      img.onerror = () => reject(new Error("Photo illisible"));
+      img.src = r.result;
+    };
+    r.onerror = () => reject(new Error("Photo illisible"));
+    r.readAsDataURL(file);
+  });
+}
+
 export function Pill({ tone = "grey", ic, children, title }) {
   return <span className={`fq-pill ${tone}`} title={title}>{ic ? <Ic n={ic} /> : null}{children}</span>;
 }
@@ -36,10 +62,30 @@ export function FormExpedition({ o, onStatus, onClose, busy, titre = "Expédier"
   const [nums, setNums] = useState(depart.length ? depart : [""]);
   const [notify, setNotify] = useState(Boolean(o.customerEmail));
   const [erreur, setErreur] = useState("");
+  // Scan de l'étiquette (08/11/2026) : { i: n° du colis, etat: "lecture" | "incertain" | "echec" | "ok" }.
+  const [scan, setScan] = useState(null);
   const mode = modeDe(o);
   const pays = paysDeLaCommande(o);
   const changer = (i, v) => { setNums((l) => l.map((x, j) => (j === i ? v : x))); setErreur(""); };
   const pleins = numerosSuivi(nums);
+
+  // « 📷 Scanner l'étiquette » : la photo est réduite ici, lue par le serveur (admin), le numéro
+  // est posé dans le champ du colis i. Le gérant garde la main : il peut corriger ou retaper.
+  async function scanner(i, file) {
+    if (!file) return;
+    setScan({ i, etat: "lecture" });
+    try {
+      const dataUrl = await reduirePhoto(file);
+      const key = (typeof sessionStorage !== "undefined" && sessionStorage.getItem("niv-admin-key")) || "";
+      const r = await fetch("/api/admin/lire-etiquette", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ dataUrl }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j?.ok || !j.numero) { setScan({ i, etat: "echec" }); return; }
+      changer(i, j.numero);
+      setScan({ i, etat: j.certain === false ? "incertain" : "ok" });
+    } catch {
+      setScan({ i, etat: "echec" });
+    }
+  }
   return (
     <form className="fq-ship" onSubmit={async (e) => {
       e.preventDefault();
@@ -49,15 +95,28 @@ export function FormExpedition({ o, onStatus, onClose, busy, titre = "Expédier"
       onClose();
     }}>
       <h3><Ic n="truck" /> {titre} #{refDe(o)}</h3>
-      {nums.map((n, i) => (
-        <div key={i}>
-          <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-            <input type="text" style={{ flex: 1, minWidth: 0 }} value={n} onChange={(e) => changer(i, e.target.value)} placeholder={nums.length > 1 ? `N° de suivi du colis ${i + 1}` : "N° de suivi (La Poste, Mondial Relay, Chronopost…)"} autoFocus={i === 0} />
-            {nums.length > 1 ? <button type="button" className="fq-btn ghost" aria-label={`Retirer le colis ${i + 1}`} onClick={() => setNums((l) => l.filter((_, j) => j !== i))}>✕</button> : null}
+      {nums.map((n, i) => {
+        const sc = scan && scan.i === i ? scan.etat : null;
+        const lecture = sc === "lecture";
+        const bord = sc === "incertain" ? "#d97706" : sc === "echec" ? "var(--ash-bad)" : undefined;
+        return (
+          <div key={i}>
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              <input type="text" style={{ flex: 1, minWidth: 0, borderColor: bord, boxShadow: bord ? `0 0 0 1px ${bord}` : undefined }} value={n} onChange={(e) => { changer(i, e.target.value); if (sc && sc !== "lecture") setScan(null); }} placeholder={nums.length > 1 ? `N° de suivi du colis ${i + 1}` : "N° de suivi (La Poste, Mondial Relay, Chronopost…)"} autoFocus={i === 0} />
+              {nums.length > 1 ? <button type="button" className="fq-btn ghost" aria-label={`Retirer le colis ${i + 1}`} onClick={() => { setNums((l) => l.filter((_, j) => j !== i)); setScan(null); }}>✕</button> : null}
+            </div>
+            <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginTop: 4 }}>
+              <label className="fq-btn ghost sm" style={{ display: "inline-flex", alignSelf: "flex-start", cursor: lecture ? "wait" : "pointer", opacity: lecture ? 0.6 : 1 }} aria-label={`Scanner l'étiquette du colis ${i + 1}`}>
+                <input type="file" accept="image/*" capture="environment" hidden disabled={lecture} onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; scanner(i, f); }} />
+                <Ic n="img" /> {lecture ? "Lecture…" : "Scanner l'étiquette"}
+              </label>
+              <div className="car">{nums.length > 1 ? `Colis ${i + 1} · ` : ""}Transporteur reconnu : <b>{n.trim() ? lienSuivi(n.trim(), o).nom : "—"}</b></div>
+            </div>
+            {sc === "incertain" ? <div className="car" style={{ color: "#b45309", fontWeight: 600 }}>Lecture incertaine : vérifiez le numéro.</div> : null}
+            {sc === "echec" ? <div className="car" style={{ color: "var(--ash-bad)", fontWeight: 600 }}>Lecture impossible, tapez le numéro.</div> : null}
           </div>
-          <div className="car">{nums.length > 1 ? `Colis ${i + 1} · ` : ""}Transporteur reconnu : <b>{n.trim() ? lienSuivi(n.trim(), o).nom : "—"}</b></div>
-        </div>
-      ))}
+        );
+      })}
       <button type="button" className="fq-btn ghost" style={{ alignSelf: "flex-start" }} onClick={() => setNums((l) => [...l, ""])}>+ Ajouter un autre colis</button>
       <div className="car">{pleins.length > 1 ? `${pleins.length} colis : la cliente recevra un lien de suivi pour chacun.` : "Le lien de suivi envoyé sera le bon."}</div>
       {o.customerEmail ? <label><input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} /> Prévenir la cliente par e-mail ({o.customerEmail})</label> : <div className="car">Pas d&apos;e-mail sur cette commande : aucun message ne partira.</div>}

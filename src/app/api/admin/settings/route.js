@@ -1,4 +1,5 @@
 import { isAdmin, getSettings, setSettings, updateBoxtal } from "@/lib/stock";
+import { journaliserReglages } from "@/lib/journal";
 
 export const dynamic = "force-dynamic";
 
@@ -418,6 +419,27 @@ export async function POST(req) {
       .filter((e) => e.label || e.amount > 0);
   }
 
+  // ⚙️ Coût de gravure par pièce (08/11/2026) : usure du laser, électricité, temps — déduit dans Bénéfices.
+  if (body.coutGravure && typeof body.coutGravure === "object") {
+    const c = body.coutGravure;
+    const nb = (v, max) => { const n = Number(String(v ?? "").replace(/\s/g, "").replace(",", ".")); return Number.isFinite(n) && n >= 0 ? Math.min(max, n) : 0; };
+    const minutes = {};
+    for (const [slug, m] of Object.entries(c.minutes && typeof c.minutes === "object" ? c.minutes : {}).slice(0, 300)) {
+      const k = String(slug).slice(0, 80); const n = nb(m, 600);
+      if (k && n > 0) minutes[k] = n;
+    }
+    patch.coutGravure = { laser: nb(c.laser, 100000), heures: nb(c.heures, 100000), elec: nb(c.elec, 100), main: nb(c.main, 500), minutes };
+  }
+  // 🔔 Notifications & résumés (08/11/2026) : résumé du matin (heure Paris) par e-mail au gérant.
+  if (body.notifications && typeof body.notifications === "object") {
+    const n = body.notifications;
+    const heure = /^([01]\d|2[0-3]):[0-5]\d$/.test(String(n.heure || "")) ? String(n.heure) : "07:30";
+    patch.notifications = { resumeMatin: n.resumeMatin === true, heure, joursOff: Array.isArray(n.joursOff) ? n.joursOff.map((d) => parseInt(d, 10)).filter((d) => d >= 0 && d <= 6).slice(0, 7) : [] };
+  }
+
+  // Journal d'activité (08/11/2026) : une ligne par réglage qui change, avec « Rétablir ».
+  const avant = await getSettings(true).catch(() => null);
   const saved = await setSettings(patch);
+  journaliserReglages(avant, patch, { source: "reglages" }).catch(() => {});
   return Response.json({ ok: true, settings: saved });
 }
