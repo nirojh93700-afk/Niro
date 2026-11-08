@@ -331,3 +331,27 @@
 ### Hors liste, à cause de ses règles
 - Commandes Etsy dans la même file : possible en lecture, mais « Etsy reste dans Etsy » (02/09) → seulement s'il le demande.
 - Demande d'avis automatique après livraison : les envois automatiques sont coupés depuis le 16/10 → ici, PRÉPARÉE puis validée (n° 2).
+
+## 🔎 GESTION — 8 IDÉES NOUVELLES (08/11/2026, gérant : « cherche sur Internet dans le monde entier… qu'est-ce qu'on peut améliorer dans admin ? ») — RIEN construit
+> Sources : Shopify Summer '26 Edition (planification, test A/B, avoir boutique, Sidekick qui agit, droits du personnel),
+> Etsy Seller app 2025–2026 (scanner d'étiquette, assistant de statistiques, accès partagé sans mot de passe),
+> Amazon Seller Central 2026 (Canvas : graphiques sur une question, assistant à mémoire), logiciels d'atelier de gravure
+> (ShopVox, Print Laser Pro, Ardent Seller : fichier approuvé gardé avec la commande, coût par pièce avec usure machine ;
+> xTool : gravure par lot à variables depuis un tableur ; Trotec Ruby : file laser depuis un dossier).
+> Ne reprend PAS les 20 idées du 30/10 (dont une partie est déjà construite : « À faire », liste de contrôle, tournée du jour, date limite).
+1. **Dossier de gravure du jour** (xTool lots à variables, Trotec Ruby) : un bouton = un dossier zip avec tous les fichiers à graver du jour
+   nommés par commande (SVG vectoriels, photos, textes traduits) + un tableur des prénoms / dates pour la gravure par lot du logiciel du laser.
+2. **Scanner l'étiquette** (Etsy) : photo de l'étiquette Boxtal / La Poste au téléphone → n° de suivi lu tout seul, commande passée « expédiée »
+   (avec la case « prévenir » comme aujourd'hui). Plus de numéro tapé à la main.
+3. **Poser une question sur les chiffres** (Etsy assistant de statistiques, Amazon Canvas) : « combien de colliers en octobre ? », « quel produit
+   rapporte le plus ? » → réponse + petit graphique, lus dans les vraies commandes et bénéfices.
+4. **Programmer un changement à une date** (Shopify) : prix, promo, mise en ligne d'un produit, Noël allumé / éteint, bandeau, à une date et
+   une heure, avec « annuler la programmation ».
+5. **« Refaire la même commande »** (ShopVox : fichier approuvé gardé) : depuis une ancienne commande, un devis prérempli avec les mêmes
+   réglages, la même photo et le même fichier à graver (cliente qui en veut un 2ᵉ, un cadeau à refaire).
+6. **Accès pour une aide à l'atelier** (Etsy accès partagé, Shopify droits du personnel) : un 2ᵉ mot de passe qui ne voit QUE l'atelier,
+   les fiches et les étiquettes (pas les prix d'achat, les finances, les clientes, les réglages).
+7. **Coût réel par pièce** (Ardent Seller) : usure du laser + électricité + temps de gravure par produit ajoutés au calcul du bénéfice.
+8. **Geste en avoir plutôt qu'en remboursement** (Shopify avoir boutique) : depuis la fiche commande, créditer la cagnotte de la cliente
+   (son choix à LUI, jamais proposé de ma part).
+Parmi les 20 idées du 30/10 encore NON construites, les plus utiles : résumé du matin · état du système · journal d'activité + « Annuler ».
