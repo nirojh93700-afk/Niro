@@ -30,6 +30,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { GlassPreview, ReglagesItem } from "@/components/admin/FicheAtelier";
 import PhotosEmail from "@/components/admin/PhotosEmail";
+import ImagesEchangees from "@/components/admin/ImagesEchangees";
 import MessagesEmail from "@/components/admin/MessagesEmail";
 import FicheDevis from "@/components/admin/FicheDevis";
 import OptionsVendues from "@/components/admin/OptionsVendues";
@@ -108,9 +109,11 @@ export default function FichePapier({ order, fmtDate, adminKey }) {
       </div>
     </div>
   ));
-  const photosEmail = order.customerEmail ? (
+  // Dernière image échangée (aperçu validé, image reçue par le site) + photos reçues par Gmail (08/11/2026).
+  const photosEmail = order.customerEmail || order.imagesEchangees?.length ? (
     <div className="fp-photos">
-      <PhotosEmail email={order.customerEmail} adminKey={adminKey} print />
+      <ImagesEchangees order={order} print />
+      {order.customerEmail ? <PhotosEmail email={order.customerEmail} adminKey={adminKey} print /> : null}
     </div>
   ) : null;
 
