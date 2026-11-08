@@ -86,7 +86,7 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
-## 🌐 GRAVURE DANS UNE AUTRE LANGUE SIGNALÉE PARTOUT DANS GESTION — 08/11/2026 (gérant : « si quelqu'un commande dans une autre langue, il faut que ce soit bien précisé pour moi ») — PRÉPARÉ, À POUSSER SUR SON MOT
+## 🌐 GRAVURE DANS UNE AUTRE LANGUE SIGNALÉE PARTOUT DANS GESTION — 08/11/2026 (gérant : « si quelqu'un commande dans une autre langue, il faut que ce soit bien précisé pour moi ») — ✅ EN LIGNE LE 08/11/2026 (« Mets en ligne », 9e130c98, déploiement réussi)
 - `languesDeLaCommande(order)` / `nomsLangues` (`traductionGravure.js`, lit chaque article ET chaque verre d'un lot) → pastille rouge « 🌐 Gravure en TAMOUL… »
   sur la carte de la file (+ filtre « Autre langue ») et dans les alertes de la fiche commande · bandeau rouge « GRAVURE EN … — PAS EN FRANÇAIS » en tête de
   chaque tableau « À graver » (`TableGravure` : fiche commande, Atelier, papier) · encadré en tête de la fiche papier · objet de l'e-mail 🛎️ « 🌐 TAMOUL · ».
