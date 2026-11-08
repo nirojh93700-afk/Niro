@@ -351,6 +351,8 @@
    réglages, la même photo et le même fichier à graver (cliente qui en veut un 2ᵉ, un cadeau à refaire).
 6. **Accès pour une aide à l'atelier** (Etsy accès partagé, Shopify droits du personnel) : un 2ᵉ mot de passe qui ne voit QUE l'atelier,
    les fiches et les étiquettes (pas les prix d'achat, les finances, les clientes, les réglages).
+   ⏸️ **08/11 : gardée pour PLUS TARD à la demande du gérant** (« pour le six tu gardes en mémoire pour après ») — absente de la maquette
+   https://claude.ai/artifact/9r4YN1hbK4cf8VTdJgTmgX qui range les autres idées dans Gestion. Ne rien construire sans sa demande.
 7. **Coût réel par pièce** (Ardent Seller) : usure du laser + électricité + temps de gravure par produit ajoutés au calcul du bénéfice.
 8. **Geste en avoir plutôt qu'en remboursement** (Shopify avoir boutique) : depuis la fiche commande, créditer la cagnotte de la cliente
    (son choix à LUI, jamais proposé de ma part).

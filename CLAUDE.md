@@ -86,6 +86,20 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
+## 🧭 MAQUETTE « LES 8 IDÉES DU 8 NOVEMBRE, RANGÉES DANS GESTION » — 08/11/2026 (gérant : « fais-moi une maquette avec tout, mais tu dois ranger dans admin, tu ajoutes pas n'importe comment, bien organisé, et pour le six tu gardes en mémoire pour après ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- https://claude.ai/artifact/9r4YN1hbK4cf8VTdJgTmgX (v1) · générateur `tools/maquettes/gestion-idees-08-11.py <dossier css du site> <sortie>` (coquille
+  `gestion_coquille.py`, vraies classes `.ash-*` / `.fq-*` ; sortie `docs/maquettes/gestion-idees-08-11.html` ignorée par git). Vérifié Chromium 390 / 1280 :
+  0 débordement, 0 erreur JS, 10 onglets, interactions jouées (scan → 74550444 Mondial Relay, question → réponse, programmation ajoutée, devis / avoir, coût, Rétablir + Annuler).
+- **Onglet « Plan du menu »** = le menu actuel (9 sections + Fêtes), lignes en or = ce qui s'ajoute, à sa place ; RIEN déplacé, RIEN supprimé. Seuls
+  4 sous-onglets neufs, tous dans **Réglages** : Programmations · Notifications & résumés · Journal d'activité · État du système.
+- Où va chaque idée : ① Dossier de gravure du jour (zip SVG par commande + `gravure-du-jour.csv`) = Commandes › Atelier, à côté de « Tournée du jour » ·
+  ② Scanner l'étiquette = bouton dans le formulaire « Expédier… » (file + fiche), lecture dans le navigateur · ③ Question sur les chiffres = Finances › Ventes ·
+  ④ Programmer un changement = Réglages › Programmations (+ « Programmer » sur une fiche produit, un code promo, une fête) · ⑤ Refaire la même commande → devis
+  prérempli et ⑧ Créditer la cagnotte (avoir) = « Plus d'actions » de la fiche commande · ⑦ Coût réel par pièce (usure laser, électricité, temps) = Catalogue ›
+  Tailles & coûts + tuile dans Bénéfices · Résumé du matin = accueil + Réglages › Notifications · État du système (10 feux) · Journal (avant → après, Rétablir, Annuler 10 s).
+- ⛔ **Idée ⑥ « accès pour une aide à l'atelier » (2ᵉ mot de passe limité) : PAS dans la maquette, gardée en mémoire pour plus tard, sur sa demande** (`docs/AMELIORATIONS.md`).
+- Au « applique » : construire idée par idée, dans l'ordre qu'il donne, MÊMES API, aucune donnée de Gestion touchée (règle du 30/10).
+
 ## 📍 MAQUETTE « D'OÙ VIENNENT LES CLIENTES » — 08/11/2026 (gérant : « savoir les clients, ils viennent de quel lien de Google ou de Insta ou TikTok ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - https://claude.ai/artifact/NnZ6EaM69wqzcKwrhqGPB4 · générateur `tools/maquettes/provenance-commandes.py <dossier css du site> <sortie>` (sortie non commitée).
   ① pastille « Venue de : Instagram » sur chaque carte de la file + filtre Provenance · ② bloc « Provenance de la cliente » dans la fiche commande
