@@ -3993,6 +3993,100 @@ export const products = [
   },
   // --- Collection Coupe du Monde 2026 : UN produit PAR pays -----------------
   {
+    // ===== Décoration de Noël ronde en cristal à graver (mise en ligne le 09/11/2026, « Mets en cristal et applique »).
+    slug: "decoration-noel-verre-gravee",
+    badge: "Nouveau",
+    name: "Décoration de Noël en cristal gravée",
+    weight: 120,
+    pickup: false,
+    letter: false, // cristal : part en colis, bien calé
+    cardImage: "/produits/deco-noel-verre-vierge.jpg",
+    title: "Décoration de Noël ronde en cristal gravée, ruban bleu",
+    category: "deco",
+    subcategory: "table",
+    type: "Décoration de Noël personnalisée",
+    tagline: "Un disque de cristal biseauté de 10 cm, gravé d'un dessin de Noël, d'un prénom ou d'une date, à suspendre au sapin.",
+    personalizable: true,
+    personalizationLabel: "Un dessin de Noël, votre texte ou votre photo",
+    images: [
+      "/produits/deco-noel-verre-vierge.jpg",
+      "/produits/deco-noel-verre-sapin.jpg",
+      "/produits/deco-noel-verre-boite.jpg",
+    ],
+    engraveImage: "/produits/deco-noel-verre-vierge.jpg",
+    engrave: {
+      box: { top: 0.40, left: 0.30, width: 0.40, height: 0.36 },
+      widthMm: 70, maxWidthFrac: 0.40, minWidthFrac: 0.10,
+    },
+    styleImages: {
+      "1": "/produits/noel/noel-01.jpg",
+      "2": "/produits/noel/noel-02.jpg",
+      "3": "/produits/noel/noel-03.jpg",
+      "4": "/produits/noel/noel-04.jpg",
+      "5": "/produits/noel/noel-05.jpg",
+      "6": "/produits/noel/noel-06.jpg",
+      "7": "/produits/noel/noel-07.jpg",
+      "8": "/produits/noel/noel-08.jpg",
+      "9": "/produits/noel/noel-09.jpg",
+      "10": "/produits/noel/noel-10.jpg",
+      "11": "/produits/noel/noel-11.jpg",
+      "12": "/produits/noel/noel-12.jpg",
+      "13": "/produits/noel/noel-13.jpg",
+      "14": "/produits/noel/noel-14.jpg",
+      "15": "/produits/noel/noel-15.jpg",
+      "16": "/produits/noel/noel-16.jpg",
+      "17": "/produits/noel/noel-17.jpg",
+      "18": "/produits/noel/noel-18.jpg",
+      "19": "/produits/noel/noel-19.jpg",
+      "20": "/produits/noel/noel-20.jpg",
+      "21": "/produits/noel/noel-21.jpg",
+      "22": "/produits/noel/noel-22.jpg",
+      "23": "/produits/noel/noel-23.jpg",
+      "24": "/produits/noel/noel-24.jpg",
+      "25": "/produits/noel/noel-25.jpg",
+      "26": "/produits/noel/noel-26.jpg",
+      "27": "/produits/noel/noel-27.jpg"
+    },
+    personalizationFields: [
+      { key: "numstyle", type: "stylepicker", optional: true, label: "Choisissez votre dessin de Noël",
+        variantContains: "dessin", groups: [
+        { label: "Dessins de Noël (1–16)", nums: ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"] },
+        { label: "Mots de Noël (17–25)", nums: ["17","18","19","20","21","22","23","24","25"] },
+        { label: "Dessins de Noël (26–27)", nums: ["26","27"] },
+      ] },
+      { key: "photo", type: "photo", label: "Votre photo ou votre logo", variantContains: "photo",
+        text: "La photo est gravée en blanc givré dans le cristal. Une image nette et bien éclairée donne le meilleur résultat." },
+      { key: "texte", label: "Le texte à graver", placeholder: "Ex. Joyeux Noël Camille", maxLength: 40, variantContains: "Mon texte" },
+      { key: "texte", label: "Ajouter un texte (compris)", placeholder: "Ex. Joyeux Noël Camille", maxLength: 40, optional: true, variantContains: "dessin" },
+      { key: "texte", label: "Ajouter un texte (compris)", placeholder: "Ex. Notre premier Noël", maxLength: 40, optional: true, variantContains: "photo" },
+      { key: "date", label: "Ajouter une date (+3 €)", placeholder: "Ex. Noël 2026", maxLength: 20, optional: true },
+      { key: "police", type: "font", label: "Police du texte", optional: true },
+      { key: "boite", type: "select", label: "Boîte bleue", optional: true, options: [
+        { value: "non", label: "Sans boîte" },
+        { value: "oui", label: "Dans sa boîte bleue avec mousse (+3,90 €)" },
+      ] },
+    ],
+    variants: [
+      { id: "deco-noel-verre-dessin", title: "Un dessin de Noël", price: 21.90 },
+      { id: "deco-noel-verre-texte", title: "Mon texte", price: 16.90 },
+      { id: "deco-noel-verre-photo", title: "Ma photo ou mon logo", price: 21.90 },
+    ],
+    engravingPricing: { flatExtras: [
+      { key: "date", amount: 3 },
+      { key: "boite", value: "oui", amount: 3.9, weight: 60 },
+    ] },
+    descriptionHtml: `<p><strong>Une décoration de Noël en cristal, gravée dans notre atelier.</strong> Un disque rond de 10 cm au bord biseauté, suspendu à un ruban de satin bleu : on y grave un de nos dessins de Noël, un prénom, une date ou votre photo. Accroché au sapin, il attrape la lumière des guirlandes.</p>
+<h3>Caractéristiques</h3>
+<ul>
+<li><strong>Matière :</strong> cristal transparent au bord biseauté</li>
+<li><strong>Taille :</strong> 10 cm de diamètre</li>
+<li><strong>Ruban :</strong> satin bleu, prêt à suspendre</li>
+<li><strong>Gravure :</strong> au laser, en blanc givré dans le cristal. 16,90 € avec un texte ; 21,90 € avec un dessin de Noël ou votre photo, texte compris ; une date en plus : +3 €</li>
+<li><strong>En option :</strong> la boîte bleue avec mousse, prête à offrir</li>
+</ul>
+<p>Chaque décoration est gravée à la commande.</p>`,
+  },
+  {
     // ===== Support téléphone en bois gravé (mis en ligne le 20/08/2026 à la
     // demande de la gérante). Même système que le verre à vin : modèles
     // numérotés, alphabet fleuri, aperçu en direct sur la photo du support

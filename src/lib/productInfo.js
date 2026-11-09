@@ -1608,6 +1608,14 @@ Un souci à la réception ?
     returns:
       "Expédié à plat en lettre suivie : 6,50 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nDécoupe 3 à 5 jours ouvrés, puis expédition suivie.\nAvec un prénom gravé, la pièce est personnalisée : elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Sans gravure, le retour reste possible sous 14 jours, frais de retour à votre charge.",
   },
+  "decoration-noel-verre-gravee": {
+    material:
+      "Cristal transparent, disque rond de 10 cm au bord biseauté.\nRuban de satin bleu, prêt à suspendre.\nGravure au laser dans notre atelier : elle ressort en blanc givré dans le cristal.",
+    usage:
+      "Choisissez ce que vous voulez faire graver : un de nos 27 dessins de Noël, votre texte, ou votre photo / votre logo.\nUn texte est compris (prénom, petit mot), dans la police de votre choix. Avec un dessin de Noël ou votre photo : 21,90 €, texte compris. Une date en plus : +3 €.\nEntretien : un chiffon doux et sec. Le cristal est fragile : manipulez-le avec soin.",
+    returns:
+      "Expédiée en colis, bien calée.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
+  },
   "support-telephone-bois-grave": {
     material:
       "Bois clair découpé et gravé au laser dans notre atelier.\nDeux pièces plates qui s'emboîtent : aucun outil, aucune colle.\nUne fente en bas du dossier laisse passer le câble de recharge.\nLe veinage varie légèrement d'une pièce à l'autre — chaque support est unique.",

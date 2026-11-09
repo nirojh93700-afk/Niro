@@ -94,6 +94,7 @@ export const PRODUCT_DATES = {
   "cartes-etapes-bebe-animaux": "2026-08-21",
   "cartes-etapes-bebe-girafe": "2026-08-21",
   "veilleuse-arbre-de-vie-prenom": "2026-08-21",
+  "decoration-noel-verre-gravee": "2026-11-09",
   "support-telephone-bois-grave": "2026-08-20",
   "support-telephone-bois-ajoure": "2026-08-20",
   "porte-serviettes-bois-fleur": "2026-08-20",

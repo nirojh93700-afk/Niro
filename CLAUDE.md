@@ -86,7 +86,11 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
-## 🎄 MAQUETTE « DÉCORATION DE NOËL RONDE EN VERRE GRAVÉE » — 09/11/2026 (gérant : photos Alibaba « ornement cristal vierge » + sa photo en boîte bleue) — EN ATTENTE DE SON AVIS, RIEN en ligne
+## 🎄 DÉCORATION DE NOËL RONDE EN CRISTAL GRAVÉE — ✅ EN LIGNE LE 09/11/2026 (« Mets en cristal et applique »)
+- Fiche `decoration-noel-verre-gravee` (slug gardé), nom « Décoration de Noël en cristal gravée », catégorie `deco`, rayon « Décoration de Noël » de
+  l'univers Cristal (`univers.js`), carte + paragraphe dans le guide « Cristal photo 3D » (`guide-cristal-3d.html`). Stock non suivi (illimité) tant qu'il
+  ne le saisit pas. Prix vérifiés par `test-textes-prix` : les textes écrivent 16,90 / 21,90 € (jamais « +5 € », qui n'est pas un supplément payé).
+- (historique de la maquette ci-dessous)
 - https://claude.ai/artifact/ST5AS45CQDddcC9kTyj7P7 (captures de la vraie fiche construite en local, puis tout remis à zéro). Ses réponses : **16,90 €** ·
   **boîte bleue avec mousse EN OPTION** (prix proposé par moi : +3,90 €, à valider) · **ruban bleu seulement** · **10 cm**. Fournisseur : Small Bridge WDY-SD
   (verre, 0,59–0,77 € pièce, 10 minimum, colis 14 × 11 × 10 cm, 140 g). Marché : ornements en verre gravés 12,95 € à 17,90 €.

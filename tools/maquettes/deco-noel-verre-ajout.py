@@ -1,19 +1,19 @@
 p="src/lib/products.js"; s=open(p,encoding="utf-8").read()
 imgs=",\n".join(f'      "{i}": "/produits/noel/noel-{i:02d}.jpg"' for i in range(1,28))
 prod='''  {
-    // ===== MAQUETTE (09/11/2026) — Décoration de Noël ronde en verre à graver. NE PAS POUSSER sans « applique ».
+    // ===== Décoration de Noël ronde en cristal à graver (mise en ligne le 09/11/2026, « Mets en cristal et applique »).
     slug: "decoration-noel-verre-gravee",
     badge: "Nouveau",
-    name: "Décoration de Noël en verre gravée",
+    name: "Décoration de Noël en cristal gravée",
     weight: 120,
     pickup: false,
-    letter: false, // verre : part en colis, bien calé
+    letter: false, // cristal : part en colis, bien calé
     cardImage: "/produits/deco-noel-verre-vierge.jpg",
-    title: "Décoration de Noël ronde en verre gravée, ruban bleu",
+    title: "Décoration de Noël ronde en cristal gravée, ruban bleu",
     category: "deco",
     subcategory: "table",
     type: "Décoration de Noël personnalisée",
-    tagline: "Un disque de verre biseauté de 10 cm, gravé d'un dessin de Noël, d'un prénom ou d'une date, à suspendre au sapin.",
+    tagline: "Un disque de cristal biseauté de 10 cm, gravé d'un dessin de Noël, d'un prénom ou d'une date, à suspendre au sapin.",
     personalizable: true,
     personalizationLabel: "Un dessin de Noël, votre texte ou votre photo",
     images: [
@@ -37,7 +37,7 @@ prod='''  {
         { label: "Dessins de Noël (26–27)", nums: ["26","27"] },
       ] },
       { key: "photo", type: "photo", label: "Votre photo ou votre logo", variantContains: "photo",
-        text: "La photo est gravée en blanc givré dans le verre. Une image nette et bien éclairée donne le meilleur résultat." },
+        text: "La photo est gravée en blanc givré dans le cristal. Une image nette et bien éclairée donne le meilleur résultat." },
       { key: "texte", label: "Le texte à graver", placeholder: "Ex. Joyeux Noël Camille", maxLength: 40, variantContains: "Mon texte" },
       { key: "texte", label: "Ajouter un texte (compris)", placeholder: "Ex. Joyeux Noël Camille", maxLength: 40, optional: true, variantContains: "dessin" },
       { key: "texte", label: "Ajouter un texte (compris)", placeholder: "Ex. Notre premier Noël", maxLength: 40, optional: true, variantContains: "photo" },
@@ -57,13 +57,13 @@ prod='''  {
       { key: "date", amount: 3 },
       { key: "boite", value: "oui", amount: 3.9, weight: 60 },
     ] },
-    descriptionHtml: `<p><strong>Une décoration de Noël en verre, gravée dans notre atelier.</strong> Un disque rond de 10 cm au bord biseauté, suspendu à un ruban de satin bleu : on y grave un de nos dessins de Noël, un prénom, une date ou votre photo. Accroché au sapin, il attrape la lumière des guirlandes.</p>
+    descriptionHtml: `<p><strong>Une décoration de Noël en cristal, gravée dans notre atelier.</strong> Un disque rond de 10 cm au bord biseauté, suspendu à un ruban de satin bleu : on y grave un de nos dessins de Noël, un prénom, une date ou votre photo. Accroché au sapin, il attrape la lumière des guirlandes.</p>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> verre transparent au bord biseauté</li>
+<li><strong>Matière :</strong> cristal transparent au bord biseauté</li>
 <li><strong>Taille :</strong> 10 cm de diamètre</li>
 <li><strong>Ruban :</strong> satin bleu, prêt à suspendre</li>
-<li><strong>Gravure :</strong> au laser, en blanc givré dans le verre. Un texte est compris ; un dessin de Noël ou votre photo : +5 € ; une date : +3 €</li>
+<li><strong>Gravure :</strong> au laser, en blanc givré dans le cristal. 16,90 € avec un texte ; 21,90 € avec un dessin de Noël ou votre photo, texte compris ; une date en plus : +3 €</li>
 <li><strong>En option :</strong> la boîte bleue avec mousse, prête à offrir</li>
 </ul>
 <p>Chaque décoration est gravée à la commande.</p>`,
@@ -76,9 +76,9 @@ pi="src/lib/productInfo.js"; t=open(pi,encoding="utf-8").read()
 a='  "support-telephone-bois-grave": {'
 add='''  "decoration-noel-verre-gravee": {
     material:
-      "Verre transparent, disque rond de 10 cm au bord biseauté.\\nRuban de satin bleu, prêt à suspendre.\\nGravure au laser dans notre atelier : elle ressort en blanc givré dans le verre.",
+      "Cristal transparent, disque rond de 10 cm au bord biseauté.\\nRuban de satin bleu, prêt à suspendre.\\nGravure au laser dans notre atelier : elle ressort en blanc givré dans le cristal.",
     usage:
-      "Choisissez ce que vous voulez faire graver : un de nos 27 dessins de Noël, votre texte, ou votre photo / votre logo.\\nUn texte est compris (prénom, petit mot), dans la police de votre choix. Le dessin de Noël ou la photo : +5 €. Une date en plus : +3 €.\\nEntretien : un chiffon doux et sec. Le verre est fragile : manipulez-le avec soin.",
+      "Choisissez ce que vous voulez faire graver : un de nos 27 dessins de Noël, votre texte, ou votre photo / votre logo.\\nUn texte est compris (prénom, petit mot), dans la police de votre choix. Avec un dessin de Noël ou votre photo : 21,90 €, texte compris. Une date en plus : +3 €.\\nEntretien : un chiffon doux et sec. Le cristal est fragile : manipulez-le avec soin.",
     returns:
       "Expédiée en colis, bien calée.\\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
   },
