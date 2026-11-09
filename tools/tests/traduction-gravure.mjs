@@ -1,5 +1,6 @@
 // npm run test-traduction : gravure traduite (07/11/2026) — garde-fou, décor sur la date, atelier.
-import { manqueLangue, phraseConnue, estTraduit, resumeLangue } from "@/lib/traductionGravure";
+import { manqueLangue, phraseConnue, estTraduit, resumeLangue, textesEnLangue, aTexteEnLangue, languesDeLaCommande } from "@/lib/traductionGravure";
+import { verreGrave } from "@/lib/prixVerres";
 import { texteAvecDecor } from "@/lib/decorTexte";
 import { parcoursEtat } from "@/lib/parcoursGuide";
 import { getProductBySlug } from "@/lib/products";
@@ -31,5 +32,20 @@ t("atelier : langue écrite", /Tamoul/.test(tout) && /Texte tapé/.test(tout));
 t("atelier : date décorée", tout.includes("♥ 12.06.2026 ♥"));
 t("atelier : texte décoré", tout.includes("♥ நன்றி ♥"));
 t("contrôle atelier : rien d'oublié", oubliesAtelier(item).length === 0);
+
+// Plusieurs textes (bijou recto / verso, 09/11/2026) : une seule langue, chaque texte traduit.
+const bj = { police: "playfair", langue: "es", langueCles: "recto,verso", rectoSource: "Maman", recto: "Mamá", versoSource: "Je t'aime", verso: "" };
+t("2 textes : traduction en cours", /arrive/.test(manqueLangue(bj)));
+const bjT = { ...bj, verso: "Te quiero" };
+t("2 textes : case demandée", /Cochez/.test(manqueLangue(bjT)));
+t("2 textes : case cochée ok", manqueLangue({ ...bjT, tradOk: "oui" }) === null);
+t("2 textes : liste", textesEnLangue(bjT).length === 2 && aTexteEnLangue(bjT));
+t("2 textes : résumé cite les deux", /Maman/.test(resumeLangue(bjT)) && /Je t'aime/.test(resumeLangue(bjT)));
+const bjItem = { slug: "collier-double-coeur", name: "Collier", fields: { ...bjT, tradOk: "oui" } };
+const cj = JSON.stringify(consignesGravure(bjItem));
+t("2 textes : atelier voit les deux textes tapés", cj.includes("Maman") && cj.includes("Je t'aime") && /Espagnol/.test(cj));
+t("2 textes : rien d'oublié", oubliesAtelier(bjItem).length === 0);
+t("2 textes : commande signalée", languesDeLaCommande({ spec: [bjItem] }).some((l) => l.code === "es"));
+t("prix verre : texte tapé seul ne grave rien", verreGrave({ rectoSource: "Maman", langueCles: "recto", langue: "es" }) === false);
 console.log(`${ok} vérifications au vert, ${ko} en échec`);
 process.exit(ko ? 1 : 0);

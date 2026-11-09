@@ -6211,18 +6211,19 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .mqt-place{margin:10px 0 0;display:flex;flex-direction:column;gap:8px}
 .mqt-plab{font-size:.86rem;color:var(--ink-soft)}
 .mqt-conseil{font-size:.84rem;color:var(--ink-soft);margin:6px 0 8px}
-.prc .field label.mqt-swap{display:flex;flex-direction:row;gap:10px;align-items:flex-start;font-size:.86rem;font-weight:400;margin:10px 0 12px;color:var(--ink-soft);cursor:pointer}
-.prc .field .mqt-swap input{width:auto;flex:none;margin:3px 0 0;padding:0;accent-color:var(--gold-dark)}
+.field.mqt-langue label.mqt-swap{display:flex;flex-direction:row;gap:10px;align-items:flex-start;font-size:.86rem;font-weight:400;margin:10px 0 12px;color:var(--ink-soft);cursor:pointer}
+.field.mqt-langue .mqt-swap input{width:auto;flex:none;margin:3px 0 0;padding:0;accent-color:var(--gold-dark)}
 .mqt-trad{border:1.5px solid var(--line);border-radius:14px;padding:12px;background:#fff;margin:10px 0 12px}
 .mqt-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .mqt-two>div{min-width:0}
+.mqt-two+.mqt-two{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
 .mqt-two small{display:block;font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-bottom:4px}
 .mqt-two b{display:block;font-size:1.15rem;line-height:1.35;overflow-wrap:anywhere}
 .mqt-etat{font-size:.8rem;color:var(--ink-soft);margin:10px 0 0;min-height:1.2em}
 .mqt-etat.ko{color:#b0332a}
-.prc .field label.mqt-check{display:flex;flex-direction:row;gap:10px;align-items:flex-start;margin-top:10px;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:.86rem;font-weight:400;line-height:1.4;cursor:pointer;color:var(--ink)}
-.prc .field label.mqt-check:has(input:checked){border-color:var(--gold-dark);background:#fffaf0}
-.prc .field .mqt-check input{margin-top:3px;width:18px;height:18px;padding:0;accent-color:var(--gold-dark);flex:none}
-.prc .field label.mqt-check.attend{border-color:#b0332a}
-.prc .field label.mqt-check.off{opacity:.55;cursor:default}
+.field.mqt-langue label.mqt-check{display:flex;flex-direction:row;gap:10px;align-items:flex-start;margin-top:10px;padding:10px;border:1.5px solid var(--line);border-radius:10px;font-size:.86rem;font-weight:400;line-height:1.4;cursor:pointer;color:var(--ink)}
+.field.mqt-langue label.mqt-check:has(input:checked){border-color:var(--gold-dark);background:#fffaf0}
+.field.mqt-langue .mqt-check input{margin-top:3px;width:18px;height:18px;padding:0;accent-color:var(--gold-dark);flex:none}
+.field.mqt-langue label.mqt-check.attend{border-color:#b0332a}
+.field.mqt-langue label.mqt-check.off{opacity:.55;cursor:default}
 @media (max-width:640px){.mqt-two{grid-template-columns:1fr}}

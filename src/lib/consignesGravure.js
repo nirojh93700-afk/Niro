@@ -18,7 +18,7 @@
 // Module pur (pas de JSX) : testé par `npm run test-consignes`.
 // =============================================================================
 import { texteAvecDecor } from "@/lib/decorTexte";
-import { langueActive, langueDe, resumeLangue, ecritureLangue } from "@/lib/traductionGravure";
+import { langueActive, langueDe, resumeLangue, ecritureLangue, textesEnLangue } from "@/lib/traductionGravure";
 import { getProductBySlug } from "@/lib/products";
 import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
@@ -314,10 +314,18 @@ export function consignesGravure(item) {
   const sansPoliceGobelet = Boolean(produit?.gobeletParcours) && !String(champs.police || "").trim();
   // Texte dans une autre langue (07/11/2026) : la langue, le texte tapé en français et le contrôle.
   // Une écriture Noto (tamoul, arabe, hébreu, chinois) remplace la police pour ce texte.
-  const enLangue = langueActive(champs) && String(champs.texte || "").trim();
+  const textesLangue = textesEnLangue(champs);
+  const enLangue = textesLangue.some((t) => t.grave);
   if (enLangue) {
     general.push({ k: "Langue de la gravure", v: resumeLangue(champs), fort: true, alerte: champs.direct !== "oui" });
-    if (champs.direct !== "oui" && String(champs.texteSource || "").trim()) autres.unshift({ k: "Texte tapé par la cliente (français)", v: String(champs.texteSource).trim(), texte: false });
+    if (champs.direct !== "oui") {
+      const avecSource = textesLangue.filter((t) => t.source);
+      const plusieurs = avecSource.length > 1;
+      avecSource.slice().reverse().forEach((t) => {
+        const lib = plusieurs ? ` — ${(vus.find((f) => f.key === t.cle)?.label || t.cle).replace(/\s*\([^)]*\)/g, "").trim()}` : "";
+        autres.unshift({ k: `Texte tapé par la cliente (français)${lib}`, v: t.source, texte: false });
+      });
+    }
   }
   const noto = enLangue ? ecritureLangue(champs) : "";
   if (fonte && aDuTexte && champs.mode !== "modele" && champs.mode !== "noel" && !sansPoliceGobelet) {

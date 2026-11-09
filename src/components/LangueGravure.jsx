@@ -5,24 +5,26 @@
 // obligatoire — sans la case, le bouton « Ajouter au panier » reste grisé et le paiement refuse.
 import { useEffect, useId, useRef, useState } from "react";
 import {
-  LANGUES, MENTION_TRAD, langueDe, langueActive, estTraduit, phraseConnue,
+  LANGUES, MENTION_TRAD, langueDe, langueActive, estTraduit, phraseConnue, cleSource,
 } from "@/lib/traductionGravure";
 import { chargerPoliceLangue, classeLangue } from "@/lib/policeLangueClient";
 
-/** Valeur à montrer dans le champ du texte (le français tapé quand le texte est traduit). */
-export function valeurChampTexte(fv) {
-  return estTraduit(fv) ? fv.texteSource || "" : fv.texte || "";
+/** Valeur à montrer dans le champ du texte k (le français tapé quand le texte est traduit). */
+export function valeurChampTexte(fv, k = "texte") {
+  return estTraduit(fv) ? fv[cleSource(k)] || "" : fv[k] || "";
 }
 /** Ce que la frappe écrit dans les champs. */
-export function patchChampTexte(fv, v) {
-  return estTraduit(fv) ? { texteSource: v, texte: "", tradOk: "" } : { texte: v, tradOk: "" };
+export function patchChampTexte(fv, v, k = "texte") {
+  return estTraduit(fv) ? { [cleSource(k)]: v, [k]: "", tradOk: "" } : { [k]: v, tradOk: "" };
 }
 
 // Menu de la langue (09/11/2026, gérant : « cherche un peu partout », puis « trop chargé, pas de
 // “même alphabet”, les clientes n'ont pas besoin de savoir ») : Français en tête, puis les langues
 // par ordre alphabétique, chacune avec son nom écrit dans la langue (Español, Deutsch, العربية…),
 // jamais de drapeau (un drapeau = un pays). Clavier : flèches, Entrée, Échap.
-const ORDRE = [langueDe("fr"), ...LANGUES.filter((l) => l.code !== "fr")];
+const ORDRE_TOUT = [langueDe("fr"), ...LANGUES.filter((l) => l.code !== "fr")];
+// Lettres empilées à la verticale (Collier Quatre Mots, pendentif) : seulement l'alphabet latin (09/11/2026).
+const ORDRE_LATIN = ORDRE_TOUT.filter((l) => !l.police);
 
 function LigneLangue({ l }) {
   return (
@@ -33,7 +35,8 @@ function LigneLangue({ l }) {
   );
 }
 
-function ChoixLangue({ code, onChoix }) {
+function ChoixLangue({ code, onChoix, latin = false }) {
+  const ORDRE = latin ? ORDRE_LATIN : ORDRE_TOUT;
   const [ouvert, setOuvert] = useState(false);
   const [actif, setActif] = useState(0);
   const id = useId();
@@ -89,90 +92,125 @@ function ChoixLangue({ code, onChoix }) {
   );
 }
 
-export default function LangueGravure({ fv, setFieldValues }) {
+export default function LangueGravure({ fv, setFieldValues, cles = null, latin = false }) {
+  // cles = [{ key, label }] : les textes de la pièce (absent = le seul « texte » du parcours des verres).
+  const multi = Boolean(cles && cles.length);
+  const champs = multi ? cles : [{ key: "texte", label: "" }];
+  const liste = champs.map((c) => c.key);
+  const cleListe = liste.join(",");
   const code = fv.langue && langueDe(fv.langue) ? fv.langue : "fr";
   const L = langueDe(code);
   const traduit = estTraduit(fv);
-  const source = String(fv.texteSource || "").trim();
-  const grave = String(fv.texte || "").trim();
+  const lignes = champs.map((c) => ({ ...c, source: String(fv[cleSource(c.key)] || "").trim(), grave: String(fv[c.key] || "").trim() }));
+  const sig = JSON.stringify(lignes.map((l) => l.source));
+  const tousGraves = lignes.map((l) => l.grave).join("");
   const [etat, setEtat] = useState("");
   const tour = useRef(0);
   const set = (patch) => setFieldValues((prev) => ({ ...prev, ...patch }));
 
-  // Écriture de la langue (aperçu) : seulement les lettres du texte.
-  useEffect(() => { if (langueActive(fv) && grave) chargerPoliceLangue(code, grave + "0123456789."); }, [code, grave]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Traduction : liste d'abord, sinon le site (Claude), 0,5 s après la dernière frappe.
+  // La langue s'applique à tous les textes de la pièce : on note lesquels (atelier, paiement).
   useEffect(() => {
-    if (!traduit || !source) { setEtat(""); return; }
-    if (grave) { setEtat(MENTION_TRAD); return; }
-    const connue = phraseConnue(source, code);
-    if (connue) { setFieldValues((p) => (p.texteSource === fv.texteSource && p.langue === code ? { ...p, texte: connue } : p)); setEtat(MENTION_TRAD); return; }
+    if (multi && langueActive(fv) && fv.langueCles !== cleListe) set({ langueCles: cleListe });
+  }, [multi, code, cleListe]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Écriture de la langue (aperçu) : seulement les lettres des textes.
+  useEffect(() => { if (langueActive(fv) && tousGraves) chargerPoliceLangue(code, tousGraves + "0123456789."); }, [code, tousGraves]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Traduction : liste d'abord, sinon le site (Claude), 0,5 s après la dernière frappe ; un texte après l'autre.
+  useEffect(() => {
+    if (!traduit || !lignes.some((l) => l.source)) { setEtat(""); return; }
+    const aFaire = lignes.filter((l) => l.source && !l.grave);
+    if (!aFaire.length) { setEtat(MENTION_TRAD); return; }
+    const connues = {};
+    const reste = [];
+    for (const l of aFaire) { const c = phraseConnue(l.source, code); if (c) connues[l.key] = c; else reste.push(l); }
+    if (Object.keys(connues).length) {
+      setFieldValues((p) => {
+        if (p.langue !== code) return p;
+        const ok = Object.fromEntries(Object.entries(connues).filter(([k]) => String(p[cleSource(k)] || "").trim() === aFaire.find((l) => l.key === k).source));
+        return { ...p, ...ok };
+      });
+    }
+    if (!reste.length) { setEtat(MENTION_TRAD); return; }
     const mon = ++tour.current;
     setEtat("Traduction en cours…");
-    const t = setTimeout(() => {
-      fetch("/api/traduire", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ texte: source, langue: code }) })
-        .then((r) => r.json())
-        .then((r) => {
+    const t = setTimeout(async () => {
+      let rate = false;
+      for (const l of reste) {
+        try {
+          const r = await fetch("/api/traduire", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ texte: l.source, langue: code }) }).then((x) => x.json());
           if (mon !== tour.current) return;
-          if (r.ok && r.texte) {
-            setFieldValues((p) => (String(p.texteSource || "").trim() === source && p.langue === code && p.direct !== "oui" ? { ...p, texte: r.texte } : p));
-            setEtat(MENTION_TRAD);
-          } else setEtat("La traduction n'a pas répondu, réessayez.");
-        })
-        .catch(() => { if (mon === tour.current) setEtat("La traduction n'a pas répondu, réessayez."); });
+          if (r.ok && r.texte) setFieldValues((p) => (String(p[cleSource(l.key)] || "").trim() === l.source && p.langue === code && p.direct !== "oui" ? { ...p, [l.key]: r.texte } : p));
+          else rate = true;
+        } catch { rate = true; }
+      }
+      if (mon === tour.current) setEtat(rate ? "La traduction n'a pas répondu, réessayez." : MENTION_TRAD);
     }, 500);
     return () => clearTimeout(t);
-  }, [traduit, source, code]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [traduit, sig, code]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function choisirLangue(c) {
     if (c === code) return;
     setFieldValues((p) => {
-      const tape = estTraduit(p) ? p.texteSource || "" : p.texte || "";
-      if (c === "fr") return { ...p, langue: "", direct: "", tradOk: "", texteSource: "", texte: tape };
-      if (p.direct === "oui") return { ...p, langue: c, tradOk: "", texteSource: "", texte: tape };
-      return { ...p, langue: c, tradOk: "", texteSource: tape, texte: "" };
+      const n = { ...p, tradOk: "" };
+      for (const k of liste) {
+        const tape = estTraduit(p) ? p[cleSource(k)] || "" : p[k] || "";
+        if (c === "fr" || p.direct === "oui") { n[k] = tape; n[cleSource(k)] = ""; }
+        else { n[cleSource(k)] = tape; n[k] = ""; }
+      }
+      if (c === "fr") return { ...n, langue: "", direct: "", ...(multi ? { langueCles: "" } : {}) };
+      return { ...n, langue: c, ...(multi ? { langueCles: cleListe } : {}) };
     });
   }
   function basculerDirect(on) {
     setFieldValues((p) => {
-      if (on) return { ...p, direct: "oui", tradOk: "", texte: p.texteSource || p.texte || "", texteSource: "" };
-      return { ...p, direct: "", tradOk: "", texteSource: p.texte || "", texte: "" };
+      const n = { ...p, direct: on ? "oui" : "", tradOk: "" };
+      for (const k of liste) {
+        if (on) { n[k] = p[cleSource(k)] || p[k] || ""; n[cleSource(k)] = ""; }
+        else { n[cleSource(k)] = p[k] || ""; n[k] = ""; }
+      }
+      return n;
     });
   }
 
   const nom = L.nom.toLowerCase();
   const Le = /^[aeiouéèh]/.test(nom) ? "L'" : "Le ";
+  const plusieurs = multi && liste.length > 1;
   const note = code === "fr"
-    ? "Votre texte est gravé tel que vous l'écrivez."
+    ? (plusieurs ? "Vos textes sont gravés tels que vous les écrivez." : "Votre texte est gravé tel que vous l'écrivez.")
     : fv.direct === "oui"
-      ? `Écrivez votre texte en ${nom} : il est gravé tel quel.`
-      : `Écrivez en français, nous le traduisons en ${nom}.${L.police ? ` ${Le}${nom} a son propre alphabet : le choix « Écriture » plus bas ne change pas ce texte.` : ""}`;
+      ? `Écrivez ${plusieurs ? "vos textes" : "votre texte"} en ${nom} : ${plusieurs ? "ils sont gravés tels quels" : "il est gravé tel quel"}.`
+      : `Écrivez en français, nous traduisons en ${nom}.${L.police ? ` ${Le}${nom} a son propre alphabet : le choix « Écriture » ne change pas ${plusieurs ? "ces textes" : "ce texte"}.` : ""}`;
   const cls = classeLangue(code);
-  const attente = traduit && grave && fv.tradOk !== "oui";
+  const aRelire = lignes.filter((l) => l.source);
+  const toutTraduit = aRelire.length > 0 && aRelire.every((l) => l.grave);
+  const attente = traduit && toutTraduit && fv.tradOk !== "oui";
+  const deux = aRelire.length > 1;
 
   return (
     <div className="field mqt-langue">
       <span className="ml-label">Langue de la gravure</span>
-      <ChoixLangue code={code} onChoix={choisirLangue} />
+      <ChoixLangue code={code} onChoix={choisirLangue} latin={latin} />
       <p className="mqt-note">{note}</p>
       {code !== "fr" && (
         <label className="mqt-swap">
           <input type="checkbox" checked={fv.direct === "oui"} onChange={(e) => basculerDirect(e.target.checked)} />
-          <span>J&apos;écris directement mon texte dans cette langue (pas de traduction)</span>
+          <span>J&apos;écris directement {plusieurs ? "mes textes" : "mon texte"} dans cette langue (pas de traduction)</span>
         </label>
       )}
-      {traduit && source && (
+      {traduit && aRelire.length > 0 && (
         <div className="mqt-trad">
-          <div className="mqt-two">
-            <div><small>Vous avez écrit</small><b>{source}</b></div>
-            <div><small>Gravé en {nom}</small><b className={cls} dir={L.dir}>{grave || "…"}</b></div>
-          </div>
+          {aRelire.map((l) => (
+            <div className="mqt-two" key={l.key}>
+              <div><small>{plusieurs && l.label ? `${l.label} · vous avez écrit` : "Vous avez écrit"}</small><b>{l.source}</b></div>
+              <div><small>Gravé en {nom}</small><b className={cls} dir={L.dir}>{l.grave || "…"}</b></div>
+            </div>
+          ))}
           <p className={`mqt-etat${/pas répondu/.test(etat) ? " ko" : ""}`}>{etat}</p>
           <p className="mqt-conseil">Un doute ? Faites-le relire par une personne qui parle cette langue avant de commander.</p>
-          <label className={`mqt-check${attente ? " attend" : ""}${grave ? "" : " off"}`}>
-            <input type="checkbox" disabled={!grave} checked={fv.tradOk === "oui"} onChange={(e) => set({ tradOk: e.target.checked ? "oui" : "" })} />
-            <span><b>J&apos;ai relu le texte traduit et je confirme qu&apos;il est exact.</b> Il sera gravé exactement comme il s&apos;affiche ci-dessus et ne pourra plus être modifié.</span>
+          <label className={`mqt-check${attente ? " attend" : ""}${toutTraduit ? "" : " off"}`}>
+            <input type="checkbox" disabled={!toutTraduit} checked={fv.tradOk === "oui"} onChange={(e) => set({ tradOk: e.target.checked ? "oui" : "" })} />
+            <span><b>J&apos;ai relu {deux ? "les textes traduits et je confirme qu'ils sont exacts" : "le texte traduit et je confirme qu'il est exact"}.</b> {deux ? "Ils seront gravés exactement comme ils s'affichent" : "Il sera gravé exactement comme il s'affiche"} ci-dessus et ne {deux ? "pourront" : "pourra"} plus être modifié{deux ? "s" : ""}.</span>
           </label>
         </div>
       )}

@@ -36,7 +36,9 @@ export function verresParVariante(variant) {
 // Pas une gravure : les réglages, et la langue de la gravure (09/11/2026 : « langue » rempli comptait comme
 // une image, et le verre 1 perdait son texte offert dès qu'une autre langue que le français était choisie).
 const NEUTRES = new Set(["police", "emplacement", "mode", "decor", "coffret", "deuxEmplacement", "sens", "motifCount",
-  "langue", "texteSource", "direct", "tradOk", "decorPlace"]);
+  "langue", "texteSource", "direct", "tradOk", "decorPlace", "langueCles"]);
+// Le texte tapé en français avant traduction (texteSource, rectoSource…) n'est pas une gravure de plus.
+const neutre = (k) => NEUTRES.has(k) || /Source$/.test(k);
 // Façon de graver choisie dans le parcours guidé : une image (modèle, lettre fleurie, photo / logo, dessin de Noël)
 // compte comme l'image offerte du verre 1 DÈS QU'ELLE EST CHOISIE (avant même l'envoi de la photo), donc le texte
 // qui l'accompagne coûte +3 €. Seul « Mon propre texte » laisse le premier texte offert (09/11/2026).
@@ -46,7 +48,7 @@ const plein = (v) => (v && typeof v === "object") ? Object.keys(v).length > 0 : 
 
 /** Le verre porte-t-il une gravure (photo, modèle, lettre, texte…) ? */
 export function verreGrave(fv) {
-  return Object.entries(fv || {}).some(([k, v]) => !NEUTRES.has(k) && plein(v));
+  return Object.entries(fv || {}).some(([k, v]) => !neutre(k) && plein(v));
 }
 
 /** Empreinte d'une gravure : deux verres « identiques » ont la même. */
@@ -90,7 +92,7 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
   const empl = (fv) => (fv?.emplacement === "deux" ? engravingExtra(product, { emplacement: "deux" }, variantId).amount : 0);
   // Le verre porte-t-il une image / un logo / un modèle (un champ gravé qui, seul,
   // ne coûte rien) ? un texte (un champ qui se paie) ?
-  const aImage = (fv) => modeImage(fv) || Object.entries(fv || {}).some(([k, v]) => !NEUTRES.has(k) && plein(v)
+  const aImage = (fv) => modeImage(fv) || Object.entries(fv || {}).some(([k, v]) => !neutre(k) && plein(v)
     && (k === cfg.modeleSubExtra?.key || engravingExtra(product, { [k]: v }, variantId).amount === 0));
   const aTexte = (fv) => engravingExtra(product, fv, variantId).amount - empl(fv) > 0;
   const cle1 = empreinte(v1);
@@ -133,8 +135,8 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
 export function texteOffertVerre1(product, fields = {}, variantId = null, candidats = null) {
   const fv = fields || {};
   const ordre = candidats || (product?.personalizationFields || []).map((f) => f.key);
-  const payant = (k) => !NEUTRES.has(k) && engravingExtra(product, { [k]: fv[k] ?? "x" }, variantId).amount > 0;
-  const image = Object.entries(fv).some(([k, v]) => !NEUTRES.has(k) && plein(v)
+  const payant = (k) => !neutre(k) && engravingExtra(product, { [k]: fv[k] ?? "x" }, variantId).amount > 0;
+  const image = Object.entries(fv).some(([k, v]) => !neutre(k) && plein(v)
     && (k === product?.engravingPricing?.modeleSubExtra?.key || engravingExtra(product, { [k]: v }, variantId).amount === 0));
   if (image || modeImage(fv)) return null;
   const cles = [...ordre, ...Object.keys(fv).filter((k) => !ordre.includes(k))];

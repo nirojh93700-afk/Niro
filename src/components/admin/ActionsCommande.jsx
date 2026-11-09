@@ -17,7 +17,7 @@ import { formatEuro } from "@/lib/format";
 import { refDe, adresseLigne } from "@/lib/fileCommandes";
 
 // Clés des réglages qui ne sont pas un texte à relire (images, mises en page, fichiers).
-const CLES_TECHNIQUES = /^(photo|image|logo|src|url|layout|apercu|preview|artwork|capture|fichier|data|cn|mp|motifCount|texteSource|tradOk|direct)$|Image$|Src$|Layout$/i;
+const CLES_TECHNIQUES = /^(photo|image|logo|src|url|layout|apercu|preview|artwork|capture|fichier|data|cn|mp|motifCount|texteSource|tradOk|direct|langueCles)$|Image$|Src$|Layout$|Source$/i;
 
 // Résumé de la gravure d'une ligne : le récap écrit à la commande, sinon les champs tapés.
 function resumeGravure(s, it) {

@@ -76,14 +76,36 @@ export function nomFichierLangue(code) {
   return (l ? l.nom : "francais").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 }
 
+// ── Plusieurs textes sur une même pièce (bijoux recto / verso, décoration de Noël, bois…, 09/11/2026 :
+// « les langues… pour tout, même les bijoux, partout il y a du texte à graver »). UNE langue par pièce,
+// appliquée à chacun de ses textes. Pour chaque texte de clé k : fv[k] = le texte GRAVÉ, fv[k + "Source"] =
+// ce que la cliente a tapé en français (si traduit). fv.langueCles = « recto,verso » (absent = « texte »).
+export const cleSource = (k) => `${k}Source`;
+export function clesLangue(fv) {
+  const c = String(fv?.langueCles || "").split(",").map((x) => x.trim()).filter(Boolean);
+  return c.length ? c : ["texte"];
+}
+/** Les textes de la pièce dans la langue choisie : [{ cle, grave, source }]. */
+export function textesEnLangue(fv) {
+  if (!langueActive(fv)) return [];
+  return clesLangue(fv)
+    .map((k) => ({ cle: k, grave: String(fv[k] ?? "").trim(), source: String(fv[cleSource(k)] ?? "").trim() }))
+    .filter((t) => t.grave || (estTraduit(fv) && t.source));
+}
+/** La pièce porte au moins un texte gravé dans une autre langue que le français. */
+export function aTexteEnLangue(fv) {
+  return textesEnLangue(fv).some((t) => t.grave);
+}
+
 /**
  * Contrôle de la commande : null si tout va bien, sinon la phrase qui dit ce qui manque.
  * Même règle sur la fiche (bouton grisé) et au paiement (ligne refusée).
  */
 export function manqueLangue(fv) {
   if (!estTraduit(fv)) return null;
-  if (!String(fv.texteSource || "").trim()) return null; // rien d'écrit dans ce champ
-  if (!String(fv.texte || "").trim()) return "La traduction arrive…";
+  const ts = clesLangue(fv).map((k) => ({ s: String(fv[cleSource(k)] || "").trim(), g: String(fv[k] || "").trim() })).filter((t) => t.s);
+  if (!ts.length) return null; // rien d'écrit
+  if (ts.some((t) => !t.g)) return "La traduction arrive…";
   if (fv.tradOk !== "oui") return "Cochez « J'ai relu le texte traduit » pour continuer.";
   return null;
 }
@@ -93,7 +115,8 @@ export function resumeLangue(fv) {
   if (!langueActive(fv)) return "";
   const l = langueDe(fv.langue);
   if (fv.direct === "oui") return `${l.nom} — texte fourni par la cliente dans sa langue, gravé tel quel`;
-  return `${l.nom} — traduit depuis « ${String(fv.texteSource || "").trim()} » (traduction automatique, relue et validée par la cliente, case cochée)`;
+  const src = clesLangue(fv).map((k) => String(fv[cleSource(k)] || "").trim()).filter(Boolean);
+  return `${l.nom} — traduit depuis ${src.map((x) => `« ${x} »`).join(", ") || "« »"} (traduction automatique, relue et validée par la cliente, case cochée)`;
 }
 
 /** Où mettre le décor : autour du texte (défaut), de la date, ou des deux. */
@@ -115,7 +138,7 @@ export function languesDeLaCommande(order) {
   for (const it of spec.filter(Boolean)) {
     const lots = [it.fields || {}, ...(Array.isArray(it.perGlass) ? it.perGlass : [])];
     for (const fv of lots) {
-      if (!langueActive(fv) || !String(fv.texte || "").trim()) continue;
+      if (!aTexteEnLangue(fv)) continue;
       const l = langueDe(fv.langue);
       if (out.some((x) => x.code === l.code && x.article === it.name)) continue;
       out.push({ code: l.code, nom: l.nom, direct: fv.direct === "oui", article: it.name || "" });

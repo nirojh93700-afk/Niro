@@ -19,10 +19,10 @@ import { photosEnvoyees } from "@/lib/apercuCote";
 import { optionsArticle } from "@/lib/optionsVendues";
 import { MODELES, imageDesign } from "@/lib/modeles";
 import { texteAvecDecor } from "@/lib/decorTexte";
-import { langueActive, langueDe } from "@/lib/traductionGravure";
+import { langueDe, aTexteEnLangue } from "@/lib/traductionGravure";
 import { lireLigne, quoiElement } from "@/lib/gobeletParcours";
 
-const IGNORES = new Set(["emplacement", "mode", "police", "deuxEmplacement", "langue", "direct", "tradOk", "decorPlace"]);
+const IGNORES = new Set(["emplacement", "mode", "police", "deuxEmplacement", "langue", "direct", "tradOk", "decorPlace", "langueCles"]);
 const estUrl = (s) => typeof s === "string" && /^(\/api\/img\/|https?:\/\/|data:image\/|\/produits\/)/.test(s);
 const norme = (s) => String(s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
 
@@ -120,7 +120,7 @@ export function oubliesAtelier(item) {
     }
   }
   // Texte dans une autre langue (07/11/2026) : la langue doit être écrite à l'atelier.
-  if (langueActive(champs) && String(champs.texte || "").trim() && !vu(langueDe(champs.langue).nom)) {
+  if (aTexteEnLangue(champs) && !vu(langueDe(champs.langue).nom)) {
     out.push({ cle: "langue", libelle: "Langue de la gravure", valeur: langueDe(champs.langue).nom, photo: false });
   }
   return out;

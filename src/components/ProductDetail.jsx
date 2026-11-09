@@ -1,7 +1,8 @@
 "use client";
 
 import { texteAvecDecor } from "@/lib/decorTexte";
-import { langueActive, langueDe, resumeLangue } from "@/lib/traductionGravure";
+import { langueActive, langueDe, resumeLangue, manqueLangue, cleSource, aTexteEnLangue } from "@/lib/traductionGravure";
+import LangueGravure, { valeurChampTexte, patchChampTexte } from "./LangueGravure";
 import { classeLangue } from "@/lib/policeLangueClient";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -408,6 +409,17 @@ export default function ProductDetail({ product, realisations = [] }) {
       (!f.showIfEmplacement || fieldValues["emplacement"] === f.showIfEmplacement) &&
       (!f.showIfField || fieldValues[f.showIfField] === f.showIfValue)
   );
+  // Langue de la gravure sur TOUS les produits à texte (09/11/2026, gérant : « les langues… pour tout,
+  // même les bijoux, partout il y a du texte à graver ») : une langue pour la pièce, appliquée à chacun
+  // de ses textes libres (pas aux dates, initiales, numéros). Le parcours des verres a son propre bloc.
+  const NON_TRADUIT = /date|ann[ée]e|initiale|num[ée]ro|heure|chiffre/i;
+  const champsLangue = (product.parcoursGuide || product.gobeletParcours) ? [] : visibleFields
+    .filter((f) => (!f.type || f.type === "text" || f.type === "textarea") && !NON_TRADUIT.test(f.key) && !NON_TRADUIT.test(f.label || ""))
+    .filter((f, i, a) => a.findIndex((x) => x.key === f.key) === i)
+    .map((f) => ({ key: f.key, label: String(f.label || "").replace(/\s*\([^)]*\)/g, "").trim() }));
+  const clesLangueFiche = champsLangue.map((c) => c.key);
+  const dernierChampLangue = clesLangueFiche[clesLangueFiche.length - 1] || null;
+  const langueManque = champsLangue.length ? manqueLangue({ ...fieldValues, langueCles: clesLangueFiche.join(",") }) : null;
   // Date de l'image du fond (26/10/2026) : la case disparaît sans « face + fond » → elle se vide (jamais payée cachée).
   useEffect(() => {
     if (fieldValues.dateImageFond && fieldValues.emplacement !== "deux") setFieldValues((prev) => ({ ...prev, dateImageFond: "" }));
@@ -462,6 +474,7 @@ export default function ProductDetail({ product, realisations = [] }) {
   // Parcours guidé (carafe…) : la gravure doit être COMPLÈTE pour ajouter au panier.
   const parcours = product.parcoursGuide ? parcoursEtat(product, fieldValues) : product.gobeletParcours ? gobeletEtat(fieldValues) : null;
   const parcoursBloque = Boolean(parcours) && !parcours.ok;
+  const ajoutBloque = parcoursBloque || Boolean(langueManque);
 
   // Libellé lisible d'une valeur (police, couleur, liste déroulante).
   function valueLabel(field, value) {
@@ -576,7 +589,7 @@ export default function ProductDetail({ product, realisations = [] }) {
         parts.push(`Texte gravé placé : ${crystalTextPos.label}`);
       }
       // Texte dans une autre langue (07/11/2026) : la langue, le texte tapé et la relecture.
-      if (langueActive(fieldValues) && (fieldValues.texte || "").trim()) {
+      if (aTexteEnLangue(fieldValues)) {
         const r = resumeLangue(fieldValues);
         parts.push(forClient ? `en ${langueDe(fieldValues.langue).nom.toLowerCase()}` : `Langue : ${r}`);
       }
@@ -596,7 +609,7 @@ export default function ProductDetail({ product, realisations = [] }) {
     if (fv.photo) p.push("photo/logo fourni");
     if ((fv.prenom || "").trim()) p.push(`« ${fv.prenom.trim()} »`);
     if ((fv.texte || "").trim()) p.push(`« ${texteAvecDecor("texte", fv.texte, fv)} »`);
-    if ((fv.texte || "").trim() && langueActive(fv)) p.push(forClient ? `en ${langueDe(fv.langue).nom.toLowerCase()}` : `langue : ${resumeLangue(fv)}`);
+    if (aTexteEnLangue(fv)) p.push(forClient ? `en ${langueDe(fv.langue).nom.toLowerCase()}` : `langue : ${resumeLangue(fv)}`);
     if ((fv.initiale || "").trim()) p.push(`initiale ${fv.initiale.trim()}`);
     if ((fv.date || "").trim()) p.push(`date ${texteAvecDecor("date", fv.date, fv)}`);
     if ((fv.texte2 || "").trim()) p.push(`date ${texteAvecDecor("texte2", fv.texte2, fv)}`);
@@ -1102,10 +1115,11 @@ export default function ProductDetail({ product, realisations = [] }) {
   async function handleAdd() {
     if (soldOut || preparing) return;
     if (parcoursBloque) { setError(parcours.manque || "Merci de choisir votre gravure."); return; }
+    if (langueManque) { setError(langueManque); return; }
     // Vérifie les champs de gravure obligatoires (selon l'option choisie).
     if (product.personalizationFields) {
       const missing = visibleFields.find(
-        (f) => f.type !== "note" && f.type !== "modele" && f.type !== "couverts" && !f.optional && !(fieldValues[f.key] || "").trim()
+        (f) => f.type !== "note" && f.type !== "modele" && f.type !== "couverts" && !f.optional && !(fieldValues[f.key] || fieldValues[cleSource(f.key)] || "").toString().trim()
       );
       // Modèle de gravure : au moins un texte requis (sauf si le champ est facultatif).
       if (modeleField && !modeleField.optional) {
@@ -2090,9 +2104,13 @@ export default function ProductDetail({ product, realisations = [] }) {
                   );
                 }
                 const max = f.maxLength || 80;
-                const val = fieldValues[f.key] || "";
+                const enLangue = clesLangueFiche.includes(f.key);
+                const val = enLangue ? valeurChampTexte(fieldValues, f.key) : fieldValues[f.key] || "";
+                const ecrire = (v) => (enLangue ? setFieldValues((prev) => ({ ...prev, ...patchChampTexte(prev, v, f.key) })) : setField(f.key, v));
+                const dirSaisie = enLangue && fieldValues.direct === "oui" && langueDe(fieldValues.langue)?.dir === "rtl" ? "rtl" : undefined;
                 return (
-                  <div className="field" key={f.key}>
+                  <div key={f.key}>
+                  <div className="field">
                     {labelEl}
                     {f.type === "textarea" ? (
                       <textarea
@@ -2100,7 +2118,8 @@ export default function ProductDetail({ product, realisations = [] }) {
                         placeholder={f.placeholder || ""}
                         value={val}
                         maxLength={max}
-                        onChange={(e) => setField(f.key, e.target.value)}
+                        dir={dirSaisie}
+                        onChange={(e) => ecrire(e.target.value)}
                       />
                     ) : (
                       <input
@@ -2109,10 +2128,15 @@ export default function ProductDetail({ product, realisations = [] }) {
                         placeholder={f.placeholder || ""}
                         value={val}
                         maxLength={max}
-                        onChange={(e) => setField(f.key, e.target.value)}
+                        dir={dirSaisie}
+                        onChange={(e) => ecrire(e.target.value)}
                       />
                     )}
                     <span className="char-count">{val.length}/{max}</span>
+                  </div>
+                  {f.key === dernierChampLangue && (
+                    <LangueGravure fv={fieldValues} setFieldValues={setFieldValues} cles={champsLangue} latin={Boolean(product.engrave3d)} />
+                  )}
                   </div>
                 );
               })}
@@ -2358,12 +2382,12 @@ export default function ProductDetail({ product, realisations = [] }) {
                 +
               </button>
             </div>
-            <button className={`btn btn-gold${parcoursBloque ? " prc-off" : ""}`} style={{ flex: 1 }} onClick={handleAdd} disabled={soldOut || preparing || parcoursBloque}>
+            <button className={`btn btn-gold${ajoutBloque ? " prc-off" : ""}`} style={{ flex: 1 }} onClick={handleAdd} disabled={soldOut || preparing || ajoutBloque}>
               {soldOut ? "Épuisé" : preparing ? "Préparation du visuel…" : added ? "Ajouté au panier ✓" : "Ajouter au panier"}
             </button>
           </div>
-          {parcoursBloque && !soldOut && (
-            <p className="prc-addhint">{parcours.manque}</p>
+          {ajoutBloque && !soldOut && (
+            <p className="prc-addhint">{parcoursBloque ? parcours.manque : langueManque}</p>
           )}
           {/* Pour celle qui hésite : garder la création sans l'acheter tout de suite. */}
           <WishlistButton

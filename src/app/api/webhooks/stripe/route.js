@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { texteAvecDecor } from "@/lib/decorTexte";
-import { langueActive, langueDe, ecritureLangue, languesDeLaCommande, nomsLangues } from "@/lib/traductionGravure";
-import { lienFichierGravure } from "@/components/admin/FichierGravure";
+import { langueActive, langueDe, ecritureLangue, languesDeLaCommande, nomsLangues, textesEnLangue } from "@/lib/traductionGravure";
+import { liensFichierGravure } from "@/components/admin/FichierGravure";
 import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail, ensureReferralCode, setPromoCode, addScheduledEmail, hasAutoSent, markAutoSent, logComm } from "@/lib/stock";
 import { sendClientMail, brandedMessage, boutonRepondre } from "@/lib/clientMail";
 import { genCodeCadeau, texteEmailDestinataire, texteEmailAcheteur, CARTE_VALIDITE_JOURS } from "@/lib/carteCadeau";
@@ -456,13 +456,16 @@ export async function POST(req) {
     // Texte dans une autre langue (07/11/2026) : langue, texte tapé, texte gravé, contrôle + fichier à graver.
     const langueHtml = (it) => {
       const f = it?.fields || {};
-      if (!langueActive(f) || !String(f.texte || "").trim()) return "";
-      const lien = lienFichierGravure({ ...it, orderRef: typeof orderRef === "string" ? orderRef : "" });
+      const textes = textesEnLangue(f).filter((t) => t.grave);
+      if (!textes.length) return "";
+      const liens = liensFichierGravure({ ...it, orderRef: typeof orderRef === "string" ? orderRef : "" });
+      const plusieurs = textes.length > 1;
       return `<div style="margin:0 0 8px;padding:8px 10px;background:#fdecec;border:2px solid #d64545;border-radius:8px;">
         <p style="margin:0 0 4px;color:#b32b2b;font-weight:bold;">🌐 Gravure en ${escapeHtml(langueDe(f.langue).nom.toLowerCase())} — ${f.direct === "oui" ? "texte fourni par la cliente dans sa langue" : "traduction automatique relue et validée par la cliente (case cochée) : à relire avant de graver"}</p>
-        ${f.direct !== "oui" && f.texteSource ? `<p style="margin:0 0 4px;"><strong>Texte tapé :</strong> ${escapeHtml(f.texteSource)}</p>` : ""}
-        <p style="margin:0 0 4px;"><strong>Texte à graver :</strong> <span dir="auto" style="font-size:18px;">${escapeHtml(texteAvecDecor("texte", f.texte, f))}</span></p>
-        ${lien ? `<p style="margin:0;"><a href="${BRAND.siteUrl}${lien.href}" style="color:${BRAND.gold};font-weight:bold;">⬇ ${escapeHtml(lien.nom)}</a> (lettres en tracés, prêt pour le laser)</p>` : ""}
+        ${textes.map((t) => `
+        ${f.direct !== "oui" && t.source ? `<p style="margin:0 0 4px;"><strong>Texte tapé${plusieurs ? ` (${escapeHtml(t.cle)})` : ""} :</strong> ${escapeHtml(t.source)}</p>` : ""}
+        <p style="margin:0 0 4px;"><strong>Texte à graver${plusieurs ? ` (${escapeHtml(t.cle)})` : ""} :</strong> <span dir="auto" style="font-size:18px;">${escapeHtml(texteAvecDecor(t.cle, f[t.cle], f) || t.grave)}</span></p>`).join("")}
+        ${liens.map((lien) => `<p style="margin:0;"><a href="${BRAND.siteUrl}${lien.href}" style="color:${BRAND.gold};font-weight:bold;">⬇ ${escapeHtml(lien.nom)}</a> (lettres en tracés, prêt pour le laser)</p>`).join("")}
       </div>`;
     };
     const persoBlocks = specItems.map((it) => {

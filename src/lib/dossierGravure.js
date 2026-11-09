@@ -19,7 +19,7 @@ import { consignesGravure } from "@/lib/consignesGravure";
 import { lignesGravure } from "@/lib/engravingSheet";
 import { imagesOrigineArticle } from "@/lib/imagesOrigine";
 import { photosEnvoyees } from "@/lib/apercuCote";
-import { lienFichierGravure } from "@/components/admin/FichierGravure";
+import { liensFichierGravure } from "@/components/admin/FichierGravure";
 import { langueActive, langueDe } from "@/lib/traductionGravure";
 
 export const STATUTS_DU_JOUR = ["a_preparer", "en_gravure"];
@@ -158,8 +158,9 @@ export function planDossier(orders, { sideConfig, sidesOf } = {}) {
 
         // 4. Texte dans une autre langue : SVG en tracés fabriqué par le serveur (même adresse que le bouton de la fiche).
         if (langueActive(item.fields)) {
-          const lien = lienFichierGravure({ ...item, orderRef: ref });
-          if (lien) fichiers.push({ nom: unique(`${nomBase}${lien.nom}`), kind: "svgLangue", url: lien.href, item, titre: `Texte en ${langueDe(item.fields.langue)?.nom || item.fields.langue}` });
+          for (const lien of liensFichierGravure({ ...item, orderRef: ref })) {
+            fichiers.push({ nom: unique(`${nomBase}${lien.nom}`), kind: "svgLangue", url: lien.href, item, titre: `Texte en ${langueDe(item.fields.langue)?.nom || item.fields.langue}` });
+          }
         }
       }
     });
