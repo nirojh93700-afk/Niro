@@ -17,7 +17,7 @@ export async function POST(req) {
   if (!body?.variantId) {
     return Response.json({ error: "variantId manquant." }, { status: 400 });
   }
-  const avant = (await getStockMap().catch(() => ({})))[body.variantId] ?? null;
+  const avant = (await getStockMap(true).catch(() => ({})))[body.variantId] ?? null;
   const map = await setStock(body.variantId, body.stock);
   const apres = map[body.variantId] ?? null;
   // Journal d'activité (08/11/2026).

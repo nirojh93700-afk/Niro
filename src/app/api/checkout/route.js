@@ -1,4 +1,5 @@
 import { gobeletSupplement } from "@/lib/gobeletParcours";
+import { decouperStock } from "@/lib/stockMeta";
 import { manqueLangue } from "@/lib/traductionGravure";
 import { cnNormaliser, cnPrixGravure, cnResume } from "@/lib/carnet";
 import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
@@ -569,8 +570,8 @@ export async function POST(req) {
       mode: "payment",
       line_items: lineItems,
       metadata: {
-        // sert à décrémenter le stock après paiement (variantId:quantité)
-        stock: JSON.stringify(boughtVariants.map((b) => [b.variantId, b.qty])).slice(0, 480),
+        // sert à décrémenter le stock après paiement (variantId:quantité), sur plusieurs clés si la liste est longue
+        ...decouperStock(boughtVariants.map((b) => [b.variantId, b.qty])),
         promoCode: appliedCode,
         // Devis payé avec le panier : le webhook le marque « payé » et joint sa demande à la commande.
         ...(devisMeta || {}),

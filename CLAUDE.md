@@ -15,6 +15,14 @@
   Limites : marque-pages = une langue pour toute la ligne ; aperçu à pastilles du gobelet sans l'écriture de la langue ; e-mail 🛎️ avec la clé brute quand il y a plusieurs textes ;
   texte vertical des marque-pages en arabe / hébreu / tamoul pas regardé. `sanitizeSpec` garde 80 clés. `npm run test-traduction` (71).
 - Gestion ⑧ : le 09/11 soir il a redit « plus tard pour l'accès ».
+- 🔴 **STOCK QUI NE BAISSAIT PAS À LA VENTE (gérant, 09/11 soir)** — deux causes trouvées dans le code, corrigées sur la branche de travail :
+  ① la vente, Gestion et les achats lisaient le stock dans le cache de 60 s de leur instance puis réécrivaient le document ENTIER → une copie périmée effaçait la baisse
+  d'une autre instance. Maintenant TOUTE écriture passe par `modifierStock(fn)` (`stock.js` : lecture fraîche + écriture dans une transaction Firestore ; base muette = rien
+  n'est écrit) : `setStock`, `adjustStockMany`, `decrementMany`, `ajouterRate`, `annulerRate` ; Gestion lit en frais (`getStockMap(true)`).
+  ② la liste envoyée à Stripe était coupée à 480 caractères → gros panier = texte illisible = rien retiré. Maintenant `src/lib/stockMeta.js` (`decouperStock` sur les clés
+  `stock`, `stock2`…, `lireStockMeta`, `texteStock`), `npm run test-stock-meta`. ⛔ Ne jamais écrire le stock autrement que par `modifierStock`.
+  Rappel donné au gérant : un produit sans stock saisi (« non suivi ») ne baisse jamais : carnet, puzzles, verre à vin 47 cl, cocktail, tumbler, supports téléphone,
+  porte-serviettes, cartes étapes, veilleuse prénom, photophore, 2 options de la décoration de Noël (relevé du 09/11). Emballages / matériel : baissent à « Valider » ou à « Expédier ».
 - ⛔ Gestion ⑦ (42 vieilles promos) : PAS touché (il l'a exclu). Gestion ⑧ (accès limité pour une aide) : PAS construit, question reposée (il l'avait mis « pour plus tard » le 08/11).
 - www.nivcreation.fr redirige DÉJÀ vers nivcreation.fr (vérifié le 09/11) ; flux Google `flux-google.xml` répond (91 produits) ; médiateur : son adhésion d'abord.
 - ⚠️ Environnement « Crafia » : npm passe seulement par le relais → `NO_PROXY=localhost,127.0.0.1 no_proxy=localhost,127.0.0.1 npm_config_noproxy=localhost,127.0.0.1 npm ci`.

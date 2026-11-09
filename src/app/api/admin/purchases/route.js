@@ -23,7 +23,7 @@ const MAX_FILE_BYTES = 12 * 1024 * 1024;
 // Toutes les lignes de stock possibles : variantes + accessoires en option.
 async function stockRows() {
   const products = await getCatalogAdmin();
-  const map = await getStockMap();
+  const map = await getStockMap(true);
   const rows = []; const seen = new Set();
   for (const p of products) {
     for (const v of p.variants || []) {

@@ -23,6 +23,7 @@
     "test-marque-pages": "node --import ./tools/alias-register.mjs tools/tests/marque-pages.test.mjs",
     "test-devis-quantite": "node --import ./tools/alias-register.mjs tools/tests/devis-quantite.mjs",
     "test-devis-panier": "node --import ./tools/alias-register.mjs tools/tests/devis-panier.test.mjs",
+    "test-stock-meta": "node tools/tests/stock-meta.mjs",
     "test-reachat": "node tools/tests/reachat.mjs",
     "test-materiel":"node --import ./tools/alias-register.mjs tools/tests/materiel.test.mjs",
     "audit-photos": "node --import ./tools/alias-register.mjs tools/audit-photos.mjs",

@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { decouperStock } from "@/lib/stockMeta";
 import { getQuote } from "@/lib/firebase";
 import { toCents } from "@/lib/format";
 import { verifierCodeDevis } from "@/lib/promoDevis";
@@ -100,7 +101,7 @@ export async function POST(req) {
         ...promoMeta,
         ...relaisMeta,
         ...(provMeta ? { prov: provMeta } : {}), // d'où vient la cliente (facultatif)
-        ...(stockPairs.length ? { stock: JSON.stringify(stockPairs).slice(0, 480) } : {}),
+        ...decouperStock(stockPairs),
       },
       success_url: `${siteUrl}/merci?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${siteUrl}/document/${id}`,

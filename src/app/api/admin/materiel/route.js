@@ -38,7 +38,7 @@ export async function GET(req) {
   if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   const orderId = new URL(req.url).searchParams.get("orderId") || "";
   const { items, usage } = await getMateriel(true);
-  const [rates, stock] = await Promise.all([getRates(true).catch(() => []), getStockMap().catch(() => ({}))]);
+  const [rates, stock] = await Promise.all([getRates(true).catch(() => []), getStockMap(true).catch(() => ({}))]);
   const out = { ok: true, items, cats: MATERIEL_CATS, kits: MATERIEL_KITS, utilise: utilise(usage), usages: usage, nbCommandes: Object.keys(usage).length, rates, stock };
   if (orderId) {
     out.usage = usage[orderId] || null;

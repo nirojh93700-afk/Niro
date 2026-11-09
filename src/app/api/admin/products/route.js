@@ -10,7 +10,7 @@ export async function GET(req) {
   if (!(await isAdmin(req))) {
     return Response.json({ error: "Accès refusé." }, { status: 401 });
   }
-  const map = await getStockMap();
+  const map = await getStockMap(true);
   const overrides = await getImageOverrides();
   const promos = await getPromos();
   const products = await getCatalogAdmin();
