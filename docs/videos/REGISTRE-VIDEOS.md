@@ -858,3 +858,19 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #gravure #cadeauunique #ideecadeau
+
+## Vidéo 54 — Nouveauté : la décoration de Noël en cristal (09/11/2026)
+- Demande : « dès que tout sera en ligne, tu me fais une vidéo pour la nouveauté » (fiche `decoration-noel-verre-gravee`, en ligne le 09/11).
+- Style NEUF « carte de vœux » : fond rouge de Noël et or, neige qui tombe, chaque exemple dans une carte à liseré doré qui entre en tournant,
+  grande phrase Playfair + ligne dorée, points de progression, récapitulatif des 4 cartes, fin avec le bouton nivcreation.fr qui respire.
+- Photos = les 4 exemples de la fiche SANS l'étiquette « EXEMPLE » (dessin n° 3 « Camille », photo de couple, dessin n° 20 « Famille Martin »,
+  photo d'enfant « Mon premier Noël ») : `python3 tools/maquettes/deco-noel-cristal-exemples.py <dossier> --sans-etiquette`.
+  23 s, sans son, 1080 × 1920 (4,8 Mo) et 720 × 1280 (1,5 Mo). Aucun prix. Fichiers à supprimer le 11/11.
+- Script : `python3 tools/video/noel_cristal_54.py <polices> <dossier exemples> <sortie> [--apercu]` (polices : PlayfairDisplay.ttf, Inter.ttf, GreatVibes.ttf).
+
+**Vidéo 54 — Nouveau : la décoration de Noël en cristal** (Décoration de Noël en cristal gravée)
+> 🎄 Nouveau à l'atelier : la décoration de Noël en cristal, à suspendre au sapin ✨
+> Un prénom, votre photo ou un de nos dessins de Noël, gravés en blanc givré 💛 Un souvenir à ressortir chaque année 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #decorationdenoel #cadeaupersonnalise #noel2026 #ideecadeau
