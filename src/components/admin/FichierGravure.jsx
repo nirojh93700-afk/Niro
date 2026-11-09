@@ -3,6 +3,12 @@
 // lettres en TRACÉS : aucune police à installer dans le logiciel du laser. Aperçu noir sur blanc + bouton.
 import { langueDe, langueActive, nomFichierLangue, textesEnLangue } from "@/lib/traductionGravure";
 import { texteAvecDecor } from "@/lib/decorTexte";
+import { cnLibelleCle } from "@/lib/carnet";
+import { mpLibelleCle } from "@/lib/marquePages";
+import { gobeletLibelleCle } from "@/lib/gobeletParcours";
+
+/** Où se grave le texte de cette clé, en mots (carnet, marque-pages, gobelet) ; sinon la clé elle-même. */
+const ouTexte = (item, cle) => cnLibelleCle(cle) || mpLibelleCle(cle) || (/^gt\d+$/.test(cle) ? gobeletLibelleCle(item?.fields || {}, cle) : "") || cle;
 import FichierGravureFormats from "@/components/admin/FichierGravureFormats";
 
 /** Un fichier par texte gravé dans une autre langue (texte seul, ou recto, verso…). */
@@ -37,7 +43,7 @@ export default function FichierGravure({ item }) {
       <div style={{ fontWeight: 700, color: "#8a6d1f", fontSize: "0.9rem", marginBottom: 6 }}>{plusieurs ? "Fichiers à graver" : "Fichier à graver"} — {langueDe(item.fields.langue).nom}</div>
       {liens.map((a, i) => (
         <div key={a.nom} style={{ marginBottom: plusieurs ? 8 : 0 }}>
-          {plusieurs && <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "#6b5d48" }}>{a.cle}</div>}
+          {plusieurs && <div style={{ fontSize: "0.82rem", fontWeight: 600, color: "#6b5d48" }}>{ouTexte(item, a.cle)}</div>}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={vues[i].href} alt="Fichier à graver" style={{ display: "block", width: "100%", maxWidth: 300, aspectRatio: "2 / 1", background: "#fff", border: "1px solid #e7d3a1", borderRadius: 6 }} />
           <a href={a.href} download={a.nom} className="no-print" style={{ display: "inline-block", marginTop: 6, fontWeight: 700, color: "#8a6d1f" }}>⬇ {a.nom}</a>

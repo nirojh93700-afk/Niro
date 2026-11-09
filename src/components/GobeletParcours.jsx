@@ -218,7 +218,8 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
   const edRef = useRef(null);
   const recapRef = useRef(null);
 
-  const ecrire = (nouvelle, patch = null) => setFieldValues((prev) => gobeletEcrire(patch ? { ...prev, ...patch } : prev, nouvelle));
+  // fn reçoit la liste la plus récente (une traduction peut arriver entre deux gestes : elle ne doit pas être écrasée).
+  const ecrire = (fn, patch = null) => setFieldValues((prev) => gobeletEcrire(patch ? { ...prev, ...patch } : prev, fn(gobeletListe(prev))));
 
   // Langue de la gravure (09/11/2026) : une langue pour le gobelet, proposée dès qu'un texte est dans la gravure.
   // Le bloc commun (LangueGravure) lit et écrit des champs à plat : on les reporte dans les éléments.
@@ -270,10 +271,10 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
   function basculerDessin(n) {
     setMsg("");
     const i = liste.findIndex((e) => e.kind === "dessin" && e.num === n);
-    if (i >= 0) { ecrire(liste.filter((_, k) => k !== i)); return; }
+    if (i >= 0) { ecrire((l) => l.filter((e) => !(e.kind === "dessin" && e.num === n))); return; }
     const place = premiereLibre(liste);
     if (!place) { setMsg("Toutes les places du gobelet sont prises : retirez un élément avant d'en ajouter un autre."); return; }
-    ecrire([...liste, { kind: "dessin", num: n, ...place }]);
+    ecrire((l) => [...l, { kind: "dessin", num: n, ...place }]);
   }
 
   // Cadre, lettre, texte, photo : on remplit puis « Ajouter à ma gravure ».
@@ -293,16 +294,16 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
       const champ = e.kind === "texte" ? "texte" : e.kind === "cadre" || e.kind === "lettre" ? "nom" : null;
       if (champ && aDesLettres(e[champ])) { e.source = e[champ]; e[champ] = ""; }
     }
-    ecrire([...liste, e], langueActive(fieldValues) ? { tradOk: "" } : null);
+    ecrire((l) => [...l, e], langueActive(fieldValues) ? { tradOk: "" } : null);
     setEd({ ...VIDE, kind: ed.kind, police: ed.police });
     setMsg("");
     setTimeout(() => recapRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 60);
   }
 
-  function retirer(i) { ecrire(liste.filter((_, k) => k !== i)); }
+  function retirer(i) { ecrire((l) => l.filter((_, k) => k !== i)); }
   function deplacer(i, valeur) {
     const [side, zone] = valeur.split("|");
-    ecrire(liste.map((e, k) => (k === i ? { ...e, side, zone } : e)));
+    ecrire((l) => l.map((e, k) => (k === i ? { ...e, side, zone } : e)));
   }
 
   const ecr = (p) => getFontLabel(p).split(" — ")[0];

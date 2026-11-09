@@ -235,7 +235,8 @@ export function Planches({ valeur, onChoix, onFermer }) {
 function Editeur({ modele, v, onChange, owner, grille, setGrille, productSlug, lg, onFrappe }) {
   const A = MP_DATA.modeles[modele];
   const [envoi, setEnvoi] = useState({});
-  const maj = (key, patch) => onChange({ ...v, [key]: { ...v[key], ...patch } });
+  // Écriture sur l'état le plus récent (une traduction peut arriver entre deux frappes : elle ne doit pas être écrasée).
+  const maj = (key, patch) => onChange((p) => ({ ...p, [key]: { ...p[key], ...patch } }));
   return (
     <div className="mq-ed">
       <p className="mq-edi">Quatre emplacements, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un texte en haut et un dessin au milieu, ou l&apos;inverse, sur la face comme au dos. Un texte +3 €, un dessin, un cadre ou votre photo +4 €. Rien de coché = marque-page nu.</p>
@@ -414,8 +415,10 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   }
   function majSlot(i, patch) {
     setSlots((ss) => {
-      let n = ss.map((o, j) => (j === i ? { ...o, ...patch, touched: true } : o));
-      if (meme && i === 0 && patch.v) n = n.map((o, j) => (j === 0 ? o : { ...o, v: copie(patch.v) }));
+      // patch.v peut être une fonction (l'éditeur écrit sur la gravure la plus récente de ce marque-page).
+      const p = typeof patch.v === "function" ? { ...patch, v: patch.v(ss[i].v) } : patch;
+      let n = ss.map((o, j) => (j === i ? { ...o, ...p, touched: true } : o));
+      if (meme && i === 0 && p.v) n = n.map((o, j) => (j === 0 ? o : { ...o, v: copie(p.v) }));
       return n;
     });
   }

@@ -99,7 +99,8 @@ export function Gravure({ v, side, couleur, police, langue = "" }) {
 // --- L'éditeur d'une face : quatre emplacements -------------------------------------------------------------------------
 function Face({ side, v, onChange, grille, setGrille, productSlug, lg, onFrappe }) {
   const [envoi, setEnvoi] = useState({});
-  const maj = (z, patch) => onChange({ ...v, [side]: { ...v[side], [z]: { ...v[side][z], ...patch } } });
+  // Écriture sur l'état le plus récent (une traduction peut arriver entre deux frappes : elle ne doit pas être écrasée).
+  const maj = (z, patch) => onChange((p) => ({ ...p, [side]: { ...p[side], [z]: { ...p[side][z], ...patch } } }));
   return (
     <div className="mq-ed">
       {CN_ZONES.map(([z, lab, sub]) => {
