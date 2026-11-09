@@ -414,7 +414,7 @@ export default function ProductDetail({ product, realisations = [] }) {
   // de ses textes libres (pas aux dates, initiales, numéros). Le parcours des verres a son propre bloc.
   const NON_TRADUIT = /date|ann[ée]e|initiale|num[ée]ro|heure|chiffre/i;
   const champsLangue = (product.parcoursGuide || product.gobeletParcours) ? [] : visibleFields
-    .filter((f) => (!f.type || f.type === "text" || f.type === "textarea") && !NON_TRADUIT.test(f.key) && !NON_TRADUIT.test(f.label || ""))
+    .filter((f) => (!f.type || f.type === "text" || f.type === "textarea") && !NON_TRADUIT.test(f.key) && !/^\s*(date|ann[ée]e|initiales?|num[ée]ro|heure|chiffre)\b/i.test(f.label || ""))
     .filter((f, i, a) => a.findIndex((x) => x.key === f.key) === i)
     .map((f) => ({ key: f.key, label: String(f.label || "").replace(/\s*\([^)]*\)/g, "").trim() }));
   const clesLangueFiche = champsLangue.map((c) => c.key);
