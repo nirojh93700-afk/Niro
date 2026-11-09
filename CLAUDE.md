@@ -53,6 +53,14 @@
   TableGravure → fiche commande, Atelier, chaque verre d'un lot) et lien dans l'e-mail 🛎️ (encadré rouge « 🌐 Gravure en … ») ·
   décor : `texteAvecDecor` accepte `date` / `texte2` selon `decorPlace` (aperçu, atelier, contrôle `oubliesAtelier`).
   `npm run test-traduction` (17). Navigateur 390 / 1280 : 0 erreur, 0 débordement. ⚠️ PNG / PDF du fichier : PAS faits (SVG seul).
+  ✅ **09/11/2026 (« corrige le prix et mets aussi en ligne pour les langues, la maquette » ; maquette v3 https://claude.ai/artifact/RCEptQ5yXfzgnU1fauNffx)** :
+  les pastilles deviennent UN menu fait main (`ChoixLangue` dans LangueGravure.jsx, CSS `.ml-*` : globe, « Français (par défaut) » en tête puis
+  les langues par ordre alphabétique, chacune avec son nom dans sa langue `natif`, sans drapeau, sans groupes ni exemples — refusés « trop chargé »,
+  clavier flèches / Entrée / Échap) + **Allemand, Espagnol, Italien, Portugais** (police vide = les 8 écritures, elles ont ñ ç ã ä ö ü ß ; prénoms
+  gardés tels quels, « Joyeux anniversaire » dans PHRASES). ⛔ Langues d'Europe à alphabet élargi (polonais, tchèque…) ÉCARTÉES par lui : « juste
+  les pays autour de la France ». **PRIX CORRIGÉ** : `langue`, `texteSource`, `direct`, `tradOk`, `decorPlace` ajoutés à `NEUTRES` (prixVerres.js) ;
+  avant, choisir une autre langue comptait comme une « image » → le premier texte du verre 1 payé 3 € au lieu d'offert (07/11 → 09/11).
+  Règle confirmée : AUCUN supplément pour la langue ou la traduction ; verre 1 = image offerte + texte 3 €, ou texte seul offert.
   **RESTE (sur son mot) : le choix de langue sur les AUTRES produits à texte** (bijoux, cristal, bois…) avec les corrections listées plus bas.
 - ✅ **FICHIER À GRAVER DANS LE DOSSIER DE LA COMMANDE (gérant, 06/11 : « quand la cliente commande un texte, il faut que je l'aie en format pour graver… dans le dossier »)** :
   maquette v5 = ligne « Fichier à graver — rangé dans le dossier de la commande » dans « ce que l'atelier verra » (aperçu noir sur blanc + nom

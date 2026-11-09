@@ -8,7 +8,7 @@ import { langueDe, phraseConnue, cleNormale } from "@/lib/traductionGravure";
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
 
 function consigne(nom, code) {
-  const ecrit = code === "en"
+  const ecrit = ["en", "es", "pt", "it", "de"].includes(code)
     ? "Les prénoms et noms propres restent tels quels. "
     : "Écris dans l'écriture de la langue (jamais en lettres latines). Les prénoms et noms propres ne se traduisent pas : transcris-les phonétiquement dans l'écriture de la langue. ";
   return `Traduis ce texte du français vers la langue : ${nom}. C'est un texte court à graver sur un objet offert en cadeau : traduction naturelle et chaleureuse. ${ecrit}Garde les chiffres et les dates tels quels. Réponds UNIQUEMENT par le texte traduit, sans guillemets ni explication.`;

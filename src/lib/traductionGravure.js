@@ -12,20 +12,24 @@
 //   tradOk      = « oui » quand la case « J'ai relu le texte traduit » est cochée
 //   decorPlace  = texte | date | deux (où mettre le décor ; vide = autour du texte)
 
-// [code, nom, écriture Noto (vide = l'écriture choisie par la cliente), sens]
+// [code, nom, nom écrit dans la langue (menu, 09/11/2026), écriture Noto (vide = l'écriture choisie par la cliente), sens]
 export const LANGUES = [
-  { code: "en", nom: "Anglais", police: "", dir: "ltr" },
-  { code: "ar", nom: "Arabe", police: "Noto Naskh Arabic", dir: "rtl" },
-  { code: "zh", nom: "Chinois", police: "Noto Serif SC", dir: "ltr" },
-  { code: "fr", nom: "Français", police: "", dir: "ltr" },
-  { code: "he", nom: "Hébreu", police: "Noto Serif Hebrew", dir: "rtl" },
-  { code: "ta", nom: "Tamoul", police: "Noto Serif Tamil", dir: "ltr" },
+  { code: "de", nom: "Allemand", natif: "Deutsch", police: "", dir: "ltr" },
+  { code: "en", nom: "Anglais", natif: "English", police: "", dir: "ltr" },
+  { code: "ar", nom: "Arabe", natif: "العربية", police: "Noto Naskh Arabic", dir: "rtl" },
+  { code: "zh", nom: "Chinois", natif: "中文", police: "Noto Serif SC", dir: "ltr" },
+  { code: "es", nom: "Espagnol", natif: "Español", police: "", dir: "ltr" },
+  { code: "fr", nom: "Français", natif: "Français", police: "", dir: "ltr" },
+  { code: "he", nom: "Hébreu", natif: "עברית", police: "Noto Serif Hebrew", dir: "rtl" },
+  { code: "it", nom: "Italien", natif: "Italiano", police: "", dir: "ltr" },
+  { code: "pt", nom: "Portugais", natif: "Português", police: "", dir: "ltr" },
+  { code: "ta", nom: "Tamoul", natif: "தமிழ்", police: "Noto Serif Tamil", dir: "ltr" },
 ];
 
 // Phrases déjà préparées (rapport « Marché tamoul » + images réseaux du 06/11). Elles portent la
 // MÊME mention que la traduction en direct tant qu'un locuteur ne les a pas relues (maquette v4).
 export const PHRASES = {
-  "joyeux anniversaire": { en: "Happy birthday", ta: "பிறந்தநாள் வாழ்த்துகள்", ar: "عيد ميلاد سعيد", he: "יום הולדת שמח", zh: "生日快乐" },
+  "joyeux anniversaire": { en: "Happy birthday", es: "Feliz cumpleaños", pt: "Feliz aniversário", it: "Buon compleanno", de: "Alles Gute zum Geburtstag", ta: "பிறந்தநாள் வாழ்த்துகள்", ar: "عيد ميلاد سعيد", he: "יום הולדת שמח", zh: "生日快乐" },
   "je t'aime": { en: "I love you", ta: "நான் உன்னை காதலிக்கிறேன்", ar: "أحبك", he: "אני אוהב אותך", zh: "我爱你" },
   "amour": { en: "Love", ta: "அன்பு", ar: "حب", he: "אהבה", zh: "爱" },
   "mon amour": { en: "My love", ta: "என் அன்பே", ar: "حبيبي", he: "אהובי", zh: "我的爱" },

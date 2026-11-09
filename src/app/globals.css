@@ -6181,6 +6181,29 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 .fnt-lang-he{font-family:"NivGrav-he","Noto Serif Hebrew","Arial Hebrew","Arial",serif}
 .fnt-lang-zh{font-family:"NivGrav-zh","Noto Serif SC","Songti SC","SimSun",serif}
 .mqt-langue{margin-top:-2px}
+/* Menu « Langue de la gravure » (09/11/2026) */
+.ml-label{display:block;font-weight:600;font-size:.9rem;margin-bottom:6px}
+.ml{position:relative;max-width:420px}
+.ml-btn{display:flex;align-items:center;gap:10px;width:100%;min-height:48px;border:1.5px solid var(--line);border-radius:12px;background:#fff;padding:8px 14px;font-family:inherit;color:var(--ink);cursor:pointer;text-align:left}
+.ml-btn:hover{border-color:var(--gold)}
+.ml-btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(201,162,75,.45)}
+.ml-btn.on{border-color:var(--gold-dark);background:#fffaf0;box-shadow:0 0 0 2px var(--gold)}
+.ml-globe{color:var(--gold-dark);display:flex;flex:none}
+.ml-val{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ml-val b{font-weight:600;font-size:.95rem}
+.ml-val small{color:var(--ink-soft);font-size:.85rem}
+.ml-fleche{flex:none;width:9px;height:9px;border-right:2px solid var(--gold-dark);border-bottom:2px solid var(--gold-dark);transform:translateY(-2px) rotate(45deg);transition:transform .15s}
+.ml.ouvert .ml-fleche{transform:translateY(2px) rotate(-135deg)}
+.ml-panneau{position:absolute;z-index:40;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 34px rgba(26,18,6,.16);overflow:hidden}
+.ml-liste{list-style:none;margin:0;padding:6px;max-height:min(480px,62vh);overflow-y:auto;overscroll-behavior:contain}
+.ml-opt{display:grid;grid-template-columns:auto minmax(0,1fr) 18px;align-items:center;gap:10px;min-height:46px;padding:7px 10px;border-radius:10px;cursor:pointer}
+.ml-opt.act{background:#f6efe0}
+.ml-opt.on{background:#fffaf0}
+.ml-opt.on b{color:var(--gold-dark)}
+.ml-nom{font-weight:600;font-size:.93rem}
+.ml-natif{font-size:.85rem;color:var(--ink-soft);justify-self:start;text-align:left}
+
+.ml-coche{grid-column:3;color:var(--gold-dark);font-weight:700;text-align:center}
 .mqt-langs{display:flex;flex-wrap:wrap;gap:8px}
 .mqt-lang{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;font-size:.88rem;font-family:inherit;color:var(--ink);cursor:pointer;min-height:40px}
 .mqt-lang.on{border-color:var(--gold-dark);background:#fffaf0;box-shadow:0 0 0 2px var(--gold)}

@@ -42,5 +42,10 @@ t("prix et étiquette d'accord (date seule = 0)", prixGravureVerres(PF, U, 1, { 
 t("verre vierge = pas grave", verreGrave({ police: "playfair" }) === false);
 const r = prixGravureVerres(P, U, 2, {}, [photoTexte, logo]);
 t("le détail liste les lignes", r.lignes.some((l) => /logo et texte/.test(l.libelle)) && r.lignes.some((l) => l.montant === 0));
+// Langue de la gravure (09/11/2026) : choisir une autre langue ne fait pas perdre le texte offert du verre 1
+const tradES = { mode: "texte", texte: "Feliz cumpleaños", texteSource: "Joyeux anniversaire", langue: "es", tradOk: "oui", decorPlace: "texte" };
+t("1 verre texte traduit = 0 (texte offert)", prixGravureVerres(P, U, 1, tradES).total === 0);
+t("2 identiques texte traduit = 0 + 3", prixGravureVerres(P, U, 2, tradES).total === 3);
+t("langue choisie sans texte = verre vierge", verreGrave({ langue: "es", texteSource: "" }) === false);
 console.log(`${ok} vérifications au vert, ${ko} en échec`);
 if (ko) process.exit(1);

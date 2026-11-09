@@ -33,7 +33,10 @@ export function verresParVariante(variant) {
 }
 
 // Champs qui ne font pas, à eux seuls, une gravure.
-const NEUTRES = new Set(["police", "emplacement", "mode", "decor", "coffret", "deuxEmplacement", "sens", "motifCount"]);
+// Pas une gravure : les réglages, et la langue de la gravure (09/11/2026 : « langue » rempli comptait comme
+// une image, et le verre 1 perdait son texte offert dès qu'une autre langue que le français était choisie).
+const NEUTRES = new Set(["police", "emplacement", "mode", "decor", "coffret", "deuxEmplacement", "sens", "motifCount",
+  "langue", "texteSource", "direct", "tradOk", "decorPlace"]);
 const plein = (v) => (v && typeof v === "object") ? Object.keys(v).length > 0 : String(v ?? "").trim() !== "";
 
 /** Le verre porte-t-il une gravure (photo, modèle, lettre, texte…) ? */
