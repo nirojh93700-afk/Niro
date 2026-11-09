@@ -1,0 +1,31 @@
+diff --git a/src/lib/prixVerres.js b/src/lib/prixVerres.js
+index 38754506..0deff565 100644
+--- a/src/lib/prixVerres.js
++++ b/src/lib/prixVerres.js
+@@ -33,7 +33,10 @@ export function verresParVariante(variant) {
+ }
+ 
+ // Champs qui ne font pas, à eux seuls, une gravure.
+-const NEUTRES = new Set(["police", "emplacement", "mode", "decor", "coffret", "deuxEmplacement", "sens", "motifCount"]);
++// Pas une gravure : les réglages, et la langue de la gravure (09/11/2026 : « langue » rempli comptait comme
++// une image, et le verre 1 perdait son texte offert dès qu'une autre langue que le français était choisie).
++const NEUTRES = new Set(["police", "emplacement", "mode", "decor", "coffret", "deuxEmplacement", "sens", "motifCount",
++  "langue", "texteSource", "direct", "tradOk", "decorPlace"]);
+ const plein = (v) => (v && typeof v === "object") ? Object.keys(v).length > 0 : String(v ?? "").trim() !== "";
+ 
+ /** Le verre porte-t-il une gravure (photo, modèle, lettre, texte…) ? */
+diff --git a/tools/tests/prix-verres.test.mjs b/tools/tests/prix-verres.test.mjs
+index 81e690dd..24e21083 100644
+--- a/tools/tests/prix-verres.test.mjs
++++ b/tools/tests/prix-verres.test.mjs
+@@ -42,5 +42,10 @@ t("prix et étiquette d'accord (date seule = 0)", prixGravureVerres(PF, U, 1, {
+ t("verre vierge = pas grave", verreGrave({ police: "playfair" }) === false);
+ const r = prixGravureVerres(P, U, 2, {}, [photoTexte, logo]);
+ t("le détail liste les lignes", r.lignes.some((l) => /logo et texte/.test(l.libelle)) && r.lignes.some((l) => l.montant === 0));
++// Langue de la gravure (09/11/2026) : choisir une autre langue ne fait pas perdre le texte offert du verre 1
++const tradES = { mode: "texte", texte: "Feliz cumpleaños", texteSource: "Joyeux anniversaire", langue: "es", tradOk: "oui", decorPlace: "texte" };
++t("1 verre texte traduit = 0 (texte offert)", prixGravureVerres(P, U, 1, tradES).total === 0);
++t("2 identiques texte traduit = 0 + 3", prixGravureVerres(P, U, 2, tradES).total === 3);
++t("langue choisie sans texte = verre vierge", verreGrave({ langue: "es", texteSource: "" }) === false);
+ console.log(`${ok} vérifications au vert, ${ko} en échec`);
+ if (ko) process.exit(1);
