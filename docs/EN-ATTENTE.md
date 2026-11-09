@@ -703,7 +703,8 @@ En attente de SA décision :
 - Gérant : « juste les pays autour de la France… fais une maquette avec un menu déroulant ». Maquette https://claude.ai/artifact/RCEptQ5yXfzgnU1fauNffx
   (captures de la vraie fiche du verre à vin en local). v2 du 09/11 (« travaille mieux, cherche partout ») : menu fait main (bouton + liste, globe,
   nom de la langue dans sa langue, sans drapeau, Français en tête puis « Même alphabet que le français » / « Autre alphabet », exemple « Joyeux
-  anniversaire » gravé, clavier flèches / Entrée / Échap). + CORRECTION DE PRIX : `langue`, `texteSource`, `direct`, `tradOk`, `decorPlace` comptaient
+  anniversaire » gravé, clavier flèches / Entrée / Échap). v3 du 09/11 (« trop chargé, ne dis pas même alphabet ») : groupes et exemples RETIRÉS,
+  Français en tête puis liste alphabétique « Nom  Nom-dans-la-langue ». + CORRECTION DE PRIX : `langue`, `texteSource`, `direct`, `tradOk`, `decorPlace` comptaient
   comme une « image » dans prixVerres.js (NEUTRES) → verre 1 : texte payé 3 € au lieu d'offert dès qu'une autre langue est choisie (en ligne depuis le 07/11).
 - Ces 4 langues = police vide (les 8 écritures du site ont ñ ç ã ä ö ü ß), pas de fichier SVG laser ; « Joyeux anniversaire » ajouté dans PHRASES ;
   consigne Claude : prénoms gardés tels quels. Au « applique » : `git apply tools/maquettes/langues-gravure-menu-4-langues.patch`, build, test-traduction, push.
