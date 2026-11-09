@@ -35,7 +35,8 @@ function sanitizeSpec(spec) {
     if (Array.isArray(val)) return val.slice(0, 40).map((x) => clean(x, depth + 1));
     if (typeof val === "object") {
       const out = {};
-      for (const k of Object.keys(val).slice(0, 40)) out[k] = clean(val[k], depth + 1);
+      // 80 clés : des marque-pages gravés dans une autre langue portent deux champs par texte (gravé + français tapé).
+      for (const k of Object.keys(val).slice(0, 80)) out[k] = clean(val[k], depth + 1);
       return out;
     }
     return val;

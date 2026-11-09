@@ -14,6 +14,13 @@ import {
   CG_DOSSIER, CG_MODELES, CG_DESSINS, CG_ZODIAQUE, CG_FAMILLES, CG_TAILLES,
   CG_TEXTE_PRIX, CG_ZOD_NOM_PRIX, CG_ZOD_TOUT_PRIX, CG_SLUG, cgVariantId,
 } from "@/lib/cristauxGraves";
+import LangueGravure, { valeurChampTexte, patchChampTexte } from "@/components/LangueGravure";
+import { langueActive, langueDe, manqueLangue, resumeLangue, alignerTextes, cleSource } from "@/lib/traductionGravure";
+import { classeLangue } from "@/lib/policeLangueClient";
+
+// Textes qui peuvent être gravés dans une autre langue (09/11/2026) : le texte libre, et pour le zodiaque le nom
+// et la ville. La date et l'heure de naissance ne sont jamais traduites.
+const CLES_LANGUE = ["texte", "zPrenom", "zVille"];
 
 const PAGE = 8;
 const eur = (n) => n.toFixed(2).replace(".", ",") + " €";
@@ -72,10 +79,16 @@ export default function CristauxGraves({ prix = {}, noel = null, socles = null }
   const [socle, setSocle] = useState(false);
   const [txt, setTxt] = useState(false);
   const [zopt, setZopt] = useState(""); // zodiaque : "" | "nom" (+5 €) | "tout" (+8 €)
-  const [texte, setTexte] = useState("");
+  // Langue de la gravure : UNE langue pour le cristal. tx garde, comme sur les autres fiches, le texte GRAVÉ (texte,
+  // zPrenom, zVille), le français tapé (…Source), langue, direct, tradOk. Français : seulement les textes tapés.
+  const [tx, setTxBrut] = useState({});
+  const setTx = (u) => setTxBrut((p) => alignerTextes(typeof u === "function" ? u(p) : { ...p, ...u }, CLES_LANGUE));
+  const taper = (k) => (v) => setTx((p) => ({ ...p, ...patchChampTexte(p, v, k) }));
+  const texte = valeurChampTexte(tx, "texte"), zp = valeurChampTexte(tx, "zPrenom"), zv = valeurChampTexte(tx, "zVille");
+  const setTexte = taper("texte"), setZp = taper("zPrenom"), setZv = taper("zVille");
   const [font, setFont] = useState("playfair");
   const [pos, setPos] = useState("bas");
-  const [zp, setZp] = useState(""); const [zd, setZd] = useState(""); const [zh, setZh] = useState(""); const [zv, setZv] = useState("");
+  const [zd, setZd] = useState(""); const [zh, setZh] = useState("");
   const [q, setQ] = useState(1);
   const [ajoute, setAjoute] = useState(false);
   const [barOff, setBarOff] = useState(false);
@@ -100,6 +113,13 @@ export default function CristauxGraves({ prix = {}, noel = null, socles = null }
   const zodOk = zopt === "nom" ? Boolean(zp) : zopt === "tout" ? Boolean(zp && zd && zv) : false;
   const prixZod = zopt === "tout" ? CG_ZOD_TOUT_PRIX : zopt === "nom" ? CG_ZOD_NOM_PRIX : 0;
   const avecTxt = zod ? zodOk : txt && Boolean(texte.trim());
+  // Autre langue : les textes de l'option ouverte ; jamais gravé traduit sans la case « J'ai relu… ».
+  const clesLangue = !zod ? [{ key: "texte", label: "Texte" }] : zopt === "tout" ? [{ key: "zPrenom", label: "Prénom ou nom" }, { key: "zVille", label: "Ville" }] : [{ key: "zPrenom", label: "Prénom ou nom" }];
+  const enLangue = langueActive(tx);
+  const langueManque = ouvert && avecTxt && enLangue ? manqueLangue({ ...tx, langueCles: clesLangue.map((c) => c.key).join(",") }) : null;
+  const clsLangue = enLangue ? classeLangue(tx.langue) : "";
+  const dirLangue = enLangue && langueDe(tx.langue)?.dir === "rtl" ? "rtl" : undefined;
+  const grave = (k) => String(tx[k] || "").trim(); // le texte gravé (en français : le texte tapé)
   const t = T[taille];
   // Couché (horizontal) : grand socle pour toutes les tailles ; debout (vertical) : petit socle sauf XL (gérant, 30/10/2026).
   const prixSocle = fmt === "h" ? (t.socleH || t.socle) : t.socle;
@@ -107,9 +127,10 @@ export default function CristauxGraves({ prix = {}, noel = null, socles = null }
   const socleVu = (taille !== "xl" && fmt !== "h" ? socles?.carre : socles?.rect)
     || { image: "/produits/socle-led-rectangle.jpg", court: "LED multicolores" };
   const unit = t.prix + (socle ? prixSocle : 0) + (avecTxt ? (zod ? prixZod : CG_TEXTE_PRIX) : 0);
-  const ok = i >= 0 && Boolean(fmt) && (!ouvert || avecTxt);
+  const ok = i >= 0 && Boolean(fmt) && (!ouvert || avecTxt) && !langueManque;
   const manque = i < 0 ? "Choisissez d'abord un modèle, un dessin ou votre signe."
     : !fmt ? "Il manque le format : vertical ou horizontal."
+    : langueManque ? langueManque
     : zod && zopt === "nom" ? "Écrivez le nom à graver, ou retirez l'option."
     : zod ? "Écrivez le nom, la date et la ville, ou retirez l'option."
     : "Écrivez le texte à graver, ou retirez l'option texte.";
@@ -172,14 +193,25 @@ export default function CristauxGraves({ prix = {}, noel = null, socles = null }
     const police = FONTS.find(([k]) => k === font)?.[1] || font;
     const place = PLACES.find(([k]) => k === pos)?.[1] || pos;
     if (avecTxt) {
-      if (zod) { fields.zOption = zopt; fields.zPrenom = zp; if (zopt === "tout") { if (zDate) fields.zDate = zDate; fields.zVille = zv; } }
-      else fields.texte = texte.trim();
+      if (zod) { fields.zOption = zopt; fields.zPrenom = grave("zPrenom"); if (zopt === "tout") { if (zDate) fields.zDate = zDate; fields.zVille = grave("zVille"); } }
+      else fields.texte = grave("texte");
       fields.police = font; fields.textePos = pos;
+      // Autre langue : mêmes champs que sur toutes les fiches (langue, texte gravé, français tapé, case cochée).
+      if (enLangue) {
+        fields.langue = tx.langue;
+        if (zod) fields.langueCles = clesLangue.map((c) => c.key).join(",");
+        if (tx.direct === "oui") fields.direct = "oui";
+        else {
+          fields.tradOk = "oui";
+          for (const c of clesLangue) { const src = String(tx[cleSource(c.key)] || "").trim(); if (src) fields[cleSource(c.key)] = src; }
+        }
+      }
     }
     const resume = [
       `${genre} : ${m.nom}`, format,
-      avecTxt && !zod ? `Texte : « ${texte.trim()} » (${police}, ${place.toLowerCase()})` : "",
-      avecTxt && zod ? [zopt === "tout" ? "Tout gravé" : "Le nom gravé", `Prénom : ${zp}`, zopt === "tout" && zDate && `Né(e) le : ${zDate}`, zopt === "tout" && `Habite à : ${zv}`].filter(Boolean).join(" · ") + ` (${police})` : "",
+      avecTxt && !zod ? `Texte : « ${grave("texte")} » (${police}, ${place.toLowerCase()})` : "",
+      avecTxt && zod ? [zopt === "tout" ? "Tout gravé" : "Le nom gravé", `Prénom : ${grave("zPrenom")}`, zopt === "tout" && zDate && `Né(e) le : ${zDate}`, zopt === "tout" && `Habite à : ${grave("zVille")}`].filter(Boolean).join(" · ") + ` (${police})` : "",
+      avecTxt && fields.langue ? `Langue : ${resumeLangue(fields)}` : "",
       socle ? "Socle lumineux LED" : "",
     ].filter(Boolean).join(" · ");
     const variantTitle = `${format} · ${t.nom} — ${fmt === "h" ? t.h : t.v}`;
@@ -299,11 +331,11 @@ export default function CristauxGraves({ prix = {}, noel = null, socles = null }
                 <span className={`cg-bloc cg-bloc-xl${m.z ? " cg-zbloc" : ""}${fmt === "h" ? " fmt-h" : ""}`}>
                   <span className="cg-bloc-in"><BlocContenu it={m} exemple={!(zod && ouvert)} /></span>
                   {zod && ouvert ? (
-                    <span className="cg-zperso"><b className="fnt-great-vibes">{zp}</b>{zopt === "tout" ? <><small>{zDate}</small><small>{zv}</small></> : null}</span>
+                    <span className="cg-zperso"><b className={clsLangue || "fnt-great-vibes"} dir={dirLangue}>{grave("zPrenom") || zp}</b>{zopt === "tout" ? <><small>{zDate}</small><small className={clsLangue || undefined} dir={dirLangue}>{grave("zVille") || zv}</small></> : null}</span>
                   ) : null}
                 </span>
               ) : null}
-              {avecTxt && m && !zod ? <span className={`cg-txtpv fnt-${font} pos-${pos}`}>{texte.trim()}</span> : null}
+              {avecTxt && m && !zod ? <span className={`cg-txtpv ${clsLangue || `fnt-${font}`} pos-${pos}`} dir={dirLangue}>{grave("texte") || texte.trim()}</span> : null}
             </div>
             <h3 id="t-pan" className="cg-pname">{m ? (m.z ? `Signe du ${m.nom}` : m.noel ? `Noël n° ${m.n} · ${m.nom}` : m.nom) : "Votre cristal"}</h3>
             <p className="cg-pdesc">{m ? m.phrase : "Aucun modèle choisi pour l'instant."}</p>
@@ -378,6 +410,7 @@ export default function CristauxGraves({ prix = {}, noel = null, socles = null }
                   <div className="cg-inp"><input id="cg-zv" type="text" maxLength={24} placeholder="Paris" autoComplete="off" value={zv} onChange={(e) => setZv(e.target.value.trim() ? e.target.value : "")} /></div>
                   </div>
                 </div>
+                {ouvert ? <LangueGravure fv={tx} setFieldValues={setTx} cles={clesLangue} /> : null}
                 <span className="cg-sub">Écriture</span>
                 <div className="cg-fonts" role="group" aria-label="Écriture du texte">
                   {FONTS.map(([k, lab]) => (
