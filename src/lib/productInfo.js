@@ -544,7 +544,7 @@ Un souci à la réception ?
 - Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
   },
   "carnet-a5-grave": {
-    material: "Format A5 : 21,2 × 14,5 cm. Couverture rigide aspect cuir, coins arrondis, élastique de fermeture. 100 feuilles (200 pages) de papier 80 g, reliure cousue. Coloris : marron, noir ou gris.",
+    material: "Format A5 : 21,2 × 14,5 cm. Couverture rigide aspect cuir, coins arrondis, élastique de fermeture. 100 feuilles (200 pages) lignées, papier crème 80 g, avec une ligne pour la date en haut de page, reliure cousue. Coloris : marron, noir ou gris.",
     usage: "Gravure laser sur la couverture et au dos : prénom, initiales, texte court, logo ou dessin. Sur le marron et le gris, la gravure ressort d'un ton plus sombre ; sur le noir, d'un ton plus clair. Entretien : un coup de chiffon doux et sec suffit.",
     returns: "Pièce personnalisée, gravée à la commande : elle ne peut être ni reprise ni échangée (article L221-28 du Code de la consommation). Expédition suivie à domicile ou en point relais.",
   },

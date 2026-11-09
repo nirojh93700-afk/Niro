@@ -790,7 +790,7 @@ export const products = [
 <ul>
 <li><strong>Format :</strong> A5, 21,2 × 14,5 cm</li>
 <li><strong>Couverture :</strong> rigide, aspect cuir, coins arrondis, élastique de fermeture</li>
-<li><strong>Intérieur :</strong> 100 feuilles (200 pages) de papier 80 g, reliure cousue</li>
+<li><strong>Intérieur :</strong> 100 feuilles (200 pages) lignées, papier crème 80 g, avec une ligne pour la date en haut de page, reliure cousue</li>
 <li><strong>Coloris :</strong> marron, noir ou gris</li>
 <li><strong>Gravure :</strong> laser, réalisée sur commande dans notre atelier</li>
 </ul>
