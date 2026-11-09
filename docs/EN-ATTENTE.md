@@ -698,3 +698,10 @@ En attente de SA décision :
   +5 € (champ 40 car., 8 écritures, aperçu) ; lignes ajoutées au tableau, total et encadré « Articles » mis à jour ; bouton payer grisé si texte coché vide.
 - Au « applique » : options lues dans `engravingPricing.flatExtras` du produit de la 1re ligne rattachée (`variantId`), prix recalculés côté serveur
   (`devisEffectif` / quote-pay / checkout), stock du socle décompté, poids ajouté au port, texte écrit dans la commande (atelier « À graver »).
+
+## 🌐 LANGUE DE LA GRAVURE : MENU DÉROULANT + ALLEMAND, ESPAGNOL, ITALIEN, PORTUGAIS — MAQUETTE DU 09/11/2026 (en attente de son « applique »)
+- Gérant : « juste les pays autour de la France… fais une maquette avec un menu déroulant ». Maquette https://claude.ai/artifact/RCEptQ5yXfzgnU1fauNffx
+  (captures de la vraie fiche du verre à vin en local). Les boutons deviennent UN menu (Français par défaut), 10 langues alphabétiques.
+- Ces 4 langues = police vide (les 8 écritures du site ont ñ ç ã ä ö ü ß), pas de fichier SVG laser ; « Joyeux anniversaire » ajouté dans PHRASES ;
+  consigne Claude : prénoms gardés tels quels. Au « applique » : `git apply tools/maquettes/langues-gravure-menu-4-langues.patch`, build, test-traduction, push.
+- La liste de 32 langues d'Europe (menu à part) a été écartée par lui le 09/11 (« juste les pays autour de la France »).

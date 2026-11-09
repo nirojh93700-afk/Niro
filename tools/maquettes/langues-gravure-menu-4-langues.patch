@@ -1,0 +1,73 @@
+diff --git a/src/app/globals.css b/src/app/globals.css
+index bdf4d382..d6491442 100644
+--- a/src/app/globals.css
++++ b/src/app/globals.css
+@@ -6184,6 +6184,8 @@ body:has(.ash) > main { padding: 0; margin: 0; }
+ .mqt-langs{display:flex;flex-wrap:wrap;gap:8px}
+ .mqt-lang{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-weight:600;font-size:.88rem;font-family:inherit;color:var(--ink);cursor:pointer;min-height:40px}
+ .mqt-lang.on{border-color:var(--gold-dark);background:#fffaf0;box-shadow:0 0 0 2px var(--gold)}
++.mqt-select{display:block;width:100%;max-width:340px;min-height:44px;border:1.5px solid var(--line);border-radius:12px;padding:9px 40px 9px 14px;font-weight:600;font-size:.95rem;font-family:inherit;color:var(--ink);background:#fff url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%278%27%3E%3Cpath d=%27M1 1l5 5 5-5%27 fill=%27none%27 stroke=%27%23a98935%27 stroke-width=%272%27/%3E%3C/svg%3E") no-repeat right 14px center;-webkit-appearance:none;appearance:none;cursor:pointer}
++.mqt-select.on{border-color:var(--gold-dark);background-color:#fffaf0;box-shadow:0 0 0 2px var(--gold)}
+ .mqt-note{font-size:.8rem;color:var(--ink-soft);margin:6px 0 0;line-height:1.45}
+ .mqt-place{margin:10px 0 0;display:flex;flex-direction:column;gap:8px}
+ .mqt-plab{font-size:.86rem;color:var(--ink-soft)}
+diff --git a/src/components/LangueGravure.jsx b/src/components/LangueGravure.jsx
+index 4a035e6a..f0ad8c90 100644
+--- a/src/components/LangueGravure.jsx
++++ b/src/components/LangueGravure.jsx
+@@ -82,11 +82,9 @@ export default function LangueGravure({ fv, setFieldValues }) {
+   return (
+     <div className="field mqt-langue">
+       <label>Langue de la gravure</label>
+-      <div className="mqt-langs">
+-        {LANGUES.map((l) => (
+-          <button type="button" key={l.code} className={`mqt-lang${code === l.code ? " on" : ""}`} onClick={() => choisirLangue(l.code)}>{l.nom}</button>
+-        ))}
+-      </div>
++      <select aria-label="Langue de la gravure" className={`mqt-select${code !== "fr" ? " on" : ""}`} value={code} onChange={(e) => choisirLangue(e.target.value)}>
++        {LANGUES.map((l) => <option key={l.code} value={l.code}>{l.nom}{l.code === "fr" ? " (par défaut)" : ""}</option>)}
++      </select>
+       <p className="mqt-note">{note}</p>
+       {code !== "fr" && (
+         <label className="mqt-swap">
+diff --git a/src/lib/traductionGravure.js b/src/lib/traductionGravure.js
+index 7543bd74..70a9510d 100644
+--- a/src/lib/traductionGravure.js
++++ b/src/lib/traductionGravure.js
+@@ -14,18 +14,22 @@
+ 
+ // [code, nom, écriture Noto (vide = l'écriture choisie par la cliente), sens]
+ export const LANGUES = [
++  { code: "de", nom: "Allemand", police: "", dir: "ltr" },
+   { code: "en", nom: "Anglais", police: "", dir: "ltr" },
+   { code: "ar", nom: "Arabe", police: "Noto Naskh Arabic", dir: "rtl" },
+   { code: "zh", nom: "Chinois", police: "Noto Serif SC", dir: "ltr" },
++  { code: "es", nom: "Espagnol", police: "", dir: "ltr" },
+   { code: "fr", nom: "Français", police: "", dir: "ltr" },
+   { code: "he", nom: "Hébreu", police: "Noto Serif Hebrew", dir: "rtl" },
++  { code: "it", nom: "Italien", police: "", dir: "ltr" },
++  { code: "pt", nom: "Portugais", police: "", dir: "ltr" },
+   { code: "ta", nom: "Tamoul", police: "Noto Serif Tamil", dir: "ltr" },
+ ];
+ 
+ // Phrases déjà préparées (rapport « Marché tamoul » + images réseaux du 06/11). Elles portent la
+ // MÊME mention que la traduction en direct tant qu'un locuteur ne les a pas relues (maquette v4).
+ export const PHRASES = {
+-  "joyeux anniversaire": { en: "Happy birthday", ta: "பிறந்தநாள் வாழ்த்துகள்", ar: "عيد ميلاد سعيد", he: "יום הולדת שמח", zh: "生日快乐" },
++  "joyeux anniversaire": { en: "Happy birthday", es: "Feliz cumpleaños", pt: "Feliz aniversário", it: "Buon compleanno", de: "Alles Gute zum Geburtstag", ta: "பிறந்தநாள் வாழ்த்துகள்", ar: "عيد ميلاد سعيد", he: "יום הולדת שמח", zh: "生日快乐" },
+   "je t'aime": { en: "I love you", ta: "நான் உன்னை காதலிக்கிறேன்", ar: "أحبك", he: "אני אוהב אותך", zh: "我爱你" },
+   "amour": { en: "Love", ta: "அன்பு", ar: "حب", he: "אהבה", zh: "爱" },
+   "mon amour": { en: "My love", ta: "என் அன்பே", ar: "حبيبي", he: "אהובי", zh: "我的爱" },
+diff --git a/src/lib/traductionServeur.js b/src/lib/traductionServeur.js
+index 955d1741..bb5f44fb 100644
+--- a/src/lib/traductionServeur.js
++++ b/src/lib/traductionServeur.js
+@@ -8,7 +8,7 @@ import { langueDe, phraseConnue, cleNormale } from "@/lib/traductionGravure";
+ const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
+ 
+ function consigne(nom, code) {
+-  const ecrit = code === "en"
++  const ecrit = ["en", "es", "pt", "it", "de"].includes(code)
+     ? "Les prénoms et noms propres restent tels quels. "
+     : "Écris dans l'écriture de la langue (jamais en lettres latines). Les prénoms et noms propres ne se traduisent pas : transcris-les phonétiquement dans l'écriture de la langue. ";
+   return `Traduis ce texte du français vers la langue : ${nom}. C'est un texte court à graver sur un objet offert en cadeau : traduction naturelle et chaleureuse. ${ecrit}Garde les chiffres et les dates tels quels. Réponds UNIQUEMENT par le texte traduit, sans guillemets ni explication.`;

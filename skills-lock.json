@@ -413,7 +413,7 @@
       "source": "pbakaus/impeccable",
       "sourceType": "github",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "computedHash": "5dce49bdb3a5f461ec15283a6c05197698539e974ac622db8e130a9d49848238"
+      "computedHash": "b79e42080422abc5f2c0420bc6719524a5e7071b3f30980abeb57496e9271a53"
     },
     "industrial-brutalist-ui": {
       "source": "Leonxlnx/taste-skill",
@@ -725,7 +725,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/upgrade-stripe/SKILL.md",
-      "computedHash": "f63e53e72e146b6180ae277d9040836c94be84d321d4928ffa7a818885ce1a7e"
+      "computedHash": "bb4e971fb0f7ba84dc1a78207b7be6540dffab043f4f335c864304bfaf0fd1f0"
     },
     "vercel-cli-with-tokens": {
       "source": "vercel-labs/agent-skills",
