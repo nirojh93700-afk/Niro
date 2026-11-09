@@ -61,6 +61,9 @@
   les pays autour de la France ». **PRIX CORRIGÉ** : `langue`, `texteSource`, `direct`, `tradOk`, `decorPlace` ajoutés à `NEUTRES` (prixVerres.js) ;
   avant, choisir une autre langue comptait comme une « image » → le premier texte du verre 1 payé 3 € au lieu d'offert (07/11 → 09/11).
   Règle confirmée : AUCUN supplément pour la langue ou la traduction ; verre 1 = image offerte + texte 3 €, ou texte seul offert.
+  ✅ **09/11 soir (capture : « Texte sous la photo (facultatif, offert) », « corrige-moi partout très vite »)** : dès que la cliente CHOISIT
+  photo / logo, modèle, lettre fleurie ou dessin de Noël (même avant l'envoi de la photo), le texte est « +3 € » (`modeImage` dans prixVerres.js,
+  prix ET étiquettes). Seul « Mon propre texte » garde le premier texte offert. Vérifié vin, flûte, whisky, cocktail.
   **RESTE (sur son mot) : le choix de langue sur les AUTRES produits à texte** (bijoux, cristal, bois…) avec les corrections listées plus bas.
 - ✅ **FICHIER À GRAVER DANS LE DOSSIER DE LA COMMANDE (gérant, 06/11 : « quand la cliente commande un texte, il faut que je l'aie en format pour graver… dans le dossier »)** :
   maquette v5 = ligne « Fichier à graver — rangé dans le dossier de la commande » dans « ce que l'atelier verra » (aperçu noir sur blanc + nom

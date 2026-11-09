@@ -37,6 +37,11 @@ export function verresParVariante(variant) {
 // une image, et le verre 1 perdait son texte offert dès qu'une autre langue que le français était choisie).
 const NEUTRES = new Set(["police", "emplacement", "mode", "decor", "coffret", "deuxEmplacement", "sens", "motifCount",
   "langue", "texteSource", "direct", "tradOk", "decorPlace"]);
+// Façon de graver choisie dans le parcours guidé : une image (modèle, lettre fleurie, photo / logo, dessin de Noël)
+// compte comme l'image offerte du verre 1 DÈS QU'ELLE EST CHOISIE (avant même l'envoi de la photo), donc le texte
+// qui l'accompagne coûte +3 €. Seul « Mon propre texte » laisse le premier texte offert (09/11/2026).
+const MODES_IMAGE = new Set(["modele", "lettre", "photo", "noel"]);
+export const modeImage = (fv) => MODES_IMAGE.has(String(fv?.mode || ""));
 const plein = (v) => (v && typeof v === "object") ? Object.keys(v).length > 0 : String(v ?? "").trim() !== "";
 
 /** Le verre porte-t-il une gravure (photo, modèle, lettre, texte…) ? */
@@ -85,7 +90,7 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
   const empl = (fv) => (fv?.emplacement === "deux" ? engravingExtra(product, { emplacement: "deux" }, variantId).amount : 0);
   // Le verre porte-t-il une image / un logo / un modèle (un champ gravé qui, seul,
   // ne coûte rien) ? un texte (un champ qui se paie) ?
-  const aImage = (fv) => Object.entries(fv || {}).some(([k, v]) => !NEUTRES.has(k) && plein(v)
+  const aImage = (fv) => modeImage(fv) || Object.entries(fv || {}).some(([k, v]) => !NEUTRES.has(k) && plein(v)
     && (k === cfg.modeleSubExtra?.key || engravingExtra(product, { [k]: v }, variantId).amount === 0));
   const aTexte = (fv) => engravingExtra(product, fv, variantId).amount - empl(fv) > 0;
   const cle1 = empreinte(v1);
@@ -131,7 +136,7 @@ export function texteOffertVerre1(product, fields = {}, variantId = null, candid
   const payant = (k) => !NEUTRES.has(k) && engravingExtra(product, { [k]: fv[k] ?? "x" }, variantId).amount > 0;
   const image = Object.entries(fv).some(([k, v]) => !NEUTRES.has(k) && plein(v)
     && (k === product?.engravingPricing?.modeleSubExtra?.key || engravingExtra(product, { [k]: v }, variantId).amount === 0));
-  if (image) return null;
+  if (image || modeImage(fv)) return null;
   const cles = [...ordre, ...Object.keys(fv).filter((k) => !ordre.includes(k))];
   return cles.find((k) => plein(fv[k]) && payant(k)) || cles.find((k) => payant(k)) || null;
 }

@@ -47,5 +47,11 @@ const tradES = { mode: "texte", texte: "Feliz cumpleaños", texteSource: "Joyeux
 t("1 verre texte traduit = 0 (texte offert)", prixGravureVerres(P, U, 1, tradES).total === 0);
 t("2 identiques texte traduit = 0 + 3", prixGravureVerres(P, U, 2, tradES).total === 3);
 t("langue choisie sans texte = verre vierge", verreGrave({ langue: "es", texteSource: "" }) === false);
+// 09/11/2026 : photo / logo / modèle / lettre / Noël CHOISI (même avant l'envoi de la photo) → le texte n'est jamais offert
+for (const m of ["photo", "modele", "lettre", "noel"]) {
+  t(`étiquette : mode ${m} sans image encore → texte pas offert`, texteOffertVerre1(PF, { mode: m }) === null);
+  t(`mode ${m} + texte = 3`, prixGravureVerres(P, U, 1, { mode: m, texte: "Léa" }).total === 3);
+}
+t("mode texte : texte toujours offert", texteOffertVerre1(PF, { mode: "texte", texte: "Léa" }) === "texte");
 console.log(`${ok} vérifications au vert, ${ko} en échec`);
 if (ko) process.exit(1);
