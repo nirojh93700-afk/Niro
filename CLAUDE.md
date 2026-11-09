@@ -94,10 +94,10 @@
   8 écritures, aperçu sur la photo vierge, colis (verre), `deco` › Art de la table. Ex. dessin 3 + texte + date + boîte = 26,80 €.
 - Au « applique » : `python3 tools/maquettes/deco-noel-verre-ajout.py` (ajoute le produit à products.js, productInfo.js, productDates.js), copier
   `docs/maquettes/assets/deco-noel-verre/{vierge,sapin-exemple,boite}.jpg` en `public/produits/deco-noel-verre-{vierge,sapin,boite}.jpg`, rayon dans
-  `univers.js`, guide « Idées & conseils », build. ⚠️ Photos : la photo du sapin (fournisseur) porte un texte ANGLAIS, la boîte montre un ruban rouge :
+  `univers.js`, guide « Idées & conseils », build. ⚠️ Photos : la photo du sapin (fournisseur) porte un texte ANGLAIS :
   à remplacer par une vraie photo gravée. Nom : « verre » (fiche fournisseur), pas « cristal ».
-- v2 (09/11, « tu peux faire comme si c'était gravé ? ») : 3 images « Exemple » en blanc givré (`tools/maquettes/deco-noel-verre-exemples.py <sortie>` :
-  disque vierge sur fond de Noël sombre, ruban bleu gardé, dessins n° 3 / 20 / 11 du site + prénoms d'exemple) → `docs/maquettes/assets/deco-noel-verre/exemple-1..3.jpg`.
+- v3 (09/11) : les images « Exemple » en blanc givré ont été REFUSÉES (« c'est un peu moche, on fait comme avant ») et supprimées ;
+  la photo de la boîte = SA nouvelle photo (boîte bleue, ruban BLEU, fond blanc), l'ancienne (ruban rouge) est retirée.
 
 ## 🖼️ DERNIÈRE IMAGE ÉCHANGÉE EN GRAND DANS LA FICHE ATELIER — 08/11/2026 (commande 1COCUCLN, Stéphanie Ranchon, devis DEV-1547 ; gérant : « pourquoi y a pas l'image qu'elle demande… même si c'est un devis on a échangé par mail, je veux les dernières images qu'ils ont validées dans les commandes ») — ✅ EN LIGNE LE 08/11/2026 (« Mets en ligne », 18273fe1), pour toutes les commandes
 - **Cause** : `imagesEchangees` ne lisait que le FIL de la commande (`bat`), rempli seulement au rangement (ouverture des messages / 21 h) ;
