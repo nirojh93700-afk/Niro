@@ -110,6 +110,11 @@
   fiche papier). `GlassPreview` montre aussi tel quel l'aperçu enregistré à la commande (`previewImage`) quand il existe (sauf modèle d'avant le 05/11).
 - Page Atelier : chaque article qui n'est pas un verre a maintenant son bloc « Aperçu vu par la cliente » (avant : aucun visuel pour bijoux, cristaux, carnet…).
 
+## 📦 BOÎTES CADEAUX DES VERRES — MESSAGE AU FOURNISSEUR ENREGISTRÉ LE 09/11/2026 (« quand je te demanderai, tu me donneras »)
+- `docs/messages/boites-verres-fournisseur.md` : 3 boîtes rigides, verres COUCHÉS (choix du 09/11) : vin/flûte 1 verre 26 × 14 × 14 · 2 verres 26 × 25 × 14 ·
+  2 verres à whisky 18 × 22 × 12 (un verre seul y va aussi), tailles intérieures, mesures des verres, message en français ET en anglais. Le redonner tel quel quand il le demande.
+  ⚠️ Mesures du 47 cl à vérifier à la règle (modèle supposé d'après la photo de la fiche).
+
 ## 🎄 DÉCORATION DE NOËL RONDE EN CRISTAL GRAVÉE — ✅ EN LIGNE LE 09/11/2026 (« Mets en cristal et applique »)
 - Fiche `decoration-noel-verre-gravee` (slug gardé), nom « Décoration de Noël en cristal gravée », catégorie `deco`, rayon « Décoration de Noël » de
   l'univers Cristal (`univers.js`), carte + paragraphe dans le guide « Cristal photo 3D » (`guide-cristal-3d.html`). Stock non suivi (illimité) tant qu'il
