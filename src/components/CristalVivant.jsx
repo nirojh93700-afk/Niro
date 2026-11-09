@@ -28,7 +28,7 @@ const SUBS = {
   "pyramide-cristal-gravure-3d": "photo en pyramide",
 };
 
-export default function CristalVivant({ products = [] }) {
+export default function CristalVivant({ products = [], decoNoel = null }) {
   const root = useRef(null);
 
   useEffect(() => {
@@ -116,6 +116,13 @@ export default function CristalVivant({ products = [] }) {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <span className="cg-img"><img src="/produits/cristaux-graves/bouddha.jpg" alt="Cristal déjà gravé" loading="lazy" /></span>
                     <span className="cg-meta"><span className="cg-tag">modèles, dessins &amp; zodiaque</span><b className="cg-nom">Cristaux déjà gravés</b><span className="cg-price">dès 39,90 €</span></span>
+                  </Link>
+                ) : null,
+                apresBlocs && decoNoel ? (
+                  <Link className="cg-tile" key="deco-noel" href="/produit/decoration-noel-verre-gravee" aria-label="Décoration de Noël en cristal">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <span className="cg-img"><img src="/produits/deco-noel-cristal-ex-1.jpg" alt="Décoration de Noël en cristal gravée" loading="lazy" /></span>
+                    <span className="cg-meta"><span className="cg-tag">à suspendre au sapin, ruban bleu</span><b className="cg-nom">Décoration de Noël en cristal</b>{decoNoel.prix ? <span className="cg-price">dès {euro(decoNoel.prix)}</span> : null}</span>
                   </Link>
                 ) : null,
               ];

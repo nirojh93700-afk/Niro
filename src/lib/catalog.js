@@ -165,7 +165,9 @@ export async function getCatalog() {
   const customApplied = (custom || []).map((p) => applyBijouxSale(applyOverride(p, overrides[p.slug], images, promos)));
   // Catégories / rayons masqués dans Gestion → Visibilité sur le site : tous leurs produits sortent du site.
   const parGroupe = retiresParGroupe([...base, ...customApplied], visibilite);
-  const all = [...base, ...customApplied].filter((p) => !p.hidden && !parGroupe.has(p.slug) && !outOfSeason(p));
+  // Produit de fête (`fete: "noel"`) : visible seulement quand la fête est allumée dans Gestion → Fêtes.
+  const feteEteinte = (p) => p.fete === "noel" && !noelCfg.on;
+  const all = [...base, ...customApplied].filter((p) => !p.hidden && !parGroupe.has(p.slug) && !outOfSeason(p) && !feteEteinte(p));
   // Rupture de stock automatique : true si toutes les variantes suivies sont à 0.
   return all.map((p0) => {
     // Socles lumineux : dès qu'un ancien socle est à 0 en stock, la fiche vend le nouveau modèle (stock, photo, texte).

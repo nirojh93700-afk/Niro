@@ -50,5 +50,8 @@ export default async function CristauxPage() {
 
   // Habillage de la maquette « cristaux-blocs » (mise en ligne le 10/10/2026) : écrin, cartes, note et
   // retour boutique sont dans CristalVivant ; rien d'autre sur la page.
-  return <CristalVivant products={tiles} />;
+  // 🎄 Décoration de Noël en cristal : la carte n'existe que si le produit est en ligne (Noël allumé dans Gestion → Fêtes).
+  const decoNoel = catalog.find((p) => p.slug === "decoration-noel-verre-gravee") || null;
+  const prixNoel = decoNoel ? Math.min(...(decoNoel.variants || []).map((v) => Number(v.price)).filter((n) => n > 0)) : null;
+  return <CristalVivant products={tiles} decoNoel={decoNoel ? { prix: prixNoel } : null} />;
 }

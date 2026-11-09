@@ -77,7 +77,7 @@ export const NOEL_SLUGS = [
   "collier-plaque-acier", "collier-coeur-grave", "bracelet-homme-cuir-tresse-acier", "collier-couple-puzzle",
   "porte-cles-cuir-a-graver", "cle-usb-bois-coffret", "veilleuse-arbre-de-vie-prenom",
   "couverts-enfants-personnalises", "plaque-de-porte-enfant", "photophore-fee-bois",
-  "porte-cles-cristal-led-coeur", "piece-ronde-laiton",
+  "porte-cles-cristal-led-coeur", "piece-ronde-laiton", "decoration-noel-verre-gravee",
 ];
 OCCASIONS.push({
   slug: "noel",

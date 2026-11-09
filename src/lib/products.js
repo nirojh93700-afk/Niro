@@ -3995,6 +3995,8 @@ export const products = [
   {
     // ===== Décoration de Noël ronde en cristal à graver (mise en ligne le 09/11/2026, « Mets en cristal et applique »).
     slug: "decoration-noel-verre-gravee",
+    // 🎄 Liée à l'interrupteur Noël (Gestion → Fêtes) : Noël éteint = la décoration disparaît de tout le site (fiche, cristal, cadeaux de Noël).
+    fete: "noel",
     badge: "Nouveau",
     name: "Décoration de Noël en cristal gravée",
     weight: 120,
