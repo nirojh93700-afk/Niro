@@ -1,5 +1,5 @@
 diff --git a/src/app/page.jsx b/src/app/page.jsx
-index 2f86fc7d..fda16e74 100644
+index 2f86fc7d..fe94fb32 100644
 --- a/src/app/page.jsx
 +++ b/src/app/page.jsx
 @@ -70,6 +70,7 @@ export default async function HomePage() {
@@ -10,20 +10,77 @@ index 2f86fc7d..fda16e74 100644
    const gobelet = C("gobelet-isotherme-40oz");
    const puzzle = C("puzzle-savane");
    const BIJOUX_PHOTOS = [["collier-3coeurs-1.jpg", "Collier 3 Cœurs, porté", "collier-3coeurs"], ["bracelet-femme-acier-porte.jpg", "Bracelet gravé", "bracelet-femme-acier"], ["bracelet-cordon-plaque-4.jpg", "Bracelets homme gravés", "bracelet-cordon-plaque"]];
-@@ -234,12 +235,15 @@ export default async function HomePage() {
-               <p>Cristal photo, verres, bijoux gravés : chaque création est faite à la commande dans notre atelier, et n’existe qu’une fois.</p>
-               <Bouton href="/offrir?occ=noel">Voir les idées de Noël</Bouton>
-               <p className="mxnoel-note">Chaque pièce est gravée une par une : pensez-y tôt.</p>
+@@ -154,6 +155,29 @@ export default async function HomePage() {
+           </section>
+         ) : null}
+ 
++        {/* NOËL — rouge et or */}
++        {show.noel ? (
++          <section className="mxnoel rv" aria-labelledby="t-noel">
++            <div className="mxnoel-copy">
++              <h2 id="t-noel">Ce Noël, offrez un <em>cadeau unique</em></h2>
++              <p>Cristal photo, verres, bijoux gravés : chaque création est faite à la commande dans notre atelier, et n’existe qu’une fois.</p>
++              <Bouton href="/offrir?occ=noel">Voir les idées de Noël</Bouton>
++              <p className="mxnoel-note">Chaque pièce est gravée une par une : pensez-y tôt.</p>
 +              {decoNoel ? <p className="mxnoel-note"><Link href="/produit/decoration-noel-verre-gravee" style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: 3 }}>Nouveau : la décoration de Noël en cristal à graver, dès 16,90 €</Link></p> : null}
-             </div>
-             <div className="fan">
-               {/* eslint-disable-next-line @next/next/no-img-element */}
-               <LienPhoto c={cristalH}><img className="fan-1" src="/produits/cristal-h-famille.jpg" alt="Photo de famille gravée dans un cristal" loading="lazy" /></LienPhoto>
-               {/* eslint-disable-next-line @next/next/no-img-element */}
++            </div>
++            <div className={decoNoel ? "fan fan4" : "fan"}>
++              {/* eslint-disable-next-line @next/next/no-img-element */}
++              <LienPhoto c={cristalH}><img className="fan-1" src="/produits/cristal-h-famille.jpg" alt="Photo de famille gravée dans un cristal" loading="lazy" /></LienPhoto>
++              {/* eslint-disable-next-line @next/next/no-img-element */}
++              <LienPhoto c={collierPlaques}><img className="fan-2" src="/produits/collier-coeur-plaques-1.jpg" alt="Collier cœur et plaques gravés" loading="lazy" /></LienPhoto>
++              {/* eslint-disable-next-line @next/next/no-img-element */}
++              {decoNoel ? <LienPhoto c={decoNoel}><img className="fan-d" src="/produits/deco-noel-cristal-ex-1.jpg" alt="Décoration de Noël en cristal gravée" loading="lazy" /></LienPhoto> : null}
++              {/* eslint-disable-next-line @next/next/no-img-element */}
++              <LienPhoto c={whisky}><img className="fan-3" src="/produits/verre_a_whisky_exemple_face.jpg" alt="Verre à whisky gravé" loading="lazy" /></LienPhoto>
++            </div>
++          </section>
++        ) : null}
++
+         {/* LES DERNIÈRES SORTIES — rail */}
+         {show.newArrivals && nouveaux.length ? (
+           <Rail titre={<>Les dernières sorties <em>de l’atelier</em></>} sous="Nos créations ajoutées ces derniers jours."
+@@ -226,26 +250,6 @@ export default async function HomePage() {
+           </section>
+         ) : null}
+ 
+-        {/* NOËL — rouge et or */}
+-        {show.noel ? (
+-          <section className="mxnoel rv" aria-labelledby="t-noel">
+-            <div className="mxnoel-copy">
+-              <h2 id="t-noel">Ce Noël, offrez un <em>cadeau unique</em></h2>
+-              <p>Cristal photo, verres, bijoux gravés : chaque création est faite à la commande dans notre atelier, et n’existe qu’une fois.</p>
+-              <Bouton href="/offrir?occ=noel">Voir les idées de Noël</Bouton>
+-              <p className="mxnoel-note">Chaque pièce est gravée une par une : pensez-y tôt.</p>
+-            </div>
+-            <div className="fan">
+-              {/* eslint-disable-next-line @next/next/no-img-element */}
+-              <LienPhoto c={cristalH}><img className="fan-1" src="/produits/cristal-h-famille.jpg" alt="Photo de famille gravée dans un cristal" loading="lazy" /></LienPhoto>
+-              {/* eslint-disable-next-line @next/next/no-img-element */}
 -              <LienPhoto c={collierPlaques}><img className="fan-2" src="/produits/collier-coeur-plaques-1.jpg" alt="Collier cœur et plaques gravés" loading="lazy" /></LienPhoto>
-+              {decoNoel
-+                ? <LienPhoto c={decoNoel}><img className="fan-2" src="/produits/deco-noel-cristal-ex-1.jpg" alt="Décoration de Noël en cristal gravée" loading="lazy" /></LienPhoto>
-+                : <LienPhoto c={collierPlaques}><img className="fan-2" src="/produits/collier-coeur-plaques-1.jpg" alt="Collier cœur et plaques gravés" loading="lazy" /></LienPhoto>}
-               {/* eslint-disable-next-line @next/next/no-img-element */}
-               <LienPhoto c={whisky}><img className="fan-3" src="/produits/verre_a_whisky_exemple_face.jpg" alt="Verre à whisky gravé" loading="lazy" /></LienPhoto>
-             </div>
+-              {/* eslint-disable-next-line @next/next/no-img-element */}
+-              <LienPhoto c={whisky}><img className="fan-3" src="/produits/verre_a_whisky_exemple_face.jpg" alt="Verre à whisky gravé" loading="lazy" /></LienPhoto>
+-            </div>
+-          </section>
+-        ) : null}
+-
+         {/* NOS UNIVERS */}
+         {show.categories ? (
+           <section className="sec univ rv" id="univers" aria-labelledby="t-univ">
+diff --git a/src/app/univers-site.css b/src/app/univers-site.css
+index c84419d7..744cc9cc 100644
+--- a/src/app/univers-site.css
++++ b/src/app/univers-site.css
+@@ -72,3 +72,12 @@
+ 
+ /* Audit 05/11/2026 (accessibilité) : nombre de créations des onglets d'univers un peu plus foncé (contraste 3,9 → 4,9). */
+ .mx .uv-tabs small{opacity:.62}
++
++/* 🎄 Bloc Noël à 4 photos (décoration de Noël en cristal au premier plan) — 09/11/2026 */
++.mx .fan.fan4{height:480px}
++.mx .fan.fan4 img{width:44%}
++.mx .fan.fan4 .fan-1{left:0;top:0;transform:rotate(-7deg);z-index:1}
++.mx .fan.fan4 .fan-2{right:0;left:auto;top:0;transform:rotate(6deg);z-index:1}
++.mx .fan.fan4 .fan-3{left:4%;right:auto;top:200px;transform:rotate(-4deg);z-index:2}
++.mx .fan.fan4 .fan-d{left:42%;top:170px;transform:rotate(4deg);z-index:3}
++@media (max-width:640px){.mx .fan.fan4{height:auto;aspect-ratio:1/1.02}.mx .fan.fan4 img{width:47%}.mx .fan.fan4 .fan-3{top:46%}.mx .fan.fan4 .fan-d{left:44%;top:40%}}
