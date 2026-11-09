@@ -103,6 +103,13 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
+## 🖼️ APERÇU DE LA COMMANDE TEL QUE LA CLIENTE L'A VU, POUR TOUS LES PRODUITS — 09/11/2026 (gérant : « sur le carnet je sais pas comment la cliente a choisi… je veux l'aperçu de la commande pour toutes les commandes ») — PRÉPARÉ, À POUSSER SUR SON MOT
+- `ApercuPapeterie.jsx` (admin) REDESSINE la gravure avec le MÊME code que la fiche : carnet (`Gravure` exporté de CarnetFiche, couverture + dos de la
+  couleur commandée), marque-pages (`Signet` + `itemsDe` exportés de MarquePagesFiche, face + dos de chaque pièce du coffret), gobelet (`GobeletPreview`
+  avec `spec.composition`, sinon recalculé depuis les champs). Anciennes commandes comprises. Branché dans `GlassPreview` (FicheAtelier → fiche commande,
+  fiche papier). `GlassPreview` montre aussi tel quel l'aperçu enregistré à la commande (`previewImage`) quand il existe (sauf modèle d'avant le 05/11).
+- Page Atelier : chaque article qui n'est pas un verre a maintenant son bloc « Aperçu vu par la cliente » (avant : aucun visuel pour bijoux, cristaux, carnet…).
+
 ## 🎄 DÉCORATION DE NOËL RONDE EN CRISTAL GRAVÉE — ✅ EN LIGNE LE 09/11/2026 (« Mets en cristal et applique »)
 - Fiche `decoration-noel-verre-gravee` (slug gardé), nom « Décoration de Noël en cristal gravée », catégorie `deco`, rayon « Décoration de Noël » de
   l'univers Cristal (`univers.js`), carte + paragraphe dans le guide « Cristal photo 3D » (`guide-cristal-3d.html`). Stock non suivi (illimité) tant qu'il

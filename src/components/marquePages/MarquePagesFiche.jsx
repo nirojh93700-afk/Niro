@@ -29,7 +29,7 @@ const copie = (v) => Object.fromEntries(Object.entries(v).map(([k, e]) => [k, { 
 const NUMS = new Set(MP_NUMS_OK);
 const EMP_COURT = { "face|haut": "face, en haut", "face|bas": "face, au milieu", "dos|haut": "dos, en haut", "dos|bas": "dos, au milieu" };
 
-function itemsDe(v, police) {
+export function itemsDe(v, police) {
   const it = [];
   for (const key of Object.keys(v || {})) {
     const e = v[key]; const [side, zone] = key.split("|");
@@ -95,7 +95,7 @@ export function ajuster(t, maxW, maxH) {
   } catch { /* mesure impossible : texte laissé tel quel */ }
 }
 
-function Signet({ modele, side, items, H, couleur, onZoom }) {
+export function Signet({ modele, side, items, H, couleur, onZoom }) {
   const A = MP_DATA.modeles[modele];
   const ref = useRef(null);
   const W = Math.round(H * A.ratio);

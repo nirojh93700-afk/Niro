@@ -24,6 +24,7 @@ import { positionTexteCristal, LIBELLE_POSITION } from "@/lib/cristalTexte";
 import VarBadge from "@/components/admin/VarBadge";
 import ApercuClient from "@/components/admin/ApercuClient";
 import Apercu3DCommande, { a3D } from "@/components/admin/Apercu3DCommande";
+import ApercuPapeterie, { aApercuPapeterie } from "@/components/admin/ApercuPapeterie";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
@@ -72,6 +73,8 @@ function CristalPreview({ item, p }) {
 
 export function GlassPreview({ item, papier = false }) {
   const p = getProductBySlug(item.slug);
+  // Carnet, marque-pages, gobelet : la gravure redessinée comme sur leur fiche (09/11/2026).
+  if (aApercuPapeterie(p)) return <ApercuPapeterie item={item} p={p} papier={papier} />;
   // Bijou à aperçu 3D : à l'écran, le MÊME aperçu 3D que la cliente a vu (05/11/2026, 0BHBVOXK).
   // Sur papier, la photo d'avant (un dessin 3D ne s'imprime pas).
   if (!papier && a3D(p)) return <Apercu3DCommande item={item} />;
@@ -82,6 +85,22 @@ export function GlassPreview({ item, papier = false }) {
     return (
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", maxWidth: "100%" }}>
         {cotes.map((side) => <ApercuClient key={side} item={item} side={side} largeur={cotes.length > 1 ? 220 : 300} />)}
+      </div>
+    );
+  }
+  // L'image enregistrée à l'ajout au panier = exactement ce que la cliente a vu (photo du produit + sa gravure) :
+  // on la montre telle quelle (09/11/2026). Sauf un modèle d'avant le 05/11/2026 (0SJAY2KK : mauvais modèle capturé).
+  const capture = typeof item.previewImage === "string" && /^(\/|https?:|data:image)/.test(item.previewImage) && item.previewImage !== item.photoSrc && !(item.modele && !item.designCapture);
+  if (capture) {
+    return (
+      <div style={{ width: 300, maxWidth: "100%" }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={item.previewImage} alt="Aperçu vu par la cliente" style={{ width: "100%", display: "block", borderRadius: 10, border: "1px solid #e7d9bd" }} />
+        {item.previewImageFond ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.previewImageFond} alt="Aperçu du fond" style={{ width: "100%", display: "block", borderRadius: 10, border: "1px solid #e7d9bd", marginTop: 8 }} />
+        ) : null}
+        <div style={{ fontSize: "0.74rem", color: "#888", marginTop: 4 }}>Image enregistrée au moment de la commande.</div>
       </div>
     );
   }

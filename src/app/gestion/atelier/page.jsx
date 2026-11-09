@@ -34,6 +34,7 @@ import FenetreConditionnement, { BlocConditionnement } from "@/components/admin/
 import BoutonRate, { RatesCommande } from "@/components/admin/Rates";
 import VarBadge from "@/components/admin/VarBadge";
 import ApercuClient from "@/components/admin/ApercuClient";
+import { GlassPreview } from "@/components/admin/FicheAtelier";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
@@ -363,6 +364,8 @@ export default function AtelierPage() {
                   })()}
 
                   <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
+                    {/* Tous les autres produits (bijoux, cristal, carnet, marque-pages, gobelet…) : l'aperçu tel que la cliente l'a vu (09/11/2026). */}
+                    {!isGlass(item.slug) ? <div style={{ maxWidth: "100%" }}><div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 4 }}>Aperçu vu par la cliente</div><GlassPreview item={item} /></div> : null}
                     {isGlass(item.slug) && sidesOf(item).map((side) => {
                       const cfg = sideConfig(item, side);
                       const preview = cfg?.preview;

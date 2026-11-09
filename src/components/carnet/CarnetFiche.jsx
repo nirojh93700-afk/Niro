@@ -24,7 +24,7 @@ import { CN_FACES, CN_ZONES, CN_ZONES_POS, CN_ENCRE, CN_GRAVURE, cnVide, cnPlein
 const cle = (t) => t.toLowerCase(); // « Marron » → « marron »
 
 // --- La gravure posée sur la grande photo ----------------------------------------------------------------------------
-function Gravure({ v, side, couleur, police }) {
+export function Gravure({ v, side, couleur, police }) {
   const ref = useRef(null);
   const [W, setW] = useState(0);
   useLayoutEffect(() => {
