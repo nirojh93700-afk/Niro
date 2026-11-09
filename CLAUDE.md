@@ -89,7 +89,7 @@
 ## 🎄 DÉCORATION DE NOËL RONDE EN CRISTAL GRAVÉE — ✅ EN LIGNE LE 09/11/2026 (« Mets en cristal et applique »)
 - Fiche `decoration-noel-verre-gravee` (slug gardé), nom « Décoration de Noël en cristal gravée », catégorie `deco`, rayon « Décoration de Noël » de
   l'univers Cristal (`univers.js`), carte + paragraphe dans le guide « Cristal photo 3D » (`guide-cristal-3d.html`). Stock non suivi (illimité) tant qu'il
-  ne le saisit pas. 2ᵉ photo = celle qu'il a redonnée le 09/11 (« Merry Christmas Grandma & Grandpa », sans le bandeau « Custom designs ») → `deco-noel-cristal-exemple.jpg`. Prix vérifiés par `test-textes-prix` : les textes écrivent 16,90 / 21,90 € (jamais « +5 € », qui n'est pas un supplément payé).
+  ne le saisit pas. 2ᵉ photo = celle qu'il a redonnée le 09/11 (« Merry Christmas Grandma & Grandpa », sans le bandeau « Custom designs ») → `deco-noel-cristal-exemple.jpg`. + 4 images « EXEMPLE » (09/11, « Toutes, tu peux mettre sur la fiche ») `deco-noel-cristal-ex-1..4.jpg` = sa photo, gravure anglaise effacée (inpaint), gravure française en blanc givré (dessin 3 Camille · photo couple · dessin 20 Famille Martin · photo enfant), générateur `tools/maquettes/deco-noel-cristal-exemples.py`. Prix vérifiés par `test-textes-prix` : les textes écrivent 16,90 / 21,90 € (jamais « +5 € », qui n'est pas un supplément payé).
 - (historique de la maquette ci-dessous)
 - https://claude.ai/artifact/ST5AS45CQDddcC9kTyj7P7 (captures de la vraie fiche construite en local, puis tout remis à zéro). Ses réponses : **16,90 €** ·
   **boîte bleue avec mousse EN OPTION** (prix proposé par moi : +3,90 €, à valider) · **ruban bleu seulement** · **10 cm**. Fournisseur : Small Bridge WDY-SD

@@ -2,7 +2,8 @@
 """Images « Exemple » de la décoration de Noël en cristal (09/11/2026, gérant : « des exemples comme si c'était gravé, des photos aussi »).
 Base = la photo du gérant (cristal sur son socle, décor chaleureux) dont la gravure anglaise est effacée (inpaint OpenCV),
 puis une gravure en FRANÇAIS posée en blanc givré : dessins de Noël du site (noel-NN-blanc.png) ou photo d'exemple + textes.
-Usage : python3 tools/maquettes/deco-noel-cristal-exemples.py <dossier de sortie>"""
+Usage : python3 tools/maquettes/deco-noel-cristal-exemples.py <dossier de sortie>  (puis renommer en public/produits/deco-noel-cristal-ex-1..4.jpg :
+dessin-camille, photo-couple, mots-famille, photo-enfant)"""
 import os, sys
 import cv2, numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
@@ -74,7 +75,13 @@ def exemple(nom, pieces):
         elif kind == "photo": y += photo(cal, os.path.join(ROOT, args[0]), args[1], y) + 10
         elif kind == "espace": y += args[0]
         else: y += texte(cal, *args[:2], y=y, poids=args[2] if len(args) > 2 else None, espace=args[3] if len(args) > 3 else 0, taille=None) if False else texte(cal, args[0], args[1], args[2], y, args[3] if len(args) > 3 else None, args[4] if len(args) > 4 else 0)
-    grave(img, cal).save(os.path.join(OUT, nom), "JPEG", quality=88, optimize=True, progressive=True); print(nom)
+    img = grave(img, cal)
+    # étiquette « EXEMPLE » comme sur les autres fiches (pastille encre, lettres or)
+    d = ImageDraw.Draw(img); fb = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 26)
+    w = d.textlength("EXEMPLE", font=fb)
+    d.rounded_rectangle([26, 26, 26 + w + 40, 76], radius=25, fill=(26, 18, 6))
+    d.text((46, 35), "EXEMPLE", font=fb, fill=(226, 198, 126))
+    img.save(os.path.join(OUT, nom), "JPEG", quality=88, optimize=True, progressive=True); print(nom)
 
 PORT = "docs/maquettes/assets/marque-pages/exemples/portraits/"
 exemple("exemple-dessin-camille.jpg", [("dessin", 3, 190), ("t", "JOYEUX NOËL", PF, 30, 500, 4), ("t", "Camille", GV, 92), ("t", "2026", PF, 30, 500, 4)])
