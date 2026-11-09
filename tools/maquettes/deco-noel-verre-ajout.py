@@ -18,7 +18,7 @@ prod='''  {
     personalizationLabel: "Un dessin de Noël, votre texte ou votre photo",
     images: [
       "/produits/deco-noel-verre-vierge.jpg",
-      "/produits/deco-noel-verre-sapin.jpg",
+      "/produits/deco-noel-cristal-exemple.jpg",
       "/produits/deco-noel-verre-boite.jpg",
     ],
     engraveImage: "/produits/deco-noel-verre-vierge.jpg",
