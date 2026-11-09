@@ -63,6 +63,54 @@ function Chart({ series }) {
   );
 }
 
+// Les produits vendus sans coût d'achat connu : un champ par produit, enregistré comme le « coût »
+// de la fiche (Produits & stock). Une ligne sans fiche (devis, livraison saisie à la main) ne peut
+// pas recevoir de coût ici : elle est listée à part.
+function CoutsManquants({ manque, adminKey, onSaved }) {
+  const [val, setVal] = useState({});
+  const [etat, setEtat] = useState({});
+  const items = manque.items || [];
+  const avecFiche = items.filter((i) => i.slug);
+  const sansFiche = items.filter((i) => !i.slug);
+  const enregistrer = async (slug) => {
+    const cout = Math.round(Number(String(val[slug] || "").replace(",", ".")) * 100) / 100;
+    if (!(cout > 0)) { setEtat((e) => ({ ...e, [slug]: "Écrivez un coût supérieur à 0." })); return; }
+    setEtat((e) => ({ ...e, [slug]: "…" }));
+    try {
+      const res = await fetch("/api/admin/catalog", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": adminKey }, body: JSON.stringify({ action: "edit", slug, patch: { cost: cout } }) });
+      if (!res.ok) throw new Error();
+      setEtat((e) => ({ ...e, [slug]: "ok" }));
+      onSaved && onSaved();
+    } catch { setEtat((e) => ({ ...e, [slug]: "Non enregistré, réessayez." })); }
+  };
+  return (
+    <div style={{ ...card, background: "#fbf3e6", borderColor: "#e7d3a1" }}>
+      <strong>{manque.count} article(s) vendu(s) sans coût d&apos;achat connu.</strong>
+      <div style={{ fontSize: "0.85rem", color: "var(--ink-soft)", marginTop: 4 }}>
+        Ces articles comptent pour 0 € de coût : le bénéfice affiché est donc trop haut. Écrivez ce que vous coûte UNE pièce, port du fournisseur compris, puis « Enregistrer ».
+      </div>
+      {avecFiche.length > 0 && (
+        <div style={{ display: "grid", gap: 8, marginTop: 12 }}>
+          {avecFiche.map((i) => (
+            <div key={i.slug} style={{ display: "flex", flexWrap: "wrap", gap: 8, alignItems: "center", background: "#fff", border: "1px solid #eadfc4", borderRadius: 10, padding: "8px 10px" }}>
+              <span style={{ flex: "1 1 200px", minWidth: 0, overflowWrap: "anywhere" }}><b>{i.name}</b><br /><small style={{ color: "var(--ink-soft)" }}>{i.units} vendu{i.units > 1 ? "s" : ""} · {euro(i.revenue)} encaissés</small></span>
+              <input inputMode="decimal" placeholder="Coût d'une pièce" aria-label={`Coût d'achat d'une pièce : ${i.name}`} value={val[i.slug] || ""} onChange={(e) => setVal((v) => ({ ...v, [i.slug]: e.target.value }))}
+                style={{ width: 130, boxSizing: "border-box", minWidth: 0, padding: "8px 10px", border: "1px solid #d9c9a3", borderRadius: 8, fontSize: 16 }} />
+              <button type="button" className="btn btn-gold" style={{ padding: "8px 14px" }} onClick={() => enregistrer(i.slug)}>Enregistrer</button>
+              {etat[i.slug] ? <small style={{ flexBasis: "100%", color: etat[i.slug] === "ok" ? "#2e7d32" : "#b02a25" }}>{etat[i.slug] === "ok" ? "Enregistré : le bénéfice est recalculé." : etat[i.slug]}</small> : null}
+            </div>
+          ))}
+        </div>
+      )}
+      {sansFiche.length > 0 && (
+        <div style={{ fontSize: "0.85rem", color: "var(--ink-soft)", marginTop: 12 }}>
+          Lignes sans fiche produit (devis, lignes saisies à la main), impossibles à chiffrer ici : {sansFiche.map((i) => `${i.name} (${i.units})`).join(", ")}.
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function BeneficesPage() {
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
@@ -254,15 +302,9 @@ export default function BeneficesPage() {
         <div style={{ fontSize: "1.9rem", fontWeight: 800, color: netProfit >= 0 ? "#e2c67e" : "#e78d7a", fontVariantNumeric: "tabular-nums" }}>{euro(netProfit)}</div>
       </div>
 
-      {/* Alerte coûts manquants */}
+      {/* Coûts d'achat manquants : saisis ici, produit par produit (09/11/2026) */}
       {data.missingCost?.count > 0 && (
-        <div style={{ ...card, background: "#fbf3e6", borderColor: "#e7d3a1" }}>
-          <strong>⚠️ {data.missingCost.count} article(s) vendu(s) sans coût d&apos;achat renseigné.</strong>
-          <div style={{ fontSize: "0.85rem", color: "var(--ink-soft)", marginTop: 4 }}>
-            Le bénéfice est donc <strong>sous-estimé en coût</strong> (ces articles comptent comme coût 0). Renseigne le « coût » sur ces produits dans <a href="/gestion/produits">Produits &amp; Stock</a> pour un calcul exact.
-            {data.missingCost.names.length ? <div style={{ marginTop: 4 }}>Concernés : {data.missingCost.names.join(", ")}.</div> : null}
-          </div>
-        </div>
+        <CoutsManquants manque={data.missingCost} adminKey={key} onSaved={() => load(key)} />
       )}
 
       {/* Graphique */}

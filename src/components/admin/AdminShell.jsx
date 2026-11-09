@@ -89,16 +89,17 @@ const SECTIONS = [
     { id: "reglages-produits", t: "Réglage des aperçus", href: "/gestion/reglages" },
     { id: "tailles", t: "Tailles & coûts", href: "/gestion/tailles-conseillees" },
     { id: "sante", t: "Santé du catalogue", href: "/gestion/sante" } ] },
-  { id: "stock", t: "Stock & achats", ic: "box", tabs: [
+  { id: "stock", t: "Stock & achats", ic: "box", badge: "rachat", tabs: [
     { id: "materiel", t: "Matériel", href: "/gestion/materiel" },
     { id: "packaging", t: "Emballages vendus", href: "/gestion/emballages" },
-    { id: "achats", t: "Achats & factures", href: "/gestion/achats" } ] },
+    { id: "achats", t: "Achats & factures", href: "/gestion/achats", badge: "rachat" } ] },
   { id: "fetes", t: "Fêtes", ic: "spark", tabs: [
     { id: "fetes", t: "Fêtes de l'année", href: "/gestion/fetes" } ] },
   { id: "marketing", t: "Marketing", ic: "mega", tabs: [
     { id: "newsletter", t: "Newsletter", href: "/gestion/newsletter" },
     { id: "promos", t: "Codes promo", href: "/gestion/promotions" },
     { id: "offre-gravure", t: "Offre gravure offerte", href: "/gestion/offre-gravure" },
+    { id: "provenance", t: "D'où viennent les ventes", href: "/gestion/provenance" },
     { id: "etude-marche", t: "Étude de marché", href: "/gestion/etude-marche" } ] },
   { id: "finances", t: "Finances", ic: "chart", tabs: [
     { id: "benefices", t: "Bénéfices", href: "/gestion/benefices" },
@@ -159,7 +160,7 @@ export default function AdminShell({ children }) {
   const [recents, setRecents] = useState([]);
   const [filtre, setFiltre] = useState(""); // recherche d'écran dans le menu (téléphone)
   const [recherche, setRecherche] = useState(false); // recherche universelle (Ctrl+K)
-  const [counts, setCounts] = useState({ prep: 0, unread: 0, replies: 0, reviews: 0, pros: 0 });
+  const [counts, setCounts] = useState({ prep: 0, unread: 0, replies: 0, reviews: 0, pros: 0, rachat: 0 });
 
   useEffect(() => {
     const apply = () => setHash(typeof window !== "undefined" ? window.location.hash : "");
@@ -202,7 +203,7 @@ export default function AdminShell({ children }) {
       const r = await fetch("/api/admin/counts", H);
       if (!r.ok) return;
       const c = await r.json();
-      setCounts({ prep: c.prep || 0, unread: c.unread || 0, replies: c.replies || 0, reviews: c.reviews || 0, pros: c.pros || 0 });
+      setCounts({ prep: c.prep || 0, unread: c.unread || 0, replies: c.replies || 0, reviews: c.reviews || 0, pros: c.pros || 0, rachat: c.rachat || 0 });
     } catch { /* réseau : on garde les derniers chiffres */ }
   }, []);
   // Une fois au chargement puis toutes les 2 min — plus à chaque changement d'écran.

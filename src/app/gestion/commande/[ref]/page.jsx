@@ -23,6 +23,7 @@ import Ic from "@/components/admin/IconesGestion";
 import VarBadge from "@/components/admin/VarBadge";
 import DelaiCommande from "@/components/admin/DelaiCommande";
 import HistoriqueCommande from "@/components/admin/HistoriqueCommande";
+import ProvenanceCommande from "@/components/admin/ProvenanceCommande";
 import { BlocConditionnement } from "@/components/admin/Conditionnement";
 import { RatesCommande } from "@/components/admin/Rates";
 import { FormExpedition, Pill, LiensSuivi } from "@/components/admin/CarteCommande";
@@ -464,6 +465,9 @@ export default function FicheCommandePage() {
               {usage ? <div className="fc-gain"><span>Gain de la commande<small>après produits, matériel, étiquette, Stripe, ratés</small></span><b>{euro(usage.gain)}</b></div> : <div className="fc-sub">Gain calculé à « Valider » dans Conditionnement.</div>}
               <div className={`fc-sub fc-pay`} style={{ color: remb.tone === "bad" ? "var(--ash-bad)" : remb.tone === "ok" ? "var(--ash-ok)" : remb.tone === "warn" ? "var(--ash-warn)" : undefined, fontWeight: 600 }}>{remb.txt} · dans « Plus d&apos;actions ».</div>
             </div>
+          </Carte>
+          <Carte id="fc-provenance" ic="pin" titre="Provenance de la cliente" h3>
+            <ProvenanceCommande order={o} />
           </Carte>
           <Carte id="fc-notes" ic="flag" titre="Étiquettes & note interne" h3>
             <div className="cb">

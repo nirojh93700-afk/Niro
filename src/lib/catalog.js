@@ -27,12 +27,22 @@ import { configNoel, noelPourProduit, emballagesNoelPourProduit, champsFicheAvec
 
 const EDITABLE = ["name", "tagline", "title", "descriptionHtml", "category", "subcategory", "type", "personalizationLabel", "model3d", "badge"];
 
+export function sansAllegations(html) {
+  return String(html || "")
+    .replace(/\s*\(qualité chirurgicale\)/gi, "")
+    .replace(/acier chirurgical/gi, "acier inoxydable")
+    .replace(/\s+hypoallergéniques?/gi, "");
+}
+
 function applyOverride(product, ov, images, promos) {
   const p = { ...product };
   if (ov) {
     for (const f of EDITABLE) {
       if (ov[f] !== undefined && ov[f] !== "") p[f] = ov[f];
     }
+    // Mots à risque encore écrits dans une description enregistrée dans Gestion (audit du 05/11) :
+    // « hypoallergénique » est une allégation de santé, « chirurgical » n'est pas une norme.
+    if (typeof p.descriptionHtml === "string") p.descriptionHtml = sansAllegations(p.descriptionHtml);
     if (ov.badge === "none") p.badge = ""; // "Aucun" choisi dans l'admin → retire le badge du catalogue
     if (ov.hidden !== undefined) p.hidden = Boolean(ov.hidden); // l'admin décide (publier/masquer) — prime TOUJOURS sur le code
     if (product.retire) p.hidden = true; // produit retiré du site sur ordre du gérant : rien dans Gestion ne le republie

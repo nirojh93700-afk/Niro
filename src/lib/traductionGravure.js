@@ -119,6 +119,55 @@ export function resumeLangue(fv) {
   return `${l.nom} — traduit depuis ${src.map((x) => `« ${x} »`).join(", ") || "« »"} (traduction automatique, relue et validée par la cliente, case cochée)`;
 }
 
+// ── Fiches à part (carnet, marque-pages, gobelet, cristaux déjà gravés — 09/11/2026 : « RESTE : carnet,
+// marque-pages, gobelet, cristaux déjà gravés »). Leurs textes sont rangés dans des emplacements
+// ({ t: texte GRAVÉ, ts: français tapé }) ; au panier, ils sont recopiés à plat (mêmes clés que partout :
+// langue, langueCles, k, kSource, tradOk, direct) pour que le paiement et l'atelier les lisent sans rien changer.
+/** Le texte contient au moins une lettre (une date, un numéro, une heure ne se traduisent jamais). */
+export const aDesLettres = (t) => /\p{L}/u.test(String(t || ""));
+/** Ce que le champ de saisie montre : le français tapé quand le texte est traduit. */
+export const texteMontre = (lg, t, ts) => (estTraduit(lg) ? ts || t || "" : t || "");
+/** Ce que la frappe écrit dans l'emplacement : { t, ts }. Sans lettre (date, numéro) : gravé tel quel. */
+export function texteFrappe(lg, v) {
+  return estTraduit(lg) && aDesLettres(v) ? { t: "", ts: v } : { t: v, ts: "" };
+}
+/**
+ * Champs à plat pour le panier et l'atelier. lg = { langue, direct, tradOk } ; textes = [{ key, t, ts }].
+ * Français, ou aucun texte avec des lettres : {} (rien de plus dans le panier).
+ */
+export function champsLangueAPlat(lg, textes) {
+  if (!langueActive(lg)) return {};
+  const direct = lg.direct === "oui";
+  const ts = (textes || [])
+    .map((x) => ({ cle: x.key, grave: String(x.t || "").trim(), source: direct ? "" : String(x.ts || "").trim() }))
+    .filter((x) => aDesLettres(x.source || x.grave));
+  if (!ts.length) return {};
+  const out = { langue: lg.langue, langueCles: ts.map((x) => x.cle).join(",") };
+  if (direct) out.direct = "oui";
+  else if (lg.tradOk === "oui") out.tradOk = "oui";
+  for (const x of ts) {
+    out[x.cle] = x.grave;
+    if (x.source) out[cleSource(x.cle)] = x.source;
+  }
+  return out;
+}
+/**
+ * Remet d'accord les textes à plat avec la langue choisie (page des cristaux déjà gravés : le texte libre et
+ * les champs du zodiaque ne sont pas affichés en même temps, le menu de langue ne bascule que ceux qu'il voit).
+ * Traduit : un texte sans son français tapé repart en traduction ; français ou « j'écris moi-même » : le texte
+ * tapé redevient le texte gravé. Renvoie le même objet si rien ne change.
+ */
+export function alignerTextes(fv, cles) {
+  let n = fv;
+  const pose = (patch) => { n = { ...n, ...patch }; };
+  for (const k of cles || []) {
+    const g = String(n[k] || ""), s = String(n[cleSource(k)] || "");
+    if (estTraduit(n)) { if (g.trim() && !s.trim() && aDesLettres(g)) pose({ [cleSource(k)]: g, [k]: "", tradOk: "" }); }
+    else if (s) pose({ [k]: s, [cleSource(k)]: "" });
+  }
+  return n;
+}
+
 /** Où mettre le décor : autour du texte (défaut), de la date, ou des deux. */
 export function decorSur(fv, cible) {
   const p = fv?.decorPlace || "texte";

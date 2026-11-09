@@ -5,6 +5,7 @@ import { verifierCodeDevis } from "@/lib/promoDevis";
 import { getSettings } from "@/lib/stock";
 import { livraisonActive, portDevis } from "@/lib/portDevis";
 import { devisEffectif } from "@/lib/devisEffectif";
+import { nettoyerProvenance, compacterProvenance } from "@/lib/provenance";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +35,9 @@ export async function POST(req) {
   const siteUrl = resolveSiteUrl();
   const stockPairs = app.stock;
   const stripe = new Stripe(secret);
+  // Provenance de la cliente : nettoyée ici, facultative, ne peut jamais gêner le paiement.
+  let provMeta = "";
+  try { provMeta = compacterProvenance(nettoyerProvenance(body?.provenance)); } catch { provMeta = ""; }
   // Pays livrés (mêmes que la boutique) — pour collecter l'adresse de livraison.
   const SHIPPING_COUNTRIES = ["FR", "BE", "CH", "LU", "DE", "ES", "IT", "NL", "PT", "MC"];
   // Code promo saisi sur le lien du devis (03/10/2026) : revérifié ICI côté serveur (jamais
@@ -95,6 +99,7 @@ export async function POST(req) {
         ...(app.n ? { qte: String(app.n) } : {}),
         ...promoMeta,
         ...relaisMeta,
+        ...(provMeta ? { prov: provMeta } : {}), // d'où vient la cliente (facultatif)
         ...(stockPairs.length ? { stock: JSON.stringify(stockPairs).slice(0, 480) } : {}),
       },
       success_url: `${siteUrl}/merci?session_id={CHECKOUT_SESSION_ID}`,

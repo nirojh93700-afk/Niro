@@ -1,3 +1,18 @@
+## 🧰 LOT DU 09/11/2026 SOIR — SITE 1, 4, 7, 8, 9 + GESTION 1 À 6 (gérant : « tu me fais ça », numéros choisis dans ma liste) — CONSTRUIT SUR LA BRANCHE DE TRAVAIL `claude/cool-maxwell-qh1kcw`, PAS EN LIGNE : attendre son « mets en ligne » (puis fusion vers `claude/site-product-overview-1t2de`)
+- **Site** : ① provenance des commandes (`src/lib/provenance.js`, `ProvenanceCapture.jsx`, `metadata.prov` → `order.provenance`, pastille « Venue de » + filtre dans la file,
+  carte dans la fiche commande, page Gestion → Marketing → « D'où viennent les ventes » `/gestion/provenance` avec les liens à copier pour les bios, ligne 6 ter de
+  Confidentialité, `npm run test-provenance`) · ④ recherche dans l'en-tête (loupe à droite sur ordinateur, À GAUCHE sur téléphone pour ne pas passer sur le logo ;
+  `/boutique?q=` sans accents, plusieurs mots) · ⑦ « hypoallergénique » / « chirurgical » retirés (FAQ + `sansAllegations` dans `catalog.js` pour les descriptions
+  enregistrées dans Gestion) · ⑨ « Me prévenir si le prix baisse » sur la fiche (`AlertePrix.jsx`, même API que Mes favoris, connexion demandée) · ⑤ tuile Maison : déjà corrigée avant.
+- **Gestion** : ① une facture de matériel remplit le stock de Matériel (`mat:<id>` dans `/api/admin/purchases`, à la PIÈCE, pas compté en dépense) · ② « à racheter »
+  calculé sur 60 jours de ventes (`src/lib/reachat.js`, `reachatServeur.js`, `/api/admin/reachat`, pastille sur Stock & achats, panneau en tête d'Achats & factures,
+  `npm run test-reachat`) · ③ l'agent e-mail voit les devis de l'adresse (`devisDeLAdresse` dans `inbox.js`) · ④ coûts d'achat manquants saisis dans Bénéfices
+  (`CoutsManquants`, enregistre le « coût » de la fiche) · ⑤ le matériel habituel du colis se coche dans le formulaire « Expédier » (`FormExpedition`, jamais deux fois) ·
+  ⑥ fichier à graver aussi en PNG et PDF (`FichierGravureFormats.jsx`, fabriqués dans le navigateur, 600 points par pouce, 60 × 30 mm).
+- ⛔ Gestion ⑦ (42 vieilles promos) : PAS touché (il l'a exclu). Gestion ⑧ (accès limité pour une aide) : PAS construit, question reposée (il l'avait mis « pour plus tard » le 08/11).
+- www.nivcreation.fr redirige DÉJÀ vers nivcreation.fr (vérifié le 09/11) ; flux Google `flux-google.xml` répond (91 produits) ; médiateur : son adhésion d'abord.
+- ⚠️ Environnement « Crafia » : npm passe seulement par le relais → `NO_PROXY=localhost,127.0.0.1 no_proxy=localhost,127.0.0.1 npm_config_noproxy=localhost,127.0.0.1 npm ci`.
+
 ## 🪔 MAQUETTE « GRAVURE EN TAMOUL » — 06/11/2026 (gérant, après le rapport « Marché tamoul » : « prépare-moi des verres, des bijoux… avec le texte tamoul traditionnel : joyeux anniversaire, joyeux Noël pour les verres ; pour les bijoux des messages pour les parents ou les amoureux ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - Artifact https://claude.ai/artifact/A1LsiJozYynsZoRGYnrjcx (v2) · générateur `tools/maquettes/gravure-tamoul.py <dossier captures> <sortie>` · sortie
   `docs/maquettes/gravure-tamoul.html` (ignorée par git). ⛔ La v1 (textes posés avec Pillow sur les photos) a été REFUSÉE (« très moche… il faut que

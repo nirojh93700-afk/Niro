@@ -1,7 +1,7 @@
 import { getGmailCreds, getBatThreadsMeta, batImportEmails, batImportOutgoing, ensureCommThread, getBatThread, addPendingReply, listPendingReplies, getInboxState, saveInboxState, getSettings, logComm, getCommsFor, getProspectsAll, recordProspectReply, classerEtListerPending, getInboxBlock } from "@/lib/stock";
 import { aEcarter } from "@/lib/inboxFilter";
 import { gmailAccessToken, gmailListInboxIds, gmailListSentIds, gmailGetMessage, gmailGetAttachment, looksLikeRealCustomer } from "@/lib/gmail";
-import { getSiteOrders } from "@/lib/firebase";
+import { getSiteOrders, listQuotes } from "@/lib/firebase";
 import { triageIncomingEmail } from "@/lib/agents/registry";
 import { sendDraftAlert } from "@/lib/replyAlert";
 import { BRAND } from "@/lib/email";
@@ -35,6 +35,25 @@ function fmtDate(ts) {
 }
 
 // Résumé lisible de la commande + des échanges, donné à l'agent pour répondre juste.
+// Les devis / factures d'une adresse, en une ligne chacun (pur, testé par test-inbox-devis).
+const ETAT_DEVIS = { brouillon: "brouillon, PAS encore envoyé à la cliente", envoye: "envoyé, en attente de règlement", paye: "PAYÉ", annule: "annulé" };
+export function devisDeLAdresse(quotes, email) {
+  const e = String(email || "").trim().toLowerCase();
+  if (!e || !Array.isArray(quotes)) return [];
+  return quotes
+    .filter((q) => q && String(q.client?.email || "").trim().toLowerCase() === e)
+    .sort((a, b) => String(a.createdAt || "").localeCompare(String(b.createdAt || "")))
+    .slice(-6)
+    .map((q) => {
+      const paye = q.paid || q.status === "paye" || q.status === "payé";
+      const etat = paye ? "PAYÉ" : (ETAT_DEVIS[q.status] || q.status || "état inconnu");
+      const lignes = (q.items || []).map((i) => `${Number(i?.qty) || 1}× ${String(i?.desc || "").replace(/\s+/g, " ").slice(0, 110)}`).slice(0, 8).join(" ; ");
+      const total = Number(q.total);
+      const note = String(q.note || q.demande || "").replace(/\s+/g, " ").slice(0, 240);
+      return `${q.type === "facture" ? "Facture" : "Devis"} ${q.number || ""} du ${fmtDate(q.createdAt)} — ${etat}${Number.isFinite(total) && total > 0 ? ` — total ${total.toFixed(2).replace(".", ",")} €` : ""}${lignes ? ` — ${lignes}` : ""}${note ? ` — note : ${note}` : ""}`;
+    });
+}
+
 export async function buildContext(order, email) {
   const parts = [];
   if (order) {
@@ -53,8 +72,20 @@ export async function buildContext(order, email) {
         for (const m of msgs) parts.push(`- [${m.from === "atelier" ? "Nous" : "Cliente"} · ${fmtDate(m.at)}] ${String(m.text || "").replace(/\s+/g, " ").slice(0, 400)}`);
       }
     } catch { /* sans historique */ }
-  } else {
-    parts.push("Aucune commande trouvée à cette adresse e-mail : c'est peut-être une future cliente (question avant achat).");
+  }
+  // DEVIS ET FACTURES de cette adresse (09/11/2026) : l'agent ne les voyait pas et répondait
+  // « aucune commande trouvée » à une cliente qui avait un devis en cours (Doriane, 28/10).
+  let devis = [];
+  try { devis = devisDeLAdresse(await listQuotes(200), email); } catch { devis = []; }
+  if (devis.length) {
+    parts.push("DEVIS ET FACTURES que nous avons faits pour cette adresse (du plus ancien au plus récent) :");
+    for (const d of devis) parts.push(`- ${d}`);
+    parts.push("Si la cliente parle de « mon devis », « le visuel », « la maquette » ou d'un choix à confirmer, c'est de ces pièces qu'il s'agit. Ne JAMAIS annoncer un autre prix que celui du devis, ne jamais dire que le devis est introuvable.");
+  }
+  if (!order && !devis.length) {
+    parts.push("Aucune commande ni devis trouvé à cette adresse e-mail : c'est peut-être une future cliente (question avant achat).");
+  } else if (!order) {
+    parts.push("Aucune commande payée à cette adresse pour l'instant (seulement les devis ci-dessus).");
   }
   // DOSSIER DE COMMUNICATION COMPLET, tous canaux (e-mails, Messages clients,
   // bouton Répondre, formulaire) — ajouté le 15/09/2026 après l'incident Rose :

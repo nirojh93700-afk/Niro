@@ -114,7 +114,8 @@ export function mpGravureNette(modele, v) {
     const ok = mpAutorise(modele, side, zone);
     const k = ok.includes(e.k) ? e.k : "";
     const n = k === "dessin" && NUMS.has(Number(e.n)) ? Number(e.n) : 0;
-    const t = k === "texte" || (k === "dessin" && n >= 75) ? txt(e.t) : "";
+    // Limite large : une traduction peut être plus longue que le texte tapé (24 caractères sur la fiche).
+    const t = k === "texte" || (k === "dessin" && n >= 75) ? txt(e.t, 72) : "";
     const src = k === "photo" && estPhoto(e.src) ? e.src : null;
     out[key] = { k, t, n, src };
   }
@@ -219,4 +220,31 @@ export function mpPremiereGravure(mp) {
     }
   }
   return 0;
+}
+
+// ── Langue de la gravure (09/11/2026) : UNE langue pour la ligne du panier (tous les marque-pages), appliquée à
+// chacun de ses textes. Sur la fiche, chaque emplacement garde t (texte gravé) et ts (français tapé) ; au panier,
+// les textes en autre langue sont recopiés à plat (clés « mp1FaceHaut », « mp2DosBas »…).
+const MAJ1 = (x) => x.charAt(0).toUpperCase() + x.slice(1);
+export const mpCleTexte = (i, side, zone) => `mp${i + 1}${MAJ1(side)}${MAJ1(zone)}`;
+/** « Marque-page 2 · dos, en haut » (vide si la clé n'est pas celle d'un marque-page). */
+export function mpLibelleCle(cle, modele = 1) {
+  const m = /^mp(\d+)(Face|Dos)(Haut|Bas)$/.exec(String(cle || ""));
+  if (!m) return "";
+  const L = LIBELLE_EMP[modele] || LIBELLE_EMP[1];
+  return `Marque-page ${m[1]} · ${L[`${m[2].toLowerCase()}|${m[3].toLowerCase()}`].toLowerCase()}`;
+}
+/** Tous les textes des marque-pages (emplacements « texte » et cadres) : [{ key, label, t, ts, i, emp }]. */
+export function mpTextes(slots, modele = 1) {
+  const out = [];
+  (slots || []).forEach((s, i) => {
+    for (const [side, zone] of MP_EMPLACEMENTS) {
+      const emp = `${side}|${zone}`;
+      const e = (s?.v || {})[emp];
+      if (!e || !(e.k === "texte" || (e.k === "dessin" && e.n >= 75))) continue;
+      const key = mpCleTexte(i, side, zone);
+      out.push({ key, label: mpLibelleCle(key, modele), t: e.t || "", ts: e.ts || "", i, emp });
+    }
+  });
+  return out;
 }

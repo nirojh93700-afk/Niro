@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "@/components/admin/PageHead";
+import ARacheter from "@/components/admin/ARacheter";
 import { exportRows } from "@/lib/exportClients";
 
 // =============================================================================
@@ -140,6 +141,8 @@ export default function AchatsPage() {
           ]}
         />
 
+        <ARacheter />
+
         {err && <div className="notice" style={{ borderColor: "#e7b7ad", background: "#fdeee8" }}>{err}</div>}
 
         {result && (
@@ -228,6 +231,7 @@ export default function AchatsPage() {
             <div className="ach-opts">
               <label><input type="checkbox" checked={updateCost} onChange={(e) => setUpdateCost(e.target.checked)} /> Mettre à jour le coût d&apos;achat des produits (port réparti au prorata) — sert au calcul des bénéfices</label>
               <label><input type="checkbox" checked={addExpense} onChange={(e) => setAddExpense(e.target.checked)} /> Ajouter le total payé dans les dépenses (Bénéfices)</label>
+              {proposal.lines.some((l) => String(l.stockId || "").startsWith("mat:")) ? <p style={{ margin: "2px 0 0", fontSize: "0.82rem", color: "var(--ink-soft)" }}>Les lignes de matériel d&apos;emballage remplissent le stock de Matériel &amp; emballages (comptez les pièces, pas les lots). Elles ne sont pas ajoutées aux dépenses : ce matériel est déjà déduit à chaque colis validé.</p> : null}
             </div>
             <div style={{ marginTop: 14 }}>
               <button type="button" className="btn btn-gold" disabled={busy === "apply" || !nbOk} onClick={apply}>{busy === "apply" ? "Enregistrement…" : `Valider : mettre ${nbOk} ligne${nbOk > 1 ? "s" : ""} en stock`}</button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { track, trackOnce } from "@/lib/track";
+import { provenancePourPaiement } from "@/lib/provenance";
 
 // Envoie le panier au serveur pour créer une session Stripe Checkout,
 // puis redirige le client vers la page de paiement sécurisée Stripe.
@@ -16,6 +17,10 @@ export async function startCheckout(items, postalCode = "", promoCode = "", deli
     spec: i.spec || null, // réglages détaillés (fiche atelier)
     devis: i.devis && i.devis.id ? { id: String(i.devis.id), n: i.devis.n || undefined } : undefined, // devis payé avec le panier (prix relu au serveur)
   }));
+
+  // D'où vient la cliente (Google, Instagram, lien marqué…) : facultatif, jamais bloquant.
+  let provenance;
+  try { provenance = provenancePourPaiement(); } catch { provenance = undefined; }
 
   const res = await fetch("/api/checkout", {
     method: "POST",
@@ -35,6 +40,7 @@ export async function startCheckout(items, postalCode = "", promoCode = "", deli
       relaisPoint: delivery?.relais || null,
       useCagnotte: Boolean(useCagnotte), // payer une partie avec la cagnotte fidélité
       cadeau, // préférence de cadeau d'attente choisie sur le panier (mode délai allongé)
+      provenance, // d'où vient la cliente (absent = rien, le paiement se fait comme avant)
     }),
   });
 

@@ -18,6 +18,7 @@ import { detailVariante } from "@/lib/detailProduit";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 import { LOGO_URL } from "@/lib/photosLocales";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
+import { lireProvenanceCompacte } from "@/lib/provenance";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -770,6 +771,9 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       console.error("Cashback cagnotte:", e.message);
     }
 
+    let provenance = null;
+    try { provenance = lireProvenanceCompacte(session?.metadata?.prov || event.data.object?.metadata?.prov || ""); } catch { provenance = null; }
+
     // Enregistre la vente dans la base (collection siteOrders, sans risque).
     const newOrderId = await recordSiteOrder({
       ref: orderRef,
@@ -789,6 +793,8 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       // Devis payé AVEC le panier (02/11/2026) : emballage choisi sur la page du devis.
       ...(session?.metadata?.quoteEmballage ? { quoteEmballage: String(session.metadata.quoteEmballage) } : {}),
       surMesure: Boolean(quote),
+      // D'où vient la cliente (Google, Instagram, lien marqué…). Absente = rien.
+      ...(provenance ? { provenance } : {}),
       paymentIntentId: (session.payment_intent || "").toString(),
       total: (session.amount_total || 0) / 100,
       // Détail de la vente (pour l'encadré « Détail du prix » dans l'admin) :

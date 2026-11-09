@@ -62,6 +62,7 @@ export async function GET(req) {
   const monthly = {}; // "YYYY-MM" -> {revenue,cost,profit,shipping,orders}
   let missing = new Set();
   let missingUnits = 0;
+  const missingItems = {};
 
   for (const o of real) {
     const mk = monthKey(o.createdAt);
@@ -94,6 +95,12 @@ export async function GET(req) {
       const hasCost = unitCost != null;
       const cost = hasCost ? unitCost * qty : 0;
       if (!hasCost) { missing.add(it.name || slug || "?"); missingUnits += qty; }
+      // Détail des coûts manquants (09/11/2026) : par produit, pour les saisir sans quitter la page.
+      if (!hasCost) {
+        const cle = bySlug[slug] ? slug : `?${it.name || "?"}`;
+        const m = (missingItems[cle] = missingItems[cle] || { slug: bySlug[slug] ? slug : "", name: bySlug[slug] ? (nameBySlug[slug] || slug) : (it.name || "?"), units: 0, revenue: 0 });
+        m.units += qty; m.revenue = round(m.revenue + rev);
+      }
 
       const add = (b) => { b.revenue += rev; b.cost += cost; b.units += qty; };
       add(per.all); if (inYear) add(per.year); if (inMonth) add(per.month);
@@ -150,7 +157,7 @@ export async function GET(req) {
     ok: true,
     month: per.month, year: per.year, all: per.all,
     series, products: productsList, declared,
-    missingCost: { count: missingUnits, names: [...missing].slice(0, 30) },
+    missingCost: { count: missingUnits, names: [...missing].slice(0, 30), items: Object.values(missingItems).sort((x, y) => y.revenue - x.revenue).slice(0, 60) },
     coutGravure: { regle: reglageActif(coutG), coutHoraire: round(coutHoraire(coutG)) },
   });
 }

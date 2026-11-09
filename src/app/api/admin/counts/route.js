@@ -1,5 +1,6 @@
 import { isAdmin, getAdminCountsData } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
+import { calculReachat } from "@/lib/reachatServeur";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +10,14 @@ export const dynamic = "force-dynamic";
 // seulement, gardés 30 s en mémoire, sans Gmail.
 let memo = { at: 0, data: null };
 const TTL = 30 * 1000;
+// « À racheter » (vitesse de vente) : calcul plus lourd, gardé 10 minutes.
+let memoRachat = { at: 0, n: 0 };
+async function nbRachat() {
+  if (Date.now() - memoRachat.at < 10 * 60 * 1000) return memoRachat.n;
+  try { const r = await calculReachat(); memoRachat = { at: Date.now(), n: (r.produits?.length || 0) + (r.materiel?.length || 0) }; }
+  catch { memoRachat = { at: Date.now(), n: 0 }; }
+  return memoRachat.n;
+}
 
 export async function GET(req) {
   if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
@@ -18,7 +27,7 @@ export async function GET(req) {
     getSiteOrders(300).catch(() => []),
   ]);
   const prep = (orders || []).filter((x) => !x.test && (!x.status || x.status === "a_preparer")).length;
-  const data = { prep, ...c };
+  const data = { prep, ...c, rachat: await nbRachat() };
   memo = { at: Date.now(), data };
   return Response.json(data);
 }

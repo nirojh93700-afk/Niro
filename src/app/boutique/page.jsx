@@ -23,9 +23,11 @@ export default async function BoutiquePage({ searchParams }) {
   if (!q) return <UniversPage uid="boutique" />;
   const catalog = await getCatalog().catch(() => []);
   const R = rangerCatalogue(catalog);
-  const ql = q.toLowerCase();
+  // Sans accents, « œ » = « oe », et chaque mot tapé doit se retrouver (« coeur collier » trouve « Collier Cœur »).
+  const plat = (t) => String(t || "").toLowerCase().replace(/œ/g, "oe").replace(/æ/g, "ae").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const mots = plat(q).split(/\s+/).filter(Boolean);
   const trouves = catalog
-    .filter((p) => `${p.name} ${p.title || ""} ${p.tagline || ""} ${p.type || ""}`.toLowerCase().includes(ql))
+    .filter((p) => { const t = plat(`${p.name} ${p.title || ""} ${p.tagline || ""} ${p.type || ""}`); return mots.every((m) => t.includes(m) || (m.length > 3 && m.endsWith("s") && t.includes(m.slice(0, -1)))); })
     .map((p) => R.carteDe(p.slug)).filter(Boolean);
   return (
     <div className="mx">

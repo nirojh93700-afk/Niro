@@ -6,6 +6,7 @@ import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { cumulPermis, remiseCumulee, remisePourPort } from "@/lib/cumulCodes";
 import { toCents } from "@/lib/format";
+import { nettoyerProvenance, compacterProvenance } from "@/lib/provenance";
 import { EXPRESS_START } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getStockMap } from "@/lib/stock";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
@@ -558,6 +559,10 @@ export async function POST(req) {
     } catch { /* cagnotte ignorée si souci — le paiement continue normalement */ }
   }
 
+  // Provenance de la cliente : nettoyée ici, facultative, ne peut jamais gêner le paiement.
+  let provMeta = "";
+  try { provMeta = compacterProvenance(nettoyerProvenance(body?.provenance)); } catch { provMeta = ""; }
+
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -582,6 +587,8 @@ export async function POST(req) {
         // offert aujourd'hui (mode délai allongé OU interrupteur « cadeau dans
         // chaque colis ») — sinon on n'enregistre rien.
         ...(cadeauChoisi && cadeauColisActif(settings) ? { cadeauChoix: cadeauChoisi } : {}),
+        // D'où vient la cliente (Google, Instagram, lien marqué…) : JSON compact, rangé sur la commande par le webhook.
+        ...(provMeta ? { prov: provMeta } : {}),
       },
       locale: "fr",
       currency: "eur",

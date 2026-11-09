@@ -23,10 +23,10 @@ import { getProductBySlug } from "@/lib/products";
 import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
 import { MODELES, layoutLabel, imageDesign } from "@/lib/modeles";
-import { mpFormat, mpBoitesTexte, mpLignes } from "@/lib/marquePages";
-import { CN_FACES, cnLignes } from "@/lib/carnet";
+import { mpFormat, mpBoitesTexte, mpLignes, mpLibelleCle } from "@/lib/marquePages";
+import { CN_FACES, cnLignes, cnLibelleCle } from "@/lib/carnet";
 import { NOEL_IMAGES } from "@/lib/fetes";
-import { gobeletElements, gobeletSupplement, prixElement, quoiElement, plancheDuNumero, GOB_COTES, GOB_PLACES, GOB_ATELIER_APERCU } from "@/lib/gobeletParcours";
+import { gobeletElements, gobeletSupplement, prixElement, quoiElement, plancheDuNumero, gobeletLibelleCle, GOB_COTES, GOB_PLACES, GOB_ATELIER_APERCU } from "@/lib/gobeletParcours";
 
 function champVisible(f, champs, variantTitle) {
   if (f.showIfField && String(champs[f.showIfField] || "") !== String(f.showIfValue)) return false;
@@ -120,11 +120,27 @@ export function placementGravure(item) {
   return out;
 }
 
+// Fiches à part (carnet, marque-pages, gobelet — 09/11/2026) : gravure dans une autre langue. La langue en tête,
+// l'écriture de la langue, puis pour chaque texte traduit le français tapé et le texte gravé (libelle = où il se grave).
+function ajouterLangue(general, autres, champs, libelle) {
+  const textes = textesEnLangue(champs).filter((t) => t.grave);
+  if (!textes.length) return;
+  const nom = langueDe(champs.langue).nom;
+  general.push({ k: "Langue de la gravure", v: resumeLangue(champs), fort: true, alerte: champs.direct !== "oui" });
+  const noto = ecritureLangue(champs);
+  if (noto) general.push({ k: "Écriture", v: `${nom} (${noto}) pour les textes en ${nom.toLowerCase()} — déjà tracée dans les fichiers à graver` });
+  for (const t of textes) {
+    const ou = libelle(t.cle) || t.cle;
+    if (champs.direct !== "oui" && t.source) autres.push({ k: `Texte tapé par la cliente (français) — ${ou}`, v: `${t.source} → gravé : ${t.grave}`, texte: false });
+    else autres.push({ k: `Texte en ${nom.toLowerCase()} — ${ou}`, v: t.grave, texte: false });
+  }
+}
+
 const EMPLACEMENTS = { face: "Face avant du verre", fond: "Fond du verre (lu à travers le verre)", deux: "Face avant ET fond du verre" };
 
 // Marque-pages (27/10/2026) : un bloc PAR marque-page et par côté (face / dos), avec sa couleur ; le texte « au milieu »
 // est écrit à la verticale (zones données par le gérant le 23/10). Le dessin et la photo s'affichent en vignette.
-function consignesMarquePages(produit, mp) {
+function consignesMarquePages(produit, mp, champs = {}) {
   const cfg = produit.marquePages;
   const general = [], faces = [], autres = [];
   const fmt = mpFormat(mp.format);
@@ -144,6 +160,7 @@ function consignesMarquePages(produit, mp) {
     }
   });
   if (aDuTexte) general.push({ k: "Police", v: getFontLabel(mp.police) || mp.police });
+  ajouterLangue(general, autres, champs, (cle) => mpLibelleCle(cle, cfg.modele));
   return { general, faces, autres, placement: [] };
 }
 
@@ -159,7 +176,9 @@ function consignesCarnet(produit, cn, item) {
     return { nom: `${nom} (+7 €)`, lignes, vide: !lignes.length };
   });
   if (aDuTexte) general.push({ k: "Police", v: getFontLabel(cn.police) || cn.police });
-  return { general, faces, autres: [], placement: [] };
+  const autres = [];
+  ajouterLangue(general, autres, item?.fields || {}, cnLibelleCle);
+  return { general, faces, autres, placement: [] };
 }
 
 // Gobelet (05/11/2026, gérant : « il faut que ça soit bien détaillé dans la commande pour que je sache où graver quoi ») :
@@ -193,13 +212,15 @@ function consignesGobelet(produit, champs) {
   const general = [{ k: "Éléments", v: `${els.length} (1 compris${sup.enPlus ? ` + ${sup.enPlus} en plus = ${String(sup.montant.toFixed(2)).replace(".", ",")} €` : ""})`, fort: true }];
   const aPlacer = els.filter((e) => e.side === "atelier").length;
   if (aPlacer) general.push({ k: "⚠️ Aperçu", v: `${aPlacer} élément${aPlacer > 1 ? "s" : ""} à placer par l'atelier : envoyer un aperçu à la cliente et attendre sa réponse avant de graver`, fort: true });
-  return { general, faces: blocs.map(({ cle, ...f }) => f), autres: [], placement: [] };
+  const autres = [];
+  ajouterLangue(general, autres, champs, (cle) => gobeletLibelleCle(champs, cle));
+  return { general, faces: blocs.map(({ cle, ...f }) => f), autres, placement: [] };
 }
 
 export function consignesGravure(item) {
   const produit = getProductBySlug(item?.slug);
   const champs = item?.fields || {};
-  if (produit?.marquePages && champs.mp && typeof champs.mp === "object") return consignesMarquePages(produit, champs.mp);
+  if (produit?.marquePages && champs.mp && typeof champs.mp === "object") return consignesMarquePages(produit, champs.mp, champs);
   if (produit?.gobeletParcours && champs.mode) return consignesGobelet(produit, champs);
   if (produit?.carnet && champs.cn && typeof champs.cn === "object") return consignesCarnet(produit, champs.cn, item);
   const vus = (produit?.personalizationFields || []).filter((f) => champVisible(f, champs, item?.variantTitle));

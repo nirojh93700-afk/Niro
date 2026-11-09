@@ -32,6 +32,9 @@ const html = `
 <h3>6 bis. Espace client</h3>
 <p>Si vous utilisez votre espace client (connexion par lien reçu par e-mail), nous conservons la date et l'heure de vos connexions pendant 90 jours, associées à votre adresse e-mail. Cette information nous sert uniquement à mieux vous accompagner (par exemple retrouver votre demande plus vite) ; elle n'est jamais utilisée à des fins publicitaires ni transmise à un tiers.</p>
 
+<h3>6 ter. Par quel site vous êtes arrivée</h3>
+<p>Quand vous arrivez sur la boutique, nous notons par quel site ou quel lien vous êtes venue (par exemple Google, Instagram, TikTok ou l'un de nos e-mails), pour savoir quelles publications fonctionnent. Cette note reste dans votre navigateur pendant 30 jours ; elle n'est rattachée à une commande que si vous achetez, et elle n'est jamais revendue ni transmise à un réseau social.</p>
+
 <h3>7. Partage des données</h3>
 <p>Vos données ne sont jamais vendues. Elles sont partagées uniquement avec nos prestataires techniques (Google Firebase pour l'hébergement, Google Analytics pour la mesure d'audience, Stripe pour le paiement, La Poste / Mondial Relay pour la livraison, Resend et Gmail pour l'envoi de nos e-mails) dans le strict cadre du traitement de votre commande.</p>
 

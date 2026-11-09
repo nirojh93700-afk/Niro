@@ -21,21 +21,29 @@ import PayInfoModal from "@/components/PayInfo";
 import TrustSection from "@/components/TrustSection";
 import { MP_DATA } from "@/lib/marquePagesData";
 import {
-  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, mpCompteBoites, mpBoitesDepuisCompte, mpIdFormat, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure,
+  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, mpCompteBoites, mpBoitesDepuisCompte, mpIdFormat, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure, mpTextes,
 } from "@/lib/marquePages";
+import LangueFiche from "@/components/LangueFiche";
+import { langueDe, langueActive, texteMontre, texteFrappe, champsLangueAPlat, manqueLangue, resumeLangue } from "@/lib/traductionGravure";
+import { classeLangue } from "@/lib/policeLangueClient";
 
-const vide = () => Object.fromEntries(MP_EMPLACEMENTS.map(([s, z]) => [`${s}|${z}`, { k: "", t: "", n: 0, src: null }]));
+// ts = le français tapé quand le texte est traduit (fiche seulement : au panier il part dans les champs à plat).
+const vide = () => Object.fromEntries(MP_EMPLACEMENTS.map(([s, z]) => [`${s}|${z}`, { k: "", t: "", n: 0, src: null, ts: "" }]));
+// Pour le prix affiché : un texte en cours de traduction (français tapé, traduction pas encore arrivée) compte déjà.
+const pleinV = (v) => Object.fromEntries(Object.entries(v || {}).map(([k, e]) => [k, e && !e.t && e.ts ? { ...e, t: e.ts } : e]));
 const copie = (v) => Object.fromEntries(Object.entries(v).map(([k, e]) => [k, { ...e }]));
 const NUMS = new Set(MP_NUMS_OK);
 const EMP_COURT = { "face|haut": "face, en haut", "face|bas": "face, au milieu", "dos|haut": "dos, en haut", "dos|bas": "dos, au milieu" };
 
-export function itemsDe(v, police) {
+// langue (facultatif) = code de la langue de la gravure : son écriture (tamoul, arabe, hébreu, chinois) et son sens.
+export function itemsDe(v, police, langue = "") {
   const it = [];
+  const dir = langueDe(langue)?.dir === "rtl" ? "rtl" : undefined;
   for (const key of Object.keys(v || {})) {
     const e = v[key]; const [side, zone] = key.split("|");
-    const font = "fnt-" + (police || "playfair");
-    if (e.k === "texte" && (e.t || "").trim()) it.push({ kind: "texte", text: e.t, font, side, zone });
-    else if (e.k === "dessin" && e.n) it.push({ kind: "dessin", num: e.n, text: e.n >= 75 ? e.t : "", font, side, zone });
+    const font = classeLangue(langue) || "fnt-" + (police || "playfair");
+    if (e.k === "texte" && (e.t || "").trim()) it.push({ kind: "texte", text: e.t, font, dir, side, zone });
+    else if (e.k === "dessin" && e.n) it.push({ kind: "dessin", num: e.n, text: e.n >= 75 ? e.t : "", font, dir, side, zone });
     else if (e.k === "photo") it.push({ kind: "photo", src: e.src, side, zone });
   }
   return it;
@@ -120,7 +128,7 @@ export function Signet({ modele, side, items, H, couleur, onZoom }) {
       if (cadre && (e.text || "").trim()) {
         const cc = MP_DATA.dessins.centre[e.num] || [0.5, 0.5, 0.5];
         const dw = Math.min(bw, bh * asp), dh = Math.min(bh, bw / asp);
-        t = <span className={`t ${e.font}`} data-mw={dw * 0.6} data-mh={dh * (cc[2] || 0.5)} style={{ left: (bw - dw) / 2 + cc[0] * dw, top: (bh - dh) / 2 + cc[1] * dh }}>{e.text.trim()}</span>;
+        t = <span className={`t ${e.font}`} dir={e.dir} data-mw={dw * 0.6} data-mh={dh * (cc[2] || 0.5)} style={{ left: (bw - dw) / 2 + cc[0] * dw, top: (bh - dh) / 2 + cc[1] * dh }}>{e.text.trim()}</span>;
       }
       // eslint-disable-next-line @next/next/no-img-element
       inner = <><img src={src} alt="" />{t}</>;
@@ -128,7 +136,7 @@ export function Signet({ modele, side, items, H, couleur, onZoom }) {
       // eslint-disable-next-line @next/next/no-img-element
       inner = <div className={`ph${e.src ? " on" : ""}`}>{e.src ? <img src={e.src} alt="" /> : "votre photo"}</div>;
     } else {
-      inner = <span className={`t ${e.font}`} data-mw={bw * 0.96} data-mh={bh * 0.9}>{e.text.trim()}</span>;
+      inner = <span className={`t ${e.font}`} dir={e.dir} data-mw={bw * 0.96} data-mh={bh * 0.9}>{e.text.trim()}</span>;
     }
     els.push(<div key={i} className={`mq-el${cadre ? " cadre" : ""}`} style={st}>{inner}</div>);
   });
@@ -138,7 +146,9 @@ export function Signet({ modele, side, items, H, couleur, onZoom }) {
     run();
     let vivant = true;
     if (document.fonts?.ready) document.fonts.ready.then(() => { if (vivant) run(); }); // la police peut arriver après la mesure
-    return () => { vivant = false; };
+    const police2 = () => { if (vivant) run(); }; // l'écriture d'une langue (tamoul, arabe…) arrive après la mesure
+    window.addEventListener("niv-police-langue", police2);
+    return () => { vivant = false; window.removeEventListener("niv-police-langue", police2); };
   }, [sig]);
   return (
     <div className="mq-aps">
@@ -222,7 +232,7 @@ export function Planches({ valeur, onChoix, onFermer }) {
 }
 
 // --- Éditeur à quatre emplacements (port de mqEditeur) -------------------------------------------------------------
-function Editeur({ modele, v, onChange, owner, grille, setGrille, productSlug }) {
+function Editeur({ modele, v, onChange, owner, grille, setGrille, productSlug, lg, onFrappe }) {
   const A = MP_DATA.modeles[modele];
   const [envoi, setEnvoi] = useState({});
   const maj = (key, patch) => onChange({ ...v, [key]: { ...v[key], ...patch } });
@@ -245,7 +255,7 @@ function Editeur({ modele, v, onChange, owner, grille, setGrille, productSlug })
               <select className="mq-empk" value={e.k} aria-label={`${side === "face" ? "Face" : "Dos"} · ${lab}`}
                 onChange={(ev) => {
                   const k = ev.target.value;
-                  maj(key, { k, n: k === "dessin" ? e.n : 0, src: k === "photo" ? e.src : null, t: k === "photo" ? "" : e.t });
+                  maj(key, { k, n: k === "dessin" ? e.n : 0, src: k === "photo" ? e.src : null, t: k === "photo" ? "" : e.t, ts: k === "photo" ? "" : e.ts || "" });
                   setGrille(k === "dessin" && !e.n ? gk : (ouverte ? null : grille));
                 }}>
                 <option value="">Rien</option>
@@ -257,16 +267,16 @@ function Editeur({ modele, v, onChange, owner, grille, setGrille, productSlug })
             {e.k ? (
               <div className="mq-empb">
                 {e.k === "texte" && (
-                  <input type="text" className="mq-empt" maxLength={24} placeholder="Ex : Léa" value={e.t} onChange={(ev) => maj(key, { t: ev.target.value })} />
+                  <input type="text" className="mq-empt" maxLength={24} placeholder="Ex : Léa" value={texteMontre(lg, e.t, e.ts)} onChange={(ev) => { maj(key, texteFrappe(lg, ev.target.value)); onFrappe(); }} />
                 )}
                 {e.k === "dessin" && (
                   <div className="mq-empd">
                     {!ouverte && e.n ? <p className="mq-empok">{e.n >= 75 ? `Cadre n° ${e.n} choisi ✓` : `Dessin n° ${e.n} choisi ✓`}</p> : null}
                     {!ouverte && <button type="button" className="prc-change mq-empgo" onClick={() => setGrille(gk)}>{e.n ? "Changer de dessin" : "Choisir dans les planches"}</button>}
-                    {ouverte && <Planches valeur={e.n} onChoix={(n) => maj(key, { n, t: n >= 75 ? e.t : "" })} onFermer={() => setGrille(null)} />}
+                    {ouverte && <Planches valeur={e.n} onChoix={(n) => maj(key, { n, t: n >= 75 ? e.t : "", ts: n >= 75 ? e.ts || "" : "" })} onFermer={() => setGrille(null)} />}
                     {e.n >= 75 && (
                       <label className="mq-empcl">Votre texte au milieu du cadre (+3 €), facultatif
-                        <input type="text" className="mq-empct" maxLength={24} placeholder="Ex : Léa" value={e.t} onChange={(ev) => maj(key, { t: ev.target.value })} />
+                        <input type="text" className="mq-empct" maxLength={24} placeholder="Ex : Léa" value={texteMontre(lg, e.t, e.ts)} onChange={(ev) => { maj(key, texteFrappe(lg, ev.target.value)); onFrappe(); }} />
                       </label>
                     )}
                   </div>
@@ -350,9 +360,28 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   const composition = fmt.n === 1 ? [{ c: ci, v: vPage }] : slots;
   const mp = { format: fid, police, slots: composition.map((s) => ({ c: V[s.c].id, v: s.v })) };
   const norme = mpNormaliser(product, mp);
-  const calc = norme ? mpCalcul(product, norme) : null;
+  // Prix : un texte en cours de traduction compte déjà (le total ne bouge pas pendant la traduction).
+  const normePrix = norme ? mpNormaliser(product, { ...mp, slots: mp.slots.map((s) => ({ ...s, v: pleinV(s.v) })) }) : null;
+  const calc = normePrix ? mpCalcul(product, normePrix) : null;
   const total = calc ? calc.total : 0;
-  const itemsPage = gravure && fmt.n === 1 ? itemsDe(vPage, police) : [];
+  // Langue de la gravure (09/11/2026) : UNE langue pour tous les marque-pages de la ligne ; chaque emplacement garde
+  // t (texte gravé) et ts (français tapé).
+  const [lg, setLg] = useState({ langue: "", direct: "", tradOk: "" });
+  const codeLangue = langueActive(lg) ? lg.langue : "";
+  const textes = gravure ? mpTextes(composition, modele) : [];
+  const unSeul = useRef(true); unSeul.current = fmt.n === 1;
+  const ecrireTexte = (key, patch) => {
+    const m = /^mp(\d+)(Face|Dos)(Haut|Bas)$/.exec(key);
+    if (!m) return;
+    const i = Number(m[1]) - 1, emp = `${m[2].toLowerCase()}|${m[3].toLowerCase()}`;
+    const dans = (v) => (v && v[emp] ? { ...v, [emp]: { ...v[emp], ...patch } } : v);
+    if (unSeul.current) { if (i === 0) setVPage(dans); } else setSlots((ss) => ss.map((o, j) => (j === i ? { ...o, v: dans(o.v) } : o)));
+  };
+  const onFrappe = () => setLg((p) => (p.tradOk ? { ...p, tradOk: "" } : p));
+  const champsLangue = champsLangueAPlat(lg, textes);
+  const langueManque = manqueLangue(champsLangue);
+  const blocLangue = gravure && (textes.length > 0 || langueActive(lg)) ? <LangueFiche lg={lg} setLg={setLg} textes={textes} ecrire={ecrireTexte} /> : null;
+  const itemsPage = gravure && fmt.n === 1 ? itemsDe(vPage, police, codeLangue) : [];
 
   // L'aperçu se pose dans la grande photo dès qu'il y a une gravure (24/10 soir, « comme pour le carnet »).
   const sigPage = JSON.stringify([itemsPage, ci]);
@@ -402,14 +431,15 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   const manque = Object.entries(besoins).find(([sid, q]) => epuise(sid, q));
   const photoEnCours = composition.some((s) => Object.values(s.v).some((e) => e.k === "photo" && !e.src));
   const dessinManquant = composition.some((s) => Object.values(s.v).some((e) => e.k === "dessin" && !e.n));
-  const bloque = !calc || Boolean(manque) || photoEnCours || dessinManquant;
+  const bloque = !calc || Boolean(manque) || photoEnCours || dessinManquant || Boolean(langueManque);
   const raison = manque ? (manque[0].startsWith("mp-boite") ? "Cette boîte est momentanément épuisée : choisissez un autre format." : "Une couleur choisie est épuisée (ou il n'en reste pas assez) : choisissez-en une autre.")
     : photoEnCours ? "Il manque une photo : envoyez-la, ou choisissez « Rien » à cet emplacement."
-      : dessinManquant ? "Il manque le numéro d'un dessin : choisissez-le dans les planches, ou choisissez « Rien »." : "";
+      : dessinManquant ? "Il manque le numéro d'un dessin : choisissez-le dans les planches, ou choisissez « Rien »." : langueManque || "";
 
   function ajouter() {
     if (bloque) return;
-    const resume = mpResume(product, norme);
+    const resume = mpResume(product, norme) + (champsLangue.langue ? ` · Langue : ${resumeLangue(champsLangue)}` : "");
+    const fields = { mp: norme, ...champsLangue };
     const couleurs = norme.slots.map((s) => V.find((x) => x.id === s.c)?.title).join(", ");
     const cle = norme.slots.map((s) => Object.values(s.v).map((e) => e.src || "").join(",")).join(";");
     addItem({
@@ -420,9 +450,9 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
       price: total,
       image: fmt.boites.length ? boites[fmt.boites[0]] : V[ci].image || product.images[0],
       personalization: resume,
-      fields: { mp: norme },
+      fields,
       cleLigne: cle.replace(/[;,]/g, "") ? cle : undefined,
-      spec: { slug: product.slug, name: product.name, variantTitle: `${fmt.titre} · ${couleurs}`, fields: { mp: norme }, personalization: resume },
+      spec: { slug: product.slug, name: product.name, variantTitle: `${fmt.titre} · ${couleurs}`, fields, personalization: resume },
       pickup: false,
       weight: calc.grams,
       quantity: qty,
@@ -433,7 +463,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   }
 
   // Prix des marque-pages seuls (gravure comprise), puis la ou les boîtes pour ce nombre.
-  const prixPieces = nb > 1 ? slots.reduce((a, o) => a + V[o.c].price + mpPrixGravure(o.v), 0) : V[ci].price + mpPrixGravure(vPage);
+  const prixPieces = nb > 1 ? slots.reduce((a, o) => a + V[o.c].price + mpPrixGravure(pleinV(o.v)), 0) : V[ci].price + mpPrixGravure(pleinV(vPage));
   const boitesNb = mpBoitesDepuisCompte(cptBoites);
   const placesNb = boitesNb.reduce((a, b) => a + b, 0);
   const prixBoitesNb = boitesNb.reduce((a, b) => a + MP_BOITES[b].prix, 0);
@@ -545,9 +575,11 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
           {gravure && !coffret && (
             <div style={{ marginBottom: 6 }}>
               <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 12 }}>Personnalisation — gravure</p>
-              <Editeur modele={modele} v={vPage} onChange={setVPage} owner="page" grille={grille} setGrille={setGrille} productSlug={product.slug} />
+              <Editeur modele={modele} v={vPage} onChange={setVPage} owner="page" grille={grille} setGrille={setGrille} productSlug={product.slug} lg={lg} onFrappe={onFrappe} />
             </div>
           )}
+          {/* Un seul bloc « Langue de la gravure » à l'écran : ici, ou dans la fenêtre du coffret quand elle est ouverte. */}
+          {!(sheet && coffret) && blocLangue}
           {gravure && (
             <div className="field">
               <label htmlFor="mp-police">Écriture du texte</label>
@@ -673,15 +705,16 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
                   {gravure && (
                     <>
                       {meme && i > 0 ? <p className="mq-lock-note">Gravé comme le marque-page 1 — décochez « la même gravure » pour le changer.</p> : null}
-                      <div className="mq-grav"><Editeur modele={modele} v={o.v} onChange={(v) => majSlot(i, { v })} owner={`s${i}`} grille={grille} setGrille={setGrille} productSlug={product.slug} /></div>
+                      <div className="mq-grav"><Editeur modele={modele} v={o.v} onChange={(v) => majSlot(i, { v })} owner={`s${i}`} grille={grille} setGrille={setGrille} productSlug={product.slug} lg={lg} onFrappe={onFrappe} /></div>
                       <div className="mq-ap">
                         <p className="mq-aph">Votre aperçu <small>— touchez pour agrandir</small></p>
-                        <Apercu modele={modele} items={itemsDe(o.v, police)} H={shH} couleur={V[o.c].title} />
+                        <Apercu modele={modele} items={itemsDe(o.v, police, codeLangue)} H={shH} couleur={V[o.c].title} />
                       </div>
                     </>
                   )}
                 </div>
               )))}
+              {blocLangue ? <div>{blocLangue}</div> : null}
               {gravure && (
                 <div className="mq-sc mq-pol">
                   <p>Écriture du texte (la même pour tous les marque-pages)</p>

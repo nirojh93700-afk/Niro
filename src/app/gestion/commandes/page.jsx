@@ -19,7 +19,7 @@ import CarteCommande from "@/components/admin/CarteCommande";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import FenetreConditionnement from "@/components/admin/Conditionnement";
 import { imprimerFiche } from "@/lib/impression";
-import { ACTIFS, FILTRES, TRIS, estActive, estPartie, estFinie, etatDelai, positions, passeFiltre, rechercheTexte, trier, statutInfo, estExpress, euro, dateFr, refDe, hrefFiche } from "@/lib/fileCommandes";
+import { ACTIFS, FILTRES, TRIS, passeProvenance, choixProvenance, estActive, estPartie, estFinie, etatDelai, positions, passeFiltre, rechercheTexte, trier, statutInfo, estExpress, euro, dateFr, refDe, hrefFiche } from "@/lib/fileCommandes";
 
 const FichePapier = dynamic(() => import("@/components/admin/FichePapier"), { ssr: false });
 
@@ -41,6 +41,7 @@ export default function FileProductionPage() {
   const [q, setQ] = useState("");
   const [sort, setSort] = useState("ordre");
   const [filters, setFilters] = useState(() => new Set());
+  const [prov, setProv] = useState(""); // filtre « Provenance » ("" = toutes)
   const [sel, setSel] = useState(() => new Set());
   const [focus, setFocus] = useState("");
   const [help, setHelp] = useState(false);
@@ -120,8 +121,10 @@ export default function FileProductionPage() {
     const s = q.trim().toLowerCase();
     if (s && !rechercheTexte(o).includes(s)) return false;
     for (const f of filters) if (!passeFiltre(o, f, unreadSet.has(o.id))) return false;
+    if (prov && !passeProvenance(o, prov)) return false;
     return true;
-  }, [q, filters, unreadSet]);
+  }, [q, filters, unreadSet, prov]);
+  const provChoix = useMemo(() => { try { return choixProvenance(orders); } catch { return []; } }, [orders]);
   const actives = useMemo(() => orders.filter(estActive), [orders]);
   const vis = useMemo(() => orders.filter(matches), [orders, matches]);
   const prep = useMemo(() => trier(vis.filter((o) => !o.status || o.status === "a_preparer"), sort), [vis, sort]);
@@ -258,9 +261,10 @@ export default function FileProductionPage() {
         <div className="fq-row2">
           <label className="fq-search"><Ic n="search" /><input id="fq-q" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Réf., cliente, produit, gravure…" /><kbd>/</kbd></label>
           <select className="fq-select" value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Trier">{TRIS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
+          {provChoix.length ? <select className="fq-select" value={prov} onChange={(e) => setProv(e.target.value)} aria-label="Provenance"><option value="">Provenance : toutes</option>{provChoix.map(([v, l]) => <option key={v} value={v}>Venue de : {l}</option>)}</select> : null}
           <div className="fq-chipbar">
             {FILTRES.map((f) => <button key={f.id} type="button" className={`fq-chip${filters.has(f.id) ? " on" : ""}`} onClick={() => toggleFilter(f.id)}><Ic n={f.ic} />{f.lib}</button>)}
-            {filters.size || q ? <button type="button" className="fq-chip" onClick={() => { setFilters(new Set()); setQ(""); }}><Ic n="x" />Effacer</button> : null}
+            {filters.size || q || prov ? <button type="button" className="fq-chip" onClick={() => { setFilters(new Set()); setQ(""); setProv(""); }}><Ic n="x" />Effacer</button> : null}
           </div>
           <span className="fq-count">{vis.length} commande{vis.length > 1 ? "s" : ""} affichée{vis.length > 1 ? "s" : ""}</span>
         </div>
