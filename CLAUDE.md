@@ -65,6 +65,12 @@
   photo / logo, modèle, lettre fleurie ou dessin de Noël (même avant l'envoi de la photo), le texte est « +3 € » (`modeImage` dans prixVerres.js,
   prix ET étiquettes). Seul « Mon propre texte » garde le premier texte offert. Vérifié vin, flûte, whisky, cocktail.
   **RESTE (sur son mot) : le choix de langue sur les AUTRES produits à texte** (bijoux, cristal, bois…) avec les corrections listées plus bas.
+  ✅ **09/11/2026 soir (« fais les langues sur la déco de Noël pour tout, même les bijoux » → « mets en ligne »)** : toute fiche `ProductDetail` à champs texte
+  (bijoux recto / verso, déco de Noël, bois, cristal…) a le menu sous le DERNIER champ traduisible (dates, initiales, numéros exclus). UNE langue par pièce :
+  chaque clé k = texte GRAVÉ, `kSource` = français tapé, `langueCles` = « recto,verso » (absent = « texte ») ; `clesLangue` / `textesEnLangue` /
+  `aTexteEnLangue` (traductionGravure.js) ; une seule case « J'ai relu les textes… » ; `engrave3d` (Quatre Mots, pendentif) = langues latines seules.
+  Atelier (`consignesGravure`), contrôle, e-mail 🛎️, fichiers à graver (`liensFichierGravure` : un SVG par texte), dossier du jour suivent ; `*Source` neutres
+  au prix. RESTE : carnet, marque-pages, gobelet, cristaux déjà gravés (fiches à part).
 - ✅ **FICHIER À GRAVER DANS LE DOSSIER DE LA COMMANDE (gérant, 06/11 : « quand la cliente commande un texte, il faut que je l'aie en format pour graver… dans le dossier »)** :
   maquette v5 = ligne « Fichier à graver — rangé dans le dossier de la commande » dans « ce que l'atelier verra » (aperçu noir sur blanc + nom
   `gravure-<réf>-verre1-<langue>-60x30mm.svg`). Au « applique » : à la commande, le SERVEUR fabrique un SVG à la taille réelle (mm), LETTRES EN
