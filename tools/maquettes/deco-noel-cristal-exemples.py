@@ -76,7 +76,9 @@ def exemple(nom, pieces):
         elif kind == "espace": y += args[0]
         else: y += texte(cal, *args[:2], y=y, poids=args[2] if len(args) > 2 else None, espace=args[3] if len(args) > 3 else 0, taille=None) if False else texte(cal, args[0], args[1], args[2], y, args[3] if len(args) > 3 else None, args[4] if len(args) > 4 else 0)
     img = grave(img, cal)
-    # étiquette « EXEMPLE » comme sur les autres fiches (pastille encre, lettres or)
+    # étiquette « EXEMPLE » comme sur les autres fiches (pastille encre, lettres or) ; --sans-etiquette = pour une vidéo
+    if "--sans-etiquette" in sys.argv:
+        img.save(os.path.join(OUT, nom), "JPEG", quality=90, optimize=True, progressive=True); print(nom); return
     d = ImageDraw.Draw(img); fb = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 26)
     w = d.textlength("EXEMPLE", font=fb)
     d.rounded_rectangle([26, 26, 26 + w + 40, 76], radius=25, fill=(26, 18, 6))
