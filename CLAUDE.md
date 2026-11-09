@@ -96,6 +96,8 @@
   `docs/maquettes/assets/deco-noel-verre/{vierge,sapin-exemple,boite}.jpg` en `public/produits/deco-noel-verre-{vierge,sapin,boite}.jpg`, rayon dans
   `univers.js`, guide « Idées & conseils », build. ⚠️ Photos : la photo du sapin (fournisseur) porte un texte ANGLAIS, la boîte montre un ruban rouge :
   à remplacer par une vraie photo gravée. Nom : « verre » (fiche fournisseur), pas « cristal ».
+- v2 (09/11, « tu peux faire comme si c'était gravé ? ») : 3 images « Exemple » en blanc givré (`tools/maquettes/deco-noel-verre-exemples.py <sortie>` :
+  disque vierge sur fond de Noël sombre, ruban bleu gardé, dessins n° 3 / 20 / 11 du site + prénoms d'exemple) → `docs/maquettes/assets/deco-noel-verre/exemple-1..3.jpg`.
 
 ## 🖼️ DERNIÈRE IMAGE ÉCHANGÉE EN GRAND DANS LA FICHE ATELIER — 08/11/2026 (commande 1COCUCLN, Stéphanie Ranchon, devis DEV-1547 ; gérant : « pourquoi y a pas l'image qu'elle demande… même si c'est un devis on a échangé par mail, je veux les dernières images qu'ils ont validées dans les commandes ») — ✅ EN LIGNE LE 08/11/2026 (« Mets en ligne », 18273fe1), pour toutes les commandes
 - **Cause** : `imagesEchangees` ne lisait que le FIL de la commande (`bat`), rempli seulement au rangement (ouverture des messages / 21 h) ;
