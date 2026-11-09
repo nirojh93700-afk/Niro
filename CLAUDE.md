@@ -86,7 +86,18 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
-## 🖼️ DERNIÈRE IMAGE ÉCHANGÉE EN GRAND DANS LA FICHE ATELIER — 08/11/2026 (commande 1COCUCLN, Stéphanie Ranchon, devis DEV-1547 ; gérant : « pourquoi y a pas l'image qu'elle demande… même si c'est un devis on a échangé par mail, je veux les dernières images qu'ils ont validées dans les commandes ») — PRÉPARÉ, EN ATTENTE DE SON « METS EN LIGNE »
+## 🎄 MAQUETTE « DÉCORATION DE NOËL RONDE EN VERRE GRAVÉE » — 09/11/2026 (gérant : photos Alibaba « ornement cristal vierge » + sa photo en boîte bleue) — EN ATTENTE DE SON AVIS, RIEN en ligne
+- https://claude.ai/artifact/ST5AS45CQDddcC9kTyj7P7 (captures de la vraie fiche construite en local, puis tout remis à zéro). Ses réponses : **16,90 €** ·
+  **boîte bleue avec mousse EN OPTION** (prix proposé par moi : +3,90 €, à valider) · **ruban bleu seulement** · **10 cm**. Fournisseur : Small Bridge WDY-SD
+  (verre, 0,59–0,77 € pièce, 10 minimum, colis 14 × 11 × 10 cm, 140 g). Marché : ornements en verre gravés 12,95 € à 17,90 €.
+- Fiche : 3 choix à 16,90 € (un des 27 dessins de Noël n° 1–27 · mon texte · ma photo ou mon logo), texte en plus +3 € avec dessin / photo, date +3 €,
+  8 écritures, aperçu sur la photo vierge, colis (verre), `deco` › Art de la table. Ex. dessin 3 + texte + date + boîte = 26,80 €.
+- Au « applique » : `python3 tools/maquettes/deco-noel-verre-ajout.py` (ajoute le produit à products.js, productInfo.js, productDates.js), copier
+  `docs/maquettes/assets/deco-noel-verre/{vierge,sapin-exemple,boite}.jpg` en `public/produits/deco-noel-verre-{vierge,sapin,boite}.jpg`, rayon dans
+  `univers.js`, guide « Idées & conseils », build. ⚠️ Photos : la photo du sapin (fournisseur) porte un texte ANGLAIS, la boîte montre un ruban rouge :
+  à remplacer par une vraie photo gravée. Nom : « verre » (fiche fournisseur), pas « cristal ».
+
+## 🖼️ DERNIÈRE IMAGE ÉCHANGÉE EN GRAND DANS LA FICHE ATELIER — 08/11/2026 (commande 1COCUCLN, Stéphanie Ranchon, devis DEV-1547 ; gérant : « pourquoi y a pas l'image qu'elle demande… même si c'est un devis on a échangé par mail, je veux les dernières images qu'ils ont validées dans les commandes ») — ✅ EN LIGNE LE 08/11/2026 (« Mets en ligne », 18273fe1), pour toutes les commandes
 - **Cause** : `imagesEchangees` ne lisait que le FIL de la commande (`bat`), rempli seulement au rangement (ouverture des messages / 21 h) ;
   Stéphanie a tout échangé par le SITE (formulaire + bouton « Répondre » avec photo, aperçu envoyé par `send-client-email`) → ces images
   sont dans son DOSSIER (`comms`, `photos`), pas dans le fil → rien dans la fiche. Et même présentes, elles n'étaient qu'en vignettes tout en
