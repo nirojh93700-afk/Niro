@@ -70,6 +70,7 @@ export default async function HomePage() {
   // Le verre à whisky en premier (gérant, 10/10/2026 : « tu peux mettre le verre de whisky en premier »).
   // Le gobelet juste après le verre à whisky (gérant, 06/11/2026 : « tu peux le mettre après le verre de whisky »).
   const whisky = C("verre-a-whisky-grave");
+  const decoNoel = C("decoration-noel-verre-gravee");
   const gobelet = C("gobelet-isotherme-40oz");
   const puzzle = C("puzzle-savane");
   const BIJOUX_PHOTOS = [["collier-3coeurs-1.jpg", "Collier 3 Cœurs, porté", "collier-3coeurs"], ["bracelet-femme-acier-porte.jpg", "Bracelet gravé", "bracelet-femme-acier"], ["bracelet-cordon-plaque-4.jpg", "Bracelets homme gravés", "bracelet-cordon-plaque"]];
@@ -154,6 +155,29 @@ export default async function HomePage() {
           </section>
         ) : null}
 
+        {/* NOËL — rouge et or */}
+        {show.noel ? (
+          <section className="mxnoel rv" aria-labelledby="t-noel">
+            <div className="mxnoel-copy">
+              <h2 id="t-noel">Ce Noël, offrez un <em>cadeau unique</em></h2>
+              <p>Cristal photo, verres, bijoux gravés : chaque création est faite à la commande dans notre atelier, et n’existe qu’une fois.</p>
+              <Bouton href="/offrir?occ=noel">Voir les idées de Noël</Bouton>
+              <p className="mxnoel-note">Chaque pièce est gravée une par une : pensez-y tôt.</p>
+              {decoNoel ? <p className="mxnoel-note"><Link href="/produit/decoration-noel-verre-gravee" style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: 3 }}>Nouveau : la décoration de Noël en cristal à graver, dès 16,90 €</Link></p> : null}
+            </div>
+            <div className={decoNoel ? "fan fan4" : "fan"}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <LienPhoto c={cristalH}><img className="fan-1" src="/produits/cristal-h-famille.jpg" alt="Photo de famille gravée dans un cristal" loading="lazy" /></LienPhoto>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <LienPhoto c={collierPlaques}><img className="fan-2" src="/produits/collier-coeur-plaques-1.jpg" alt="Collier cœur et plaques gravés" loading="lazy" /></LienPhoto>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              {decoNoel ? <LienPhoto c={decoNoel}><img className="fan-d" src="/produits/deco-noel-cristal-ex-1.jpg" alt="Décoration de Noël en cristal gravée" loading="lazy" /></LienPhoto> : null}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <LienPhoto c={whisky}><img className="fan-3" src="/produits/verre_a_whisky_exemple_face.jpg" alt="Verre à whisky gravé" loading="lazy" /></LienPhoto>
+            </div>
+          </section>
+        ) : null}
+
         {/* LES DERNIÈRES SORTIES — rail */}
         {show.newArrivals && nouveaux.length ? (
           <Rail titre={<>Les dernières sorties <em>de l’atelier</em></>} sous="Nos créations ajoutées ces derniers jours."
@@ -222,26 +246,6 @@ export default async function HomePage() {
               <p>Verre taillé, bouchon à facettes, gravée avec votre prénom ou le modèle de votre choix. Livraison offerte dès 60 € d’achat sur les verres et carafes.</p>
               <p className="lim-price"><b>{prixTexte(carafe)}</b><span>livraison offerte</span></p>
               <Bouton href={carafe.href}>Découvrir la carafe</Bouton>
-            </div>
-          </section>
-        ) : null}
-
-        {/* NOËL — rouge et or */}
-        {show.noel ? (
-          <section className="mxnoel rv" aria-labelledby="t-noel">
-            <div className="mxnoel-copy">
-              <h2 id="t-noel">Ce Noël, offrez un <em>cadeau unique</em></h2>
-              <p>Cristal photo, verres, bijoux gravés : chaque création est faite à la commande dans notre atelier, et n’existe qu’une fois.</p>
-              <Bouton href="/offrir?occ=noel">Voir les idées de Noël</Bouton>
-              <p className="mxnoel-note">Chaque pièce est gravée une par une : pensez-y tôt.</p>
-            </div>
-            <div className="fan">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <LienPhoto c={cristalH}><img className="fan-1" src="/produits/cristal-h-famille.jpg" alt="Photo de famille gravée dans un cristal" loading="lazy" /></LienPhoto>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <LienPhoto c={collierPlaques}><img className="fan-2" src="/produits/collier-coeur-plaques-1.jpg" alt="Collier cœur et plaques gravés" loading="lazy" /></LienPhoto>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <LienPhoto c={whisky}><img className="fan-3" src="/produits/verre_a_whisky_exemple_face.jpg" alt="Verre à whisky gravé" loading="lazy" /></LienPhoto>
             </div>
           </section>
         ) : null}

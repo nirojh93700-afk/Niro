@@ -95,6 +95,10 @@
   Cristal, `/offrir/noel` (`NOEL_SLUGS`), accueil, guide, plan du site. Carte sur `/cristaux` juste après « Cristaux déjà gravés »
   (`CristalVivant` prop `decoNoel`, maquette https://claude.ai/artifact/RmkwqH88XoffxRSzuVVNMS). Le paragraphe du guide cristal est retiré (texte fixe) ;
   la carte du guide reste (lue dans le catalogue, disparaît avec Noël). Tout nouveau produit de fête : `fete: "<clé>"`.
+- ✅ ACCUEIL (09/11, maquette https://claude.ai/artifact/LNChABXiBgaQQEzQCCdAWK v2, « Applique la maquette de l'accueil ») : le bloc rouge « Ce Noël, offrez
+  un cadeau unique » est REMONTÉ juste au-dessus de « Les dernières sorties de l'atelier » ; Noël allumé = 4 photos (cristal, collier, whisky, décoration
+  au premier plan, classe `.fan.fan4` dans univers-site.css) + ligne « Nouveau : la décoration de Noël en cristal à graver, dès 16,90 € » ; Noël éteint =
+  les 3 photos d'avant, pas de ligne (le bloc lui-même suit l'interrupteur Apparence `sections.noel`).
 - (historique de la maquette ci-dessous)
 - https://claude.ai/artifact/ST5AS45CQDddcC9kTyj7P7 (captures de la vraie fiche construite en local, puis tout remis à zéro). Ses réponses : **16,90 €** ·
   **boîte bleue avec mousse EN OPTION** (prix proposé par moi : +3,90 €, à valider) · **ruban bleu seulement** · **10 cm**. Fournisseur : Small Bridge WDY-SD

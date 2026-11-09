@@ -72,3 +72,12 @@
 
 /* Audit 05/11/2026 (accessibilité) : nombre de créations des onglets d'univers un peu plus foncé (contraste 3,9 → 4,9). */
 .mx .uv-tabs small{opacity:.62}
+
+/* 🎄 Bloc Noël à 4 photos (décoration de Noël en cristal au premier plan) — 09/11/2026 */
+.mx .fan.fan4{height:480px}
+.mx .fan.fan4 img{width:44%}
+.mx .fan.fan4 .fan-1{left:0;top:0;transform:rotate(-7deg);z-index:1}
+.mx .fan.fan4 .fan-2{right:0;left:auto;top:0;transform:rotate(6deg);z-index:1}
+.mx .fan.fan4 .fan-3{left:4%;right:auto;top:200px;transform:rotate(-4deg);z-index:2}
+.mx .fan.fan4 .fan-d{left:42%;top:170px;transform:rotate(4deg);z-index:3}
+@media (max-width:640px){.mx .fan.fan4{height:auto;aspect-ratio:1/1.02}.mx .fan.fan4 img{width:47%}.mx .fan.fan4 .fan-3{top:46%}.mx .fan.fan4 .fan-d{left:44%;top:40%}}
