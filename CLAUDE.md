@@ -9,6 +9,12 @@
   `npm run test-reachat`) · ③ l'agent e-mail voit les devis de l'adresse (`devisDeLAdresse` dans `inbox.js`) · ④ coûts d'achat manquants saisis dans Bénéfices
   (`CoutsManquants`, enregistre le « coût » de la fiche) · ⑤ le matériel habituel du colis se coche dans le formulaire « Expédier » (`FormExpedition`, jamais deux fois) ·
   ⑥ fichier à graver aussi en PNG et PDF (`FichierGravureFormats.jsx`, fabriqués dans le navigateur, 600 points par pouce, 60 × 30 mm).
+- **Site ⑧ langues sur les fiches à part** (carnet, marque-pages, gobelet, cristaux déjà gravés) : `src/components/LangueFiche.jsx` (pont vers `LangueGravure`), une langue par article du
+  panier, mêmes clés à plat (`langue`, `langueCles`, `<clé>`, `<clé>Source`, `tradOk`, `direct` ; carnet `cnFaceHaut…`, marque-pages `mp1FaceHaut…`, gobelet `gt1…`, cristal `texte` /
+  `zPrenom` / `zVille`), bouton grisé tant que la case n'est pas cochée (vérifié au navigateur 390 / 1280 sur les 4 fiches), refus au paiement par `manqueLangue`, aucun supplément.
+  Limites : marque-pages = une langue pour toute la ligne ; aperçu à pastilles du gobelet sans l'écriture de la langue ; e-mail 🛎️ avec la clé brute quand il y a plusieurs textes ;
+  texte vertical des marque-pages en arabe / hébreu / tamoul pas regardé. `sanitizeSpec` garde 80 clés. `npm run test-traduction` (71).
+- Gestion ⑧ : le 09/11 soir il a redit « plus tard pour l'accès ».
 - ⛔ Gestion ⑦ (42 vieilles promos) : PAS touché (il l'a exclu). Gestion ⑧ (accès limité pour une aide) : PAS construit, question reposée (il l'avait mis « pour plus tard » le 08/11).
 - www.nivcreation.fr redirige DÉJÀ vers nivcreation.fr (vérifié le 09/11) ; flux Google `flux-google.xml` répond (91 produits) ; médiateur : son adhésion d'abord.
 - ⚠️ Environnement « Crafia » : npm passe seulement par le relais → `NO_PROXY=localhost,127.0.0.1 no_proxy=localhost,127.0.0.1 npm_config_noproxy=localhost,127.0.0.1 npm ci`.
