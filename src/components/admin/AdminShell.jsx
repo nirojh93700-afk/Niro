@@ -92,7 +92,8 @@ const SECTIONS = [
   { id: "stock", t: "Stock & achats", ic: "box", badge: "rachat", tabs: [
     { id: "materiel", t: "Matériel", href: "/gestion/materiel" },
     { id: "packaging", t: "Emballages vendus", href: "/gestion/emballages" },
-    { id: "achats", t: "Achats & factures", href: "/gestion/achats", badge: "rachat" } ] },
+    { id: "achats", t: "Achats & factures", href: "/gestion/achats", badge: "rachat" },
+    { id: "recomptage", t: "Stock à recompter", href: "/gestion/recomptage" } ] },
   { id: "fetes", t: "Fêtes", ic: "spark", tabs: [
     { id: "fetes", t: "Fêtes de l'année", href: "/gestion/fetes" } ] },
   { id: "marketing", t: "Marketing", ic: "mega", tabs: [

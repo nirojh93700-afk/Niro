@@ -23,6 +23,9 @@
   `stock`, `stock2`…, `lireStockMeta`, `texteStock`), `npm run test-stock-meta`. ⛔ Ne jamais écrire le stock autrement que par `modifierStock`.
   Rappel donné au gérant : un produit sans stock saisi (« non suivi ») ne baisse jamais : carnet, puzzles, verre à vin 47 cl, cocktail, tumbler, supports téléphone,
   porte-serviettes, cartes étapes, veilleuse prénom, photophore, 2 options de la décoration de Noël (relevé du 09/11). Emballages / matériel : baissent à « Valider » ou à « Expédier ».
+- ✅ **LOT MIS EN LIGNE LE 09/11/2026 SOIR (« Oui mets en ligne et prépare-moi la liste », fbe32f3)** + écran **Gestion → Stock & achats → « Stock à recompter »**
+  (`/gestion/recomptage`, API `/api/admin/recomptage`, `src/lib/recomptage.js`) : tout ce qui s'est vendu depuis le début par ligne de stock (pièces, commandes, dernière
+  vente, annulées à part), le chiffre de Gestion et un champ « Compté » qui enregistre le vrai stock ; onglet « Vendus sans stock saisi ». Le gérant recompte lui-même.
 - ⛔ Gestion ⑦ (42 vieilles promos) : PAS touché (il l'a exclu). Gestion ⑧ (accès limité pour une aide) : PAS construit, question reposée (il l'avait mis « pour plus tard » le 08/11).
 - www.nivcreation.fr redirige DÉJÀ vers nivcreation.fr (vérifié le 09/11) ; flux Google `flux-google.xml` répond (91 produits) ; médiateur : son adhésion d'abord.
 - ⚠️ Environnement « Crafia » : npm passe seulement par le relais → `NO_PROXY=localhost,127.0.0.1 no_proxy=localhost,127.0.0.1 npm_config_noproxy=localhost,127.0.0.1 npm ci`.
