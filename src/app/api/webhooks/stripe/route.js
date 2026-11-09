@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { lireStockMeta, texteStock } from "@/lib/stockMeta";
 import { texteAvecDecor } from "@/lib/decorTexte";
 import { langueActive, langueDe, ecritureLangue, languesDeLaCommande, nomsLangues, textesEnLangue } from "@/lib/traductionGravure";
 import { liensFichierGravure } from "@/components/admin/FichierGravure";
@@ -18,6 +19,7 @@ import { detailVariante } from "@/lib/detailProduit";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 import { LOGO_URL } from "@/lib/photosLocales";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
+import { lireProvenanceCompacte } from "@/lib/provenance";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
 // boutique un e-mail récapitulatif (produits + perso + adresse de livraison).
@@ -282,11 +284,8 @@ export async function POST(req) {
 
   // Décrémente le stock des variantes achetées (si suivi).
   try {
-    const raw = event.data.object?.metadata?.stock;
-    if (raw) {
-      const pairs = JSON.parse(raw); // [[variantId, qty], ...]
-      await decrementMany(pairs.map(([variantId, qty]) => ({ variantId, qty })));
-    }
+    const pairs = lireStockMeta(event.data.object?.metadata); // [[variantId, qty], ...] sur une ou plusieurs clés
+    if (pairs.length) await decrementMany(pairs.map(([variantId, qty]) => ({ variantId, qty })));
   } catch (e) {
     console.error("Décrément stock impossible:", e.message);
   }
@@ -471,7 +470,7 @@ export async function POST(req) {
     const persoBlocks = specItems.map((it) => {
       // Variante EXACTE (taille du verre à vin comprise) — 13/10/2026.
       let varTxt = it.variantTitle || "";
-      try { varTxt = detailVariante({ stock: session?.metadata?.stock || "" }, it.slug, { variantId: it.variantId, variantTitle: it.variantTitle }).texte || varTxt; } catch { /* titre brut */ }
+      try { varTxt = detailVariante({ stock: texteStock(session?.metadata) }, it.slug, { variantId: it.variantId, variantTitle: it.variantTitle }).texte || varTxt; } catch { /* titre brut */ }
       const titre = `<p style="margin:0 0 8px;font-weight:bold;">${escapeHtml(it.name || "Article")}${varTxt ? ` — ${escapeHtml(varTxt)}` : ""}</p>`;
       const verres = eclaterParVerre(it);
       if (verres.length > 1) {
@@ -770,6 +769,9 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       console.error("Cashback cagnotte:", e.message);
     }
 
+    let provenance = null;
+    try { provenance = lireProvenanceCompacte(session?.metadata?.prov || event.data.object?.metadata?.prov || ""); } catch { provenance = null; }
+
     // Enregistre la vente dans la base (collection siteOrders, sans risque).
     const newOrderId = await recordSiteOrder({
       ref: orderRef,
@@ -789,6 +791,8 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       // Devis payé AVEC le panier (02/11/2026) : emballage choisi sur la page du devis.
       ...(session?.metadata?.quoteEmballage ? { quoteEmballage: String(session.metadata.quoteEmballage) } : {}),
       surMesure: Boolean(quote),
+      // D'où vient la cliente (Google, Instagram, lien marqué…). Absente = rien.
+      ...(provenance ? { provenance } : {}),
       paymentIntentId: (session.payment_intent || "").toString(),
       total: (session.amount_total || 0) / 100,
       // Détail de la vente (pour l'encadré « Détail du prix » dans l'admin) :
@@ -826,7 +830,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
         subtotal: (li.amount_subtotal || 0) / 100,     // ligne avant remise
         total: (li.amount_total || 0) / 100,           // ligne après remise
       })),
-      stock: event.data.object?.metadata?.stock || "",
+      stock: texteStock(event.data.object?.metadata),
     }, claimedDocId); // écrit sur le document déjà réservé plus haut (anti-doublon)
     // 🔔 Alerte sur le téléphone du gérant (02/10/2026) — jamais bloquant.
     try {

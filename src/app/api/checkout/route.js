@@ -1,4 +1,5 @@
 import { gobeletSupplement } from "@/lib/gobeletParcours";
+import { decouperStock } from "@/lib/stockMeta";
 import { manqueLangue } from "@/lib/traductionGravure";
 import { cnNormaliser, cnPrixGravure, cnResume } from "@/lib/carnet";
 import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
@@ -6,6 +7,7 @@ import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { cumulPermis, remiseCumulee, remisePourPort } from "@/lib/cumulCodes";
 import { toCents } from "@/lib/format";
+import { nettoyerProvenance, compacterProvenance } from "@/lib/provenance";
 import { EXPRESS_START } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getStockMap } from "@/lib/stock";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
@@ -34,7 +36,8 @@ function sanitizeSpec(spec) {
     if (Array.isArray(val)) return val.slice(0, 40).map((x) => clean(x, depth + 1));
     if (typeof val === "object") {
       const out = {};
-      for (const k of Object.keys(val).slice(0, 40)) out[k] = clean(val[k], depth + 1);
+      // 80 clés : des marque-pages gravés dans une autre langue portent deux champs par texte (gravé + français tapé).
+      for (const k of Object.keys(val).slice(0, 80)) out[k] = clean(val[k], depth + 1);
       return out;
     }
     return val;
@@ -558,13 +561,17 @@ export async function POST(req) {
     } catch { /* cagnotte ignorée si souci — le paiement continue normalement */ }
   }
 
+  // Provenance de la cliente : nettoyée ici, facultative, ne peut jamais gêner le paiement.
+  let provMeta = "";
+  try { provMeta = compacterProvenance(nettoyerProvenance(body?.provenance)); } catch { provMeta = ""; }
+
   try {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
       metadata: {
-        // sert à décrémenter le stock après paiement (variantId:quantité)
-        stock: JSON.stringify(boughtVariants.map((b) => [b.variantId, b.qty])).slice(0, 480),
+        // sert à décrémenter le stock après paiement (variantId:quantité), sur plusieurs clés si la liste est longue
+        ...decouperStock(boughtVariants.map((b) => [b.variantId, b.qty])),
         promoCode: appliedCode,
         // Devis payé avec le panier : le webhook le marque « payé » et joint sa demande à la commande.
         ...(devisMeta || {}),
@@ -582,6 +589,8 @@ export async function POST(req) {
         // offert aujourd'hui (mode délai allongé OU interrupteur « cadeau dans
         // chaque colis ») — sinon on n'enregistre rien.
         ...(cadeauChoisi && cadeauColisActif(settings) ? { cadeauChoix: cadeauChoisi } : {}),
+        // D'où vient la cliente (Google, Instagram, lien marqué…) : JSON compact, rangé sur la commande par le webhook.
+        ...(provMeta ? { prov: provMeta } : {}),
       },
       locale: "fr",
       currency: "eur",

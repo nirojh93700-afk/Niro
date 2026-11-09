@@ -26,10 +26,12 @@ export const CN_ENCRE = { marron: "#2c160a", noir: "#c9c2b6", gris: "#2f2f31" };
 const NUMS = new Set(MP_NUMS_OK);
 const COURT = Object.fromEntries(CN_ZONES.map(([k, l]) => [k, l.toLowerCase()]));
 
-export const cnVide = () => Object.fromEntries(CN_FACES.map(([s]) => [s, Object.fromEntries(CN_ZONES.map(([z]) => [z, { k: "", t: "", t2: "", n: 0, src: null }]))]));
+// ts / ts2 = le français tapé quand le texte est traduit (fiche seulement : au panier il part dans les champs à plat).
+export const cnVide = () => Object.fromEntries(CN_FACES.map(([s]) => [s, Object.fromEntries(CN_ZONES.map(([z]) => [z, { k: "", t: "", t2: "", n: 0, src: null, ts: "", ts2: "" }]))]));
 
 export function cnPlein(e) {
-  return Boolean(e && ((e.k === "texte" && String(e.t || "").trim()) || (e.k === "dessin" && e.n) || (e.k === "logo" && e.src)));
+  // Un texte en cours de traduction (français tapé, traduction pas encore arrivée) compte déjà : le prix ne bouge pas.
+  return Boolean(e && ((e.k === "texte" && String(e.t || e.ts || "").trim()) || (e.k === "dessin" && e.n) || (e.k === "logo" && e.src)));
 }
 export function cnFaceGravee(v, side) {
   return Object.values(v?.[side] || {}).some(cnPlein);
@@ -48,13 +50,14 @@ export function cnNormaliser(product, cn) {
     const e = cn.v?.[s]?.[z];
     if (!e || typeof e !== "object") continue;
     const k = ["texte", "dessin", "logo"].includes(e.k) ? e.k : "";
-    const t = String(e.t || "").slice(0, 30);
-    const t2 = String(e.t2 || "").slice(0, 40);
+    // Limites larges : une traduction peut être plus longue que le texte tapé (30 / 40 / 24 caractères sur la fiche).
+    const t = String(e.t || "").slice(0, 90);
+    const t2 = String(e.t2 || "").slice(0, 120);
     if (k === "texte" && t.trim()) v[s][z] = { k, t, t2: t2.trim() ? t2 : "", n: 0, src: null };
     else if (k === "dessin") {
       const n = Number(e.n);
       if (!NUMS.has(n)) return null; // un dessin sans numéro valable : la fiche ne laisse pas passer
-      v[s][z] = { k, t: n >= 75 ? String(e.t || "").slice(0, 24) : "", t2: "", n, src: null };
+      v[s][z] = { k, t: n >= 75 ? String(e.t || "").slice(0, 72) : "", t2: "", n, src: null };
     } else if (k === "logo") {
       if (!photoSite(e.src)) return null;
       v[s][z] = { k, t: "", t2: "", n: 0, src: e.src };
@@ -89,4 +92,32 @@ export function cnResume(product, cn, couleur) {
   }
   if (texte) morceaux.push(`Écriture : ${getFontLabel(cn.police) || cn.police}`);
   return morceaux.filter(Boolean).join(" · ");
+}
+
+// ── Langue de la gravure (09/11/2026) : UNE langue pour le carnet, appliquée à chacun de ses textes.
+const maj1 = (x) => x.charAt(0).toUpperCase() + x.slice(1);
+/** Clé à plat d'un texte du carnet : « cnFaceHaut », « cnDosBasg2 » (2ᵉ ligne). */
+export const cnCleTexte = (side, zone, ligne2 = false) => `cn${maj1(side)}${maj1(zone)}${ligne2 ? "2" : ""}`;
+/** « Couverture · en haut », « Dos · en bas à gauche · 2ᵉ ligne » (vide si la clé n'est pas celle d'un carnet). */
+export function cnLibelleCle(cle) {
+  for (const [s, nom] of CN_FACES) for (const [z] of CN_ZONES) {
+    if (cle === cnCleTexte(s, z)) return `${nom} · ${COURT[z]}`;
+    if (cle === cnCleTexte(s, z, true)) return `${nom} · ${COURT[z]} · 2ᵉ ligne`;
+  }
+  return "";
+}
+/** Tous les textes du carnet (emplacements « texte » : ligne 1 et 2 ; cadres : le texte au milieu) : [{ key, label, t, ts, side, zone, champ }]. */
+export function cnTextes(v) {
+  const out = [];
+  for (const [s] of CN_FACES) for (const [z] of CN_ZONES) {
+    const e = v?.[s]?.[z];
+    if (!e) continue;
+    if (e.k === "texte") {
+      out.push({ key: cnCleTexte(s, z), label: cnLibelleCle(cnCleTexte(s, z)), t: e.t || "", ts: e.ts || "", side: s, zone: z, champ: "t" });
+      out.push({ key: cnCleTexte(s, z, true), label: cnLibelleCle(cnCleTexte(s, z, true)), t: e.t2 || "", ts: e.ts2 || "", side: s, zone: z, champ: "t2" });
+    } else if (e.k === "dessin" && e.n >= 75) {
+      out.push({ key: cnCleTexte(s, z), label: cnLibelleCle(cnCleTexte(s, z)), t: e.t || "", ts: e.ts || "", side: s, zone: z, champ: "t" });
+    }
+  }
+  return out;
 }

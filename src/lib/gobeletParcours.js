@@ -13,6 +13,7 @@
 //   éléments en plus        autour : un élément par ligne, écrit par ligneElement() et relu par lireLigne()
 
 import { getFontLabel } from "./fonts";
+import { langueActive, aDesLettres, manqueLangue, resumeLangue, aTexteEnLangue, cleSource } from "./traductionGravure";
 
 export const GOB_DESSINS_MAX = 74;
 export const GOB_CADRE_MIN = 75;
@@ -116,7 +117,8 @@ export function premierElement(fields) {
   if (kind === "cadre") return { ...base, num: parseInt(f.cadre, 10), nom: t(f.nom) };
   if (kind === "lettre") return { ...base, lettre: t(f.lettre), nom: t(f.nom) };
   if (kind === "texte") return { ...base, texte: t(f.texte) };
-  if (kind === "photo") return { ...base, photo: t(f.photo), sous: t(f.texteSousPhoto) };
+  // sousSource : le français tapé du texte sous la photo quand il est traduit (toujours le 1er texte : « gt1 »).
+  if (kind === "photo") return { ...base, photo: t(f.photo), sous: t(f.texteSousPhoto), sousSource: langueActive(f) ? t(f[cleSource("gt1")]) : "" };
   return null;
 }
 
@@ -129,7 +131,7 @@ export function champsPremier(e) {
   if (e.kind === "cadre") { out.cadre = String(e.num); out.nom = e.nom || ""; out.police = e.police || ""; }
   if (e.kind === "lettre") { out.lettre = e.lettre || ""; out.nom = e.nom || ""; out.police = e.police || ""; }
   if (e.kind === "texte") { out.texte = e.texte || ""; out.police = e.police || ""; }
-  if (e.kind === "photo") { out.photo = e.photo || ""; out.texteSousPhoto = e.sous || ""; out.police = e.sous ? (e.police || "") : ""; }
+  if (e.kind === "photo") { out.photo = e.photo || ""; out.texteSousPhoto = e.sous || ""; out.police = e.sous || e.sousSource ? (e.police || "") : ""; }
   return out;
 }
 
@@ -153,7 +155,8 @@ export function gobeletElements(fields) {
   const p = premierElement(fields);
   if (p) {
     out.push({ ...p, compris: true });
-    if (p.kind === "photo" && p.sous) out.push({ kind: "sous", texte: p.sous, side: p.side, zone: p.zone, police: p.police, compris: false });
+    // Un texte sous la photo en cours de traduction compte déjà (le prix ne bouge pas pendant la traduction).
+    if (p.kind === "photo" && (p.sous || p.sousSource)) out.push({ kind: "sous", texte: p.sous, side: p.side, zone: p.zone, police: p.police, compris: false });
   }
   for (const l of lignesAutour(fields)) out.push({ ...lireLigne(l), compris: false });
   return out;
@@ -163,6 +166,9 @@ export function gobeletElements(fields) {
 export function gobeletEtat(fields) {
   const p = premierElement(fields);
   if (!p) return { ok: false, centre: null, manque: "Choisissez ce que vous voulez graver (étape 1)." };
+  // Gravure dans une autre langue (09/11/2026) : jamais sans la traduction arrivée et la case « J'ai relu… » cochée.
+  const langue = manqueLangue(fields || {});
+  if (langue) return { ok: false, centre: null, manque: langue };
   const manque = manqueElement(p);
   if (manque) return { ok: false, centre: null, manque };
   const sous = p.kind === "photo" && p.sous ? ` + « ${p.sous} »` : "";
@@ -197,7 +203,7 @@ export function gobeletResume(fields, cfg = {}) {
   return gobeletElements(fields).map((e, i) => {
     const ecr = ["cadre", "lettre", "texte", "sous"].includes(e.kind) && e.police ? `, écriture ${ecritureCourte(e.police)}` : "";
     return `${i + 1}. ${quoiElement(e)} — ${ouElement(e)}${ecr} (${e.compris ? "compris" : `+${String(prixElement(e, cfg)).replace(".", ",")} €`})`;
-  }).join(" · ");
+  }).join(" · ") + (aTexteEnLangue(fields || {}) ? ` · Langue : ${resumeLangue(fields)}` : "");
 }
 
 /** La planche (image) qui contient le numéro n — pour le montrer à l'atelier. */
@@ -213,3 +219,76 @@ export function plancheDuNumero(cfg, n) {
 
 /** Au moins un élément placé par l'atelier → un aperçu est à envoyer à la cliente avant de graver. */
 export const gobeletApercuAEnvoyer = (fields) => gobeletElements(fields).some((e) => e.side === "atelier");
+
+// ── Langue de la gravure (09/11/2026) : UNE langue pour le gobelet, appliquée à chacun de ses textes (nom d'un cadre,
+// nom d'une lettre fleurie, texte, texte sous la photo). Le texte GRAVÉ reste où il est (champs du 1er élément, lignes
+// « autour ») ; en plus, pour le paiement et l'atelier, chaque texte en autre langue est recopié à plat : « gt1 » = texte
+// gravé, « gt1Source » = français tapé, langueCles = « gt1,gt2 ». Français : aucun de ces champs.
+const CLE_GT = /^gt\d+(Source)?$/;
+/** Les textes de la gravure, dans l'ordre des éléments (liste sans les « sous ») : [{ key, label, i, champ, t, ts }]. */
+export function gobeletTextes(liste) {
+  const out = [];
+  (liste || []).forEach((e, i) => {
+    const champ = e.kind === "texte" ? "texte" : e.kind === "cadre" || e.kind === "lettre" ? "nom" : e.kind === "photo" && i === 0 ? "sous" : null;
+    if (!champ) return;
+    const quoi = e.kind === "cadre" ? `Cadre n° ${e.num}` : e.kind === "lettre" ? `Lettre fleurie ${e.lettre}` : e.kind === "photo" ? "Texte sous la photo" : "Texte";
+    out.push({ key: `gt${out.length + 1}`, label: `${i + 1}. ${quoi}`, i, champ, t: String(e[champ] || ""), ts: String(e[champ === "sous" ? "sousSource" : "source"] || "") });
+  });
+  return out;
+}
+/** Les éléments (sans « sous »), chacun avec le français tapé de son texte (source / sousSource) quand il est traduit. */
+export function gobeletListe(fields) {
+  const liste = gobeletElements(fields).filter((e) => e.kind !== "sous");
+  if (!langueActive(fields)) return liste;
+  for (const x of gobeletTextes(liste)) {
+    const s = t(fields[cleSource(x.key)]);
+    if (s) liste[x.i][x.champ === "sous" ? "sousSource" : "source"] = s;
+  }
+  return liste;
+}
+/** Les champs, plus les textes à plat même en français (le menu de langue en a besoin pour basculer). */
+export function gobeletAPlat(fields) {
+  const n = { ...(fields || {}) };
+  for (const x of gobeletTextes(gobeletListe(fields))) {
+    if (!aDesLettres(x.ts || x.t)) continue;
+    n[x.key] = x.t; n[cleSource(x.key)] = x.ts;
+  }
+  return n;
+}
+/**
+ * Écrit une liste d'éléments dans les champs (remplace champsDepuisListe dans la fiche) ET remet à jour les textes à
+ * plat de la langue. Plus aucun texte avec des lettres : la langue revient au français.
+ */
+export function gobeletEcrire(prev, liste) {
+  const n = { ...(prev || {}) };
+  for (const k of Object.keys(n)) if (CLE_GT.test(k)) delete n[k];
+  delete n.langueCles;
+  Object.assign(n, champsDepuisListe(liste));
+  if (!langueActive(n)) return n;
+  const direct = n.direct === "oui";
+  const cles = [];
+  for (const x of gobeletTextes(liste)) {
+    const src = direct ? "" : x.ts.trim();
+    if (!aDesLettres(src || x.t)) continue;
+    cles.push(x.key);
+    n[x.key] = x.t.trim();
+    if (src) n[cleSource(x.key)] = src;
+  }
+  if (cles.length) n.langueCles = cles.join(",");
+  else { n.langue = ""; n.direct = ""; n.tradOk = ""; }
+  return n;
+}
+/** Ce que le menu de langue a changé (champs à plat) reporté dans les éléments, puis réécrit. */
+export function gobeletDepuisAPlat(prev, next) {
+  const liste = gobeletListe(prev).map((e) => ({ ...e }));
+  for (const x of gobeletTextes(liste)) {
+    if (!(x.key in next)) continue;
+    liste[x.i][x.champ] = String(next[x.key] || "").replace(/\s*[\r\n]+\s*/g, " "); // une ligne par élément
+    liste[x.i][x.champ === "sous" ? "sousSource" : "source"] = String(next[cleSource(x.key)] || "");
+  }
+  return gobeletEcrire(next, liste);
+}
+/** « 2. Cadre n° 82 » : où se grave le texte de clé « gt2 ». */
+export function gobeletLibelleCle(fields, cle) {
+  return gobeletTextes(gobeletListe(fields)).find((x) => x.key === cle)?.label || "";
+}

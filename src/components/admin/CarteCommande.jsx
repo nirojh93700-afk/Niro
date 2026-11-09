@@ -9,17 +9,17 @@
 // action + menu « ··· ». Expédier se fait DANS la carte (n° de suivi, transporteur
 // reconnu, case « prévenir ») : plus jamais de fenêtre système.
 // =============================================================================
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Ic from "@/components/admin/IconesGestion";
 import VarBadge from "@/components/admin/VarBadge";
 import DelaiCommande from "@/components/admin/DelaiCommande";
-import { BlocConditionnement } from "@/components/admin/Conditionnement";
+import { BlocConditionnement, materielConseille } from "@/components/admin/Conditionnement";
 import { RatesCommande } from "@/components/admin/Rates";
 import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
 import { lienSuivi, numerosSuivi, joindreSuivis } from "@/lib/suiviColis";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
-import { FLAGS, FLAG_PAR_ID, chipsDe, modeDe, statutDe, statutInfo, estActive, estFinie, euro, ageDe, dateFr, refDe, hrefFiche, adresseLigne } from "@/lib/fileCommandes";
+import { FLAGS, FLAG_PAR_ID, chipsDe, pastilleProvenance, modeDe, statutDe, statutInfo, estActive, estFinie, euro, ageDe, dateFr, refDe, hrefFiche, adresseLigne } from "@/lib/fileCommandes";
 
 const MODE_IC = { express: "bolt", relais: "pin", retrait: "user", domicile: "home" };
 
@@ -67,6 +67,37 @@ export function FormExpedition({ o, onStatus, onClose, busy, titre = "Expédier"
   const mode = modeDe(o);
   const pays = paysDeLaCommande(o);
   const changer = (i, v) => { setNums((l) => l.map((x, j) => (j === i ? v : x))); setErreur(""); };
+
+  // Matériel du colis proposé ICI (09/11/2026) : si le conditionnement n'est pas encore validé pour
+  // cette commande, le matériel habituel est coché d'office et décompté à « Confirmer l'expédition ».
+  // Déjà validé (ou modification du suivi) : rien n'est proposé, rien n'est décompté deux fois.
+  const [matos, setMatos] = useState(null); // { lignes: [{ id, nom, cout }], etiquette } | { deja: true }
+  const [decompter, setDecompter] = useState(true);
+  const adminKey = () => (typeof sessionStorage !== "undefined" && sessionStorage.getItem("niv-admin-key")) || "";
+  useEffect(() => {
+    if (statutDe(o) === "expediee" || !o.id) return undefined;
+    let vivant = true;
+    fetch(`/api/admin/materiel?orderId=${encodeURIComponent(o.id)}`, { headers: { "x-admin-key": adminKey() } })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!vivant || !d) return;
+        if (d.usage) { setMatos({ deja: true }); return; }
+        const items = (d.items || []).filter((i) => !i.archive);
+        const ids = materielConseille(o, items);
+        const lignes = items.filter((i) => ids.has(i.id) && !(typeof i.stock === "number" && i.stock <= 0)).map((i) => ({ id: i.id, nom: i.nom, cout: Number(i.cout) || 0 }));
+        if (lignes.length) setMatos({ lignes, etiquette: Number(d.estimation?.etiquette) || 0 });
+      })
+      .catch(() => {});
+    return () => { vivant = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [o.id]);
+  async function decompterMateriel() {
+    if (!matos || matos.deja || !decompter || !matos.lignes?.length) return;
+    try {
+      await fetch("/api/admin/materiel", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": adminKey() },
+        body: JSON.stringify({ action: "valider", orderId: o.id, lines: Object.fromEntries(matos.lignes.map((l) => [l.id, 1])), etiquette: matos.etiquette }) });
+    } catch { /* l'expédition passe quand même : le matériel se valide ensuite dans « Conditionnement » */ }
+  }
   const pleins = numerosSuivi(nums);
 
   // « 📷 Scanner l'étiquette » : la photo est réduite ici, lue par le serveur (admin), le numéro
@@ -91,6 +122,7 @@ export function FormExpedition({ o, onStatus, onClose, busy, titre = "Expédier"
       e.preventDefault();
       const t = joindreSuivis(nums);
       if (!t && o.customerEmail && notify) { setErreur("Sans numéro de suivi, la cliente ne recevra pas de lien : décoche « Prévenir » ou saisis le numéro."); return; }
+      await decompterMateriel();
       await onStatus(o, "expediee", { tracking: t, notifyCustomer: Boolean(t && notify && o.customerEmail) });
       onClose();
     }}>
@@ -120,6 +152,14 @@ export function FormExpedition({ o, onStatus, onClose, busy, titre = "Expédier"
       <button type="button" className="fq-btn ghost" style={{ alignSelf: "flex-start" }} onClick={() => setNums((l) => [...l, ""])}>+ Ajouter un autre colis</button>
       <div className="car">{pleins.length > 1 ? `${pleins.length} colis : la cliente recevra un lien de suivi pour chacun.` : "Le lien de suivi envoyé sera le bon."}</div>
       {o.customerEmail ? <label><input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} /> Prévenir la cliente par e-mail ({o.customerEmail})</label> : <div className="car">Pas d&apos;e-mail sur cette commande : aucun message ne partira.</div>}
+      {matos?.deja ? <div className="car"><Ic n="check" /> Matériel du colis déjà validé.</div> : null}
+      {matos?.lignes?.length ? (
+        <label style={{ alignItems: "flex-start" }}>
+          <input type="checkbox" checked={decompter} onChange={(e) => setDecompter(e.target.checked)} />
+          <span>Sortir du stock le matériel habituel de ce colis : <b>{matos.lignes.map((l) => l.nom).join(", ")}</b> ({euro(matos.lignes.reduce((t, l) => t + l.cout, 0))}).
+            <small style={{ display: "block", color: "var(--ash-muted, #6b6558)" }}>Autre matériel ? Décochez, puis ouvrez « Conditionnement » sur la carte.</small></span>
+        </label>
+      ) : null}
       {mode.k === "relais" && o.relaisPoint ? <div className="car"><Ic n="pin" /> {o.relaisPoint}</div> : null}
       {mode.k === "express" ? <div className="car" style={{ color: "var(--ash-bad)", fontWeight: 700 }}><Ic n="bolt" /> Express payé : Chrono 18 à domicile</div> : null}
       {pays.etranger ? <div className="car" style={{ color: "var(--ash-bad)", fontWeight: 700 }}>{pays.drapeau} {pays.nom} : étiquette internationale</div> : null}
@@ -163,6 +203,8 @@ export default function CarteCommande({ o, pos, inBoard = false, unread = false,
   const pays = paysDeLaCommande(o);
   const flags = o.flags || [];
   const chips = chipsDe(o, unread);
+  let venue = null;
+  try { venue = pastilleProvenance(o); } catch { venue = null; }
   const active = estActive(o);
   const finie = estFinie(o);
   const ref = refDe(o);
@@ -199,7 +241,7 @@ export default function CarteCommande({ o, pos, inBoard = false, unread = false,
         {mode.k === "relais" && o.relaisPoint ? <><span className="dot">·</span><span>{o.relaisPoint}</span></> : null}
         {pays.etranger ? <><span className="dot">·</span><b style={{ color: "var(--ash-bad)" }}>{pays.drapeau} {pays.nom}</b></> : null}
       </div>
-      {chips.length ? <div className="fq-chips">{chips.map((c) => <Pill key={c.k} tone={c.tone} ic={{ express: "bolt", immediate: "bolt", pays: "flag", reponse: "mail", cadeau: "gift", dateimage: "alert", alerte: "alert", surmesure: "pen", emailfix: "mail", test: "tag" }[c.k]}>{c.lib}</Pill>)}</div> : null}
+      {chips.length || venue ? <div className="fq-chips">{chips.map((c) => <Pill key={c.k} tone={c.tone} ic={{ express: "bolt", immediate: "bolt", pays: "flag", reponse: "mail", cadeau: "gift", dateimage: "alert", alerte: "alert", surmesure: "pen", emailfix: "mail", test: "tag" }[c.k]}>{c.lib}</Pill>)}{venue ? <span className="fq-pill line pv-src" title="D'où vient la cliente"><i style={{ background: venue.couleur }} />Venue de : <b>{venue.nom}</b>{venue.extra ? ` · ${venue.extra}` : ""}</span> : null}</div> : null}
       {!inBoard && o.shippingAddress ? <div className="fq-adr">{mode.k === "relais" ? "Coordonnées : " : "Étiquette : "}{adresseLigne(o)}</div> : null}
 
       <ul className="fq-items">

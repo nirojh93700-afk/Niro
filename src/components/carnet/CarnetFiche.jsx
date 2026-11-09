@@ -19,12 +19,16 @@ import PayInfoModal from "@/components/PayInfo";
 import TrustSection from "@/components/TrustSection";
 import { MP_DATA } from "@/lib/marquePagesData";
 import { Planches, envoyerPhoto, ajuster } from "@/components/marquePages/MarquePagesFiche";
-import { CN_FACES, CN_ZONES, CN_ZONES_POS, CN_ENCRE, CN_GRAVURE, cnVide, cnPlein, cnFaceGravee, cnPrixGravure, cnNormaliser, cnResume } from "@/lib/carnet";
+import { CN_FACES, CN_ZONES, CN_ZONES_POS, CN_ENCRE, CN_GRAVURE, cnVide, cnPlein, cnFaceGravee, cnPrixGravure, cnNormaliser, cnResume, cnTextes } from "@/lib/carnet";
+import LangueFiche from "@/components/LangueFiche";
+import { langueDe, langueActive, texteMontre, texteFrappe, champsLangueAPlat, manqueLangue, resumeLangue } from "@/lib/traductionGravure";
+import { classeLangue } from "@/lib/policeLangueClient";
 
 const cle = (t) => t.toLowerCase(); // « Marron » → « marron »
 
 // --- La gravure posée sur la grande photo ----------------------------------------------------------------------------
-export function Gravure({ v, side, couleur, police }) {
+// langue (facultatif) = code de la langue de la gravure : son écriture (tamoul, arabe, hébreu, chinois) et son sens.
+export function Gravure({ v, side, couleur, police, langue = "" }) {
   const ref = useRef(null);
   const [W, setW] = useState(0);
   useLayoutEffect(() => {
@@ -34,9 +38,10 @@ export function Gravure({ v, side, couleur, police }) {
     return () => ro?.disconnect();
   }, []);
   const col = CN_ENCRE[couleur] || "#2c160a";
-  const fnt = `fnt-${police || "playfair"}`;
+  const fnt = classeLangue(langue) || `fnt-${police || "playfair"}`;
+  const dir = langueDe(langue)?.dir === "rtl" ? "rtl" : undefined;
   const Z = CN_ZONES_POS[side];
-  const sig = JSON.stringify([v?.[side], W, couleur, police]);
+  const sig = JSON.stringify([v?.[side], W, couleur, police, langue]);
   useLayoutEffect(() => {
     const run = () => ref.current?.querySelectorAll(".t").forEach((t) => {
       ajuster(t, +t.dataset.mw, +t.dataset.mh);
@@ -46,7 +51,10 @@ export function Gravure({ v, side, couleur, police }) {
     run();
     let vivant = true;
     document.fonts?.ready?.then(() => { if (vivant) run(); });
-    return () => { vivant = false; };
+    // L'écriture d'une langue arrive après la mesure : on remesure.
+    const police2 = () => { if (vivant) run(); };
+    window.addEventListener("niv-police-langue", police2);
+    return () => { vivant = false; window.removeEventListener("niv-police-langue", police2); };
   }, [sig]);
   const els = [];
   if (W) for (const [z] of CN_ZONES) {
@@ -59,8 +67,8 @@ export function Gravure({ v, side, couleur, police }) {
       const deux = Boolean(String(e.t2 || "").trim());
       els.push(
         <div key={z} className={`cn-el ${al}`} style={pos}>
-          <span className={`t l1 ${fnt}`} data-mw={w * 0.96} data-mh={h * (deux ? 0.58 : 0.85)} style={{ color: col }}>{e.t.trim()}</span>
-          {deux && <span className={`l2 ${fnt}`} style={{ color: col }}>{e.t2.trim()}</span>}
+          <span className={`t l1 ${fnt}`} dir={dir} data-mw={w * 0.96} data-mh={h * (deux ? 0.58 : 0.85)} style={{ color: col }}>{String(e.t || "").trim()}</span>
+          {deux && <span className={`l2 ${fnt}`} dir={dir} style={{ color: col }}>{e.t2.trim()}</span>}
         </div>
       );
     } else if (e.k === "dessin") {
@@ -73,7 +81,7 @@ export function Gravure({ v, side, couleur, police }) {
         <div key={z} className="cn-el cadre" style={pos}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="d" src={`/marque-pages/dessins/${String(e.n).padStart(3, "0")}.png`} alt="" style={{ left: ox, top: (h - dh) / 2, width: dw, height: dh }} />
-          {cadre && <span className={`t c ${fnt}`} data-mw={dw * 0.6} data-mh={dh * (cc[2] || 0.5)} style={{ left: ox + cc[0] * dw, top: (h - dh) / 2 + cc[1] * dh, color: col }}>{e.t.trim()}</span>}
+          {cadre && <span className={`t c ${fnt}`} dir={dir} data-mw={dw * 0.6} data-mh={dh * (cc[2] || 0.5)} style={{ left: ox + cc[0] * dw, top: (h - dh) / 2 + cc[1] * dh, color: col }}>{e.t.trim()}</span>}
         </div>
       );
     } else if (e.k === "logo") {
@@ -89,9 +97,10 @@ export function Gravure({ v, side, couleur, police }) {
 }
 
 // --- L'éditeur d'une face : quatre emplacements -------------------------------------------------------------------------
-function Face({ side, v, onChange, grille, setGrille, productSlug }) {
+function Face({ side, v, onChange, grille, setGrille, productSlug, lg, onFrappe }) {
   const [envoi, setEnvoi] = useState({});
-  const maj = (z, patch) => onChange({ ...v, [side]: { ...v[side], [z]: { ...v[side][z], ...patch } } });
+  // Écriture sur l'état le plus récent (une traduction peut arriver entre deux frappes : elle ne doit pas être écrasée).
+  const maj = (z, patch) => onChange((p) => ({ ...p, [side]: { ...p[side], [z]: { ...p[side][z], ...patch } } }));
   return (
     <div className="mq-ed">
       {CN_ZONES.map(([z, lab, sub]) => {
@@ -105,7 +114,7 @@ function Face({ side, v, onChange, grille, setGrille, productSlug }) {
               <select className="mq-empk" value={e.k} aria-label={`${side === "face" ? "Couverture" : "Dos"} · ${lab}`}
                 onChange={(ev) => {
                   const k = ev.target.value;
-                  maj(z, { k, n: k === "dessin" ? e.n : 0, src: k === "logo" ? e.src : null, t: k === "texte" ? e.t : "", t2: k === "texte" ? e.t2 : "" });
+                  maj(z, { k, n: k === "dessin" ? e.n : 0, src: k === "logo" ? e.src : null, t: k === "texte" ? e.t : "", t2: k === "texte" ? e.t2 : "", ts: k === "texte" ? e.ts || "" : "", ts2: k === "texte" ? e.ts2 || "" : "" });
                   setGrille(k === "dessin" && !e.n ? gk : (ouverte ? null : grille));
                 }}>
                 <option value="">Rien</option>
@@ -118,18 +127,18 @@ function Face({ side, v, onChange, grille, setGrille, productSlug }) {
               <div className="mq-empb">
                 {e.k === "texte" && (
                   <>
-                    <input type="text" className="mq-empt" maxLength={30} placeholder="Ex : Camille, Carnet de voyage…" value={e.t} onChange={(ev) => maj(z, { t: ev.target.value })} />
-                    <input type="text" className="mq-empt cn-empt2" maxLength={40} placeholder="Deuxième ligne (facultatif) : une date, une citation courte" value={e.t2} onChange={(ev) => maj(z, { t2: ev.target.value })} />
+                    <input type="text" className="mq-empt" maxLength={30} placeholder="Ex : Camille, Carnet de voyage…" value={texteMontre(lg, e.t, e.ts)} onChange={(ev) => { maj(z, texteFrappe(lg, ev.target.value)); onFrappe(); }} />
+                    <input type="text" className="mq-empt cn-empt2" maxLength={40} placeholder="Deuxième ligne (facultatif) : une date, une citation courte" value={texteMontre(lg, e.t2, e.ts2)} onChange={(ev) => { const f = texteFrappe(lg, ev.target.value); maj(z, { t2: f.t, ts2: f.ts }); onFrappe(); }} />
                   </>
                 )}
                 {e.k === "dessin" && (
                   <div className="mq-empd">
                     {!ouverte && e.n ? <p className="mq-empok">{e.n >= 75 ? `Cadre n° ${e.n} choisi ✓` : `Dessin n° ${e.n} choisi ✓`}</p> : null}
                     {!ouverte && <button type="button" className="prc-change mq-empgo" onClick={() => setGrille(gk)}>{e.n ? "Changer de dessin" : "Choisir dans les planches"}</button>}
-                    {ouverte && <Planches valeur={e.n} onChoix={(n) => maj(z, { n, t: n >= 75 ? e.t : "" })} onFermer={() => setGrille(null)} />}
+                    {ouverte && <Planches valeur={e.n} onChoix={(n) => maj(z, { n, t: n >= 75 ? e.t : "", ts: n >= 75 ? e.ts || "" : "" })} onFermer={() => setGrille(null)} />}
                     {e.n >= 75 && (
                       <label className="mq-empcl">Votre texte au milieu du cadre, facultatif
-                        <input type="text" className="mq-empct" maxLength={24} placeholder="Ex : Camille" value={e.t} onChange={(ev) => maj(z, { t: ev.target.value })} />
+                        <input type="text" className="mq-empct" maxLength={24} placeholder="Ex : Camille" value={texteMontre(lg, e.t, e.ts)} onChange={(ev) => { maj(z, texteFrappe(lg, ev.target.value)); onFrappe(); }} />
                       </label>
                     )}
                   </div>
@@ -176,6 +185,16 @@ export default function CarnetFiche({ product, realisations = [] }) {
   const couleur = cle(V[ci].title);
   const [v, setV] = useState(cnVide);
   const [police, setPolice] = useState("playfair");
+  // Langue de la gravure (09/11/2026) : une langue pour tout le carnet ; chaque emplacement garde t (gravé) et ts (français tapé).
+  const [lg, setLg] = useState({ langue: "", direct: "", tradOk: "" });
+  const textes = cnTextes(v);
+  const ecrireTexte = (key, { t, ts }) => setV((p) => {
+    const x = cnTextes(p).find((y) => y.key === key);
+    if (!x) return p;
+    const patch = x.champ === "t2" ? { t2: t, ts2: ts } : { t, ts };
+    return { ...p, [x.side]: { ...p[x.side], [x.zone]: { ...p[x.side][x.zone], ...patch } } };
+  });
+  const onFrappe = () => setLg((p) => (p.tradOk ? { ...p, tradOk: "" } : p));
   const [grille, setGrille] = useState(null);
   const [qty, setQty] = useState(1);
   const [ajoute, setAjoute] = useState(false);
@@ -212,13 +231,17 @@ export default function CarnetFiche({ product, realisations = [] }) {
   const sid = V[ci].stockId || V[ci].id;
   const manque = epuise(sid, qty);
   const enCours = Object.values(v).some((f) => Object.values(f).some((e) => (e.k === "logo" && !e.src) || (e.k === "dessin" && !e.n)));
-  const bloque = !norme || manque || enCours;
+  // Autre langue : les textes à plat (panier, paiement, atelier) ; jamais gravé traduit sans la case « J'ai relu… ».
+  const champsLangue = champsLangueAPlat(lg, textes);
+  const langueManque = manqueLangue(champsLangue);
+  const bloque = !norme || manque || enCours || Boolean(langueManque);
   const raison = manque ? "Cette couleur est épuisée (ou il n'en reste pas assez) : choisissez-en une autre."
-    : enCours ? "Il manque une image ou le numéro d'un dessin : complétez-le, ou choisissez « Rien » à cet emplacement." : "";
+    : enCours ? "Il manque une image ou le numéro d'un dessin : complétez-le, ou choisissez « Rien » à cet emplacement." : langueManque || "";
 
   function ajouter() {
     if (bloque) return;
-    const resume = cnResume(product, norme, V[ci].title);
+    const resume = cnResume(product, norme, V[ci].title) + (champsLangue.langue ? ` · Langue : ${resumeLangue(champsLangue)}` : "");
+    const fields = { cn: norme, ...champsLangue };
     const cleL = Object.values(norme.v).map((f) => Object.values(f).map((e) => e.src || "").join(",")).join(";");
     addItem({
       productSlug: product.slug,
@@ -228,9 +251,9 @@ export default function CarnetFiche({ product, realisations = [] }) {
       price: unite,
       image: V[ci].image,
       personalization: resume,
-      fields: { cn: norme },
+      fields,
       cleLigne: cleL.replace(/[;,]/g, "") ? cleL : undefined,
-      spec: { slug: product.slug, name: product.name, variantTitle: V[ci].title, variantId: V[ci].id, fields: { cn: norme }, personalization: resume },
+      spec: { slug: product.slug, name: product.name, variantTitle: V[ci].title, variantId: V[ci].id, fields, personalization: resume },
       pickup: false,
       weight: product.weight,
       quantity: qty,
@@ -247,7 +270,7 @@ export default function CarnetFiche({ product, realisations = [] }) {
           <div className="gallery-main">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="gallery-bg" src={src(actuelle)} alt={product.name} />
-            {sideVue && <Gravure v={v} side={sideVue} couleur={couleur} police={police} />}
+            {sideVue && <Gravure v={v} side={sideVue} couleur={couleur} police={police} langue={langueActive(lg) ? lg.langue : ""} />}
             <button type="button" className="gallery-arrow gallery-arrow-prev" aria-label="Photo précédente" onClick={() => setVue((x) => (x - 1 + galerie.length) % galerie.length)}>‹</button>
             <button type="button" className="gallery-arrow gallery-arrow-next" aria-label="Photo suivante" onClick={() => setVue((x) => (x + 1) % galerie.length)}>›</button>
           </div>
@@ -293,9 +316,10 @@ export default function CarnetFiche({ product, realisations = [] }) {
           {CN_FACES.map(([side]) => (
             <div key={side}>
               <p className="mq-sub cn-sub">{side === "face" ? "Sur la couverture" : "Au dos"} <small>(+{CN_GRAVURE} €){cnFaceGravee(v, side) ? " · gravée ✓" : ""}</small></p>
-              <Face side={side} v={v} onChange={setV} grille={grille} setGrille={setGrille} productSlug={product.slug} />
+              <Face side={side} v={v} onChange={setV} grille={grille} setGrille={setGrille} productSlug={product.slug} lg={lg} onFrappe={onFrappe} />
             </div>
           ))}
+          {(textes.length > 0 || langueActive(lg)) && <LangueFiche lg={lg} setLg={setLg} textes={textes} ecrire={ecrireTexte} />}
           <div className="field">
             <label htmlFor="cn-police">Écriture du texte</label>
             <select id="cn-police" value={police} onChange={(e) => setPolice(e.target.value)}>

@@ -92,7 +92,10 @@ export function avecStockDepart(map) {
   return m;
 }
 
-export async function getStockMap() {
+// `frais = true` : relit la base (Gestion doit voir tout de suite une vente faite par une autre instance du
+// site) ; sinon le cache de 60 s suffit (affichage des fiches).
+export async function getStockMap(frais = false) {
+  if (frais) { try { return await lireStockFrais(); } catch { /* repli sur le cache */ } }
   return avecStockDepart(await lireStockBrut());
 }
 async function lireStockBrut() {
@@ -715,32 +718,67 @@ export async function rebasePriceWatch(lot) {
   return true;
 }
 
-export async function setStock(variantId, value) {
-  const map = await getStockMap();
-  if (value === null || value === "" || value === undefined) {
-    delete map[variantId]; // repasse en "non suivi"
-  } else {
-    map[variantId] = Math.max(0, parseInt(value, 10) || 0);
+// ⛔ TOUTE ÉCRITURE DU STOCK PASSE PAR ICI (09/11/2026, gérant : « quand il y a des ventes, les stocks
+// ne diminuent pas automatiquement »). Avant : la vente, Gestion et les achats lisaient le stock dans le
+// cache de 60 s de LEUR instance du site, puis réécrivaient le document ENTIER. Avec plusieurs instances,
+// une copie périmée effaçait la baisse faite par une autre (ou une baisse était calculée sur un ancien
+// chiffre). Maintenant : lecture FRAÎCHE et écriture dans une même transaction ; `fn(map)` modifie la
+// carte et rend `false` s'il n'y a rien à écrire. `fn` peut être rejouée : elle ne garde rien hors d'elle.
+async function modifierStock(fn) {
+  if (useFirestore()) {
+    const db = getFirestoreDb();
+    if (db) {
+      try {
+        const ref = db.collection(FS_COLLECTION).doc(KEY);
+        const res = await db.runTransaction(async (tx) => {
+          const doc = await tx.get(ref);
+          let m = {};
+          try { m = doc.exists ? JSON.parse(doc.data()?.json || "{}") || {} : {}; } catch { m = {}; }
+          m = avecStockDepart(m);
+          const retour = fn(m);
+          if (retour !== false) tx.set(ref, { json: JSON.stringify(m), updatedAt: new Date().toISOString() });
+          return { map: m, retour };
+        });
+        fsCache.stock = cacheCopy(res.map);
+        fsCache.stockAt = Date.now();
+        return res;
+      } catch (e) {
+        // La base n'a pas répondu : on N'ÉCRIT RIEN (réécrire une carte lue de travers effacerait tout le stock).
+        console.error("Stock (transaction) :", e.message);
+        return { map: await getStockMap().catch(() => ({})), retour: false, echec: true };
+      }
+    }
   }
-  await persist(map);
+  const map = await lireStockFrais();
+  const retour = fn(map);
+  if (retour !== false) await persist(map);
+  return { map, retour };
+}
+
+export async function setStock(variantId, value) {
+  const { map } = await modifierStock((m) => {
+    if (value === null || value === "" || value === undefined) delete m[variantId]; // repasse en "non suivi"
+    else m[variantId] = Math.max(0, parseInt(value, 10) || 0);
+  });
   return map;
 }
 
 // Ajoute des quantités (réception d'un achat fournisseur) en UNE écriture.
 // items : [{ stockId, qty }]. Une variante « non suivie » devient suivie.
 export async function adjustStockMany(items) {
-  const map = await getStockMap();
-  const applied = [];
-  for (const it of items || []) {
-    const id = String(it?.stockId || "").trim();
-    const qty = parseInt(it?.qty, 10) || 0;
-    if (!id || !qty) continue;
-    const before = typeof map[id] === "number" ? map[id] : 0;
-    map[id] = Math.max(0, before + qty);
-    applied.push({ stockId: id, before, after: map[id], qty });
-  }
-  if (applied.length) await persist(map);
-  return applied;
+  const { retour } = await modifierStock((map) => {
+    const applied = [];
+    for (const it of items || []) {
+      const id = String(it?.stockId || "").trim();
+      const qty = parseInt(it?.qty, 10) || 0;
+      if (!id || !qty) continue;
+      const before = typeof map[id] === "number" ? map[id] : 0;
+      map[id] = Math.max(0, before + qty);
+      applied.push({ stockId: id, before, after: map[id], qty });
+    }
+    return applied.length ? applied : false;
+  });
+  return retour || [];
 }
 
 // =============================================================================
@@ -762,15 +800,16 @@ export async function addPurchase(rec) {
 
 // items : [{ variantId, qty }]
 export async function decrementMany(items) {
-  const map = await getStockMap();
-  let changed = false;
-  for (const it of items || []) {
-    if (typeof map[it.variantId] === "number") {
-      map[it.variantId] = Math.max(0, map[it.variantId] - (parseInt(it.qty, 10) || 1));
-      changed = true;
+  const { map } = await modifierStock((m) => {
+    let changed = false;
+    for (const it of items || []) {
+      if (typeof m[it.variantId] === "number") {
+        m[it.variantId] = Math.max(0, m[it.variantId] - (parseInt(it.qty, 10) || 1));
+        changed = true;
+      }
     }
-  }
-  if (changed) await persist(map);
+    return changed;
+  });
   return map;
 }
 
@@ -2937,13 +2976,15 @@ export async function getRates(fresh = false) {
 export async function ajouterRate({ orderId, ref, slug, name, variantTitle, verre, stockId, qty, cout, envoi, note }) {
   const q = Math.max(1, Math.min(99, parseInt(qty, 10) || 1));
   const sid = String(stockId || "").trim().slice(0, 120);
-  const map = await lireStockFrais();
   let avant = null, apres = null;
-  if (sid && typeof map[sid] === "number") {
-    avant = map[sid];
-    apres = Math.max(0, avant - q);
-    map[sid] = apres;
-    await persist(map);
+  if (sid) {
+    const { retour } = await modifierStock((map) => {
+      if (typeof map[sid] !== "number") return false;
+      const av = map[sid];
+      map[sid] = Math.max(0, av - q);
+      return { avant: av, apres: map[sid] };
+    });
+    if (retour) { avant = retour.avant; apres = retour.apres; }
   }
   const r2 = (v) => Math.round((Number(String(v ?? "").replace(",", ".")) || 0) * 100) / 100;
   const rec = {
@@ -2985,11 +3026,11 @@ export async function annulerRate(id) {
   const rec = list.find((r) => r.id === id);
   if (!rec) return null;
   if (rec.stockId && rec.retire > 0) {
-    const map = await lireStockFrais();
-    if (typeof map[rec.stockId] === "number") {
+    await modifierStock((map) => {
+      if (typeof map[rec.stockId] !== "number") return false;
       map[rec.stockId] += rec.retire;
-      await persist(map);
-    }
+      return true;
+    });
   }
   data.rates = list.filter((r) => r.id !== id);
   await persistCatalog(data, ["rates"]);

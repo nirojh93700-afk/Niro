@@ -7,6 +7,7 @@
 import { delaiCommande, jourFr } from "@/lib/delaiCommande";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
 import { languesDeLaCommande, nomsLangues } from "@/lib/traductionGravure";
+import { sourceDe, provenanceDe, detailVisite, couleurSource, nomSource, ORDRE_SOURCES } from "@/lib/provenance";
 
 export const FLAGS = [
   { id: "urgent", label: "Urgente", tone: "bad" },
@@ -110,6 +111,30 @@ export function chipsDe(o, unread = false) {
   if (o.alerteEmail || o.emailCorrigeDe) c.push({ k: "emailfix", tone: "warn", lib: o.alerteEmail || `E-mail corrigé (« ${o.emailCorrigeDe} »)` });
   if (o.test) c.push({ k: "test", tone: "grey", lib: "Commande test (non comptée)" });
   return c;
+}
+
+// Pastille « Venue de : Instagram » (09/11/2026). Ancienne commande sans provenance = null (aucune pastille).
+export function pastilleProvenance(o) {
+  const s = sourceDe(o, "premiere");
+  if (!s) return null;
+  const p = provenanceDe(o);
+  const extra = [detailVisite(s.visite)];
+  const d = p.derniere ? sourceDe(o, "derniere") : null;
+  if (d && (d.cle !== s.cle || d.nom !== s.nom)) extra.push(`puis revenue par ${d.nom}`);
+  return { cle: s.cle, nom: s.nom, couleur: couleurSource(s.cle), extra: extra.filter(Boolean).join(" · ") };
+}
+// Filtre « Provenance » de la file : "" = toutes, une clé de source, ou "inconnue" (non relevée).
+export function passeProvenance(o, cle) {
+  if (!cle) return true;
+  const s = sourceDe(o, "premiere");
+  return cle === "inconnue" ? !s : Boolean(s) && s.cle === cle;
+}
+// Les choix du filtre : seulement les sources présentes dans les commandes chargées.
+export function choixProvenance(orders) {
+  const vues = new Set((orders || []).map((o) => sourceDe(o, "premiere")?.cle || "inconnue"));
+  const l = ORDRE_SOURCES.filter((k) => vues.has(k)).map((k) => [k, nomSource(k)]);
+  if (vues.has("inconnue") && l.length) l.push(["inconnue", "Non relevée"]);
+  return l;
 }
 
 export function rechercheTexte(o) {

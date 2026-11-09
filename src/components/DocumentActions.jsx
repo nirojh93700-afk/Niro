@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import RelaisPicker from "@/components/RelaisPicker";
+import { provenancePourPaiement } from "@/lib/provenance";
 import { useDevisChoix, choixPourServeur } from "@/lib/devisChoixStore";
 
 const euro = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(n || 0);
@@ -90,6 +91,8 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
 
   async function pay() {
     setLoading(true); setErr("");
+    let provenance;
+    try { provenance = provenancePourPaiement(); } catch { provenance = undefined; }
     try {
       const res = await fetch("/api/quote-pay", {
         method: "POST",
@@ -99,6 +102,7 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
           ...avecN,
           ...(promo ? { promoCode: promo.code, promoEmail: promo.email } : {}),
           ...(peutLivrer ? { deliveryMethod: method, ...(method === "relais" ? { relaisPoint: relais } : {}) } : {}),
+          ...(provenance ? { provenance } : {}), // d'où vient la cliente (facultatif)
         }),
       });
       const data = await res.json();

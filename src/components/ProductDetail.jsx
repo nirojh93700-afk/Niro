@@ -62,6 +62,7 @@ import Glass3D from "./Glass3D";
 import ZoomThumb from "./ZoomThumb";
 import TrustSection from "./TrustSection";
 import WishlistButton from "@/components/WishlistButton";
+import AlertePrix from "@/components/AlertePrix";
 import GobeletComposer from "./GobeletComposer";
 import GobeletPreview from "./GobeletPreview";
 import GobeletParcours from "./GobeletParcours";
@@ -2397,6 +2398,7 @@ export default function ProductDetail({ product, realisations = [] }) {
             price={hasPromo ? salePrice : variant.price}
             variant="ligne"
           />
+          <AlertePrix slug={product.slug} />
           {/* Stock masqué pour les clientes : on n'affiche QUE l'alerte « épuisé »
              (le compteur exact reste visible dans la gestion). */}
           {soldOut && (

@@ -19,6 +19,7 @@ import QuestionWidget from "@/components/QuestionWidget";
 import FlottantsAuto from "@/components/FlottantsAuto";
 import WelcomePopup from "@/components/WelcomePopup";
 import RefCapture from "@/components/RefCapture";
+import ProvenanceCapture from "@/components/ProvenanceCapture";
 import SiteAnalytics from "@/components/SiteAnalytics";
 import Heartbeat from "@/components/Heartbeat";
 import SalesBanner from "@/components/SalesBanner";
@@ -261,6 +262,7 @@ export default async function RootLayout({ children }) {
               {settings.agents?.widget !== false ? <QuestionWidget /> : null}
               <WelcomePopup enabled={settings.welcome?.enabled} code={settings.welcome?.code} text={settings.welcome?.text} />
               <RefCapture />
+              <ProvenanceCapture />
               <SiteAnalytics />
               <Heartbeat />
             </CartProvider>

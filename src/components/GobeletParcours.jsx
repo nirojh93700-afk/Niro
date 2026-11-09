@@ -13,10 +13,13 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { FONTS, getFontClass, getFontLabel } from "@/lib/fonts";
 import { formatEuro } from "@/lib/format";
 import {
-  gobeletEtat, gobeletSupplement, gobeletElements, champsDepuisListe, premiereLibre, ORDRE_PLACES, prixElement,
+  gobeletEtat, gobeletSupplement, premiereLibre, ORDRE_PLACES, prixElement,
   manqueElement, quoiElement, ouElement, placesDuCote, GOB_COTES, GOB_PLACES,
   GOB_DESSINS_MAX, GOB_CADRE_MIN, GOB_CADRE_MAX,
+  gobeletListe, gobeletTextes, gobeletEcrire, gobeletAPlat, gobeletDepuisAPlat,
 } from "@/lib/gobeletParcours";
+import LangueGravure from "./LangueGravure";
+import { langueActive, langueDe, estTraduit, aDesLettres } from "@/lib/traductionGravure";
 import PhotoUpload, { GUIDE_PHOTO_GRAVURE } from "./PhotoUpload";
 
 const LETTRES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -206,7 +209,8 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
   const etat = gobeletEtat(fieldValues);
   const sup = gobeletSupplement(fieldValues, cfg);
   // La gravure = une liste d'éléments (le texte sous une photo fait partie de la photo).
-  const liste = gobeletElements(fieldValues).filter((e) => e.kind !== "sous");
+  // Chaque élément porte aussi le français tapé de son texte (source) quand la gravure est traduite.
+  const liste = gobeletListe(fieldValues);
   const [ouvert, setOuvert] = useState(""); // catégorie ouverte : dessin | cadre | lettre | texte | photo | ""
   const [ed, setEd] = useState(VIDE);
   const [msg, setMsg] = useState("");
@@ -214,7 +218,24 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
   const edRef = useRef(null);
   const recapRef = useRef(null);
 
-  const ecrire = (nouvelle) => setFieldValues((prev) => ({ ...prev, ...champsDepuisListe(nouvelle) }));
+  // fn reçoit la liste la plus récente (une traduction peut arriver entre deux gestes : elle ne doit pas être écrasée).
+  const ecrire = (fn, patch = null) => setFieldValues((prev) => gobeletEcrire(patch ? { ...prev, ...patch } : prev, fn(gobeletListe(prev))));
+
+  // Langue de la gravure (09/11/2026) : une langue pour le gobelet, proposée dès qu'un texte est dans la gravure.
+  // Le bloc commun (LangueGravure) lit et écrit des champs à plat : on les reporte dans les éléments.
+  const traduit = estTraduit(fieldValues);
+  const textesLangue = gobeletTextes(liste).filter((x) => aDesLettres(x.ts || x.t));
+  const setChampsLangue = (u) => setFieldValues((prev) => {
+    const aPlat = gobeletAPlat(prev);
+    const next = typeof u === "function" ? u(aPlat) : { ...aPlat, ...u };
+    return !next || next === aPlat ? prev : gobeletDepuisAPlat(prev, next);
+  });
+  // Dans la liste : un texte en cours de traduction montre ce que la cliente a écrit.
+  const quoiVu = (e) => {
+    const champ = e.kind === "texte" ? "texte" : e.kind === "cadre" || e.kind === "lettre" ? "nom" : null;
+    if (!champ || !e.source) return quoiElement(e);
+    return `${quoiElement({ ...e, [champ]: e[champ] || "…" })} (vous avez écrit « ${e.source} »)`;
+  };
 
   // Prix + repères de l'aperçu (photo de la FACE du gobelet).
   useEffect(() => {
@@ -250,10 +271,10 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
   function basculerDessin(n) {
     setMsg("");
     const i = liste.findIndex((e) => e.kind === "dessin" && e.num === n);
-    if (i >= 0) { ecrire(liste.filter((_, k) => k !== i)); return; }
+    if (i >= 0) { ecrire((l) => l.filter((e) => !(e.kind === "dessin" && e.num === n))); return; }
     const place = premiereLibre(liste);
     if (!place) { setMsg("Toutes les places du gobelet sont prises : retirez un élément avant d'en ajouter un autre."); return; }
-    ecrire([...liste, { kind: "dessin", num: n, ...place }]);
+    ecrire((l) => [...l, { kind: "dessin", num: n, ...place }]);
   }
 
   // Cadre, lettre, texte, photo : on remplit puis « Ajouter à ma gravure ».
@@ -268,16 +289,21 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
     if (!place) { setMsg("Toutes les places du gobelet sont prises : retirez un élément avant d'en ajouter un autre."); return; }
     const manque = manqueElement(e);
     if (manque) { setMsg(manque); return; }
-    ecrire([...liste, e]);
+    // Gravure traduite : le texte tapé (en français) part en traduction ; une date ou un numéro reste tel quel.
+    if (traduit) {
+      const champ = e.kind === "texte" ? "texte" : e.kind === "cadre" || e.kind === "lettre" ? "nom" : null;
+      if (champ && aDesLettres(e[champ])) { e.source = e[champ]; e[champ] = ""; }
+    }
+    ecrire((l) => [...l, e], langueActive(fieldValues) ? { tradOk: "" } : null);
     setEd({ ...VIDE, kind: ed.kind, police: ed.police });
     setMsg("");
     setTimeout(() => recapRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 60);
   }
 
-  function retirer(i) { ecrire(liste.filter((_, k) => k !== i)); }
+  function retirer(i) { ecrire((l) => l.filter((_, k) => k !== i)); }
   function deplacer(i, valeur) {
     const [side, zone] = valeur.split("|");
-    ecrire(liste.map((e, k) => (k === i ? { ...e, side, zone } : e)));
+    ecrire((l) => l.map((e, k) => (k === i ? { ...e, side, zone } : e)));
   }
 
   const ecr = (p) => getFontLabel(p).split(" — ")[0];
@@ -345,6 +371,12 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
               <div className="field"><label htmlFor="gbp-txt">Votre texte</label>
                 <input id="gbp-txt" type="text" maxLength={30} placeholder="Prénom, date, message…" value={ed.texte} onChange={(e) => maj({ texte: e.target.value })} />
                 <span className="prc-count">{ed.texte.length}/30</span></div>
+            )}
+
+            {langueActive(fieldValues) && ["cadre", "lettre", "texte"].includes(ouvert) && (
+              <p className="prc-opt">{traduit
+                ? `Écrivez en français : le texte est traduit en ${langueDe(fieldValues.langue).nom.toLowerCase()} une fois ajouté à votre gravure (une date reste telle quelle).`
+                : `Écrivez directement en ${langueDe(fieldValues.langue).nom.toLowerCase()} : le texte est gravé tel quel.`}</p>
             )}
 
             {ouvert === "photo" && (
@@ -432,7 +464,7 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
                     <img className="gbp-xvig" src={e.kind === "photo" ? e.photo : srcDessin(cfg, e.num)} alt="" />
                   ) : null}
                   <span>
-                    <b>{i + 1}.</b> {quoiElement(e)}{e.kind === "photo" && e.sous ? ` + « ${e.sous} » (+${extra} €)` : ""}{["cadre", "lettre", "texte"].includes(e.kind) && e.police ? ` (écriture ${ecr(e.police)})` : ""}
+                    <b>{i + 1}.</b> {quoiVu(e)}{e.kind === "photo" && e.sous ? ` + « ${e.sous} » (+${extra} €)` : ""}{["cadre", "lettre", "texte"].includes(e.kind) && e.police ? ` (écriture ${ecr(e.police)})` : ""}
                   </span>
                   <b className="p">{i === 0 ? "compris" : `+${prix(prixElement(e, cfg))} €`}</b>
                   <button type="button" aria-label="Retirer" onClick={() => retirer(i)}>×</button>
@@ -442,6 +474,9 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
                 </li>
               ))}
             </ul>
+          )}
+          {textesLangue.length > 0 && (
+            <LangueGravure fv={gobeletAPlat(fieldValues)} setFieldValues={setChampsLangue} cles={textesLangue.map(({ key, label }) => ({ key, label }))} />
           )}
           {liste.length > 0 && <p className="gbp-total-ligne">Gravure : {sup.enPlus ? `1 compris + ${sup.enPlus} en plus${sup.photosEnPlus ? ` (dont ${sup.photosEnPlus} photo${sup.photosEnPlus > 1 ? "s" : ""} à ${extraPhoto} €)` : ""} = ${formatEuro(sup.montant)}` : "comprise"} · <b>Total {formatEuro(unitPrice)}</b> (hors livraison)</p>}
         </div>

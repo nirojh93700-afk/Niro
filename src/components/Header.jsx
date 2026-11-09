@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useCart } from "./CartContext";
 import { CATEGORIES } from "@/lib/products";
@@ -10,6 +10,19 @@ import { LOGO_FICHIER } from "@/lib/photosLocales";
 export default function Header({ categories, cristal = true }) {
   const { count, setDrawerOpen, hydrated } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
+  // Recherche dans l'en-tête (09/11/2026) : la loupe ouvre un champ, la recherche se fait sur /boutique?q=
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const searchRef = useRef(null);
+  useEffect(() => { if (searchOpen) searchRef.current?.focus(); }, [searchOpen]);
+  const chercher = (e) => {
+    e.preventDefault();
+    const t = q.trim();
+    if (!t) return;
+    setSearchOpen(false);
+    setMenuOpen(false);
+    router.push(`/boutique?q=${encodeURIComponent(t)}`);
+  };
   const router = useRouter();
   const pathname = usePathname();
   const showBack = pathname && pathname !== "/";
@@ -30,6 +43,19 @@ export default function Header({ categories, cristal = true }) {
             <span className="header-back-label">Retour</span>
           </button>
         )}
+        {/* Téléphone : la loupe va à GAUCHE (à droite, quatre icônes passaient sur le logo). */}
+        <button
+          type="button"
+          className={`cart-btn header-search-btn hs-mob${showBack ? " hs-apres-retour" : ""}`}
+          aria-label={searchOpen ? "Fermer la recherche" : "Rechercher une création"}
+          aria-expanded={searchOpen}
+          onClick={() => setSearchOpen((o) => !o)}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3.6-3.6" />
+          </svg>
+        </button>
         <Link href="/" className="logo" onClick={() => setMenuOpen(false)} aria-label="Niv Création — accueil">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -40,6 +66,18 @@ export default function Header({ categories, cristal = true }) {
         </Link>
 
         <div className="header-actions">
+          <button
+            type="button"
+            className="cart-btn header-search-btn hs-desk"
+            aria-label={searchOpen ? "Fermer la recherche" : "Rechercher une création"}
+            aria-expanded={searchOpen}
+            onClick={() => setSearchOpen((o) => !o)}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3.6-3.6" />
+            </svg>
+          </button>
           <Link href="/espace" className="cart-btn" aria-label="Mon espace" style={{ display: "inline-flex", transform: "translateX(8px)" }}>
             <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="8" r="4" />
@@ -81,6 +119,24 @@ export default function Header({ categories, cristal = true }) {
           </button>
         </div>
       </div>
+
+      {searchOpen && (
+        <form className="header-search" role="search" onSubmit={chercher}>
+          <div className="container header-search-in">
+            <input
+              ref={searchRef}
+              type="search"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Escape") setSearchOpen(false); }}
+              placeholder="Rechercher : collier, verre, cristal, prénom…"
+              aria-label="Rechercher dans la boutique"
+              enterKeyHint="search"
+            />
+            <button type="submit" className="header-search-ok">Rechercher</button>
+          </div>
+        </form>
+      )}
 
       <nav className={`nav ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(false)}>
         <Link href="/boutique">Boutique</Link>

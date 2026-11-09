@@ -35,7 +35,7 @@ export const FAQ = [
     a: "Envoyez-nous une photo dans les 14 jours suivant la réception (24 h pour les commandes de mariage urgentes) : nous refaisons la pièce ou nous vous remboursons, sans frais.",
   },
   {
-    q: "Les bijoux sont-ils hypoallergéniques ?",
+    q: "Les bijoux conviennent-ils aux peaux sensibles ?",
     a: "Nos bijoux sont en acier inoxydable (316L ou 304 selon le modèle, précisé sur chaque fiche), l'acier utilisé en bijouterie, qui convient généralement aux peaux sensibles. Ils ne noircissent pas la peau et supportent la transpiration du quotidien. En cas d'allergie connue au nickel, écrivez-nous avant de commander : nous vous indiquerons la matière exacte du bijou.",
   },
   {

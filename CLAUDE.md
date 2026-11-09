@@ -1,3 +1,35 @@
+## 🧰 LOT DU 09/11/2026 SOIR — SITE 1, 4, 7, 8, 9 + GESTION 1 À 6 (gérant : « tu me fais ça », numéros choisis dans ma liste) — CONSTRUIT SUR LA BRANCHE DE TRAVAIL `claude/cool-maxwell-qh1kcw`, PAS EN LIGNE : attendre son « mets en ligne » (puis fusion vers `claude/site-product-overview-1t2de`)
+- **Site** : ① provenance des commandes (`src/lib/provenance.js`, `ProvenanceCapture.jsx`, `metadata.prov` → `order.provenance`, pastille « Venue de » + filtre dans la file,
+  carte dans la fiche commande, page Gestion → Marketing → « D'où viennent les ventes » `/gestion/provenance` avec les liens à copier pour les bios, ligne 6 ter de
+  Confidentialité, `npm run test-provenance`) · ④ recherche dans l'en-tête (loupe à droite sur ordinateur, À GAUCHE sur téléphone pour ne pas passer sur le logo ;
+  `/boutique?q=` sans accents, plusieurs mots) · ⑦ « hypoallergénique » / « chirurgical » retirés (FAQ + `sansAllegations` dans `catalog.js` pour les descriptions
+  enregistrées dans Gestion) · ⑨ « Me prévenir si le prix baisse » sur la fiche (`AlertePrix.jsx`, même API que Mes favoris, connexion demandée) · ⑤ tuile Maison : déjà corrigée avant.
+- **Gestion** : ① une facture de matériel remplit le stock de Matériel (`mat:<id>` dans `/api/admin/purchases`, à la PIÈCE, pas compté en dépense) · ② « à racheter »
+  calculé sur 60 jours de ventes (`src/lib/reachat.js`, `reachatServeur.js`, `/api/admin/reachat`, pastille sur Stock & achats, panneau en tête d'Achats & factures,
+  `npm run test-reachat`) · ③ l'agent e-mail voit les devis de l'adresse (`devisDeLAdresse` dans `inbox.js`) · ④ coûts d'achat manquants saisis dans Bénéfices
+  (`CoutsManquants`, enregistre le « coût » de la fiche) · ⑤ le matériel habituel du colis se coche dans le formulaire « Expédier » (`FormExpedition`, jamais deux fois) ·
+  ⑥ fichier à graver aussi en PNG et PDF (`FichierGravureFormats.jsx`, fabriqués dans le navigateur, 600 points par pouce, 60 × 30 mm).
+- **Site ⑧ langues sur les fiches à part** (carnet, marque-pages, gobelet, cristaux déjà gravés) : `src/components/LangueFiche.jsx` (pont vers `LangueGravure`), une langue par article du
+  panier, mêmes clés à plat (`langue`, `langueCles`, `<clé>`, `<clé>Source`, `tradOk`, `direct` ; carnet `cnFaceHaut…`, marque-pages `mp1FaceHaut…`, gobelet `gt1…`, cristal `texte` /
+  `zPrenom` / `zVille`), bouton grisé tant que la case n'est pas cochée (vérifié au navigateur 390 / 1280 sur les 4 fiches), refus au paiement par `manqueLangue`, aucun supplément.
+  Limites : marque-pages = une langue pour toute la ligne ; aperçu à pastilles du gobelet sans l'écriture de la langue ; e-mail 🛎️ avec la clé brute quand il y a plusieurs textes ;
+  texte vertical des marque-pages en arabe / hébreu / tamoul pas regardé. `sanitizeSpec` garde 80 clés. `npm run test-traduction` (71).
+- Gestion ⑧ : le 09/11 soir il a redit « plus tard pour l'accès ».
+- 🔴 **STOCK QUI NE BAISSAIT PAS À LA VENTE (gérant, 09/11 soir)** — deux causes trouvées dans le code, corrigées sur la branche de travail :
+  ① la vente, Gestion et les achats lisaient le stock dans le cache de 60 s de leur instance puis réécrivaient le document ENTIER → une copie périmée effaçait la baisse
+  d'une autre instance. Maintenant TOUTE écriture passe par `modifierStock(fn)` (`stock.js` : lecture fraîche + écriture dans une transaction Firestore ; base muette = rien
+  n'est écrit) : `setStock`, `adjustStockMany`, `decrementMany`, `ajouterRate`, `annulerRate` ; Gestion lit en frais (`getStockMap(true)`).
+  ② la liste envoyée à Stripe était coupée à 480 caractères → gros panier = texte illisible = rien retiré. Maintenant `src/lib/stockMeta.js` (`decouperStock` sur les clés
+  `stock`, `stock2`…, `lireStockMeta`, `texteStock`), `npm run test-stock-meta`. ⛔ Ne jamais écrire le stock autrement que par `modifierStock`.
+  Rappel donné au gérant : un produit sans stock saisi (« non suivi ») ne baisse jamais : carnet, puzzles, verre à vin 47 cl, cocktail, tumbler, supports téléphone,
+  porte-serviettes, cartes étapes, veilleuse prénom, photophore, 2 options de la décoration de Noël (relevé du 09/11). Emballages / matériel : baissent à « Valider » ou à « Expédier ».
+- ✅ **LOT MIS EN LIGNE LE 09/11/2026 SOIR (« Oui mets en ligne et prépare-moi la liste », fbe32f3)** + écran **Gestion → Stock & achats → « Stock à recompter »**
+  (`/gestion/recomptage`, API `/api/admin/recomptage`, `src/lib/recomptage.js`) : tout ce qui s'est vendu depuis le début par ligne de stock (pièces, commandes, dernière
+  vente, annulées à part), le chiffre de Gestion et un champ « Compté » qui enregistre le vrai stock ; onglet « Vendus sans stock saisi ». Le gérant recompte lui-même.
+- ⛔ Gestion ⑦ (42 vieilles promos) : PAS touché (il l'a exclu). Gestion ⑧ (accès limité pour une aide) : PAS construit, question reposée (il l'avait mis « pour plus tard » le 08/11).
+- www.nivcreation.fr redirige DÉJÀ vers nivcreation.fr (vérifié le 09/11) ; flux Google `flux-google.xml` répond (91 produits) ; médiateur : son adhésion d'abord.
+- ⚠️ Environnement « Crafia » : npm passe seulement par le relais → `NO_PROXY=localhost,127.0.0.1 no_proxy=localhost,127.0.0.1 npm_config_noproxy=localhost,127.0.0.1 npm ci`.
+
 ## 🪔 MAQUETTE « GRAVURE EN TAMOUL » — 06/11/2026 (gérant, après le rapport « Marché tamoul » : « prépare-moi des verres, des bijoux… avec le texte tamoul traditionnel : joyeux anniversaire, joyeux Noël pour les verres ; pour les bijoux des messages pour les parents ou les amoureux ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - Artifact https://claude.ai/artifact/A1LsiJozYynsZoRGYnrjcx (v2) · générateur `tools/maquettes/gravure-tamoul.py <dossier captures> <sortie>` · sortie
   `docs/maquettes/gravure-tamoul.html` (ignorée par git). ⛔ La v1 (textes posés avec Pillow sur les photos) a été REFUSÉE (« très moche… il faut que

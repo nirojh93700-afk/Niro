@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { isAdmin, getStockMap, adjustStockMany, getPurchases, addPurchase, setProductOverride, getSettings, setSettings } from "@/lib/stock";
+import { isAdmin, getStockMap, adjustStockMany, getPurchases, addPurchase, setProductOverride, getSettings, setSettings, getMateriel, recevoirMateriel } from "@/lib/stock";
 import { getCatalogAdmin } from "@/lib/catalog";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +23,7 @@ const MAX_FILE_BYTES = 12 * 1024 * 1024;
 // Toutes les lignes de stock possibles : variantes + accessoires en option.
 async function stockRows() {
   const products = await getCatalogAdmin();
-  const map = await getStockMap();
+  const map = await getStockMap(true);
   const rows = []; const seen = new Set();
   for (const p of products) {
     for (const v of p.variants || []) {
@@ -39,6 +39,15 @@ async function stockRows() {
       }
     }
   }
+  // Matériel & emballages (cartons, calage, sacs, boîtes…) — 09/11/2026 : une facture de cartons
+  // remplit aussi le stock du matériel, plus besoin de « + Reçu » à la main. Identifiant « mat:<id> ».
+  try {
+    const { items } = await getMateriel(true);
+    for (const it of items || []) {
+      if (!it || !it.id || it.archive) continue;
+      rows.push({ stockId: `mat:${it.id}`, slug: "", materiel: true, product: "Matériel & emballages", variant: `${it.nom || it.id}${it.taille ? " · " + it.taille : ""}`, category: "matériel d'emballage, compté à la PIÈCE", stock: typeof it.stock === "number" ? it.stock : null, cost: null });
+    }
+  } catch { /* sans matériel : les produits restent proposés */ }
   return rows;
 }
 
@@ -96,6 +105,8 @@ async function analyze({ file, text }) {
     text: `Tu es l'assistant d'achats d'une petite boutique artisanale (bijoux, verres gravés, cristaux, déco bois).
 Lis cette facture / ce devis fournisseur et extrais CHAQUE ligne d'article (désignation, quantité, prix unitaire).
 Puis rapproche chaque ligne du produit du catalogue ci-dessous (identifiant de stock). Une ligne = un identifiant au plus.
+Les identifiants qui commencent par « mat: » sont du MATÉRIEL D'EMBALLAGE (cartons, calage, sacs, boîtes, étiquettes) compté à la PIÈCE :
+pour un lot (« lot de 25 cartons »), qty = nombre total de pièces (lots × pièces par lot) et unitPrice = prix d'UNE pièce.
 Règles : les couleurs comptent (doré / argenté / or rose = variantes différentes) ; si plusieurs variantes partagent
 la même désignation sans couleur, choisis la plus probable et baisse la confiance ; si rien ne correspond, stockId = "" et
 explique en 5 mots. Les frais de port / import / douane vont dans "shipping", jamais dans une ligne. Convertis en euros si
@@ -153,15 +164,25 @@ async function apply(body) {
   const total = Math.max(0, Number(body.total) || 0) || Math.round((subtotal + shipping) * 100) / 100;
   const coef = subtotal > 0 ? 1 + shipping / subtotal : 1; // port réparti au prorata
 
-  // 1) Stock (une seule écriture).
-  const applied = await adjustStockMany(lines.map((l) => ({ stockId: l.stockId, qty: l.qty })));
+  // 1) Stock (une seule écriture pour les produits) ; le matériel passe par sa propre réception.
+  const estMat = (l) => Boolean(bySid.get(l.stockId)?.materiel);
+  const lignesProduits = lines.filter((l) => !estMat(l));
+  const applied = lignesProduits.length ? await adjustStockMany(lignesProduits.map((l) => ({ stockId: l.stockId, qty: l.qty }))) : [];
+  let montantMateriel = 0;
+  for (const l of lines.filter(estMat)) {
+    const avant = bySid.get(l.stockId).stock;
+    const it = await recevoirMateriel(l.stockId.slice(4), l.qty);
+    if (!it) continue;
+    applied.push({ stockId: l.stockId, qty: l.qty, before: typeof avant === "number" ? avant : 0, after: it.stock });
+    montantMateriel += l.qty * l.unitPrice * coef;
+  }
 
   // 2) Coût d'achat du produit (port inclus), moyenne pondérée par produit.
   const costs = [];
   if (body.updateCost !== false) {
     const perSlug = {};
     for (const l of lines) {
-      if (!l.unitPrice) continue;
+      if (!l.unitPrice || estMat(l)) continue;
       const slug = bySid.get(l.stockId).slug;
       perSlug[slug] = perSlug[slug] || { q: 0, v: 0 };
       perSlug[slug].q += l.qty; perSlug[slug].v += l.qty * l.unitPrice * coef;
@@ -175,11 +196,14 @@ async function apply(body) {
 
   // 3) Dépense dans Bénéfices.
   let expense = null;
-  if (body.addExpense !== false && total > 0) {
+  // Le matériel n'entre PAS dans les dépenses : il est déjà déduit commande par commande quand le
+  // conditionnement est validé (sinon il serait compté deux fois dans Bénéfices).
+  const totalDepense = Math.max(0, Math.round((total - montantMateriel) * 100) / 100);
+  if (body.addExpense !== false && totalDepense > 0) {
     try {
       const s = await getSettings();
       const label = `Achat fournisseur ${body.supplier || ""}${body.invoiceNumber ? " " + body.invoiceNumber : ""}`.trim().slice(0, 80);
-      expense = { id: "dep_" + Math.random().toString(36).slice(2, 8), label, amount: Math.round(total * 100) / 100, date: /^\d{4}-\d{2}-\d{2}/.test(String(body.date || "")) ? String(body.date).slice(0, 10) : new Date().toISOString().slice(0, 10), category: "achat" };
+      expense = { id: "dep_" + Math.random().toString(36).slice(2, 8), label, amount: totalDepense, date: /^\d{4}-\d{2}-\d{2}/.test(String(body.date || "")) ? String(body.date).slice(0, 10) : new Date().toISOString().slice(0, 10), category: "achat" };
       await setSettings({ expenses: [expense, ...(Array.isArray(s.expenses) ? s.expenses : [])].slice(0, 500) });
     } catch { expense = null; }
   }

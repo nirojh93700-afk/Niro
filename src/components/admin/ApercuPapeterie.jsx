@@ -14,6 +14,18 @@ import GobeletPreview from "@/components/GobeletPreview";
 import { cnNormaliser, cnFaceGravee, CN_FACES } from "@/lib/carnet";
 import { mpNormaliser } from "@/lib/marquePages";
 import { gobeletElements } from "@/lib/gobeletParcours";
+import { useEffect } from "react";
+import { langueActive, textesEnLangue } from "@/lib/traductionGravure";
+import { chargerPoliceLangue } from "@/lib/policeLangueClient";
+
+// Gravure dans une autre langue (09/11/2026) : l'aperçu prend l'écriture de la langue, comme sur la fiche.
+function useLangue(item) {
+  const f = item?.fields || {};
+  const code = langueActive(f) ? f.langue : "";
+  const lettres = code ? textesEnLangue(f).map((t) => t.grave).join("") : "";
+  useEffect(() => { if (code && lettres) chargerPoliceLangue(code, lettres + "0123456789."); }, [code, lettres]);
+  return code;
+}
 
 export const aApercuPapeterie = (p) => Boolean(p?.carnet || p?.marquePages || p?.gobeletParcours);
 
@@ -21,6 +33,7 @@ const legende = { fontSize: "0.72rem", fontWeight: 700, letterSpacing: ".04em", 
 const note = { fontSize: "0.74rem", color: "#888", marginTop: 4 };
 
 function Carnet({ item, p, largeur }) {
+  const langue = useLangue(item);
   const norme = cnNormaliser(p, item.fields?.cn);
   const v = (p.variants || []).find((x) => x.id === item.variantId) || p.variants?.[0];
   if (!norme || !v) return <div style={note}>Aperçu impossible : réglages du carnet absents.</div>;
@@ -34,7 +47,7 @@ function Carnet({ item, p, largeur }) {
           <div className="gallery-main" style={{ width: "100%", boxShadow: "none", borderRadius: 10 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={photo(side)} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-            <Gravure v={norme.v} side={side} couleur={couleur} police={norme.police} />
+            <Gravure v={norme.v} side={side} couleur={couleur} police={norme.police} langue={langue} />
           </div>
           {!cnFaceGravee(norme.v, side) ? <div style={note}>Rien à graver sur cette face.</div> : null}
         </div>
@@ -44,6 +57,7 @@ function Carnet({ item, p, largeur }) {
 }
 
 function MarquePages({ item, p, H }) {
+  const langue = useLangue(item);
   const norme = mpNormaliser(p, item.fields?.mp);
   if (!norme) return <div style={note}>Aperçu impossible : réglages des marque-pages absents.</div>;
   const modele = p.marquePages.modele;
@@ -51,7 +65,7 @@ function MarquePages({ item, p, H }) {
     <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
       {norme.slots.map((s, i) => {
         const v = (p.variants || []).find((x) => x.id === s.c);
-        const items = itemsDe(s.v, norme.police);
+        const items = itemsDe(s.v, norme.police, langue);
         return (
           <div key={i}>
             <div style={legende}>{norme.slots.length > 1 ? `Marque-page ${i + 1} · ` : ""}{v?.title || ""}</div>
