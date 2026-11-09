@@ -98,6 +98,8 @@
   à remplacer par une vraie photo gravée. Nom : « verre » (fiche fournisseur), pas « cristal ».
 - v3 (09/11) : les images « Exemple » en blanc givré ont été REFUSÉES (« c'est un peu moche, on fait comme avant ») et supprimées ;
   la photo de la boîte = SA nouvelle photo (boîte bleue, ruban BLEU, fond blanc), l'ancienne (ruban rouge) est retirée.
+- v4 (09/11, gérant : « pour l'image, c'est payant » → dessin de Noël ET photo, +5 €) : Mon texte 16,90 € · Un dessin de Noël 21,90 € ·
+  Ma photo ou mon logo 21,90 € ; un texte est COMPRIS dans les trois, date +3 €, boîte +3,90 €. Ex. dessin 3 + texte + date + boîte = 28,80 €.
 
 ## 🖼️ DERNIÈRE IMAGE ÉCHANGÉE EN GRAND DANS LA FICHE ATELIER — 08/11/2026 (commande 1COCUCLN, Stéphanie Ranchon, devis DEV-1547 ; gérant : « pourquoi y a pas l'image qu'elle demande… même si c'est un devis on a échangé par mail, je veux les dernières images qu'ils ont validées dans les commandes ») — ✅ EN LIGNE LE 08/11/2026 (« Mets en ligne », 18273fe1), pour toutes les commandes
 - **Cause** : `imagesEchangees` ne lisait que le FIL de la commande (`bat`), rempli seulement au rangement (ouverture des messages / 21 h) ;

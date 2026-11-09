@@ -39,8 +39,8 @@ prod='''  {
       { key: "photo", type: "photo", label: "Votre photo ou votre logo", variantContains: "photo",
         text: "La photo est gravée en blanc givré dans le verre. Une image nette et bien éclairée donne le meilleur résultat." },
       { key: "texte", label: "Le texte à graver", placeholder: "Ex. Joyeux Noël Camille", maxLength: 40, variantContains: "Mon texte" },
-      { key: "texte", label: "Ajouter un texte (+3 €)", placeholder: "Ex. Joyeux Noël Camille", maxLength: 40, optional: true, variantContains: "dessin" },
-      { key: "texte", label: "Ajouter un texte (+3 €)", placeholder: "Ex. Notre premier Noël", maxLength: 40, optional: true, variantContains: "photo" },
+      { key: "texte", label: "Ajouter un texte (compris)", placeholder: "Ex. Joyeux Noël Camille", maxLength: 40, optional: true, variantContains: "dessin" },
+      { key: "texte", label: "Ajouter un texte (compris)", placeholder: "Ex. Notre premier Noël", maxLength: 40, optional: true, variantContains: "photo" },
       { key: "date", label: "Ajouter une date (+3 €)", placeholder: "Ex. Noël 2026", maxLength: 20, optional: true },
       { key: "police", type: "font", label: "Police du texte", optional: true },
       { key: "boite", type: "select", label: "Boîte bleue", optional: true, options: [
@@ -49,12 +49,11 @@ prod='''  {
       ] },
     ],
     variants: [
-      { id: "deco-noel-verre-dessin", title: "Un dessin de Noël", price: 16.90 },
+      { id: "deco-noel-verre-dessin", title: "Un dessin de Noël", price: 21.90 },
       { id: "deco-noel-verre-texte", title: "Mon texte", price: 16.90 },
-      { id: "deco-noel-verre-photo", title: "Ma photo ou mon logo", price: 16.90 },
+      { id: "deco-noel-verre-photo", title: "Ma photo ou mon logo", price: 21.90 },
     ],
     engravingPricing: { flatExtras: [
-      { key: "texte", amount: 0, amountByVariant: { "deco-noel-verre-dessin": 3, "deco-noel-verre-photo": 3 } },
       { key: "date", amount: 3 },
       { key: "boite", value: "oui", amount: 3.9, weight: 60 },
     ] },
@@ -64,7 +63,7 @@ prod='''  {
 <li><strong>Matière :</strong> verre transparent au bord biseauté</li>
 <li><strong>Taille :</strong> 10 cm de diamètre</li>
 <li><strong>Ruban :</strong> satin bleu, prêt à suspendre</li>
-<li><strong>Gravure :</strong> au laser, en blanc givré dans le verre</li>
+<li><strong>Gravure :</strong> au laser, en blanc givré dans le verre. Un texte est compris ; un dessin de Noël ou votre photo : +5 € ; une date : +3 €</li>
 <li><strong>En option :</strong> la boîte bleue avec mousse, prête à offrir</li>
 </ul>
 <p>Chaque décoration est gravée à la commande.</p>`,
@@ -79,7 +78,7 @@ add='''  "decoration-noel-verre-gravee": {
     material:
       "Verre transparent, disque rond de 10 cm au bord biseauté.\\nRuban de satin bleu, prêt à suspendre.\\nGravure au laser dans notre atelier : elle ressort en blanc givré dans le verre.",
     usage:
-      "Choisissez ce que vous voulez faire graver : un de nos 27 dessins de Noël, votre texte, ou votre photo / votre logo.\\nAvec un dessin ou une photo, vous pouvez ajouter un texte (+3 €) et une date (+3 €), dans la police de votre choix.\\nEntretien : un chiffon doux et sec. Le verre est fragile : manipulez-le avec soin.",
+      "Choisissez ce que vous voulez faire graver : un de nos 27 dessins de Noël, votre texte, ou votre photo / votre logo.\\nUn texte est compris (prénom, petit mot), dans la police de votre choix. Le dessin de Noël ou la photo : +5 €. Une date en plus : +3 €.\\nEntretien : un chiffon doux et sec. Le verre est fragile : manipulez-le avec soin.",
     returns:
       "Expédiée en colis, bien calée.\\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
   },
