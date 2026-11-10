@@ -1,5 +1,5 @@
 // Vérifications « vendu en plus » (npm run test-options) — pures, sans navigateur.
-import { nomLivraison, ressembleAUneAdresse, nomLivraisonDifferent } from "../../src/lib/nomLivraison.js";
+import { nomLivraison, ressembleAUneAdresse, nomLivraisonDifferent, nomManquant } from "../../src/lib/nomLivraison.js";
 import { optionsArticle, optionsCommande, livraisonCommande, emballagesDuDetail } from "../../src/lib/optionsVendues.js";
 let n = 0, ko = 0;
 const check = (nom, cond) => { n++; if (!cond) { ko++; console.log("❌", nom); } else console.log("✅", nom); };
@@ -44,6 +44,13 @@ check("vrais noms jamais pris pour une adresse", !ressembleAUneAdresse("Lorenzo 
 check("0GTB1LZ5 : prénom Lorenzo / nom Franchi (correction connue)", (() => { const r = nomLivraison({ ref: "0GTB1LZ5", shippingName: "23quater avenue du president coty les manoirs de la cote app D15" }); return r.prenom === "Lorenzo" && r.nom === "Franchi" && !r.suspect; })());
 check("devis : on prend le nom du devis si le champ nom est une adresse", (() => { const r = nomLivraison({ ref: "ZZZ", shippingName: "12 rue des Lilas", quoteClientName: "Anne Martin" }); return r.complet === "Anne Martin" && r.source === "nom du devis"; })());
 check("adresse sans aucun nom de repli : gardée mais signalée", nomLivraison({ ref: "ZZZ", shippingName: "12 rue des Lilas" }).suspect === true);
+check("07UNS8IG : adresse dans le nom, payeur PayPal proposé", (() => { const r = nomLivraison({ ref: "07UNS8IG", shippingName: "8 RUE AUBIN BONNEFON 91480 QUINCY SOUS SENART", customerName: "", payeurNom: "NADEZDA PICHEREAU", payeurSource: "PayPal" }); return r.complet === "NADEZDA PICHEREAU" && r.source === "nom du payeur (PayPal)" && !r.suspect; })());
+check("nomManquant : adresse + payeur → manquant, nom proposé", (() => { const m = nomManquant({ ref: "X1", shippingName: "8 RUE AUBIN BONNEFON 91480 QUINCY", payeurNom: "Nadezda Pichereau", payeurSource: "PayPal" }); return m.manquant && m.propose === "Nadezda Pichereau" && /PayPal/.test(m.source); })());
+check("nomManquant : adresse sans repli → manquant, rien proposé", (() => { const m = nomManquant({ ref: "X2", shippingName: "12 rue des Lilas" }); return m.manquant && m.propose === ""; })());
+check("nomManquant : nom vide → manquant", nomManquant({ ref: "X3", shippingName: "", customerName: "" }).manquant === true);
+check("nomManquant : nom normal → rien", nomManquant({ shippingName: "Sophie Berardo" }).manquant === false);
+check("nomManquant : correction connue → rien", nomManquant({ ref: "0GTB1LZ5", shippingName: "23quater avenue du president coty" }).manquant === false);
+check("payeur qui ressemble à une adresse : pas repris", nomManquant({ ref: "X4", shippingName: "12 rue des Lilas", payeurNom: "12 rue des Lilas" }).propose === "");
 check("commande normale inchangée", (() => { const r = nomLivraison({ shippingName: "Sophie Berardo" }); return r.prenom === "Sophie" && r.nom === "Berardo" && !r.suspect; })());
 
 // --- Photo de l'emballage (09/10/2026) : liaison « Boîte cadeau (+5.90 €) » ↔ bibliothèque

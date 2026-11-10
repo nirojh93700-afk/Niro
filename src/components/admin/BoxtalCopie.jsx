@@ -10,7 +10,7 @@
 // Visible uniquement dans la gestion (jamais côté client).
 // =============================================================================
 
-import { nomLivraison, nomLivraisonDifferent } from "@/lib/nomLivraison";
+import { nomLivraison, nomLivraisonDifferent, nomManquant } from "@/lib/nomLivraison";
 import { useMemo, useState } from "react";
 import { getProductBySlug } from "@/lib/products";
 
@@ -141,7 +141,8 @@ export default function BoxtalCopie({ order: orderInitial }) {
   // Prénom / Nom : Boxtal les demande séparés — on coupe au premier espace.
   // Si le client a tapé son ADRESSE dans le champ « nom » (incident 0GTB1LZ5), on
   // prend le nom du devis / du client et on prévient.
-  const { prenom, nom, suspect } = nomLivraison(order);
+  const { prenom, nom } = nomLivraison(order);
+  const manque = nomManquant(order);
   const autreNom = nomLivraisonDifferent(order);
   const description = (order.items || []).map((it) => it.name).join(", ").slice(0, 80) || "Cadeau personnalisé";
 
@@ -160,9 +161,14 @@ export default function BoxtalCopie({ order: orderInitial }) {
       {DEPART.map(([l, v]) => <Ligne key={l} label={l} valeur={v} />)}
 
       <Titre>Arrivée (cliente)</Titre>
-      {suspect ? (
+      {manque.manquant && !manque.propose ? (
         <p style={{ margin: "4px 0 6px", padding: "6px 10px", background: "#fdecec", border: "2px solid #d64545", borderRadius: 8, color: "#b32b2b", fontWeight: 700, fontSize: "0.85rem" }}>
-          ⚠️ Le client a écrit une ADRESSE dans le champ « nom » du paiement : vérifie le prénom / nom ci-dessous (« {order.shippingName || order.customerName} »).
+          ⚠️ Nom manquant : {manque.ecrit ? <>l&apos;adresse a été écrite à la place du nom (« {manque.ecrit} »)</> : "aucun nom saisi au paiement"}. Aucun autre nom connu : demande-lui le nom à mettre sur le colis, puis « Corriger le nom ou l&apos;adresse ».
+        </p>
+      ) : null}
+      {manque.manquant && manque.propose ? (
+        <p style={{ margin: "4px 0 6px", padding: "6px 10px", background: "#fff4e0", border: "2px solid #e0a030", borderRadius: 8, color: "#8a5a00", fontWeight: 700, fontSize: "0.85rem" }}>
+          ⚠️ Nom manquant au paiement {manque.ecrit ? <>(l&apos;adresse a été écrite à la place : « {manque.ecrit} »)</> : null}. Nom repris {manque.source.startsWith("nom du ") ? `du ${manque.source.slice(7)}` : `(${manque.source})`} : « {manque.propose} », à confirmer avec la cliente en cas de doute.
         </p>
       ) : null}
       {autreNom.different ? (

@@ -6,6 +6,7 @@
 // =============================================================================
 import { delaiCommande, jourFr } from "@/lib/delaiCommande";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
+import { nomManquant } from "@/lib/nomLivraison";
 import { languesDeLaCommande, nomsLangues } from "@/lib/traductionGravure";
 import { sourceDe, provenanceDe, detailVisite, couleurSource, nomSource, ORDRE_SOURCES } from "@/lib/provenance";
 
@@ -108,6 +109,9 @@ export function chipsDe(o, unread = false) {
   if (Array.isArray(o.alerteImage) && o.alerteImage.length) c.push({ k: "dateimage", tone: "warn", lib: "Date dans l'image · à regarder avant de graver" });
   if (o.alerteInterne) c.push({ k: "alerte", tone: "bad", lib: o.alerteInterne });
   if (o.surMesure || o.demande) c.push({ k: "surmesure", tone: "gold", lib: `Sur mesure${o.quoteNumber ? ` · devis ${o.quoteNumber}` : ""}` });
+  // Nom manquant pour l'étiquette (10/11/2026, 07UNS8IG : adresse tapée dans le champ « nom »).
+  const nm = estActive(o) ? nomManquant(o) : { manquant: false };
+  if (nm.manquant) c.push({ k: "nom", tone: "bad", lib: nm.propose ? `Nom manquant · proposé : ${nm.propose} (${nm.source})` : "Nom manquant · l'adresse est dans le champ nom : demander le nom" });
   if (o.alerteEmail || o.emailCorrigeDe) c.push({ k: "emailfix", tone: "warn", lib: o.alerteEmail || `E-mail corrigé (« ${o.emailCorrigeDe} »)` });
   if (o.test) c.push({ k: "test", tone: "grey", lib: "Commande test (non comptée)" });
   return c;
@@ -158,7 +162,7 @@ export function passeFiltre(o, f, unread) {
     case "reponse": return Boolean(unread);
     case "etranger": return paysDeLaCommande(o).etranger;
     case "langue": return languesDeLaCommande(o).length > 0;
-    case "alerte": return Boolean(o.alerteInterne) || (Array.isArray(o.alerteImage) && o.alerteImage.length > 0) || (o.flags || []).includes("urgent") || Boolean(o.alerteEmail || o.emailCorrigeDe);
+    case "alerte": return Boolean(o.alerteInterne) || (Array.isArray(o.alerteImage) && o.alerteImage.length > 0) || (o.flags || []).includes("urgent") || Boolean(o.alerteEmail || o.emailCorrigeDe) || (estActive(o) && nomManquant(o).manquant);
     case "late": return etatDelai(o).k === "late";
     default: return true;
   }

@@ -34,13 +34,32 @@ export function nomLivraison(order) {
   const brut = String(order?.shippingName || order?.customerName || "").trim();
   const corrige = NOMS_CORRIGES[order?.ref] || "";
   const devis = String(order?.quoteClientName || "").trim();
-  const suspect = ressembleAUneAdresse(brut);
+  // Nom de la personne qui a payé (PayPal : nom du compte ; carte : nom du titulaire), relevé au
+  // paiement depuis le 10/11/2026 (commande 07UNS8IG : adresse dans le champ « nom », aucun nom ailleurs).
+  const payeur = String(order?.payeurNom || "").trim();
+  const suspect = !brut || ressembleAUneAdresse(brut);
   let complet = brut, source = "paiement";
   if (corrige) { complet = corrige; source = "correction connue"; }
   else if (suspect && devis && !ressembleAUneAdresse(devis)) { complet = devis; source = "nom du devis"; }
   else if (suspect && order?.customerName && !ressembleAUneAdresse(order.customerName)) { complet = String(order.customerName).trim(); source = "nom du client"; }
+  else if (suspect && payeur && !ressembleAUneAdresse(payeur)) { complet = payeur; source = `nom du payeur${order?.payeurSource ? ` (${order.payeurSource})` : ""}`; }
   const [prenom, ...reste] = complet.split(/\s+/);
   return { complet, prenom: prenom || "", nom: reste.join(" ") || prenom || "", suspect: suspect && !corrige && source === "paiement", source };
+}
+
+/**
+ * Nom manquant pour l'étiquette : le champ « nom » du paiement est vide ou contient une adresse.
+ * `propose` = le nom qu'on peut mettre à la place (devis, client, payeur), à confirmer ; vide si aucun.
+ * Sert à l'e-mail 🛎️, à la carte de la file de production et à la fiche commande.
+ * @returns {{ manquant:boolean, ecrit:string, propose:string, source:string }}
+ */
+export function nomManquant(order) {
+  if (NOMS_CORRIGES[order?.ref]) return { manquant: false, ecrit: "", propose: "", source: "" };
+  const ecrit = String(order?.shippingName || order?.customerName || "").trim();
+  if (ecrit && !ressembleAUneAdresse(ecrit)) return { manquant: false, ecrit, propose: "", source: "" };
+  const n = nomLivraison(order);
+  const trouve = n.source !== "paiement" && n.complet && !ressembleAUneAdresse(n.complet);
+  return { manquant: true, ecrit, propose: trouve ? n.complet : "", source: trouve ? n.source : "" };
 }
 
 // -----------------------------------------------------------------------------

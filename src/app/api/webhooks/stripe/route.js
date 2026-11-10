@@ -19,6 +19,7 @@ import { detailVariante } from "@/lib/detailProduit";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 import { LOGO_URL } from "@/lib/photosLocales";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
+import { ressembleAUneAdresse, nomManquant } from "@/lib/nomLivraison";
 import { lireProvenanceCompacte } from "@/lib/provenance";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -349,6 +350,23 @@ export async function POST(req) {
       session.shipping_details || session.collected_information?.shipping_details || null;
     const currency = session.currency || "eur";
 
+    // Nom de la personne qui a payé (10/11/2026, commande 07UNS8IG : adresse tapée dans le champ « nom »,
+    // aucun nom nulle part alors que PayPal le connaissait). Relevé SEULEMENT si le nom manque ou ressemble
+    // à une adresse : PayPal = nom du compte ; carte = nom du titulaire. Jamais bloquant.
+    let payeurNom = "", payeurSource = "";
+    try {
+      const nomEcrit = String(shipping?.name || customer.name || "").trim();
+      if ((!nomEcrit || ressembleAUneAdresse(nomEcrit)) && session.payment_intent) {
+        const pi = await stripe.paymentIntents.retrieve(String(session.payment_intent), { expand: ["latest_charge"] });
+        const ch = pi?.latest_charge && typeof pi.latest_charge === "object" ? pi.latest_charge : null;
+        const pp = String(ch?.payment_method_details?.paypal?.payer_name || "").trim();
+        const titulaire = String(ch?.billing_details?.name || "").trim();
+        if (pp && !ressembleAUneAdresse(pp)) { payeurNom = pp; payeurSource = "PayPal"; }
+        else if (titulaire && !ressembleAUneAdresse(titulaire)) { payeurNom = titulaire; payeurSource = "titulaire de la carte"; }
+      }
+    } catch { /* jamais bloquant */ }
+    const nomAVerifier = nomManquant({ shippingName: shipping?.name || "", customerName: customer.name || "", quoteClientName: quote?.client?.name || "", payeurNom, payeurSource });
+
     const lines = (session.line_items?.data || [])
       .map((li) => {
         const name = li.price?.product?.name || li.description || "Article";
@@ -602,6 +620,7 @@ export async function POST(req) {
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
         ${imageBlock}
         ${oublisBlock}
+        ${nomAVerifier.manquant ? `<div style="background:#fdecec;border:2px solid #d64545;padding:12px 14px;border-radius:10px;margin:0 0 16px;"><strong style="color:#b32b2b;">⚠️ Nom manquant : ${nomAVerifier.ecrit ? "l'adresse a été écrite à la place du nom" : "aucun nom saisi au paiement"}</strong>${nomAVerifier.ecrit ? `<p style="margin:6px 0 0;">Écrit dans le champ « nom » : « ${escapeHtml(nomAVerifier.ecrit)} »</p>` : ""}<p style="margin:6px 0 0;">${nomAVerifier.propose ? `Nom proposé pour l'étiquette (${escapeHtml(nomAVerifier.source)}) : <strong>${escapeHtml(nomAVerifier.propose)}</strong> — à confirmer avec la cliente si besoin.` : "Aucun autre nom connu : demande-lui le nom à mettre sur le colis."}</p></div>` : ""}
         ${emailVerif.alerte ? `<div style="background:#fdecec;border:2px solid #d64545;padding:12px 14px;border-radius:10px;margin:0 0 16px;"><strong style="color:#b32b2b;">⚠️ Adresse e-mail de la cliente</strong><p style="margin:6px 0 0;">${escapeHtml(emailVerif.alerte)}</p></div>` : ""}
         ${alerteBlock}
         ${cadeauBlock}
@@ -620,7 +639,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
 
         ${sectionTitle("Client")}
         <p style="margin:0;">
-          ${escapeHtml(customer.name || "—")}<br>
+          ${escapeHtml(customer.name || "—")}${payeurNom ? ` <span style="color:#8a6d1f;">(payeur ${escapeHtml(payeurSource)} : ${escapeHtml(payeurNom)})</span>` : ""}<br>
           ✉️ ${escapeHtml(customer.email || "—")}<br>
           📞 ${escapeHtml(customer.phone || "—")}
         </p>
@@ -652,7 +671,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
     const ownerEmail = process.env.CONTACT_EMAIL || "contact.nivcreation@gmail.com";
     await sendEmail({
       to: ownerEmail,
-      subject: `${alertesImage.length ? "⚠️ " : ""}${nomsLangues(languesDeLaCommande({ spec: specItems })) ? `🌐 ${nomsLangues(languesDeLaCommande({ spec: specItems }))} · ` : ""}${paysAlerte.etranger ? `${paysAlerte.drapeau} ${paysAlerte.nom.toUpperCase()} · ` : ""}🛎️ Commande ${orderRef} — ${customer.name || "Client"} (${euro(session.amount_total, currency)})`,
+      subject: `${alertesImage.length || nomAVerifier.manquant ? "⚠️ " : ""}${nomAVerifier.manquant ? "NOM MANQUANT · " : ""}${nomsLangues(languesDeLaCommande({ spec: specItems })) ? `🌐 ${nomsLangues(languesDeLaCommande({ spec: specItems }))} · ` : ""}${paysAlerte.etranger ? `${paysAlerte.drapeau} ${paysAlerte.nom.toUpperCase()} · ` : ""}🛎️ Commande ${orderRef} — ${customer.name || "Client"} (${euro(session.amount_total, currency)})`,
       html,
       replyTo: customer.email || undefined,
     });
@@ -810,6 +829,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
       ...(emailVerif.alerte ? { alerteEmail: emailVerif.alerte } : {}),
       ...(alertesImage.length ? { alerteImage: alertesImage } : {}),
       customerPhone: customer.phone || "",
+      ...(payeurNom ? { payeurNom, payeurSource } : {}),
       shippingName: shipping?.name || "",
       shippingAddress: shipping?.address || null,
       shippingMethod: shippingRateName,
