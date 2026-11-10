@@ -42,10 +42,8 @@ UNIVERS = [
                  ("marque-pages/m1/exemple-ex5.jpg", "Sa photo, sur un marque-page en bois"),
                  ("carnet/exemple-ex4.jpg", "Un carnet pour ses idées")]),
   ("Enfants", [("produits/couverts_enfants_ex_prenom.jpg", "Ses couverts, à son prénom"),
-               ("produits/puzzle-photo-enfants.jpg", "Un puzzle de leur photo"),
-               ("produits/veilleuse-prenom-1.jpg", "Une veilleuse à son prénom")]),
-  ("Maison & mariage", [("produits/photophore-fee-1.jpg", "Un photophore féerique"),
-                        ("produits/numero_table_arche_geometrique_relief_bois.jpeg", "Les numéros de table du grand jour")]),
+               ("produits/puzzle-photo-enfants.jpg", "Un puzzle de leur photo")]),
+  ("Maison & mariage", [("produits/numero_table_arche_geometrique_relief_bois.jpeg", "Les numéros de table du grand jour")]),
 ]
 
 # ---------------------------------------------------------------- géométrie de la pellicule
@@ -90,14 +88,14 @@ def image_decompte(n):
 
 # ---------------------------------------------------------------- le film : liste des images + durée d'arrêt
 film = []   # (image, arrêt en s, légende (univers, texte) ou None, flash avant ?)
-for n in (3, 2, 1): film.append((image_decompte(n), 0.45, None, False))
-film.append((image_titre("", "Gravé pour vous", "Niv Création · atelier de gravure"), 1.3, None, False))
+for n in (3, 2, 1): film.append((image_decompte(n), 0.35, None, False))
+film.append((image_titre("", "Gravé pour vous", "Niv Création · atelier de gravure"), 1.0, None, False))
 for i, (nom, items) in enumerate(UNIVERS):
-    film.append((image_titre(f"CHAPITRE {i + 1:02d}", nom), 0.9, None, True))
-    for chemin, leg in items: film.append((image_photo(chemin), 1.55, (nom, leg), False))
+    film.append((image_titre(f"CHAPITRE {i + 1:02d}", nom), 0.65, None, True))
+    for chemin, leg in items: film.append((image_photo(chemin), 1.15, (nom, leg), False))
 film.append((image_titre("", "Votre histoire,", "gravée pour toujours"), 1.4, None, True))
 film.append((image_titre("", "nivcreation.fr", "Personnalisé en France"), 2.2, None, False))
-TR = 0.42  # durée d'un défilement d'une image à la suivante
+TR = 0.32  # durée d'un défilement d'une image à la suivante
 
 # calendrier : temps de début du défilement vers l'image k
 cal = []; t = 0.0

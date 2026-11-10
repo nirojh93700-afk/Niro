@@ -882,13 +882,14 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
   scintillement, légende en bas sur bandeau sombre (univers en or + phrase en Playfair), fin « Votre histoire, gravée pour toujours » puis nivcreation.fr.
 - Photos regardées sur planche (gravées, sans badge EXEMPLE, sans texte anglais, sans bijou vierge) : Cristal (tour Eiffel, oiseaux,
   porte-clés chien) · Bijoux (bracelet cœur doré, collier Enveloppe, 3 Cœurs « Naomi ») · Verres (whisky « Le meilleur papa du monde »,
-  whisky photo) · Papeterie (marque-page « Léa 2026 », marque-page photo, carnet « Inès ») · Enfants (couverts « Ishaan », puzzle photo,
-  veilleuse « Ethan ») · Maison & mariage (photophore fée, numéro de table arche). 47,8 s, sans son, 1080 × 1920 (15,9 Mo) et 720 × 1280 (14,2 Mo).
+  whisky photo) · Papeterie (marque-page « Léa 2026 », marque-page photo, carnet « Inès ») · Enfants (couverts « Ishaan », puzzle photo)
+  · Maison & mariage (numéro de table arche). 33,6 s, sans son, 1080 × 1920 (11,8 Mo) et 720 × 1280 (10,6 Mo).
+  v2 du même soir (gérant : « enlève la fée et la lampe, que ça défile un peu plus vite ») : photophore fée et veilleuse retirés, arrêts plus courts.
   Aucun prix. Fichiers à supprimer le 12/11.
 - Script : `python3 tools/video/pellicule_55.py <polices> <sortie> [--apercu] [--image t1,t2]` (depuis la racine ; PlayfairDisplay.ttf + Inter.ttf ;
   la version 1080 sortie à 117 Mo à cause du grain a été recompressée en crf 30).
 
-**Vidéo 55 — Gravé pour vous, en pellicule** (Cristal déjà gravé, Porte-clés cristal, Bracelet cœur, Collier Enveloppe, Collier 3 Cœurs, Verre à whisky, Marque-pages en bois, Carnet A5, Couverts enfant, Puzzle photo, Veilleuse prénom, Photophore fée, Numéro de table)
+**Vidéo 55 — Gravé pour vous, en pellicule** (Cristal déjà gravé, Porte-clés cristal, Bracelet cœur, Collier Enveloppe, Collier 3 Cœurs, Verre à whisky, Marque-pages en bois, Carnet A5, Couverts enfant, Puzzle photo, Numéro de table)
 > 🎬 Cristal, bijoux, verres, papeterie, cadeaux pour les enfants et déco de mariage : chaque pièce est gravée dans notre atelier ✨
 > Votre histoire, gravée pour toujours 💛
 > 👉 nivcreation.fr
