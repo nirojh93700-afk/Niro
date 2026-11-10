@@ -20,6 +20,7 @@ import { chargerAvecCache } from "@/components/admin/adminCache";
 import FenetreConditionnement from "@/components/admin/Conditionnement";
 import { imprimerFiche } from "@/lib/impression";
 import { ACTIFS, FILTRES, TRIS, passeProvenance, choixProvenance, estActive, estPartie, estFinie, etatDelai, positions, passeFiltre, rechercheTexte, trier, statutInfo, estExpress, euro, dateFr, refDe, hrefFiche } from "@/lib/fileCommandes";
+import { nomAffiche } from "@/lib/nomLivraison";
 
 const FichePapier = dynamic(() => import("@/components/admin/FichePapier"), { ssr: false });
 
@@ -227,7 +228,7 @@ export default function FileProductionPage() {
   const tableFin = (l) => (l.length ? (
     <div className="fq-done-body"><table>
       <thead><tr><th>Commande</th><th>Cliente</th><th>Articles</th><th>État</th><th>Total</th></tr></thead>
-      <tbody>{l.map((o) => <tr key={o.id}><td className="mono"><Link className="fq-ref" href={hrefFiche(o)}>#{refDe(o)}</Link></td><td>{o.customerName || "—"}</td><td>{(o.items || []).map((i) => `${i.quantity}× ${i.name}`).join(", ")}</td><td><span className={`fq-pill ${statutInfo(o).tone}`}>{statutInfo(o).lib}</span> <span className="muted">{dateFr(o.deliveredAt || o.createdAt, false)}</span></td><td className="mono">{euro(o.total)}</td></tr>)}</tbody>
+      <tbody>{l.map((o) => <tr key={o.id}><td className="mono"><Link className="fq-ref" href={hrefFiche(o)}>#{refDe(o)}</Link></td><td>{nomAffiche(o)}</td><td>{(o.items || []).map((i) => `${i.quantity}× ${i.name}`).join(", ")}</td><td><span className={`fq-pill ${statutInfo(o).tone}`}>{statutInfo(o).lib}</span> <span className="muted">{dateFr(o.deliveredAt || o.createdAt, false)}</span></td><td className="mono">{euro(o.total)}</td></tr>)}</tbody>
     </table></div>
   ) : <div className="fq-empty" style={{ margin: 10 }}>Aucune commande terminée pour cette recherche.</div>);
 

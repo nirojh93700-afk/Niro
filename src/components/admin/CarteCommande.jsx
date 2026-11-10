@@ -20,6 +20,7 @@ import { apparierSpec, eclaterParVerre } from "@/lib/orderSpec";
 import { lienSuivi, numerosSuivi, joindreSuivis } from "@/lib/suiviColis";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
 import { FLAGS, FLAG_PAR_ID, chipsDe, pastilleProvenance, modeDe, statutDe, statutInfo, estActive, estFinie, euro, ageDe, dateFr, refDe, hrefFiche, adresseLigne } from "@/lib/fileCommandes";
+import { nomAffiche } from "@/lib/nomLivraison";
 
 const MODE_IC = { express: "bolt", relais: "pin", retrait: "user", domicile: "home" };
 
@@ -235,7 +236,7 @@ export default function CarteCommande({ o, pos, inBoard = false, unread = false,
         <span className="fq-tot mono">{euro(o.total)}</span>
       </div>
       <div className="fq-who">
-        <b>{o.customerName || "—"}</b>
+        <b>{nomAffiche(o)}</b>
         <span className="dot">·</span><span title={dateFr(o.createdAt)}>{ageDe(o.createdAt)}</span>
         <span className="dot">·</span><span className={`fq-mode ${mode.k}`}><Ic n={MODE_IC[mode.k]} /> {mode.lib}{Number(o.shippingPrice) > 0 ? ` · ${euro(o.shippingPrice)}` : ""}</span>
         {mode.k === "relais" && o.relaisPoint ? <><span className="dot">·</span><span>{o.relaisPoint}</span></> : null}

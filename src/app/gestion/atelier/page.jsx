@@ -36,6 +36,7 @@ import VarBadge from "@/components/admin/VarBadge";
 import ApercuClient from "@/components/admin/ApercuClient";
 import { GlassPreview } from "@/components/admin/FicheAtelier";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
+import { nomAffiche } from "@/lib/nomLivraison";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -255,7 +256,7 @@ export default function AtelierPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8, marginBottom: 10 }}>
                 <strong style={{ fontSize: "1.02rem" }}>{lignesDevis(o).map((l) => l.court).join(" + ") || "Commande sur mesure"}</strong>
                 <span style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>
-                  Commande <strong>#{o.ref || o.id?.slice(-8)?.toUpperCase()}</strong> · {o.customerName || "—"}{o.quoteNumber ? ` · devis ${o.quoteNumber}` : ""}{o.createdAt ? ` · ${new Date(o.createdAt).toLocaleDateString("fr-FR")}` : ""}
+                  Commande <strong>#{o.ref || o.id?.slice(-8)?.toUpperCase()}</strong> · {nomAffiche(o)}{o.quoteNumber ? ` · devis ${o.quoteNumber}` : ""}{o.createdAt ? ` · ${new Date(o.createdAt).toLocaleDateString("fr-FR")}` : ""}
                   {STATUTS[o.status] ? <span style={{ marginLeft: 8, padding: "2px 10px", borderRadius: 20, background: STATUTS[o.status][1], color: STATUTS[o.status][2], fontWeight: 600 }}>{STATUTS[o.status][0]}</span> : null}
                 </span>
               </div>
@@ -320,7 +321,7 @@ export default function AtelierPage() {
                       {item.verre ? <span style={{ marginLeft: 8, padding: "2px 10px", borderRadius: 20, background: "#fbf3e6", border: "1px solid #c9a24b", color: "#8a6d1f", fontSize: "0.85rem" }}>Verre {item.verre} / {item.verres}</span> : null}
                     </strong>
                     <span style={{ fontSize: "0.82rem", color: "var(--ink-soft)" }}>
-                      Commande <strong>#{o.ref || o.id?.slice(-8)?.toUpperCase()}</strong> · {o.customerName || "—"}{date ? ` · ${date}` : ""}
+                      Commande <strong>#{o.ref || o.id?.slice(-8)?.toUpperCase()}</strong> · {nomAffiche(o)}{date ? ` · ${date}` : ""}
                       {stLbl ? <span style={{ marginLeft: 8, padding: "2px 10px", borderRadius: 20, background: stBg, color: stFg, fontWeight: 600 }}>{stLbl}</span> : null}
                     </span>
                   </div>

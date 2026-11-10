@@ -16,6 +16,7 @@ import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import { FEUILLE, NB_CASES, positions, modeEnvoi, adresseCollee, travaux, placer, contenuEtiquette, feuilleHtml, feuillePdf, EXPEDITEUR_DEFAUT, MODELES, modeleValide, cssModeles, resserrerEtiquettes } from "@/lib/etiquettes";
+import { nomAffiche } from "@/lib/nomLivraison";
 
 const CLE = "niv-etiquettes";
 const A_EXPEDIER = ["a_preparer", "en_gravure"];
@@ -238,7 +239,7 @@ export default function EtiquettesPage() {
               return (
                 <label key={o.id} className={`etq-ord${on ? " on" : ""}${m.ok ? "" : " off"}`}>
                   <input type="checkbox" checked={on} disabled={!m.ok} onChange={() => basculer(o.id)} />
-                  <span><span className="nm">#{o.ref} · {o.shippingName || o.customerName || "—"}</span><br />
+                  <span><span className="nm">#{o.ref} · {nomAffiche(o)}</span><br />
                     <span className="ad">{[a.line1, [a.postal_code, a.city].filter(Boolean).join(" ")].filter(Boolean).join(", ") || "Adresse non renseignée"} · {dateFr(o.createdAt)}</span></span>
                   <span className={`chip ${m.ok ? "poste" : "relais"}`}>{m.chip}</span>
                 </label>

@@ -6,6 +6,7 @@ import { chiffresPeriode, devisEnAttente, depuis } from "@/lib/dashPeriodes";
 import { delaiCommande, jourFr } from "@/lib/delaiCommande";
 import { livraisonCommande } from "@/lib/optionsVendues";
 import { Ico } from "@/components/admin/AdminShell";
+import { nomAffiche } from "@/lib/nomLivraison";
 
 // =============================================================================
 // ACCUEIL DE GESTION — « version B », téléphone d'abord (maquette Gestion moderne
@@ -24,7 +25,7 @@ import { Ico } from "@/components/admin/AdminShell";
 const ACTIFS = new Set(["a_preparer", "en_gravure"]);
 const LATER = "niv-accueil-plus-tard";
 const JOUR = 86400000;
-const nom = (o) => o?.customerName || o?.customerEmail || "Cliente";
+const nom = (o) => nomAffiche(o);
 const prenom = (s) => String(s || "").trim().split(/\s+/)[0] || "Cliente";
 const liste = (arr, n = 3) => arr.slice(0, n).join(" · ") + (arr.length > n ? ` · +${arr.length - n}` : "");
 const plur = (n, mot, fem) => `${n} ${mot}${n > 1 ? "s" : ""}`;

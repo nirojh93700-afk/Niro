@@ -122,3 +122,18 @@ export function nomLivraisonDifferent(order) {
   const commun = motsDuNom(cliente).some((w) => a.has(w) || [...a].some((x) => w.length >= 5 && x.length >= 5 && distance1(w, x)));
   return { different: a.size > 0 && !commun, livraison, cliente };
 }
+
+/**
+ * Nom à AFFICHER pour une commande dans Gestion (10/11/2026, capture du gérant : « #07UNS8IG — »
+ * sans aucun nom, « je peux pas voir ce qu'il a commandé »). Le nom de la cliente s'il est un vrai
+ * nom, sinon le nom de livraison / du payeur, sinon ce qui a été tapé, sinon l'e-mail. Jamais vide.
+ */
+export function nomAffiche(order) {
+  const client = String(order?.customerName || "").trim();
+  if (client && !pasUnNomDePersonne(client)) return client;
+  const n = nomLivraison(order);
+  if (n.complet && !pasUnNomDePersonne(n.complet)) return n.complet;
+  const tape = String(order?.shippingName || client || "").trim();
+  if (tape) return tape;
+  return String(order?.customerEmail || "").trim() || "Cliente sans nom";
+}

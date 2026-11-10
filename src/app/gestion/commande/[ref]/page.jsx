@@ -34,7 +34,7 @@ import { imprimerFiche } from "@/lib/impression";
 import { apparierSpec } from "@/lib/orderSpec";
 import { lienSuivi, numerosSuivi } from "@/lib/suiviColis";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
-import { nomLivraisonDifferent } from "@/lib/nomLivraison";
+import { nomLivraisonDifferent, nomLivraison, nomAffiche } from "@/lib/nomLivraison";
 import { getProductBySlug } from "@/lib/products";
 import { formatEuro } from "@/lib/format";
 import { FLAGS, CONTROLES, estActive, estFinie, estPartie, modeDe, statutDe, statutInfo, chipsDe, cadeauTexte, ordreTraitement, positions, euro, dateFr, refDe, hrefFiche, adresseLigne } from "@/lib/fileCommandes";
@@ -123,7 +123,7 @@ export default function FicheCommandePage() {
   }, [load]);
 
   const o = useMemo(() => orders.find((x) => String(x.ref || "").toUpperCase() === refParam.toUpperCase() || x.id === refParam) || null, [orders, refParam]);
-  useEffect(() => { if (o) { setNote(o.adminNote || ""); setGeste(o.alerteInterne || ""); document.title = `#${refDe(o)} · ${o.customerName || ""} — Gestion`; } }, [o?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (o) { setNote(o.adminNote || ""); setGeste(o.alerteInterne || ""); document.title = `#${refDe(o)} · ${nomAffiche(o)} — Gestion`; } }, [o?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (o && autoPrint.current) { autoPrint.current = false; setPapier(true); setTimeout(() => imprimerFiche(), 600); } }, [o]);
   useAdminBack(true, "File de production", useCallback(() => router.push("/gestion/commandes"), [router]));
 
@@ -302,7 +302,7 @@ export default function FicheCommandePage() {
       <div className="fc-head">
         <div className="row1">
           <Link className="fc-back" href="/gestion/commandes"><Ic n="back" /> Commandes</Link>
-          <div className="fc-ref"><h1>#{refDe(o)}</h1><Copier texte={refDe(o)} onToast={montrer} /><span className="who"><b>{o.customerName || "—"}</b> · {dateFr(o.createdAt)} · {formatEuro(total)}{pos[o.id] ? ` · n° ${pos[o.id]} dans la file` : ""}</span></div>
+          <div className="fc-ref"><h1>#{refDe(o)}</h1><Copier texte={refDe(o)} onToast={montrer} /><span className="who"><b>{nomAffiche(o)}</b> · {dateFr(o.createdAt)} · {formatEuro(total)}{pos[o.id] ? ` · n° ${pos[o.id]} dans la file` : ""}</span></div>
           <div className="fc-nav">
             {voisines.prev ? <Link className="fc-ibtn" href={hrefFiche(voisines.prev)} title="Commande précédente (K)"><Ic n="back" /></Link> : <button type="button" className="fc-ibtn" disabled><Ic n="back" /></button>}
             {voisines.next ? <Link className="fc-ibtn" href={hrefFiche(voisines.next)} title="Commande suivante (J)"><Ic n="next" /></Link> : <button type="button" className="fc-ibtn" disabled><Ic n="next" /></button>}
@@ -411,7 +411,7 @@ export default function FicheCommandePage() {
             </div>
           </Carte>
 
-          <Carte id="fc-messages" ic="mail" titre={`Messages avec ${(o.customerName || "la cliente").split(" ")[0]}`} droite={unreadIci ? <Pill tone="info"><Ic n="mail" /> Nouvelle réponse</Pill> : <span className="faint">e-mails, bouton « Répondre », aperçus (BAT)</span>}>
+          <Carte id="fc-messages" ic="mail" titre={`Messages avec ${(nomAffiche(o) || "la cliente").split(" ")[0]}`} droite={unreadIci ? <Pill tone="info"><Ic n="mail" /> Nouvelle réponse</Pill> : <span className="faint">e-mails, bouton « Répondre », aperçus (BAT)</span>}>
             <div className="cb"><BatThread order={o} adminKey={key} /></div>
           </Carte>
 
@@ -435,7 +435,7 @@ export default function FicheCommandePage() {
         <div className="fc-side">
           <Carte id="fc-cliente" ic="user" titre="Cliente" h3 droite={o.customerEmail ? <Link className="fc-lnk" href={`/gestion/crm?q=${encodeURIComponent(o.customerEmail)}`}>dossier →</Link> : null}>
             <div className="cb"><dl className="fc-kv">
-              <dt>Nom</dt><dd>{o.customerName || "—"}</dd>
+              <dt>Nom</dt><dd>{nomAffiche(o)}</dd>
               <dt>E-mail</dt><dd>{o.customerEmail ? <>{o.customerEmail}<Copier texte={o.customerEmail} label="" onToast={montrer} /></> : "—"}</dd>
               <dt>Téléphone</dt><dd>{o.customerPhone || "—"}</dd>
               <dt>Commandes</dt><dd>{nbCmdCliente} {nbCmdCliente > 1 ? "(dont celle-ci)" : "(la première)"}</dd>
@@ -446,7 +446,7 @@ export default function FicheCommandePage() {
               {blocMode}
               <div className="fc-addr" style={{ marginTop: 10 }}>
                 {pays.etranger ? <span className="fc-pill bad" style={{ marginBottom: 6 }}>{pays.drapeau} À ENVOYER EN {pays.nom.toUpperCase()}</span> : <span className="faint">{pays.drapeau} {pays.nom}</span>}
-                {o.shippingAddress ? <><b>{o.shippingName || o.customerName}</b>{o.shippingCompany ? <>{o.shippingCompany}<br /></> : null}{o.shippingAddress.line1}<br />{o.shippingAddress.line2 ? <>{o.shippingAddress.line2}<br /></> : null}{o.shippingAddress.postal_code} {o.shippingAddress.city}<br />{o.shippingAddress.country}<Copier texte={adresseLigne(o)} label="copier l'adresse" onToast={montrer} /></> : <div className="faint">Pas d&apos;adresse enregistrée{mode.k === "retrait" ? " (retrait à l'atelier)" : ""}.</div>}
+                {o.shippingAddress ? <><b>{nomLivraison(o).complet || o.shippingName || o.customerName}</b>{o.shippingCompany ? <>{o.shippingCompany}<br /></> : null}{o.shippingAddress.line1}<br />{o.shippingAddress.line2 ? <>{o.shippingAddress.line2}<br /></> : null}{o.shippingAddress.postal_code} {o.shippingAddress.city}<br />{o.shippingAddress.country}<Copier texte={adresseLigne(o)} label="copier l'adresse" onToast={montrer} /></> : <div className="faint">Pas d&apos;adresse enregistrée{mode.k === "retrait" ? " (retrait à l'atelier)" : ""}.</div>}
               </div>
               {o.relaisPoint ? <div className="fc-sub"><Ic n="pin" /> Point relais : {o.relaisPoint}</div> : null}
               {autreNom.different ? <div className="fc-sub" style={{ color: "var(--ash-warn)", fontWeight: 700 }}>⚠️ Livré au nom de « {autreNom.livraison} », pas de la cliente.</div> : null}

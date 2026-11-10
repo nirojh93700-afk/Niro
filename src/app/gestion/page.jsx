@@ -4,7 +4,7 @@ import { imageDesign } from "@/lib/modeles";
 import HistoriqueCommande from "@/components/admin/HistoriqueCommande";
 import { lienSuivi, numerosSuivi, joindreSuivis } from "@/lib/suiviColis";
 import DelaiCommande from "@/components/admin/DelaiCommande";
-import { nomLivraisonDifferent } from "@/lib/nomLivraison";
+import { nomLivraisonDifferent, nomAffiche } from "@/lib/nomLivraison";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { formatEuro } from "@/lib/format";
 import { BandeauDelai, BandeauFetes, MessagesATraiter } from "@/components/admin/DashBlocks";
@@ -1044,7 +1044,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                 {/* Ligne compacte : on voit l'essentiel, on clique pour ouvrir la fiche complète */}
                 <button type="button" className="co-head" onClick={() => toggleOrder(o.id)} aria-expanded={isOpen}>
                   <span className="co-ref">#{o.ref || o.id?.slice(-6)}<small>{fmtDate(o.createdAt)}</small></span>
-                  <span className="co-who"><strong>{o.customerName || "—"}</strong>{paysDeLaCommande(o).etranger ? <em className="co-pays">{paysDeLaCommande(o).drapeau} {paysDeLaCommande(o).nom.toUpperCase()}</em> : null}<small>{resumeArticles(o)}</small></span>
+                  <span className="co-who"><strong>{nomAffiche(o)}</strong>{paysDeLaCommande(o).etranger ? <em className="co-pays">{paysDeLaCommande(o).drapeau} {paysDeLaCommande(o).nom.toUpperCase()}</em> : null}<small>{resumeArticles(o)}</small></span>
                   <span className={`co-status s-${o.status || "a_preparer"}`}>{libelleStatut(o)}</span>
                   <span className="co-total">{formatEuro(o.total)}{o.shippingPrice != null ? <small>livraison {formatEuro(o.shippingPrice)}</small> : null}</span>
                   <span className="co-chev" aria-hidden>{isOpen ? "▾" : "▸"}</span>
@@ -1060,7 +1060,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                   <div style={{ margin: "6px 0 0", padding: "6px 10px", background: r.bg, borderRadius: 8, color: r.color, fontSize: "0.8rem", fontWeight: 600 }}>{r.txt}</div>
                 ); })()}
                 <div style={{ fontSize: "0.9rem", color: "var(--ink-soft)", margin: "4px 0 8px" }}>
-                  <strong>{o.customerName || "—"}</strong>
+                  <strong>{nomAffiche(o)}</strong>
                   {o.customerEmail ? <> · <a href={`mailto:${o.customerEmail}`}>{o.customerEmail}</a></> : null}
                   {o.customerPhone ? <> · {o.customerPhone}</> : null}
                   {o.shippingAddress ? (
