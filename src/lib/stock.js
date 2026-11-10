@@ -299,12 +299,14 @@ export async function reverseCagnotteForOrder(order) {
     return { ok: true, deja: true, retire: 0, rendu: 0 };
   }
 
+  // Déjà retiré par un remboursement partiel (10/11/2026) : on ne le retire pas une 2e fois.
+  const dejaRetire = (c.history || []).filter((h) => String(h.orderId || "").startsWith(`${ref}:remb:`)).reduce((s, h) => s - (Number(h.amount) || 0), 0);
   const mouvements = [];
   let retire = 0, rendu = 0;
-  if (gagne > 0) {
+  if (gagne - dejaRetire > 0) {
     // On ne descend jamais sous zéro : si elle a déjà dépensé ce cashback,
     // on ne lui crée pas une dette.
-    retire = Math.min(c.balance, gagne);
+    retire = Math.min(c.balance, Math.round((gagne - dejaRetire) * 100) / 100);
     if (retire > 0) mouvements.push({ amount: -retire, reason: "Commande annulée : cashback retiré", orderId: cle, at: Date.now() });
   }
   if (utilise > 0) {
@@ -323,6 +325,34 @@ export async function reverseCagnotteForOrder(order) {
   data.cagnotte[e] = c;
   await persistCatalog(data, ["cagnotte"]);
   return { ok: true, retire, rendu, balance: c.balance };
+}
+
+// Remboursement PARTIEL (10/11/2026, gérant : « il faut que le cashback diminue automatiquement ») :
+// le cashback gagné sur la commande baisse dans la même proportion que l'argent rendu.
+// Ex. 50 % remboursé → la moitié du cashback est retirée. Une seule fois par remboursement
+// (clé = id Stripe du remboursement), jamais sous zéro (un cashback déjà dépensé ne crée pas de dette).
+export async function reduireCashbackRemboursementPartiel(order, montant, refundId) {
+  const e = normEmail(order?.customerEmail);
+  if (!validEmail(e)) return { ok: false, raison: "commande sans e-mail" };
+  const total = Number(order?.total) || 0;
+  const gagne = Number(order?.cashbackEarned) || 0;
+  const m = Number(montant) || 0;
+  if (total <= 0 || gagne <= 0 || m <= 0) return { ok: true, retire: 0 };
+  const ref = String(order?.ref || order?.id || "");
+  const cle = `${ref}:remb:${refundId || Math.round(m * 100)}`;
+  const data = await getCatalogRaw(true);
+  data.cagnotte = data.cagnotte || {};
+  const c = data.cagnotte[e] || { balance: 0, history: [] };
+  if ((c.history || []).some((h) => h.orderId === cle || h.orderId === `${ref}:annulation`)) return { ok: true, deja: true, retire: 0 };
+  const part = Math.min(1, m / total);
+  const aRetirer = Math.round(gagne * part * 100) / 100;
+  const retire = Math.min(Number(c.balance) || 0, aRetirer);
+  c.history = [{ amount: -retire, reason: `Remboursement partiel de ${m.toFixed(2).replace(".", ",")} € : cashback réduit`, orderId: cle, at: Date.now() }, ...(c.history || [])].slice(0, 100);
+  c.balance = Math.max(0, Math.round(((Number(c.balance) || 0) - retire) * 100) / 100);
+  c.updatedAt = Date.now();
+  data.cagnotte[e] = c;
+  await persistCatalog(data, ["cagnotte"]);
+  return { ok: true, retire, balance: c.balance };
 }
 
 // =============================================================================

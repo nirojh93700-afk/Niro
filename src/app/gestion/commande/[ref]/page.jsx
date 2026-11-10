@@ -93,6 +93,7 @@ export default function FicheCommandePage() {
   const [condOpen, setCondOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [montantRemb, setMontantRemb] = useState(""); // vide = tout rembourser
   const [confirm, setConfirm] = useState(""); // grav · exp · liv · cancel · refund · delete · devis · cagnotte
   const [boxtal, setBoxtal] = useState(false);
   const [papier, setPapier] = useState(false);
@@ -167,9 +168,16 @@ export default function FicheCommandePage() {
   async function rembourser() {
     setBusy(true); setConfirm("");
     try {
-      const r = await fetch("/api/admin/refund", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ id: o.id }) });
+      const montant = String(montantRemb || "").trim();
+      const r = await fetch("/api/admin/refund", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ id: o.id, ...(montant ? { amount: montant } : {}) }) });
       const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.error || "Échec du remboursement.");
-      setOrders((os) => os.map((x) => (x.id === o.id ? { ...x, status: "remboursee" } : x))); montrer("Remboursement Stripe lancé");
+      if (d.partiel) {
+        setOrders((os) => os.map((x) => (x.id === o.id ? { ...x, rembourse: d.rembourse } : x)));
+        montrer(`Remboursement partiel de ${formatEuro(d.montant)} lancé${d.cagnotte?.retire ? ` · cashback réduit de ${formatEuro(d.cagnotte.retire)}` : ""}`);
+      } else {
+        setOrders((os) => os.map((x) => (x.id === o.id ? { ...x, status: "remboursee" } : x))); montrer("Remboursement Stripe lancé");
+      }
+      setMontantRemb("");
     } catch (e) { montrer(e.message); } finally { setBusy(false); }
   }
   async function supprimer() {
@@ -254,7 +262,7 @@ export default function FicheCommandePage() {
   ) : confirm === "cancel" ? (
     <div className="fc-confirm" style={{ background: "var(--ash-bad-bg)", borderColor: "#f0c4bd" }}>{verrou(o) ? "⚠️ Fabrication lancée ou 24 h dépassées : normalement plus annulable côté cliente. " : ""}Annuler la commande <b>#{refDe(o)}</b> ? Elle ne comptera plus dans le chiffre d&apos;affaires (aucun remboursement : utilise « Rembourser » pour ça). {o.customerEmail ? <label style={{ display: "flex", gap: 6, alignItems: "center" }}><input type="checkbox" checked={cancelNotify} onChange={(e) => setCancelNotify(e.target.checked)} /> prévenir la cliente</label> : null}<button type="button" className="fc-btn sm danger" disabled={busy} onClick={() => setStatus(o, "annulee", { notifyCustomer: cancelNotify && Boolean(o.customerEmail) })}>Oui, annuler la commande</button><button type="button" className="fc-btn sm" onClick={() => setConfirm("")}>Non</button></div>
   ) : confirm === "refund" ? (
-    <div className="fc-confirm" style={{ background: "var(--ash-bad-bg)", borderColor: "#f0c4bd" }}>{verrou(o) ? "⚠️ Produit personnalisé en fabrication ou 24 h dépassées : normalement PAS remboursable. " : ""}Rembourser <b>{formatEuro(total)}</b> sur la carte de la cliente (Stripe) ? Irréversible. <button type="button" className="fc-btn sm danger" disabled={busy} onClick={rembourser}>Rembourser</button><button type="button" className="fc-btn sm" onClick={() => setConfirm("")}>Non</button></div>
+    <div className="fc-confirm" style={{ background: "var(--ash-bad-bg)", borderColor: "#f0c4bd" }}>{verrou(o) ? "⚠️ Produit personnalisé en fabrication ou 24 h dépassées : normalement PAS remboursable. " : ""}{Number(o.rembourse) > 0 ? <>Déjà remboursé : <b>{formatEuro(o.rembourse)}</b>. </> : null}Montant à rendre sur la carte de la cliente (Stripe) : <input inputMode="decimal" value={montantRemb} onChange={(e) => setMontantRemb(e.target.value)} placeholder={`tout (${formatEuro(Math.max(0, (Number(total) || 0) - (Number(o.rembourse) || 0)))})`} style={{ width: 140, padding: "6px 8px", border: "1px solid var(--line)", borderRadius: 8, font: "inherit" }} /> €, vide = tout. Un remboursement partiel réduit le cashback dans la même proportion. Irréversible. <button type="button" className="fc-btn sm danger" disabled={busy} onClick={rembourser}>{String(montantRemb).trim() ? `Rembourser ${montantRemb} €` : "Tout rembourser"}</button><button type="button" className="fc-btn sm" onClick={() => setConfirm("")}>Non</button></div>
   ) : confirm === "delete" ? (
     <div className="fc-confirm" style={{ background: "var(--ash-bad-bg)", borderColor: "#f0c4bd" }}>Supprimer définitivement <b>#{refDe(o)}</b> ? À réserver aux commandes de test. Irréversible. <button type="button" className="fc-btn sm danger" onClick={supprimer}>Oui, supprimer</button><button type="button" className="fc-btn sm" onClick={() => setConfirm("")}>Non</button></div>
   ) : confirm === "devis" ? (

@@ -82,7 +82,8 @@ export async function GET(req) {
     monthly[mk].shipping += ship; monthly[mk].etiquettes += etiq;
     const mat = Number(matUsage[o.id]?.matCost) || 0;
     if (mat) { per.all.materiel += mat; if (inYear) per.year.materiel += mat; if (inMonth) per.month.materiel += mat; monthly[mk].materiel = (monthly[mk].materiel || 0) + mat; }
-    const perte = Number(perteParCommande[o.id]) || 0;
+    // Remboursement partiel (10/11/2026) : l'argent rendu est déduit comme une perte de la commande.
+    const perte = (Number(perteParCommande[o.id]) || 0) + (Number(o.rembourse) || 0);
     if (perte) { per.all.rates += perte; if (inYear) per.year.rates += perte; if (inMonth) per.month.rates += perte; monthly[mk].rates = (monthly[mk].rates || 0) + perte; }
     const grav = coutCommande(coutG, o);
     if (grav) { per.all.gravure += grav; if (inYear) per.year.gravure += grav; if (inMonth) per.month.gravure += grav; monthly[mk].gravure = (monthly[mk].gravure || 0) + grav; }
