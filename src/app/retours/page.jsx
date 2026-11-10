@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MEDIATEUR_HTML } from "@/lib/mediateur";
 
 export const metadata = {
   alternates: { canonical: "/retours" },
@@ -56,6 +57,9 @@ const html = `
 
 <h3>Pas satisfait ?</h3>
 <p>Quelle qu'en soit la raison, faites-le nous savoir à <a href="mailto:contact.nivcreation@gmail.com">contact.nivcreation@gmail.com</a>. Nous ferons le nécessaire pour trouver une solution.</p>
+
+<h3>Médiation de la consommation</h3>
+${MEDIATEUR_HTML}
 `;
 
 export default function RetoursPage() {

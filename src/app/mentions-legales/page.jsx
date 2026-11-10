@@ -1,3 +1,4 @@
+import { MEDIATEUR_HTML } from "@/lib/mediateur";
 export const metadata = {
   alternates: { canonical: "/mentions-legales" },
   title: "Mentions légales",
@@ -16,6 +17,9 @@ const html = `
 
 <h3>Propriété intellectuelle</h3>
 <p>L'ensemble du contenu du site (textes, images, logo, design) est la propriété exclusive de Niv Création, sauf mention contraire. Toute reproduction, même partielle, est interdite sans autorisation écrite préalable.</p>
+
+<h3>Médiation de la consommation</h3>
+${MEDIATEUR_HTML}
 
 <h3>Crédits photos</h3>
 <p>Photos produits : Niv Création.</p>
