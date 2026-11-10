@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Dessin du site (JPG / PNG / WebP) → SVG VECTORIEL pour le laser (tracés noirs, aucun pixel).
-Usage : python3 tools/gravure/vectoriser.py <image> <sortie.svg> [largeur_mm=60]
+Usage : python3 tools/gravure/vectoriser.py <image> <sortie.svg> [largeur_mm=60] [seuil 0-255, sinon automatique]
 Méthode : fond transparent aplati en blanc, gris, image agrandie ×3 (courbes plus lisses), seuil automatique
 (Otsu), puis potrace (apt install potrace) : courbes de Bézier, petites taches < 6 px retirées.
 Le SVG porte sa taille réelle en mm (hauteur au prorata)."""
@@ -20,7 +20,7 @@ def otsu(img):
         if v > best[0]: best = (v, t)
     return best[1]
 
-def vectoriser(src, out, largeur_mm=60.0):
+def vectoriser(src, out, largeur_mm=60.0, seuil=None):
     im = Image.open(src)
     a = None
     if im.mode in ("RGBA", "LA", "P") or "transparency" in im.info:
@@ -35,7 +35,8 @@ def vectoriser(src, out, largeur_mm=60.0):
         g = ImageOps.invert(encre)
     elif g.resize((1, 1)).getpixel((0, 0)) < 110: g = ImageOps.invert(g)  # dessin clair sur fond sombre → trait noir
     g = g.resize((g.width * 3, g.height * 3), Image.LANCZOS)
-    t = otsu(g)
+    # seuil forcé (ex. 235) pour garder les parties GRISES d'un dessin (étoiles semi-transparentes de « Meilleur Papa »)
+    t = otsu(g) if seuil is None else seuil
     bw = g.point(lambda p: 0 if p <= t else 255, "1")
     with tempfile.TemporaryDirectory() as d:
         pbm = os.path.join(d, "a.pbm"); bw.save(pbm)
@@ -47,4 +48,5 @@ def vectoriser(src, out, largeur_mm=60.0):
     return t
 
 if __name__ == "__main__":
-    print("seuil", vectoriser(sys.argv[1], sys.argv[2], float(sys.argv[3]) if len(sys.argv) > 3 else 60.0))
+    print("seuil", vectoriser(sys.argv[1], sys.argv[2], float(sys.argv[3]) if len(sys.argv) > 3 else 60.0,
+                              int(sys.argv[4]) if len(sys.argv) > 4 else None))
