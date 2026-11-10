@@ -5360,9 +5360,13 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
 - Bijoux (fiche `ProductDetail` + page devis `DevisPanier`) : la ligne « Sans emballage cadeau » est RETIRÉE (gérant : « retirer la proposition sans
   emballage »). Rien de choisi = pas d'emballage (prix inchangé) ; toucher l'emballage choisi une 2ᵉ fois le retire (phrase sous « Votre emballage »).
 
-## ⚠️ NOM MANQUANT AU PAIEMENT SIGNALÉ PARTOUT — 10/11/2026 (commande 07UNS8IG : adresse tapée dans le champ « nom », aucune alerte ; gérant : « t'as dû m'alerter avant ») — PRÉPARÉ, À POUSSER SUR SON MOT
+## ⚠️ NOM MANQUANT AU PAIEMENT SIGNALÉ PARTOUT — 10/11/2026 (commande 07UNS8IG : adresse tapée dans le champ « nom », aucune alerte ; gérant : « t'as dû m'alerter avant ») — ✅ EN LIGNE LE 10/11/2026
 - `nomManquant(order)` (`nomLivraison.js`) : nom vide ou adresse dans le champ nom → `{manquant, ecrit, propose, source}` (devis, client, puis payeur).
 - Webhook Stripe : si le nom manque, relit le paiement (`latest_charge`) → nom du payeur PayPal (`paypal.payer_name`) ou du titulaire de la carte,
   gardé sur la commande (`payeurNom`, `payeurSource`) ; e-mail 🛎️ : objet « ⚠️ NOM MANQUANT · » + encadré rouge en tête (nom proposé ou « demande-lui le nom »).
 - File de production : pastille rouge « Nom manquant · proposé : X » + filtre « Alerte ». Boxtal : rouge si aucun nom, orange si un nom est repris (à confirmer).
 - Les commandes d'avant n'ont pas `payeurNom` : elles affichent « demander le nom » jusqu'à la correction (« ✏️ Corriger le nom ou l'adresse »).
+- **Nom de LIEU à la place du nom (10/11/2026, 0FUPET23 « Résidence fond Vert » : l'étiquette sortait sans le nom de la personne ; gérant : « oui ajoute-le et pousse »)** :
+  `estUnLieu` / `pasUnNomDePersonne` (`nomLivraison.js` : résidence, EHPAD, hôtel, société, école…) → même alerte rouge (motif « lieu », `texteNomManquant`),
+  payeur PayPal / carte relevé aussi ; le lieu passe sur la ligne « Société » (Boxtal) / sous le nom (étiquette La Poste, `nomLivraison().lieu`). 0FUPET23 corrigée
+  à la main : Halid Ibouroi · Résidence fond Vert · Rue des Cédrats (SANS numéro). Étiquettes (`etiquettes.js`, page, CSS) NON touchées depuis le 06/11 (48/48 tests).

@@ -111,7 +111,7 @@ export function chipsDe(o, unread = false) {
   if (o.surMesure || o.demande) c.push({ k: "surmesure", tone: "gold", lib: `Sur mesure${o.quoteNumber ? ` · devis ${o.quoteNumber}` : ""}` });
   // Nom manquant pour l'étiquette (10/11/2026, 07UNS8IG : adresse tapée dans le champ « nom »).
   const nm = estActive(o) ? nomManquant(o) : { manquant: false };
-  if (nm.manquant) c.push({ k: "nom", tone: "bad", lib: nm.propose ? `Nom manquant · proposé : ${nm.propose} (${nm.source})` : "Nom manquant · l'adresse est dans le champ nom : demander le nom" });
+  if (nm.manquant) c.push({ k: "nom", tone: "bad", lib: nm.propose ? `Nom manquant${nm.motif === "lieu" ? ` (« ${nm.ecrit} » est un lieu)` : ""} · proposé : ${nm.propose} (${nm.source})` : nm.motif === "lieu" ? `Nom manquant · « ${nm.ecrit} » est un lieu : demander le nom` : nm.motif === "vide" ? "Nom manquant · aucun nom saisi : demander le nom" : "Nom manquant · l'adresse est dans le champ nom : demander le nom" });
   if (o.alerteEmail || o.emailCorrigeDe) c.push({ k: "emailfix", tone: "warn", lib: o.alerteEmail || `E-mail corrigé (« ${o.emailCorrigeDe} »)` });
   if (o.test) c.push({ k: "test", tone: "grey", lib: "Commande test (non comptée)" });
   return c;

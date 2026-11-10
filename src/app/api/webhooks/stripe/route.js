@@ -19,7 +19,7 @@ import { detailVariante } from "@/lib/detailProduit";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 import { LOGO_URL } from "@/lib/photosLocales";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
-import { ressembleAUneAdresse, nomManquant } from "@/lib/nomLivraison";
+import { pasUnNomDePersonne, nomManquant, texteNomManquant } from "@/lib/nomLivraison";
 import { lireProvenanceCompacte } from "@/lib/provenance";
 
 // Webhook Stripe : reçoit l'événement "paiement réussi" et envoie à la
@@ -356,13 +356,13 @@ export async function POST(req) {
     let payeurNom = "", payeurSource = "";
     try {
       const nomEcrit = String(shipping?.name || customer.name || "").trim();
-      if ((!nomEcrit || ressembleAUneAdresse(nomEcrit)) && session.payment_intent) {
+      if ((!nomEcrit || pasUnNomDePersonne(nomEcrit)) && session.payment_intent) {
         const pi = await stripe.paymentIntents.retrieve(String(session.payment_intent), { expand: ["latest_charge"] });
         const ch = pi?.latest_charge && typeof pi.latest_charge === "object" ? pi.latest_charge : null;
         const pp = String(ch?.payment_method_details?.paypal?.payer_name || "").trim();
         const titulaire = String(ch?.billing_details?.name || "").trim();
-        if (pp && !ressembleAUneAdresse(pp)) { payeurNom = pp; payeurSource = "PayPal"; }
-        else if (titulaire && !ressembleAUneAdresse(titulaire)) { payeurNom = titulaire; payeurSource = "titulaire de la carte"; }
+        if (pp && !pasUnNomDePersonne(pp)) { payeurNom = pp; payeurSource = "PayPal"; }
+        else if (titulaire && !pasUnNomDePersonne(titulaire)) { payeurNom = titulaire; payeurSource = "titulaire de la carte"; }
       }
     } catch { /* jamais bloquant */ }
     const nomAVerifier = nomManquant({ shippingName: shipping?.name || "", customerName: customer.name || "", quoteClientName: quote?.client?.name || "", payeurNom, payeurSource });
@@ -620,7 +620,7 @@ export async function POST(req) {
         <p style="margin:0 0 16px;">Réf. commande : <strong>${escapeHtml(orderRef)}</strong></p>
         ${imageBlock}
         ${oublisBlock}
-        ${nomAVerifier.manquant ? `<div style="background:#fdecec;border:2px solid #d64545;padding:12px 14px;border-radius:10px;margin:0 0 16px;"><strong style="color:#b32b2b;">⚠️ Nom manquant : ${nomAVerifier.ecrit ? "l'adresse a été écrite à la place du nom" : "aucun nom saisi au paiement"}</strong>${nomAVerifier.ecrit ? `<p style="margin:6px 0 0;">Écrit dans le champ « nom » : « ${escapeHtml(nomAVerifier.ecrit)} »</p>` : ""}<p style="margin:6px 0 0;">${nomAVerifier.propose ? `Nom proposé pour l'étiquette (${escapeHtml(nomAVerifier.source)}) : <strong>${escapeHtml(nomAVerifier.propose)}</strong> — à confirmer avec la cliente si besoin.` : "Aucun autre nom connu : demande-lui le nom à mettre sur le colis."}</p></div>` : ""}
+        ${nomAVerifier.manquant ? `<div style="background:#fdecec;border:2px solid #d64545;padding:12px 14px;border-radius:10px;margin:0 0 16px;"><strong style="color:#b32b2b;">⚠️ Nom manquant : ${escapeHtml(texteNomManquant(nomAVerifier))}</strong><p style="margin:6px 0 0;">${nomAVerifier.propose ? `Nom proposé pour l'étiquette (${escapeHtml(nomAVerifier.source)}) : <strong>${escapeHtml(nomAVerifier.propose)}</strong> — à confirmer avec la cliente si besoin.` : "Aucun autre nom connu : demande-lui le nom à mettre sur le colis."}</p></div>` : ""}
         ${emailVerif.alerte ? `<div style="background:#fdecec;border:2px solid #d64545;padding:12px 14px;border-radius:10px;margin:0 0 16px;"><strong style="color:#b32b2b;">⚠️ Adresse e-mail de la cliente</strong><p style="margin:6px 0 0;">${escapeHtml(emailVerif.alerte)}</p></div>` : ""}
         ${alerteBlock}
         ${cadeauBlock}

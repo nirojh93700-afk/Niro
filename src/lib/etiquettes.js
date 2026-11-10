@@ -44,9 +44,11 @@ export function modeEnvoi(o) {
 export function adresseEtiquette(o) {
   const a = o?.shippingAddress || {};
   const pays = String(a.country || "FR").toUpperCase();
+  const n = nomLivraison(o);
   return {
-    nom: nomLivraison(o).complet || "",
-    lignes: [o?.shippingCompany, a.line1, a.line2].map((x) => String(x || "").trim()).filter(Boolean),
+    nom: n.complet || "",
+    // Nom de lieu tapé dans le champ « nom » (résidence, hôtel…) : gardé comme ligne d'adresse sous le nom.
+    lignes: [o?.shippingCompany || n.lieu, a.line1, a.line2].map((x) => String(x || "").trim()).filter(Boolean),
     cpVille: `${String(a.postal_code || "").trim()} ${String(a.city || "").trim()}`.trim().toUpperCase(),
     pays: pays && pays !== "FR" ? (PAYS[pays] || pays) : "",
     ref: o?.ref || "",

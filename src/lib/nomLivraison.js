@@ -26,8 +26,25 @@ export function ressembleAUneAdresse(s) {
   return VOIE.test(t) && /\d/.test(t);   // mot de voirie + un chiffre
 }
 
+// Nom d'un LIEU tapé à la place d'un nom de personne (10/11/2026, commande 0FUPET23 : « Résidence fond Vert »
+// dans le champ « nom », l'étiquette sortait sans le nom de la cliente). Sans chiffre, donc invisible pour
+// `ressembleAUneAdresse`. Mots d'établissement seulement (jamais un prénom ni un nom de famille courant).
+const LIEU = /(^|[^a-zà-ÿ])(r[ée]sidence|ehpad|h[ôo]tel|h[ôo]pital|clinique|maison de retraite|maison de sant[ée]|soci[ée]t[ée]|sarl|sasu?|eurl|entreprise|mairie|[ée]cole|coll[èe]ge|lyc[ée]e|universit[ée]|restaurant|brasserie|pharmacie|association|cabinet|agence|magasin|boutique|camping|foyer|cr[èe]che|[ée]tablissement|institut|gendarmerie|caserne|[ée]glise|paroisse|internat|copropri[ée]t[ée]|b[âa]timent|immeuble)($|[^a-zà-ÿ])/i;
+
+/** Vrai si la chaîne est le nom d'un lieu (résidence, EHPAD, hôtel, société…) et non d'une personne. */
+export function estUnLieu(s) {
+  const t = String(s || "").trim();
+  return Boolean(t) && LIEU.test(t);
+}
+
+/** Vrai si la chaîne n'est pas un nom de personne : une adresse OU un nom de lieu. */
+export function pasUnNomDePersonne(s) {
+  return ressembleAUneAdresse(s) || estUnLieu(s);
+}
+
 /**
- * @returns {{ complet:string, prenom:string, nom:string, suspect:boolean, source:string }}
+ * @returns {{ complet:string, prenom:string, nom:string, suspect:boolean, source:string, lieu:string }}
+ *   `lieu` = nom d'établissement tapé dans le champ « nom » (à mettre sur la ligne « société » de l'étiquette).
  *   `suspect` = le nom enregistré ressemblait à une adresse (à signaler à l'écran).
  */
 export function nomLivraison(order) {
@@ -37,14 +54,16 @@ export function nomLivraison(order) {
   // Nom de la personne qui a payé (PayPal : nom du compte ; carte : nom du titulaire), relevé au
   // paiement depuis le 10/11/2026 (commande 07UNS8IG : adresse dans le champ « nom », aucun nom ailleurs).
   const payeur = String(order?.payeurNom || "").trim();
-  const suspect = !brut || ressembleAUneAdresse(brut);
+  const suspect = !brut || pasUnNomDePersonne(brut);
+  // Le lieu va sur la ligne « société » de l'étiquette, sauf si une société est déjà saisie.
+  const lieu = !corrige && estUnLieu(brut) && !String(order?.shippingCompany || "").trim() ? brut : "";
   let complet = brut, source = "paiement";
   if (corrige) { complet = corrige; source = "correction connue"; }
-  else if (suspect && devis && !ressembleAUneAdresse(devis)) { complet = devis; source = "nom du devis"; }
-  else if (suspect && order?.customerName && !ressembleAUneAdresse(order.customerName)) { complet = String(order.customerName).trim(); source = "nom du client"; }
-  else if (suspect && payeur && !ressembleAUneAdresse(payeur)) { complet = payeur; source = `nom du payeur${order?.payeurSource ? ` (${order.payeurSource})` : ""}`; }
+  else if (suspect && devis && !pasUnNomDePersonne(devis)) { complet = devis; source = "nom du devis"; }
+  else if (suspect && order?.customerName && !pasUnNomDePersonne(order.customerName)) { complet = String(order.customerName).trim(); source = "nom du client"; }
+  else if (suspect && payeur && !pasUnNomDePersonne(payeur)) { complet = payeur; source = `nom du payeur${order?.payeurSource ? ` (${order.payeurSource})` : ""}`; }
   const [prenom, ...reste] = complet.split(/\s+/);
-  return { complet, prenom: prenom || "", nom: reste.join(" ") || prenom || "", suspect: suspect && !corrige && source === "paiement", source };
+  return { complet, prenom: prenom || "", nom: reste.join(" ") || prenom || "", suspect: suspect && !corrige && source === "paiement", source, lieu: complet === lieu ? "" : lieu };
 }
 
 /**
@@ -54,12 +73,21 @@ export function nomLivraison(order) {
  * @returns {{ manquant:boolean, ecrit:string, propose:string, source:string }}
  */
 export function nomManquant(order) {
-  if (NOMS_CORRIGES[order?.ref]) return { manquant: false, ecrit: "", propose: "", source: "" };
+  if (NOMS_CORRIGES[order?.ref]) return { manquant: false, ecrit: "", propose: "", source: "", motif: "" };
   const ecrit = String(order?.shippingName || order?.customerName || "").trim();
-  if (ecrit && !ressembleAUneAdresse(ecrit)) return { manquant: false, ecrit, propose: "", source: "" };
+  if (ecrit && !pasUnNomDePersonne(ecrit)) return { manquant: false, ecrit, propose: "", source: "", motif: "" };
   const n = nomLivraison(order);
-  const trouve = n.source !== "paiement" && n.complet && !ressembleAUneAdresse(n.complet);
-  return { manquant: true, ecrit, propose: trouve ? n.complet : "", source: trouve ? n.source : "" };
+  const trouve = n.source !== "paiement" && n.complet && !pasUnNomDePersonne(n.complet);
+  // motif : « vide » (rien saisi), « lieu » (résidence, hôtel… à la place du nom), « adresse » (rue, numéro…).
+  const motif = !ecrit ? "vide" : ressembleAUneAdresse(ecrit) ? "adresse" : "lieu";
+  return { manquant: true, ecrit, propose: trouve ? n.complet : "", source: trouve ? n.source : "", motif };
+}
+
+/** Phrase courte qui dit ce qui a été écrit à la place du nom (e-mail 🛎️, fiche, file de production). */
+export function texteNomManquant(m) {
+  if (m.motif === "vide") return "aucun nom saisi au paiement";
+  if (m.motif === "lieu") return `un nom de lieu a été écrit à la place du nom de la personne (« ${m.ecrit} »)`;
+  return `l'adresse a été écrite à la place du nom (« ${m.ecrit} »)`;
 }
 
 // -----------------------------------------------------------------------------

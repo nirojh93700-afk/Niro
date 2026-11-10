@@ -1,5 +1,6 @@
 // Vérifications « vendu en plus » (npm run test-options) — pures, sans navigateur.
-import { nomLivraison, ressembleAUneAdresse, nomLivraisonDifferent, nomManquant } from "../../src/lib/nomLivraison.js";
+import { nomLivraison, ressembleAUneAdresse, nomLivraisonDifferent, nomManquant, estUnLieu } from "../../src/lib/nomLivraison.js";
+import { adresseEtiquette } from "../../src/lib/etiquettes.js";
 import { optionsArticle, optionsCommande, livraisonCommande, emballagesDuDetail } from "../../src/lib/optionsVendues.js";
 let n = 0, ko = 0;
 const check = (nom, cond) => { n++; if (!cond) { ko++; console.log("❌", nom); } else console.log("✅", nom); };
@@ -48,6 +49,13 @@ check("07UNS8IG : adresse dans le nom, payeur PayPal proposé", (() => { const r
 check("nomManquant : adresse + payeur → manquant, nom proposé", (() => { const m = nomManquant({ ref: "X1", shippingName: "8 RUE AUBIN BONNEFON 91480 QUINCY", payeurNom: "Nadezda Pichereau", payeurSource: "PayPal" }); return m.manquant && m.propose === "Nadezda Pichereau" && /PayPal/.test(m.source); })());
 check("nomManquant : adresse sans repli → manquant, rien proposé", (() => { const m = nomManquant({ ref: "X2", shippingName: "12 rue des Lilas" }); return m.manquant && m.propose === ""; })());
 check("nomManquant : nom vide → manquant", nomManquant({ ref: "X3", shippingName: "", customerName: "" }).manquant === true);
+check("0FUPET23 : « Résidence fond Vert » reconnu comme un lieu", estUnLieu("Résidence fond Vert") && estUnLieu("EHPAD Les Lilas") && estUnLieu("Hôtel Villa Marquis"));
+check("vrais noms jamais pris pour un lieu", !estUnLieu("Halid Ibouroi") && !estUnLieu("Marie Hôtelier") && !estUnLieu("Paul Lécole") && !estUnLieu("Lorenzo Franchi"));
+check("nomManquant : lieu sans repli → manquant, motif lieu", (() => { const m = nomManquant({ ref: "X4", shippingName: "Résidence fond Vert", customerName: "Résidence fond Vert" }); return m.manquant && m.motif === "lieu" && m.propose === ""; })());
+check("nomManquant : lieu + payeur → nom proposé", (() => { const m = nomManquant({ ref: "X5", shippingName: "Résidence fond Vert", payeurNom: "Halid Ibouroi", payeurSource: "PayPal" }); return m.manquant && m.propose === "Halid Ibouroi"; })());
+check("étiquette : lieu sous le nom de la personne", (() => { const e = adresseEtiquette({ ref: "X6", shippingName: "Résidence fond Vert", payeurNom: "Halid Ibouroi", shippingAddress: { line1: "Rue des Cédrats", postal_code: "13014", city: "Marseille", country: "FR" } }); return e.nom === "Halid Ibouroi" && e.lignes[0] === "Résidence fond Vert" && e.lignes[1] === "Rue des Cédrats"; })());
+check("étiquette : lieu sans autre nom → pas répété", (() => { const e = adresseEtiquette({ ref: "X7", shippingName: "Résidence fond Vert", shippingAddress: { line1: "Rue des Cédrats", postal_code: "13014", city: "Marseille", country: "FR" } }); return e.nom === "Résidence fond Vert" && e.lignes.length === 1; })());
+check("étiquette : nom corrigé + société → inchangé", (() => { const e = adresseEtiquette({ ref: "X8", shippingName: "Halid Ibouroi", shippingCompany: "Résidence fond Vert", shippingAddress: { line1: "Rue des Cédrats", postal_code: "13014", city: "Marseille", country: "FR" } }); return e.nom === "Halid Ibouroi" && e.lignes.join("|") === "Résidence fond Vert|Rue des Cédrats"; })());
 check("nomManquant : nom normal → rien", nomManquant({ shippingName: "Sophie Berardo" }).manquant === false);
 check("nomManquant : correction connue → rien", nomManquant({ ref: "0GTB1LZ5", shippingName: "23quater avenue du president coty" }).manquant === false);
 check("payeur qui ressemble à une adresse : pas repris", nomManquant({ ref: "X4", shippingName: "12 rue des Lilas", payeurNom: "12 rue des Lilas" }).propose === "");
