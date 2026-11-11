@@ -4,6 +4,15 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
+## 💶 PRIX D'ACHAT DES ARTICLES (AVEC LIVRAISON) — À RECEVOIR DU GÉRANT (11/11/2026)
+- Il donnera le prix d'achat de chaque article, livraison du fournisseur comprise (« tu enregistres quelque part avec les prix de livraison »).
+- Où les enregistrer : `src/lib/productCosts.js` (`VARIANT_COSTS`, clé = stockId de la variante, coût rendu = article + part du port),
+  avec un commentaire de source (fournisseur, date, total payé). La page Bénéfices les lit toute seule.
+- Manquants les plus vendus au 11/11 : Bracelet Homme Chaîne Acier (7), Bracelet Empreinte Pied de Bébé (5), Collier Enveloppe (3),
+  Collier Plaque Acier (2), puis carafe, médaillon cœur ouvrable, bracelet femme cœur, bracelet cordon à plaque, bracelet ange…
+  (liste complète : `GET /api/admin/benefices` → `missingCost.items`).
+- Prix réels des étiquettes : champ `etiquetteReelle` sur la commande (`/api/admin/orders` action `annotate`), prioritaire sur l'estimation.
+
 ## 🖼️ GOOGLE MERCHANT : 8 PHOTOS DE PRODUITS < 500 × 500 px — À DÉCIDER AVANT LE 31/01/2027 (gérant, 04/11/2026 : « mets une alerte, tu me rappelleras, on décidera »)
 - Mail Merchant Center (ID 5840330121) : dès le 31/01/2027, une photo principale < 500 × 500 px = produit refusé dans Google Shopping.
 - Concernés (photo principale du flux) : bracelet-femme-acier 400×379, bracelet-femme-coeur 381×400 (grandes photos 800 / 900 px déjà sur leur fiche),
