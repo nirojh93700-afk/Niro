@@ -469,7 +469,12 @@ export default function BeneficesPage() {
             <tbody>
               {data.products.map((r, i) => (
                 <tr key={i} style={{ borderBottom: "1px solid #f0eadd" }}>
-                  <td style={{ padding: "8px 6px" }}>{r.name}{!r.hasCost && <span title="Coût non renseigné" style={{ color: "#b4452f", marginLeft: 4 }}>⚠️</span>}</td>
+                  <td style={{ padding: "8px 6px" }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      {r.image ? <img src={r.image} alt="" loading="lazy" style={{ width: 44, height: 44, objectFit: "cover", borderRadius: 8, flex: "none", background: "#f3ece0" }} /> : <span style={{ width: 44, height: 44, borderRadius: 8, flex: "none", background: "#f3ece0" }} />}
+                      <span>{r.name}{!r.hasCost && <span title="Coût non renseigné" style={{ color: "#b4452f", marginLeft: 4 }}>⚠️</span>}</span>
+                    </span>
+                  </td>
                   <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{r.units}</td>
                   <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{euro(r.revenue)}</td>
                   <td style={{ padding: "8px 6px", textAlign: "right", fontVariantNumeric: "tabular-nums", color: "var(--ink-soft)" }}>{r.hasCost ? euro(r.cost) : "—"}</td>

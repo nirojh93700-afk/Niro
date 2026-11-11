@@ -63,6 +63,11 @@ export async function POST(req) {
     // Liste de contrôle de la fiche commande (04/11/2026) : gravée · contrôlée · emballée · étiquette · expédiée.
     const CONTROLES = ["gravee", "controlee", "emballee", "etiquette", "expediee"];
     if (Array.isArray(body.controles)) patch.controles = [...new Set(body.controles.map(String).filter((c) => CONTROLES.includes(c)))];
+    // Prix RÉEL de l'étiquette payée (TTC), donné par le gérant (11/11/2026) : prime sur l'estimation dans Bénéfices.
+    if (body.etiquetteReelle !== undefined) {
+      const v = body.etiquetteReelle === "" || body.etiquetteReelle === null ? null : Math.round(Number(String(body.etiquetteReelle).replace(",", ".")) * 100) / 100;
+      if (v === null || (Number.isFinite(v) && v >= 0 && v < 500)) patch.etiquetteReelle = v;
+    }
     if (!Object.keys(patch).length) return Response.json({ error: "Rien à enregistrer." }, { status: 400 });
     const ok = await updateSiteOrder(id, patch);
     return Response.json({ ok, patch });

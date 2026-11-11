@@ -75,7 +75,7 @@ export async function GET(req) {
     // Étiquette = celle saisie à « Valider » dans Conditionnement, sinon le prix Boxtal du mode d'envoi.
     const ship = Number(o.shippingPrice) || 0;
     const u = matUsage[o.id];
-    const etiq = u && u.etiquette !== undefined && u.etiquette !== null && u.etiquette !== "" ? Number(u.etiquette) || 0 : etiquetteEstimee(o, (slug) => bySlug[slug]);
+    const etiq = o.etiquetteReelle != null && o.etiquetteReelle !== "" ? Number(o.etiquetteReelle) || 0 : u && u.etiquette !== undefined && u.etiquette !== null && u.etiquette !== "" ? Number(u.etiquette) || 0 : etiquetteEstimee(o, (slug) => bySlug[slug]);
     const addShip = (b) => { b.shipping += ship; b.etiquettes += etiq; };
     addShip(per.all); if (inYear) addShip(per.year); if (inMonth) addShip(per.month);
     monthly[mk] = monthly[mk] || { revenue: 0, cost: 0, shipping: 0, etiquettes: 0, orders: 0, materiel: 0, rates: 0, gravure: 0 };
@@ -109,7 +109,7 @@ export async function GET(req) {
       monthly[mk].revenue += rev; monthly[mk].cost += cost;
 
       const key = slug || (it.name || "?");
-      byProduct[key] = byProduct[key] || { name: nameBySlug[slug] || it.name || key, units: 0, revenue: 0, cost: 0, hasCost };
+      byProduct[key] = byProduct[key] || { name: nameBySlug[slug] || it.name || key, image: (bySlug[slug]?.images || [])[0] || it.image || "", units: 0, revenue: 0, cost: 0, hasCost };
       const bp = byProduct[key];
       bp.units += qty; bp.revenue += rev; bp.cost += cost; if (hasCost) bp.hasCost = true;
     }
@@ -146,7 +146,7 @@ export async function GET(req) {
   }
 
   const productsList = Object.values(byProduct).map((b) => ({
-    name: b.name, units: b.units, revenue: round(b.revenue), cost: round(b.cost),
+    name: b.name, image: b.image || "", units: b.units, revenue: round(b.revenue), cost: round(b.cost),
     profit: round(b.revenue - b.cost), margin: b.revenue > 0 ? Math.round(((b.revenue - b.cost) / b.revenue) * 100) : 0,
     hasCost: b.hasCost,
   })).sort((a, b) => b.profit - a.profit);
