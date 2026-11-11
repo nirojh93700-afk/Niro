@@ -18,7 +18,9 @@ const BOUGE = 10; // px : au-delà, le doigt fait défiler, ce n'est pas un touc
 export default function FlottantsAuto() {
   useEffect(() => {
     const html = document.documentElement;
-    const mq = window.matchMedia("(max-width: 760px)");
+    // Tous les écrans tactiles, quelle que soit leur largeur (11/11/2026 : sur un Samsung Fold ouvert,
+    // plus large que 760 px, les boutons ne se cachaient jamais), + les petites fenêtres.
+    const mq = window.matchMedia("(max-width: 1100px), (pointer: coarse)");
     let t = null;
     let depart = null;
     let yMontre = window.scrollY;

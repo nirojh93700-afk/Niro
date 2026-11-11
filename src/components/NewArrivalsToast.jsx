@@ -55,7 +55,9 @@ export default function NewArrivalsToast({ items = [] }) {
       aria-live="polite"
       style={{
         position: "fixed", zIndex: 60,
-        left: mobile ? 10 : 24, right: mobile ? 10 : "auto", bottom: mobile ? 84 : 24,
+        // Toujours AU-DESSUS des boutons « Une question ? » / « La boutique » (11/11/2026 : sur un Fold ouvert
+        // et sur ordinateur, la fenêtre se posait derrière « Une question ? »).
+        left: mobile ? 10 : 24, right: mobile ? 10 : "auto", bottom: 84,
         width: mobile ? "auto" : 320, maxWidth: "calc(100vw - 20px)",
         background: "#fff", borderRadius: 14, boxShadow: "0 10px 34px rgba(0,0,0,.18)", border: "1px solid #ece3d2",
         padding: mobile ? 12 : 10,

@@ -5476,9 +5476,8 @@ body:has(.ash) > main { padding: 0; margin: 0; }
 
 /* ===== Boutons flottants du bas : se cachent après 4 s sur téléphone (01/11/2026, FlottantsAuto.jsx) ===== */
 .flot-btn{transition:transform .35s ease,opacity .35s ease}
-@media (max-width:760px){
-  html.flot-cache:not(.flot-garde) .flot-btn{transform:translateY(140%);opacity:0;pointer-events:none}
-}
+/* La classe flot-cache n'est posée que sur un écran tactile ou une petite fenêtre (FlottantsAuto.jsx) : pas de media query ici. */
+html.flot-cache:not(.flot-garde) .flot-btn{transform:translateY(140%);opacity:0;pointer-events:none}
 @media (prefers-reduced-motion:reduce){.flot-btn{transition:none}}
 
 /* ===== Page du devis : emballage + « Compléter votre commande » (02/11/2026, maquette Lo8LopW8uKma8KuAgriD6a) ===== */
