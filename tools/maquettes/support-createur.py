@@ -157,6 +157,9 @@ def lettres_fleuries():
 LETTRES = lettres_fleuries()
 PLANCHE = jpg_uri(os.path.join(PUB, "produits", "alphabet-fleuri.jpg"), w=760, q=80)
 EXEMPLE = jpg_uri(os.path.join(ROOT, "docs/maquettes/assets/marque-pages/exemples/portraits/couple.jpg"))
+# le logo du site, fichier d'origine tel quel (aucune retouche) : accroché au mur, au fond de la vue 3D
+LOGO = raw_uri(os.path.join(PUB, "logo-niv-creation.jpg"))
+with Image.open(os.path.join(PUB, "logo-niv-creation.jpg")) as _l: LOGO_R = round(_l.width / _l.height, 4)
 
 POLICES = [
     ["playfair", "Playfair", "'Playfair Display',serif"], ["cinzel", "Cinzel", "'Cinzel',serif"],
@@ -166,7 +169,7 @@ POLICES = [
 ]
 
 ATOMM = json.load(open(atomm, encoding="utf-8"))
-DONNEES = json.dumps({"atomm": ATOMM, "photos": PHOTOS, "dessins": DESSINS, "lettres": LETTRES, "planche": PLANCHE, "exemple": EXEMPLE, "polices": POLICES,
+DONNEES = json.dumps({"atomm": ATOMM, "photos": PHOTOS, "dessins": DESSINS, "lettres": LETTRES, "planche": PLANCHE, "exemple": EXEMPLE, "logo": LOGO, "logoR": LOGO_R, "polices": POLICES,
                       "prix": {"base": 12.9, "taille": {"petit": 0, "standard": 3, "grand": 6}, "element": 3, "ajoure": 3}},
                      ensure_ascii=False, separators=(",", ":"))
 
@@ -700,7 +703,15 @@ V3.ouvrir=function(){
    var c=$('vue3d'),r=new THREE.WebGLRenderer({canvas:c,antialias:true,alpha:true});r.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
    var sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(32,1,1,2000);
    sc.add(new THREE.HemisphereLight(0xfff4e0,0x6b4f30,.55));var dl=new THREE.DirectionalLight(0xffffff,.55);dl.position.set(-120,220,260);sc.add(dl);
-   var sol=new THREE.Mesh(new THREE.CircleGeometry(170,48),new THREE.MeshBasicMaterial({color:0x3a2a16,transparent:true,opacity:.12}));sol.rotation.x=-Math.PI/2;sc.add(sol);
+   var sol=new THREE.Mesh(new THREE.CircleGeometry(170,48),new THREE.MeshBasicMaterial({color:0x3a2a16,transparent:true,opacity:.12}));sol.rotation.x=-Math.PI/2;sol.position.y=.05;sc.add(sol);
+   /* le décor fixe : le bureau, le mur du fond et le logo encadré, accroché en haut à gauche (il ne tourne pas avec le support) */
+   var bureau=new THREE.Mesh(new THREE.PlaneGeometry(900,520),new THREE.MeshBasicMaterial({color:0xe6dbc7}));bureau.rotation.x=-Math.PI/2;bureau.position.set(0,0,100);sc.add(bureau);
+   var mur=new THREE.Mesh(new THREE.PlaneGeometry(900,520),new THREE.MeshBasicMaterial({color:0xf3ede3}));mur.position.set(0,260,-160);sc.add(mur);
+   var lw=56,lh=lw/D.logoR,cadre=new THREE.Mesh(new THREE.BoxGeometry(lw+7,lh+7,2.5),new THREE.MeshStandardMaterial({color:0x9a7442,roughness:.6}));
+   cadre.position.set(-96,128,-158.6);sc.add(cadre);
+   var ombre=new THREE.Mesh(new THREE.PlaneGeometry(lw+12,lh+12),new THREE.MeshBasicMaterial({color:0x5a4430,transparent:true,opacity:.13}));ombre.position.set(-93,125,-159.8);sc.add(ombre);
+   new THREE.TextureLoader().load(D.logo,function(tx){var lg=new THREE.Mesh(new THREE.PlaneGeometry(lw,lh),new THREE.MeshBasicMaterial({map:tx}));
+    lg.position.set(-96,128,-157.2);sc.add(lg);V3.rendre()});
    V3.r=r;V3.sc=sc;V3.cam=cam;V3.rot=-.45;V3.pret=true;
    var tir=null;c.addEventListener('pointerdown',function(e){tir={x:e.clientX,r:V3.rot};try{c.setPointerCapture(e.pointerId)}catch(_){ }});
    c.addEventListener('pointermove',function(e){if(!tir)return;V3.rot=tir.r+(e.clientX-tir.x)/120;V3.rendre()});

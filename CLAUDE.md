@@ -25,6 +25,7 @@
 - **v8 (12/11 soir, gérant : « quand ils choisissent la découpe sur le pied, y a pas d'image en 3D »)** = VERSION 8 de l'artifact, celle à reproduire :
   le pied était caché derrière le dossier. Maintenant, dès qu'un motif est découpé sur le pied : vignette « Le pied, vu de dessus » en bas à gauche de
   la vue de face, et en 3D la caméra monte (et se met de dos quand le motif n'est QUE sur le pied, Persienne / Fenêtre), avec « le motif du pied se voit de dos ».
+- **v9 (12/11 soir, gérant : « mettre mon logo comme s'il était accroché sur le mur en arrière-plan » → « oui vas-y »)** = VERSION 9 de l'artifact : en 3D, un mur clair et un bureau fixes, le logo d'origine du site (`public/logo-niv-creation.jpg`, sans retouche) dans un cadre bois, en haut à gauche, qui ne tourne pas avec le support.
 - (v5, remplacée) nos propres formes dessinées et calculées (dossier 80 × 150, 13°).
 - L'outil d'Atomm (xTool) ne s'installe pas sur un autre site : on construit le nôtre. ⛔ Ne pas se servir de `morluto/rea` (outil qui démonte un logiciel) pour recopier le leur.
 - https://claude.ai/artifact/ARNf7BxbQxsTvkpJxgQKD7 (v1) · générateur `tools/maquettes/support-createur.py <capture> <dossier css> <sortie>`
