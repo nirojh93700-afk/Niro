@@ -4,8 +4,8 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
-## 🧱 MAQUETTE « SUSPENSION À PRÉNOMS » — 12/11/2026 SOIR, EN ATTENTE DE SON AVIS, RIEN en ligne
-- **12/11/2026 soir — maquette « Suspension à prénoms »** (d'après « Create Your Stack » d'Atomm, 170 mm de haut au plus) : https://claude.ai/artifact/PpnA3aSf9gMaxuoSr5onFp. En attente de son avis : sens de « 170 mm », prix (12,90 € avec 2 prénoms, + 3 € par prénom), réglages laissés à la cliente, écritures. Rien en ligne.
+## 🧱 MAQUETTE « SUSPENSION À PRÉNOMS » — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (version 1), RIEN en ligne
+- **12/11/2026 soir — maquette « Suspension à prénoms »** (d'après « Create Your Stack » d'Atomm, 170 mm de haut au plus) : https://claude.ai/artifact/PpnA3aSf9gMaxuoSr5onFp. Ne plus la modifier sans sa demande. Restent à valider avant de construire : sens de « 170 mm », prix (12,90 € avec 2 prénoms, + 3 € par prénom), réglages laissés à la cliente, écritures. Rien en ligne.
 
 ## 🦌 MAQUETTE « DÉCORATION À PRÉNOM » — ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (version 4, fil blanc), RIEN en ligne
 

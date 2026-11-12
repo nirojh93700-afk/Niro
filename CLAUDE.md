@@ -1,4 +1,4 @@
-## 🧱 GÉNÉRATEUR ATOMM « CREATE YOUR STACK » — ANALYSÉ LE 12/11/2026 SOIR (gérant : lien donné, « Analyse bien ») puis MAQUETTE « SUSPENSION À PRÉNOMS » (gérant : « 170mm ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+## 🧱 GÉNÉRATEUR ATOMM « CREATE YOUR STACK » — ANALYSÉ LE 12/11/2026 SOIR (gérant : lien donné, « Analyse bien ») puis MAQUETTE « SUSPENSION À PRÉNOMS » (gérant : « 170mm ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« OK, enregistre la maquette ») = VERSION 1 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - 🧱 **MAQUETTE v1 (12/11/2026 soir, sa réponse « 170mm » à « je prépare la maquette ? »)** : https://claude.ai/artifact/PpnA3aSf9gMaxuoSr5onFp ·
   générateur `python3 tools/maquettes/empile-createur.py <page de base = sortie d'un autre créateur> docs/maquettes/assets/empile/formes.json <sortie>` ·
   formes : `NODE_PATH=$(npm root -g) node tools/maquettes/empile-formes.cjs <paper-full.min.js> docs/maquettes/assets/empile/brut <formes.json>`
