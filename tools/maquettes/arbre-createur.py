@@ -455,6 +455,7 @@ svg.innerHTML='<defs>'
  +'<path id="arbreP" fill-rule="nonzero" stroke-width=".35"/><path id="arbreV" fill="#fff" filter="url(#veine)" opacity=".45"/>'
  +'<g id="noms"></g>';
 (function(){var dg=svg.querySelector('defs');MATIERES.forEach(function(m){dg.insertAdjacentHTML('beforeend','<linearGradient id="g-'+m.id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+m.c[0]+'"/><stop offset=".55" stop-color="'+m.c[1]+'"/><stop offset="1" stop-color="'+m.c[2]+'"/></linearGradient>')})})();
+svg.querySelector('defs').insertAdjacentHTML('beforeend','<linearGradient id="g-nom" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a4a24"/><stop offset="1" stop-color="#4f2c12"/></linearGradient>');
 var BOIS=Mde('contreplaque');
 
 /* ---- un prénom dans son cœur (ou son cercle), comme Atomm : le prénom est en bois, il part du bord gauche du cœur et rejoint
@@ -477,9 +478,9 @@ function nomDansForme(sl,txt,uid){
  var cp=el('clipPath',{id:'cp'+uid},outer);el('path',{d:sl.o},cp);
  var g=el('g',{filter:'url(#bordF)'},outer);
  var x0=cx-e.w/2,inkL=x0-e.l,inkR=x0+e.r,yb=base-fs*.12,hb=fs*.1;
- el('rect',{x:sl.c[0]-40,y:yb-hb/2,width:inkL-(sl.c[0]-40)+fs*.25,height:hb,fill:'url(#g-contreplaque)'},g);
- el('rect',{x:inkR-fs*.25,y:yb-hb/2,width:sl.c[0]+40-inkR,height:hb,fill:'url(#g-contreplaque)'},g);
- texteNom(g,txt,cx,base,fs,pol,'url(#g-contreplaque)')}
+ el('rect',{x:sl.c[0]-40,y:yb-hb/2,width:inkL-(sl.c[0]-40)+fs*.25,height:hb,fill:'url(#g-nom)'},g);
+ el('rect',{x:inkR-fs*.25,y:yb-hb/2,width:sl.c[0]+40-inkR,height:hb,fill:'url(#g-nom)'},g);
+ texteNom(g,txt,cx,base,fs,pol,'url(#g-nom)')}
 
 /* ---- le pied (les 2 pièces du « Card Stand » d'Atomm, 100 × 90 mm) : A a sa fente en haut, B en bas ; elles se croisent à 90°,
    les deux bouts (les « orteils ») vers l'avant ; l'arbre se pose dessus en s'appuyant sur les montants ---- */
