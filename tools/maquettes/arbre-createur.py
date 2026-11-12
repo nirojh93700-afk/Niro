@@ -130,7 +130,7 @@ PIED = {"a": _decale(_L["pathA"], -_pa["x"], -_pa["y"]), "b": _decale(_L["pathB"
 PIED["slotB"] = PIED["larg"] - PIED["slotA"]
 MATIERES = [{"id": "contreplaque", "nom": "Contreplaqué", "c": ["#f0dcb4", "#e3c796", "#d6b47f"], "bord": "#9c7744"}]
 DONNEES = json.dumps({"arbres": ARBRES["arbres"], "slots": ARBRES["slots"], "base": "arbres/", "max": 6, "taille": 180,
-                      "matieres": MATIERES, "polices": POLICES, "logo": LOGO, "logoR": LOGO_R, "prix": {"base": 24.9, "inclus": 2, "nom": 3, "gravePied": 3}, "pied": PIED},
+                      "matieres": MATIERES, "polices": POLICES, "logo": LOGO, "logoR": LOGO_R, "prix": {"base": 24.9, "inclus": 2, "nom": 3, "gravePied": 5}, "pied": PIED},
                      ensure_ascii=False, separators=(",", ":"))
 
 CSS_MAQ = r"""
@@ -371,7 +371,7 @@ HTML_OUTIL = r"""
   <div class="prc-sh"><span class="prc-num done">5</span><h3>Le pied</h3></div>
   <div class="ab-pied"><svg id="piedIco" viewBox="-4 -4 98 108" aria-hidden="true"></svg>
    <p><b>Le pied est fourni avec l'arbre.</b> Deux pièces en bois qui s'emboîtent en croix, taillées pour votre arbre de 18 cm (10 cm de haut). L'arbre se pose dessus, légèrement incliné.</p></div>
-  <label class="ab-grave"><input type="checkbox" id="gravePied"> Graver le pied (+3 €)</label>
+  <label class="ab-grave"><input type="checkbox" id="gravePied"> Graver le pied (+5 €)</label>
   <div class="ab-gchamps" id="gchamps" hidden>
    <input type="text" id="piedTexte" maxlength="20" placeholder="Ex. Famille Martin" aria-label="Texte gravé sur le pied">
    <select id="piedPolice" aria-label="Écriture du pied"></select>
@@ -410,7 +410,7 @@ HTML_ATELIER = r"""
   </div>
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
-  <li>Le pied est compris dans le prix (à confirmer) ; la gravure du pied : +3 € (proposé par moi, à confirmer).</li>
+  <li>Le pied est compris dans le prix (à confirmer) ; la gravure du pied : +5 € (votre prix).</li>
   <li>Prix : 24,90 € l'arbre avec 2 prénoms (prix de base proposé par moi, à confirmer), chaque prénom en plus +3 € (votre règle) : 6 prénoms = 36,90 €.</li>
   <li>Le contour rouge de la maquette est un aperçu ; à la construction, le fichier aura les vrais tracés (comme l'export d'Atomm), prénoms soudés à leur cœur.</li>
   <li>Les dessins des arbres et des cœurs sont ceux d'Atomm (vous avez décidé de les reprendre, comme pour le support de téléphone).</li>

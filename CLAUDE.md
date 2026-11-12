@@ -20,9 +20,9 @@
   par moi pour l'arbre de 18 cm, PAS au choix de la cliente : **100 mm de haut, 90 mm de long, bois 3 mm** → 2 pièces imbriquées sur
   **129,5 × 136,25 mm**. Tracés obtenus avec LEUR outil ouvert dans le navigateur (`node tools/maquettes/arbre-pied-atomm.cjs <dossier>` →
   `pied-100x90.json`, 6ᵉ argument du générateur ; ⛔ leur code n'est jamais lancé sur la machine, refusé par la sécurité). Maquette : étape
-  « Le pied » (fourni, case « Graver le pied (+3 €) » : texte 20 car., 10 écritures, sur les deux pièces ou une seule), pied vu de face sous
+  « Le pied » (fourni, case « Graver le pied (+5 €) », prix donné par lui le 12/11 : texte 20 car., 10 écritures, sur les deux pièces ou une seule), pied vu de face sous
   l'arbre, vignette « le pied, vu de côté », 3D (arbre incliné de 12° posé sur le pied), fichier = **deux planches** (arbre 180 × 180 +
-  pied 129,5 × 136,25 : ensemble ils ne tiennent pas dans 200 × 200), rouge découpe, noir gravure. À valider : pied compris, gravure +3 €.
+  pied 129,5 × 136,25 : ensemble ils ne tiennent pas dans 200 × 200), rouge découpe, noir gravure. À valider : pied compris dans le prix.
 - **À valider** : contour de la maquette = aperçu (vrais tracés soudés à la construction) ; dessins d'Atomm repris (sa décision, comme le support).
 
 ## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCORATION À SUSPENDRE » (générateur « Ornament » d'Atomm) — 12/11/2026 (gérant : « fais la même chose pour cette création… tout comme sur le site ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR = VERSION 5 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
