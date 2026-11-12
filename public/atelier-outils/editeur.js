@@ -54,7 +54,13 @@
     }
     var b = window.scAtelier, T = b.S;
     var el = function (id) { for (var i = 0; i < T.els.length; i++) if (String(T.els[i].id) === String(id)) return T.els[i]; return null; };
+    /* Décoration « Classique » : une pièce en contreplaqué peut être SOUDÉE au cadre (découpée avec lui, d'une seule pièce)
+       au lieu d'être un morceau à part à coller. Jamais une photo, jamais une pièce en acrylique (autre matière que le cadre). */
+    var soudable = function (e) { return quoi === 'deco' && !!e && T.style === 'classique' && e.type !== 'photo' && !!b.matDe && b.matDe(e).indexOf('contreplaqu') === 0; };
+    var soudee = function (e) { return soudable(e) && !!e.soude; };
     return {
+      soudable: function (id) { return soudable(el(id)); }, soudee: function (id) { return soudee(el(id)); },
+      souder: function (id, oui) { var e = el(id); if (e) { if (oui) e.soude = true; else delete e.soude; } },
       produit: quoi === 'support' ? 'Le dossier' : 'La décoration', centrable: true, retirable: true, policeDe: function () { return 'Écriture'; },
       geo: function () { return b.geo(); },
       pieces: function () {
@@ -62,6 +68,7 @@
           var texte = e.type === 'texte' ? e.texte : e.type === 'lettre' ? (e.nom || '') : undefined;
           var nom = b.nomEl ? b.nomEl(e) : e.type === 'texte' ? '« ' + (e.texte || '…') + ' »' : e.type === 'dessin' ? 'Dessin' : e.type === 'lettre' ? 'Lettre fleurie ' + (e.lettre || '') : 'Photo';
           var sous = quoi === 'support' ? 'gravé' : (T.style !== 'classique' ? 'gravé sur la plaque' : (e.type === 'photo' ? 'photo sur une pièce' : e.mode === 'grave' ? 'gravé sur une pièce' : 'découpé') + (b.matDe ? ' · ' + b.matDe(e) : ''));
+          if (soudee(e)) sous = 'soudé au cadre · rien à coller';
           return { id: e.id, type: e.type, nom: nom, sous: sous, texte: texte, police: texte !== undefined ? e.police : undefined, max: 30, flottant: !!e.flottant };
         });
       },
@@ -74,7 +81,8 @@
       retirer: function (id) { T.els = T.els.filter(function (e) { return String(e.id) !== String(id); }); if (String(T.sel) === String(id)) T.sel = null; },
       choisir: function (id) { T.sel = id; }, choisi: function () { return T.sel; },
       redessiner: function () { b.dessiner(); if (b.fiche) b.fiche(); },
-      alerte: function (id) { var e = el(id); return e && e.flottant ? 'Cette pièce ne touche ni le cadre ni une autre pièce : elle tomberait. Déplacez-la jusqu\'à ce qu\'elle touche.' : ''; },
+      alerte: function (id) { var e = el(id); if (soudee(e) && e.flottant) return 'Cette pièce est « soudée au cadre » mais elle ne le touche pas : elle resterait un morceau à part. Déplacez-la jusqu\'à ce qu\'elle morde sur le bois du cadre.';
+        return e && e.flottant ? 'Cette pièce ne touche ni le cadre ni une autre pièce : elle tomberait. Déplacez-la jusqu\'à ce qu\'elle touche.' : ''; },
       clicScene: function () { return undefined; }
     };
   }
@@ -119,7 +127,7 @@
     + '#nivProps .mm{position:relative}#nivProps .mm input{padding-right:34px;font-variant-numeric:tabular-nums}#nivProps .mm i{position:absolute;right:10px;bottom:11px;font:normal 12px Inter,system-ui,sans-serif;color:#9a8c75;pointer-events:none}'
     + '#nivProps .rg{display:flex;gap:6px;flex-wrap:wrap;align-items:center}'
     + '#nivProps .rg span{font-size:12px;color:#7a6d58}'
-    + '#nivProps .pas button.on{background:#1a1206;color:#fff;border-color:#1a1206}'
+    + '#nivProps .pas button.on,#nivProps button[data-w].on{background:#1a1206;color:#fff;border-color:#1a1206}'
     + '#nivProps .note{font-size:12px;color:#7a6d58;margin:0}'
     + '#nivProps .dg{color:#b4452f;border-color:#e9b9ad}'
     + '#nivProps .alerte{font-size:12.5px;padding:7px 10px;border-radius:9px;background:#fdf1ee;border:1px solid #e9b9ad;color:#8a2d1c}'
@@ -203,7 +211,7 @@
     var L = ad.pieces(), h = '';
     L.forEach(function (p) {
       h += '<button type="button" data-id="' + esc(p.id) + '"' + (String(p.id) === String(sel) ? ' class="on" aria-pressed="true"' : ' aria-pressed="false"') + '><span class="ic">' + (IC[p.type] || '•') + '</span>'
-        + '<span class="tx"><b>' + esc(p.nom) + '</b><small>' + esc(p.sous || '') + '</small></span>' + (p.flottant ? '<span class="al">ne tient pas</span>' : ad.alerte && ad.alerte(p.id) ? '<span class="al">dépasse</span>' : '') + '</button>';
+        + '<span class="tx"><b>' + esc(p.nom) + '</b><small>' + esc(p.sous || '') + '</small></span>' + (p.flottant ? '<span class="al">' + (ad.soudee && ad.soudee(p.id) ? 'ne touche pas' : 'ne tient pas') + '</span>' : ad.alerte && ad.alerte(p.id) ? '<span class="al">dépasse</span>' : '') + '</button>';
     });
     $('nivListe').innerHTML = h || '<p id="nivVide">Aucune pièce pour l\'instant. Ajoutez un texte, un dessin ou une photo dans l\'onglet « Produit et ajouts ».</p>';
   }
@@ -211,7 +219,7 @@
   function proprietes(refaire) {
     var P = $('nivProps'), p = sel == null ? null : piece(sel);
     if (!p) { P.innerHTML = '<p class="note">Touchez une pièce dans la liste ou sur l\'aperçu pour la régler.</p>'; P.setAttribute('data-id', ''); return; }
-    var m = mesure(p.id), rel = !m && ad.decalage, cle = p.id + '|' + (m ? 'm' : rel ? 'r' : 'x') + '|' + (p.texte !== undefined) + '|' + ad.pieces().length;
+    var m = mesure(p.id), rel = !m && ad.decalage, sd = !!(ad.soudable && ad.soudable(p.id)), cle = p.id + '|' + (m ? 'm' : rel ? 'r' : 'x') + '|' + (p.texte !== undefined) + '|' + ad.pieces().length + '|' + sd;
     if (refaire || P.getAttribute('data-id') !== cle) {
       var h = '';
       if (p.texte !== undefined) h += '<label>Texte<input id="nivTexte" type="text" maxlength="' + (p.max || 30) + '" autocomplete="off" autocapitalize="words" spellcheck="false"></label>';
@@ -233,6 +241,8 @@
       if (m && autres.length) h += '<div><h4>Aligner sur une autre pièce</h4><label>Pièce de référence<select id="nivRef">' + autres.map(function (q) { return '<option value="' + esc(q.id) + '">' + esc(q.nom) + '</option>'; }).join('') + '</select></label>'
         + '<div class="rg" style="margin-top:6px"><button type="button" class="nb" data-a="g">Bords gauches</button><button type="button" class="nb" data-a="cx">Centres ↔</button><button type="button" class="nb" data-a="d">Bords droits</button>'
         + '<button type="button" class="nb" data-a="h">Hauts</button><button type="button" class="nb" data-a="cy">Milieux ↕</button><button type="button" class="nb" data-a="b">Bas</button></div></div>';
+      if (sd) h += '<div><h4>Découpe de cette pièce</h4><div class="rg"><button type="button" class="nb" data-w="0" aria-pressed="false">Pièce à part, à coller</button><button type="button" class="nb" data-w="1" aria-pressed="false">Soudée au cadre</button></div>'
+        + '<p class="note" style="margin-top:6px">« Soudée » : la pièce est découpée en même temps que le cadre, d\'un seul morceau. Elle doit mordre sur le bois du cadre.</p></div>';
       h += '<div class="alerte" id="nivAl" role="status" hidden></div>';
       if (ad.retirable) h += '<div class="rg"><button type="button" class="nb dg" data-x="1">Retirer cette pièce</button></div>';
       var av = document.activeElement, avId = av && P.contains(av) ? av.id : '', avV = avId ? av.value : '', avC = avId && av.selectionStart != null ? av.selectionStart : null;
@@ -240,6 +250,7 @@
       if (avId && $(avId)) { var nv = $(avId); nv.value = avV; nv.focus(); if (avC != null) { try { nv.setSelectionRange(avC, avC); } catch (e) { /* champ sans curseur */ } } }
     }
     var act = document.activeElement, poser = function (id, v) { var e = $(id); if (e && e !== act) e.value = v; };
+    if (sd) { var so = ad.soudee(p.id); [].forEach.call(P.querySelectorAll('[data-w]'), function (x) { var on = (x.getAttribute('data-w') === '1') === so; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); }); }
     var al = $('nivAl'), msg = ad.alerte ? ad.alerte(p.id) : ''; if (al) { al.textContent = msg; al.hidden = !msg; }
     if (p.texte !== undefined) poser('nivTexte', p.texte || '');
     if (p.police !== undefined) poser('nivPolice', p.police || '');
@@ -308,6 +319,7 @@
       else if (b.hasAttribute('data-pas')) { pas = +b.getAttribute('data-pas'); proprietes(true); }
       else if (b.hasAttribute('data-s')) { var f = +b.getAttribute('data-s'); appliquer(function () { ad.grossir(sel, f); }); }
       else if (b.hasAttribute('data-r')) appliquer(function () { ad.remettre(sel); });
+      else if (b.hasAttribute('data-w')) { var w = b.getAttribute('data-w') === '1'; appliquer(function () { ad.souder(sel, w); }); }
       else if (b.hasAttribute('data-c') && m) { var ax = b.getAttribute('data-c'); appliquer(function () { if (ax === 'x') ad.bouger(sel, ((g.w - m.w) / 2 - m.x) * u, 0); else ad.bouger(sel, 0, ((g.h - m.h) / 2 - m.y) * u); }); }
       else if (b.hasAttribute('data-a') && m) {
         var r = mesure(($('nivRef') || {}).value), k = b.getAttribute('data-a'); if (!r) return;
@@ -380,9 +392,10 @@
       if (p.texte !== undefined) o.texte = p.texte || ''; if (p.police !== undefined) o.police = pol[p.police] || p.police || '';
       if (m) { o.x = r1(m.x); o.y = r1(m.y); o.w = r1(m.w); o.h = r1(m.h); }
       var al = ad.alerte ? ad.alerte(p.id) : ''; if (al) o.alerte = al;
+      if (ad.soudee && ad.soudee(p.id)) o.soude = true;
       L.push(o);
     });
     return L;
   }
-  window.NivEditeur = { demarrer: demarrer, repartir: repartir, pieces: inventaire, _mesure: function (id) { return mesure(id); }, _etat: function () { return { sel: sel, rang: rang, pile: pile.length, zoom: zoom }; } };
+  window.NivEditeur = { demarrer: demarrer, repartir: repartir, pieces: inventaire, soudee: function (id) { return !!(ad && ad.soudee && ad.soudee(id)); }, _mesure: function (id) { return mesure(id); }, _etat: function () { return { sel: sel, rang: rang, pile: pile.length, zoom: zoom }; } };
 })();

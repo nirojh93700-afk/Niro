@@ -52,6 +52,12 @@
   (`creations/<id>.pieces` = cliente, `atelierPieces` = atelier ; `piecesPropres`, `setCreationPieces` : posée une fois à la 1re ouverture si elle manque ;
   `creerCreation(id, outil, etat, pieces)` le jour de la mise en vente) et s'affiche sur la fiche de la commande et la page Atelier (`PiecesCreation.jsx`).
   Vérifié sur une commande de décoration simulée, 390 / 1280 : 2 fichiers, plan, 5 pièces, liste sur la fiche, 0 erreur, 0 débordement.
+- 🔗 **« SOUDÉE AU CADRE » (12/11/2026 soir, gérant, capture du plan : « pour le numéro trois, si j'ai envie que ça soit coupé en même temps que le cercle… au lieu que ça soit
+  un morceau ») — EN LIGNE** : éditeur, décoration « Classique », pièce en CONTREPLAQUÉ (jamais une photo ni une pièce en acrylique) : « Pièce à part, à coller » / « Soudée au
+  cadre » (`e.soude`, gardé dans l'état de la création). Fabrication (`specs.deco`) : la pièce est remise à sa place sur le cadre (centre mesuré par `NivEditeur._mesure`) et le
+  cadre sort en UN tracé « cut » (cadre + pièces soudées, rendu puis suivi de contour) ; `touchent()` mesure la surface commune : 0 = « ne le touche pas, restera un morceau
+  à part », < 4 mm² = « attache très fine » (écrit dans la note du fichier). Plan et liste : « soudé au cadre : rien à coller ». Un flocon posé tout seul par l'outil ne fait que
+  TOUCHER le bord : il faut le pousser de quelques mm sur le bois. Dans xTool, la même chose se fait à la main (superposer, Combiner → Unir).
 - ✅ **ÉDITEUR, BOUTONS DES COMMANDES, PLAN ET LISTE : MIS EN LIGNE LE 12/11/2026 SOIR** (son accord : « tu mets en ligne en même temps »). Gestion seulement, rien côté clientes.
 - `next.config.js` : `X-Robots-Tag: noindex` sur `/atelier-outils/` et `/atelier-tests/`. ⚠️ Ces pages sont dans `public/` : joignables par
   leur adresse sans mot de passe (comme les fichiers de test), liées nulle part ailleurs que dans Gestion.

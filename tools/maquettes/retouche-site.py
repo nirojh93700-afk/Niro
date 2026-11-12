@@ -62,7 +62,8 @@ INIT = {
   A().S.sel=null;A().dessiner();var ok=document.getElementById('modOk');if(ok)ok.remove();window.scrollTo(0,0);return true}
  function planColl(){var B=document.getElementById('planBloc'),P=document.getElementById('plan');if(!B||B.hidden||!P||!P.innerHTML)return Promise.resolve(null);
   var vb=P.viewBox.baseVal;return window.NivFabrique._rendre(P.innerHTML,{x:0,y:0,w:vb.width,h:vb.height},10).then(function(r){
-   return{png:r.c.toDataURL('image/png'),w:vb.width,h:vb.height,legende:[].map.call(document.querySelectorAll('#planLeg li'),function(li){return li.textContent.replace(/\s+/g,' ').trim()})}}).catch(function(){return null})}
+   return{png:r.c.toDataURL('image/png'),w:vb.width,h:vb.height,legende:[].map.call(document.querySelectorAll('#planLeg li'),function(li,i){var e=i?A().S.els[i-1]:null,ok=e&&window.NivEditeur&&window.NivEditeur.soudee&&window.NivEditeur.soudee(e.id);
+    return li.textContent.replace(/\s+/g,' ').trim()+(ok?' · soudé au cadre : rien à coller':'')})}}).catch(function(){return null})}
  function alerte(){var n=A().S.els.filter(function(e){return e.flottant}).length;return n?n+' pièce'+(n>1?'s ne touchent':' ne touche')+' pas le cadre : elle'+(n>1?'s tomberaient':' tomberait')+'.':''}
 """,
 "support": r"""

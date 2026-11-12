@@ -192,8 +192,14 @@
   }
 
   /* ---------- un fichier : objets → SVG en mm, calé à 5 mm du bord ---------- */
+  /* une pièce « soudée au cadre » le touche-t-elle vraiment ? (sinon elle resterait un morceau à part) */
+  async function touchent(base, piece, f) {
+    var vb = { x: -2, y: -2, w: f.w + 4, h: f.h + 4 }, a = await rendre(base, vb, 4), A = gris(a), c = await rendre(piece, vb, 4), C = gris(c), n = 0;
+    for (var i = 0; i < A.length; i++) if (A[i] < 128 && C[i] < 128) n++;
+    return n / 16;   // surface commune, en mm² (4 points par mm)
+  }
   async function ecrire(f, dire) {
-    var objs = [];
+    var objs = [], avert = [];
     for (var n = 0; n < f.objets.length; n++) {
       var o = f.objets[n]; if (dire) dire(f, n);
       if (o.type === 'vect') { objs.push(o); continue; }
@@ -202,6 +208,8 @@
       if (x1 <= x0 || y1 <= y0) continue;
       var vb = { x: r3(x0), y: r3(y0), w: x1 - x0, h: y1 - y0 };
       if (o.type === 'image') { var ph = await photo(o.markup, vb); if (ph) { ph.id = o.id; ph.type = 'image'; objs.push(ph); } continue; }
+      if (o.soudes) for (var q = 0; q < o.soudes.length; q++) { var mm2 = await touchent(o.base, o.soudes[q].markup, f); if (mm2 < 0.4) avert.push(o.soudes[q].nom + ' est « soudé au cadre » mais ne le touche pas : il restera un morceau à part');
+        else if (mm2 < 4) avert.push(o.soudes[q].nom + ' ne tient au cadre que par une attache très fine : faites-le mordre davantage sur le bois'); }
       var ds = await tracer(o.markup, vb); if (ds.length) objs.push({ id: o.id, type: o.type, d: ds.join(' ') });
       await attendre(0);
     }
@@ -218,7 +226,8 @@
     g.setAttribute('transform', 'translate(' + r2(5 - tb.x) + ' ' + r2(5 - tb.y) + ')'); g.removeAttribute('id');
     var svg = '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="' + NS + '" xmlns:xlink="' + XL + '" width="' + W + 'mm" height="' + H + 'mm" viewBox="0 0 ' + W + ' ' + H + '">\n' + propre(g.outerHTML).replace(/></g, '>\n<') + '\n</svg>\n';
     z.innerHTML = '';
-    return { nom: f.nom + '.svg', svg: svg, w: W, h: H, titre: f.titre, matiere: f.matiere, note: f.note || '', gravure: objs.some(function (o) { return o.type === 'grav' || o.type === 'image'; }),
+    return { nom: f.nom + '.svg', svg: svg, w: W, h: H, titre: f.titre, matiere: f.matiere,
+      note: (f.note || '') + (avert.length ? ' ⚠ ' + avert.join('. ') + '.' : ''), gravure: objs.some(function (o) { return o.type === 'grav' || o.type === 'image'; }),
       objets: objs.map(function (o) { return { id: o.id, quoi: o.type === 'grav' ? 'gravure' : o.type === 'image' ? 'photo' : 'découpe' }; }) };
   }
   async function fabriquer(specs, progres) {
@@ -316,6 +325,9 @@
         return [{ nom: base + '-contreplaque', w: vb[2], h: vb[3], objets: objs, titre: titre + ' (plaque pleine)', matiere: NOMS.contreplaque, note: nbObjets(objs.length) + '. La plaque se découpe, le reste se grave dessus.' }];
       }
       var mats = []; [].forEach.call(F.querySelectorAll('g[data-mat]'), function (g) { var m = g.getAttribute('data-mat'); if (mats.indexOf(m) < 0) mats.push(m); });
+      /* les pièces « soudées au cadre » (éditeur de l'atelier) : remises à leur place sur le cadre et découpées avec lui */
+      var ed = window.NivEditeur, cb = boite(cadre.markup, vb[2], vb[3]), soudes = [], gravSoudes = [];
+      var noirCadre = function () { var c = F.querySelector('g[data-piece="1"]').cloneNode(true); [].forEach.call(c.querySelectorAll('path'), function (e) { e.setAttribute('fill', '#000'); e.setAttribute('stroke', 'none'); }); return c.outerHTML; };
       return mats.map(function (m) {
         var objets = m === 'contreplaque' ? [cadre] : [];
         [].filter.call(F.querySelectorAll('g[data-mat="' + m + '"]'), function (g) { return g.getAttribute('data-piece') !== '1'; }).forEach(function (g) {
@@ -323,13 +335,25 @@
           [].forEach.call(c.querySelectorAll('[fill="#FF0000"],[stroke="#FF0000"]'), function (e) { e.remove(); });
           [].forEach.call(c.querySelectorAll('[fill="#111"],image[filter^="url(#t"],image[clip-path]'), function (e) { e.remove(); });
           [].forEach.call(c.querySelectorAll('[fill="#fff"],[stroke="#fff"]'), function (e) { if (e.closest('mask')) return; if (e.getAttribute('fill') === '#fff') e.setAttribute('fill', '#000'); if (e.getAttribute('stroke') === '#fff') e.setAttribute('stroke', '#000'); });
+          var el = S.els[+g.getAttribute('data-piece') - 2], mes = el && el.soude && m === 'contreplaque' && !g.querySelector('image[clip-path]') && ed && ed._mesure ? ed._mesure(el.id) : null;
+          if (mes) {
+            var pb = boite(c.outerHTML, vb[2], vb[3]), tr = '<g transform="translate(' + r3(cb.x + mes.x + mes.w / 2 - (pb.x + pb.width / 2)) + ' ' + r3(cb.y + mes.y + mes.h / 2 - (pb.y + pb.height / 2)) + ')">';
+            soudes.push({ nom: g.getAttribute('data-nom') || 'une pièce', markup: tr + c.outerHTML + '</g>' });
+            if (g.querySelector('[fill="#111"],feFlood[flood-color="#111"]')) gravSoudes.push({ id: 'gravure-' + nomDe(g), type: 'grav', markup: tr + gravDe(g) + '</g>' });
+            return;
+          }
           objets.push({ id: nomDe(g), type: 'cut', markup: c.outerHTML });
           if (g.querySelector('[fill="#111"],feFlood[flood-color="#111"]')) objets.push({ id: 'gravure-' + nomDe(g), type: 'grav', markup: gravDe(g) });
           if (g.querySelector('image[clip-path]')) { var ph = g.cloneNode(true); [].forEach.call(ph.querySelectorAll('[fill="#FF0000"],[stroke="#FF0000"]'), function (e) { e.remove(); }); objets.push({ id: 'photo-' + nomDe(g), type: 'image', markup: ph.outerHTML }); }
         });
+        if (m === 'contreplaque' && soudes.length) {
+          var bn = noirCadre();
+          objets[0] = { id: 'cadre', type: 'cut', markup: bn + soudes.map(function (x) { return x.markup; }).join(''), base: bn, soudes: soudes };
+          objets = objets.concat(gravSoudes);
+        }
         uniques(objets);
         return { nom: base + '-' + m, w: vb[2], h: vb[3], objets: objets, titre: titre + ' · ' + (NOMS[m] || m).toLowerCase().replace(' 3 mm', ''), matiere: NOMS[m] || m,
-          note: nbObjets(objets.length) + '. ' + (m === 'contreplaque' ? (mats.length > 1 ? 'Les pièces en acrylique sont dans leur propre fichier.' : '') : 'À découper dans l\'acrylique, puis à coller sur le cadre comme sur l\'aperçu.') };
+          note: nbObjets(objets.length) + '. ' + (m === 'contreplaque' && soudes.length ? soudes.length + ' pièce' + (soudes.length > 1 ? 's soudées' : ' soudée') + ' au cadre (découpée' + (soudes.length > 1 ? 's' : '') + ' avec lui). ' : '') + (m === 'contreplaque' ? (mats.length > 1 ? 'Les pièces en acrylique sont dans leur propre fichier.' : '') : 'À découper dans l\'acrylique, puis à coller sur le cadre comme sur l\'aperçu.') };
       });
     }
   };
