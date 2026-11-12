@@ -241,7 +241,7 @@ HTML_OUTIL = r"""
   <div id="liste"></div>
  </section>
 
- <section class="prc-step">
+ <section class="prc-step" id="etape3">
   <div class="prc-sh"><span class="prc-num" id="n3">3</span><h3>Votre création</h3></div>
   <div class="prc-sum" id="resume"></div>
  </section>
@@ -501,6 +501,18 @@ function sousEntete(){var h=document.querySelector('header'),t=0;
  if(h&&/sticky|fixed/.test(getComputedStyle(h).position))t=h.offsetHeight;
  document.documentElement.style.setProperty('--sc-top',t+'px')}
 sousEntete();window.addEventListener('resize',sousEntete);window.addEventListener('load',sousEntete);
+/* sur téléphone : l'aperçu reste collé en haut pendant les étapes 1 et 2, puis se décolle dès que la cliente arrive au résumé et aux prix */
+var attente=false;
+function decoller(){attente=false;
+ var st=$('stage'),e3=$('etape3'),d=0;
+ if(window.matchMedia('(max-width:900px)').matches&&G.vue==='creation'){
+  var top=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sc-top'))||0;
+  d=Math.min(0,e3.getBoundingClientRect().top-(top+st.offsetHeight+8));
+  d=Math.max(d,-(top+st.offsetHeight+30));}
+ st.style.transform=d?'translateY('+Math.round(d)+'px)':'';
+ st.style.visibility=d<=-(st.offsetHeight)?'hidden':''}
+window.addEventListener('scroll',function(){if(!attente){attente=true;requestAnimationFrame(decoller)}},{passive:true});
+window.addEventListener('resize',decoller);
 /* ---- la galerie : vos photos, puis « Votre création » dès qu'elle commence ---- */
 var G={vue:'photo',i:0,commence:false};
 function vignettes(){
