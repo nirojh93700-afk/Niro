@@ -11,7 +11,10 @@
   « 6 prénoms au maximum ») · ③ cœurs ou cercles · ④ 10 écritures d'Atomm (Pacifico, Lobster, Courgette, Lobster Two, Oleo Script, Pattaya, Leckerli One,
   Berkshire Swash, Sriracha, Lily Script One, OFL) · ⑤ résumé, prénom vide = panier bloqué. Prénom = bois dans le trou de son cœur, 1re lettre reliée au
   bord gauche, dernière au bord droit, accents reliés (comme Atomm). Vue Face / 3D (logo au mur), fichier atelier 180 × 180 mm en rouge.
-- **À valider** : prix PROPOSÉ par moi 24,90 € ; contour de la maquette = aperçu (vrais tracés soudés à la construction) ; dessins d'Atomm repris (sa décision, comme le support).
+- **Prix (gérant, 12/11) : 2 prénoms compris, +3 € par prénom en plus** (base 24,90 € proposée par moi, à confirmer ; 6 prénoms = 36,90 €), artifact v2.
+  **Pied pour poser l'arbre** : il va donner le lien d'un AUTRE fichier (pied) à intégrer : taille adaptée à l'arbre (pas au choix de la cliente),
+  gravure du pied possible si la cliente veut, fichier de découpe du pied fourni EN MÊME TEMPS que celui de l'arbre.
+- **À valider** : contour de la maquette = aperçu (vrais tracés soudés à la construction) ; dessins d'Atomm repris (sa décision, comme le support).
 
 ## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCORATION À SUSPENDRE » (générateur « Ornament » d'Atomm) — 12/11/2026 (gérant : « fais la même chose pour cette création… tout comme sur le site ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR = VERSION 5 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - ⛔ **RÈGLE (gérant, 12/11, après une 1re version fausse) : quand il donne un logiciel ou un site à reproduire, L'ANALYSER À FOND AVANT de construire**

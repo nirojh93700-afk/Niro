@@ -108,7 +108,7 @@ for a in ARBRES["arbres"]:
     a["vignette"], _ = png_uri(os.path.join(vigdir, a["id"] + ".png"), w=120)
 MATIERES = [{"id": "contreplaque", "nom": "Contreplaqué", "c": ["#f0dcb4", "#e3c796", "#d6b47f"], "bord": "#9c7744"}]
 DONNEES = json.dumps({"arbres": ARBRES["arbres"], "slots": ARBRES["slots"], "base": "arbres/", "max": 6, "taille": 180,
-                      "matieres": MATIERES, "polices": POLICES, "logo": LOGO, "logoR": LOGO_R, "prix": {"base": 24.9}},
+                      "matieres": MATIERES, "polices": POLICES, "logo": LOGO, "logoR": LOGO_R, "prix": {"base": 24.9, "inclus": 2, "nom": 3}},
                      ensure_ascii=False, separators=(",", ":"))
 
 CSS_MAQ = r"""
@@ -322,7 +322,7 @@ HTML_OUTIL = r"""
  </section>
  <section class="prc-step">
   <div class="prc-sh"><span class="prc-num done">2</span><h3>Les prénoms</h3></div>
-  <p class="prc-legend">Jusqu'à six prénoms. <b>Chaque prénom a son cœur</b> : ajoutez un prénom, un cœur apparaît dans l'arbre. Les flèches changent l'ordre.</p>
+  <p class="prc-legend">Jusqu'à six prénoms : <b>les 2 premiers sont compris, chaque prénom en plus +3 €</b>. Chaque prénom a son cœur : ajoutez un prénom, un cœur apparaît dans l'arbre. Les flèches changent l'ordre.</p>
   <div id="listeNoms"></div>
   <button type="button" class="ab-ajout" id="ajoutNom">+ Ajouter un prénom</button>
   <p class="prc-hint">10 lettres au plus par prénom. Le prénom est découpé dans le bois, attaché au bord de son cœur : rien ne tombe.</p>
@@ -366,7 +366,7 @@ HTML_ATELIER = r"""
   </div>
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
-  <li>Prix proposé par moi : 24,90 € l'arbre, jusqu'à 6 prénoms. À vous de le fixer.</li>
+  <li>Prix : 24,90 € l'arbre avec 2 prénoms (prix de base proposé par moi, à confirmer), chaque prénom en plus +3 € (votre règle) : 6 prénoms = 36,90 €.</li>
   <li>Le contour rouge de la maquette est un aperçu ; à la construction, le fichier aura les vrais tracés (comme l'export d'Atomm), prénoms soudés à leur cœur.</li>
   <li>Les dessins des arbres et des cœurs sont ceux d'Atomm (vous avez décidé de les reprendre, comme pour le support de téléphone).</li>
  </ul></div>
@@ -460,7 +460,7 @@ function majNoms(){var h='';S.noms.forEach(function(t,i){
    +'<button type="button" class="sc-o" data-act="bas" aria-label="Descendre"'+(i<nb()-1?'':' disabled')+'>↓</button>'
    +'<button type="button" class="sc-x" data-act="x" aria-label="Retirer"'+(nb()>1?'':' disabled')+'>✕</button></div>'});
  $('listeNoms').innerHTML=h;dernierN=nb();
- $('ajoutNom').disabled=nb()>=MAX;$('ajoutNom').innerHTML=nb()>=MAX?'6 prénoms au maximum':'+ Ajouter un prénom';}
+ $('ajoutNom').disabled=nb()>=MAX;$('ajoutNom').innerHTML=nb()>=MAX?'6 prénoms au maximum':(nb()<D.prix.inclus?'+ Ajouter un prénom (compris)':'+ Ajouter un prénom (+3 €)');}
 $('listeNoms').addEventListener('click',function(ev){var r=ev.target.closest('.ab-nom');if(!r)return;var i=+r.getAttribute('data-i'),a=ev.target.getAttribute('data-act');
  if(a==='x'&&nb()>1){S.noms.splice(i,1)}
  else if(a==='haut'&&i){S.noms.splice(i-1,0,S.noms.splice(i,1)[0])}
@@ -484,14 +484,16 @@ $('polices').addEventListener('click',function(ev){var b=ev.target.closest('.ab-
 /* ---- étape 5 : résumé et prix ---- */
 var dernierN=-1;function majListe(){if(dernierN!==nb()){dernierN=nb();majNoms()}majPolicesSi()}
 var dernierEx=null;function majPolicesSi(){var ex=(S.noms[0]||'').trim();if(ex!==dernierEx){dernierEx=ex;majPolices()}}
-function total(){return D.prix.base}
+function enPlus(){return Math.max(0,S.noms.length-D.prix.inclus)}
+function total(){return D.prix.base+enPlus()*D.prix.nom}
 function resume(){var noms=S.noms.map(function(t){return t.trim()}).filter(Boolean);
  var h='<div class="prc-sumrow"><span>Arbre</span><b>'+A().nom+' · 18 cm · contreplaqué 3 mm — '+eur(D.prix.base)+'</b></div>'
   +'<div class="prc-sumrow"><span>Prénoms</span><b>'+(noms.length?noms.map(esc).join(', '):'aucun')+'</b></div>'
+  +'<div class="prc-sumrow"><span>Prénoms en plus</span><b>'+(enPlus()?enPlus()+' × '+eur(D.prix.nom)+' = +'+eur(enPlus()*D.prix.nom):'2 prénoms compris')+'</b></div>'
   +'<div class="prc-sumrow"><span>Autour des prénoms</span><b>'+(S.forme==='heart'?'Cœurs':'Cercles')+'</b></div>'
   +'<div class="prc-sumrow"><span>Écriture</span><b>'+police(S.police)[1]+'</b></div>'
   +'<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+eur(total())+'</b></div>';
- $('resume').innerHTML=h;$('total').textContent=eur(total());$('prixtete').textContent=eur(total());
+ $('resume').innerHTML=h;$('total').textContent=eur(total());$('prixtete').textContent=eur(D.prix.base);
  var vides=S.noms.filter(function(t){return !t.trim()}).length;
  $('manque').textContent=vides?(vides>1?vides+' prénoms sont vides : écrivez-les ou retirez-les.':'Un prénom est vide : écrivez-le ou retirez-le.'):'';
  $('ajouter').disabled=!!vides}
