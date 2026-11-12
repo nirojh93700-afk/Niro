@@ -1,3 +1,15 @@
+## 🛠️ MAQUETTE « CRÉEZ VOTRE SUPPORT DE TÉLÉPHONE » — 12/11/2026 (gérant, lien du générateur Atomm de xTool : « est-ce qu'on peut utiliser cet outil de création sur mon site ? … fais-moi une maquette pour la deuxième solution ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- L'outil d'Atomm (xTool) ne s'installe pas sur un autre site : on construit le nôtre. ⛔ Ne pas se servir de `morluto/rea` (outil qui démonte un logiciel) pour recopier le leur.
+- https://claude.ai/artifact/ARNf7BxbQxsTvkpJxgQKD7 (v1) · générateur `tools/maquettes/support-createur.py <capture> <dossier css> <sortie>`
+  (capture = `curl https://nivcreation.fr/produit/support-telephone-bois-grave` + ses feuilles de style ; sortie de 2 Mo non commitée).
+- La fiche du support téléphone gravé, où la galerie devient un aperçu DESSINÉ en direct (collé sous l'en-tête sur téléphone) et la
+  personnalisation un parcours en 3 étapes : ① forme du dossier (Classique · Arche · Cœur · Chat · Nuage · Maison, MES propositions) ·
+  ② texte (8 écritures), dessin (modèles n° du site), photo (gravée en brun), plusieurs possibles, chacun se glisse au doigt, taille − / +,
+  Centrer, retirer · ③ résumé et total. En bas : le fichier que l'atelier recevrait (rouge = découpe, noir = gravure).
+- Prix LUS dans la fiche en ligne : texte 12,90 · dessin 14,90 · photo 19,90, chaque élément en plus +3 € (photo + texte = 22,90 comme aujourd'hui).
+- À trancher par lui : les formes à vendre et leur prix, la lettre fleurie (absente de la maquette), les autres produits en bois où réutiliser l'outil.
+  Vérifié Chromium 390 / 1280 : 0 erreur JS, 0 débordement, 6 formes sans chevauchement, glisser, modifier, retirer.
+
 ## 🧰 LOT DU 09/11/2026 SOIR — SITE 1, 4, 7, 8, 9 + GESTION 1 À 6 (gérant : « tu me fais ça », numéros choisis dans ma liste) — CONSTRUIT SUR LA BRANCHE DE TRAVAIL `claude/cool-maxwell-qh1kcw`, PAS EN LIGNE : attendre son « mets en ligne » (puis fusion vers `claude/site-product-overview-1t2de`)
 - **Site** : ① provenance des commandes (`src/lib/provenance.js`, `ProvenanceCapture.jsx`, `metadata.prov` → `order.provenance`, pastille « Venue de » + filtre dans la file,
   carte dans la fiche commande, page Gestion → Marketing → « D'où viennent les ventes » `/gestion/provenance` avec les liens à copier pour les bios, ligne 6 ter de
