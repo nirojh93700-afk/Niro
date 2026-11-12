@@ -322,7 +322,8 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
             {corriger ? (
               <div style={{ margin: "0 0 10px", padding: "10px 12px", border: "1.5px solid #c9a24b", borderRadius: 10, background: "#fffaf0", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
                 <a className="fq-btn sm primary" href={corriger}>✎ Corriger dans l&apos;outil</a>
-                <span style={{ fontSize: "0.82rem", color: "#6b5d4a", flex: "1 1 200px", minWidth: 0, lineHeight: 1.4 }}>Ouvre la création de la cliente : vous changez le texte, la place, la taille, puis vous fabriquez les fichiers pour la machine. Sa version reste gardée.</span>
+                <a className="fq-btn sm" href={`${corriger}&fichiers=1`}>⬇ Fichiers pour la machine</a>
+                <span style={{ fontSize: "0.82rem", color: "#6b5d4a", flex: "1 1 200px", minWidth: 0, lineHeight: 1.4 }}>« Corriger » ouvre la création dans l'éditeur (texte, écriture, place et taille en millimètres). « Fichiers » refabrique les fichiers de la version gardée, à retélécharger quand vous voulez.</span>
               </div>
             ) : null}
           </div>

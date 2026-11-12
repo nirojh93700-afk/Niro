@@ -43,10 +43,11 @@ JS_COMMUN = r"""
   if('sel' in S||QUOI!=='arbre'){S.sel=null;S.panneau=null}
   if(Array.isArray(S.els))S.seq=S.els.reduce(function(a,x){return Math.max(a,+x.id||0)},0);
   A().maj();if(typeof apresCharge==='function')apresCharge();window.scrollTo(0,0);return true}
- window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,etat:etat,charger:recharger,
+ window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,etat:etat,_charger:recharger,
+  charger:function(e){var ok=recharger(e);if(ok&&window.NivEditeur)window.NivEditeur.repartir();return ok},
   fabriquer:function(progres){return window.NivFabrique.fabriquer(window.NivFabrique.specs[QUOI](),progres)}};
  var essais=0;(function pret(){essais++;var ok=false;try{ok=charge()}catch(e){ok=false}
-  if(ok||essais>80){setTimeout(function(){window.nivAtelier.pret=true;try{parent.postMessage({type:'niv-pret',quoi:QUOI},location.origin)}catch(_){}} ,600)}else setTimeout(pret,250)})();
+  if(ok||essais>80){setTimeout(function(){if(window.NivEditeur)try{window.NivEditeur.demarrer(QUOI)}catch(e){};window.nivAtelier.pret=true;try{parent.postMessage({type:'niv-pret',quoi:QUOI},location.origin)}catch(_){}} ,600)}else setTimeout(pret,250)})();
 })();
 """
 INIT = {
@@ -66,42 +67,37 @@ INIT = {
 """,
 "arbre": r"""
  function A(){return window.abAtelier}
- function ligne(nom,cle){return '<div class="at-l" data-k="'+cle+'"><b>'+nom+'</b><button type="button" data-a="g" aria-label="Vers la gauche">←</button><button type="button" data-a="d" aria-label="Vers la droite">→</button>'
-   +'<button type="button" data-a="h" aria-label="Vers le haut">↑</button><button type="button" data-a="b" aria-label="Vers le bas">↓</button><button type="button" data-a="m" aria-label="Plus petit">−</button><button type="button" data-a="p" aria-label="Plus grand">+</button><button type="button" data-a="0" aria-label="Remettre à sa place">↺</button></div>'}
- function echap(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
- function reglages(){var S=A().S,h='<h3>Réglages de l\'atelier</h3><p>Déplacez ou agrandissez chaque prénom dans son cœur, et le texte gravé sur le pied.</p>';
-  S.noms.forEach(function(n,i){h+=ligne('« '+echap(n||'…')+' »','n'+i)});if(S.pied.grave)h+=ligne('Pied : « '+echap(S.pied.texte||'…')+' »','pied');
-  var b=document.getElementById('atReg');if(!b){b=document.createElement('div');b.id='atReg';b.className='at-reg';var r=document.getElementById('resume');(r.closest('section')||r).parentNode.insertBefore(b,r.closest('section')||r);
-   b.addEventListener('click',function(ev){var x=ev.target.closest('button');if(!x)return;var k=x.parentNode.getAttribute('data-k'),a=x.getAttribute('data-a'),S=A().S,o;
-    if(k==='pied'){o=S.pied.aj=S.pied.aj||{dx:0,dy:0,s:1}}else{S.aj=S.aj||[];o=S.aj[+k.slice(1)]=S.aj[+k.slice(1)]||{dx:0,dy:0,s:1}}
-    var pas=k==='pied'?1.5:2;if(a==='g')o.dx-=pas;if(a==='d')o.dx+=pas;if(a==='h')o.dy-=pas;if(a==='b')o.dy+=pas;if(a==='m')o.s=Math.max(.5,o.s-.06);if(a==='p')o.s=Math.min(1.6,o.s+.06);if(a==='0'){o.dx=0;o.dy=0;o.s=1}
-    A().dessiner()})}
-  b.innerHTML=h}
  var lance=false;
  function charge(){if(!A()||!window.abEtat)return false;
   if(!lance){lance=true;var S=A().S;S.arbre='life';S.forme='heart';S.noms=['Léa','Tom'];S.police='pacifico';S.pied.grave=true;S.pied.texte='Léa & Tom';S.pied.texte2='';S.pied.police='pacifico';S.pied.ou='deux';
-   A().maj();reglages();var maj=function(){setTimeout(reglages,60)};
-   ['input','click','change'].forEach(function(t){document.addEventListener(t,function(ev){if(ev.target.closest&&!ev.target.closest('#atReg'))maj()})});window.scrollTo(0,0)}
+   A().maj();window.scrollTo(0,0)}
   return abEtat().pret}
  function alerte(){return abEtat().pret?'':'L\'arbre se charge encore.'}
- function apresCharge(){reglages()}
 """,
 }
 
+# Ce que chaque outil ouvre à l'atelier : « maj » remet tous ses boutons d'accord avec l'état ; « geo » donne l'échelle
+# (unités de la scène par mm) et le coin en haut à gauche du produit, pour les mesures en mm de l'éditeur.
 MAJ = {
- "support": "maj:function(){voirCreation();majChoix();panneau();dessiner()}",
- "deco": "maj:function(){voirCreation();majFormes();majTaille();majMatiere();majStyle();panneau();dessiner()}",
+ "support": "maj:function(){voirCreation();majChoix();panneau();dessiner()},geo:function(){return{u:3,x:ox(),y:oy(),w:T().W,h:T().H}},polices:D.polices",
+ "deco": "maj:function(){voirCreation();majFormes();majTaille();majMatiere();majStyle();panneau();dessiner()},geo:function(){return{u:k(),x:ox(),y:oy(),w:S.W,h:S.H}},"
+         "polices:D.polices,nomEl:nomEl,matDe:function(e){return matEl(e).nom.toLowerCase()}",
 }
+ARBRE_CLE = "window.abAtelier={S:S,dessiner:function(){dessiner()},"
+ARBRE_PLUS = "window.abAtelier={S:S,geo:function(){return{u:1/K,x:0,y:0,w:TAILLE,h:TAILLE}},polices:D.polices,dessiner:function(){dessiner()},"
 def atelier(src, quoi, nom):
     s = open(src, encoding="utf-8").read()
     if quoi in MAJ:
         cle = "window.scAtelier={S:S,dessiner:function(){dessiner()}};"
         assert s.count(cle) == 1, quoi
         s = s.replace(cle, "window.scAtelier={S:S,dessiner:function(){dessiner()}," + MAJ[quoi] + "};")
+    else:
+        assert s.count(ARBRE_CLE) == 1, quoi
+        s = s.replace(ARBRE_CLE, ARBRE_PLUS)
     js = JS_COMMUN.replace("__QUOI__", quoi).replace("__INIT__", INIT[quoi])
     s = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow">'
          '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Outil de l\'atelier</title></head><body>'
-         + s + f'<style>{CSS_AT}</style><script src="fabrique.js"></script><script>{js}</script></body></html>')
+         + s + f'<style>{CSS_AT}</style><script src="fabrique.js"></script><script src="editeur.js"></script><script>{js}</script></body></html>')
     open(os.path.join(out, nom), "w", encoding="utf-8").write(s)
     print(nom, round(len(s.encode("utf-8")) / 1024), "Ko")
 

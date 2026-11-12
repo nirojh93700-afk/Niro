@@ -15,6 +15,18 @@
   (seulement Chromium, vue iPhone 13) : à lui de dire si l'écriture sort bien ; la machine de test a Great Vibes, Playfair et Cinzel installées.
 - xTool ne lit PAS les textes d'un SVG (aide xTool, article 544 : le texte disparaît) : un vrai texte double-cliquable demanderait un fichier
   projet `.xcs` (JSON non documenté) ; il faut un exemple de sa part (un projet avec un texte, enregistré) avant de promettre quoi que ce soit.
+- 🛠️ **ÉDITEUR DE L'ATELIER (12/11/2026 soir, gérant : « je veux vraiment un vrai outil comme des sites pro… pourquoi t'as pas fait ça comme je t'ai demandé ») —
+  CONSTRUIT, PAS POUSSÉ, démonstration à essayer : https://claude.ai/artifact/JYvdMPxea6HDVJUMaBHrsf** (`python3 tools/maquettes/editeur-demo.py
+  public/atelier-outils <sortie>` : les 3 outils + un pont de messages + `polices.js`, un artifact n'ayant pas le droit de lire Google Fonts ; `window.NivPolices` dans fabrique.js).
+  `public/atelier-outils/editeur.js` (`NivEditeur.demarrer(quoi)`, chargé par les 3 pages, modèle : LightBurn « Numeric Edits ») remplace le panneau de la cliente par :
+  barre Annuler / Refaire / zoom / Tout voir · onglets « Pièces » et « Produit et ajouts » (= les réglages d'origine de l'outil) · liste des pièces · fiche de la pièce :
+  texte, écriture, bord gauche / haut / largeur / hauteur EN MILLIMÈTRES (mesurés sur l'encre réelle, le fichier suit à 0,2 mm), flèches par pas de 0,1 / 0,5 / 1 / 5 mm,
+  − +, centrer, aligner sur une autre pièce, retirer ; arbre : taille en %, « Place d'origine », alerte « ce prénom dépasse de son emplacement » ; décoration : « ne tient pas ».
+  Un adaptateur par outil (`adaptateur(quoi)` : `geo`, `pieces`, `noeud`, `bouger`, `grossir`, `texte`, `police`, `alerte`…) ; `retouche-site.py` ouvre `maj`, `geo`, `polices` sur
+  `scAtelier` / `abAtelier`. ⚠️ Pièges : l'outil d'origine décolle l'aperçu au défilement (`decoller()` pose transform + visibility sur `#stage`) et met `.sc-left` en
+  `display:contents` sous 900 px → neutralisés par `body.niv-pro` ; mesurer un texte par `getBBox` est faux de 1 mm (case, pas l'encre) → canvas × 20.
+  Commande : bouton **« ⬇ Fichiers pour la machine »** à côté de « Corriger dans l'outil » (`&fichiers=1`) = refabrique les fichiers de la version gardée, sans rien réécrire.
+  Vérifié 390 / 1280 : mesures, fichier, annuler / refaire, zoom, alertes, commande simulée, 0 erreur, 0 débordement. Non essayé sur un vrai iPhone ni dans l'artifact réel.
 - `next.config.js` : `X-Robots-Tag: noindex` sur `/atelier-outils/` et `/atelier-tests/`. ⚠️ Ces pages sont dans `public/` : joignables par
   leur adresse sans mot de passe (comme les fichiers de test), liées nulle part ailleurs que dans Gestion.
 

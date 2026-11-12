@@ -97,7 +97,7 @@ export default function RetouchePage() {
           if (!r.ok) throw new Error(j.error || "Création introuvable.");
           const ou = OUTILS.find((x) => x.id === j.outil);
           if (!ou || !j.etat) throw new Error("Cette création ne peut pas être ouverte.");
-          setCmd({ id: j.id, ref: q.get("commande") || "", outil: ou.id, etat: j.etat, atelier: j.atelier || null, atelierAt: j.atelierAt || "", charge: false });
+          setCmd({ id: j.id, ref: q.get("commande") || "", outil: ou.id, etat: j.etat, atelier: j.atelier || null, atelierAt: j.atelierAt || "", charge: false, direct: q.get("fichiers") === "1" });
           ouvrir(ou.id, ou.departs[0].ex);
         } catch (e) { setCmdMsg(`La création de cette commande n'a pas pu être ouverte : ${e.message}`); }
       })();
@@ -145,7 +145,8 @@ export default function RetouchePage() {
     return () => { document.removeEventListener("keydown", k); document.body.style.overflow = avant; };
   }, [visible, busy]);
 
-  const fabriquer = async () => {
+  // « sansGarder » : bouton « Fichiers pour la machine » de la commande : on refabrique la version gardée, sans rien réécrire.
+  const fabriquer = async (sansGarder) => {
     const at = cadre.current?.contentWindow?.nivAtelier;
     if (!at || !at.pret) { setErr("L'outil se charge encore, un instant."); return; }
     setBusy(true); setErr(""); setProg("Fabrication des fichiers…");
@@ -154,7 +155,7 @@ export default function RetouchePage() {
       let alerte = ""; try { alerte = at.alerte() || ""; } catch { /* sans alerte */ }
       // Commande : la version de l'atelier est gardée à côté de celle de la cliente (un échec ne bloque pas les fichiers).
       let gardee = "";
-      if (cmd && ouvert.outil === cmd.outil) { try { await garder(at.etat()); gardee = "ok"; } catch (e) { gardee = e.message || "échec"; } }
+      if (sansGarder !== true && cmd && ouvert.outil === cmd.outil) { try { await garder(at.etat()); gardee = "ok"; } catch (e) { gardee = e.message || "échec"; } }
       setResultat({ outil: ouvert.outil, a: heure(), fichiers: Array.from(fichiers), alerte, policesKo: Array.from(fichiers.policesKo || []), gardee });
       setVisible(false);
       setTimeout(() => document.getElementById("rt-fichiers")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
@@ -162,6 +163,16 @@ export default function RetouchePage() {
       setErr(`La fabrication a échoué : ${e?.message || e}`);
     } finally { setBusy(false); setProg(""); }
   };
+  // Depuis la commande, bouton « Fichiers pour la machine » (&fichiers=1) : dès que la création est posée dans l'outil, les
+  // fichiers sont refabriqués tels qu'elle est gardée (la version de l'atelier si elle existe, sinon celle de la cliente).
+  const direct = useRef(false);
+  useEffect(() => {
+    if (!cmd || !cmd.direct || !cmd.charge || direct.current) return;
+    direct.current = true;
+    const t = setTimeout(() => fabriquer(true), 700);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cmd]);
 
   return (
     <div>
@@ -193,7 +204,8 @@ export default function RetouchePage() {
         <strong style={{ fontSize: 14 }}>Comment faire</strong>
         <ol style={{ margin: "6px 0 0", paddingLeft: 18, fontSize: 13, lineHeight: 1.6 }}>
           <li>Ouvrez un outil ci-dessous : il s'ouvre sur un exemple, que vous changez comme vous voulez.</li>
-          <li>Touchez un nom sur l'aperçu pour le déplacer au doigt ; sa fiche permet de le retaper, de l'agrandir ou de changer l'écriture.</li>
+          <li>Touchez une pièce dans la liste (ou sur l'aperçu) : sa fiche donne son texte, son écriture, sa place et sa taille en millimètres. Vous tapez une mesure, ou vous déplacez avec les flèches, par pas de 0,1 à 5 mm.</li>
+          <li>En haut : Annuler, Refaire, le zoom. « Centrer » et « Aligner » posent une pièce au milieu ou sur une autre. L'onglet « Produit et ajouts » change la forme, la taille, et ajoute une pièce.</li>
           <li>Touchez « Fabriquer les fichiers » : les fichiers apparaissent ici, à la taille réelle en millimètres.</li>
           <li><b style={{ color: "#d0021b" }}>Rouge = découpe</b> · <b>noir = gravure</b>. Dans xTool, chaque nom et chaque pièce reste un objet que vous pouvez encore déplacer.</li>
         </ol>
@@ -252,8 +264,8 @@ export default function RetouchePage() {
           <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", padding: "calc(8px + env(safe-area-inset-top, 0px)) 12px 8px", background: "#1a1206", color: "#fbf7ee" }}>
             <button type="button" className="fq-btn sm" disabled={busy} onClick={() => setVisible(false)} style={{ background: "transparent", color: "#fbf7ee", borderColor: "#6b5d4a" }}>‹ Fermer</button>
             <b style={{ flex: "1 1 120px", minWidth: 0, fontSize: 13.5, lineHeight: 1.3 }}>{outil?.titre}
-              <small style={{ display: "block", fontWeight: 400, fontSize: 11.5, color: "#d9cbb0" }}>{cmd && cmd.ref && ouvert.outil === cmd.outil ? `Commande #${cmd.ref} · ` : ""}{busy ? prog : pret ? "Changez ce que vous voulez, puis fabriquez." : "L'outil se charge…"}</small></b>
-            <button type="button" className="fq-btn sm" disabled={busy || !pret} onClick={fabriquer}
+              <small style={{ display: "block", fontWeight: 400, fontSize: 11.5, color: "#d9cbb0" }}>{busy ? prog : !pret ? "L'outil se charge…" : cmd && cmd.ref && ouvert.outil === cmd.outil ? `Commande #${cmd.ref}` : "Corrigez, puis fabriquez."}</small></b>
+            <button type="button" className="fq-btn sm" disabled={busy || !pret} onClick={() => fabriquer()}
               style={{ background: "linear-gradient(135deg, #e2c67e, #c9a24b)", borderColor: "#a98935", color: "#1a1206", fontWeight: 700, opacity: busy || !pret ? 0.6 : 1 }}>{busy ? "Fabrication…" : "Fabriquer les fichiers"}</button>
           </div>
           {err ? <div role="alert" style={{ padding: "8px 12px", fontSize: 13, background: "#fdf1ee", color: "#8a2d1c", borderBottom: "1px solid #e9b9ad" }}>{err}</div> : null}

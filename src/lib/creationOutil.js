@@ -18,3 +18,9 @@ export function lienCorriger(item, order) {
   const ref = order ? order.ref || String(order.id || "").slice(-6) : "";
   return `/gestion/retouche?creation=${encodeURIComponent(c.id)}${ref ? `&commande=${encodeURIComponent(ref)}` : ""}`;
 }
+
+// « Fichiers pour la machine » : la même page, qui refabrique tout de suite les fichiers de la version gardée avec la commande.
+export function lienFichiers(item, order) {
+  const l = lienCorriger(item, order);
+  return l ? `${l}&fichiers=1` : null;
+}

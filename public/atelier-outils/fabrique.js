@@ -26,6 +26,11 @@
   function b64(buf) { var b = new Uint8Array(buf), s = '', i; for (i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(s); }
   async function lireBlocs() {
     if (blocs) return blocs; var L = [];
+    /* hors du site (page de démonstration, où la lecture de Google Fonts est interdite) : les écritures sont fournies avec la page */
+    if (Array.isArray(window.NivPolices)) {
+      window.NivPolices.forEach(function (f) { L.push({ fam: String(f.nom).toLowerCase(), nom: f.nom, css: f.css, url: f.url }); donnees[f.url] = f.data; });
+      blocs = L; return L;
+    }
     var liens = [].slice.call(document.querySelectorAll('link[rel="stylesheet"][href*="fonts.googleapis.com"]'));
     for (var i = 0; i < liens.length; i++) {
       try {

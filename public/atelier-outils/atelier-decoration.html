@@ -948,7 +948,7 @@ window.scDemo=function(o){o=o||{};S.forme=o.forme||'xmas_gift_box';S.taille=o.ta
  majFormes();majTaille();majMatiere();majStyle();dessiner();
  if(o.photo)ajouter({type:'photo',src:D.exemple,nom:'exemple',forme:o.forme2||'ovale'});
  ajouter({type:'texte',texte:o.texte||'Camille',police:o.police||'great-vibes',mode:o.mode||'decoupe',mat:o.mat||'contreplaque',esp:0,courbe:0,creux:false});S.sel=null;dessiner()};
-window.scAtelier={S:S,dessiner:function(){dessiner()},maj:function(){voirCreation();majFormes();majTaille();majMatiere();majStyle();panneau();dessiner()}};
+window.scAtelier={S:S,dessiner:function(){dessiner()},maj:function(){voirCreation();majFormes();majTaille();majMatiere();majStyle();panneau();dessiner()},geo:function(){return{u:k(),x:ox(),y:oy(),w:S.W,h:S.H}},polices:D.polices,nomEl:nomEl,matDe:function(e){return matEl(e).nom.toLowerCase()}};
 window.scEtat=function(){return {S:S,total:total(),forme:F().nom,W:S.W,H:S.H}};
 })();
 </script>
@@ -963,7 +963,7 @@ body{background:#fbf7ee;padding-bottom:40px}
 .at-l{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 0;border-top:1px solid #eadfc8}.at-l b{flex:1 1 90px;font-size:.88rem;min-width:0;overflow-wrap:anywhere}
 .at-l button{min-width:38px;min-height:38px;border:1px solid #d9cbb0;border-radius:9px;background:#fff;font:600 1rem system-ui;cursor:pointer}
 .at-l button:active{background:#f3e8d3}
-</style><script src="fabrique.js"></script><script>
+</style><script src="fabrique.js"></script><script src="editeur.js"></script><script>
 (function(){
  var QUOI='deco',EX=(location.search.match(/[?&]ex=([a-z0-9-]+)/)||[])[1]||'';
  
@@ -982,9 +982,10 @@ body{background:#fbf7ee;padding-bottom:40px}
   if('sel' in S||QUOI!=='arbre'){S.sel=null;S.panneau=null}
   if(Array.isArray(S.els))S.seq=S.els.reduce(function(a,x){return Math.max(a,+x.id||0)},0);
   A().maj();if(typeof apresCharge==='function')apresCharge();window.scrollTo(0,0);return true}
- window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,etat:etat,charger:recharger,
+ window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,etat:etat,_charger:recharger,
+  charger:function(e){var ok=recharger(e);if(ok&&window.NivEditeur)window.NivEditeur.repartir();return ok},
   fabriquer:function(progres){return window.NivFabrique.fabriquer(window.NivFabrique.specs[QUOI](),progres)}};
  var essais=0;(function pret(){essais++;var ok=false;try{ok=charge()}catch(e){ok=false}
-  if(ok||essais>80){setTimeout(function(){window.nivAtelier.pret=true;try{parent.postMessage({type:'niv-pret',quoi:QUOI},location.origin)}catch(_){}} ,600)}else setTimeout(pret,250)})();
+  if(ok||essais>80){setTimeout(function(){if(window.NivEditeur)try{window.NivEditeur.demarrer(QUOI)}catch(e){};window.nivAtelier.pret=true;try{parent.postMessage({type:'niv-pret',quoi:QUOI},location.origin)}catch(_){}} ,600)}else setTimeout(pret,250)})();
 })();
 </script></body></html>
