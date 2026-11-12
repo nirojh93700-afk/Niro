@@ -552,16 +552,22 @@ function pieceDessin(e,cx,cy,w,h,P,uid){var d=elem(e.did);if(!d)return '';var x=
 /* ---- le placement automatique d'un dessin : on cherche sur le bois du cadre un endroit libre (la pièce y est collée, elle ne
    tombe pas) ; en plaque pleine, un endroit libre entièrement sur la plaque. On préfère l'endroit le plus loin des autres pièces. ---- */
 function surBois(x,y){var q=k();try{return $('dos').isPointInFill(new DOMPoint((x-ox())/(q*sx()),(y-oy())/(q*sy())))}catch(_){return false}}
-function placerAuto(e){var cl=S.style==='classique',L=limites(),q=k(),W=S.W*q,H=S.H*q,essai=0;
+function ecartAngle(a,b){var d=Math.abs(a-b)%360;return d>180?360-d:d}
+/* cible : un angle (degrés, 0 = à droite, 90 = en bas) autour du centre de la forme ; sans cible, l'endroit le plus loin des autres pièces */
+function placerAuto(e,cible){var cl=S.style==='classique',L=limites(),q=k(),W=S.W*q,H=S.H*q,essai=0,C=centre();
  while(essai++<4){var t=taille(e),hw=t.w/2+off(),hh=t.h/2+off(),pas=Math.max(3,Math.min(W,H)/36),pts=[];
-  for(var y=L.y0+hh;y<=L.y1-hh;y+=pas)for(var x=L.x0+hw;x<=L.x1-hw;x+=pas){
+  /* en classique la pièce est collée SUR la barre du cadre (elle peut dépasser du bord, comme sur Atomm) : son centre peut aller partout sur le bois */
+  var X0=cl?ox():L.x0+hw,X1=cl?ox()+W:L.x1-hw,Y0=cl?L.y0:L.y0+hh,Y1=cl?oy()+H:L.y1-hh;
+  for(var y=Y0;y<=Y1;y+=pas)for(var x=X0;x<=X1;x+=pas){
    if(cl){if(!surBois(x,y))continue}
    else if(!(surBois(x-hw,y-hh)&&surBois(x+hw,y-hh)&&surBois(x-hw,y+hh)&&surBois(x+hw,y+hh)&&surBois(x,y)))continue;
    var libre=true,dmin=1e9;
    S.els.forEach(function(o){if(o===e||!o.bw)return;
     if(x+hw>o.bx-2&&x-hw<o.bx+o.bw+2&&y+hh>o.by-2&&y-hh<o.by+o.bh+2)libre=false;
     dmin=Math.min(dmin,Math.hypot(x-(o.bx+o.bw/2),y-(o.by+o.bh/2)))});
-   if(libre)pts.push([x,y,dmin+Math.random()*pas*2])}
+   if(!libre)continue;
+   if(cible==null)pts.push([x,y,dmin+Math.random()*pas*2]);
+   else{var ang=Math.atan2(y-C.y,x-C.x)*180/Math.PI;pts.push([x,y,-ecartAngle(ang,cible)*4+Math.hypot(x-C.x,y-C.y)*.15])}}
   if(pts.length){pts.sort(function(a,b){return b[2]-a[2]});
    for(var i=0;i<Math.min(8,pts.length);i++){e.x=pts[i][0];e.y=pts[i][1];dessiner();if(!e.flottant)return true}}
   e.s=Math.max(.3,e.s*.8)}
@@ -570,8 +576,9 @@ function placerAuto(e){var cl=S.style==='classique',L=limites(),q=k(),W=S.W*q,H=
 function auHasard(){var fam=S.famille||D.elements.familles[0],pool=D.elements.elements.filter(function(d){return d.cats.indexOf(fam)>=0}),n=S.nHasard||3,pris=[];
  S.els=S.els.filter(function(e){return !e.hasard});dessiner();
  pool=pool.slice();for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=pool[i];pool[i]=pool[j];pool[j]=x}
- pool.slice(0,n).forEach(function(d){var o={type:'dessin',did:d.id,fam:fam,mode:'decoupe',mat:'contreplaque',rot:Math.random()<.5?0:(Math.random()<.5?-15:15),flip:Math.random()<.3,hasard:true,s:.55};
-  o.id=++S.seq;var p=place(o);o.x=p.x;o.y=p.y;S.els.push(o);dessiner();if(placerAuto(o))pris.push(o);else{S.els=S.els.filter(function(x){return x!==o})}});
+ var debut=n===1?-90:-90+180/n;
+ pool.slice(0,n).forEach(function(d,i){var o={type:'dessin',did:d.id,fam:fam,mode:'decoupe',mat:'contreplaque',rot:Math.random()<.5?0:(Math.random()<.5?-15:15),flip:Math.random()<.3,hasard:true,s:.55};
+  o.id=++S.seq;var p=place(o);o.x=p.x;o.y=p.y;S.els.push(o);dessiner();if(placerAuto(o,debut+360*i/n))pris.push(o);else{S.els=S.els.filter(function(x){return x!==o})}});
  S.sel=null;S.aBouge=true;dessiner();
  var m=$('msgHasard');if(m)m.textContent=pris.length<n?pris.length+' décor'+(pris.length>1?'s':'')+' posé'+(pris.length>1?'s':'')+' : il n\'y a plus de place sur le cadre pour les autres.':n+' décor'+(n>1?'s':'')+' posé'+(n>1?'s':'')+' et collé'+(n>1?'s':'')+' sur le cadre. Touchez encore pour un autre tirage.'}
 /* une pièce photo : la photo gravée, la pièce découpée 1,6 mm autour (rectangle arrondi ou ovale) */

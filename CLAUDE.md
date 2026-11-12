@@ -40,6 +40,10 @@
   TOUT SEUL sur le bois du cadre (collé, jamais « flottant ») + bouton « Placer automatiquement » dans sa fiche (`placerAuto` : endroit libre sur le
   cadre, le plus loin des autres pièces ; en plaque pleine, entièrement sur la plaque) ; bloc « Au hasard » dans le panneau des dessins : − N +
   (1 à 10), « Tirer N décors au hasard » dans la famille choisie, posés et collés tout seuls, un nouveau tirage remplace le précédent (`auHasard`).
+  **v9 (12/11 soir, capture iPhone : « Aléatoire… ça a tout mis au-dessus, il faut que ça les place à des endroits précis »)** : les décors tirés au
+  hasard sont RÉPARTIS tout autour de la forme (`placerAuto(e, cible)`, un angle par décor : 2 = les deux côtés, 3 = coins du haut + bas, 4 = les
+  4 coins…) ; en Classique le centre du décor peut aller partout sur la barre du cadre (avant, il devait tenir entièrement dans la forme, donc
+  seul le nœud du haut était assez large). « Placer automatiquement » d'un seul dessin garde l'endroit le plus loin des autres pièces.
   ⛔ Leçon : « fais exactement comme le logiciel » = TOUS ses réglages ; ce qu'il exclut se retire seulement si c'est EXACTEMENT ce qu'il a nommé.
 - ✅✅ **V6 ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») : c'est CELLE à reproduire au « applique » (remplace la v5), ne plus la modifier sans sa demande.**
 - ✅ **v6 (12/11 soir, captures iPhone : « les noms quand ils dépassent de l'objet ça coupe, on voit pas, il faut pas que ça se coupe »)** = VERSION 6 de l'artifact, CELLE à reproduire : en style **Classique**, un nom ou une photo est une pièce COLLÉE par-dessus le cadre → affiché ENTIER même s'il dépasse (plus de découpe à la forme sur l'aperçu de face) ; en **Plaque pleine** (tout gravé sur la plaque) rien ne sort de la forme, comme avant.
