@@ -1,3 +1,21 @@
+## 🦌 MAQUETTE « CRÉEZ VOTRE DÉCORATION À PRÉNOM » (générateur « Personalized Holiday Name Ornament » d'Atomm) — 12/11/2026 SOIR (gérant : lien donné, « analyse bien le nouveau truc… il faut que ça soit fait correctement… tu me prépares comme pour cela ») — v1 EN ATTENTE DE SON AVIS, RIEN en ligne
+- **Artifact** https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (v1) · générateur `python3 tools/maquettes/prenom-createur.py <page de base = sortie d'un autre créateur, ex. arbre> docs/maquettes/assets/prenom/formes <sortie>`
+  (index.html + formes/ publiés ensemble) · formes : `node tools/maquettes/prenom-atomm-releve.cjs` (LEUR outil ouvert dans le navigateur, hôte
+  `personalized-holiday-name-ornament.generator.atommapps.com` ajouté au réseau ; à lancer depuis un dossier qui a `brut/`) → `python3 -I tools/maquettes/prenom-atomm-donnees.py <brut> <formes>`
+  (16 fichiers = 4 modèles × 4 polices d'initiale, 26 lettres, 2,6 Mo).
+- **Ce que fait Atomm (analysé le 12/11)** : 4 modèles (Reindeer, Santa hat, Rabbit ears, Devil horns) ; une grande INITIALE (Lilita One, Titan One, Paytone One, Alfa Slab One),
+  hauteur 50–140 mm (80), bordure 1,5–6 (2,5), taille du décor 60–150 %, largeur du nez 10–28 mm (renne), anneau (Ø 12, trou 5, décalage, hauteur) ; le prénom gravé DANS la lettre
+  (Pacifico, Lobster, Courgette, Satisfy, Lora, Bree Serif, Arvo, Lato Bold ; taille 50–100 % ; placement automatique / horizontal / vertical, parfois en biais) ; jusqu'à 40 prénoms,
+  un par ligne ; initiale = 1re lettre sans accent (Élodie → E), chiffres et Œ / Ø refusés ; DEUX couches par décoration : le fond (lettre + bordure + décor + anneau) et le devant
+  (la lettre) ; Atomm fait PEINDRE (devant blanc, nez / bonnet / cornes rouges, oreilles roses, reflet blanc) : « Paint, then engrave », traits bleus = guides de peinture ;
+  bois clair / noyer = aperçu seulement ; plan de découpe « fond à gauche, devant à droite », écart 6 mm.
+- **La maquette v1** : fiche du site, 7 étapes : modèle · prénoms (1 à 10, une décoration par prénom, 14 lettres) · forme de la lettre (4) · taille (lettre 6 / 8 / 10 cm = formes d'Atomm
+  réduites ou agrandies) · couleurs (« Blanc et rouge » = lettre en acrylique blanc + décors en acrylique rouge / blanc collés, + 4 € ; « Tout en bois » = décors gravés) · écriture du
+  prénom (8) et place (au mieux / horizontale / verticale) · résumé. Le prénom est placé par MON calcul (plus grand rectangle libre dans la lettre, hors décors, à plat préféré) :
+  proche d'Atomm, pas identique (Atomm met plus souvent en biais). Planches de l'atelier par matière, 190 mm au plus, pièces numérotées.
+- **Proposé par moi, à valider** : pas de peinture (acrylique collé) ; prix 12,90 € + 2 / + 4 € (taille) + 4 € (couleurs) ; tailles 6 / 8 / 10 cm ; réglages d'Atomm NON proposés
+  (bordure, taille du décor, largeur du nez, anneau, taille du prénom) ; pas de vue 3D ; pas d'acrylique rose (oreilles gravées).
+
 ## ✎ GESTION → TESTS → « RETOUCHER ET FABRIQUER » — 12/11/2026 SOIR (gérant : « c'est à moi de corriger… changer le nom, la position où je vais graver, je veux avoir accès pour tout corriger ») — ✅ EN LIGNE LE 12/11/2026 SOIR
 - Page `/gestion/retouche` (2ᵉ sous-onglet de Tests, `AdminShell`) + bouton « ✎ Corriger moi-même » sur chaque exemple de `/gestion/tests`
   (`?outil=support|arbre|decoration&ex=camille|lea-tom|flocons|mamie|coeur-photo`). Les trois outils s'ouvrent en plein écran dans un cadre

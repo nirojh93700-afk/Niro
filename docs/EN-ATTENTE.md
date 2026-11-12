@@ -726,3 +726,7 @@ En attente de SA décision :
 - Ces 4 langues = police vide (les 8 écritures du site ont ñ ç ã ä ö ü ß), pas de fichier SVG laser ; « Joyeux anniversaire » ajouté dans PHRASES ;
   consigne Claude : prénoms gardés tels quels. Au « applique » : `git apply tools/maquettes/langues-gravure-menu-4-langues.patch`, build, test-traduction, push.
 - La liste de 32 langues d'Europe (menu à part) a été écartée par lui le 09/11 (« juste les pays autour de la France »).
+
+## 12/11/2026 soir — en attente de l'avis du gérant
+- Maquette « Décoration à prénom » v1 : https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (peinture ou acrylique collé ? prix, tailles, réglages d'Atomm non proposés, vue 3D).
+- Éditeur de l'atelier, plan de collage, liste des pièces : EN LIGNE dans Gestion (6a495d0e). Les trois produits (support, arbre, décoration) ne sont toujours pas en vente.
