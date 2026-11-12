@@ -1,5 +1,5 @@
-## 🦌 MAQUETTE « CRÉEZ VOTRE DÉCORATION À PRÉNOM » (générateur « Personalized Holiday Name Ornament » d'Atomm) — 12/11/2026 SOIR (gérant : lien donné, « analyse bien le nouveau truc… il faut que ça soit fait correctement… tu me prépares comme pour cela ») — v1 EN ATTENTE DE SON AVIS, RIEN en ligne
-- **Artifact** https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (v1) · générateur `python3 tools/maquettes/prenom-createur.py <page de base = sortie d'un autre créateur, ex. arbre> docs/maquettes/assets/prenom/formes <sortie>`
+## 🦌 MAQUETTE « CRÉEZ VOTRE DÉCORATION À PRÉNOM » (générateur « Personalized Holiday Name Ornament » d'Atomm) — 12/11/2026 SOIR (gérant : lien donné, « analyse bien le nouveau truc… il faut que ça soit fait correctement… tu me prépares comme pour cela ») — v2 EN ATTENTE DE SON AVIS, RIEN en ligne
+- **Artifact** https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (v2) · générateur `python3 tools/maquettes/prenom-createur.py <page de base = sortie d'un autre créateur, ex. arbre> docs/maquettes/assets/prenom/formes <sortie>`
   (index.html + formes/ publiés ensemble) · formes : `node tools/maquettes/prenom-atomm-releve.cjs` (LEUR outil ouvert dans le navigateur, hôte
   `personalized-holiday-name-ornament.generator.atommapps.com` ajouté au réseau ; à lancer depuis un dossier qui a `brut/`) → `python3 -I tools/maquettes/prenom-atomm-donnees.py <brut> <formes>`
   (16 fichiers = 4 modèles × 4 polices d'initiale, 26 lettres, 2,6 Mo).
@@ -13,7 +13,10 @@
   réduites ou agrandies) · couleurs (« Blanc et rouge » = lettre en acrylique blanc + décors en acrylique rouge / blanc collés, + 4 € ; « Tout en bois » = décors gravés) · écriture du
   prénom (8) et place (au mieux / horizontale / verticale) · résumé. Le prénom est placé par MON calcul (plus grand rectangle libre dans la lettre, hors décors, à plat préféré) :
   proche d'Atomm, pas identique (Atomm met plus souvent en biais). Planches de l'atelier par matière, 190 mm au plus, pièces numérotées.
-- **Proposé par moi, à valider** : pas de peinture (acrylique collé) ; prix 12,90 € + 2 / + 4 € (taille) + 4 € (couleurs) ; tailles 6 / 8 / 10 cm ; réglages d'Atomm NON proposés
+- ✅ **v2 (12/11/2026 soir, gérant : « Peinture alors »)** : comme Atomm, DEUX pièces par prénom, tout en contreplaqué 3 mm : le fond et la lettre. « Peinte à la main » (+ 4 €,
+  proposé) = lettre peinte en blanc, nez / bonnet / cornes en rouge, bande et pompon en blanc, intérieur des oreilles en rose ; « Bois naturel » = sans peinture, décors gravés.
+  Planches : rouge = découpe, noir = prénom gravé (APRÈS la peinture), BLEU = repère de peinture (trait léger, facultatif). Plus d'acrylique ni de petits morceaux à coller.
+- **Proposé par moi, à valider** : (v1, remplacé par la peinture) prix 12,90 € + 2 / + 4 € (taille) + 4 € (couleurs) ; tailles 6 / 8 / 10 cm ; réglages d'Atomm NON proposés
   (bordure, taille du décor, largeur du nez, anneau, taille du prénom) ; pas de vue 3D ; pas d'acrylique rose (oreilles gravées).
 
 ## ✎ GESTION → TESTS → « RETOUCHER ET FABRIQUER » — 12/11/2026 SOIR (gérant : « c'est à moi de corriger… changer le nom, la position où je vais graver, je veux avoir accès pour tout corriger ») — ✅ EN LIGNE LE 12/11/2026 SOIR

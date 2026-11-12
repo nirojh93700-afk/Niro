@@ -58,8 +58,8 @@ def vignette(mod):
 DONNEES = json.dumps({
     "modeles": [{"id": m, "nom": n, "sous": t, "vig": vignette(m)} for m, n, t in MODELES], "polI": POL_I, "polN": POL_N, "base": "formes/", "logo": LOGO,
     "tailles": [{"id": "p", "nom": "Petite", "h": 60, "plus": 0}, {"id": "m", "nom": "Moyenne", "h": 80, "plus": 2}, {"id": "g", "nom": "Grande", "h": 100, "plus": 4}],
-    "finitions": [{"id": "couleur", "nom": "Blanc et rouge", "sous": "La lettre en acrylique blanc, les décors en acrylique de couleur, collés", "plus": 4},
-                  {"id": "bois", "nom": "Tout en bois", "sous": "La lettre en bois clair, les décors gravés", "plus": 0}],
+    "finitions": [{"id": "couleur", "nom": "Peinte à la main", "sous": "La lettre peinte en blanc, les décors en couleur, comme sur le modèle", "plus": 4},
+                  {"id": "bois", "nom": "Bois naturel", "sous": "Sans peinture : la lettre en bois clair, les décors gravés", "plus": 0}],
     "prix": 12.9, "max": 10, "lettres": 14}, ensure_ascii=False, separators=(",", ":"))
 
 CSS = r"""
@@ -135,7 +135,7 @@ __FIL__
  <section class="prc-step">
   <div class="prc-sh"><span class="prc-num done">5</span><h3>Les couleurs</h3></div>
   <div class="sc-styles" id="finitions"></div>
-  <p class="prc-hint">Le fond est toujours en contreplaqué 3 mm. Deux épaisseurs collées : le fond, puis la lettre par-dessus.</p>
+  <p class="prc-hint">Deux pièces en contreplaqué 3 mm, collées : le fond, puis la lettre par-dessus. Le prénom est gravé après la peinture.</p>
  </section>
  <section class="prc-step">
   <div class="prc-sh"><span class="prc-num done">6</span><h3>L'écriture du prénom</h3></div>
@@ -160,23 +160,24 @@ __FIL__
 </div></div>
 
 <section class="sc-atelier"><div class="container">
- <h2>De votre côté : les pièces à découper, rangées par matière</h2>
- <p>À la commande, le site range dans le dossier de la commande une planche par matière, à la taille réelle, avec le plan de collage. Elles changent en direct quand vous modifiez la décoration au-dessus.</p>
+ <h2>De votre côté : deux pièces par prénom, à découper, peindre et coller</h2>
+ <p>À la commande, le site range dans le dossier de la commande les planches à la taille réelle. Elles changent en direct quand vous modifiez la décoration au-dessus.</p>
  <div class="sc-agrid">
   <div class="pn-feuilles" id="feuilles"></div>
   <div>
-   <ul class="sc-legende"><li><i style="border-color:#d32f2f"></i>Trait rouge : à découper</li><li><i style="border-color:#111"></i>Noir : à graver</li></ul>
+   <ul class="sc-legende"><li><i style="border-color:#d32f2f"></i>Trait rouge : à découper</li><li><i style="border-color:#111"></i>Noir : à graver</li><li><i style="border-color:#1f6feb"></i>Bleu : repère de peinture (trait léger, facultatif)</li></ul>
    <ul class="sc-points">
     <li><b>Les formes du générateur d'Atomm</b>4 modèles, 4 formes de lettre, 26 lettres : le fond (lettre, bordure, décor, anneau) et le devant, tels que leur outil les dessine, lettre de 8 cm (réduite ou agrandie pour les deux autres tailles).</li>
-    <li><b>Deux épaisseurs</b>Le fond en contreplaqué 3 mm, la lettre collée par-dessus. En « Blanc et rouge », les décors de couleur sont des pièces en acrylique collées sur la lettre.</li>
+    <li><b>Deux pièces, comme Atomm</b>Le fond et la lettre, en contreplaqué 3 mm. Pas de petits morceaux à coller : les couleurs sont peintes.</li>
+    <li><b>L'ordre du travail</b>1. Découper les deux pièces. 2. Peindre la lettre en blanc et les décors (nez, bonnet ou cornes en rouge, bande et pompon en blanc, intérieur des oreilles en rose). 3. Graver le prénom, après la peinture. 4. Coller la lettre sur le fond, passer le ruban.</li>
     <li><b>Le prénom, gravé dans la lettre</b>Placé tout seul à l'endroit où il est le plus grand (à plat, debout ou en biais), jamais sur un décor. Dans le fichier, le prénom sera en tracés.</li>
-    <li><b>Une planche par matière</b>Chaque pièce porte son numéro ; le plan de collage reprend les mêmes numéros.</li>
+    <li><b>Les traits bleus</b>Ils montrent où peindre chaque couleur. Vous pouvez les marquer très légèrement au laser avant de peindre, ou les ignorer. En « Bois naturel », les décors sont gravés (noir) et il n'y a rien à peindre.</li>
    </ul>
   </div>
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
-  <li>Atomm prévoit de PEINDRE (lettre en blanc, nez et bonnet en rouge, oreilles en rose). Ici, pas de peinture : la lettre en acrylique blanc et les décors en acrylique rouge ou blanc, collés ; l'intérieur des oreilles du lapin est gravé (pas d'acrylique rose). Dites-moi si vous préférez peindre.</li>
-  <li>Prix proposés par moi : 12,90 € la décoration « tout en bois », taille petite ; « Blanc et rouge » + 4 € ; taille moyenne + 2 €, grande + 4 € (comme la décoration à suspendre).</li>
+  <li>Peinture, comme Atomm (votre choix du 12/11) : la lettre en blanc, le nez, le bonnet ou les cornes en rouge, l'intérieur des oreilles en rose. Deux pièces par prénom, tout en contreplaqué.</li>
+  <li>Prix proposés par moi : 12,90 € la décoration en bois naturel, taille petite ; « Peinte à la main » + 4 € ; taille moyenne + 2 €, grande + 4 € (comme la décoration à suspendre).</li>
   <li>Tailles proposées : lettre de 6, 8 ou 10 cm. Atomm laisse régler de 5 à 14 cm.</li>
   <li>Réglages d'Atomm laissés à leur valeur d'origine, non proposés à la cliente : largeur de la bordure (2,5 mm), taille du décor, largeur du nez, anneau (12 mm, trou de 5 mm), taille du prénom (95 %).</li>
   <li>La vue 3D n'est pas encore faite sur cette maquette.</li>
@@ -256,7 +257,7 @@ function ornement(n,opt){var g=forme(n);if(!g)return'';opt=opt||{};var couleur=S
  g.k.forEach(function(q){var r=q[0],d=q[1];
   if(couleur){if(r==='nez'||r==='rouge')h+='<path d="'+d+'" fill="url(#g-rouge)"/>';
    else if(r==='blanc')h+='<path d="'+d+'" fill="url(#g-blanc)" stroke="#cfc8ba" stroke-width=".3"/>';
-   else if(r==='rose')h+='<path d="'+d+'" fill="#cdb48f" opacity=".75"/>';
+   else if(r==='rose')h+='<path d="'+d+'" fill="#f3b3bb"/>';
    else if(r==='reflet')h+='<path d="'+d+'" fill="#fff" opacity=".85"/>'}
   else if(r!=='reflet')h+='<path d="'+d+'" fill="#b08a55" opacity="'+(r==='blanc'?'.35':'.8')+'"/>'});
  var f=placer(n);if(f){var p=polN(),e=f.e,fs=f.fs,x=f.cx-((e.r-e.l)/2)*fs/100,y=f.cy+((e.a-e.d)/2)*fs/100;
@@ -327,12 +328,10 @@ function feuilles(){var v=valides(),q=k(),couleur=S.finition==='couleur',P={},or
  v.forEach(function(n){var g=forme(n);if(!g)return;
   mettre('Contreplaqué 3 mm',{n:++num,nom:'fond « '+n+' »',b:g.b,h:'<path d="'+g.f+'" fill="none" stroke="#d32f2f" stroke-width=".35"/>'});
   var grav='';if(!couleur)g.k.forEach(function(x){if(x[0]!=='reflet')grav+='<path d="'+x[1]+'" fill="#111" opacity="'+(x[0]==='blanc'?'.25':'.6')+'"/>'});
-  else g.k.forEach(function(x){if(x[0]==='rose')grav+='<path d="'+x[1]+'" fill="#111" opacity=".5"/>'});
+  else g.k.forEach(function(x){grav+='<path d="'+x[1]+'" fill="none" stroke="#1f6feb" stroke-width=".3"/>'});
   var f=placer(n),t='';if(f){var p=polN(),e=f.e,x=f.cx-((e.r-e.l)/2)*f.fs/100,y=f.cy+((e.a-e.d)/2)*f.fs/100;
    t='<text x="'+x.toFixed(2)+'" y="'+y.toFixed(2)+'" font-family="'+p[2]+',cursive" font-weight="'+p[3]+'" font-size="'+f.fs.toFixed(2)+'" fill="#111"'+(f.ang?' transform="rotate('+f.ang+' '+f.cx.toFixed(2)+' '+f.cy.toFixed(2)+')"':'')+'>'+esc(String(n).trim())+'</text>'}
-  mettre(couleur?'Acrylique blanc 3 mm':'Contreplaqué 3 mm',{n:++num,nom:'lettre « '+n+' »',b:boiteDe(g.d),h:'<path d="'+g.d+'" fill="none" stroke="#d32f2f" stroke-width=".35"/>'+grav+t});
-  if(couleur)g.k.forEach(function(x){if(x[0]==='nez'||x[0]==='rouge')mettre('Acrylique rouge 3 mm',{n:++num,nom:(x[0]==='nez'?'nez':'décor rouge')+' « '+n+' »',b:boiteDe(x[1]),h:'<path d="'+x[1]+'" fill="none" stroke="#d32f2f" stroke-width=".35"/>'});
-   else if(x[0]==='blanc')mettre('Acrylique blanc 3 mm',{n:++num,nom:'décor blanc « '+n+' »',b:boiteDe(x[1]),h:'<path d="'+x[1]+'" fill="none" stroke="#d32f2f" stroke-width=".35"/>'})})});
+  mettre('Contreplaqué 3 mm',{n:++num,nom:'lettre « '+n+' »'+(couleur?' (à peindre)':''),b:boiteDe(g.d),h:'<path d="'+g.d+'" fill="none" stroke="#d32f2f" stroke-width=".35"/>'+grav+t})});
  var G=6,LMAX=190,out='';
  ordre.forEach(function(mat){var pages=[],cur=null;
   function ouvrir(){cur={x:0,y:0,hl:0,W:0,h:'',noms:[]};pages.push(cur)}
