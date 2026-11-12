@@ -393,6 +393,20 @@ export async function getSiteOrder(id) {
 // Le document garde la version de la CLIENTE (jamais modifiée) et, à côté, celle de l'ATELIER (retouche du gérant).
 const OUTILS_CREATION = ["support", "arbre", "decoration"];
 const idCreation = (id) => String(id || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 60);
+// La liste écrite des pièces d'une création (nom, matière, texte, écriture, place et taille en mm) : 60 pièces au plus.
+function piecesPropres(L) {
+  if (!Array.isArray(L)) return [];
+  const t = (v, n) => String(v == null ? "" : v).replace(/[\u0000-\u001f]/g, " ").slice(0, n);
+  const mm = (v) => (Number.isFinite(+v) ? Math.round(+v * 10) / 10 : null);
+  return L.slice(0, 60).map((p) => {
+    const o = { n: Math.max(0, Math.min(99, parseInt(p && p.n, 10) || 0)), nom: t(p && p.nom, 80), sous: t(p && p.sous, 80) };
+    if (p && p.texte !== undefined) o.texte = t(p.texte, 60);
+    if (p && p.police) o.police = t(p.police, 40);
+    for (const k of ["x", "y", "w", "h"]) { const v = p ? mm(p[k]) : null; if (v !== null && p[k] !== undefined && p[k] !== null) o[k] = v; }
+    if (p && p.alerte) o.alerte = t(p.alerte, 200);
+    return o;
+  }).filter((o) => o.nom);
+}
 export async function getCreation(id) {
   const a = getApp(), k = idCreation(id);
   if (!a || !k) return null;
@@ -401,14 +415,15 @@ export async function getCreation(id) {
     if (!doc.exists) return null;
     const d = doc.data() || {};
     const lire = (t) => { try { return t ? JSON.parse(t) : null; } catch { return null; } };
-    return { id: k, outil: d.outil || "", etat: lire(d.etat), atelier: lire(d.atelier), at: d.at || "", atelierAt: d.atelierAt || "" };
+    return { id: k, outil: d.outil || "", etat: lire(d.etat), atelier: lire(d.atelier), at: d.at || "", atelierAt: d.atelierAt || "",
+      pieces: lire(d.pieces) || [], atelierPieces: lire(d.atelierPieces) || [] };
   } catch (e) {
     console.error("Lecture création Firebase:", e.message);
     return null;
   }
 }
 // La version de l'atelier (etat = null : on revient à la version de la cliente). 700 Ko au plus (un document = 1 Mo).
-export async function setCreationAtelier(id, etat) {
+export async function setCreationAtelier(id, etat, pieces) {
   const a = getApp(), k = idCreation(id);
   if (!a || !k) return { ok: false, error: "Base indisponible." };
   const txt = etat ? JSON.stringify(etat) : "";
@@ -416,21 +431,38 @@ export async function setCreationAtelier(id, etat) {
   try {
     const ref = admin.firestore().collection("creations").doc(k), doc = await ref.get();
     if (!doc.exists) return { ok: false, error: "Création introuvable." };
-    await ref.update({ atelier: txt, atelierAt: txt ? new Date().toISOString() : "" });
+    await ref.update({ atelier: txt, atelierAt: txt ? new Date().toISOString() : "", atelierPieces: txt ? JSON.stringify(piecesPropres(pieces)) : "" });
     return { ok: true };
   } catch (e) {
     console.error("MAJ création Firebase:", e.message);
     return { ok: false, error: "Enregistrement impossible." };
   }
 }
+// La liste des pièces de la version de la CLIENTE, quand elle manque (création enregistrée sans liste) : posée une seule fois,
+// à la première ouverture dans l'outil. Ne touche jamais à l'état.
+export async function setCreationPieces(id, pieces) {
+  const a = getApp(), k = idCreation(id);
+  if (!a || !k) return { ok: false, error: "Base indisponible." };
+  const L = piecesPropres(pieces);
+  if (!L.length) return { ok: false, error: "Liste vide." };
+  try {
+    const ref = admin.firestore().collection("creations").doc(k), doc = await ref.get();
+    if (!doc.exists) return { ok: false, error: "Création introuvable." };
+    if (!(doc.data() || {}).pieces) await ref.update({ pieces: JSON.stringify(L) });
+    return { ok: true };
+  } catch (e) {
+    console.error("Pièces création Firebase:", e.message);
+    return { ok: false, error: "Enregistrement impossible." };
+  }
+}
 // Enregistre la création d'une cliente (appelé par la fiche du produit le jour où ces produits seront en vente).
-export async function creerCreation(id, outil, etat) {
+export async function creerCreation(id, outil, etat, pieces) {
   const a = getApp(), k = idCreation(id);
   if (!a || !k || !OUTILS_CREATION.includes(outil) || !etat || typeof etat !== "object") return false;
   const txt = JSON.stringify(etat);
   if (txt.length > 700000) return false;
   try {
-    await admin.firestore().collection("creations").doc(k).create({ outil, etat: txt, atelier: "", at: new Date().toISOString(), atelierAt: "" });
+    await admin.firestore().collection("creations").doc(k).create({ outil, etat: txt, atelier: "", at: new Date().toISOString(), atelierAt: "", pieces: JSON.stringify(piecesPropres(pieces)), atelierPieces: "" });
     return true;
   } catch (e) {
     console.error("Création Firebase:", e.message);

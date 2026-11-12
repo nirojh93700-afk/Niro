@@ -35,7 +35,8 @@ import BoutonRate, { RatesCommande } from "@/components/admin/Rates";
 import VarBadge from "@/components/admin/VarBadge";
 import ApercuClient from "@/components/admin/ApercuClient";
 import { GlassPreview } from "@/components/admin/FicheAtelier";
-import { lienCorriger } from "@/lib/creationOutil";
+import { lienCorriger, creationDe } from "@/lib/creationOutil";
+import PiecesCreation from "@/components/admin/PiecesCreation";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
 import { nomAffiche } from "@/lib/nomLivraison";
 
@@ -337,6 +338,7 @@ export default function AtelierPage() {
                   {/* Tableau professionnel « quel texte sur quelle face ». */}
                   <TableGravure item={item} titre={false} />
                   {/* Produit créé avec un outil (support, arbre, décoration) : ouvrir la création de la cliente pour la corriger (12/11/2026). */}
+                  {creationDe(item) ? <PiecesCreation id={creationDe(item).id} /> : null}
                   {lienCorriger(item, o) ? <a className="fq-btn sm primary" href={lienCorriger(item, o)} style={{ display: "inline-flex", margin: "6px 0" }}>✎ Corriger dans l&apos;outil</a> : null}
                   {lienCorriger(item, o) ? <a className="fq-btn sm" href={`${lienCorriger(item, o)}&fichiers=1`} style={{ display: "inline-flex", margin: "6px 0 6px 6px" }}>⬇ Fichiers pour la machine</a> : null}
                   {/* Consignes envoyées par e-mail (une fois par commande). */}

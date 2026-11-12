@@ -26,7 +26,8 @@ import ApercuClient from "@/components/admin/ApercuClient";
 import Apercu3DCommande, { a3D } from "@/components/admin/Apercu3DCommande";
 import ApercuPapeterie, { aApercuPapeterie } from "@/components/admin/ApercuPapeterie";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
-import { lienCorriger } from "@/lib/creationOutil";
+import { lienCorriger, creationDe } from "@/lib/creationOutil";
+import PiecesCreation from "@/components/admin/PiecesCreation";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -319,6 +320,7 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
         return (
           <div key={i}>
             <ItemSheet item={it} />
+            {creationDe(it) ? <PiecesCreation id={creationDe(it).id} papier={!!print} /> : null}
             {corriger ? (
               <div style={{ margin: "0 0 10px", padding: "10px 12px", border: "1.5px solid #c9a24b", borderRadius: 10, background: "#fffaf0", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
                 <a className="fq-btn sm primary" href={corriger}>✎ Corriger dans l&apos;outil</a>

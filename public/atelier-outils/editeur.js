@@ -369,5 +369,20 @@
   /* après un rechargement de création par Gestion (commande) : l'historique repart de là */
   function repartir() { pile = []; rang = -1; sel = null; setTimeout(function () { noter(); vue(true); cadrer(); }, 300); }
 
-  window.NivEditeur = { demarrer: demarrer, repartir: repartir, _mesure: function (id) { return mesure(id); }, _etat: function () { return { sel: sel, rang: rang, pile: pile.length, zoom: zoom }; } };
+  /* La liste écrite des pièces (fiche de la commande, écran des fichiers) : le produit d'abord, puis chaque pièce avec
+     son texte, son écriture, sa matière, sa place et sa taille en mm. Décoration : mêmes numéros que le fichier et le plan. */
+  function inventaire() {
+    if (!ad) return []; var g = ad.geo(), r1 = function (v) { return Math.round(v * 10) / 10; }, deco = quoi === 'deco', pol = {};
+    (ad.polices() || []).forEach(function (q) { pol[q[0]] = q[1]; });
+    var L = [{ n: deco ? 1 : 0, nom: deco ? (window.scAtelier.S.style === 'classique' ? 'Le cadre' : 'La plaque') : ad.produit, sous: deco ? 'contreplaqué' : '', w: r1(g.w), h: r1(g.h) }];
+    ad.pieces().forEach(function (p, i) {
+      var m = mesure(p.id), o = { n: deco ? i + 2 : 0, nom: p.nom, sous: p.sous || '' };
+      if (p.texte !== undefined) o.texte = p.texte || ''; if (p.police !== undefined) o.police = pol[p.police] || p.police || '';
+      if (m) { o.x = r1(m.x); o.y = r1(m.y); o.w = r1(m.w); o.h = r1(m.h); }
+      var al = ad.alerte ? ad.alerte(p.id) : ''; if (al) o.alerte = al;
+      L.push(o);
+    });
+    return L;
+  }
+  window.NivEditeur = { demarrer: demarrer, repartir: repartir, pieces: inventaire, _mesure: function (id) { return mesure(id); }, _etat: function () { return { sel: sel, rang: rang, pile: pile.length, zoom: zoom }; } };
 })();

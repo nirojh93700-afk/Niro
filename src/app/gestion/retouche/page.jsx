@@ -14,6 +14,7 @@
 // =============================================================================
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "@/components/admin/PageHead";
+import { ListePieces } from "@/components/admin/PiecesCreation";
 
 const OUTILS = [
   { id: "support", titre: "Support de téléphone", page: "atelier-support.html", apercu: "/atelier-tests/support-standard-rectangle-camille-apercu.webp",
@@ -97,7 +98,7 @@ export default function RetouchePage() {
           if (!r.ok) throw new Error(j.error || "Création introuvable.");
           const ou = OUTILS.find((x) => x.id === j.outil);
           if (!ou || !j.etat) throw new Error("Cette création ne peut pas être ouverte.");
-          setCmd({ id: j.id, ref: q.get("commande") || "", outil: ou.id, etat: j.etat, atelier: j.atelier || null, atelierAt: j.atelierAt || "", charge: false, direct: q.get("fichiers") === "1" });
+          setCmd({ id: j.id, ref: q.get("commande") || "", outil: ou.id, etat: j.etat, atelier: j.atelier || null, atelierAt: j.atelierAt || "", sansListe: !(Array.isArray(j.pieces) && j.pieces.length), charge: false, direct: q.get("fichiers") === "1" });
           ouvrir(ou.id, ou.departs[0].ex);
         } catch (e) { setCmdMsg(`La création de cette commande n'a pas pu être ouverte : ${e.message}`); }
       })();
@@ -113,12 +114,26 @@ export default function RetouchePage() {
       else setErr("La création n'a pas pu être chargée dans l'outil.");
     } catch (e) { setErr(`La création n'a pas pu être chargée dans l'outil : ${e?.message || e}`); }
   }, [pret, cmd, ouvert]);
-  const garder = async (etat) => {
-    const r = await fetch("/api/admin/creation", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": cle.current }, body: JSON.stringify({ id: cmd.id, atelier: etat }) });
+  const garder = async (etat, pieces) => {
+    const r = await fetch("/api/admin/creation", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": cle.current }, body: JSON.stringify({ id: cmd.id, atelier: etat, pieces: pieces || [] }) });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(j.error || "Enregistrement impossible.");
     setCmd((c) => (c ? { ...c, atelier: j.atelier || null, atelierAt: j.atelierAt || "" } : c));
   };
+  // La création de la cliente vient d'être posée dans l'outil et sa liste de pièces n'a jamais été gardée : on la garde
+  // maintenant (une seule fois), pour que la fiche de la commande l'affiche sans rouvrir l'outil.
+  useEffect(() => {
+    if (!cmd || !cmd.charge || cmd.atelier || !cmd.sansListe) return undefined;
+    const t = setTimeout(async () => {
+      try {
+        const pieces = cadre.current?.contentWindow?.nivAtelier?.pieces?.() || [];
+        if (pieces.length < 1) return;
+        await fetch("/api/admin/creation", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": cle.current }, body: JSON.stringify({ id: cmd.id, piecesCliente: pieces }) });
+        setCmd((c) => (c ? { ...c, sansListe: false } : c));
+      } catch { /* la liste sera gardée à la prochaine ouverture */ }
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [cmd]);
   const revenirCliente = async () => {
     if (!cmd) return;
     setCmdMsg("");
@@ -153,10 +168,12 @@ export default function RetouchePage() {
     try {
       const fichiers = await at.fabriquer((fait, total) => setProg(`Fabrication des fichiers… ${fait} / ${total}`));
       let alerte = ""; try { alerte = at.alerte() || ""; } catch { /* sans alerte */ }
+      let pieces = []; try { pieces = at.pieces ? at.pieces() : []; } catch { /* sans liste */ }
+      let plan = null; try { plan = at.plan ? await at.plan() : null; } catch { /* sans plan */ }
       // Commande : la version de l'atelier est gardée à côté de celle de la cliente (un échec ne bloque pas les fichiers).
       let gardee = "";
-      if (sansGarder !== true && cmd && ouvert.outil === cmd.outil) { try { await garder(at.etat()); gardee = "ok"; } catch (e) { gardee = e.message || "échec"; } }
-      setResultat({ outil: ouvert.outil, a: heure(), fichiers: Array.from(fichiers), alerte, policesKo: Array.from(fichiers.policesKo || []), gardee });
+      if (sansGarder !== true && cmd && ouvert.outil === cmd.outil) { try { await garder(at.etat(), pieces); gardee = "ok"; } catch (e) { gardee = e.message || "échec"; } }
+      setResultat({ outil: ouvert.outil, a: heure(), fichiers: Array.from(fichiers), alerte, policesKo: Array.from(fichiers.policesKo || []), gardee, pieces, plan });
       setVisible(false);
       setTimeout(() => document.getElementById("rt-fichiers")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
     } catch (e) {
@@ -248,6 +265,20 @@ export default function RetouchePage() {
           <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))" }}>
             {resultat.fichiers.map((f) => <Fichier key={f.nom} f={f} />)}
           </div>
+          {resultat.plan ? (
+            <div style={{ border: "1px solid #d9cbb0", borderRadius: 10, background: "#fff", padding: "10px 12px", display: "grid", gap: 8 }}>
+              <strong style={{ fontSize: 13.5 }}>Plan de collage</strong>
+              <span style={{ fontSize: 12.5, ...gris }}>Où coller chaque pièce sur le cadre. Les numéros sont ceux du fichier et de la liste des pièces.</span>
+              <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "flex-start" }}>
+                <img src={resultat.plan.png} alt="Plan de collage numéroté" style={{ flex: "0 1 300px", minWidth: 0, maxWidth: "100%", borderRadius: 8, border: "1px solid #efe6d3" }} />
+                <ol style={{ flex: "1 1 200px", minWidth: 0, margin: 0, padding: 0, listStyle: "none", fontSize: 13, lineHeight: 1.7 }}>
+                  {resultat.plan.legende.map((l, i) => <li key={i} style={{ overflowWrap: "anywhere" }}>{l}</li>)}
+                </ol>
+              </div>
+              <a className="fq-btn sm" style={{ justifySelf: "start" }} href={resultat.plan.png} download={`plan-de-collage${cmd?.ref ? `-${cmd.ref}` : ""}.png`}>Télécharger le plan</a>
+            </div>
+          ) : null}
+          <ListePieces pieces={resultat.pieces} titre="Les pièces, en détail" note="Tailles et places en millimètres, mesurées depuis le coin en haut à gauche du produit." />
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <button type="button" className="fq-btn sm" onClick={() => setVisible(true)}>Retoucher encore</button>
             {cmd && cmd.atelier ? <button type="button" className="fq-btn sm" onClick={revenirCliente}>Revenir à la version de la cliente</button> : null}

@@ -1,4 +1,4 @@
-## ✎ GESTION → TESTS → « RETOUCHER ET FABRIQUER » — 12/11/2026 SOIR (gérant : « c'est à moi de corriger… changer le nom, la position où je vais graver, je veux avoir accès pour tout corriger ») — CONSTRUIT, PAS POUSSÉ : attendre son « mets en ligne »
+## ✎ GESTION → TESTS → « RETOUCHER ET FABRIQUER » — 12/11/2026 SOIR (gérant : « c'est à moi de corriger… changer le nom, la position où je vais graver, je veux avoir accès pour tout corriger ») — ✅ EN LIGNE LE 12/11/2026 SOIR
 - Page `/gestion/retouche` (2ᵉ sous-onglet de Tests, `AdminShell`) + bouton « ✎ Corriger moi-même » sur chaque exemple de `/gestion/tests`
   (`?outil=support|arbre|decoration&ex=camille|lea-tom|flocons|mamie|coeur-photo`). Les trois outils s'ouvrent en plein écran dans un cadre
   (`public/atelier-outils/atelier-*.html`, fabriqués par `python3 tools/maquettes/retouche-site.py <support.html> <arbre.html> <decoration.html>
@@ -27,6 +27,14 @@
   `display:contents` sous 900 px → neutralisés par `body.niv-pro` ; mesurer un texte par `getBBox` est faux de 1 mm (case, pas l'encre) → canvas × 20.
   Commande : bouton **« ⬇ Fichiers pour la machine »** à côté de « Corriger dans l'outil » (`&fichiers=1`) = refabrique les fichiers de la version gardée, sans rien réécrire.
   Vérifié 390 / 1280 : mesures, fichier, annuler / refaire, zoom, alertes, commande simulée, 0 erreur, 0 débordement. Non essayé sur un vrai iPhone ni dans l'artifact réel.
+- 📋 **PLAN DE COLLAGE + LISTE DES PIÈCES (12/11/2026 soir, gérant : « tout sera en détail et en morceaux… pour que je découpe, que je colle » → « oui ajoute… il faut
+  que tout soit prêt et tu mets en ligne en même temps »)** : `nivAtelier.pieces()` (= `NivEditeur.pieces()` : le produit puis chaque pièce, texte, écriture, matière,
+  place et taille en mm ; décoration = mêmes numéros que le fichier) et `nivAtelier.plan()` (décoration « Classique » : le plan numéroté de l'outil rendu en PNG + légende).
+  Écran « Vos fichiers » : bloc « Plan de collage » (image, légende, Télécharger) + « Les pièces, en détail ». La liste est gardée avec la création
+  (`creations/<id>.pieces` = cliente, `atelierPieces` = atelier ; `piecesPropres`, `setCreationPieces` : posée une fois à la 1re ouverture si elle manque ;
+  `creerCreation(id, outil, etat, pieces)` le jour de la mise en vente) et s'affiche sur la fiche de la commande et la page Atelier (`PiecesCreation.jsx`).
+  Vérifié sur une commande de décoration simulée, 390 / 1280 : 2 fichiers, plan, 5 pièces, liste sur la fiche, 0 erreur, 0 débordement.
+- ✅ **ÉDITEUR, BOUTONS DES COMMANDES, PLAN ET LISTE : MIS EN LIGNE LE 12/11/2026 SOIR** (son accord : « tu mets en ligne en même temps »). Gestion seulement, rien côté clientes.
 - `next.config.js` : `X-Robots-Tag: noindex` sur `/atelier-outils/` et `/atelier-tests/`. ⚠️ Ces pages sont dans `public/` : joignables par
   leur adresse sans mot de passe (comme les fichiers de test), liées nulle part ailleurs que dans Gestion.
 

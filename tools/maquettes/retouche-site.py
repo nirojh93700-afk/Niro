@@ -44,6 +44,9 @@ JS_COMMUN = r"""
   if(Array.isArray(S.els))S.seq=S.els.reduce(function(a,x){return Math.max(a,+x.id||0)},0);
   A().maj();if(typeof apresCharge==='function')apresCharge();window.scrollTo(0,0);return true}
  window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,etat:etat,_charger:recharger,
+  /* la liste écrite des pièces, et (décoration) le plan de collage numéroté, en image : mêmes numéros que le fichier */
+  pieces:function(){try{return window.NivEditeur&&window.NivEditeur.pieces?window.NivEditeur.pieces():[]}catch(e){return []}},
+  plan:function(){try{return typeof planColl==='function'?planColl():Promise.resolve(null)}catch(e){return Promise.resolve(null)}},
   charger:function(e){var ok=recharger(e);if(ok&&window.NivEditeur)window.NivEditeur.repartir();return ok},
   fabriquer:function(progres){return window.NivFabrique.fabriquer(window.NivFabrique.specs[QUOI](),progres)}};
  var essais=0;(function pret(){essais++;var ok=false;try{ok=charge()}catch(e){ok=false}
@@ -57,6 +60,9 @@ INIT = {
   if(EX==='coeur-photo')scDemo({forme:'Heart',photo:true,texte:'Mamie',mat:'acr-rouge',police:'great-vibes'});
   else document.querySelector('.sc-mod[data-m="'+(EX==='mamie'?4:0)+'"]').click();
   A().S.sel=null;A().dessiner();var ok=document.getElementById('modOk');if(ok)ok.remove();window.scrollTo(0,0);return true}
+ function planColl(){var B=document.getElementById('planBloc'),P=document.getElementById('plan');if(!B||B.hidden||!P||!P.innerHTML)return Promise.resolve(null);
+  var vb=P.viewBox.baseVal;return window.NivFabrique._rendre(P.innerHTML,{x:0,y:0,w:vb.width,h:vb.height},10).then(function(r){
+   return{png:r.c.toDataURL('image/png'),w:vb.width,h:vb.height,legende:[].map.call(document.querySelectorAll('#planLeg li'),function(li){return li.textContent.replace(/\s+/g,' ').trim()})}}).catch(function(){return null})}
  function alerte(){var n=A().S.els.filter(function(e){return e.flottant}).length;return n?n+' pièce'+(n>1?'s ne touchent':' ne touche')+' pas le cadre : elle'+(n>1?'s tomberaient':' tomberait')+'.':''}
 """,
 "support": r"""
