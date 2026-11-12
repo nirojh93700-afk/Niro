@@ -14,6 +14,15 @@
 - **Prix (gérant, 12/11) : 2 prénoms compris, +3 € par prénom en plus** (base 24,90 € proposée par moi, à confirmer ; 6 prénoms = 36,90 €), artifact v2.
   **Pied pour poser l'arbre** : il va donner le lien d'un AUTRE fichier (pied) à intégrer : taille adaptée à l'arbre (pas au choix de la cliente),
   gravure du pied possible si la cliente veut, fichier de découpe du pied fourni EN MÊME TEMPS que celui de l'arbre.
+- **v3 (12/11, le pied : lien https://www.atomm.com/creativetools/community/generator/card-stand/)** : le « Card Stand Generator » d'Atomm (hôte
+  `card-stand.generator.atommapps.com`, ajouté au réseau) = 2 pièces de même profil emboîtées en croix (A fente par le haut, B par le bas, une
+  pièce découpée retournée), l'arbre se pose sur les deux bouts et s'appuie sur les montants, gravure possible sur le bas des pièces. Réglé
+  par moi pour l'arbre de 18 cm, PAS au choix de la cliente : **100 mm de haut, 90 mm de long, bois 3 mm** → 2 pièces imbriquées sur
+  **129,5 × 136,25 mm**. Tracés obtenus avec LEUR outil ouvert dans le navigateur (`node tools/maquettes/arbre-pied-atomm.cjs <dossier>` →
+  `pied-100x90.json`, 6ᵉ argument du générateur ; ⛔ leur code n'est jamais lancé sur la machine, refusé par la sécurité). Maquette : étape
+  « Le pied » (fourni, case « Graver le pied (+3 €) » : texte 20 car., 10 écritures, sur les deux pièces ou une seule), pied vu de face sous
+  l'arbre, vignette « le pied, vu de côté », 3D (arbre incliné de 12° posé sur le pied), fichier = **deux planches** (arbre 180 × 180 +
+  pied 129,5 × 136,25 : ensemble ils ne tiennent pas dans 200 × 200), rouge découpe, noir gravure. À valider : pied compris, gravure +3 €.
 - **À valider** : contour de la maquette = aperçu (vrais tracés soudés à la construction) ; dessins d'Atomm repris (sa décision, comme le support).
 
 ## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCORATION À SUSPENDRE » (générateur « Ornament » d'Atomm) — 12/11/2026 (gérant : « fais la même chose pour cette création… tout comme sur le site ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR = VERSION 5 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne

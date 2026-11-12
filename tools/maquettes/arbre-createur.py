@@ -7,14 +7,16 @@ plus, PAS de photo (« on peut pas graver de photo »), PAS de collage ni d'acry
 contreplaqué 3 mm. Les 9 arbres et, pour chaque nombre de prénoms, l'arbre déjà dessiné avec ses cœurs ou ses cercles viennent
 de l'outil d'Atomm (arbre-atomm-donnees.py) ; ils sont publiés à côté de la page (dossier arbres/) et chargés à la demande.
 
-  python3 tools/maquettes/arbre-createur.py <capture.html> <dossier css> <sortie.html> <arbres.json> <dossier vignettes>
+  python3 tools/maquettes/arbre-createur.py <capture.html> <dossier css> <sortie.html> <arbres.json> <dossier vignettes> <pied-100x90.json>
+
+Le pied = les 2 pièces du « Card Stand Generator » d'Atomm (arbre-pied-atomm.cjs), 100 × 90 mm, choisi pour l'arbre de 18 cm.
 """
 import base64, io, json, os, re, sys
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PUB = os.path.join(ROOT, "public")
-cap, cssdir, sortie, arbres_json, vigdir = sys.argv[1:6]
+cap, cssdir, sortie, arbres_json, vigdir, pied_json = sys.argv[1:7]
 
 
 def raw_uri(path):
@@ -106,9 +108,29 @@ NOMS_FR = {"life": "Arbre de vie", "oak": "Chêne", "willow": "Saule", "apple": 
 for a in ARBRES["arbres"]:
     a["nom"] = NOMS_FR.get(a["id"], a["nom"])
     a["vignette"], _ = png_uri(os.path.join(vigdir, a["id"] + ".png"), w=120)
+def _decale(d, dx, dy):
+    """Déplace un tracé SVG absolu (M L Q C Z, nombres par paires x y)."""
+    out, i = [], 0
+    for t in re.findall(r"[MLQCZ]|-?[0-9.]+", d):
+        if t in "MLQCZ":
+            out.append(t); continue
+        v = float(t) + (dx if i % 2 == 0 else dy); i += 1
+        out.append(f"{v:.3f}".rstrip("0").rstrip("."))
+    return " ".join(out)
+_P = json.load(open(pied_json, encoding="utf-8"))
+_L, _N = _P["L"], _P["n"]
+_pa, _pb = _L["placements"]["a"], _L["placements"]["b"]
+PIED = {"a": _decale(_L["pathA"], -_pa["x"], -_pa["y"]), "b": _decale(_L["pathB"], -_pb["x"], -_pb["y"]),
+        "outA": [[round(x, 2), round(y, 2)] for x, y in _L["outline"]["a"]],
+        "outB": [[round(x, 2), round(y, 2)] for x, y in _L["outline"]["b"]],
+        "slotA": _L["slot"]["centre"] - _pa["x"], "haut": _L["params"]["height"], "larg": 90,
+        "nest": {"w": _N["width"], "h": _N["height"], "a": [_N["placements"]["a"]["x"], _N["placements"]["a"]["y"]],
+                 "b": [_N["placements"]["b"]["x"], _N["placements"]["b"]["y"], _N["placements"]["b"]["pivotX"], _N["placements"]["b"]["pivotY"]]},
+        "txt": {"x": 14.5, "base": _L["params"]["height"] - 6, "size": 8, "maxw": 40}}
+PIED["slotB"] = PIED["larg"] - PIED["slotA"]
 MATIERES = [{"id": "contreplaque", "nom": "Contreplaqué", "c": ["#f0dcb4", "#e3c796", "#d6b47f"], "bord": "#9c7744"}]
 DONNEES = json.dumps({"arbres": ARBRES["arbres"], "slots": ARBRES["slots"], "base": "arbres/", "max": 6, "taille": 180,
-                      "matieres": MATIERES, "polices": POLICES, "logo": LOGO, "logoR": LOGO_R, "prix": {"base": 24.9, "inclus": 2, "nom": 3}},
+                      "matieres": MATIERES, "polices": POLICES, "logo": LOGO, "logoR": LOGO_R, "prix": {"base": 24.9, "inclus": 2, "nom": 3, "gravePied": 3}, "pied": PIED},
                      ensure_ascii=False, separators=(",", ":"))
 
 CSS_MAQ = r"""
@@ -307,6 +329,12 @@ CSS_MAQ += r"""
 .ab-pol{display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 6px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;color:var(--ink);font:inherit}
 .ab-pol span{font-size:1.45rem;line-height:1.25;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ab-pol small{font-size:.7rem;color:var(--ink-soft)}
 .ab-pol.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
+.ab-pied{display:flex;gap:12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fffaf0}
+.ab-pied svg{flex:none;width:74px;height:74px}.ab-pied p{margin:0;font-size:.86rem;line-height:1.45}
+.ab-grave{display:flex;align-items:center;gap:8px;margin:12px 0 6px;font-weight:600;cursor:pointer}.ab-grave input{width:18px;height:18px;accent-color:var(--gold-dark)}
+.ab-gchamps{display:grid;gap:8px}.ab-gchamps input,.ab-gchamps select{box-sizing:border-box;width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+.ab-vig{position:absolute;left:10px;bottom:10px;z-index:3;width:min(140px,34%);padding:6px 6px 4px;border-radius:10px;background:rgba(255,253,248,.92);box-shadow:0 2px 10px rgba(43,29,14,.18);font-size:.68rem;color:var(--ink-soft);text-align:center}
+.ab-vig svg{display:block;width:100%;height:auto}@media (max-width:900px){.ab-vig{width:76px;left:6px;bottom:6px;padding:4px 4px 2px;font-size:.6rem}}.sc-stage[data-3d="1"] .ab-vig{display:none}
 .ab-charge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;margin:0;padding:8px 14px;border-radius:999px;background:rgba(43,38,32,.86);color:#fff;font-size:.8rem}
 .sc-stage.ab-stage svg#scene{max-height:max(300px,min(560px,calc(100vh - var(--sc-top,0px) - 120px)))}
 @media (max-width:900px){.sc-stage.ab-stage svg#scene{max-height:34vh}}
@@ -314,7 +342,7 @@ CSS_MAQ += r"""
 
 HTML_OUTIL = r"""
 <div class="prc" id="prc">
- <div class="prc-head"><p class="prc-title">Créez votre arbre</p><p class="prc-sub">Quatre petites étapes. Votre arbre se dessine au fur et à mesure.</p></div>
+ <div class="prc-head"><p class="prc-title">Créez votre arbre</p><p class="prc-sub">Cinq petites étapes. Votre arbre se dessine au fur et à mesure.</p></div>
  <section class="prc-step">
   <div class="prc-sh"><span class="prc-num done">1</span><h3>L'arbre</h3></div>
   <div class="ab-arbres" id="arbres"></div>
@@ -339,8 +367,23 @@ HTML_OUTIL = r"""
   <div class="ab-pols" id="polices"></div>
   <p class="prc-hint">Des écritures épaisses, faites pour être découpées dans le bois.</p>
  </section>
+ <section class="prc-step">
+  <div class="prc-sh"><span class="prc-num done">5</span><h3>Le pied</h3></div>
+  <div class="ab-pied"><svg id="piedIco" viewBox="-4 -4 98 108" aria-hidden="true"></svg>
+   <p><b>Le pied est fourni avec l'arbre.</b> Deux pièces en bois qui s'emboîtent en croix, taillées pour votre arbre de 18 cm (10 cm de haut). L'arbre se pose dessus, légèrement incliné.</p></div>
+  <label class="ab-grave"><input type="checkbox" id="gravePied"> Graver le pied (+3 €)</label>
+  <div class="ab-gchamps" id="gchamps" hidden>
+   <input type="text" id="piedTexte" maxlength="20" placeholder="Ex. Famille Martin" aria-label="Texte gravé sur le pied">
+   <select id="piedPolice" aria-label="Écriture du pied"></select>
+   <div class="sc-styles" id="piedOu" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+    <button type="button" class="sc-style" data-v="deux"><b>Sur les deux pièces</b><small>Le texte de chaque côté</small></button>
+    <button type="button" class="sc-style" data-v="une"><b>Sur une pièce</b><small>À l'avant gauche</small></button>
+   </div>
+   <p class="prc-hint" style="margin:0">20 lettres au plus. Gravé sur le bas du pied, sous l'arbre.</p>
+  </div>
+ </section>
  <section class="prc-step" id="etape3">
-  <div class="prc-sh"><span class="prc-num done">5</span><h3>Votre arbre</h3></div>
+  <div class="prc-sh"><span class="prc-num done">6</span><h3>Votre arbre</h3></div>
   <div class="prc-sum" id="resume"></div>
  </section>
 </div>
@@ -351,21 +394,23 @@ HTML_OUTIL = r"""
 
 HTML_ATELIER = r"""
 <section class="sc-atelier"><div class="container">
- <h2>De votre côté : le fichier pour le laser se fabrique tout seul</h2>
- <p>À la commande, le site range dans le dossier de la commande le fichier de l'arbre, à la taille réelle (18 cm). Il change en direct quand vous modifiez l'arbre au-dessus.</p>
+ <h2>De votre côté : les fichiers pour le laser se fabriquent tout seuls</h2>
+ <p>À la commande, le site range dans le dossier de la commande le fichier de l'arbre (18 cm) et celui du pied (ses 2 pièces imbriquées), à la taille réelle. Il change en direct quand vous modifiez l'arbre au-dessus.</p>
  <div class="sc-agrid">
-  <div class="sc-feuille"><svg id="fichier" viewBox="0 0 190 190" role="img" aria-label="Fichier de découpe"></svg><p class="sc-fnom" id="fnom"></p></div>
+  <div class="sc-feuille"><svg id="fichier" viewBox="0 0 334 196" role="img" aria-label="Fichier de découpe"></svg><p class="sc-fnom" id="fnom"></p></div>
   <div>
-   <ul class="sc-legende"><li><i style="border-color:#d32f2f"></i>Trait rouge : à découper (tout est découpé, rien n'est gravé)</li></ul>
+   <ul class="sc-legende"><li><i style="border-color:#d32f2f"></i>Trait rouge : à découper</li><li><i style="border-color:#111"></i>Noir : la gravure du pied, si la cliente l'a demandée</li></ul>
    <ul class="sc-points">
     <li><b>Les 9 arbres de l'outil d'Atomm</b>Arbre de vie, chêne, saule, pommier, olivier, cèdre, cerisier, jacaranda, figuier. Pour chaque nombre de prénoms (1 à 6), l'arbre est déjà dessiné avec ses cœurs ou ses cercles bien placés dans le feuillage.</li>
-    <li><b>Une seule pièce</b>Les prénoms sont dans le bois de leur cœur : la première lettre part du bord gauche, la dernière rejoint le bord droit, les accents et les points sont reliés à leur lettre. Pas de collage.</li>
+    <li><b>Le pied d'Atomm, à la bonne taille</b>Les 2 pièces du « Card Stand » d'Atomm, réglées pour l'arbre de 18 cm : 100 mm de haut, 90 mm de long, fente de 3 mm (l'épaisseur du bois), imbriquées sur une planche de 129,5 × 136,25 mm. Une pièce est découpée retournée, pour que les deux gravures soient du même côté. L'arbre et le pied ne tiennent pas ensemble dans 200 × 200 : deux planches.</li>
+    <li><b>L'arbre : une seule pièce</b>Les prénoms sont dans le bois de leur cœur : la première lettre part du bord gauche, la dernière rejoint le bord droit, les accents et les points sont reliés à leur lettre. Pas de collage.</li>
     <li><b>18 cm, contreplaqué 3 mm</b>Le fichier tient dans la zone de 200 × 200 mm de la F2 Ultra UV, avec 1 cm de marge.</li>
     <li><b>Dans Gestion, comme les autres commandes</b>L'aperçu de la cliente et le fichier apparaissent dans la fiche atelier et dans le dossier du jour.</li>
    </ul>
   </div>
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
+  <li>Le pied est compris dans le prix (à confirmer) ; la gravure du pied : +3 € (proposé par moi, à confirmer).</li>
   <li>Prix : 24,90 € l'arbre avec 2 prénoms (prix de base proposé par moi, à confirmer), chaque prénom en plus +3 € (votre règle) : 6 prénoms = 36,90 €.</li>
   <li>Le contour rouge de la maquette est un aperçu ; à la construction, le fichier aura les vrais tracés (comme l'export d'Atomm), prénoms soudés à leur cœur.</li>
   <li>Les dessins des arbres et des cœurs sont ceux d'Atomm (vous avez décidé de les reprendre, comme pour le support de téléphone).</li>
@@ -384,7 +429,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;
 /* ---- l'arbre de vie d'Atomm : 9 arbres, et pour chaque nombre de prénoms (1 à 6) un arbre déjà dessiné avec ses cœurs
    ou ses cercles (canevas 300 × 300 mm, vendu en 18 cm). Les tracés sont des fichiers à part, chargés à la demande. ---- */
 var MAX=D.max, TAILLE=D.taille, K=TAILLE/300, MATIERES=D.matieres;
-var S={arbre:'life',forme:'heart',noms:['Léo','Nora','Maël','Inès'],police:'pacifico'};
+var S={arbre:'life',forme:'heart',noms:['Léo','Nora','Maël','Inès'],police:'pacifico',pied:{grave:false,texte:'',police:'pacifico',ou:'deux'}};
 function A(){for(var i=0;i<D.arbres.length;i++)if(D.arbres[i].id===S.arbre)return D.arbres[i];return D.arbres[0]}
 function police(id){for(var i=0;i<D.polices.length;i++)if(D.polices[i][0]===id)return D.polices[i];return D.polices[0]}
 function Mde(id){for(var i=0;i<MATIERES.length;i++)if(MATIERES[i].id===id)return MATIERES[i];return MATIERES[0]}
@@ -406,7 +451,7 @@ svg.innerHTML='<defs>'
  +'<feFlood flood-color="#9c7744"/><feComposite in2="r" operator="in" result="e"/><feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="e"/></feMerge></filter>'
  +'<filter id="flou"><feGaussianBlur stdDeviation="6"/></filter></defs>'
  +'<ellipse cx="150" cy="318" rx="120" ry="7" fill="#3a2a16" opacity=".14" filter="url(#flou)"/>'
- +'<path id="ombreA" fill="#6b4a25" opacity=".28" transform="translate(2.5,3.5)"/>'
+ +'<g id="pieds"></g><path id="ombreA" fill="#6b4a25" opacity=".28" transform="translate(2.5,3.5)"/>'
  +'<path id="arbreP" fill-rule="nonzero" stroke-width=".35"/><path id="arbreV" fill="#fff" filter="url(#veine)" opacity=".45"/>'
  +'<g id="noms"></g>';
 (function(){var dg=svg.querySelector('defs');MATIERES.forEach(function(m){dg.insertAdjacentHTML('beforeend','<linearGradient id="g-'+m.id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+m.c[0]+'"/><stop offset=".55" stop-color="'+m.c[1]+'"/><stop offset="1" stop-color="'+m.c[2]+'"/></linearGradient>')})})();
@@ -436,6 +481,25 @@ function nomDansForme(sl,txt,uid){
  el('rect',{x:inkR-fs*.25,y:yb-hb/2,width:sl.c[0]+40-inkR,height:hb,fill:'url(#g-contreplaque)'},g);
  texteNom(g,txt,cx,base,fs,pol,'url(#g-contreplaque)')}
 
+/* ---- le pied (les 2 pièces du « Card Stand » d'Atomm, 100 × 90 mm) : A a sa fente en haut, B en bas ; elles se croisent à 90°,
+   les deux bouts (les « orteils ») vers l'avant ; l'arbre se pose dessus en s'appuyant sur les montants ---- */
+var P=D.pied,PIO=10.2,SOL=300+PIO/K; /* le bas de l'arbre est à 10,2 mm du sol, posé sur les deux pieds */
+function piedGrave(){return S.pied.grave&&S.pied.texte.trim()?S.pied.texte.trim():''}
+function piedGrav(f,uid,fill){var t=piedGrave();if(!t||(f==='b'&&S.pied.ou!=='deux'))return '';
+ var pol=police(S.pied.police)[2],fs=P.txt.size,e=encre(t,pol,fs);if(e.l+e.r>P.txt.maxw)fs*=P.txt.maxw/(e.l+e.r);
+ var x=f==='a'?P.txt.x:P.larg-P.txt.x,anc=f==='a'?'start':'end';
+ return '<clipPath id="pc'+uid+'"><path d="'+P[f]+'"/></clipPath><text clip-path="url(#pc'+uid+')" x="'+x+'" y="'+P.txt.base+'" text-anchor="'+anc
+  +'" font-family="'+esc(pol).replace(/"/g,"'")+'" font-size="'+fs.toFixed(2)+'" fill="'+fill+'">'+esc(t)+'</text>'}
+function dessinerPieds(){
+ var c=.7071/K,u=1/K,h='';
+ [['a',P.slotA],['b',P.slotB]].forEach(function(z){var f=z[0];
+  h+='<g transform="matrix('+c+' 0 0 '+u+' '+(150-z[1]*c)+' '+(SOL-P.haut*u)+')"><path d="'+P[f]+'" fill="'+(f==='a'?'#d9bb88':'#cfae78')+'" stroke="'+BOIS.bord+'" stroke-width="'+(.5/u)+'"/>'
+   +piedGrav(f,'f'+f,'rgba(70,40,15,.8)')+'</g>'});
+ $('pieds').innerHTML='<ellipse cx="150" cy="'+(SOL+1)+'" rx="95" ry="4" fill="#3a2a16" opacity=".16" filter="url(#flou)"/>'+h;
+ $('piedIco').innerHTML='<path d="'+P.a+'" fill="#e3c796" stroke="#9c7744" stroke-width="1.2"/>'+piedGrav('a','i','#5a3a18');
+ var g=!!piedGrave();$('vigPied').hidden=!g;
+ if(g)$('vigSvg').innerHTML='<path d="'+P.a+'" fill="#e3c796" stroke="#9c7744" stroke-width=".8"/>'+piedGrav('a','v','#4a2c10')}
+
 function dessiner(){
  var k=cle();
  if(!TR[k]){charger(k,dessiner);return}
@@ -444,7 +508,7 @@ function dessiner(){
  $('arbreP').setAttribute('fill','url(#g-contreplaque)');$('arbreP').setAttribute('stroke',BOIS.bord);
  $('noms').innerHTML='';
  slots().forEach(function(sl,i){nomDansForme(sl,S.noms[i].trim(),i)});
- fichier();majListe();resume();if(V3.pret)V3.maj();
+ dessinerPieds();fichier();majListe();resume();if(V3.pret)V3.maj();
  $('aide').textContent=V3.actif?'Vue 3D indicative : faites glisser pour tourner l\'arbre.':'Aperçu indicatif : arbre de 18 cm découpé d\'une seule pièce dans du contreplaqué 3 mm.'}
 
 /* ---- étape 1 : l'arbre ---- */
@@ -485,28 +549,46 @@ $('polices').addEventListener('click',function(ev){var b=ev.target.closest('.ab-
 var dernierN=-1;function majListe(){if(dernierN!==nb()){dernierN=nb();majNoms()}majPolicesSi()}
 var dernierEx=null;function majPolicesSi(){var ex=(S.noms[0]||'').trim();if(ex!==dernierEx){dernierEx=ex;majPolices()}}
 function enPlus(){return Math.max(0,S.noms.length-D.prix.inclus)}
-function total(){return D.prix.base+enPlus()*D.prix.nom}
+function total(){return D.prix.base+enPlus()*D.prix.nom+(piedGrave()?D.prix.gravePied:0)}
 function resume(){var noms=S.noms.map(function(t){return t.trim()}).filter(Boolean);
  var h='<div class="prc-sumrow"><span>Arbre</span><b>'+A().nom+' · 18 cm · contreplaqué 3 mm — '+eur(D.prix.base)+'</b></div>'
   +'<div class="prc-sumrow"><span>Prénoms</span><b>'+(noms.length?noms.map(esc).join(', '):'aucun')+'</b></div>'
   +'<div class="prc-sumrow"><span>Prénoms en plus</span><b>'+(enPlus()?enPlus()+' × '+eur(D.prix.nom)+' = +'+eur(enPlus()*D.prix.nom):'2 prénoms compris')+'</b></div>'
+  +'<div class="prc-sumrow"><span>Pied</span><b>Compris · 2 pièces à emboîter · 10 cm</b></div>'
+  +'<div class="prc-sumrow"><span>Gravure du pied</span><b>'+(piedGrave()?'« '+esc(piedGrave())+' » · '+police(S.pied.police)[1]+' · '+(S.pied.ou==='deux'?'les deux pièces':'une pièce')+' · +'+eur(D.prix.gravePied):'Non')+'</b></div>'
   +'<div class="prc-sumrow"><span>Autour des prénoms</span><b>'+(S.forme==='heart'?'Cœurs':'Cercles')+'</b></div>'
   +'<div class="prc-sumrow"><span>Écriture</span><b>'+police(S.police)[1]+'</b></div>'
   +'<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+eur(total())+'</b></div>';
  $('resume').innerHTML=h;$('total').textContent=eur(total());$('prixtete').textContent=eur(D.prix.base);
- var vides=S.noms.filter(function(t){return !t.trim()}).length;
- $('manque').textContent=vides?(vides>1?vides+' prénoms sont vides : écrivez-les ou retirez-les.':'Un prénom est vide : écrivez-le ou retirez-le.'):'';
- $('ajouter').disabled=!!vides}
+ var vides=S.noms.filter(function(t){return !t.trim()}).length,pv=S.pied.grave&&!S.pied.texte.trim();
+ $('manque').textContent=vides?(vides>1?vides+' prénoms sont vides : écrivez-les ou retirez-les.':'Un prénom est vide : écrivez-le ou retirez-le.'):pv?'Écrivez le texte à graver sur le pied, ou décochez « Graver le pied ».':'';
+ $('ajouter').disabled=!!vides||pv}
 $('ajouter').addEventListener('click',function(){if(!this.disabled)this.textContent='Ajouté au panier ✓ (maquette)'});
+$('piedPolice').innerHTML=D.polices.map(function(q){return '<option value="'+q[0]+'">'+q[1]+'</option>'}).join('');
+function majPied(){$('gravePied').checked=S.pied.grave;$('gchamps').hidden=!S.pied.grave;$('piedPolice').value=S.pied.police;
+ [].forEach.call($('piedOu').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')===S.pied.ou)})}
+$('gravePied').addEventListener('change',function(){S.pied.grave=this.checked;majPied();dessiner();if(this.checked)$('piedTexte').focus()});
+$('piedTexte').addEventListener('input',function(){S.pied.texte=this.value;dessiner()});
+$('piedPolice').addEventListener('change',function(){S.pied.police=this.value;dessiner();
+ if(document.fonts&&document.fonts.load)document.fonts.load('40px '+police(S.pied.police)[2],S.pied.texte||'a').then(dessiner,function(){})});
+$('piedOu').addEventListener('click',function(ev){var b=ev.target.closest('.sc-style');if(!b)return;S.pied.ou=b.getAttribute('data-v');majPied();dessiner()});
 
 /* ---- le fichier de l'atelier : 18 cm, rouge = découpe (contour de tout le bois, prénoms compris) ---- */
 function contourDe(inner,id){return '<filter id="'+id+'" x="-2%" y="-2%" width="104%" height="104%"><feMorphology in="SourceAlpha" operator="dilate" radius=".45" result="d"/><feComposite in="d" in2="SourceAlpha" operator="out" result="r"/><feFlood flood-color="#FF0000"/><feComposite in2="r" operator="in"/></filter><g filter="url(#'+id+')">'+inner+'</g>'}
 function fichier(){
  var noir=function(s){return s.replace(/url\(#g-[a-z-]+\)/g,'#000').replace(/filter="url\(#bordF\)"/g,'')};
  var arbre='<path d="'+$('arbreP').getAttribute('d')+'" fill="#000"/>';
- $('fichier').setAttribute('viewBox','0 0 190 190');
- $('fichier').innerHTML='<g transform="translate(5 5) scale('+K+')">'+contourDe(arbre+noir($('noms').innerHTML),'fc1')+'</g>';
- $('fnom').textContent='arbre-'+S.arbre+'-'+(S.forme==='heart'?'coeurs':'cercles')+'-'+nb()+'-prenoms-<n° de commande>.svg · 180 × 180 mm · une seule pièce · contreplaqué 3 mm'}
+ var N=P.nest,ox=200,trait='fill="none" stroke="#FF0000" stroke-width=".3"';
+ $('fichier').setAttribute('viewBox','0 0 '+(ox+N.w+4)+' 202');
+ $('fichier').innerHTML='<rect x=".2" y=".2" width="189.6" height="189.6" fill="none" stroke="#c9c2b6" stroke-width=".4" stroke-dasharray="2 2"/>'
+  +'<g transform="translate(5 5) scale('+K+')">'+contourDe(arbre+noir($('noms').innerHTML),'fc1')+'</g>'
+  +'<text x="95" y="198" text-anchor="middle" font-size="5" fill="#7a6e60" font-family="sans-serif">Planche 1 · l\'arbre · 180 × 180 mm</text>'
+  +'<g transform="translate('+ox+' 0)"><rect x=".2" y=".2" width="'+(N.w-.4)+'" height="'+(N.h-.4)+'" fill="none" stroke="#c9c2b6" stroke-width=".4" stroke-dasharray="2 2"/>'
+  +'<g transform="translate('+N.a[0]+' '+N.a[1]+')"><path d="'+P.a+'" '+trait+'/>'+piedGrav('a','na','#000')+'</g>'
+  +'<g transform="translate('+N.b[0]+' '+N.b[1]+') rotate(180 '+N.b[2]+' '+N.b[3]+')"><path d="'+P.b+'" '+trait+'/>'+piedGrav('b','nb','#000')+'</g>'
+  +'<text x="'+(N.w/2)+'" y="'+(N.h+8)+'" text-anchor="middle" font-size="5" fill="#7a6e60" font-family="sans-serif">Planche 2 · le pied · 129,5 × 136,25 mm</text></g>';
+ var ref='<n° de commande>';
+ $('fnom').textContent='arbre-'+S.arbre+'-'+(S.forme==='heart'?'coeurs':'cercles')+'-'+nb()+'-prenoms-'+ref+'.svg · 180 × 180 mm  +  pied-arbre-'+ref+'.svg · 129,5 × 136,25 mm, 2 pièces'+(piedGrave()?' + gravure':'')+' · contreplaqué 3 mm'}
 
 /* ---- la vue 3D : l'arbre en contreplaqué 3 mm, le logo au mur (three.js, chargé seulement quand on touche « 3D ») ---- */
 var V3={pret:false,actif:false,n:0};
@@ -548,8 +630,22 @@ V3.maj=function(){if(!V3.actif)return;var id=++V3.n;
   for(var z=-1.5;z<1.5;z+=.25){var p=new THREE.Mesh(new THREE.PlaneGeometry(T,T),tranche);p.position.z=z;g.add(p)}
   var face=new THREE.Mesh(new THREE.PlaneGeometry(T,T),new THREE.MeshStandardMaterial({map:tx,transparent:true,alphaTest:.5,roughness:.85}));face.position.z=1.5;g.add(face);
   var dos=face.clone();dos.position.z=-1.5;dos.rotation.y=Math.PI;g.add(dos);
+  var tout=new THREE.Group(),th=12*Math.PI/180,yc=PIO+90*Math.cos(th),bas=-70;
+  g.rotation.x=-th;g.position.set(0,bas+yc,8*.7071+1.5+(P.haut-yc)*Math.tan(th));tout.add(g);
+  var bois=new THREE.MeshStandardMaterial({color:0xdcc08f,roughness:.8});
+  [['a',P.outA,P.slotA,Math.PI/4],['b',P.outB,P.slotB,-Math.PI/4]].forEach(function(z){
+   var sh=new THREE.Shape();z[1].forEach(function(q,i){var x=q[0]-z[2],y=P.haut-q[1];if(i)sh.lineTo(x,y);else sh.moveTo(x,y)});
+   var geo=new THREE.ExtrudeGeometry(sh,{depth:3,bevelEnabled:false});geo.translate(0,0,-1.5);
+   var pg=new THREE.Group();pg.add(new THREE.Mesh(geo,bois));
+   var gr=piedGrav(z[0],'3'+z[0],'#4a2c10');
+   if(gr){var src='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+P.larg+' '+P.haut+'" width="900" height="1000">'+gr+'</svg>',im=new Image();
+    im.onload=function(){var cv2=document.createElement('canvas');cv2.width=900;cv2.height=1000;cv2.getContext('2d').drawImage(im,0,0,900,1000);
+     var pl=new THREE.Mesh(new THREE.PlaneGeometry(P.larg,P.haut),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cv2),transparent:true,alphaTest:.3,depthWrite:false}));
+     pl.position.set(P.larg/2-z[2],P.haut/2,1.6);pg.add(pl);V3.rendre()};
+    im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(src)}
+   pg.rotation.y=z[3];pg.position.y=bas;tout.add(pg)});
   if(V3.g){V3.sc.remove(V3.g);V3.g.traverse(function(o){if(o.geometry)o.geometry.dispose()})}
-  V3.g=g;V3.sc.add(g);V3.cam.position.set(0,T*.05,T*2.35);V3.cam.lookAt(0,0,0);
+  V3.g=tout;V3.sc.add(tout);V3.cam.position.set(0,T*.22,T*2.35);V3.cam.lookAt(0,-8,0);
   $('msg3d').textContent='Faites glisser pour tourner l\'arbre.';V3.rendre()})};
 function majVue(){[].forEach.call(document.querySelectorAll('.sc-vue button'),function(x){x.classList.toggle('on',(x.getAttribute('data-vue')==='3d')===V3.actif)})}
 $('vueBtns').addEventListener('click',function(ev){var x=ev.target.closest('button');if(!x)return;if(x.getAttribute('data-vue')==='3d')V3.ouvrir();else{V3.fermer();dessiner()}});
@@ -574,7 +670,7 @@ window.addEventListener('resize',decoller);
 
 var G={vue:'creation'};
 /* ---- départ ---- */
-majArbres();majNoms();majForme();majPolices();dessiner();
+majArbres();majNoms();majForme();majPolices();majPied();dessiner();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){majPolices();dessiner()});
 [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
 window.abEtat=function(){return {S:S,total:total(),cle:cle(),pret:!!TR[cle()],slots:slots().length}};
@@ -594,7 +690,8 @@ page = f"""<title>Créateur d'arbre de vie</title>
  <div class="sc-left">
   <div class="sc-stage ab-stage" id="stage" data-vue="creation"><span class="sc-tag">Votre arbre, en direct</span>
    <div class="sc-mur" aria-hidden="true"><img src="__LOGO__" alt=""></div>
-   <svg id="scene" viewBox="-28 -28 356 356" role="img" aria-label="Aperçu de votre arbre de vie"></svg>
+   <svg id="scene" viewBox="-28 -28 356 372" role="img" aria-label="Aperçu de votre arbre de vie"></svg>
+   <div class="ab-vig" id="vigPied" hidden><svg id="vigSvg" viewBox="-3 -3 96 106"></svg>Le pied, vu de côté</div>
    <p class="ab-charge" id="chargement" hidden>Chargement de l'arbre…</p>
    <div class="sc-vue" id="vueBtns"><button type="button" data-vue="2d" class="on">Face</button><button type="button" data-vue="3d">3D</button></div>
    <canvas class="sc-3d" id="vue3d" aria-label="Vue 3D de l'arbre"></canvas><p class="sc-3dmsg" id="msg3d"></p></div>
