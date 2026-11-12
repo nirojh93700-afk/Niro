@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="130.0mm" height="52.0mm" viewBox="0 0 130.0 52.0">
+<g transform="translate(5 5)">
+<path id="plaquette" fill="none" stroke="#FF0000" stroke-width="0.1" d="M0 0H18.60V18.0H21.40V0H38.55V18.0H41.45V0H58.50V18.0H61.50V0H78.45V18.0H81.55V0H98.40V18.0H101.60V0H120.0V42.0H0Z"/>
+<path id="repere-1-1" fill="#000000" stroke="none" d="M19.00 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-2-1" fill="#000000" stroke="none" d="M37.40 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-2-2" fill="#000000" stroke="none" d="M40.60 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-3-1" fill="#000000" stroke="none" d="M55.80 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-3-2" fill="#000000" stroke="none" d="M59.00 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-3-3" fill="#000000" stroke="none" d="M62.20 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-4-1" fill="#000000" stroke="none" d="M74.20 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-4-2" fill="#000000" stroke="none" d="M77.40 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-4-3" fill="#000000" stroke="none" d="M80.60 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-4-4" fill="#000000" stroke="none" d="M83.80 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-5-1" fill="#000000" stroke="none" d="M92.60 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-5-2" fill="#000000" stroke="none" d="M95.80 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-5-3" fill="#000000" stroke="none" d="M99.00 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-5-4" fill="#000000" stroke="none" d="M102.20 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+<path id="repere-5-5" fill="#000000" stroke="none" d="M105.40 27.0a1.0 1.0 0 1 0 2.0 0a1.0 1.0 0 1 0 -2.0 0Z"/>
+</g>
+</svg>

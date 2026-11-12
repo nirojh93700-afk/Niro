@@ -2,6 +2,24 @@
  "fait": "2026-11-12",
  "groupes": [
   {
+   "id": "emboitement",
+   "titre": "Pièce d'essai : l'emboîtement",
+   "sous": "Cinq fentes de 2,8 à 3,2 mm. Glissez une chute de votre bois dans chaque fente : celle qui tient sans forcer donne le bon réglage pour le support et le pied de l'arbre.",
+   "apercu": "/atelier-tests/essai-emboitement-apercu.webp",
+   "fichiers": [
+    {
+     "nom": "essai-emboitement-fentes.svg",
+     "url": "/atelier-tests/essai-emboitement-fentes.svg",
+     "titre": "Plaquette à 5 fentes · 1 point = 2,8 mm · 2 = 2,9 · 3 = 3,0 · 4 = 3,1 · 5 = 3,2 mm",
+     "matiere": "Contreplaqué 3 mm",
+     "w": 130.0,
+     "h": 52.0,
+     "note": "Les points sont gravés sous chaque fente. Dites-moi le nombre de points de la fente qui tient le mieux.",
+     "gravure": true
+    }
+   ]
+  },
+  {
    "id": "support",
    "titre": "Support de téléphone",
    "sous": "Standard · rectangle arrondi · 13° · passage du câble · « Camille » gravé",
@@ -100,6 +118,34 @@
      "h": 100,
      "note": "5 objets séparés, que vous pouvez déplacer un par un. ",
      "gravure": true
+    }
+   ]
+  },
+  {
+   "id": "photo",
+   "titre": "Décoration avec une photo gravée",
+   "sous": "Cœur · une photo gravée sur une pièce ovale · « Mamie » en acrylique rouge",
+   "apercu": "/atelier-tests/decoration-coeur-photo-mamie-apercu.webp",
+   "fichiers": [
+    {
+     "nom": "decoration-coeur-photo-mamie-contreplaque.svg",
+     "url": "/atelier-tests/decoration-coeur-photo-mamie-contreplaque.svg",
+     "titre": "Décoration · cœur · photo gravée + « Mamie » · contreplaqué",
+     "matiere": "Contreplaqué 3 mm",
+     "w": 100,
+     "h": 158.96,
+     "note": "3 objets séparés, que vous pouvez déplacer un par un. Le prénom est dans le fichier acrylique.",
+     "gravure": true
+    },
+    {
+     "nom": "decoration-coeur-photo-mamie-acr-rouge.svg",
+     "url": "/atelier-tests/decoration-coeur-photo-mamie-acr-rouge.svg",
+     "titre": "Décoration · cœur · photo gravée + « Mamie » · acrylique rouge",
+     "matiere": "Acrylique rouge 3 mm",
+     "w": 44.16,
+     "h": 22.39,
+     "note": "1 objet. À découper dans l'acrylique, puis à coller sur le cadre comme sur l'aperçu.",
+     "gravure": false
     }
    ]
   }

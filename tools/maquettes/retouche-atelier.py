@@ -63,7 +63,7 @@ INIT = {
 "support": r"""
  function A(){return window.scAtelier}
  function charge(){if(!A()||!window.scDemo)return false;scDemo({forme:'rectangle',taille:'standard'});
-  /* la cliente a posé son prénom trop bas, sur les fentes du pied */
+  /* la cliente a posé son prénom tout en bas, juste au-dessus des fentes */
   var S=A().S;S.els=S.els.filter(function(e){return e.type==='texte'});if(S.els[0]){S.els[0].texte='Camille';S.els[0].y+=118;S.els[0].x-=30}S.sel=null;A().dessiner();window.scrollTo(0,0);return true}
  function fichiers(){var S=A().S;return [{nom:'support-telephone-'+S.taille+'-'+S.forme+'-'+S.angle+'deg-EX-SUP1.svg',detail:'Contreplaqué 3 mm · le dossier et le pied'+(S.grave&&S.els.length?' + la gravure':'')+(S.ajoure?' + le motif ajouré':'')}]}
  function alerte(){return ''}
@@ -107,7 +107,7 @@ CMD = [
  {"id": "arbre", "page": "atelier-arbre.html", "ref": "EX-ARB1", "cliente": "Paul Mercier", "quoi": "Arbre de vie · 3 prénoms · pied gravé",
   "detail": "Cœurs · « Léa », « Tom », « Capucine » · pied « Famille Martin »", "alerte": "« Capucine » est long : à vérifier dans son cœur avant de découper.", "total": "32,90 €"},
  {"id": "support", "page": "atelier-support.html", "ref": "EX-SUP1", "cliente": "Inès Martin", "quoi": "Support de téléphone · standard · rectangle",
-  "detail": "13° · passage du câble · « Camille » gravé", "alerte": "Le prénom est posé trop bas, sur les fentes du pied.", "total": "18,90 €"},
+  "detail": "13° · passage du câble · « Camille » gravé", "alerte": "Le prénom est collé tout en bas, juste au-dessus des fentes : à remonter.", "total": "18,90 €"},
 ]
 CSS = """
 html,body{margin:0}body,.ash{font-family:Inter,system-ui,-apple-system,sans-serif}.ph-title{font-family:"Playfair Display",Georgia,serif}

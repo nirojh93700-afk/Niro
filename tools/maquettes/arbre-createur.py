@@ -352,6 +352,7 @@ HTML_OUTIL = r"""
   <div class="prc-sh"><span class="prc-num done">2</span><h3>Les prénoms</h3></div>
   <p class="prc-legend">Jusqu'à six prénoms : <b>les 2 premiers sont compris, chaque prénom en plus +3 €</b>. Chaque prénom a son cœur : ajoutez un prénom, un cœur apparaît dans l'arbre. Les flèches changent l'ordre.</p>
   <div id="listeNoms"></div>
+  <p class="prc-hint prc-miss" id="alerteNoms" style="margin:6px 0 0"></p>
   <button type="button" class="ab-ajout" id="ajoutNom">+ Ajouter un prénom</button>
   <p class="prc-hint">10 lettres au plus par prénom. Le prénom est découpé dans le bois, attaché au bord de son cœur : rien ne tombe.</p>
  </section>
@@ -375,12 +376,14 @@ HTML_OUTIL = r"""
   <div class="ab-gchamps" id="gchamps" hidden>
    <input type="text" id="piedTexte" maxlength="20" placeholder="Ex. Famille Martin" aria-label="Texte gravé sur le pied">
    <select id="piedPolice" aria-label="Écriture du pied"></select>
-   <div class="sc-styles" id="piedOu" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+   <div class="sc-styles" id="piedOu" style="grid-template-columns:repeat(2,minmax(0,1fr))">
     <button type="button" class="sc-style" data-v="gauche"><b>Pied gauche</b><small>Le texte à gauche</small></button>
     <button type="button" class="sc-style" data-v="droite"><b>Pied droit</b><small>Le texte à droite</small></button>
-    <button type="button" class="sc-style" data-v="deux"><b>Les deux pieds</b><small>Le texte de chaque côté</small></button>
+    <button type="button" class="sc-style" data-v="deux"><b>Les deux pieds</b><small>Le même texte de chaque côté</small></button>
+    <button type="button" class="sc-style" data-v="suite"><b>La suite sur le 2ᵉ pied</b><small>Un texte à gauche, la suite à droite</small></button>
    </div>
-   <p class="prc-hint" style="margin:0">20 lettres au plus. Gravé sur le bas du pied, sous l'arbre.</p>
+   <input type="text" id="piedTexte2" maxlength="20" placeholder="La suite sur le pied droit, ex. depuis 2026" aria-label="Suite du texte, gravée sur le pied droit" hidden>
+   <p class="prc-hint" style="margin:0">20 lettres au plus par pied. Gravé sur le bas du pied, sous l'arbre. Un pied ou les deux : même prix.</p>
   </div>
  </section>
  <section class="prc-step" id="etape3">
@@ -430,7 +433,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;
 /* ---- l'arbre de vie d'Atomm : 9 arbres, et pour chaque nombre de prénoms (1 à 6) un arbre déjà dessiné avec ses cœurs
    ou ses cercles (canevas 300 × 300 mm, vendu en 18 cm). Les tracés sont des fichiers à part, chargés à la demande. ---- */
 var MAX=D.max, TAILLE=D.taille, K=TAILLE/300, MATIERES=D.matieres;
-var S={arbre:'life',forme:'heart',noms:['Léo','Nora','Maël','Inès'],police:'pacifico',pied:{grave:false,texte:'',police:'pacifico',ou:'deux'}};
+var S={arbre:'life',forme:'heart',noms:['Léo','Nora','Maël','Inès'],police:'pacifico',pied:{grave:false,texte:'',texte2:'',police:'pacifico',ou:'deux'}};
 function A(){for(var i=0;i<D.arbres.length;i++)if(D.arbres[i].id===S.arbre)return D.arbres[i];return D.arbres[0]}
 function police(id){for(var i=0;i<D.polices.length;i++)if(D.polices[i][0]===id)return D.polices[i];return D.polices[0]}
 function Mde(id){for(var i=0;i<MATIERES.length;i++)if(MATIERES[i].id===id)return MATIERES[i];return MATIERES[0]}
@@ -461,7 +464,7 @@ var BOIS=Mde('contreplaque');
 
 /* ---- un prénom dans son cœur (ou son cercle), comme Atomm : le prénom est en bois, il part du bord gauche du cœur et rejoint
    le bord droit par un petit trait, les accents et les points sont reliés à leur lettre ; l'intérieur des lettres est évidé ---- */
-var CV=document.createElement('canvas').getContext('2d');
+var CV=document.createElement('canvas').getContext('2d'),PETITS=[];
 var ACC=/[éèêëàâäîïíìôöóòûüùúÿÉÈÊËÀÂÄÎÏÔÖÛÜÙij]/;
 function encre(txt,pol,fs){CV.font='100px '+pol;var m=CV.measureText(txt),f=fs/100;return{l:m.actualBoundingBoxLeft*f,r:m.actualBoundingBoxRight*f,w:m.width*f}}
 function texteNom(g,txt,cx,base,fs,pol,fill,extra){
@@ -474,7 +477,7 @@ function texteNom(g,txt,cx,base,fs,pol,fill,extra){
 function nomDansForme(sl,txt,uid){
  if(!txt)return;
  var t=sl.t,h=t[3],fs=h*2.36,cx=t[0]+t[2]/2,base=t[1]+h*1.76,pol=police(S.police)[2];
- var e=encre(txt,pol,fs);if(e.l+e.r>t[2]){fs*=t[2]/(e.l+e.r);e=encre(txt,pol,fs)}
+ var e=encre(txt,pol,fs);if(e.l+e.r>t[2]){var q=t[2]/(e.l+e.r);if(q<.72)PETITS.push(txt);fs*=q;e=encre(txt,pol,fs)}
  /* retouche de l'atelier (Gestion) : décalage et taille de ce prénom, absents côté cliente */
  var aj=(S.aj||[])[uid];if(aj){cx+=aj.dx||0;base+=aj.dy||0;if(aj.s&&aj.s!==1){fs*=aj.s;e=encre(txt,pol,fs)}}
  var outer=el('g',{'clip-path':'url(#cp'+uid+')'},$('noms'));
@@ -491,7 +494,11 @@ var P=D.pied,PIO=10.2,SOL=300+PIO/K; /* le bas de l'arbre est à 10,2 mm du sol,
 function piedGrave(){return S.pied.grave&&S.pied.texte.trim()?S.pied.texte.trim():''}
 /* le pied gravé : à gauche (pièce A), à droite (pièce B) ou les deux — gérant, 12/11 : « le client peut sélectionner le pied droit et / ou gauche » */
 function piedOu(){var o=S.pied.ou;return o==='une'?'gauche':o}
+/* « la suite sur le 2e pied » (gérant, 12/11 : « commencer sur le premier et continuer sur le deuxième, les deux pour cinq euros ») :
+   le pied gauche porte le texte, le pied droit la suite */
+function piedSuite(){return piedOu()==='suite'?(S.pied.texte2||'').trim():''}
 function piedGrav(f,uid,fill,toujours){var t=piedGrave(),o=piedOu();if(!t||(!toujours&&((f==='a'&&o==='droite')||(f==='b'&&o==='gauche'))))return '';
+ if(o==='suite'&&f==='b'){t=piedSuite();if(!t)return ''}
  var pol=police(S.pied.police)[2],fs=P.txt.size,e=encre(t,pol,fs);if(e.l+e.r>P.txt.maxw)fs*=P.txt.maxw/(e.l+e.r);
  var x=f==='a'?P.txt.x:P.larg-P.txt.x,anc=f==='a'?'start':'end',yb=P.txt.base;
  var pj=S.pied.aj;if(pj){x+=(f==='a'?1:-1)*(pj.dx||0);yb+=pj.dy||0;fs*=pj.s||1}
@@ -514,8 +521,9 @@ function dessiner(){
  var d=TR[k];
  ['arbreP','arbreV','ombreA'].forEach(function(i){$(i).setAttribute('d',d)});
  $('arbreP').setAttribute('fill','url(#g-contreplaque)');$('arbreP').setAttribute('stroke',BOIS.bord);
- $('noms').innerHTML='';
+ $('noms').innerHTML='';PETITS=[];
  slots().forEach(function(sl,i){nomDansForme(sl,S.noms[i].trim(),i)});
+ $('alerteNoms').textContent=PETITS.length?(PETITS.length>1?PETITS.map(function(x){return '« '+x+' »'}).join(', ')+' sont longs : ils seront gravés plus petit que les autres.':'« '+PETITS[0]+' » est long : il sera gravé plus petit que les autres.'):'';
  dessinerPieds();fichier();majListe();resume();if(V3.pret)V3.maj();
  $('aide').textContent=V3.actif?'Vue 3D indicative : faites glisser pour tourner l\'arbre.':'Aperçu indicatif : arbre de 18 cm découpé d\'une seule pièce dans du contreplaqué 3 mm.'}
 
@@ -563,7 +571,7 @@ function resume(){var noms=S.noms.map(function(t){return t.trim()}).filter(Boole
   +'<div class="prc-sumrow"><span>Prénoms</span><b>'+(noms.length?noms.map(esc).join(', '):'aucun')+'</b></div>'
   +'<div class="prc-sumrow"><span>Prénoms en plus</span><b>'+(enPlus()?enPlus()+' × '+eur(D.prix.nom)+' = +'+eur(enPlus()*D.prix.nom):'2 prénoms compris')+'</b></div>'
   +'<div class="prc-sumrow"><span>Pied</span><b>Compris · 2 pièces à emboîter · 10 cm</b></div>'
-  +'<div class="prc-sumrow"><span>Gravure du pied</span><b>'+(piedGrave()?'« '+esc(piedGrave())+' » · '+police(S.pied.police)[1]+' · '+(piedOu()==='deux'?'les deux pieds':piedOu()==='droite'?'pied droit':'pied gauche')+' · +'+eur(D.prix.gravePied):'Non')+'</b></div>'
+  +'<div class="prc-sumrow"><span>Gravure du pied</span><b>'+(piedGrave()?'« '+esc(piedGrave())+' » · '+police(S.pied.police)[1]+' · '+(piedOu()==='deux'?'les deux pieds':piedOu()==='droite'?'pied droit':piedOu()==='suite'?'pied gauche, puis « '+esc(piedSuite()||'…')+' » sur le pied droit':'pied gauche')+' · +'+eur(D.prix.gravePied):'Non')+'</b></div>'
   +'<div class="prc-sumrow"><span>Autour des prénoms</span><b>'+(S.forme==='heart'?'Cœurs':'Cercles')+'</b></div>'
   +'<div class="prc-sumrow"><span>Écriture</span><b>'+police(S.police)[1]+'</b></div>'
   +'<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+eur(total())+'</b></div>';
@@ -574,9 +582,11 @@ function resume(){var noms=S.noms.map(function(t){return t.trim()}).filter(Boole
 $('ajouter').addEventListener('click',function(){if(!this.disabled)this.textContent='Ajouté au panier ✓ (maquette)'});
 $('piedPolice').innerHTML=D.polices.map(function(q){return '<option value="'+q[0]+'">'+q[1]+'</option>'}).join('');
 function majPied(){$('gravePied').checked=S.pied.grave;$('gchamps').hidden=!S.pied.grave;$('piedPolice').value=S.pied.police;
- [].forEach.call($('piedOu').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')===piedOu())})}
+ [].forEach.call($('piedOu').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')===piedOu())});
+ $('piedTexte2').hidden=piedOu()!=='suite';$('piedTexte2').value=S.pied.texte2||''}
 $('gravePied').addEventListener('change',function(){S.pied.grave=this.checked;majPied();dessiner();if(this.checked)$('piedTexte').focus()});
 $('piedTexte').addEventListener('input',function(){S.pied.texte=this.value;dessiner()});
+$('piedTexte2').addEventListener('input',function(){S.pied.texte2=this.value;dessiner()});
 $('piedPolice').addEventListener('change',function(){S.pied.police=this.value;dessiner();
  if(document.fonts&&document.fonts.load)document.fonts.load('40px '+police(S.pied.police)[2],S.pied.texte||'a').then(dessiner,function(){})});
 $('piedOu').addEventListener('click',function(ev){var b=ev.target.closest('.sc-style');if(!b)return;S.pied.ou=b.getAttribute('data-v');majPied();dessiner()});

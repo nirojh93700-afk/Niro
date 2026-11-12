@@ -21,6 +21,9 @@ function tracer(png,nom){
  const ds=[...s.matchAll(/<path d="([^"]+)"/g)].map(m=>m[1]);
  const T=(x,y)=>[(x/10)/R,(H-y/10)/R];
  return ds.map(d=>aplatir(d,T)).filter(Boolean)}
+/* une photo à graver : rendue en niveaux de gris à 12 points par mm (≈ 300 dpi), recadrée sur ce qui est dessiné → image posée en mm */
+function photo(png,RP){const o=execFileSync('python3',['-I','-c','import sys,io,base64,json\nfrom PIL import Image,ImageChops\nim=Image.open(sys.argv[1]).convert("L")\nbb=ImageChops.invert(im).getbbox()\nim=im.crop(bb)\nb=io.BytesIO();im.save(b,"PNG",optimize=True)\nprint(json.dumps({"bb":bb,"uri":"data:image/png;base64,"+base64.b64encode(b.getvalue()).decode()}))',png],{maxBuffer:1<<28}).toString();
+ const j=JSON.parse(o),f=v=>Math.round(v/RP*1000)/1000;return {x:f(j.bb[0]),y:f(j.bb[1]),w:f(j.bb[2]-j.bb[0]),h:f(j.bb[3]-j.bb[1]),uri:j.uri}}
 function aplatir(d,T){const tk=d.match(/[MmLlCcZz]|-?[\d.]+/g);let i=0,cx=0,cy=0,sx=0,sy=0,cmd='',o=[];
  const n=()=>+tk[i++],f=v=>Math.round(v*1000)/1000,p=(x,y)=>{const q=T(x,y);return f(q[0])+' '+f(q[1])};
  while(i<tk.length){if(/[A-Za-z]/.test(tk[i]))cmd=tk[i++];
@@ -37,7 +40,7 @@ function aplatir(d,T){const tk=d.match(/[MmLlCcZz]|-?[\d.]+/g);let i=0,cx=0,cy=0
  const b=await chromium.launch();
  const raster=await b.newPage({viewport:{width:800,height:800}});
  await raster.setContent('<html><head>'+FONTS+'</head><body style="margin:0;background:#fff"><div id="lzr"></div></body></html>');await raster.waitForTimeout(800);
- async function rendre(markup,w,h,nom){const W=Math.ceil(w*R),H=Math.ceil(h*R);await raster.setViewportSize({width:W,height:H});
+ async function rendre(markup,w,h,nom,RR){const Rr=RR||R,W=Math.ceil(w*Rr),H=Math.ceil(h*Rr);await raster.setViewportSize({width:W,height:H});
   await raster.evaluate(([m,w,h,W,H])=>{document.getElementById('lzr').innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+w+' '+h+'" style="display:block;background:#fff">'+m+'</svg>'},[markup,w,h,W,H]);
   await raster.evaluate(()=>document.fonts.ready);await raster.waitForTimeout(700);
   const f=path.join(TMP,nom+'.png');await raster.screenshot({path:f,clip:{x:0,y:0,width:W,height:H}});return f}
@@ -52,20 +55,22 @@ function aplatir(d,T){const tk=d.match(/[MmLlCcZz]|-?[\d.]+/g);let i=0,cx=0,cy=0
   const objs=[];let n=0;
   for(const o of f.objets){n++;
    if(o.type==='vect'){objs.push({...o});continue}
+   if(o.type==='image'){objs.push({id:o.id,type:'image',...photo(await rendre(o.markup,f.w,f.h,nom+'-'+n,12),12)});continue}
    const ds=tracer(await rendre(o.markup,f.w,f.h,nom+'-'+n),nom+'-'+n);if(ds.length)objs.push({id:o.id,type:o.type,d:ds.join(' ')})}
   const svg=await raster.evaluate(([objs])=>{const NS='http://www.w3.org/2000/svg',esc=t=>String(t).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
    const z=document.getElementById('lzr');
    z.innerHTML='<svg xmlns="'+NS+'" width="1000" height="1000"><g id="tout">'+objs.map(o=>o.type==='vect'?'<g id="'+esc(o.id)+'" data-v="1">'+o.markup+'</g>'
+     :o.type==='image'?'<image id="'+esc(o.id)+'" x="'+o.x+'" y="'+o.y+'" width="'+o.w+'" height="'+o.h+'" preserveAspectRatio="none" href="'+o.uri+'" xlink:href="'+o.uri+'"/>'
      :o.type==='cut'?'<path id="'+esc(o.id)+'" fill="none" stroke="#FF0000" stroke-width="0.1" d="'+o.d+'"/>':'<path id="'+esc(o.id)+'" fill="#000000" stroke="none" d="'+o.d+'"/>').join('')+'</g></svg>';
    z.querySelectorAll('g[data-v] path').forEach(e=>{e.setAttribute('fill','none');e.setAttribute('stroke','#FF0000');e.setAttribute('stroke-width','0.1');e.setAttribute('vector-effect','non-scaling-stroke');e.removeAttribute('fill-rule')});
    z.querySelectorAll('g[data-v]').forEach(e=>{e.removeAttribute('data-v');e.querySelectorAll('[data-mat],[data-piece],[data-nom]').forEach(x=>{x.removeAttribute('data-mat');x.removeAttribute('data-piece');x.removeAttribute('data-nom')})});
    const g=document.getElementById('tout'),bb=g.getBBox(),r=v=>Math.round(v*100)/100,W=r(bb.width+10),H=r(bb.height+10);
    g.setAttribute('transform','translate('+r(5-bb.x)+' '+r(5-bb.y)+')');g.removeAttribute('id');
-   return {w:W,h:H,s:'<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="'+NS+'" width="'+W+'mm" height="'+H+'mm" viewBox="0 0 '+W+' '+H+'">\n'+g.outerHTML.replace(/></g,'>\n<')+'\n</svg>\n'}},[objs]);
+   return {w:W,h:H,s:'<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="'+NS+'" xmlns:xlink="http://www.w3.org/1999/xlink" width="'+W+'mm" height="'+H+'mm" viewBox="0 0 '+W+' '+H+'">\n'+g.outerHTML.replace(/></g,'>\n<')+'\n</svg>\n'}},[objs]);
   fs.writeFileSync(path.join(OUT,nom+'.svg'),svg.s);
-  const liste=objs.map(o=>({id:o.id,quoi:o.type==='grav'?'gravure':'découpe'}));
-  fichiers.push({fichier:nom+'.svg',w:svg.w,h:svg.h,titre:f.titre,matiere:f.matiere,note:f.note||'',gravure:objs.some(o=>o.type==='grav'),objets:liste});
-  console.log(nom,svg.w+' × '+svg.h+' mm ·',liste.map(o=>o.id+(o.quoi==='gravure'?' (gravure)':'')).join(', '))}
+  const liste=objs.map(o=>({id:o.id,quoi:o.type==='grav'?'gravure':o.type==='image'?'photo':'découpe'}));
+  fichiers.push({fichier:nom+'.svg',w:svg.w,h:svg.h,titre:f.titre,matiere:f.matiere,note:f.note||'',gravure:objs.some(o=>o.type==='grav'||o.type==='image'),objets:liste});
+  console.log(nom,svg.w+' × '+svg.h+' mm ·',liste.map(o=>o.id+(o.quoi!=='découpe'?' ('+o.quoi+')':'')).join(', '))}
 
  const p=await b.newPage({viewport:{width:1280,height:900}});const err=[];p.on('pageerror',e=>err.push(e.message));
  async function apercu(nom){const loc=p.locator('#scene');await loc.scrollIntoViewIfNeeded();await p.addStyleTag({content:'.sc-mur,.sc-vue,#astuce,.sc-tag,.gallery-arrow,#scene [stroke-dasharray]{display:none!important}'});
@@ -125,7 +130,7 @@ function aplatir(d,T){const tk=d.match(/[MmLlCcZz]|-?[\d.]+/g);let i=0,cx=0,cy=0
  /* ===== 3. décoration : « Flocons de neige » (classique, prénom en acrylique bleu) et « Pour Mamie » (plaque pleine) ===== */
  await p.goto('file://'+utf(DECO));await p.waitForTimeout(2500);
  async function deco(i,nom,titre){
-  await p.evaluate(i=>document.querySelector('.sc-mod[data-m="'+i+'"]').click(),i);await p.waitForTimeout(1200);
+  if(typeof i==='object')await p.evaluate(o=>scDemo(o),i);else await p.evaluate(i=>document.querySelector('.sc-mod[data-m="'+i+'"]').click(),i);await p.waitForTimeout(1500);
   await apercu(nom);
   const r=await p.evaluate(()=>{const F=document.getElementById('fichier'),vb=F.getAttribute('viewBox').split(' ').map(Number),cl=scEtat().S.style==='classique';
    const out={},nomDe=g=>'piece-'+g.getAttribute('data-piece')+'-'+(g.getAttribute('data-nom')||'');
@@ -138,10 +143,11 @@ function aplatir(d,T){const tk=d.match(/[MmLlCcZz]|-?[\d.]+/g);let i=0,cx=0,cy=0
    mats.forEach(m=>{const objets=m==='contreplaque'?[cadre]:[];
     [...F.querySelectorAll('g[data-mat="'+m+'"]')].filter(g=>g.getAttribute('data-piece')!=='1').forEach(g=>{const c=g.cloneNode(true);
      c.querySelectorAll('[fill="#FF0000"],[stroke="#FF0000"]').forEach(e=>e.remove());
-     c.querySelectorAll('[fill="#111"],image[filter^="url(#t"]').forEach(e=>e.remove());
+     c.querySelectorAll('[fill="#111"],image[filter^="url(#t"],image[clip-path]').forEach(e=>e.remove());
      c.querySelectorAll('[fill="#fff"],[stroke="#fff"]').forEach(e=>{if(e.closest('mask'))return;if(e.getAttribute('fill')==='#fff')e.setAttribute('fill','#000');if(e.getAttribute('stroke')==='#fff')e.setAttribute('stroke','#000')});
      objets.push({id:nomDe(g),type:'cut',markup:c.outerHTML});
-     if(g.querySelector('[fill="#111"],feFlood[flood-color="#111"]'))objets.push({id:'gravure-'+nomDe(g),type:'grav',markup:gravDe(g)})});
+     if(g.querySelector('[fill="#111"],feFlood[flood-color="#111"]'))objets.push({id:'gravure-'+nomDe(g),type:'grav',markup:gravDe(g)});
+     if(g.querySelector('image[clip-path]')){const ph=g.cloneNode(true);ph.querySelectorAll('[fill="#FF0000"],[stroke="#FF0000"]').forEach(e=>e.remove());objets.push({id:'photo-'+nomDe(g),type:'image',markup:ph.outerHTML})}});
     out[m]={w:vb[2],h:vb[3],objets}});
    return out});
   const noms={contreplaque:'Contreplaqué 3 mm','acr-bleu':'Acrylique bleu 3 mm','acr-rouge':'Acrylique rouge 3 mm','acr-blanc':'Acrylique blanc 3 mm','acr-noir':'Acrylique noir 3 mm'};
@@ -150,6 +156,7 @@ function aplatir(d,T){const tk=d.match(/[MmLlCcZz]|-?[\d.]+/g);let i=0,cx=0,cy=0
    note:nb+' objet'+(nb>1?'s séparés, que vous pouvez déplacer un par un':'')+'. '+(m==='contreplaque'&&Object.keys(r).length>1?'Le prénom est dans le fichier acrylique.':(m!=='contreplaque'?'À découper dans l\'acrylique, puis à coller sur le cadre comme sur l\'aperçu.':''))})}}
  await deco(0,'decoration-boule-flocons-camille','Décoration · boule · « Flocons de neige »');
  await deco(4,'decoration-cadeau-mamie','Décoration · cadeau · « Pour Mamie » (plaque pleine)');
+ await deco({forme:'Heart',photo:true,texte:'Mamie',mat:'acr-rouge',police:'great-vibes'},'decoration-coeur-photo-mamie','Décoration · cœur · photo gravée + « Mamie »');
 
  fs.writeFileSync(path.join(OUT,'fichiers.json'),JSON.stringify(fichiers,null,1));
  console.log('erreurs',JSON.stringify(err));await b.close();srv.kill();fs.rmSync(TMP,{recursive:true,force:true})})();

@@ -3205,3 +3205,36 @@ export async function getCronState(fresh = false) {
   const data = await getCatalogRaw(fresh);
   return data.cronState && typeof data.cronState === "object" ? { ...data.cronState } : {};
 }
+
+// ── Essais des fichiers laser (Gestion → Tests) — 12/11/2026 ─────────────────────────────────────────────
+// Gérant : « envoie-moi des tests… pour que j'essaie sur la machine ». Section « testsLaser » du catalogue :
+//   { notes: { [fichier]: { etat: "ok" | "ko" | "", note, at } }, reglages: { [matiere]: { decoupe, gravure, at } } }
+// Lecture fraîche + écriture de cette seule section, clé par clé (jamais de remplacement en bloc).
+export async function getTestsLaser(fresh = false) {
+  const data = await getCatalogRaw(fresh);
+  const t = data.testsLaser || {};
+  return { notes: t.notes || {}, reglages: t.reglages || {} };
+}
+
+export async function setTestLaser({ fichier, etat, note, matiere, decoupe, gravure }) {
+  const data = await getCatalogRaw(true);
+  const t = { notes: { ...(data.testsLaser?.notes || {}) }, reglages: { ...(data.testsLaser?.reglages || {}) } };
+  const txt = (v, n) => String(v ?? "").replace(/\s+/g, " ").trim().slice(0, n);
+  const at = new Date().toISOString();
+  if (fichier) {
+    const cle = txt(fichier, 120);
+    const e = ["ok", "ko"].includes(etat) ? etat : "";
+    const n = txt(note, 600);
+    if (!e && !n) delete t.notes[cle];
+    else t.notes[cle] = { etat: e, note: n, at };
+  }
+  if (matiere) {
+    const cle = txt(matiere, 60);
+    const d = txt(decoupe, 200), g = txt(gravure, 200);
+    if (!d && !g) delete t.reglages[cle];
+    else t.reglages[cle] = { decoupe: d, gravure: g, at };
+  }
+  data.testsLaser = t;
+  await persistCatalog(data, ["testsLaser"]);
+  return t;
+}

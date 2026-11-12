@@ -395,6 +395,8 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 .sc-mod-ok{margin:-4px 0 12px;padding:9px 12px;border-radius:10px;background:#fffaf0;border:1px solid var(--gold);font-size:.84rem}
 .sc-item input[data-edit].sc-pulse{box-shadow:0 0 0 3px var(--gold);transition:box-shadow .3s}
 @media (min-width:901px){.sc-mod{flex-basis:160px}}
+.sc-recale{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}.sc-recale .prc-hint{margin:0;flex:1 1 160px}
+.sc-plan-leg{margin:8px 0 0;padding:0;list-style:none;font-size:.8rem;line-height:1.5;color:var(--ink-soft)}.sc-plan-leg b{display:inline-block;min-width:1.6em;color:var(--ink)}
 @media (max-width:420px){.sc-ajout{font-size:.76rem;padding:10px 4px}.sc-forme{font-size:.72rem}.sc-taille small{display:none}.sc-motif{font-size:.68rem}}
 """
 
@@ -432,6 +434,7 @@ HTML_OUTIL = r"""
   </div>
   <div class="sc-panneau" id="panneau"></div>
   <div id="liste"></div>
+  <div class="sc-recale" id="zoneRecale" hidden><button type="button" class="sc-btn" id="recaler">Tout recaler sur le cadre</button><span class="prc-hint" id="msgRecale">Chaque pièce est remise à une place où elle est bien collée.</span></div>
  </section>
  <section class="prc-step" id="etape3">
   <div class="prc-sh"><span class="prc-num done" id="n6">5</span><h3>Votre création</h3></div>
@@ -448,7 +451,9 @@ HTML_ATELIER = r"""
  <h2>De votre côté : le fichier pour le laser se fabrique tout seul</h2>
  <p>À la commande, le site range dans le dossier de la commande le fichier de la décoration, à la taille réelle. Il change en direct ci-dessous quand vous modifiez la décoration au-dessus.</p>
  <div class="sc-agrid">
-  <div class="sc-feuille"><svg id="fichier" viewBox="0 0 110 110" role="img" aria-label="Fichier de découpe et de gravure"></svg><p class="sc-fnom" id="fnom"></p></div>
+  <div><div class="sc-feuille"><svg id="fichier" viewBox="0 0 110 110" role="img" aria-label="Fichier de découpe et de gravure"></svg><p class="sc-fnom" id="fnom"></p></div>
+   <div class="sc-feuille" id="planBloc" style="margin-top:14px"><svg id="plan" viewBox="0 0 110 110" role="img" aria-label="Plan de collage"></svg>
+    <p class="sc-fnom">Plan de collage : où coller chaque pièce, imprimé avec la fiche de l'atelier.</p><ul class="sc-plan-leg" id="planLeg"></ul></div></div>
   <div>
    <ul class="sc-legende"><li><i style="border-color:#d32f2f"></i>Trait rouge : à découper</li><li><i style="border-color:#111"></i>Noir : à graver</li></ul>
    <ul class="sc-points">
@@ -933,7 +938,8 @@ function fichier(){
    gr+='</g>'});
   h='<clipPath id="fclip"><path transform="'+fo+'" clip-rule="evenodd" d="'+f.d+'"/></clipPath><g clip-path="url(#fclip)">'+gr+'</g>'+h;
  }
- Fh.setAttribute('viewBox','0 0 '+lw+' '+lh);Fh.innerHTML=h;
+ Fh.setAttribute('viewBox','0 0 '+lw+' '+lh);Fh.innerHTML=h;plan();
+ var zr=$('zoneRecale');if(zr)zr.hidden=!cl||!S.els.length;
  var n=S.els.length;
  var trop=lw>200||lh>200;
  $('fnom').textContent=(trop?'⚠ plus grand que 200 × 200 mm : deux passages sur la F2 Ultra UV · ':'')+'decoration-'+f.id+'-'+S.taille+'-<n° de commande>.svg · '+lw+' × '+lh+' mm · '+'contreplaqué 3 mm · '
@@ -941,6 +947,27 @@ function fichier(){
  var acr={};S.els.forEach(function(e){var m=matEl(e);if(m.acrylique)acr[m.nom.toLowerCase()]=(acr[m.nom.toLowerCase()]||0)+1});
  var ks=Object.keys(acr);if(cl&&ks.length)$('fnom').textContent+=' · à découper aussi dans : '+ks.map(function(x){return x+' ('+acr[x]+')'}).join(', ');
 }
+
+/* ---- le plan de collage (atelier) : la décoration assemblée, chaque pièce avec son numéro (le même que dans le fichier) ---- */
+function plan(){var B=$('planBloc');if(!B)return;var cl=S.style==='classique';B.hidden=!cl||!S.els.length;if(B.hidden)return;
+ var f=F(),q=k(),W=S.W,H=S.H;function mm(v){return v/q} function X(v){return (v-ox())/q+5} function Y(v){return (v-oy())/q+5}
+ var h='<g transform="translate(5 5) scale('+sx().toFixed(5)+' '+sy().toFixed(5)+')"><path fill="#f1e6cf" stroke="#9c7744" stroke-width="'+(.3/sx()).toFixed(3)+'" fill-rule="evenodd" d="'+f.cadre+'"/></g>';
+ var Pp={cl:true,plein:'#fff',trait:'#555',grav:'#bbb',o:1.6,coupe:.3,ombre:false,filtre:'style="filter:grayscale(1) opacity(.45)"'},pastilles='',leg='<li><b>1</b> le cadre · contreplaqué</li>';
+ S.els.forEach(function(e,i){var t=taille(e);
+  if(e.type==='texte')h+=pieceTexte(e,X(e.x),Y(e.y),mm(e.fs),Pp,'p'+e.id);
+  else if(e.type==='dessin')h+=pieceDessin(e,X(e.x),Y(e.y),mm(t.w),mm(t.h),Pp,'p'+e.id);
+  else h+=piecePhoto(e,X(e.x),Y(e.y),mm(t.w),mm(t.h),Pp,'p'+e.id);
+  var cx=e.bw?X(e.bx+e.bw/2):X(e.x),cy=e.bh?Y(e.by+e.bh/2):Y(e.y);
+  pastilles+='<circle cx="'+cx+'" cy="'+cy+'" r="3.4" fill="#1a1206"/><text x="'+cx+'" y="'+cy+'" text-anchor="middle" dominant-baseline="central" font-size="4" font-weight="700" fill="#fff" font-family="sans-serif">'+(i+2)+'</text>';
+  leg+='<li><b>'+(i+2)+'</b> '+esc(nomEl(e))+' · '+matEl(e).nom.toLowerCase()+'</li>'});
+ $('plan').setAttribute('viewBox','0 0 '+Math.ceil(W+10)+' '+Math.ceil(H+10));$('plan').innerHTML=h+pastilles;$('planLeg').innerHTML=leg}
+/* ---- « Tout recaler » : chaque pièce mal posée retrouve une place où elle est collée (les noms d'abord, puis les dessins) ---- */
+function recalerTout(){var n=0;
+ S.els.filter(function(e){return e.type==='texte'}).forEach(function(e){if(e.courbe)return;var av=e.x+'|'+e.y+'|'+e.s;e.auto=true;ajusterAuCadre(e);if(e.flottant||chevaucheAutre(e))poserTexte(e);if(av!==e.x+'|'+e.y+'|'+e.s)n++});
+ S.els.filter(function(e){return e.type!=='texte'}).forEach(function(e){dessiner();if(e.flottant){if(placerAuto(e))n++}});
+ S.sel=null;dessiner();
+ $('msgRecale').textContent=n?n+' pièce'+(n>1?'s remises':' remise')+' en place.':'Tout est déjà bien posé.'}
+$('recaler').addEventListener('click',recalerTout);
 
 /* ---- la vue 3D : la décoration suspendue à son ruban, le logo au mur (three.js, chargé seulement quand on touche « 3D ») ---- */
 var V3={pret:false,actif:false,n:0};

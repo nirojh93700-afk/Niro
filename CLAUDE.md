@@ -13,10 +13,15 @@
   « prêt à découper » (une pièce) + « modifiable » (arbre vectoriel + chaque prénom à part, qui dépasse de 0,8 mm sur le bois autour du cœur → déplacer
   puis Combiner → Unir). Fonctions de XCS vérifiées dans l'aide xTool : Dissocier, Combiner → Unir, Décalage, Modifier les nœuds ; un nom est un tracé,
   il ne se retape pas dans XCS (changer le texte = dans Gestion).
+- **Ajouts du 12/11 soir (« tu peux corriger tout ce que tu m'as dit »), PRÉPARÉS, à pousser sur son accord** : pièce d'essai d'emboîtement
+  (`essai-emboitement-fentes.svg`, 5 fentes de 2,8 à 3,2 mm, 1 à 5 points gravés) · essai avec une PHOTO gravée (image en niveaux de gris à 12 points / mm
+  posée en mm, type `image` de l'outil) · sous chaque fichier « ✓ Ça marche » / « ✗ À corriger » + note, et « Mes réglages machine, par matière »
+  (section `testsLaser` : `getTestsLaser` / `setTestLaser` en fin de `stock.js`, API `/api/admin/tests-laser`, clé par clé) · copie et liste par
+  `python3 -I tools/maquettes/tests-laser-publier.py <dossier des fichiers> <racine>` (10 fichiers).
 - ✅ EN LIGNE DANS GESTION le 12/11/2026 soir (« Oui, envoie sur le site », d9deda22 sur la branche du site + miroirs main / master ; vérifié :
   `/gestion/tests` et les fichiers répondent 200). ⚠️ La branche distante `claude/reprise-projet-dfumwy` est une VIEILLE branche qui a divergé
   (1858 commits) : ne jamais la forcer ; on pousse sur la branche du site.
-- **MAQUETTE « RETOUCHER AVANT DE GRAVER » (12/11 soir, son « oui ») — EN ATTENTE DE SON AVIS, RIEN en ligne** :
+- ✅ **MAQUETTE « RETOUCHER AVANT DE GRAVER » — ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« et dans admin ») = VERSION 3, RIEN en ligne** :
   https://claude.ai/artifact/CC8T7W7kK48YJ4dpH9vKTG · générateur `tools/maquettes/retouche-atelier.py <css Gestion> <support.html> <arbre.html>
   <decoration.html> <dossier arbres> <sortie> [vignettes.json]` (coquille de Gestion + les trois outils ouverts en « mode atelier » dans un cadre :
   habillage du site masqué, création de la cliente chargée avec un défaut d'exemple, `postMessage` pour valider). 3 commandes d'exemple : il ouvre,
@@ -55,9 +60,17 @@
 - **v7 (12/11 soir, gérant : « pour le pied gravé, le client peut sélectionner le pied droit et / ou gauche »)** : trois choix sous « Graver le pied
   (+5 €) » : **Pied gauche · Pied droit · Les deux pieds** (`S.pied.ou` = gauche / droite / deux ; pièce A = gauche, pièce B = droite ; l'ancien
   « une » = gauche). Aperçu de face, 3D, vignette « Le pied gauche / droit, vu de côté », résumé et fichier de l'atelier suivent. Même prix (+5 €).
+- **v8 (12/11 soir, gérant : « commencer sur le premier et continuer sur le deuxième s'il a envie, les deux c'est pour cinq euros »)** : 4ᵉ choix
+  **« La suite sur le 2ᵉ pied »** (un texte à gauche `pied.texte`, la suite à droite `pied.texte2`, 20 lettres chacun, toujours + 5 € pour tout) ;
+  alerte sous les prénoms quand l'un est long (« il sera gravé plus petit que les autres », réduction de plus de 28 %).
+- ✅✅ **ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« tu enregistres les maquettes, les trois maquettes et dans admin ») = VERSION 8 de l'artifact** :
+  c'est CELLE à reproduire au « applique », ne plus la modifier sans sa demande.
 - **À valider** : contour de la maquette = aperçu (vrais tracés soudés à la construction) ; dessins d'Atomm repris (sa décision, comme le support).
 
 ## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCORATION À SUSPENDRE » (générateur « Ornament » d'Atomm) — 12/11/2026 (gérant : « fais la même chose pour cette création… tout comme sur le site ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR = VERSION 6 de l'artifact (v5 + noms jamais coupés en Classique), CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
+- ✅✅ **ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« tu enregistres les maquettes, les trois maquettes et dans admin ») = VERSION 13 de l'artifact**
+  (v12 + bouton « Tout recaler sur le cadre » : chaque pièce mal posée retrouve une place collée, `recalerTout` ; + « Plan de collage » numéroté dans
+  la partie atelier, `plan()`, mêmes numéros que le fichier). C'est CELLE à reproduire au « applique », elle remplace la v6.
 - 🆕 **v7 (12/11 soir, gérant : « je voulais que tu fasses exactement le truc qu'il y a sur le logiciel de création… t'as oublié tout ça ») = les
   « ÉLÉMENTS » D'ATOMM AJOUTÉS** (oubliés jusque-là : j'avais lu « pas de dessins » du 12/11 comme « pas ceux d'Atomm non plus », ERREUR) : bouton
   « Un dessin » à côté de « Un texte » / « Ma photo », les **257 dessins** d'Atomm en 17 familles (Noël, Bougies, Sapins, Cadeaux, Cloches, Flocons,
@@ -119,6 +132,7 @@
 - **Prix PROPOSÉS par moi, à valider** : 9,90 € (cadre ou plaque) + 3 € par texte ou photo + 2 € pour un nom en acrylique. Questions : ruban, colle, prix de la grande.
 
 ## 🛠️ MAQUETTE « CRÉEZ VOTRE SUPPORT DE TÉLÉPHONE » — 12/11/2026 (gérant, lien du générateur Atomm de xTool : « est-ce qu'on peut utiliser cet outil de création sur mon site ? … fais-moi une maquette pour la deuxième solution ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 (« Tout est bon… enregistre la maquette ») = VERSION 4 (lettre fleurie comprise), puis refaite à sa demande en v5 et v6 (formes Atomm, ci-dessous). ✅ **V6 ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette telle quelle »), artifact version 6 : c'est CELLE à reproduire au « applique », ne plus la modifier sans sa demande.** Au « applique » : à la commande, le site range UN fichier SVG à la taille réelle (rouge = découpe, noir = gravure) dans le dossier de la commande ; textes passés en tracés (comme `fichierGravure.js`), dessins en vectoriel (`public/vectoriel/`), photo en image. RIEN en ligne.
+- ✅ **RÉ-ENREGISTRÉE LE 12/11/2026 SOIR avec les deux autres (« les trois maquettes ») = toujours la VERSION 11** (rien changé : l'outil empêche déjà de poser une gravure sur les fentes, `limites()` / `borner`).
 - **v6 (12/11 soir, gérant : « tu crées pas toi-même, tu prends sur le site » ; « prends vraiment les formes qu'ils ont de découpe » ; « pas de tablettes,
   l'un ou l'autre, un peu plus cher ») — CELLE à reproduire au « applique ».** Les formes de découpe viennent du générateur Atomm (xTool,
   `phone-stand-generator.generator.atommapps.com`, bouton « Download SVG », sans compte) : SA décision, prise après que je lui ai dit que leurs

@@ -16,6 +16,7 @@ const SAVE_ROUTES = {
   "/api/admin/settings": "Réglages enregistrés",
   "/api/admin/fetes": "Fêtes enregistrées",
   "/api/admin/materiel": "Matériel enregistré",
+  "/api/admin/tests-laser": "Essai enregistré",
   "/api/admin/prospects": "Restaurants & bars enregistrés",
   "/api/admin/catalog": "Catalogue enregistré",
   "/api/admin/stock": "Stock enregistré",
