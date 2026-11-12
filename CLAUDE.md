@@ -10,7 +10,7 @@
   pleine (`maskImg`) avec palettes et sortie « Score lines » (traits à peindre) ou « Color print ». Export = compte exigé.
 - **Décisions du gérant** : PAS de dessins (« pas ces images, tu mets que les photos » : ni les dessins de Noël, ni nos modèles, ni la lettre fleurie) ;
   **pas d'impression couleur** (« c'est avec une autre machine, je peux pas imprimer ») → le mode Color devient « Plaque pleine » gravée.
-- **Artifact** https://claude.ai/artifact/6Gs8LNkzpdvWMRDNZpE775 (v3) · générateur `tools/maquettes/decoration-createur.py <capture> <css> <sortie> <contours.json>`
+- **Artifact** https://claude.ai/artifact/6Gs8LNkzpdvWMRDNZpE775 (v4 : bulle « Glissez un nom pour le placer » sur l'aperçu, phrase dans l'étape, flèches ← ↑ ↓ → dans la fiche de chaque pièce) · générateur `tools/maquettes/decoration-createur.py <capture> <css> <sortie> <contours.json>`
   (même capture / css que le support de téléphone) · contours `tools/maquettes/decoration-contours.py <layouts.json> <masques> <sortie.json> <cadres>`
   (layouts = `api.xtool.com/efficacy/v1/data/type/aimake_cms_generator_layouts/items`, masques = `maskImg`, cadres = `mainImg`, OpenCV, plus grand côté 100 mm).
 - **Parcours** : ① forme (46, par groupe) · ② taille 30–150 mm, proportions liées · ③ style **Classique** (cadre découpé + pièces collées) / **Plaque pleine**
