@@ -27,6 +27,15 @@
 - **À valider** : contour de la maquette = aperçu (vrais tracés soudés à la construction) ; dessins d'Atomm repris (sa décision, comme le support).
 
 ## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCORATION À SUSPENDRE » (générateur « Ornament » d'Atomm) — 12/11/2026 (gérant : « fais la même chose pour cette création… tout comme sur le site ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR = VERSION 6 de l'artifact (v5 + noms jamais coupés en Classique), CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
+- 🆕 **v7 (12/11 soir, gérant : « je voulais que tu fasses exactement le truc qu'il y a sur le logiciel de création… t'as oublié tout ça ») = les
+  « ÉLÉMENTS » D'ATOMM AJOUTÉS** (oubliés jusque-là : j'avais lu « pas de dessins » du 12/11 comme « pas ceux d'Atomm non plus », ERREUR) : bouton
+  « Un dessin » à côté de « Un texte » / « Ma photo », les **257 dessins** d'Atomm en 17 familles (Noël, Bougies, Sapins, Cadeaux, Cloches, Flocons,
+  Rennes, Papillons, Œufs de Pâques, Feuillages, Autres, Lapins, Croix, Fleurs, Formes, Chaussettes, Bonnets). Comme Atomm : chaque dessin **découpé**
+  (pièce à sa forme, contreplaqué ou acrylique +2 €) ou **gravé** (sur une pièce découpée 1,6 mm autour de sa silhouette), taille, tourner ↺ ↻ (15°),
+  retourner, flèches, glisser ; en Plaque pleine il est gravé sur la plaque ; + 3 € par dessin. Chaîne : `node tools/maquettes/decoration-elements-atomm.cjs`
+  (leur panneau Element dans le navigateur → cats.json) → téléchargement des PNG → `python3 -I tools/maquettes/decoration-elements.py <elements.json>
+  <png> <elements-maquette.json>` (WebP 320 px + silhouette pleine) → 5ᵉ argument de `decoration-createur.py`. Page 6,5 Mo. EN ATTENTE DE SON AVIS.
+  ⛔ Leçon : « fais exactement comme le logiciel » = TOUS ses réglages ; ce qu'il exclut se retire seulement si c'est EXACTEMENT ce qu'il a nommé.
 - ✅✅ **V6 ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») : c'est CELLE à reproduire au « applique » (remplace la v5), ne plus la modifier sans sa demande.**
 - ✅ **v6 (12/11 soir, captures iPhone : « les noms quand ils dépassent de l'objet ça coupe, on voit pas, il faut pas que ça se coupe »)** = VERSION 6 de l'artifact, CELLE à reproduire : en style **Classique**, un nom ou une photo est une pièce COLLÉE par-dessus le cadre → affiché ENTIER même s'il dépasse (plus de découpe à la forme sur l'aperçu de face) ; en **Plaque pleine** (tout gravé sur la plaque) rien ne sort de la forme, comme avant.
 - ⛔ **RÈGLE (gérant, 12/11, après une 1re version fausse) : quand il donne un logiciel ou un site à reproduire, L'ANALYSER À FOND AVANT de construire**
