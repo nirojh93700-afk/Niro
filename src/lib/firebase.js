@@ -387,6 +387,57 @@ export async function getSiteOrder(id) {
   }
 }
 
+// ---- Créations des outils (support de téléphone, arbre de vie, décoration) — 12/11/2026 ----
+// Une création = l'état COMPLET de l'outil (forme, taille, pièces, textes, places), trop long pour les réglages d'une
+// commande (sanitizeSpec coupe à 400 caractères) : il est gardé à part, la commande ne porte que { outil, id }.
+// Le document garde la version de la CLIENTE (jamais modifiée) et, à côté, celle de l'ATELIER (retouche du gérant).
+const OUTILS_CREATION = ["support", "arbre", "decoration"];
+const idCreation = (id) => String(id || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 60);
+export async function getCreation(id) {
+  const a = getApp(), k = idCreation(id);
+  if (!a || !k) return null;
+  try {
+    const doc = await admin.firestore().collection("creations").doc(k).get();
+    if (!doc.exists) return null;
+    const d = doc.data() || {};
+    const lire = (t) => { try { return t ? JSON.parse(t) : null; } catch { return null; } };
+    return { id: k, outil: d.outil || "", etat: lire(d.etat), atelier: lire(d.atelier), at: d.at || "", atelierAt: d.atelierAt || "" };
+  } catch (e) {
+    console.error("Lecture création Firebase:", e.message);
+    return null;
+  }
+}
+// La version de l'atelier (etat = null : on revient à la version de la cliente). 700 Ko au plus (un document = 1 Mo).
+export async function setCreationAtelier(id, etat) {
+  const a = getApp(), k = idCreation(id);
+  if (!a || !k) return { ok: false, error: "Base indisponible." };
+  const txt = etat ? JSON.stringify(etat) : "";
+  if (txt.length > 700000) return { ok: false, error: "Cette création est trop lourde pour être gardée (photo trop grande)." };
+  try {
+    const ref = admin.firestore().collection("creations").doc(k), doc = await ref.get();
+    if (!doc.exists) return { ok: false, error: "Création introuvable." };
+    await ref.update({ atelier: txt, atelierAt: txt ? new Date().toISOString() : "" });
+    return { ok: true };
+  } catch (e) {
+    console.error("MAJ création Firebase:", e.message);
+    return { ok: false, error: "Enregistrement impossible." };
+  }
+}
+// Enregistre la création d'une cliente (appelé par la fiche du produit le jour où ces produits seront en vente).
+export async function creerCreation(id, outil, etat) {
+  const a = getApp(), k = idCreation(id);
+  if (!a || !k || !OUTILS_CREATION.includes(outil) || !etat || typeof etat !== "object") return false;
+  const txt = JSON.stringify(etat);
+  if (txt.length > 700000) return false;
+  try {
+    await admin.firestore().collection("creations").doc(k).create({ outil, etat: txt, atelier: "", at: new Date().toISOString(), atelierAt: "" });
+    return true;
+  } catch (e) {
+    console.error("Création Firebase:", e.message);
+    return false;
+  }
+}
+
 // Met à jour le statut d'une commande (a_preparer | expediee).
 export async function updateSiteOrderStatus(id, status) {
   const a = getApp();

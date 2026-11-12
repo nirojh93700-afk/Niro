@@ -18,6 +18,22 @@
 - `next.config.js` : `X-Robots-Tag: noindex` sur `/atelier-outils/` et `/atelier-tests/`. ⚠️ Ces pages sont dans `public/` : joignables par
   leur adresse sans mot de passe (comme les fichiers de test), liées nulle part ailleurs que dans Gestion.
 
+- **BOUTON « ✎ CORRIGER DANS L'OUTIL » DANS LES COMMANDES — 12/11/2026 SOIR (gérant : « dans la fiche gravure où il y a les détails, je veux un
+  bouton pour corriger ; ça va directement dans l'outil du produit » → « on va faire le un, et le 2 garde en mémoire, on verra plus tard »)
+  — CONSTRUIT, PAS POUSSÉ** : un article créé avec l'un des trois outils porte `spec.creation = { outil: "support" | "arbre" | "decoration", id }`.
+  L'état complet de la création est gardé À PART (collection Firestore `creations/<id>` : `etat` = version de la cliente, jamais modifiée ;
+  `atelier` = la retouche du gérant ; `getCreation / setCreationAtelier / creerCreation` dans firebase.js ; `sanitizeSpec` couperait l'état).
+  `src/lib/creationOutil.js` (`lienCorriger(item, order)`) → bouton dans `FicheAtelier` (fiche commande, jamais sur le papier) et sur la page
+  Atelier → `/gestion/retouche?creation=<id>&commande=<réf>` : l'outil s'ouvre sur la création de la cliente (`nivAtelier.charger(etat)`, ou sur
+  la version de l'atelier si elle existe), « Fabriquer » garde sa version (`POST /api/admin/creation {id, atelier}`), « Revenir à la version
+  de la cliente » l'efface, « ‹ Retour à la commande ». Vérifié sur une commande simulée, 390 / 1280 : chargement, retouche, fichiers,
+  réouverture, retour. ⚠️ **Le bouton n'apparaîtra sur aucune vraie commande tant que ces trois produits ne sont pas EN VENTE** : le jour de
+  l'« applique », la fiche du produit devra appeler `creerCreation(id, outil, etat)` (photos envoyées par `/api/upload`, pas en data URI :
+  700 Ko au plus par création) et mettre `creation: { outil, id }` dans les réglages du panier.
+- ⏳ **CAS 2, GARDÉ EN MÉMOIRE POUR PLUS TARD (sa décision du 12/11 soir)** : le même bouton « Corriger » pour les produits DÉJÀ en vente
+  (verres, carafe, bijoux, cristal, gobelet, carnet, marque-pages) : ouvrir la gravure telle que la cliente l'a vue, changer le texte,
+  l'écriture, la place, la taille, puis sortir le fichier pour la machine. Un outil par famille ; je conseillais de commencer par les verres
+  et la carafe. Ne rien construire avant qu'il le redemande.
 ## 🔧 RAPPORT PRODUITS DU 12/11/2026 — POINTS 2, 3, 4, 5, 7 (gérant : « corriger les points 2, 3, 4, 5 et le 7 ») — ✅ EN LIGNE LE 12/11/2026 SOIR (« OK, mets la correction en ligne », d7a2dcbf, déploiement réussi, les 4 fiches vérifiées en ligne)
 - ② « Hypoallergénique » : `sansAllegations` (catalog.js) retire aussi le mot en TÊTE d'une liste (« Hypoallergénique • Résistant… », description de la
   gourmette enregistrée dans Gestion) · ③ décoration de Noël en cristal ajoutée à `PIECES_ACHETEES` (plus d'encadré « Fait main dans notre atelier ») ·

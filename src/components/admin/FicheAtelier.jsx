@@ -26,6 +26,7 @@ import ApercuClient from "@/components/admin/ApercuClient";
 import Apercu3DCommande, { a3D } from "@/components/admin/Apercu3DCommande";
 import ApercuPapeterie, { aApercuPapeterie } from "@/components/admin/ApercuPapeterie";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
+import { lienCorriger } from "@/lib/creationOutil";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -311,7 +312,22 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
       ) : null}
       {/* Une image échangée APRÈS la commande (autre version envoyée par « Répondre », aperçu validé) prime sur celle du site (08/11/2026). */}
       <ImagesEchangees order={order} print={print} compact />
-      {items.map((it, i) => <ItemSheet key={i} item={it} />)}
+      {items.map((it, i) => {
+        // Produit créé avec un outil (support de téléphone, arbre de vie, décoration) : le bouton ouvre la création de la cliente
+        // dans le même outil, pour la corriger et fabriquer les fichiers de la machine (12/11/2026). Jamais sur le papier.
+        const corriger = print ? null : lienCorriger(it, order);
+        return (
+          <div key={i}>
+            <ItemSheet item={it} />
+            {corriger ? (
+              <div style={{ margin: "0 0 10px", padding: "10px 12px", border: "1.5px solid #c9a24b", borderRadius: 10, background: "#fffaf0", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+                <a className="fq-btn sm primary" href={corriger}>✎ Corriger dans l&apos;outil</a>
+                <span style={{ fontSize: "0.82rem", color: "#6b5d4a", flex: "1 1 200px", minWidth: 0, lineHeight: 1.4 }}>Ouvre la création de la cliente : vous changez le texte, la place, la taille, puis vous fabriquez les fichiers pour la machine. Sa version reste gardée.</span>
+              </div>
+            ) : null}
+          </div>
+        );
+      })}
       {/* Devis payé AVEC d'autres articles du site (02/11/2026) : la demande du devis aussi. */}
       {order?.surMesure ? (
         <div style={{ marginTop: 10 }}>

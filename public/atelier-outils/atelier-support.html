@@ -680,7 +680,7 @@ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(dessiner);
 window.scDemo=function(o){o=o||{};voirCreation();S.forme=o.forme||'arche';S.taille=o.taille||'standard';S.grave=o.grave!==false;S.ajoure=!!o.ajoure;S.motif=o.motif||'coeurs';
  S.angle=o.angle||13;S.els=[];S.seq=0;if(S.grave){ajouter({type:'photo',src:D.exemple,nom:'exemple'});ajouter({type:'texte',texte:'Camille & Paul',police:'great-vibes'})}
  S.sel=null;majChoix();dessiner()};
-window.scAtelier={S:S,dessiner:function(){dessiner()}};
+window.scAtelier={S:S,dessiner:function(){dessiner()},maj:function(){voirCreation();majChoix();panneau();dessiner()}};
 window.scEtat=function(){return {S:S,total:total(),pret:pret(),base:base(),trous:trous().length}};
 })();
 </script>
@@ -704,7 +704,15 @@ body{background:#fbf7ee;padding-bottom:40px}
   var S=A().S;S.els=S.els.filter(function(e){return e.type==='texte'});if(S.els[0])S.els[0].texte='Camille';S.sel=null;A().dessiner();window.scrollTo(0,0);return true}
  function alerte(){return ''}
 
- window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,
+ /* l'état COMPLET de la création (forme, taille, pièces, textes, places) : c'est lui que la commande garde */
+ function etat(){var o=JSON.parse(JSON.stringify(A().S));delete o.sel;delete o.panneau;return o}
+ function recharger(e){if(!e||typeof e!=='object')return false;var S=A().S,k;
+  for(k in S)if(Object.prototype.hasOwnProperty.call(S,k)&&!(k in e)&&k!=='sel'&&k!=='panneau')delete S[k];
+  for(k in e)if(Object.prototype.hasOwnProperty.call(e,k))S[k]=JSON.parse(JSON.stringify(e[k]));
+  if('sel' in S||QUOI!=='arbre'){S.sel=null;S.panneau=null}
+  if(Array.isArray(S.els))S.seq=S.els.reduce(function(a,x){return Math.max(a,+x.id||0)},0);
+  A().maj();if(typeof apresCharge==='function')apresCharge();window.scrollTo(0,0);return true}
+ window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,etat:etat,charger:recharger,
   fabriquer:function(progres){return window.NivFabrique.fabriquer(window.NivFabrique.specs[QUOI](),progres)}};
  var essais=0;(function pret(){essais++;var ok=false;try{ok=charge()}catch(e){ok=false}
   if(ok||essais>80){setTimeout(function(){window.nivAtelier.pret=true;try{parent.postMessage({type:'niv-pret',quoi:QUOI},location.origin)}catch(_){}} ,600)}else setTimeout(pret,250)})();

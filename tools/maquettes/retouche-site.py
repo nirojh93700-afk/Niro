@@ -35,7 +35,15 @@ JS_COMMUN = r"""
 (function(){
  var QUOI='__QUOI__',EX=(location.search.match(/[?&]ex=([a-z0-9-]+)/)||[])[1]||'';
  __INIT__
- window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,
+ /* l'état COMPLET de la création (forme, taille, pièces, textes, places) : c'est lui que la commande garde */
+ function etat(){var o=JSON.parse(JSON.stringify(A().S));delete o.sel;delete o.panneau;return o}
+ function recharger(e){if(!e||typeof e!=='object')return false;var S=A().S,k;
+  for(k in S)if(Object.prototype.hasOwnProperty.call(S,k)&&!(k in e)&&k!=='sel'&&k!=='panneau')delete S[k];
+  for(k in e)if(Object.prototype.hasOwnProperty.call(e,k))S[k]=JSON.parse(JSON.stringify(e[k]));
+  if('sel' in S||QUOI!=='arbre'){S.sel=null;S.panneau=null}
+  if(Array.isArray(S.els))S.seq=S.els.reduce(function(a,x){return Math.max(a,+x.id||0)},0);
+  A().maj();if(typeof apresCharge==='function')apresCharge();window.scrollTo(0,0);return true}
+ window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,etat:etat,charger:recharger,
   fabriquer:function(progres){return window.NivFabrique.fabriquer(window.NivFabrique.specs[QUOI](),progres)}};
  var essais=0;(function pret(){essais++;var ok=false;try{ok=charge()}catch(e){ok=false}
   if(ok||essais>80){setTimeout(function(){window.nivAtelier.pret=true;try{parent.postMessage({type:'niv-pret',quoi:QUOI},location.origin)}catch(_){}} ,600)}else setTimeout(pret,250)})();
@@ -76,11 +84,20 @@ INIT = {
    ['input','click','change'].forEach(function(t){document.addEventListener(t,function(ev){if(ev.target.closest&&!ev.target.closest('#atReg'))maj()})});window.scrollTo(0,0)}
   return abEtat().pret}
  function alerte(){return abEtat().pret?'':'L\'arbre se charge encore.'}
+ function apresCharge(){reglages()}
 """,
 }
 
+MAJ = {
+ "support": "maj:function(){voirCreation();majChoix();panneau();dessiner()}",
+ "deco": "maj:function(){voirCreation();majFormes();majTaille();majMatiere();majStyle();panneau();dessiner()}",
+}
 def atelier(src, quoi, nom):
     s = open(src, encoding="utf-8").read()
+    if quoi in MAJ:
+        cle = "window.scAtelier={S:S,dessiner:function(){dessiner()}};"
+        assert s.count(cle) == 1, quoi
+        s = s.replace(cle, "window.scAtelier={S:S,dessiner:function(){dessiner()}," + MAJ[quoi] + "};")
     js = JS_COMMUN.replace("__QUOI__", quoi).replace("__INIT__", INIT[quoi])
     s = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow">'
          '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Outil de l\'atelier</title></head><body>'

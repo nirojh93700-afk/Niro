@@ -35,6 +35,7 @@ import BoutonRate, { RatesCommande } from "@/components/admin/Rates";
 import VarBadge from "@/components/admin/VarBadge";
 import ApercuClient from "@/components/admin/ApercuClient";
 import { GlassPreview } from "@/components/admin/FicheAtelier";
+import { lienCorriger } from "@/lib/creationOutil";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
 import { nomAffiche } from "@/lib/nomLivraison";
 
@@ -335,6 +336,8 @@ export default function AtelierPage() {
                   ) : null}
                   {/* Tableau professionnel « quel texte sur quelle face ». */}
                   <TableGravure item={item} titre={false} />
+                  {/* Produit créé avec un outil (support, arbre, décoration) : ouvrir la création de la cliente pour la corriger (12/11/2026). */}
+                  {lienCorriger(item, o) ? <a className="fq-btn sm primary" href={lienCorriger(item, o)} style={{ display: "inline-flex", margin: "6px 0" }}>✎ Corriger dans l&apos;outil</a> : null}
                   {/* Consignes envoyées par e-mail (une fois par commande). */}
                   {g.travaux.findIndex((t) => t.o.id === o.id) === idx
                     ? <MessagesEmail email={o.customerEmail} depuis={o.createdAt} adminKey={key} /> : null}

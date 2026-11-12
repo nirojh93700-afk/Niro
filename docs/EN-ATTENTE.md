@@ -4,6 +4,14 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
+## ✎ BOUTON « CORRIGER » DES COMMANDES — CAS 2, POUR PLUS TARD (gérant, 12/11/2026 soir : « le 2 garde en mémoire, on verra plus tard »)
+- Le bouton « Corriger dans l'outil » existe pour le support de téléphone, l'arbre de vie et la décoration (construit le 12/11, pas poussé,
+  et visible seulement quand ces trois produits seront en vente). **Reste à faire sur sa demande** : le même bouton pour les produits déjà
+  en vente (verres, carafe, bijoux, cristal, gobelet, carnet, marque-pages) : ouvrir la gravure de la cliente, changer texte, écriture,
+  place, taille, sortir le fichier machine. Un outil par famille ; conseil donné : commencer par les verres et la carafe.
+- En attente aussi : son « mets en ligne » pour l'écran Gestion › Tests › Retoucher et fabriquer ; un projet xTool (.xcs) d'exemple avec un
+  texte, s'il veut un texte double-cliquable dans xTool.
+
 ## 💶 PRIX D'ACHAT DES ARTICLES (AVEC LIVRAISON) — À RECEVOIR DU GÉRANT (11/11/2026)
 - Il donnera le prix d'achat de chaque article, livraison du fournisseur comprise (« tu enregistres quelque part avec les prix de livraison »).
 - Où les enregistrer : `src/lib/productCosts.js` (`VARIANT_COSTS`, clé = stockId de la variante, coût rendu = article + part du port),

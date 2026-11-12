@@ -948,7 +948,7 @@ window.scDemo=function(o){o=o||{};S.forme=o.forme||'xmas_gift_box';S.taille=o.ta
  majFormes();majTaille();majMatiere();majStyle();dessiner();
  if(o.photo)ajouter({type:'photo',src:D.exemple,nom:'exemple',forme:o.forme2||'ovale'});
  ajouter({type:'texte',texte:o.texte||'Camille',police:o.police||'great-vibes',mode:o.mode||'decoupe',mat:o.mat||'contreplaque',esp:0,courbe:0,creux:false});S.sel=null;dessiner()};
-window.scAtelier={S:S,dessiner:function(){dessiner()}};
+window.scAtelier={S:S,dessiner:function(){dessiner()},maj:function(){voirCreation();majFormes();majTaille();majMatiere();majStyle();panneau();dessiner()}};
 window.scEtat=function(){return {S:S,total:total(),forme:F().nom,W:S.W,H:S.H}};
 })();
 </script>
@@ -974,7 +974,15 @@ body{background:#fbf7ee;padding-bottom:40px}
   A().S.sel=null;A().dessiner();var ok=document.getElementById('modOk');if(ok)ok.remove();window.scrollTo(0,0);return true}
  function alerte(){var n=A().S.els.filter(function(e){return e.flottant}).length;return n?n+' pièce'+(n>1?'s ne touchent':' ne touche')+' pas le cadre : elle'+(n>1?'s tomberaient':' tomberait')+'.':''}
 
- window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,
+ /* l'état COMPLET de la création (forme, taille, pièces, textes, places) : c'est lui que la commande garde */
+ function etat(){var o=JSON.parse(JSON.stringify(A().S));delete o.sel;delete o.panneau;return o}
+ function recharger(e){if(!e||typeof e!=='object')return false;var S=A().S,k;
+  for(k in S)if(Object.prototype.hasOwnProperty.call(S,k)&&!(k in e)&&k!=='sel'&&k!=='panneau')delete S[k];
+  for(k in e)if(Object.prototype.hasOwnProperty.call(e,k))S[k]=JSON.parse(JSON.stringify(e[k]));
+  if('sel' in S||QUOI!=='arbre'){S.sel=null;S.panneau=null}
+  if(Array.isArray(S.els))S.seq=S.els.reduce(function(a,x){return Math.max(a,+x.id||0)},0);
+  A().maj();if(typeof apresCharge==='function')apresCharge();window.scrollTo(0,0);return true}
+ window.nivAtelier={quoi:QUOI,pret:false,alerte:alerte,etat:etat,charger:recharger,
   fabriquer:function(progres){return window.NivFabrique.fabriquer(window.NivFabrique.specs[QUOI](),progres)}};
  var essais=0;(function pret(){essais++;var ok=false;try{ok=charge()}catch(e){ok=false}
   if(ok||essais>80){setTimeout(function(){window.nivAtelier.pret=true;try{parent.postMessage({type:'niv-pret',quoi:QUOI},location.origin)}catch(_){}} ,600)}else setTimeout(pret,250)})();

@@ -8,6 +8,9 @@
 // la taille, l'écriture, la forme… puis « Fabriquer les fichiers » fabrique les VRAIS fichiers pour la machine dans le
 // navigateur (public/atelier-outils/fabrique.js : mm, rouge = découpe, noir = gravure, textes en tracés).
 // Rien n'est enregistré sur le site et rien n'est vendu : les fichiers se téléchargent ou se partagent depuis l'appareil.
+// Depuis une COMMANDE (bouton « Corriger dans l'outil » de la fiche atelier, ?creation=<id>&commande=<réf>) : la création de
+// la cliente est rechargée telle quelle ; après « Fabriquer », la version de l'atelier est gardée À CÔTÉ de la sienne
+// (/api/admin/creation), jamais à sa place ; « Revenir à la version de la cliente » l'efface.
 // =============================================================================
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "@/components/admin/PageHead";
@@ -25,6 +28,7 @@ const OUTILS = [
 ];
 const gris = { color: "var(--ash-muted, #7a6d58)" };
 function mm(v) { return String(Math.round(v * 10) / 10).replace(".", ","); }
+function jour(iso) { try { return new Date(iso).toLocaleString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" }); } catch { return ""; } }
 function heure() { const d = new Date(); return `${d.getHours()} h ${String(d.getMinutes()).padStart(2, "0")}`; }
 
 // Une carte par fichier fabriqué : aperçu (traits épaissis pour qu'on les voie), téléchargement, partage (iPhone).
@@ -69,6 +73,10 @@ export default function RetouchePage() {
   const [resultat, setResultat] = useState(null); // { outil, a, fichiers, alerte }
   const cadre = useRef(null);
   const outil = ouvert ? OUTILS.find((o) => o.id === ouvert.outil) : null;
+  // Mode « commande » : { id, ref, outil, etat (cliente), atelier (retouche gardée), atelierAt, charge (déjà posée dans l'outil) }
+  const [cmd, setCmd] = useState(null);
+  const [cmdMsg, setCmdMsg] = useState("");
+  const cle = useRef("");
 
   const ouvrir = useCallback((id, ex) => {
     setErr("");
@@ -76,10 +84,50 @@ export default function RetouchePage() {
     setVisible(true);
   }, []);
   // Depuis la page des fichiers de test : /gestion/retouche?outil=support&ex=camille ouvre directement l'outil.
+  // Depuis une commande : ?creation=<id>&commande=<réf> charge la création de la cliente.
   useEffect(() => {
     const q = new URLSearchParams(window.location.search), id = q.get("outil"), o = OUTILS.find((x) => x.id === id);
+    cle.current = sessionStorage.getItem("niv-admin-key") || "";
+    const cid = q.get("creation");
+    if (cid) {
+      (async () => {
+        try {
+          const r = await fetch(`/api/admin/creation?id=${encodeURIComponent(cid)}`, { headers: { "x-admin-key": cle.current }, cache: "no-store" });
+          const j = await r.json();
+          if (!r.ok) throw new Error(j.error || "Création introuvable.");
+          const ou = OUTILS.find((x) => x.id === j.outil);
+          if (!ou || !j.etat) throw new Error("Cette création ne peut pas être ouverte.");
+          setCmd({ id: j.id, ref: q.get("commande") || "", outil: ou.id, etat: j.etat, atelier: j.atelier || null, atelierAt: j.atelierAt || "", charge: false });
+          ouvrir(ou.id, ou.departs[0].ex);
+        } catch (e) { setCmdMsg(`La création de cette commande n'a pas pu être ouverte : ${e.message}`); }
+      })();
+      return;
+    }
     if (o) ouvrir(o.id, o.departs.some((d) => d.ex === q.get("ex")) ? q.get("ex") : o.departs[0].ex);
   }, [ouvrir]);
+  // L'outil est prêt : on y pose la création de la commande (la version de l'atelier si elle existe, sinon celle de la cliente).
+  useEffect(() => {
+    if (!pret || !cmd || cmd.charge || !ouvert || ouvert.outil !== cmd.outil) return;
+    try {
+      if (cadre.current?.contentWindow?.nivAtelier?.charger(cmd.atelier || cmd.etat)) setCmd((c) => (c ? { ...c, charge: true } : c));
+      else setErr("La création n'a pas pu être chargée dans l'outil.");
+    } catch (e) { setErr(`La création n'a pas pu être chargée dans l'outil : ${e?.message || e}`); }
+  }, [pret, cmd, ouvert]);
+  const garder = async (etat) => {
+    const r = await fetch("/api/admin/creation", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": cle.current }, body: JSON.stringify({ id: cmd.id, atelier: etat }) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || "Enregistrement impossible.");
+    setCmd((c) => (c ? { ...c, atelier: j.atelier || null, atelierAt: j.atelierAt || "" } : c));
+  };
+  const revenirCliente = async () => {
+    if (!cmd) return;
+    setCmdMsg("");
+    try {
+      await garder(null);
+      cadre.current?.contentWindow?.nivAtelier?.charger(cmd.etat);
+      setResultat(null); setVisible(true);
+    } catch (e) { setCmdMsg(`Le retour à la version de la cliente a échoué : ${e.message}`); }
+  };
   // L'outil prévient quand il est prêt (même site) ; on revérifie aussi à intervalles, au cas où le message est passé avant.
   useEffect(() => {
     if (!ouvert) return undefined;
@@ -104,7 +152,10 @@ export default function RetouchePage() {
     try {
       const fichiers = await at.fabriquer((fait, total) => setProg(`Fabrication des fichiers… ${fait} / ${total}`));
       let alerte = ""; try { alerte = at.alerte() || ""; } catch { /* sans alerte */ }
-      setResultat({ outil: ouvert.outil, a: heure(), fichiers: Array.from(fichiers), alerte, policesKo: Array.from(fichiers.policesKo || []) });
+      // Commande : la version de l'atelier est gardée à côté de celle de la cliente (un échec ne bloque pas les fichiers).
+      let gardee = "";
+      if (cmd && ouvert.outil === cmd.outil) { try { await garder(at.etat()); gardee = "ok"; } catch (e) { gardee = e.message || "échec"; } }
+      setResultat({ outil: ouvert.outil, a: heure(), fichiers: Array.from(fichiers), alerte, policesKo: Array.from(fichiers.policesKo || []), gardee });
       setVisible(false);
       setTimeout(() => document.getElementById("rt-fichiers")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
     } catch (e) {
@@ -119,6 +170,24 @@ export default function RetouchePage() {
         title="Retoucher et fabriquer"
         subtitle="Ouvrez un outil, changez ce que vous voulez (le texte, sa place, sa taille, l'écriture, la forme), puis fabriquez les fichiers pour la machine. Rien n'est vendu ni enregistré sur le site."
       />
+
+      {cmdMsg ? <p role="alert" style={{ color: "#b4452f", fontSize: 13, margin: "10px 0 0" }}>{cmdMsg}</p> : null}
+      {cmd ? (
+        <section className="fq-card" style={{ marginTop: 12, gap: 8, borderLeftColor: "#b4452f" }}>
+          <div style={{ display: "flex", gap: 8, alignItems: "baseline", flexWrap: "wrap" }}>
+            <strong style={{ fontSize: 15 }}>Commande {cmd.ref ? `#${cmd.ref}` : ""}</strong>
+            <span style={{ fontSize: 12.5, ...gris }}>{OUTILS.find((o) => o.id === cmd.outil)?.titre}</span>
+          </div>
+          <p style={{ margin: 0, fontSize: 13, lineHeight: 1.5 }}>
+            {cmd.atelier ? `Votre version corrigée du ${jour(cmd.atelierAt)} est ouverte. La version de la cliente est gardée à côté.` : "La création est ouverte telle que la cliente l'a commandée. Si vous la corrigez, sa version reste gardée à côté de la vôtre."}
+          </p>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <button type="button" className="fq-btn sm primary" onClick={() => setVisible(true)}>{cmd.atelier ? "Retoucher encore" : "Corriger la création"}</button>
+            {cmd.atelier ? <button type="button" className="fq-btn sm" onClick={revenirCliente}>Revenir à la version de la cliente</button> : null}
+            {cmd.ref ? <a className="fq-btn sm ghost" href={`/gestion/commande/${encodeURIComponent(cmd.ref)}`}>‹ Retour à la commande</a> : null}
+          </div>
+        </section>
+      ) : null}
 
       <div className="fq-card" style={{ marginTop: 12, borderLeftColor: "var(--ash-gold, #c9a24b)" }}>
         <strong style={{ fontSize: 14 }}>Comment faire</strong>
@@ -156,6 +225,8 @@ export default function RetouchePage() {
             <strong style={{ fontSize: 15 }}>Vos fichiers</strong>
             <span style={{ fontSize: 12.5, ...gris }}>fabriqués à {resultat.a} · {OUTILS.find((o) => o.id === resultat.outil)?.titre}</span>
           </div>
+          {resultat.gardee === "ok" ? <div role="status" style={{ fontSize: 12.5, fontWeight: 600, color: "#256b34" }}>✓ Votre version est gardée avec la commande{cmd?.ref ? ` #${cmd.ref}` : ""}. Celle de la cliente n&apos;est pas modifiée.</div> : null}
+          {resultat.gardee && resultat.gardee !== "ok" ? <div role="alert" style={{ fontSize: 12.5, color: "#b4452f" }}>Vos fichiers sont prêts, mais votre version n&apos;a pas pu être gardée avec la commande : {resultat.gardee}</div> : null}
           {resultat.alerte ? <div role="alert" style={{ fontSize: 12.5, lineHeight: 1.4, padding: "7px 10px", borderRadius: 9, background: "#fdf1ee", border: "1px solid #e9b9ad", color: "#8a2d1c" }}>⚠ {resultat.alerte} À corriger avant de découper.</div> : null}
           {resultat.policesKo.length ? (
             <div role="alert" style={{ fontSize: 12.5, lineHeight: 1.4, padding: "7px 10px", borderRadius: 9, background: "#fdf1ee", border: "1px solid #e9b9ad", color: "#8a2d1c" }}>
@@ -167,6 +238,8 @@ export default function RetouchePage() {
           </div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             <button type="button" className="fq-btn sm" onClick={() => setVisible(true)}>Retoucher encore</button>
+            {cmd && cmd.atelier ? <button type="button" className="fq-btn sm" onClick={revenirCliente}>Revenir à la version de la cliente</button> : null}
+            {cmd && cmd.ref ? <a className="fq-btn sm ghost" href={`/gestion/commande/${encodeURIComponent(cmd.ref)}`}>‹ Retour à la commande</a> : null}
           </div>
           <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.45, ...gris }}>Ces fichiers restent sur cet appareil tant que la page est ouverte : téléchargez-les avant de la quitter.</p>
         </section>
@@ -179,7 +252,7 @@ export default function RetouchePage() {
           <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap", padding: "calc(8px + env(safe-area-inset-top, 0px)) 12px 8px", background: "#1a1206", color: "#fbf7ee" }}>
             <button type="button" className="fq-btn sm" disabled={busy} onClick={() => setVisible(false)} style={{ background: "transparent", color: "#fbf7ee", borderColor: "#6b5d4a" }}>‹ Fermer</button>
             <b style={{ flex: "1 1 120px", minWidth: 0, fontSize: 13.5, lineHeight: 1.3 }}>{outil?.titre}
-              <small style={{ display: "block", fontWeight: 400, fontSize: 11.5, color: "#d9cbb0" }}>{busy ? prog : pret ? "Changez ce que vous voulez, puis fabriquez." : "L'outil se charge…"}</small></b>
+              <small style={{ display: "block", fontWeight: 400, fontSize: 11.5, color: "#d9cbb0" }}>{cmd && cmd.ref && ouvert.outil === cmd.outil ? `Commande #${cmd.ref} · ` : ""}{busy ? prog : pret ? "Changez ce que vous voulez, puis fabriquez." : "L'outil se charge…"}</small></b>
             <button type="button" className="fq-btn sm" disabled={busy || !pret} onClick={fabriquer}
               style={{ background: "linear-gradient(135deg, #e2c67e, #c9a24b)", borderColor: "#a98935", color: "#1a1206", fontWeight: 700, opacity: busy || !pret ? 0.6 : 1 }}>{busy ? "Fabrication…" : "Fabriquer les fichiers"}</button>
           </div>
