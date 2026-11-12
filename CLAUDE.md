@@ -1,3 +1,25 @@
+## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCORATION À SUSPENDRE » (générateur « Ornament » d'Atomm) — 12/11/2026 (gérant : « fais la même chose pour cette création… tout comme sur le site ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- ⛔ **RÈGLE (gérant, 12/11, après une 1re version fausse) : quand il donne un logiciel ou un site à reproduire, L'ANALYSER À FOND AVANT de construire**
+  (ouvrir l'outil avec Playwright, ajouter un texte, un élément, une photo, regarder chaque mode, la 3D tournée, l'export, chaque réglage du panneau de
+  droite) pour faire EXACTEMENT la même chose. J'avais d'abord fait une forme pleine à graver, puis « découpe seule » : faux. Atomm fait des
+  **découpes en plusieurs morceaux à superposer et coller**.
+- **Ce que fait Atomm (analysé le 12/11, `scratchpad/orn/ex/`)** : 46 formes (Outline) ; mode **Classic** = la base est un **CADRE** (image `mainImg`,
+  intérieur vide) ; chaque texte (12 écritures anglaises, « Hollow », espacement, courbe) et chaque élément (257 dessins) a un **Process : Cut** (la
+  silhouette découpée, pièce à part) **ou Engrave** (gravé sur une pièce découpée avec « Outline offset » 1,5 mm) ; « Upload image » (photo, compte
+  exigé) ; « Default overflow » ; 8 matières (tilleul, contreplaqué, noyer, liège, acrylique blanc / noir / rouge / bleu) ; mode **Color** = plaque
+  pleine (`maskImg`) avec palettes et sortie « Score lines » (traits à peindre) ou « Color print ». Export = compte exigé.
+- **Décisions du gérant** : PAS de dessins (« pas ces images, tu mets que les photos » : ni les dessins de Noël, ni nos modèles, ni la lettre fleurie) ;
+  **pas d'impression couleur** (« c'est avec une autre machine, je peux pas imprimer ») → le mode Color devient « Plaque pleine » gravée.
+- **Artifact** https://claude.ai/artifact/6Gs8LNkzpdvWMRDNZpE775 (v1) · générateur `tools/maquettes/decoration-createur.py <capture> <css> <sortie> <contours.json>`
+  (même capture / css que le support de téléphone) · contours `tools/maquettes/decoration-contours.py <layouts.json> <masques> <sortie.json> <cadres>`
+  (layouts = `api.xtool.com/efficacy/v1/data/type/aimake_cms_generator_layouts/items`, masques = `maskImg`, cadres = `mainImg`, OpenCV, plus grand côté 100 mm).
+- **Parcours** : ① forme (46, par groupe) · ② taille 30–150 mm, proportions liées · ③ style **Classique** (cadre découpé + pièces collées) / **Plaque pleine**
+  (une pièce, tout gravé) · ④ matière (8, 3 mm) · ⑤ textes (Découpé = lettres soudées / Gravé = sur une pièce découpée 1,6 mm autour ; lettres creuses,
+  espacement, courbe, 8 écritures du site) et photos (gravées sur une pièce rectangle ou ovale) · ⑥ résumé. Un nom se pose tout seul d'un bord du cadre
+  à l'autre (encre mesurée) ; une pièce qui ne pose pas sur le cadre est entourée de rouge et bloque « Ajouter au panier ». 3D : cadre + pièces 3 mm
+  devant, logo au mur. Fichier atelier : cadre + chaque pièce rangée dessous, numérotée (rouge = découpe, noir = gravure), alerte au-delà de 200 × 200 mm.
+- **Prix PROPOSÉS par moi, à valider** : 9,90 € (cadre ou plaque) + 3 € par texte ou photo + 2 € en acrylique. Questions : matières en stock, ruban, colle.
+
 ## 🛠️ MAQUETTE « CRÉEZ VOTRE SUPPORT DE TÉLÉPHONE » — 12/11/2026 (gérant, lien du générateur Atomm de xTool : « est-ce qu'on peut utiliser cet outil de création sur mon site ? … fais-moi une maquette pour la deuxième solution ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 (« Tout est bon… enregistre la maquette ») = VERSION 4 (lettre fleurie comprise), puis refaite à sa demande en v5 et v6 (formes Atomm, ci-dessous). ✅ **V6 ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette telle quelle »), artifact version 6 : c'est CELLE à reproduire au « applique », ne plus la modifier sans sa demande.** Au « applique » : à la commande, le site range UN fichier SVG à la taille réelle (rouge = découpe, noir = gravure) dans le dossier de la commande ; textes passés en tracés (comme `fichierGravure.js`), dessins en vectoriel (`public/vectoriel/`), photo en image. RIEN en ligne.
 - **v6 (12/11 soir, gérant : « tu crées pas toi-même, tu prends sur le site » ; « prends vraiment les formes qu'ils ont de découpe » ; « pas de tablettes,
   l'un ou l'autre, un peu plus cher ») — CELLE à reproduire au « applique ».** Les formes de découpe viennent du générateur Atomm (xTool,
