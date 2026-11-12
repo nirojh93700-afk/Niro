@@ -35,6 +35,11 @@
   retourner, flèches, glisser ; en Plaque pleine il est gravé sur la plaque ; + 3 € par dessin. Chaîne : `node tools/maquettes/decoration-elements-atomm.cjs`
   (leur panneau Element dans le navigateur → cats.json) → téléchargement des PNG → `python3 -I tools/maquettes/decoration-elements.py <elements.json>
   <png> <elements-maquette.json>` (WebP 320 px + silhouette pleine) → 5ᵉ argument de `decoration-createur.py`. Page 6,5 Mo. EN ATTENTE DE SON AVIS.
+  **v8 (12/11 soir, gérant : « un euro pour les petits déco… un bouton, ça place automatiquement… collé pour pas que ça tombe… un bouton
+  aléatoire… combien ils veulent de déco »)** : chaque dessin = **1 €** (acrylique + 2 €, texte / photo toujours + 3 €) ; un dessin ajouté se pose
+  TOUT SEUL sur le bois du cadre (collé, jamais « flottant ») + bouton « Placer automatiquement » dans sa fiche (`placerAuto` : endroit libre sur le
+  cadre, le plus loin des autres pièces ; en plaque pleine, entièrement sur la plaque) ; bloc « Au hasard » dans le panneau des dessins : − N +
+  (1 à 10), « Tirer N décors au hasard » dans la famille choisie, posés et collés tout seuls, un nouveau tirage remplace le précédent (`auHasard`).
   ⛔ Leçon : « fais exactement comme le logiciel » = TOUS ses réglages ; ce qu'il exclut se retire seulement si c'est EXACTEMENT ce qu'il a nommé.
 - ✅✅ **V6 ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») : c'est CELLE à reproduire au « applique » (remplace la v5), ne plus la modifier sans sa demande.**
 - ✅ **v6 (12/11 soir, captures iPhone : « les noms quand ils dépassent de l'objet ça coupe, on voit pas, il faut pas que ça se coupe »)** = VERSION 6 de l'artifact, CELLE à reproduire : en style **Classique**, un nom ou une photo est une pièce COLLÉE par-dessus le cadre → affiché ENTIER même s'il dépasse (plus de découpe à la forme sur l'aperçu de face) ; en **Plaque pleine** (tout gravé sur la plaque) rien ne sort de la forme, comme avant.
