@@ -52,6 +52,9 @@
   l'arbre, vignette « le pied, vu de côté », 3D (arbre incliné de 12° posé sur le pied), fichier = **deux planches** (arbre 180 × 180 +
   pied 129,5 × 136,25 : ensemble ils ne tiennent pas dans 200 × 200), rouge découpe, noir gravure. À valider : pied compris dans le prix.
 - **v5 (12/11, « pour les noms tu mets en marron »)** : sur l'aperçu (face et 3D) seules les LETTRES des prénoms sont en MARRON (dégradé #7a4a24 → #4f2c12) ; v6 (« la barre qui touche le cœur, pas en marron ») : les traits qui relient le prénom au cœur restent couleur bois ; le fichier atelier reste en rouge (découpe).
+- **v7 (12/11 soir, gérant : « pour le pied gravé, le client peut sélectionner le pied droit et / ou gauche »)** : trois choix sous « Graver le pied
+  (+5 €) » : **Pied gauche · Pied droit · Les deux pieds** (`S.pied.ou` = gauche / droite / deux ; pièce A = gauche, pièce B = droite ; l'ancien
+  « une » = gauche). Aperçu de face, 3D, vignette « Le pied gauche / droit, vu de côté », résumé et fichier de l'atelier suivent. Même prix (+5 €).
 - **À valider** : contour de la maquette = aperçu (vrais tracés soudés à la construction) ; dessins d'Atomm repris (sa décision, comme le support).
 
 ## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCORATION À SUSPENDRE » (générateur « Ornament » d'Atomm) — 12/11/2026 (gérant : « fais la même chose pour cette création… tout comme sur le site ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR = VERSION 6 de l'artifact (v5 + noms jamais coupés en Classique), CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne

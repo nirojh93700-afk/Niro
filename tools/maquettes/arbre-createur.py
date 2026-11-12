@@ -375,9 +375,10 @@ HTML_OUTIL = r"""
   <div class="ab-gchamps" id="gchamps" hidden>
    <input type="text" id="piedTexte" maxlength="20" placeholder="Ex. Famille Martin" aria-label="Texte gravé sur le pied">
    <select id="piedPolice" aria-label="Écriture du pied"></select>
-   <div class="sc-styles" id="piedOu" style="grid-template-columns:repeat(2,minmax(0,1fr))">
-    <button type="button" class="sc-style" data-v="deux"><b>Sur les deux pièces</b><small>Le texte de chaque côté</small></button>
-    <button type="button" class="sc-style" data-v="une"><b>Sur une pièce</b><small>À l'avant gauche</small></button>
+   <div class="sc-styles" id="piedOu" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+    <button type="button" class="sc-style" data-v="gauche"><b>Pied gauche</b><small>Le texte à gauche</small></button>
+    <button type="button" class="sc-style" data-v="droite"><b>Pied droit</b><small>Le texte à droite</small></button>
+    <button type="button" class="sc-style" data-v="deux"><b>Les deux pieds</b><small>Le texte de chaque côté</small></button>
    </div>
    <p class="prc-hint" style="margin:0">20 lettres au plus. Gravé sur le bas du pied, sous l'arbre.</p>
   </div>
@@ -488,7 +489,9 @@ function nomDansForme(sl,txt,uid){
    les deux bouts (les « orteils ») vers l'avant ; l'arbre se pose dessus en s'appuyant sur les montants ---- */
 var P=D.pied,PIO=10.2,SOL=300+PIO/K; /* le bas de l'arbre est à 10,2 mm du sol, posé sur les deux pieds */
 function piedGrave(){return S.pied.grave&&S.pied.texte.trim()?S.pied.texte.trim():''}
-function piedGrav(f,uid,fill){var t=piedGrave();if(!t||(f==='b'&&S.pied.ou!=='deux'))return '';
+/* le pied gravé : à gauche (pièce A), à droite (pièce B) ou les deux — gérant, 12/11 : « le client peut sélectionner le pied droit et / ou gauche » */
+function piedOu(){var o=S.pied.ou;return o==='une'?'gauche':o}
+function piedGrav(f,uid,fill,toujours){var t=piedGrave(),o=piedOu();if(!t||(!toujours&&((f==='a'&&o==='droite')||(f==='b'&&o==='gauche'))))return '';
  var pol=police(S.pied.police)[2],fs=P.txt.size,e=encre(t,pol,fs);if(e.l+e.r>P.txt.maxw)fs*=P.txt.maxw/(e.l+e.r);
  var x=f==='a'?P.txt.x:P.larg-P.txt.x,anc=f==='a'?'start':'end',yb=P.txt.base;
  var pj=S.pied.aj;if(pj){x+=(f==='a'?1:-1)*(pj.dx||0);yb+=pj.dy||0;fs*=pj.s||1}
@@ -500,9 +503,10 @@ function dessinerPieds(){
   h+='<g transform="matrix('+c+' 0 0 '+u+' '+(150-z[1]*c)+' '+(SOL-P.haut*u)+')"><path d="'+P[f]+'" fill="'+(f==='a'?'#d9bb88':'#cfae78')+'" stroke="'+BOIS.bord+'" stroke-width="'+(.5/u)+'"/>'
    +piedGrav(f,'f'+f,'rgba(70,40,15,.8)')+'</g>'});
  $('pieds').innerHTML='<ellipse cx="150" cy="'+(SOL+1)+'" rx="95" ry="4" fill="#3a2a16" opacity=".16" filter="url(#flou)"/>'+h;
- $('piedIco').innerHTML='<path d="'+P.a+'" fill="#e3c796" stroke="#9c7744" stroke-width="1.2"/>'+piedGrav('a','i','#5a3a18');
+ $('piedIco').innerHTML='<path d="'+P.a+'" fill="#e3c796" stroke="#9c7744" stroke-width="1.2"/>'+piedGrav('a','i','#5a3a18',true);
  var g=!!piedGrave();$('vigPied').hidden=!g;
- if(g)$('vigSvg').innerHTML='<path d="'+P.a+'" fill="#e3c796" stroke="#9c7744" stroke-width=".8"/>'+piedGrav('a','v','#4a2c10')}
+ if(g)$('vigSvg').innerHTML='<path d="'+P.a+'" fill="#e3c796" stroke="#9c7744" stroke-width=".8"/>'+piedGrav('a','v','#4a2c10',true);
+ var lv=$('vigPied').lastChild;if(lv&&lv.nodeType===3)lv.textContent=piedOu()==='deux'?'Le pied, vu de côté':piedOu()==='droite'?'Le pied droit, vu de côté':'Le pied gauche, vu de côté'}
 
 function dessiner(){
  var k=cle();
@@ -559,7 +563,7 @@ function resume(){var noms=S.noms.map(function(t){return t.trim()}).filter(Boole
   +'<div class="prc-sumrow"><span>Prénoms</span><b>'+(noms.length?noms.map(esc).join(', '):'aucun')+'</b></div>'
   +'<div class="prc-sumrow"><span>Prénoms en plus</span><b>'+(enPlus()?enPlus()+' × '+eur(D.prix.nom)+' = +'+eur(enPlus()*D.prix.nom):'2 prénoms compris')+'</b></div>'
   +'<div class="prc-sumrow"><span>Pied</span><b>Compris · 2 pièces à emboîter · 10 cm</b></div>'
-  +'<div class="prc-sumrow"><span>Gravure du pied</span><b>'+(piedGrave()?'« '+esc(piedGrave())+' » · '+police(S.pied.police)[1]+' · '+(S.pied.ou==='deux'?'les deux pièces':'une pièce')+' · +'+eur(D.prix.gravePied):'Non')+'</b></div>'
+  +'<div class="prc-sumrow"><span>Gravure du pied</span><b>'+(piedGrave()?'« '+esc(piedGrave())+' » · '+police(S.pied.police)[1]+' · '+(piedOu()==='deux'?'les deux pieds':piedOu()==='droite'?'pied droit':'pied gauche')+' · +'+eur(D.prix.gravePied):'Non')+'</b></div>'
   +'<div class="prc-sumrow"><span>Autour des prénoms</span><b>'+(S.forme==='heart'?'Cœurs':'Cercles')+'</b></div>'
   +'<div class="prc-sumrow"><span>Écriture</span><b>'+police(S.police)[1]+'</b></div>'
   +'<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+eur(total())+'</b></div>';
@@ -570,7 +574,7 @@ function resume(){var noms=S.noms.map(function(t){return t.trim()}).filter(Boole
 $('ajouter').addEventListener('click',function(){if(!this.disabled)this.textContent='Ajouté au panier ✓ (maquette)'});
 $('piedPolice').innerHTML=D.polices.map(function(q){return '<option value="'+q[0]+'">'+q[1]+'</option>'}).join('');
 function majPied(){$('gravePied').checked=S.pied.grave;$('gchamps').hidden=!S.pied.grave;$('piedPolice').value=S.pied.police;
- [].forEach.call($('piedOu').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')===S.pied.ou)})}
+ [].forEach.call($('piedOu').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')===piedOu())})}
 $('gravePied').addEventListener('change',function(){S.pied.grave=this.checked;majPied();dessiner();if(this.checked)$('piedTexte').focus()});
 $('piedTexte').addEventListener('input',function(){S.pied.texte=this.value;dessiner()});
 $('piedPolice').addEventListener('change',function(){S.pied.police=this.value;dessiner();
