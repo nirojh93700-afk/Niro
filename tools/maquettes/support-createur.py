@@ -82,7 +82,7 @@ titre = re.search(r"<h1>(.*?)</h1>", main, re.S).group(1)
 accroche = re.search(r'</div><p style="color:var\(--ink-soft\);margin-top:0">(.*?)</p>', main, re.S).group(1)
 prix = dict(re.findall(r'<span class="vs-title">(.*?)</span><span class="vs-price"><span class="vs-now">(.*?)</span>', main))
 P = {k: float(v.replace(" €", "").replace(" €", "").replace(",", ".")) for k, v in prix.items()}
-P_TEXTE, P_DESSIN, P_PHOTO = P["Texte seul"], P["Dessin au choix"], P["Photo gravée"]
+P_TEXTE, P_DESSIN, P_PHOTO, P_LETTRE = P["Texte seul"], P["Dessin au choix"], P["Photo gravée"], P["Lettre fleurie"]
 bas = bloc('<div class="trust-cards">', '<section class="confiance"')
 bas = bas[:bas.rfind("</div>")] if bas else ""
 bas = re.sub(r'href="/[^"]*"', 'href="#"', bas)
@@ -110,6 +110,48 @@ for u in re.findall(r'<div class="gallery-thumbs">(.*?)</div>', main, re.S)[0].s
     if m and os.path.exists(os.path.join(PUB, m.group(1).lstrip("/"))):
         PHOTOS.append(jpg_uri(os.path.join(PUB, m.group(1).lstrip("/")), w=900, q=80))
 assert PHOTOS, "aucune photo trouvée dans la galerie de la capture"
+# ---------- la lettre fleurie : les 26 lettres découpées dans la planche du site ----------
+def lettres_fleuries():
+    import numpy as np
+    src = Image.open(os.path.join(PUB, "produits", "alphabet-fleuri.jpg")).convert("L")
+    a = np.array(src).astype(int)
+    cells = {"A": (20, 20, 315, 305)}
+    def rang(lettres, y0, y1, xs):
+        for L, (x0, x1) in zip(lettres, xs):
+            cells[L] = (x0, y0, x1, y1)
+    q = [(318, 420), (422, 525), (527, 630), (632, 735)]
+    rang("BCDE", 15, 110, q); rang("FGHI", 125, 220, q); rang("JKLM", 245, 352, q)
+    rang("NOPQRST", 358, 462, [(25, 125), (128, 228), (230, 328), (330, 430), (432, 532), (534, 632), (634, 735)])  # N = le Ñ sans son tilde
+    rang("UVWXYZ", 465, 565, [(25, 135), (140, 250), (255, 385), (388, 495), (505, 615), (625, 735)])
+    out = {}
+    for L, (x0, y0, x1, y1) in cells.items():
+        ys, xs = np.where(a[y0:y1, x0:x1] < 110)
+        bx0, by0, bx1, by1 = x0 + xs.min(), y0 + ys.min(), x0 + xs.max() + 1, y0 + ys.max() + 1
+        h = by1 - by0
+        fr = (a[by0:by1, bx0:bx1] < 110).mean(1)
+        traits = []
+        for i, f in enumerate(fr):
+            if f > 0.75:
+                if traits and i - traits[-1][1] <= 2: traits[-1][1] = i
+                else: traits.append([i, i])
+        bande = (0.38, 0.56)  # par défaut (W : traits trop courts pour être vus)
+        for k in range(len(traits) - 1):
+            g = traits[k + 1][0] - traits[k][1]
+            if 0.08 * h < g < 0.3 * h:
+                bande = ((traits[k][1] + 1) / h, traits[k + 1][0] / h); break
+        crop = src.crop((int(bx0), int(by0), int(bx1), int(by1)))
+        alpha = crop.point(lambda v: max(0, min(255, int((235 - v) * 1.6))))
+        im = Image.new("RGBA", crop.size, (0, 0, 0, 0)); im.putalpha(alpha)
+        if im.width > 300:
+            im = im.resize((300, round(im.height * 300 / im.width)), Image.LANCZOS)
+        b = io.BytesIO(); im.save(b, "PNG", optimize=True)
+        out[L] = {"src": "data:image/png;base64," + base64.b64encode(b.getvalue()).decode(),
+                  "r": round(im.width / im.height, 3), "b": [round(bande[0], 3), round(bande[1], 3)]}
+    return out
+
+
+LETTRES = lettres_fleuries()
+PLANCHE = jpg_uri(os.path.join(PUB, "produits", "alphabet-fleuri.jpg"), w=760, q=80)
 EXEMPLE = jpg_uri(os.path.join(ROOT, "docs/maquettes/assets/marque-pages/exemples/portraits/couple.jpg"))
 
 POLICES = [
@@ -119,8 +161,8 @@ POLICES = [
     ["allura", "Allura", "'Allura',cursive"], ["pacifico", "Pacifico", "'Pacifico',cursive"],
 ]
 
-DONNEES = json.dumps({"photos": PHOTOS, "dessins": DESSINS, "exemple": EXEMPLE, "polices": POLICES,
-                      "prix": {"texte": P_TEXTE, "dessin": P_DESSIN, "photo": P_PHOTO, "plus": 3}}, ensure_ascii=False)
+DONNEES = json.dumps({"photos": PHOTOS, "dessins": DESSINS, "lettres": LETTRES, "planche": PLANCHE, "exemple": EXEMPLE, "polices": POLICES,
+                      "prix": {"texte": P_TEXTE, "dessin": P_DESSIN, "lettre": P_LETTRE, "photo": P_PHOTO, "plus": 3}}, ensure_ascii=False)
 
 CSS_MAQ = r"""
 :root{color-scheme:light;--font-display:'Playfair Display';--font-body:'Inter';--font-cinzel:'Cinzel';--font-cinzel-deco:'Cinzel Decorative';
@@ -155,7 +197,12 @@ background:var(--paper);cursor:pointer;font:inherit;color:var(--ink);font-size:.
 .sc-forme svg{width:44px;height:56px}
 .sc-forme svg path{fill:#e9d6b4;stroke:#9c6b3f;stroke-width:5}
 .sc-forme.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
-.sc-ajouts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sc-ajouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media (max-width:520px){.sc-ajouts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.sc-planche{display:block;width:100%;border-radius:10px;border:1px solid var(--line);background:#fff;margin:0 0 10px}
+.prc-letters{display:flex;flex-wrap:wrap;gap:6px}
+.prc-let{min-width:38px;min-height:38px;border:1.5px solid var(--line);border-radius:9px;background:var(--paper);font:inherit;font-weight:700;cursor:pointer;color:var(--ink)}
+.prc-let.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .sc-ajout{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;border:1.5px dashed #cdb98f;border-radius:12px;
 background:#fffaf0;cursor:pointer;font:inherit;color:var(--ink);font-size:.82rem;font-weight:700;text-align:center}
 .sc-ajout small{font-weight:400;font-size:.72rem;color:var(--ink-soft)}
@@ -231,11 +278,12 @@ HTML_OUTIL = r"""
 
  <section class="prc-step">
   <div class="prc-sh"><span class="prc-num" id="n2">2</span><h3>Ce que vous gravez</h3></div>
-  <p class="prc-legend">Ajoutez un texte, un dessin ou votre photo. Vous pouvez en mettre plusieurs : le premier est compris, chaque élément en plus coûte <b id="lplus"></b>.</p>
+  <p class="prc-legend">Ajoutez un texte, un dessin, votre photo ou une lettre fleurie. Vous pouvez en mettre plusieurs : le premier est compris, chaque élément en plus coûte <b id="lplus"></b>.</p>
   <div class="sc-ajouts">
    <button type="button" class="sc-ajout" data-a="texte"><svg viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg>Un texte<small>prénom, date, petit mot</small></button>
    <button type="button" class="sc-ajout" data-a="dessin"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 8a4 4 0 0 1 7 2.4C19 15.6 12 20 12 20z"/></svg>Un dessin<small>nos modèles</small></button>
    <button type="button" class="sc-ajout" data-a="photo"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>Ma photo<small>gravée en brun</small></button>
+   <button type="button" class="sc-ajout" data-a="lettre"><svg viewBox="0 0 24 24"><path d="M6 20L12 4l6 16M8.5 14h7"/><path d="M3 12h18" stroke-dasharray="2 2"/></svg>Une lettre fleurie<small>votre initiale + un nom</small></button>
   </div>
   <div class="sc-panneau" id="panneau"></div>
   <div id="liste"></div>
@@ -268,7 +316,7 @@ HTML_ATELIER = r"""
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
   <li>Les six formes du dossier sont des propositions : lesquelles voulez-vous vendre, et au même prix ?</li>
-  <li>Les prix viennent de la fiche actuelle (texte, dessin, photo, élément en plus). La lettre fleurie de la fiche n'est pas dans la maquette : elle peut s'ajouter.</li>
+  <li>Les prix viennent de la fiche actuelle (texte, dessin, lettre fleurie, photo, élément en plus). Avec la lettre fleurie, le nom dans la bande est compris, comme aujourd'hui.</li>
   <li>Le même outil peut ensuite servir à d'autres créations en bois (porte-stylo, plaque de porte, marque-pages).</li>
  </ul></div>
 </div></section>
@@ -324,6 +372,7 @@ function limites(){var f=forme();return{x0:92,x1:308,y0:f.haut,y1:428}}
 function taille(e){ /* largeur et hauteur de l'élément dans la scène */
  if(e.type==='texte'){return{w:0,h:30*e.s}}
  if(e.type==='dessin'){var w=118*e.s;return{w:w,h:w/e.r}}
+ if(e.type==='lettre'){var w2=e.r>1.05?165*e.s:150*e.s;return{w:w2,h:w2/e.r}}
  var c=128*e.s;return{w:c,h:c}}
 function borner(e){var L=limites(),t=taille(e),hw=e.type==='texte'?36:t.w/2,hh=t.h/2,lo=L.x0+hw,hi=L.x1-hw;
  e.x=lo>hi?200:Math.max(lo,Math.min(hi,e.x));
@@ -342,6 +391,11 @@ function dessiner(){
    var bb=tx.getBBox(),max=208; if(bb.width>max){tx.setAttribute('font-size',t.h*max/bb.width)}
   }else if(e.type==='dessin'){
    el('image',{href:e.src,x:e.x-t.w/2,y:e.y-t.h/2,width:t.w,height:t.h,filter:'url(#brun)',opacity:.92},g);
+  }else if(e.type==='lettre'){
+   el('image',{href:e.src,x:e.x-t.w/2,y:e.y-t.h/2,width:t.w,height:t.h,filter:'url(#brun)',opacity:.92},g);
+   if(e.nom){var by=e.y-t.h/2+t.h*(e.b[0]+e.b[1])/2,bh=t.h*(e.b[1]-e.b[0]);
+    var tl=el('text',{x:e.x,y:by,'text-anchor':'middle','dominant-baseline':'central','font-family':police(e.police)[2],'font-size':bh*.82,fill:'#55331a',opacity:.92},g);
+    tl.textContent=e.nom;var lb=tl.getBBox();if(lb.width>t.w*.92)tl.setAttribute('font-size',bh*.82*t.w*.92/lb.width)}
   }else{
    el('image',{href:e.src,x:e.x-t.w/2,y:e.y-t.h/2,width:t.w,height:t.h,preserveAspectRatio:'xMidYMid slice',filter:'url(#sepia)'},g);
    el('rect',{x:e.x-t.w/2,y:e.y-t.h/2,width:t.w,height:t.h,fill:'none',stroke:'#4b3018','stroke-width':1.6},g);
@@ -406,6 +460,13 @@ function panneau(){
   h='<div class="prc-fields"><p class="prc-legend">Touchez un dessin : il se pose sur le support.</p><div class="prc-grid picked" style="grid-template-columns:repeat(auto-fill,minmax(84px,1fr))">';
   D.dessins.forEach(function(d){h+='<button type="button" class="prc-model on" data-n="'+d.n+'"><span class="prc-mn">'+d.n+'</span><span class="prc-mimg"><img src="'+d.src+'" alt="Dessin n° '+d.n+'"></span></button>'});
   h+='</div></div>';
+ }else if(S.panneau==='lettre'){
+  h='<div class="prc-fields"><p class="prc-legend">Choisissez votre initiale : elle est gravée dans ce style fleuri. Le nom s\'écrit dans la bande, au milieu de la lettre.</p>'
+   +'<img class="sc-planche" src="'+D.planche+'" alt="Alphabet fleuri de A à Z"><div class="prc-letters">';
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function(L){h+='<button type="button" class="prc-let'+(S.lettre===L?' on':'')+'" data-l="'+L+'">'+L+'</button>'});
+  h+='</div><div class="field" style="margin-top:12px"><label for="nlettre">Le nom dans la bande <span class="prc-opt">(facultatif, compris, 20 caractères)</span></label>'
+   +'<div class="sc-ligne"><input id="nlettre" type="text" maxlength="20" placeholder="Ex. Martin"><button type="button" class="sc-btn" id="okLettre"'+(S.lettre?'':' disabled')+'>Ajouter</button></div></div>'
+   +'<div class="field"><label>Écriture du nom</label>'+polsHtml(S.police)+'</div></div>';
  }else if(S.panneau==='photo'){
   h='<div class="prc-fields"><p class="prc-legend">Un portrait, un couple, un animal : la photo est gravée en brun dans le bois. Choisissez une image nette et bien éclairée.</p>'
    +'<div class="sc-photo"><label class="sc-btn">Choisir ma photo<input type="file" accept="image/*" id="fphoto"></label>'
@@ -421,18 +482,23 @@ $('panneau').addEventListener('click',function(ev){
   [].forEach.call($('panneau').querySelectorAll('.prc-pol'),function(x){x.classList.toggle('on',x===p)});return}
  if(ev.target.id==='okTexte'){var v=$('ntexte').value.trim();if(!v){$('ntexte').focus();return}ajouter({type:'texte',texte:v,police:S.police});return}
  var m=ev.target.closest('.prc-model'); if(m){var n=+m.getAttribute('data-n');for(var i=0;i<D.dessins.length;i++)if(D.dessins[i].n===n)ajouter({type:'dessin',n:n,src:D.dessins[i].src,r:D.dessins[i].r});return}
+ var lb=ev.target.closest('.prc-let'); if(lb){S.lettre=lb.getAttribute('data-l');
+  [].forEach.call($('panneau').querySelectorAll('.prc-let'),function(x){x.classList.toggle('on',x===lb)});$('okLettre').disabled=false;return}
+ if(ev.target.id==='okLettre'){if(!S.lettre)return;var Lt=D.lettres[S.lettre];
+  ajouter({type:'lettre',L:S.lettre,src:Lt.src,r:Lt.r,b:Lt.b,nom:$('nlettre').value.trim(),police:S.police});return}
  if(ev.target.id==='exPhoto'){ajouter({type:'photo',src:D.exemple,nom:"photo d'exemple"})}});
-$('panneau').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&ev.target.id==='ntexte'){ev.preventDefault();$('okTexte').click()}});
+$('panneau').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&ev.target.id==='ntexte'){ev.preventDefault();$('okTexte').click()}
+ if(ev.key==='Enter'&&ev.target.id==='nlettre'){ev.preventDefault();$('okLettre').click()}});
 $('panneau').addEventListener('change',function(ev){if(ev.target.id!=='fphoto')return;var f=ev.target.files&&ev.target.files[0];if(!f)return;
  var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){
    var c=document.createElement('canvas'),k=Math.min(1,700/Math.max(im.width,im.height));c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
    c.getContext('2d').drawImage(im,0,0,c.width,c.height);ajouter({type:'photo',src:c.toDataURL('image/jpeg',.82),nom:f.name})};im.src=r.result};r.readAsDataURL(f)});
 
 /* ---- la liste des éléments posés ---- */
-function nomEl(e){return e.type==='texte'?'« '+(e.texte||'')+' »':e.type==='dessin'?'Dessin n° '+e.n:'Ma photo'}
+function nomEl(e){return e.type==='texte'?'« '+(e.texte||'')+' »':e.type==='dessin'?'Dessin n° '+e.n:e.type==='lettre'?'Lettre '+e.L+(e.nom?' · « '+e.nom+' »':''):'Ma photo'}
 function prixEl(i){return i===principal()?'compris':'+ '+eur(D.prix.plus)}
 function principal(){ /* l'élément qui fixe le prix de départ : la photo, sinon le dessin, sinon le texte */
- var o=['photo','dessin','texte'];for(var k=0;k<o.length;k++)for(var i=0;i<S.els.length;i++)if(S.els[i].type===o[k])return i;return -1}
+ var o=['photo','dessin','lettre','texte'];for(var k=0;k<o.length;k++)for(var i=0;i<S.els.length;i++)if(S.els[i].type===o[k])return i;return -1}
 function liste(){
  var L=$('liste'),act=document.activeElement,garde=act&&act.getAttribute&&act.getAttribute('data-edit');
  if(garde){ /* on tape dans un champ : ne pas le reconstruire */
@@ -447,6 +513,7 @@ function liste(){
    +'<button type="button" class="sc-x" data-act="x" aria-label="Retirer">✕</button></div>';
   if(S.sel===e.id){
    if(e.type==='texte'){h+='<input type="text" maxlength="30" value="'+esc(e.texte)+'" data-edit="'+e.id+'" aria-label="Modifier le texte">'+polsHtml(e.police)}
+   if(e.type==='lettre'){h+='<input type="text" maxlength="20" value="'+esc(e.nom||'')+'" placeholder="Le nom dans la bande (facultatif)" data-edit="'+e.id+'" aria-label="Modifier le nom">'+polsHtml(e.police)}
    h+='<div class="sc-outils"><span>Taille</span><button type="button" class="sc-o" data-act="moins" aria-label="Plus petit">−</button><button type="button" class="sc-o" data-act="plus" aria-label="Plus grand">+</button>'
     +'<button type="button" class="sc-o" data-act="centre">Centrer</button></div>';
   }
@@ -461,15 +528,15 @@ $('liste').addEventListener('click',function(ev){
  else if(p){e.police=p.getAttribute('data-pol')}
  else if(ev.target.tagName==='INPUT'){return}
  S.sel=e.id;dessiner()});
-$('liste').addEventListener('input',function(ev){var id=ev.target.getAttribute('data-edit');if(!id)return;var e=trouver(+id);e.texte=ev.target.value;dessiner()});
+$('liste').addEventListener('input',function(ev){var id=ev.target.getAttribute('data-edit');if(!id)return;var e=trouver(+id);if(e.type==='lettre')e.nom=ev.target.value;else e.texte=ev.target.value;dessiner()});
 
 /* ---- étape 3 : résumé et prix ---- */
 function total(){var i=principal();if(i<0)return 0;return D.prix[S.els[i].type]+(S.els.length-1)*D.prix.plus}
 function resume(){
  var R=$('resume'),h='<div class="prc-sumrow"><span>Forme du dossier</span><b>'+forme().nom+'</b></div>',p=principal();
  if(!S.els.length)h+='<div class="prc-sumrow"><span>Gravure</span><b class="prc-miss">à choisir</b></div>';
- S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':'Photo')+'</span><b>'+esc(nomEl(e))
-  +(e.type==='texte'?' · '+police(e.police)[1]:'')+' — '+(i===p?eur(D.prix[e.type]):'+ '+eur(D.prix.plus))+'</b></div>'});
+ S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':e.type==='lettre'?'Lettre fleurie':'Photo')+'</span><b>'+esc(nomEl(e))
+  +(e.type==='texte'||(e.type==='lettre'&&e.nom)?' · '+police(e.police)[1]:'')+' — '+(i===p?eur(D.prix[e.type]):'+ '+eur(D.prix.plus))+'</b></div>'});
  h+='<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+(S.els.length?eur(total()):'dès '+eur(D.prix.texte))+'</b></div>';
  R.innerHTML=h;
  $('total').textContent=S.els.length?eur(total()):'dès '+eur(D.prix.texte);
@@ -486,6 +553,8 @@ function fichier(){
  S.els.forEach(function(e){var t=taille(e);
   if(e.type==='texte'){h+='<text x="'+e.x+'" y="'+e.y+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+t.h+'" fill="#111" data-t="'+e.id+'">'+esc(e.texte||'')+'</text>'}
   else if(e.type==='dessin'){h+='<image href="'+e.src+'" x="'+(e.x-t.w/2)+'" y="'+(e.y-t.h/2)+'" width="'+t.w+'" height="'+t.h+'"/>'}
+  else if(e.type==='lettre'){h+='<image href="'+e.src+'" x="'+(e.x-t.w/2)+'" y="'+(e.y-t.h/2)+'" width="'+t.w+'" height="'+t.h+'"/>';
+   if(e.nom){var bh=t.h*(e.b[1]-e.b[0]);h+='<text x="'+e.x+'" y="'+(e.y-t.h/2+t.h*(e.b[0]+e.b[1])/2)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+(bh*.82)+'" fill="#111" data-tl="'+(t.w*.92)+'">'+esc(e.nom)+'</text>'}}
   else{h+='<image href="'+e.src+'" x="'+(e.x-t.w/2)+'" y="'+(e.y-t.h/2)+'" width="'+t.w+'" height="'+t.h+'" preserveAspectRatio="xMidYMid slice" style="filter:grayscale(1) contrast(1.15)"/>'
    +'<rect x="'+(e.x-t.w/2)+'" y="'+(e.y-t.h/2)+'" width="'+t.w+'" height="'+t.h+'" fill="none" stroke="#111" stroke-width="1"/>'}});
  h+='<text x="200" y="476" text-anchor="middle" font-size="13" fill="#5a5247" font-family="Inter,sans-serif">Dossier</text></g>'
@@ -493,6 +562,7 @@ function fichier(){
   +'<text x="200" y="560" text-anchor="middle" font-size="13" fill="#5a5247" font-family="Inter,sans-serif">Pied</text></g>';
  F.innerHTML=h;
  [].forEach.call(F.querySelectorAll('text[data-t]'),function(t){var b=t.getBBox();if(b.width>208)t.setAttribute('font-size',parseFloat(t.getAttribute('font-size'))*208/b.width)});
+ [].forEach.call(F.querySelectorAll('text[data-tl]'),function(t){var b=t.getBBox(),m=+t.getAttribute('data-tl');if(b.width>m)t.setAttribute('font-size',parseFloat(t.getAttribute('font-size'))*m/b.width)});
  $('fnom').textContent='support-telephone-'+f.id+'-<n° de commande>.svg';
 }
 

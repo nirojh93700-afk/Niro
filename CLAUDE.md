@@ -7,7 +7,7 @@
   ② texte (8 écritures), dessin (modèles n° du site), photo (gravée en brun), plusieurs possibles, chacun se glisse au doigt, taille − / +,
   Centrer, retirer · ③ résumé et total. En bas : le fichier que l'atelier recevrait (rouge = découpe, noir = gravure).
 - Prix LUS dans la fiche en ligne : texte 12,90 · dessin 14,90 · photo 19,90, chaque élément en plus +3 € (photo + texte = 22,90 comme aujourd'hui).
-- À trancher par lui : les formes à vendre et leur prix, la lettre fleurie (absente de la maquette), les autres produits en bois où réutiliser l'outil.
+- À trancher par lui : les formes à vendre et leur prix, les autres produits en bois où réutiliser l'outil.
   Vérifié Chromium 390 / 1280 : 0 erreur JS, 0 débordement, 6 formes sans chevauchement, glisser, modifier, retirer.
 - **v2 (12/11, « Et les photos qu'on a déjà mises sur le site ? » → « oui ajoute-le »)** : la galerie montre d'abord les VRAIES photos de la fiche
   (lues dans la capture, flèches + vignettes) ; dès que la cliente choisit une forme ou ajoute un élément, la grande image devient son aperçu et une
@@ -15,6 +15,9 @@
   reste collée sous l'en-tête. ⚠️ Pas de vraie photo pour les formes autres que « Classique » : une par forme à prévoir.
 - **v3 (12/11, capture iPhone : « l'aperçu reste affiché quand elle descend au niveau des prix, il faut que ça disparaisse »)** : sur téléphone,
   l'aperçu collé est poussé vers le haut par l'étape 3 (résumé) puis disparaît ; il revient quand elle remonte. Ordinateur inchangé.
+- **v4 (12/11, « Ajoute aussi la lettre fleurie »)** : 4ᵉ bouton « Une lettre fleurie » = planche du site + boutons A–Z + « le nom dans la bande »
+  (facultatif, compris, 20 car.) + écriture ; les 26 lettres sont DÉCOUPÉES de `public/produits/alphabet-fleuri.jpg` par le générateur (N = le Ñ sans
+  son tilde ; bande vide entre les deux traits trouvée sur chaque lettre, W par défaut). Prix lu : lettre fleurie 14,90 € ; + 3 € par autre élément.
 
 ## 🧰 LOT DU 09/11/2026 SOIR — SITE 1, 4, 7, 8, 9 + GESTION 1 À 6 (gérant : « tu me fais ça », numéros choisis dans ma liste) — CONSTRUIT SUR LA BRANCHE DE TRAVAIL `claude/cool-maxwell-qh1kcw`, PAS EN LIGNE : attendre son « mets en ligne » (puis fusion vers `claude/site-product-overview-1t2de`)
 - **Site** : ① provenance des commandes (`src/lib/provenance.js`, `ProvenanceCapture.jsx`, `metadata.prov` → `order.provenance`, pastille « Venue de » + filtre dans la file,
