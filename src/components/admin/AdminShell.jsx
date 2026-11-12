@@ -117,6 +117,9 @@ const SECTIONS = [
     { id: "notifications", t: "Notifications & résumés", href: "/gestion/notifications" },
     { id: "journal", t: "Journal d'activité", href: "/gestion/journal" },
     { id: "etat", t: "État du système", href: "/gestion/etat" } ] },
+  // Tests (12/11/2026, gérant : « fais une catégorie test dans admin ») : fichiers laser des maquettes à essayer sur la machine.
+  { id: "tests", t: "Tests", ic: "bolt", tabs: [
+    { id: "tests-laser", t: "Fichiers laser à essayer", href: "/gestion/tests" } ] },
 ];
 const ECRANS = SECTIONS.flatMap((s) => s.tabs.map((t) => ({ ...t, section: s.id, group: s.t, icon: s.ic })));
 const PAR_ID = Object.fromEntries(ECRANS.map((e) => [e.id, e]));

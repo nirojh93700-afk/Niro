@@ -1,0 +1,97 @@
+{
+ "fait": "2026-11-12",
+ "groupes": [
+  {
+   "id": "support",
+   "titre": "Support de téléphone",
+   "sous": "Standard · rectangle arrondi · 13° · passage du câble · « Camille » gravé",
+   "apercu": "/atelier-tests/support-standard-rectangle-camille-apercu.webp",
+   "fichiers": [
+    {
+     "nom": "support-standard-rectangle-camille.svg",
+     "url": "/atelier-tests/support-standard-rectangle-camille.svg",
+     "titre": "Support de téléphone · standard · rectangle arrondi · 13° · « Camille » gravé",
+     "matiere": "Contreplaqué 3 mm",
+     "w": 174,
+     "h": 161,
+     "note": "",
+     "gravure": true
+    }
+   ]
+  },
+  {
+   "id": "arbre",
+   "titre": "Arbre de vie et son pied",
+   "sous": "Arbre de vie · cœurs · « Léa » et « Tom » · pied gravé « Léa & Tom »",
+   "apercu": "/atelier-tests/arbre-de-vie-lea-tom-apercu.webp",
+   "fichiers": [
+    {
+     "nom": "arbre-de-vie-coeurs-lea-tom.svg",
+     "url": "/atelier-tests/arbre-de-vie-coeurs-lea-tom.svg",
+     "titre": "Arbre de vie · cœurs · « Léa » et « Tom » (prénoms soudés à l'arbre)",
+     "matiere": "Contreplaqué 3 mm",
+     "w": 189.98,
+     "h": 189.97,
+     "note": "Une seule découpe : l'arbre et les prénoms forment une seule pièce.",
+     "gravure": false
+    },
+    {
+     "nom": "arbre-pied-grave-lea-tom.svg",
+     "url": "/atelier-tests/arbre-pied-grave-lea-tom.svg",
+     "titre": "Pied de l'arbre · 2 pièces à emboîter · « Léa & Tom » gravé",
+     "matiere": "Contreplaqué 3 mm",
+     "w": 127.5,
+     "h": 134.25,
+     "note": "",
+     "gravure": true
+    }
+   ]
+  },
+  {
+   "id": "boule",
+   "titre": "Décoration « Flocons de neige »",
+   "sous": "Boule · cadre et 3 flocons en contreplaqué · « Camille » en acrylique bleu, collé sur le cadre",
+   "apercu": "/atelier-tests/decoration-boule-flocons-camille-apercu.webp",
+   "fichiers": [
+    {
+     "nom": "decoration-boule-flocons-camille-contreplaque.svg",
+     "url": "/atelier-tests/decoration-boule-flocons-camille-contreplaque.svg",
+     "titre": "Décoration · boule · « Flocons de neige » · contreplaqué",
+     "matiere": "Contreplaqué 3 mm",
+     "w": 141.2,
+     "h": 124.64,
+     "note": "Le cadre et les petites pièces en bois. Le prénom est dans le fichier acrylique.",
+     "gravure": false
+    },
+    {
+     "nom": "decoration-boule-flocons-camille-acr-bleu.svg",
+     "url": "/atelier-tests/decoration-boule-flocons-camille-acr-bleu.svg",
+     "titre": "Décoration · boule · « Flocons de neige » · acrylique bleu",
+     "matiere": "Acrylique bleu 3 mm",
+     "w": 79.83,
+     "h": 37.23,
+     "note": "À découper dans la plaque d'acrylique, puis à coller sur le cadre comme sur l'aperçu.",
+     "gravure": false
+    }
+   ]
+  },
+  {
+   "id": "mamie",
+   "titre": "Décoration « Pour Mamie »",
+   "sous": "Cadeau · plaque pleine · « Mamie » et 3 dessins gravés",
+   "apercu": "/atelier-tests/decoration-cadeau-mamie-apercu.webp",
+   "fichiers": [
+    {
+     "nom": "decoration-cadeau-mamie-contreplaque.svg",
+     "url": "/atelier-tests/decoration-cadeau-mamie-contreplaque.svg",
+     "titre": "Décoration · cadeau · « Pour Mamie » (plaque pleine) · contreplaqué",
+     "matiere": "Contreplaqué 3 mm",
+     "w": 80.61,
+     "h": 100,
+     "note": "",
+     "gravure": true
+    }
+   ]
+  }
+ ]
+}

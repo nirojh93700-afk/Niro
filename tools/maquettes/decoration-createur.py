@@ -907,7 +907,7 @@ function fichier(){
  var Fh=$('fichier'),f=F(),cl=S.style==='classique',q=k(),W=S.W,H=S.H,R='#FF0000';
  function mm(v){return v/q}
  var fo='translate(5 5) scale('+sx().toFixed(5)+' '+sy().toFixed(5)+')';
- var h='<g transform="'+fo+'"><path fill="none" stroke="'+R+'" stroke-width="'+(.25/sx()).toFixed(3)+'" fill-rule="evenodd" d="'+(cl?f.cadre:f.d)+'"/></g>';
+ var h='<g data-mat="contreplaque" data-piece="1" transform="'+fo+'"><path fill="none" stroke="'+R+'" stroke-width="'+(.25/sx()).toFixed(3)+'" fill-rule="evenodd" d="'+(cl?f.cadre:f.d)+'"/></g>';
  var lw=Math.ceil(W+10),lh=Math.ceil(H+10);
  var Pf={cl:cl,plein:'#fff',trait:R,grav:'#111',o:1.6,coupe:.25,ombre:false,filtre:'style="filter:grayscale(1) contrast(1.15)"'};
  if(cl){
@@ -916,10 +916,11 @@ function fichier(){
   S.els.forEach(function(e,i){
    var pw=mm(e.bw)+1,ph=mm(e.bh)+1;
    if(x>5&&x+pw>195){x=5;y+=rang+8;rang=0}
-   var cx=x+pw/2,cy=y+ph/2;
+   var cx=x+pw/2,cy=y+ph/2;h+='<g data-mat="'+matEl(e).id+'" data-piece="'+(i+2)+'">';
    if(e.type==='texte')h+=pieceTexte(e,cx,cy,mm(e.fs),Pf,'f'+e.id);
    else if(e.type==='dessin'){var t=taille(e);h+=pieceDessin(e,cx,cy,mm(t.w),mm(t.h),Pf,'f'+e.id)}
    else{var t=taille(e);h+=piecePhoto(e,cx,cy,mm(t.w),mm(t.h),Pf,'f'+e.id)}
+   h+='</g>';
    h+='<text x="'+x+'" y="'+(y+ph+3.5)+'" font-size="3" fill="#888" font-family="sans-serif">'+(i+2)+' · '+matEl(e).nom.toLowerCase()+'</text>';
    x+=pw+6;rang=Math.max(rang,ph+4);lw=Math.max(lw,Math.ceil(x));lh=Math.max(lh,Math.ceil(y+rang+3))});
  }else{

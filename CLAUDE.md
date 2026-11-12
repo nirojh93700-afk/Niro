@@ -1,3 +1,14 @@
+## 🔥 GESTION → TESTS → « FICHIERS LASER À ESSAYER » — 12/11/2026 (gérant : « dans admin fais une catégorie test… envoie-moi des tests pour que
+## j'essaie sur la machine si ça fonctionne, les découpes, la gravure, pour les trois maquettes ; tu mets pas en ligne ») — PRÉPARÉ, PAS POUSSÉ
+- Page `/gestion/tests` (nouvelle section « Tests » du menu, `AdminShell`), données `src/lib/testsLaser.json`, fichiers `public/atelier-tests/`
+  (6 SVG + 4 aperçus) : support standard rectangle « Camille » · arbre de vie cœurs « Léa » / « Tom » + pied gravé « Léa & Tom » · décoration
+  « Flocons de neige » (contreplaqué + acrylique bleu, un fichier par matière) · décoration « Pour Mamie » (plaque pleine). Rien n'est vendu.
+- Fabrication : `node tools/maquettes/fichiers-laser-test.cjs <support.html> <dossier du site de l'arbre> <decoration.html> <sortie>` puis
+  copie (`scratchpad/copie-tests.py`, à refaire dans l'outil si besoin) : contours exacts gardés en vecteurs (formes Atomm, cadre, pied) ;
+  noms soudés, pièces découpées autour, textes gravés = rendus à 25 points / mm puis potrace → tracés en mm absolus (aucune transformation,
+  aucune police). Rouge #FF0000 = découpe, noir = gravure, taille réelle en mm. Décoration : `data-mat` / `data-piece` sur chaque pièce du
+  fichier de l'atelier (invisible) pour séparer les matières. Photos gravées : pas encore gérées (seraient seuillées) → à faire en image.
+
 ## 🌳 MAQUETTE « CRÉEZ VOTRE ARBRE DE VIE » (générateur « Family Tree / Life Tree » d'Atomm) — 12/11/2026 (gérant : « analyse bien le logiciel de création » → « fais-moi la maquette ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») = VERSION 6 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - **Artifact** https://claude.ai/artifact/9h1rXBNMnNEYgkaFH1NTFa (v6) · générateur `tools/maquettes/arbre-createur.py <capture> <css> <sortie> <arbres.json> <vignettes>`
   (même capture / css que le support de téléphone) · données `python3 -I tools/maquettes/arbre-atomm-donnees.py <dl> <availability.json> <sortie>`
