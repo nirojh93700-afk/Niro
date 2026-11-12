@@ -321,6 +321,14 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 .prc-miss{color:#a12622}
 #ajouter:disabled{opacity:.5;cursor:not-allowed}
 .sc-poser{margin:6px 0}
+.sc-astuce{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:8px;margin:0;padding:8px 14px;border-radius:999px;
+ background:rgba(43,38,32,.86);color:#fff;font-size:.8rem;line-height:1.3;width:max-content;max-width:calc(100% - 24px);pointer-events:none;animation:scAst 2.4s ease-in-out infinite}
+.sc-astuce svg{flex:none;width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+@keyframes scAst{0%,100%{transform:translateX(-50%)}50%{transform:translateX(-50%) translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){.sc-astuce{animation:none}}
+.sc-fleches .sc-o{min-width:40px}
+.sc-ast-c{display:none}
+@media (max-width:900px){.sc-astuce{bottom:8px;padding:5px 11px;font-size:.72rem;gap:6px}.sc-astuce svg{width:16px;height:16px}.sc-ast-l{display:none}.sc-ast-c{display:inline}}
 .sc-tailles-deco{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .sc-tailles-deco .sc-taille{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink)}
 .sc-tailles-deco .sc-taille span{font-size:1.05rem;font-weight:700}.sc-tailles-deco .sc-taille small{font-size:.72rem;color:var(--ink-soft);display:block!important}
@@ -532,6 +540,7 @@ function dessiner(){
   if(S.els.some(function(o){return o!==e&&!o.flottant&&recouvre(boite(e),boite(o))})){e.flottant=false;change=true}})}}
  S.els.forEach(function(e){if(S.sel===e.id||e.flottant)el('rect',{x:e.bx-5,y:e.by-5,width:e.bw+10,height:e.bh+10,rx:6,fill:'none',stroke:e.flottant?'#c62828':'#a98935','stroke-width':1.6,'stroke-dasharray':'6 5','pointer-events':'none'},poignee)});
  fichier();liste();resume();if(V3.pret)V3.maj();
+ $('astuce').hidden=!S.els.length||S.aBouge||V3.actif||G.vue!=='creation';vignettes();
  if(G.commence){var v=document.querySelector('.sc-thc path');if(v)v.setAttribute('d',cl?F().cadre:F().d)}
 }
 function matEl(e){return e.type==='texte'&&S.style==='classique'?Mde(e.mat||'contreplaque'):M()}
@@ -558,7 +567,7 @@ svg.addEventListener('pointerdown',function(ev){
  var g=ev.target.closest&&ev.target.closest('.sc-el'); if(!g){if(S.sel){S.sel=null;dessiner()}return}
  var e=trouver(+g.getAttribute('data-id')),p=pt(ev); S.sel=e.id; prise={e:e,dx:e.x-p.x,dy:e.y-p.y};
  try{svg.setPointerCapture(ev.pointerId)}catch(_){ } ev.preventDefault(); dessiner()});
-svg.addEventListener('pointermove',function(ev){if(!prise)return;var p=pt(ev);prise.e.auto=false;prise.e.x=p.x+prise.dx;prise.e.y=p.y+prise.dy;ev.preventDefault();dessiner()});
+svg.addEventListener('pointermove',function(ev){if(!prise)return;var p=pt(ev);prise.e.auto=false;S.aBouge=true;prise.e.x=p.x+prise.dx;prise.e.y=p.y+prise.dy;ev.preventDefault();dessiner()});
 function lacher(){prise=null}
 svg.addEventListener('pointerup',lacher);svg.addEventListener('pointercancel',lacher);
 
@@ -591,8 +600,8 @@ function ranger(){var L=limites(),els=S.els.slice().sort(function(a,b){return a.
 /* ---- étape 3 : le style ---- */
 function majStyle(){[].forEach.call($('styles').querySelectorAll('.sc-style'),function(b){b.classList.toggle('on',b.getAttribute('data-v')===S.style)});
  var cl=S.style==='classique';
- $('legTextes').innerHTML=cl?'Chaque texte et chaque photo est une <b>pièce découpée à part</b>, que l\'on colle sur le cadre. Faites-la glisser pour qu\'elle pose sur le bord du cadre : c\'est là qu\'elle est collée. Chaque pièce : + 3 €.'
-  :'Les textes et les photos sont <b>gravés directement</b> sur la plaque. Chaque élément gravé : + 3 €.';
+ $('legTextes').innerHTML=cl?'Chaque texte et chaque photo est une <b>pièce découpée à part</b>, que l\'on colle sur le cadre. <b>Vous la placez où vous voulez</b> : touchez-la dans l\'aperçu et faites-la glisser, ou utilisez les flèches. Elle doit toucher le cadre (ou une autre pièce) : c\'est là qu\'elle est collée. Chaque pièce : + 3 €.'
+  :'Les textes et les photos sont <b>gravés directement</b> sur la plaque. <b>Vous les placez où vous voulez</b> : touchez-les dans l\'aperçu et faites-les glisser, ou utilisez les flèches. Chaque élément gravé : + 3 €.';
  [].forEach.call(document.querySelectorAll('.sc-sicl'),function(x){x.hidden=!cl})}
 $('styles').addEventListener('click',function(ev){var b=ev.target.closest('.sc-style');if(!b)return;S.style=b.getAttribute('data-v');majStyle();voirCreation();panneau();dessiner();reposer()});
 
@@ -689,7 +698,8 @@ function liste(){
      +'<button type="button" class="sc-o sc-poser" data-act="poser">Poser d\'un bord du cadre à l\'autre</button>'
      +'<label class="sc-courbe">Courbe <input type="range" min="-100" max="100" step="5" value="'+(e.courbe||0)+'" data-act="courbe" aria-label="Courbe du texte"><output>'+(e.courbe||0)+'</output></label>'}
    else h+=seg('Forme',FORMES,e.forme,'ef');
-   h+='<div class="sc-outils"><span>Taille</span><button type="button" class="sc-o" data-act="moins" aria-label="Plus petit">−</button><button type="button" class="sc-o" data-act="plus" aria-label="Plus grand">+</button>'
+   h+='<div class="sc-outils sc-fleches"><span>Placer</span><button type="button" class="sc-o" data-act="g" aria-label="Vers la gauche">←</button><button type="button" class="sc-o" data-act="h" aria-label="Vers le haut">↑</button><button type="button" class="sc-o" data-act="b" aria-label="Vers le bas">↓</button><button type="button" class="sc-o" data-act="d" aria-label="Vers la droite">→</button></div>'
+    +'<div class="sc-outils"><span>Taille</span><button type="button" class="sc-o" data-act="moins" aria-label="Plus petit">−</button><button type="button" class="sc-o" data-act="plus" aria-label="Plus grand">+</button>'
     +'<button type="button" class="sc-o" data-act="centre">Centrer</button></div>'}
   h+='</div>'});
  L.innerHTML=h+'</div>'}
@@ -699,6 +709,7 @@ $('liste').addEventListener('click',function(ev){
  if(a==='x'){S.els=S.els.filter(function(x){return x!==e});if(S.sel===e.id)S.sel=null;dessiner();return}
  if(a==='moins'){e.s=Math.max(.4,e.s-.1);e.auto=false}else if(a==='plus'){e.s=Math.min(3,e.s+.1);e.auto=false}else if(a==='centre'){e.x=200}
  else if(a==='poser'){S.sel=e.id;e.auto=true;ajusterAuCadre(e);return}
+ else if(a==='g'||a==='d'||a==='h'||a==='b'){var pas=S.W*k()*.03;if(a==='g')e.x-=pas;if(a==='d')e.x+=pas;if(a==='h')e.y-=pas;if(a==='b')e.y+=pas;e.auto=false;S.aBouge=true}
  else if(a==='esp-'){e.esp=Math.max(-2,(e.esp||0)-1)}else if(a==='esp+'){e.esp=Math.min(8,(e.esp||0)+1)}
  else if(emt){e.mat=emt.getAttribute('data-emat')}
  else if(p){e.police=p.getAttribute('data-pol')}else if(em){e.mode=em.getAttribute('data-em')}else if(ef){e.forme=ef.getAttribute('data-ef')}
@@ -861,7 +872,7 @@ function vignettes(){
  $('stage').setAttribute('data-vue',G.vue);
  if(D.photos.length)$('grande').src=D.photos[G.i];
  $('prec').hidden=$('suiv').hidden=G.vue!=='photo';
- $('aide').textContent=G.vue==='creation'?(V3.actif?'Vue 3D indicative : la décoration suspendue à son ruban.':'Aperçu indicatif de la forme et de la matière choisies.')
+ $('aide').textContent=G.vue==='creation'?(V3.actif?'Vue 3D indicative : la décoration suspendue à son ruban.':S.els.length?'Faites glisser vos noms et vos photos avec le doigt pour les placer'+(S.style==='classique'?' : chaque pièce doit toucher le cadre.':'.'):'Aperçu indicatif de la forme et de la matière choisies.')
   :"Aperçu indicatif : sur le bois, la gravure ressort en brun, comme sur la photo d'exemple."+(G.commence?' Touchez « Votre création » pour revenir à votre support.':'');
 }
 function voirCreation(){G.commence=true;G.vue='creation';vignettes()}
@@ -899,6 +910,7 @@ page = f"""<title>Créateur de décoration</title>
    <button type="button" class="gallery-arrow gallery-arrow-next" id="suiv" aria-label="Photo suivante">›</button>
    <div class="sc-mur" aria-hidden="true"><img src="__LOGO__" alt=""></div>
    <svg id="scene" viewBox="40 14 320 536" role="img" aria-label="Aperçu de votre décoration"></svg>
+   <p class="sc-astuce" id="astuce" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5V4a1.5 1.5 0 0 1 3 0v6m0-1a1.5 1.5 0 0 1 3 0v4.5a6.5 6.5 0 0 1-6.5 6.5h-.6a6 6 0 0 1-4.6-2.2L4.2 14a1.5 1.5 0 0 1 2.3-1.9L9 14.5"/></svg><span class="sc-ast-l">Touchez un nom ou une photo et faites-le glisser pour le placer</span><span class="sc-ast-c">Glissez un nom pour le placer</span></p>
    <div class="sc-vue" id="vueBtns"><button type="button" data-vue="2d" class="on">Face</button><button type="button" data-vue="3d">3D</button></div>
    <canvas class="sc-3d" id="vue3d" aria-label="Vue 3D de la décoration"></canvas><p class="sc-3dmsg" id="msg3d"></p></div>
   <div class="gallery-thumbs" id="vignettes"></div>
