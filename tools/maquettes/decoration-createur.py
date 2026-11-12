@@ -916,7 +916,7 @@ function fichier(){
   S.els.forEach(function(e,i){
    var pw=mm(e.bw)+1,ph=mm(e.bh)+1;
    if(x>5&&x+pw>195){x=5;y+=rang+8;rang=0}
-   var cx=x+pw/2,cy=y+ph/2;h+='<g data-mat="'+matEl(e).id+'" data-piece="'+(i+2)+'">';
+   var cx=x+pw/2,cy=y+ph/2;h+='<g data-mat="'+matEl(e).id+'" data-piece="'+(i+2)+'" data-nom="'+esc(nomEl(e))+'">';
    if(e.type==='texte')h+=pieceTexte(e,cx,cy,mm(e.fs),Pf,'f'+e.id);
    else if(e.type==='dessin'){var t=taille(e);h+=pieceDessin(e,cx,cy,mm(t.w),mm(t.h),Pf,'f'+e.id)}
    else{var t=taille(e);h+=piecePhoto(e,cx,cy,mm(t.w),mm(t.h),Pf,'f'+e.id)}
@@ -926,10 +926,11 @@ function fichier(){
  }else{
   var gr='';
   function X(v){return (v-ox())/q+5} function Y(v){return (v-oy())/q+5}
-  S.els.forEach(function(e){
+  S.els.forEach(function(e,i){gr+='<g data-piece="'+(i+2)+'" data-nom="'+esc(nomEl(e))+'">';
    if(e.type==='texte')gr+=pieceTexte(e,X(e.x),Y(e.y),mm(e.fs),Pf,'f'+e.id);
    else if(e.type==='dessin'){var t=taille(e);gr+=pieceDessin(e,X(e.x),Y(e.y),mm(t.w),mm(t.h),Pf,'f'+e.id)}
-   else{var t=taille(e);gr+=piecePhoto(e,X(e.x),Y(e.y),mm(t.w),mm(t.h),Pf,'f'+e.id)}});
+   else{var t=taille(e);gr+=piecePhoto(e,X(e.x),Y(e.y),mm(t.w),mm(t.h),Pf,'f'+e.id)}
+   gr+='</g>'});
   h='<clipPath id="fclip"><path transform="'+fo+'" clip-rule="evenodd" d="'+f.d+'"/></clipPath><g clip-path="url(#fclip)">'+gr+'</g>'+h;
  }
  Fh.setAttribute('viewBox','0 0 '+lw+' '+lh);Fh.innerHTML=h;
