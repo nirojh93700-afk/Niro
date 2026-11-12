@@ -1,4 +1,4 @@
-## 🔧 RAPPORT PRODUITS DU 12/11/2026 — POINTS 2, 3, 4, 5, 7 (gérant : « corriger les points 2, 3, 4, 5 et le 7 ») — PRÉPARÉ, À POUSSER SUR SON MOT
+## 🔧 RAPPORT PRODUITS DU 12/11/2026 — POINTS 2, 3, 4, 5, 7 (gérant : « corriger les points 2, 3, 4, 5 et le 7 ») — ✅ EN LIGNE LE 12/11/2026 SOIR (« OK, mets la correction en ligne », d7a2dcbf, déploiement réussi, les 4 fiches vérifiées en ligne)
 - ② « Hypoallergénique » : `sansAllegations` (catalog.js) retire aussi le mot en TÊTE d'une liste (« Hypoallergénique • Résistant… », description de la
   gourmette enregistrée dans Gestion) · ③ décoration de Noël en cristal ajoutée à `PIECES_ACHETEES` (plus d'encadré « Fait main dans notre atelier ») ·
   ④ carnet : `title` « Carnet A5 gravé personnalisé, couverture aspect cuir » (52 car., c'est aussi le H1 ; choisi par moi, à changer s'il préfère) ·
