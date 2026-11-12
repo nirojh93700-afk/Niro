@@ -549,28 +549,61 @@ function pieceDessin(e,cx,cy,w,h,P,uid){var d=elem(e.did);if(!d)return '';var x=
   if(P.trait)s+=masque('mt'+uid,d.img,x,y,w,h,P.coupe)+'<rect x="'+(x-2)+'" y="'+(y-2)+'" width="'+(w+4)+'" height="'+(h+4)+'" fill="'+P.trait+'" mask="url(#mt'+uid+')"/>';
   s+=masque('mp'+uid,d.img,x,y,w,h,0)+'<g'+(P.ombre?' filter="url(#pieceF)"':'')+'><rect x="'+(x-1)+'" y="'+(y-1)+'" width="'+(w+2)+'" height="'+(h+2)+'" fill="'+P.plein+'" mask="url(#mp'+uid+')"/></g>'}
  return tr?'<g transform="'+tr.trim()+'">'+s+'</g>':s}
-/* ---- le placement automatique d'un dessin : on cherche sur le bois du cadre un endroit libre (la pièce y est collée, elle ne
-   tombe pas) ; en plaque pleine, un endroit libre entièrement sur la plaque. On préfère l'endroit le plus loin des autres pièces. ---- */
+/* ---- le placement automatique d'un dessin (gérant, 12/11, capture à l'appui) ----
+   CLASSIQUE : le décor se met DANS l'ouverture du cadre, jamais à cheval sur la barre ni en dehors de la forme. Il est collé
+   soit contre le bord intérieur du cadre (il ne le recouvre qu'un tout petit peu : c'est là qu'on met la colle), soit posé sur le
+   nom (il s'appuie sur le haut des lettres). PLAQUE PLEINE : un endroit libre entièrement sur la plaque (gravé dessus). ---- */
 function surBois(x,y){var q=k();try{return $('dos').isPointInFill(new DOMPoint((x-ox())/(q*sx()),(y-oy())/(q*sy())))}catch(_){return false}}
+function dansForme(x,y){var q=k();try{return $('decoupeP').isPointInFill(new DOMPoint((x-ox())/(q*sx()),(y-oy())/(q*sy())))}catch(_){return false}}
+/* la forme en petite grille (0 dehors, 1 ouverture, 2 bois), calculée une fois par forme et par taille : le placement va vite */
+var CARTE=null;
+function carte(){var q=k(),cle=S.forme+'|'+S.W+'|'+S.H+'|'+q;if(CARTE&&CARTE.cle===cle)return CARTE;
+ var st=2,x0=ox()-2,y0=oy()-2,nx=Math.ceil(S.W*q/st)+3,ny=Math.ceil(S.H*q/st)+3,a=new Uint8Array(nx*ny);
+ for(var j=0;j<ny;j++)for(var i=0;i<nx;i++){var x=x0+i*st,y=y0+j*st;a[j*nx+i]=surBois(x,y)?2:(dansForme(x,y)?1:0)}
+ CARTE={cle:cle,st:st,x0:x0,y0:y0,nx:nx,ny:ny,a:a};return CARTE}
+function lieu(c,x,y){var i=Math.round((x-c.x0)/c.st),j=Math.round((y-c.y0)/c.st);if(i<0||j<0||i>=c.nx||j>=c.ny)return 0;return c.a[j*c.nx+i]}
 function ecartAngle(a,b){var d=Math.abs(a-b)%360;return d>180?360-d:d}
+/* une pièce déjà posée, vue comme une boîte (le nom : son encre) */
+function boiteDe(o){if(o.type==='texte'&&o.inkL!=null)return{x0:o.inkL,x1:o.inkR,y0:o.bh?o.by:o.y-o.fs*.45,y1:o.bh?o.by+o.bh:o.y+o.fs*.3,nom:true};
+ return o.bw?{x0:o.bx,x1:o.bx+o.bw,y0:o.by,y1:o.by+o.bh,nom:o.type==='texte'}:null}
+/* ce que donne un endroit en classique : null s'il ne va pas, sinon {bord, nom} (collé contre le cadre / posé sur le nom) */
+function endroitClassique(e,x,y,hw,hh){var N=6,trou=0,bois=0,dehors=0,tot=0,c=carte();if(lieu(c,x,y)!==1)return null;
+ for(var i=0;i<=N;i++)for(var j=0;j<=N;j++){var px=x-hw+2*hw*i/N,py=y-hh+2*hh*j/N;tot++;
+  var v=lieu(c,px,py);if(v===0){dehors++;break}if(v===2)bois++;else trou++}
+ if(dehors>0)return null;                 /* rien ne sort de la forme, le milieu du décor est dans l'ouverture */
+ if(bois/tot>.3)return null;                            /* pas à cheval sur la barre : il la touche seulement */
+ var surNom=false,ok=true;
+ S.els.forEach(function(o){if(o===e||!ok)return;var b=boiteDe(o);if(!b)return;
+  var ix=Math.min(x+hw,b.x1)-Math.max(x-hw,b.x0),iy=Math.min(y+hh,b.y1)-Math.max(y-hh,b.y0);
+  if(ix<=-2||iy<=-2)return;                             /* loin de cette pièce */
+  /* posé sur le nom : le bas du décor descend un peu dans le haut des lettres, pas plus */
+  if(b.nom&&y<b.y0&&iy>4&&iy<=Math.max(6,hh*.3)&&ix>hw*.8){surNom=true;return}
+  ok=false});
+ if(!ok)return null;
+ if(bois<3&&!surNom)return null;                        /* il doit toucher le cadre ou le nom, sinon il tomberait */
+ return{bord:bois>=3,nom:surNom,bois:bois/tot}}
 /* cible : un angle (degrés, 0 = à droite, 90 = en bas) autour du centre de la forme ; sans cible, l'endroit le plus loin des autres pièces */
 function placerAuto(e,cible){var cl=S.style==='classique',L=limites(),q=k(),W=S.W*q,H=S.H*q,essai=0,C=centre();
- while(essai++<4){var t=taille(e),hw=t.w/2+off(),hh=t.h/2+off(),pas=Math.max(3,Math.min(W,H)/36),pts=[];
-  /* en classique la pièce est collée SUR la barre du cadre (elle peut dépasser du bord, comme sur Atomm) : son centre peut aller partout sur le bois */
-  var X0=cl?ox():L.x0+hw,X1=cl?ox()+W:L.x1-hw,Y0=cl?L.y0:L.y0+hh,Y1=cl?oy()+H:L.y1-hh;
-  for(var y=Y0;y<=Y1;y+=pas)for(var x=X0;x<=X1;x+=pas){
-   if(cl){if(!surBois(x,y))continue}
-   else if(!(surBois(x-hw,y-hh)&&surBois(x+hw,y-hh)&&surBois(x-hw,y+hh)&&surBois(x+hw,y+hh)&&surBois(x,y)))continue;
-   var libre=true,dmin=1e9;
-   S.els.forEach(function(o){if(o===e||!o.bw)return;
-    if(x+hw>o.bx-2&&x-hw<o.bx+o.bw+2&&y+hh>o.by-2&&y-hh<o.by+o.bh+2)libre=false;
-    dmin=Math.min(dmin,Math.hypot(x-(o.bx+o.bw/2),y-(o.by+o.bh/2)))});
-   if(!libre)continue;
-   if(cible==null)pts.push([x,y,dmin+Math.random()*pas*2]);
-   else{var ang=Math.atan2(y-C.y,x-C.x)*180/Math.PI;pts.push([x,y,-ecartAngle(ang,cible)*4+Math.hypot(x-C.x,y-C.y)*.15])}}
+ while(essai++<5){var t=taille(e),pas=Math.max(2.5,Math.min(W,H)/48),pts=[];
+  if(cl){var hw=t.w/2,hh=t.h/2;
+   for(var y=L.y0;y<=oy()+H;y+=pas)for(var x=ox();x<=ox()+W;x+=pas){var r=endroitClassique(e,x,y,hw,hh);if(!r)continue;
+    var dmin=1e9;S.els.forEach(function(o){if(o===e||!o.bw)return;dmin=Math.min(dmin,Math.hypot(x-(o.bx+o.bw/2),y-(o.by+o.bh/2)))});
+    var sc=(r.nom?20:0)-r.bois*40+Math.random()*6;
+    if(cible==null)sc+=Math.min(dmin,W)*.6;
+    else sc+=-ecartAngle(Math.atan2(y-C.y,x-C.x)*180/Math.PI,cible)*3+Math.min(dmin,W*.5)*.2;
+    pts.push([x,y,sc])}}
+  else{var hw2=t.w/2+off(),hh2=t.h/2+off();
+   for(var y2=L.y0+hh2;y2<=L.y1-hh2;y2+=pas)for(var x2=L.x0+hw2;x2<=L.x1-hw2;x2+=pas){
+    if(!(surBois(x2-hw2,y2-hh2)&&surBois(x2+hw2,y2-hh2)&&surBois(x2-hw2,y2+hh2)&&surBois(x2+hw2,y2+hh2)&&surBois(x2,y2)))continue;
+    var libre=true,dm=1e9;
+    S.els.forEach(function(o){if(o===e)return;var b=boiteDe(o);if(!b)return;
+     if(x2+hw2>b.x0-2&&x2-hw2<b.x1+2&&y2+hh2>b.y0-2&&y2-hh2<b.y1+2)libre=false;
+     dm=Math.min(dm,Math.hypot(x2-(b.x0+b.x1)/2,y2-(b.y0+b.y1)/2))});
+    if(!libre)continue;
+    pts.push([x2,y2,cible==null?dm+Math.random()*pas*2:-ecartAngle(Math.atan2(y2-C.y,x2-C.x)*180/Math.PI,cible)*4+Math.hypot(x2-C.x,y2-C.y)*.15])}}
   if(pts.length){pts.sort(function(a,b){return b[2]-a[2]});
-   for(var i=0;i<Math.min(8,pts.length);i++){e.x=pts[i][0];e.y=pts[i][1];dessiner();if(!e.flottant)return true}}
-  e.s=Math.max(.3,e.s*.8)}
+   for(var i=0;i<Math.min(10,pts.length);i++){e.x=pts[i][0];e.y=pts[i][1];dessiner();if(!e.flottant)return true}}
+  e.s=Math.max(.28,e.s*.82)}
  return false}
 /* des décors au hasard : la cliente dit combien, on les tire dans la famille choisie et on les colle sur le cadre */
 function auHasard(){var fam=S.famille||D.elements.familles[0],pool=D.elements.elements.filter(function(d){return d.cats.indexOf(fam)>=0}),n=S.nHasard||3,pris=[];
@@ -580,7 +613,7 @@ function auHasard(){var fam=S.famille||D.elements.familles[0],pool=D.elements.el
  pool.slice(0,n).forEach(function(d,i){var o={type:'dessin',did:d.id,fam:fam,mode:'decoupe',mat:'contreplaque',rot:Math.random()<.5?0:(Math.random()<.5?-15:15),flip:Math.random()<.3,hasard:true,s:.55};
   o.id=++S.seq;var p=place(o);o.x=p.x;o.y=p.y;S.els.push(o);dessiner();if(placerAuto(o,debut+360*i/n))pris.push(o);else{S.els=S.els.filter(function(x){return x!==o})}});
  S.sel=null;S.aBouge=true;dessiner();
- var m=$('msgHasard');if(m)m.textContent=pris.length<n?pris.length+' décor'+(pris.length>1?'s':'')+' posé'+(pris.length>1?'s':'')+' : il n\'y a plus de place sur le cadre pour les autres.':n+' décor'+(n>1?'s':'')+' posé'+(n>1?'s':'')+' et collé'+(n>1?'s':'')+' sur le cadre. Touchez encore pour un autre tirage.'}
+ var m=$('msgHasard');if(m)m.textContent=pris.length<n?pris.length+' décor'+(pris.length>1?'s':'')+' posé'+(pris.length>1?'s':'')+' : il n\'y a plus de place sur le cadre pour les autres.':n+' décor'+(n>1?'s':'')+' posé'+(n>1?'s':'')+' et collé'+(n>1?'s':'')+'. Touchez encore pour un autre tirage.'}
 /* une pièce photo : la photo gravée, la pièce découpée 1,6 mm autour (rectangle arrondi ou ovale) */
 function forme(e,x,y,w,h,attr){return e.forme==='ovale'?'<ellipse cx="'+(x+w/2)+'" cy="'+(y+h/2)+'" rx="'+w/2+'" ry="'+h/2+'" '+attr+'/>':'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(w*.09)+'" '+attr+'/>'}
 function piecePhoto(e,cx,cy,w,h,P,uid){var o=P.o,x=cx-w/2,y=cy-h/2,s='';
@@ -732,7 +765,7 @@ function panneau(){
    +'<div class="sc-fams">'+D.elements.familles.map(function(f){return '<button type="button" class="'+(f===fam?'on':'')+'" data-fam="'+esc(f)+'">'+esc(f)+'</button>'}).join('')+'</div>'
    +'<div class="sc-hasard"><b>Au hasard</b><span class="sc-nb"><button type="button" class="sc-o" data-h="-" aria-label="Moins de décors">−</button><output>'+(S.nHasard||3)+'</output><button type="button" class="sc-o" data-h="+" aria-label="Plus de décors">+</button></span>'
    +'<button type="button" class="sc-btn" data-h="go">Tirer '+(S.nHasard||3)+' décor'+((S.nHasard||3)>1?'s':'')+' au hasard</button>'
-   +'<p class="prc-hint" id="msgHasard">Pris dans la famille « '+esc(fam)+' », posés'+(cl?' et collés sur le cadre':' sur la plaque')+' tout seuls. 1 € chacun.</p></div>'
+   +'<p class="prc-hint" id="msgHasard">Pris dans la famille « '+esc(fam)+' », posés'+(cl?' dans l\'ouverture, collés contre le cadre ou sur le nom':' sur la plaque')+' tout seuls. 1 € chacun.</p></div>'
    +'<div class="sc-dessins">'+D.elements.elements.filter(function(d){return d.cats.indexOf(fam)>=0}).map(function(d){return '<button type="button" data-dessin="'+d.id+'" aria-label="Ajouter ce dessin"><img src="'+d.img+'" alt="" loading="lazy"></button>'}).join('')+'</div></div>'}
  P.innerHTML=h;var n=$('ntexte');if(n)n.focus()}
 function matsHtml(cour,data){return '<div class="sc-mats sc-mats5">'+MATIERES.map(function(m){return '<button type="button" class="sc-mat'+(m.id===cour?' on':'')+'" data-'+data+'="'+m.id+'"><i style="background:linear-gradient(135deg,'+m.c[0]+','+m.c[2]+')"></i>'+m.nom.replace('Acrylique ','Acrylique<br>')+'</button>'}).join('')+'</div>'}
@@ -785,7 +818,7 @@ function liste(){
      +'<label class="sc-courbe">Courbe <input type="range" min="-100" max="100" step="5" value="'+(e.courbe||0)+'" data-act="courbe" aria-label="Courbe du texte"><output>'+(e.courbe||0)+'</output></label>'}
    else if(e.type==='dessin'){if(cl){h+=seg('Découpé ou gravé',MODES,e.mode,'em');if(e.mode!=='grave')h+=matsHtml(e.mat||'contreplaque','emat')}
     h+='<div class="sc-outils"><span>Tourner</span><button type="button" class="sc-o" data-act="rot-" aria-label="Tourner à gauche">↺</button><button type="button" class="sc-o" data-act="rot+" aria-label="Tourner à droite">↻</button><button type="button" class="sc-o" data-act="flip">Retourner</button></div>'
-    +'<button type="button" class="sc-o sc-poser" data-act="auto">Placer automatiquement'+(cl?' (collé sur le cadre)':'')+'</button>'}
+    +'<button type="button" class="sc-o sc-poser" data-act="auto">Placer automatiquement'+(cl?' (collé contre le cadre ou sur le nom)':'')+'</button>'}
    else h+=seg('Forme',FORMES,e.forme,'ef');
    h+='<div class="sc-outils sc-fleches"><span>Placer</span><button type="button" class="sc-o" data-act="g" aria-label="Vers la gauche">←</button><button type="button" class="sc-o" data-act="h" aria-label="Vers le haut">↑</button><button type="button" class="sc-o" data-act="b" aria-label="Vers le bas">↓</button><button type="button" class="sc-o" data-act="d" aria-label="Vers la droite">→</button></div>'
     +'<div class="sc-outils"><span>Taille</span><button type="button" class="sc-o" data-act="moins" aria-label="Plus petit">−</button><button type="button" class="sc-o" data-act="plus" aria-label="Plus grand">+</button>'

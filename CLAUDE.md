@@ -46,6 +46,10 @@
   seul le nœud du haut était assez large). « Placer automatiquement » d'un seul dessin garde l'endroit le plus loin des autres pièces.
   **v10 (12/11 soir, gérant : « pour les tailles, deux euros de plus à chaque fois »)** : Petite 7 cm = compris · Moyenne 9 cm **+ 2 €** · Grande
   11 cm **+ 4 €** (4ᵉ valeur de `tailles`, `prixTaille()` dans le total, affiché sous chaque taille et dans le résumé).
+  **v11 (12/11 soir, capture d'un sapin : « il faut que ça soit collé sur les côtés ou le nom »)** : en Classique, un décor (au hasard ou
+  « Placer automatiquement ») se pose DANS l'ouverture du cadre, collé contre le bord intérieur ou posé sur le haut du nom (jamais à cheval
+  sur la barre, jamais sur les lettres) : `endroitClassique` (ouverture lue sur une grille mise en cache `carte()`, bois ≤ 30 %, nom ≤ 30 %
+  de la hauteur du décor), décor réduit jusqu'à 5 fois s'il ne trouve pas de place. Vérifié sur 5 formes × 3 / 5 décors : 0 flottant, 0 erreur.
   ⛔ Leçon : « fais exactement comme le logiciel » = TOUS ses réglages ; ce qu'il exclut se retire seulement si c'est EXACTEMENT ce qu'il a nommé.
 - ✅✅ **V6 ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») : c'est CELLE à reproduire au « applique » (remplace la v5), ne plus la modifier sans sa demande.**
 - ✅ **v6 (12/11 soir, captures iPhone : « les noms quand ils dépassent de l'objet ça coupe, on voit pas, il faut pas que ça se coupe »)** = VERSION 6 de l'artifact, CELLE à reproduire : en style **Classique**, un nom ou une photo est une pièce COLLÉE par-dessus le cadre → affiché ENTIER même s'il dépasse (plus de découpe à la forme sur l'aperçu de face) ; en **Plaque pleine** (tout gravé sur la plaque) rien ne sort de la forme, comme avant.
