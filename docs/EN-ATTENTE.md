@@ -4,7 +4,8 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
-## 🦌 MAQUETTE « DÉCORATION À PRÉNOM » — ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (version 3), RIEN en ligne
+## 🦌 MAQUETTE « DÉCORATION À PRÉNOM » — ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (version 4, fil blanc), RIEN en ligne
+- Décoration à suspendre : enregistrée le même soir en version 14 (fil blanc), https://claude.ai/artifact/6Gs8LNkzpdvWMRDNZpE775.
 - https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga · générateur `tools/maquettes/prenom-createur.py` (détail dans CLAUDE.md). Peinture comme Atomm,
   deux pièces par prénom (fond + lettre), tout suit le prénom tapé. Ne plus la modifier sans sa demande.
 - **À valider par lui avant tout « applique »** : prix (12,90 € · + 2 / + 4 € selon la taille · + 4 € peinte) · tailles (lettre 6 / 8 / 10 cm) ·
