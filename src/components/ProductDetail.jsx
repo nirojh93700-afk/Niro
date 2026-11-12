@@ -74,7 +74,7 @@ const ENGRAVE_PREVIEW = "#3a2f1d";
 
 // Pièces rangées en « déco » mais ACHETÉES puis gravées (pas fabriquées à
 // l'atelier) : elles n'ont pas droit à l'argument « fait main ».
-const PIECES_ACHETEES = ["couverts-enfants-personnalises"];
+const PIECES_ACHETEES = ["couverts-enfants-personnalises", "decoration-noel-verre-gravee"];
 
 export default function ProductDetail({ product, realisations = [] }) {
   const { addItem } = useCart();

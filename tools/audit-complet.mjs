@@ -238,7 +238,7 @@ section("5. Allégations (ce qui est promis aux clientes)");
     ["❌", /\b(lorem ipsum|undefined|NaN ?€|\[object Object\])/i, "texte technique visible (undefined, NaN, lorem…)"],
     ["❌", /\bnetlify\b/i, "« Netlify » visible"],
     ["⚠️", /\bétanche\b/i, "« étanche » (à éviter sur un bijou doré)"],
-    ["⚠️", /hypoallergénique/i, "« hypoallergénique » (allégation santé, à garder seulement si le fournisseur le certifie ; le bandeau « Matériaux nobles » dit aussi « acier 316L » sur toutes les fiches alors que plusieurs bijoux sont en 304)"],
+    ["⚠️", /hypoallergénique/i, "« hypoallergénique » (allégation santé, à garder seulement si le fournisseur le certifie)"],
     ["⚠️", /qualité chirurgicale|acier chirurgical/i, "« acier chirurgical » (terme marketing, pas une norme)"],
     ["⚠️", /fait main/i, "« fait main » sur un bijou, un verre ou un cristal (juste sur le bois que tu découpes, pas sur ce que tu achètes et graves)", /<title>[^<]*(collier|bracelet|bijou|verre|carafe|flûte|cristal|gobelet|tumbler|pendentif)/i],
   ];

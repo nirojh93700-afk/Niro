@@ -1,3 +1,13 @@
+## 🔧 RAPPORT PRODUITS DU 12/11/2026 — POINTS 2, 3, 4, 5, 7 (gérant : « corriger les points 2, 3, 4, 5 et le 7 ») — PRÉPARÉ, À POUSSER SUR SON MOT
+- ② « Hypoallergénique » : `sansAllegations` (catalog.js) retire aussi le mot en TÊTE d'une liste (« Hypoallergénique • Résistant… », description de la
+  gourmette enregistrée dans Gestion) · ③ décoration de Noël en cristal ajoutée à `PIECES_ACHETEES` (plus d'encadré « Fait main dans notre atelier ») ·
+  ④ carnet : `title` « Carnet A5 gravé personnalisé, couverture aspect cuir » (52 car., c'est aussi le H1 ; choisi par moi, à changer s'il préfère) ·
+  ⑤ verre à whisky Fête des pères : champ « Écriture du texte du fond » (8 écritures, seulement si face + fond et « Un texte »).
+- ⛔ Erreurs de MON rapport, vérifiées ensuite : la plaque de porte enfant propose DÉJÀ 5 styles d'écriture (lettres découpées), le verre Fête des pères
+  DÉJÀ une police par ligne du modèle ; le bandeau « Matériaux nobles » dit DÉJÀ « Acier inoxydable, bois, cristal » (point 7 : rien à corriger, chaque
+  fiche donne sa matière 316L ou 304). Le message périmé de `tools/audit-complet.mjs` est corrigé. Avant d'écrire un point de rapport : ouvrir la fiche.
+- ✅ Page Tests de Gestion (emboîtement, photo, notes, réglages machine) EN LIGNE le 12/11/2026 soir (« Envoie la mise à jour pour le test », fae446cf).
+
 ## 🔥 GESTION → TESTS → « FICHIERS LASER À ESSAYER » — 12/11/2026 (gérant : « dans admin fais une catégorie test… envoie-moi des tests pour que
 ## j'essaie sur la machine si ça fonctionne, les découpes, la gravure, pour les trois maquettes ; tu mets pas en ligne ») — PRÉPARÉ, PAS POUSSÉ
 - Page `/gestion/tests` (nouvelle section « Tests » du menu, `AdminShell`), données `src/lib/testsLaser.json`, fichiers `public/atelier-tests/`

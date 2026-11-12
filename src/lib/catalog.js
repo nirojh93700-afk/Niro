@@ -31,7 +31,11 @@ export function sansAllegations(html) {
   return String(html || "")
     .replace(/\s*\(qualité chirurgicale\)/gi, "")
     .replace(/acier chirurgical/gi, "acier inoxydable")
-    .replace(/\s+hypoallergéniques?/gi, "");
+    // « Hypoallergénique • Résistant… » (mot en tête d'une liste, 12/11/2026) : le mot part avec son séparateur.
+    .replace(/(^|>|[•·]\s*)hypoallergéniques?\s*[•·,;–-]\s*([a-zà-ÿ])?/gi, (m, avant, suite) => avant + (suite ? suite.toUpperCase() : ""))
+    .replace(/\s*[•·,;]?\s+hypoallergéniques?(?=\s*([.!<]|$))/gi, "")
+    .replace(/\s+hypoallergéniques?/gi, "")
+    .replace(/hypoallergéniques?/gi, "");
 }
 
 function applyOverride(product, ov, images, promos) {
