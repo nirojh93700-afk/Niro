@@ -240,6 +240,14 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 .sc-x{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:1rem;color:var(--ink-soft)}
 .sc-outils{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:9px}
 .sc-outils span{font-size:.76rem;color:var(--ink-soft);margin-right:2px}
+.sc-astuce{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:8px;margin:0;padding:8px 14px;border-radius:999px;
+ background:rgba(43,38,32,.86);color:#fff;font-size:.8rem;line-height:1.3;width:max-content;max-width:calc(100% - 24px);pointer-events:none;animation:scAst 2.4s ease-in-out infinite}
+.sc-astuce svg{flex:none;width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+@keyframes scAst{0%,100%{transform:translateX(-50%)}50%{transform:translateX(-50%) translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){.sc-astuce{animation:none}}
+.sc-ast-c{display:none}
+.sc-stage[data-vue=photo] .sc-astuce,.sc-stage[data-3d="1"] .sc-astuce{display:none!important}
+@media (max-width:900px){.sc-astuce{bottom:8px;padding:5px 11px;font-size:.72rem;gap:6px}.sc-astuce svg{width:16px;height:16px}.sc-ast-l{display:none}.sc-ast-c{display:inline}}
 .sc-o{min-width:40px;min-height:36px;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;font:inherit;font-size:.8rem;font-weight:600;padding:0 10px;color:var(--ink)}
 .sc-item input[type=text]{width:100%;box-sizing:border-box;min-width:0;margin-top:9px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font:inherit;background:#fff}
 .sc-item .prc-pols{margin-top:8px}
@@ -329,7 +337,7 @@ HTML_OUTIL = r"""
    <button type="button" class="sc-mode" data-m="ajoure"><b>Motif ajouré · + 3 €</b><small>un motif découpé à travers le bois</small></button>
   </div>
   <div id="blocGrave">
-   <p class="prc-legend">Ajoutez un texte, un dessin, votre photo ou une lettre fleurie : chaque élément gravé coûte + 3 €.</p>
+   <p class="prc-legend">Ajoutez un texte, un dessin, votre photo ou une lettre fleurie : chaque élément gravé coûte + 3 €. <b>Vous le placez où vous voulez</b> : touchez-le dans l'aperçu et faites-le glisser, ou utilisez les flèches.</p>
    <div class="sc-ajouts">
     <button type="button" class="sc-ajout" data-a="texte"><svg viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg>Un texte<small>prénom, date, petit mot</small></button>
     <button type="button" class="sc-ajout" data-a="dessin"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 8a4 4 0 0 1 7 2.4C19 15.6 12 20 12 20z"/></svg>Un dessin<small>nos modèles</small></button>
@@ -501,6 +509,7 @@ function dessiner(){
    el('rect',{x:b.x-5,y:b.y-5,width:b.width+10,height:b.height+10,rx:6,fill:'none',stroke:'#a98935','stroke-width':1.6,'stroke-dasharray':'6 5','pointer-events':'none'},poignee)}
  });
  fichier();liste();resume();if(V3.pret)V3.maj();
+ $('astuce').hidden=!S.els.length||S.aBouge||V3.actif||(typeof G!=='undefined'&&G.vue!=='creation');
  if(G.commence){var v=document.querySelector('.sc-thc path');if(v)v.setAttribute('d',vignetteD(S.forme))}
 }
 
@@ -512,7 +521,7 @@ svg.addEventListener('pointerdown',function(ev){
  var g=ev.target.closest&&ev.target.closest('.sc-el'); if(!g){if(S.sel){S.sel=null;dessiner()}return}
  var e=trouver(+g.getAttribute('data-id')),p=pt(ev); S.sel=e.id; prise={e:e,dx:e.x-p.x,dy:e.y-p.y};
  try{svg.setPointerCapture(ev.pointerId)}catch(_){ } ev.preventDefault(); dessiner()});
-svg.addEventListener('pointermove',function(ev){if(!prise)return;var p=pt(ev);prise.e.x=p.x+prise.dx;prise.e.y=p.y+prise.dy;ev.preventDefault();dessiner()});
+svg.addEventListener('pointermove',function(ev){if(!prise)return;var p=pt(ev);S.aBouge=true;prise.e.x=p.x+prise.dx;prise.e.y=p.y+prise.dy;ev.preventDefault();dessiner()});
 function lacher(){prise=null}
 svg.addEventListener('pointerup',lacher);svg.addEventListener('pointercancel',lacher);
 
@@ -627,7 +636,8 @@ function liste(){
   if(S.sel===e.id){
    if(e.type==='texte'){h+='<input type="text" maxlength="30" value="'+esc(e.texte)+'" data-edit="'+e.id+'" aria-label="Modifier le texte">'+polsHtml(e.police)}
    if(e.type==='lettre'){h+='<input type="text" maxlength="20" value="'+esc(e.nom||'')+'" placeholder="Le nom dans la bande (facultatif)" data-edit="'+e.id+'" aria-label="Modifier le nom">'+polsHtml(e.police)}
-   h+='<div class="sc-outils"><span>Taille</span><button type="button" class="sc-o" data-act="moins" aria-label="Plus petit">−</button><button type="button" class="sc-o" data-act="plus" aria-label="Plus grand">+</button>'
+   h+='<div class="sc-outils sc-fleches"><span>Placer</span><button type="button" class="sc-o" data-act="g" aria-label="Vers la gauche">←</button><button type="button" class="sc-o" data-act="h" aria-label="Vers le haut">↑</button><button type="button" class="sc-o" data-act="b" aria-label="Vers le bas">↓</button><button type="button" class="sc-o" data-act="d" aria-label="Vers la droite">→</button></div>'
+    +'<div class="sc-outils"><span>Taille</span><button type="button" class="sc-o" data-act="moins" aria-label="Plus petit">−</button><button type="button" class="sc-o" data-act="plus" aria-label="Plus grand">+</button>'
     +'<button type="button" class="sc-o" data-act="centre">Centrer</button></div>';
   }
   h+='</div>'});
@@ -637,7 +647,8 @@ $('liste').addEventListener('click',function(ev){
  var it=ev.target.closest('.sc-item'); if(!it)return; var e=trouver(+it.getAttribute('data-id')); if(!e)return;
  var a=ev.target.getAttribute('data-act'),p=ev.target.closest('[data-pol]');
  if(a==='x'){S.els=S.els.filter(function(x){return x!==e});if(S.sel===e.id)S.sel=null;dessiner();return}
- if(a==='moins'){e.s=Math.max(.5,e.s-.12)}else if(a==='plus'){e.s=Math.min(1.9,e.s+.12)}else if(a==='centre'){e.x=200}
+ if(a==='g'||a==='d'||a==='h'||a==='b'){var pas=6;if(a==='g')e.x-=pas;if(a==='d')e.x+=pas;if(a==='h')e.y-=pas;if(a==='b')e.y+=pas;S.aBouge=true}
+ else if(a==='moins'){e.s=Math.max(.5,e.s-.12)}else if(a==='plus'){e.s=Math.min(1.9,e.s+.12)}else if(a==='centre'){e.x=200}
  else if(p){e.police=p.getAttribute('data-pol')}
  else if(ev.target.tagName==='INPUT'){return}
  S.sel=e.id;dessiner()});
@@ -779,7 +790,7 @@ function vignettes(){
  $('stage').setAttribute('data-vue',G.vue);
  $('grande').src=D.photos[G.i];
  $('prec').hidden=$('suiv').hidden=G.vue!=='photo';
- $('aide').textContent=G.vue==='creation'?(V3.actif?'Vue 3D indicative : les deux pièces emboîtées, à l\'inclinaison choisie.':S.ajoure&&!S.els.length?'Le motif est découpé à travers le bois : on voit au travers.':'Faites glisser un élément pour le déplacer. Aperçu indicatif : sur le bois, la gravure ressort en brun.')
+ $('aide').textContent=G.vue==='creation'?(V3.actif?'Vue 3D indicative : les deux pièces emboîtées, à l\'inclinaison choisie.':S.ajoure&&!S.els.length?'Le motif est découpé à travers le bois : on voit au travers.':S.els.length?'Faites glisser vos textes, dessins et photos avec le doigt pour les placer, ou utilisez les flèches. Sur le bois, la gravure ressort en brun.':'Aperçu indicatif : sur le bois, la gravure ressort en brun.')
   :"Aperçu indicatif : sur le bois, la gravure ressort en brun, comme sur la photo d'exemple."+(G.commence?' Touchez « Votre création » pour revenir à votre support.':'');
 }
 function voirCreation(){G.commence=true;G.vue='creation';vignettes()}
@@ -815,6 +826,7 @@ page = f"""<title>Créateur support téléphone</title>
    <button type="button" class="gallery-arrow gallery-arrow-next" id="suiv" aria-label="Photo suivante">›</button>
    <div class="sc-mur" aria-hidden="true"><img src="__LOGO__" alt=""></div>
    <svg id="scene" viewBox="40 14 320 536" role="img" aria-label="Aperçu de votre support de téléphone"></svg>
+   <p class="sc-astuce" id="astuce" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5V4a1.5 1.5 0 0 1 3 0v6m0-1a1.5 1.5 0 0 1 3 0v4.5a6.5 6.5 0 0 1-6.5 6.5h-.6a6 6 0 0 1-4.6-2.2L4.2 14a1.5 1.5 0 0 1 2.3-1.9L9 14.5"/></svg><span class="sc-ast-l">Touchez un texte, un dessin ou une photo et faites-le glisser pour le placer</span><span class="sc-ast-c">Glissez un élément pour le placer</span></p>
    <div class="sc-vue" id="vueBtns"><button type="button" data-vue="2d" class="on">Face</button><button type="button" data-vue="3d">3D</button></div>
    <div class="sc-pied" id="piedVue" hidden><svg id="piedSvg"><path id="piedP"/></svg>Le pied, vu de dessus</div>
    <canvas class="sc-3d" id="vue3d" aria-label="Vue 3D du support"></canvas><p class="sc-3dmsg" id="msg3d"></p></div>

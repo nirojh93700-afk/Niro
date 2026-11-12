@@ -328,6 +328,7 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 @media (prefers-reduced-motion:reduce){.sc-astuce{animation:none}}
 .sc-fleches .sc-o{min-width:40px}
 .sc-ast-c{display:none}
+.sc-stage[data-vue=photo] .sc-astuce,.sc-stage[data-3d="1"] .sc-astuce{display:none!important}
 @media (max-width:900px){.sc-astuce{bottom:8px;padding:5px 11px;font-size:.72rem;gap:6px}.sc-astuce svg{width:16px;height:16px}.sc-ast-l{display:none}.sc-ast-c{display:inline}}
 .sc-tailles-deco{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .sc-tailles-deco .sc-taille{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink)}
