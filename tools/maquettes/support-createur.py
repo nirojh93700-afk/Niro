@@ -297,6 +297,10 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 .sc-stage:not([data-3d="1"]) .sc-3dmsg{display:none}
 .sc-stage[data-vue=creation] .sc-tag{display:none}
 .sc-stage [hidden]{display:none!important}
+.sc-pied{position:absolute;left:10px;bottom:10px;z-index:2;width:clamp(62px,15%,104px);background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:10px;padding:6px 6px 4px;text-align:center;font-size:.66rem;font-weight:700;color:var(--ink-soft);line-height:1.2}
+.sc-pied svg{display:block;width:100%;height:auto;margin-bottom:3px}
+.sc-pied path{fill:#e6cfa5;stroke:#9c6b3f;stroke-width:.6;fill-rule:evenodd}
+.sc-stage[data-vue=photo] .sc-pied,.sc-stage[data-3d="1"] .sc-pied{display:none!important}
 @media (max-width:420px){.sc-ajout{font-size:.76rem;padding:10px 4px}.sc-forme{font-size:.72rem}.sc-taille small{display:none}.sc-motif{font-size:.68rem}}
 """
 
@@ -447,7 +451,9 @@ function plaque(){ /* contour, fentes, trous ajourés et rebord, tels que dans l
   if(i===1){h+='<rect x="'+x0+'" y="'+y+'" width="'+(x1-x0)+'" height="'+ep+'" fill="#b48c58" opacity=".6"/>';return}
   h+='<path d="M'+(x0-4)+','+(y-10)+'L'+(x1+4)+','+(y-10)+'L'+x1+','+y+'L'+x0+','+y+'Z" fill="#ead6ae" stroke="#a9834f" stroke-width="1"/>'
    +'<rect x="'+x0+'" y="'+y+'" width="'+(x1-x0)+'" height="'+ep+'" fill="#c9a874" stroke="#a9834f" stroke-width="1"/>'});
- $('rebord').innerHTML=h}
+ $('rebord').innerHTML=h;
+ var tp=trousPied();$('piedVue').hidden=!tp;
+ if(tp){$('piedSvg').setAttribute('viewBox','-2 -2 '+(T().W+4)+' '+(b.piedH+4));$('piedP').setAttribute('d',b.pied+tp)}}
 
 var hautTrous={};
 function haut(d){if(!d)return 1e9;if(hautTrous[d]==null){var m=1e9;poly(d).forEach(function(c){c.forEach(function(p){if(p[1]<m)m=p[1]})});hautTrous[d]=m}return hautTrous[d]}
@@ -719,12 +725,13 @@ V3.maj=function(){if(!V3.actif)return;
  g.updateMatrixWorld(true);var bx=new THREE.Box3().setFromObject(g);porte.position.y-=bx.min.y;porte.position.z-=(bx.min.z+bx.max.z)/2;
  if(V3.g){V3.sc.remove(V3.g);V3.g.traverse(function(o){if(o.geometry)o.geometry.dispose()})}
  V3.g=g;V3.sc.add(g);
- var hh=bx.max.y-bx.min.y;V3.cam.position.set(0,hh*.72,hh*2.55);V3.cam.lookAt(0,hh*.42,0);
+ var vp=!!trousPied(),ps=piedSeul();if(V3.vu!==ps){V3.rot=ps?2.55:-.45;V3.vu=ps}
+ var hh=bx.max.y-bx.min.y;V3.cam.position.set(0,hh*(vp?1.05:.72),hh*2.55);V3.cam.lookAt(0,hh*.38,0);
  var id=++V3.n;V3.n=id;
  texture3D(function(cv){if(id!==V3.n)return;
   if(cv){var tx=new THREE.CanvasTexture(cv);var pl=new THREE.Mesh(new THREE.PlaneGeometry(t.W,H),new THREE.MeshStandardMaterial({map:tx,transparent:true,roughness:.9}));
    pl.position.set(t.W/2,H/2,3.05);porte.add(pl)}
-  $('msg3d').textContent='Faites glisser pour tourner le support.';V3.rendre()});
+  $('msg3d').textContent=trousPied()?'Faites glisser pour tourner : le motif du pied se voit de dos.':'Faites glisser pour tourner le support.';V3.rendre()});
  V3.rendre()};
 V3.n=0;
 function majVue(){[].forEach.call(document.querySelectorAll('.sc-vue button'),function(x){x.classList.toggle('on',(x.getAttribute('data-vue')==='3d')===V3.actif)})}
@@ -793,6 +800,7 @@ page = f"""<title>Créateur support téléphone</title>
    <button type="button" class="gallery-arrow gallery-arrow-next" id="suiv" aria-label="Photo suivante">›</button>
    <svg id="scene" viewBox="40 14 320 536" role="img" aria-label="Aperçu de votre support de téléphone"></svg>
    <div class="sc-vue" id="vueBtns"><button type="button" data-vue="2d" class="on">Face</button><button type="button" data-vue="3d">3D</button></div>
+   <div class="sc-pied" id="piedVue" hidden><svg id="piedSvg"><path id="piedP"/></svg>Le pied, vu de dessus</div>
    <canvas class="sc-3d" id="vue3d" aria-label="Vue 3D du support"></canvas><p class="sc-3dmsg" id="msg3d"></p></div>
   <div class="gallery-thumbs" id="vignettes"></div>
   <p class="sc-aide" id="aide">Aperçu indicatif : sur le bois, la gravure ressort en brun, comme sur la photo d'exemple.</p>
