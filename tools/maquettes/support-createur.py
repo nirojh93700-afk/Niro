@@ -167,7 +167,7 @@ POLICES = [
 
 ATOMM = json.load(open(atomm, encoding="utf-8"))
 DONNEES = json.dumps({"atomm": ATOMM, "photos": PHOTOS, "dessins": DESSINS, "lettres": LETTRES, "planche": PLANCHE, "exemple": EXEMPLE, "polices": POLICES,
-                      "prix": {"texte": P_TEXTE, "dessin": P_DESSIN, "lettre": P_LETTRE, "photo": P_PHOTO, "plus": 3, "ajoure": 16.9, "grand": 2}},
+                      "prix": {"base": 12.9, "taille": {"petit": 0, "standard": 3, "grand": 6}, "element": 3, "ajoure": 3}},
                      ensure_ascii=False, separators=(",", ":"))
 
 CSS_MAQ = r"""
@@ -278,7 +278,8 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 .sc-taille.on,.sc-mode.on,.sc-motif.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
 .sc-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
 .sc-mode{display:flex;flex-direction:column;gap:3px;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink);text-align:left}
-.sc-mode b{font-size:.95rem}.sc-mode small{font-size:.76rem;color:var(--ink-soft);line-height:1.35}
+.sc-mode b{font-size:.95rem}.sc-mode b::before{content:'';display:inline-block;width:16px;height:16px;border:1.5px solid var(--line);border-radius:5px;margin-right:7px;vertical-align:-3px;background:#fff}
+.sc-mode.on b::before{content:'✓';color:#fff;background:var(--gold-dark);border-color:var(--gold-dark);font-size:11px;line-height:16px;text-align:center}.sc-mode small{font-size:.76rem;color:var(--ink-soft);line-height:1.35}
 .sc-motifs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .sc-motif{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink);font-size:.74rem;font-weight:600;text-align:center}
 .sc-motif svg{width:42px;height:62px}
@@ -301,7 +302,7 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 
 HTML_OUTIL = r"""
 <div class="prc" id="prc">
- <div class="prc-head"><p class="prc-title">Créez votre support</p><p class="prc-sub">Quatre petites étapes. Votre support se dessine au fur et à mesure.</p></div>
+ <div class="prc-head"><p class="prc-title">Créez votre support</p><p class="prc-sub">Quatre petites étapes. Votre support se dessine au fur et à mesure. Choisissez la gravure, le motif ajouré, les deux, ou rien.</p></div>
 
  <section class="prc-step">
   <div class="prc-sh"><span class="prc-num done" id="n1">1</span><h3>La forme et la taille</h3></div>
@@ -313,11 +314,11 @@ HTML_OUTIL = r"""
  <section class="prc-step">
   <div class="prc-sh"><span class="prc-num" id="n2">2</span><h3>La décoration</h3></div>
   <div class="sc-modes" id="modes">
-   <button type="button" class="sc-mode" data-m="grave"><b>Gravé</b><small>texte, dessin, photo ou lettre fleurie</small></button>
-   <button type="button" class="sc-mode" data-m="ajoure"><b>Ajouré · <span id="lajoure"></span></b><small>un motif découpé à travers le bois</small></button>
+   <button type="button" class="sc-mode" data-m="grave"><b>Gravure · + 3 € par élément</b><small>texte, dessin, photo ou lettre fleurie</small></button>
+   <button type="button" class="sc-mode" data-m="ajoure"><b>Motif ajouré · + 3 €</b><small>un motif découpé à travers le bois</small></button>
   </div>
   <div id="blocGrave">
-   <p class="prc-legend">Ajoutez un texte, un dessin, votre photo ou une lettre fleurie. Le premier est compris, chaque élément en plus coûte <b id="lplus"></b>.</p>
+   <p class="prc-legend">Ajoutez un texte, un dessin, votre photo ou une lettre fleurie : chaque élément gravé coûte + 3 €.</p>
    <div class="sc-ajouts">
     <button type="button" class="sc-ajout" data-a="texte"><svg viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg>Un texte<small>prénom, date, petit mot</small></button>
     <button type="button" class="sc-ajout" data-a="dessin"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 8a4 4 0 0 1 7 2.4C19 15.6 12 20 12 20z"/></svg>Un dessin<small>nos modèles</small></button>
@@ -328,7 +329,7 @@ HTML_OUTIL = r"""
    <div id="liste"></div>
   </div>
   <div id="blocAjoure" hidden>
-   <p class="prc-legend">Le motif est découpé à travers le bois : on voit au travers. Un support ajouré n'est pas gravé.</p>
+   <p class="prc-legend">Le motif est découpé à travers le bois : on voit au travers. Il peut s'ajouter à la gravure.</p>
    <div class="sc-motifs" id="motifs"></div>
    <p class="sc-sous">Combien de motifs ?</p>
    <div class="prc-chips" id="densites"></div>
@@ -374,7 +375,7 @@ HTML_ATELIER = r"""
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
   <li>Découpez un support de chaque taille pour l'essayer : si les pattes sont trop serrées ou trop lâches dans les fentes, je règle le jeu.</li>
-  <li>Prix proposés : gravé = les prix de la fiche actuelle (le premier élément compris, + 3 € par élément en plus) ; ajouré 16,90 € ; taille grand + 2 €.</li>
+  <li>Prix (les vôtres, 12/11) : support petit 12,90 € · standard + 3 € · grand + 6 € · chaque élément gravé + 3 € · motif ajouré + 3 € (gravure et motif possibles ensemble).</li>
   <li>Une vraie photo par forme et par motif ajouré sera à prendre avant la mise en vente.</li>
  </ul></div>
 </div></section>
@@ -394,13 +395,13 @@ var FORMES=[{id:'rectangle',nom:'Rectangle arrondi'},{id:'arche',nom:'Arche'},{i
 var TAILLES=[{id:'petit',nom:'Petit',ex:'iPhone SE, petits téléphones'},{id:'standard',nom:'Standard',ex:'iPhone 16 / 17, Galaxy S'},{id:'grand',nom:'Grand',ex:'Pro Max, Ultra, grands téléphones'}];
 var MOTIFS=[{id:'coeurs',nom:'Cœurs'},{id:'pattes',nom:'Pattes'},{id:'soleil',nom:'Soleil'},{id:'nid',nom:"Nid d'abeille"},{id:'losanges',nom:'Losanges'},{id:'persienne',nom:'Persienne'},{id:'fenetre',nom:'Fenêtre'},{id:'etoiles',nom:'Étoiles'}];
 var DENSITES=[{id:'moins',nom:'Moins'},{id:'moyen',nom:'Moyen'},{id:'plus',nom:'Plus'}], ANGLES=[10,13,16,20];
-var S={forme:'rectangle',taille:'standard',mode:'grave',motif:'coeurs',densite:'moyen',piedMotif:true,angle:13,cable:true,
+var S={forme:'rectangle',taille:'standard',grave:true,ajoure:false,motif:'coeurs',densite:'moyen',piedMotif:true,angle:13,cable:true,
  els:[],sel:null,panneau:null,police:'playfair',seq:0};
 function T(){return A.tailles[S.taille]}
 function base(){return A.base[S.taille+'|'+S.forme+'|'+(S.cable?1:0)+'|'+S.angle]}
-function trous(){return S.mode==='ajoure'?(A.trous[S.taille+'|'+S.forme+'|'+S.motif+'|'+S.densite]||''):''}
-function piedSeul(){return S.mode==='ajoure'&&!(A.trous[S.taille+'|'+S.forme+'|'+S.motif+'|'+S.densite])}
-function trousPied(){return S.mode==='ajoure'&&(S.piedMotif||piedSeul())?(A.trousPied[S.taille+'|'+S.motif+'|'+S.densite+'|'+S.angle]||''):''}
+function trous(){return S.ajoure?(A.trous[S.taille+'|'+S.forme+'|'+S.motif+'|'+S.densite]||''):''}
+function piedSeul(){return S.ajoure&&!(A.trous[S.taille+'|'+S.forme+'|'+S.motif+'|'+S.densite])}
+function trousPied(){return S.ajoure&&(S.piedMotif||piedSeul())?(A.trousPied[S.taille+'|'+S.motif+'|'+S.densite+'|'+S.angle]||''):''}
 function fentesD(b){return b.fentes.map(function(f){return 'M'+f[0]+' '+f[1]+'H'+f[2]+'V'+f[3]+'H'+f[0]+'Z'}).join('')}
 function vignetteD(f){return A.base['standard|'+f+'|1|13'].dos}
 function poly(d){return d.split(/(?=M)/).filter(Boolean).map(function(sp){var n=sp.match(/-?[\d.]+/g).map(Number),o=[];for(var i=0;i+1<n.length;i+=2)o.push([n[i],n[i+1]]);return o})}
@@ -438,7 +439,7 @@ function plaque(){ /* contour, fentes, trous ajourés et rebord, tels que dans l
  $('plaqueG').setAttribute('transform','translate('+X+','+Y+') scale(3)');
  $('ombreG').setAttribute('transform','translate('+(X+5)+','+(Y+3)+') scale(3)');
  $('decoupeP').setAttribute('transform','translate('+X+','+Y+') scale(3)');
- $('decoupeP').setAttribute('d',b.dos);
+ $('decoupeP').setAttribute('d',b.dos+tr);$('decoupeP').setAttribute('clip-rule','evenodd');
  ['dos','dosV','ombreP'].forEach(function(i){$(i).setAttribute('d',d)});
  $('dosB').setAttribute('d',b.dos);$('trousB').setAttribute('d',tr);
  var h='';
@@ -448,7 +449,9 @@ function plaque(){ /* contour, fentes, trous ajourés et rebord, tels que dans l
    +'<rect x="'+x0+'" y="'+y+'" width="'+(x1-x0)+'" height="'+ep+'" fill="#c9a874" stroke="#a9834f" stroke-width="1"/>'});
  $('rebord').innerHTML=h}
 
-function limites(){var t=T(),f=base().fentes[0];return{x0:ox()+15,x1:ox()+3*(t.W-5),y0:oy()+3*zoneHaut(),y1:oy()+3*(f[1]-5)}}
+var hautTrous={};
+function haut(d){if(!d)return 1e9;if(hautTrous[d]==null){var m=1e9;poly(d).forEach(function(c){c.forEach(function(p){if(p[1]<m)m=p[1]})});hautTrous[d]=m}return hautTrous[d]}
+function limites(){var t=T(),f=base().fentes[0],bas=Math.min(f[1]-5,haut(trous())-4);return{x0:ox()+15,x1:ox()+3*(t.W-5),y0:oy()+3*zoneHaut(),y1:oy()+3*bas}}
 function taille(e){ /* largeur et hauteur de l'élément dans la scène */
  var k=T().W/80;
  if(e.type==='texte'){return{w:0,h:30*e.s*k}}
@@ -463,7 +466,7 @@ function borner(e){var L=limites(),t=taille(e),hw=e.type==='texte'?36:t.w/2,hh=t
 function dessiner(){
  plaque();
  grav.innerHTML='';poignee.innerHTML='';
- if(S.mode==='grave')S.els.forEach(function(e){
+ if(S.grave)S.els.forEach(function(e){
   borner(e);
   var g=el('g',{'class':'sc-el','data-id':e.id},grav),t=taille(e);
   if(e.type==='texte'){
@@ -503,7 +506,7 @@ svg.addEventListener('pointerup',lacher);svg.addEventListener('pointercancel',la
 /* ---- étapes 1 et 3 : forme, taille, motif, densité, inclinaison ---- */
 function boutons(id,liste,cls,html){$(id).innerHTML=liste.map(function(o){return '<button type="button" class="'+cls+'" data-v="'+o.id+'">'+html(o)+'</button>'}).join('')}
 boutons('formes',FORMES,'sc-forme',function(f){return '<svg viewBox="-3 -3 86 157"><path d="'+vignetteD(f.id)+'"/></svg>'+f.nom});
-boutons('tailles',TAILLES,'sc-taille',function(t){var a=A.tailles[t.id];return '<b>'+t.nom+'</b><small>'+t.ex+'</small><span>'+a.W+' × '+a.H+' mm</span>'+(t.id==='grand'?'<em>+ '+eur(D.prix.grand)+'</em>':'')});
+boutons('tailles',TAILLES,'sc-taille',function(t){var a=A.tailles[t.id];return '<b>'+t.nom+'</b><small>'+t.ex+'</small><span>'+a.W+' × '+a.H+' mm</span><em>'+(D.prix.taille[t.id]?'+ '+eur(D.prix.taille[t.id]):eur(D.prix.base))+'</em>'});
 boutons('motifs',MOTIFS,'sc-motif',function(m){var b=A.base['standard|rectangle|1|13'],t=A.trous['standard|rectangle|'+m.id+'|moyen'];
  if(t)return '<svg viewBox="-3 -3 86 157"><path d="'+b.dos+t+'"/></svg>'+m.nom;
  return '<svg viewBox="-3 -3 86 '+(b.piedH+6)+'"><path d="'+b.pied+(A.trousPied['standard|'+m.id+'|moyen|13']||'')+'"/></svg>'+m.nom+'<small>sur le pied</small>'});
@@ -512,14 +515,14 @@ boutons('angles',ANGLES.map(function(a){return{id:a}}),'prc-chip',function(a){re
 function majChoix(){
  function on(id,v){[].forEach.call($(id).querySelectorAll('button'),function(b){b.classList.toggle('on',b.getAttribute('data-v')===String(v))})}
  on('formes',S.forme);on('tailles',S.taille);on('motifs',S.motif);on('densites',S.densite);on('angles',S.angle);
- [].forEach.call(document.querySelectorAll('.sc-mode'),function(b){b.classList.toggle('on',b.getAttribute('data-m')===S.mode)});
- $('blocGrave').hidden=S.mode!=='grave';$('blocAjoure').hidden=S.mode!=='ajoure';
+ [].forEach.call(document.querySelectorAll('.sc-mode'),function(b){ b.classList.toggle('on',!!S[b.getAttribute('data-m')])});
+ $('blocGrave').hidden=!S.grave;$('blocAjoure').hidden=!S.ajoure;
  $('piedMotif').checked=S.piedMotif||piedSeul();$('piedMotif').disabled=piedSeul();
  $('notePied').hidden=!piedSeul();$('cable').checked=S.cable}
 function choisir(cle,val,num){S[cle]=num?+val:val;majChoix();voirCreation();S.els.forEach(borner);if(chevauche())ranger();dessiner()}
 [['formes','forme'],['tailles','taille'],['motifs','motif'],['densites','densite'],['angles','angle',1]].forEach(function(c){
  $(c[0]).addEventListener('click',function(ev){var b=ev.target.closest('button');if(b)choisir(c[1],b.getAttribute('data-v'),c[2])})});
-$('modes').addEventListener('click',function(ev){var b=ev.target.closest('.sc-mode');if(!b)return;S.sel=null;S.panneau=null;panneau();choisir('mode',b.getAttribute('data-m'))});
+$('modes').addEventListener('click',function(ev){var b=ev.target.closest('.sc-mode');if(!b)return;var m=b.getAttribute('data-m');S.sel=null;S.panneau=null;panneau();choisir(m,!S[m])});
 $('piedMotif').addEventListener('change',function(){S.piedMotif=this.checked;voirCreation();dessiner()});
 $('cable').addEventListener('change',function(){S.cable=this.checked;voirCreation();dessiner()});
 /* un changement de forme ou de taille : si deux éléments se retrouvent l'un sur l'autre, on les range du haut vers le bas */
@@ -593,7 +596,7 @@ $('panneau').addEventListener('change',function(ev){if(ev.target.id!=='fphoto')r
 
 /* ---- la liste des éléments posés ---- */
 function nomEl(e){return e.type==='texte'?'« '+(e.texte||'')+' »':e.type==='dessin'?'Dessin n° '+e.n:e.type==='lettre'?'Lettre '+e.L+(e.nom?' · « '+e.nom+' »':''):'Ma photo'}
-function prixEl(i){return i===principal()?'compris':'+ '+eur(D.prix.plus)}
+function prixEl(i){return '+ '+eur(D.prix.element)}
 function principal(){ /* l'élément qui fixe le prix de départ : la photo, sinon le dessin, sinon le texte */
  var o=['photo','dessin','lettre','texte'];for(var k=0;k<o.length;k++)for(var i=0;i<S.els.length;i++)if(S.els[i].type===o[k])return i;return -1}
 function liste(){
@@ -628,25 +631,25 @@ $('liste').addEventListener('click',function(ev){
 $('liste').addEventListener('input',function(ev){var id=ev.target.getAttribute('data-edit');if(!id)return;var e=trouver(+id);if(e.type==='lettre')e.nom=ev.target.value;else e.texte=ev.target.value;dessiner()});
 
 /* ---- étape 4 : résumé et prix ---- */
-function pret(){return S.mode==='ajoure'||S.els.length>0}
-function total(){var g=S.taille==='grand'?D.prix.grand:0;if(S.mode==='ajoure')return D.prix.ajoure+g;
- var i=principal();if(i<0)return 0;return D.prix[S.els[i].type]+(S.els.length-1)*D.prix.plus+g}
+function pret(){return !(S.grave&&!S.els.length)}
+function total(){return D.prix.base+D.prix.taille[S.taille]+(S.grave?S.els.length*D.prix.element:0)+(S.ajoure?D.prix.ajoure:0)}
 function resume(){
- var R=$('resume'),p=principal(),h='<div class="prc-sumrow"><span>Forme</span><b>'+nomDe(FORMES,S.forme)+'</b></div>'
-  +'<div class="prc-sumrow"><span>Taille</span><b>'+nomDe(TAILLES,S.taille)+' · '+T().W+' × '+T().H+' mm'+(S.taille==='grand'?' — + '+eur(D.prix.grand):'')+'</b></div>';
- if(S.mode==='ajoure'){h+='<div class="prc-sumrow"><span>Ajouré</span><b>'+nomDe(MOTIFS,S.motif)+' · '+nomDe(DENSITES,S.densite).toLowerCase()+(piedSeul()?' · découpé sur le pied':S.piedMotif?' · aussi sur le pied':'')+' — '+eur(D.prix.ajoure)+'</b></div>'}
- else{
+ var R=$('resume'),p=principal(),h='<div class="prc-sumrow"><span>Forme</span><b>'+nomDe(FORMES,S.forme)+' — '+eur(D.prix.base)+'</b></div>'
+  +'<div class="prc-sumrow"><span>Taille</span><b>'+nomDe(TAILLES,S.taille)+' · '+T().W+' × '+T().H+' mm'+(D.prix.taille[S.taille]?' — + '+eur(D.prix.taille[S.taille]):'')+'</b></div>';
+ if(S.ajoure){h+='<div class="prc-sumrow"><span>Ajouré</span><b>'+nomDe(MOTIFS,S.motif)+' · '+nomDe(DENSITES,S.densite).toLowerCase()+(piedSeul()?' · découpé sur le pied':S.piedMotif?' · aussi sur le pied':'')+' — + '+eur(D.prix.ajoure)+'</b></div>'}
+ if(S.grave){
   if(!S.els.length)h+='<div class="prc-sumrow"><span>Gravure</span><b class="prc-miss">à choisir</b></div>';
   S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':e.type==='lettre'?'Lettre fleurie':'Photo')+'</span><b>'+esc(nomEl(e))
-   +(e.type==='texte'||(e.type==='lettre'&&e.nom)?' · '+police(e.police)[1]:'')+' — '+(i===p?eur(D.prix[e.type]):'+ '+eur(D.prix.plus))+'</b></div>'})}
+   +(e.type==='texte'||(e.type==='lettre'&&e.nom)?' · '+police(e.police)[1]:'')+' — + '+eur(D.prix.element)+'</b></div>'})}
+ if(!S.grave&&!S.ajoure)h+='<div class="prc-sumrow"><span>Décoration</span><b>aucune (bois nu)</b></div>';
  h+='<div class="prc-sumrow"><span>Réglages</span><b>'+S.angle+'° · '+(S.cable?'passage du câble':'sans passage du câble')+' · bois 3 mm</b></div>';
- h+='<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+(pret()?eur(total()):'dès '+eur(D.prix.texte))+'</b></div>';
+ h+='<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+(pret()?eur(total()):'dès '+eur(D.prix.base))+'</b></div>';
  R.innerHTML=h;
- var txt=pret()?eur(total()):'dès '+eur(D.prix.texte);
+ var txt=pret()?eur(total()):'dès '+eur(D.prix.base);
  $('total').textContent=txt;$('prixtete').textContent=txt;
  $('n2').classList.toggle('done',pret());$('n4').classList.toggle('done',pret());
  $('ajouter').disabled=!pret();$('ajouter').style.opacity=pret()?1:.5;
- $('manque').textContent=pret()?'':'Il manque la décoration : ajoutez un texte, un dessin ou votre photo, ou choisissez « Ajouré ».';
+ $('manque').textContent=pret()?'':'Ajoutez un élément à graver, ou décochez la gravure pour un support sans gravure.';
 }
 $('ajouter').addEventListener('click',function(){if(!pret())return;this.textContent='Ajouté au panier ✓ (maquette)'});
 
@@ -656,19 +659,19 @@ function fichier(){
  function X(v){return ((v-ox())/3+5).toFixed(2)} function Y(v){return ((v-oy())/3+5).toFixed(2)} function L(v){return (v/3).toFixed(2)}
  F.setAttribute('viewBox','0 0 '+t0.lw+' '+lh);
  var h='';
- if(S.mode==='grave')S.els.forEach(function(e){var t=taille(e);
+ if(S.grave)S.els.forEach(function(e){var t=taille(e);
   if(e.type==='texte'){h+='<text x="'+X(e.x)+'" y="'+Y(e.y)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+L(t.h)+'" fill="#111" data-t="'+L(largTexte())+'">'+esc(e.texte||'')+'</text>'}
   else if(e.type==='dessin'){h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+Y(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'"/>'}
   else if(e.type==='lettre'){h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+Y(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'"/>';
    if(e.nom){var bh=t.h*(e.b[1]-e.b[0]);h+='<text x="'+X(e.x)+'" y="'+Y(e.y-t.h/2+t.h*(e.b[0]+e.b[1])/2)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+L(bh*.82)+'" fill="#111" data-t="'+L(t.w*.92)+'">'+esc(e.nom)+'</text>'}}
   else{h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+Y(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'" preserveAspectRatio="xMidYMid slice" style="filter:grayscale(1) contrast(1.15)"/>'
    +'<rect x="'+X(e.x-t.w/2)+'" y="'+Y(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'" fill="none" stroke="#111" stroke-width="0.3"/>'}});
- h='<g clip-path="url(#fclip)">'+h+'</g><clipPath id="fclip"><path transform="translate(5 5)" d="'+b.dos+'"/></clipPath>'
+ h='<g clip-path="url(#fclip)">'+h+'</g><clipPath id="fclip"><path transform="translate(5 5)" clip-rule="evenodd" d="'+b.dos+trous()+'"/></clipPath>'
   +'<g transform="translate(5 5)"><path '+R+' d="'+b.dos+fentesD(b)+trous()+'"/></g>'
   +'<g transform="translate('+t0.piedX+' 5)"><path '+R+' d="'+b.pied+trousPied()+'"/></g>';
  F.innerHTML=h;
  [].forEach.call(F.querySelectorAll('text[data-t]'),function(t){var bb=t.getBBox(),m=+t.getAttribute('data-t');if(bb.width>m)t.setAttribute('font-size',parseFloat(t.getAttribute('font-size'))*m/bb.width)});
- $('fnom').textContent='support-telephone-'+S.taille+'-'+S.forme+(S.mode==='ajoure'?'-'+S.motif:'')+'-'+S.angle+'deg-<n° de commande>.svg · '+t0.lw+' × '+lh+' mm · bois 3 mm';
+ $('fnom').textContent='support-telephone-'+S.taille+'-'+S.forme+(S.ajoure?'-'+S.motif:'')+'-'+S.angle+'deg-<n° de commande>.svg · '+t0.lw+' × '+lh+' mm · bois 3 mm';
 }
 
 /* ---- la vue 3D : les deux pièces emboîtées (three.js, chargé seulement quand on touche « 3D ») ---- */
@@ -677,7 +680,7 @@ function chargerThree(fn){if(window.THREE)return fn();var s=document.createEleme
  s.onload=fn;s.onerror=function(){$('msg3d').textContent='La vue 3D n\'a pas pu se charger.'};document.head.appendChild(s)}
 function texture3D(cb){ /* la gravure telle que dessinée sur l'aperçu, découpée au contour, en image */
  var X=ox(),Y=oy(),W=3*T().W,H=3*T().H;
- if(S.mode!=='grave'||!S.els.length)return cb(null);
+ if(!S.grave||!S.els.length)return cb(null);
  var src='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+X+' '+Y+' '+W+' '+H+'" width="'+(W*3)+'" height="'+(H*3)+'">'+svg.querySelector('defs').outerHTML+'<g clip-path="url(#decoupe)">'+grav.innerHTML+'</g></svg>';
  var im=new Image();im.onload=function(){var c=document.createElement('canvas');c.width=W*3;c.height=H*3;c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c)};
  im.onerror=function(){cb(null)};im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(src)}
@@ -754,7 +757,7 @@ function vignettes(){
  $('stage').setAttribute('data-vue',G.vue);
  $('grande').src=D.photos[G.i];
  $('prec').hidden=$('suiv').hidden=G.vue!=='photo';
- $('aide').textContent=G.vue==='creation'?(V3.actif?'Vue 3D indicative : les deux pièces emboîtées, à l\'inclinaison choisie.':S.mode==='ajoure'?'Le motif est découpé à travers le bois : on voit au travers.':'Faites glisser un élément pour le déplacer. Aperçu indicatif : sur le bois, la gravure ressort en brun.')
+ $('aide').textContent=G.vue==='creation'?(V3.actif?'Vue 3D indicative : les deux pièces emboîtées, à l\'inclinaison choisie.':S.ajoure&&!S.els.length?'Le motif est découpé à travers le bois : on voit au travers.':'Faites glisser un élément pour le déplacer. Aperçu indicatif : sur le bois, la gravure ressort en brun.')
   :"Aperçu indicatif : sur le bois, la gravure ressort en brun, comme sur la photo d'exemple."+(G.commence?' Touchez « Votre création » pour revenir à votre support.':'');
 }
 function voirCreation(){G.commence=true;G.vue='creation';vignettes()}
@@ -763,12 +766,12 @@ $('vignettes').addEventListener('click',function(ev){var b=ev.target.closest('bu
 $('prec').addEventListener('click',function(){G.i=(G.i+D.photos.length-1)%D.photos.length;vignettes()});
 $('suiv').addEventListener('click',function(){G.i=(G.i+1)%D.photos.length;vignettes()});
 /* ---- départ ---- */
-$('lplus').textContent=eur(D.prix.plus);$('lajoure').textContent=eur(D.prix.ajoure);
+
 majChoix();panneau();vignettes();dessiner();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(dessiner);
 [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
-window.scDemo=function(o){o=o||{};voirCreation();S.forme=o.forme||'arche';S.taille=o.taille||'standard';S.mode=o.mode||'grave';S.motif=o.motif||'coeurs';
- S.angle=o.angle||13;S.els=[];S.seq=0;if(S.mode==='grave'){ajouter({type:'photo',src:D.exemple,nom:'exemple'});ajouter({type:'texte',texte:'Camille & Paul',police:'great-vibes'})}
+window.scDemo=function(o){o=o||{};voirCreation();S.forme=o.forme||'arche';S.taille=o.taille||'standard';S.grave=o.grave!==false;S.ajoure=!!o.ajoure;S.motif=o.motif||'coeurs';
+ S.angle=o.angle||13;S.els=[];S.seq=0;if(S.grave){ajouter({type:'photo',src:D.exemple,nom:'exemple'});ajouter({type:'texte',texte:'Camille & Paul',police:'great-vibes'})}
  S.sel=null;majChoix();dessiner()};
 window.scEtat=function(){return {S:S,total:total(),pret:pret(),base:base(),trous:trous().length}};
 })();
@@ -809,4 +812,4 @@ page = f"""<title>Créateur support téléphone</title>
 <script>{JS.replace("__DONNEES__", DONNEES)}</script>
 """
 open(sortie, "w", encoding="utf-8").write(page)
-print(f"{sortie} : {len(page) // 1024} Ko · prix lus : texte {P_TEXTE} · dessin {P_DESSIN} · photo {P_PHOTO}")
+print(f"{sortie} : {len(page) // 1024} Ko")

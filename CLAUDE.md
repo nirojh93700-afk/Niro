@@ -16,6 +16,12 @@
   Fenêtre ne découpent que le pied (sauf grand + Plus) → la case « sur le pied » est alors forcée. Fichiers de découpe : 12 SVG (3 tailles × 4 formes,
   13°, câble) dans `docs/maquettes/assets/support-telephone/decoupe/` + zip des 288 ajourés (non commité), envoyés au gérant le 12/11 soir.
   Mes formes dessinées de la v5 (`support_geometrie.py` et ses 4 SVG) sont SUPPRIMÉES.
+- **v7 (12/11 soir, gérant : « standard trois euros de plus, six euros pour le grand, graver trois euros de plus, motif trois euros de plus, motif plus
+  gravure 6 € » + réponses : base 12,90 €, + 3 € par élément)** = VERSION 7 de l'artifact, celle à reproduire au « applique » : support petit **12,90 €**
+  (sans rien) · standard **+ 3 €** · grand **+ 6 €** · chaque élément gravé (texte, dessin, photo, lettre fleurie) **+ 3 €** · motif ajouré **+ 3 €** ·
+  GRAVURE ET MOTIF POSSIBLES ENSEMBLE (remplace « l'un ou l'autre »), deux cases à cocher ; avec un motif, la gravure reste au-dessus des trous.
+  Ex. standard + cœurs + « Camille » + dessin = 24,90 € ; grand + motif + texte + dessin = 27,90 €. Les anciens prix par type (texte 12,90, photo 19,90…) ne
+  valent plus pour ce support.
 - (v5, remplacée) nos propres formes dessinées et calculées (dossier 80 × 150, 13°).
 - L'outil d'Atomm (xTool) ne s'installe pas sur un autre site : on construit le nôtre. ⛔ Ne pas se servir de `morluto/rea` (outil qui démonte un logiciel) pour recopier le leur.
 - https://claude.ai/artifact/ARNf7BxbQxsTvkpJxgQKD7 (v1) · générateur `tools/maquettes/support-createur.py <capture> <dossier css> <sortie>`
