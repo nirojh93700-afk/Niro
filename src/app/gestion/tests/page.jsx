@@ -13,6 +13,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import PageHead from "@/components/admin/PageHead";
 import TESTS from "@/lib/testsLaser.json";
 
+// Chaque exemple s'ouvre dans l'outil de retouche (Gestion › Tests › Retoucher et fabriquer) pour être corrigé par le gérant.
+const RETOUCHE = { support: "outil=support&ex=camille", arbre: "outil=arbre&ex=lea-tom", boule: "outil=decoration&ex=flocons", mamie: "outil=decoration&ex=mamie", photo: "outil=decoration&ex=coeur-photo" };
+
 function mm(v) { return String(Math.round(v * 10) / 10).replace(".", ","); }
 function quand(iso) {
   if (!iso) return "";
@@ -115,6 +118,7 @@ export default function TestsLaserPage() {
           <li>La taille est déjà en millimètres, à l'échelle 100 %. Ne la changez pas.</li>
           <li><b style={{ color: "#d0021b" }}>Rouge = découpe</b> (traits fins) · <b>noir = gravure</b> (zones pleines et photos).</li>
           <li>Chaque nom et chaque pièce est un objet : après « Dissocier », vous pouvez le déplacer. Un prénom de l'arbre déplacé se ressoude avec « Combiner → Unir ».</li>
+          <li>Pour changer un texte, sa place ou sa taille vous-même : « Corriger moi-même » ouvre l'outil, puis « Fabriquer les fichiers ».</li>
           <li>Notez sous chaque fichier si ça marche ou ce qu'il faut corriger : je le lis ici.</li>
         </ol>
       </div>
@@ -133,6 +137,9 @@ export default function TestsLaserPage() {
               <strong style={{ fontSize: 15 }}>{g.titre}</strong>
               <p style={{ margin: "2px 0 0", fontSize: 12.5, lineHeight: 1.45, ...gris }}>{g.sous}</p>
             </div>
+            {RETOUCHE[g.id] ? (
+              <a className="fq-btn sm primary" href={`/gestion/retouche?${RETOUCHE[g.id]}`} style={{ justifySelf: "start" }}>✎ Corriger moi-même (texte, place, taille)</a>
+            ) : null}
             {g.fichiers.map((f) => {
               const r = etat.reglages[f.matiere];
               return (

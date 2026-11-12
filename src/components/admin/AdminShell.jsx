@@ -119,7 +119,9 @@ const SECTIONS = [
     { id: "etat", t: "État du système", href: "/gestion/etat" } ] },
   // Tests (12/11/2026, gérant : « fais une catégorie test dans admin ») : fichiers laser des maquettes à essayer sur la machine.
   { id: "tests", t: "Tests", ic: "bolt", tabs: [
-    { id: "tests-laser", t: "Fichiers laser à essayer", href: "/gestion/tests" } ] },
+    { id: "tests-laser", t: "Fichiers laser à essayer", href: "/gestion/tests" },
+    // 12/11/2026 soir (« je veux avoir accès pour tout corriger ») : les trois outils en mode atelier + fabrication des fichiers.
+    { id: "tests-retouche", t: "Retoucher et fabriquer", href: "/gestion/retouche" } ] },
 ];
 const ECRANS = SECTIONS.flatMap((s) => s.tabs.map((t) => ({ ...t, section: s.id, group: s.t, icon: s.ic })));
 const PAR_ID = Object.fromEntries(ECRANS.map((e) => [e.id, e]));

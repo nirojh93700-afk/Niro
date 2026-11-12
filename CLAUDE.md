@@ -1,3 +1,23 @@
+## ✎ GESTION → TESTS → « RETOUCHER ET FABRIQUER » — 12/11/2026 SOIR (gérant : « c'est à moi de corriger… changer le nom, la position où je vais graver, je veux avoir accès pour tout corriger ») — CONSTRUIT, PAS POUSSÉ : attendre son « mets en ligne »
+- Page `/gestion/retouche` (2ᵉ sous-onglet de Tests, `AdminShell`) + bouton « ✎ Corriger moi-même » sur chaque exemple de `/gestion/tests`
+  (`?outil=support|arbre|decoration&ex=camille|lea-tom|flocons|mamie|coeur-photo`). Les trois outils s'ouvrent en plein écran dans un cadre
+  (`public/atelier-outils/atelier-*.html`, fabriqués par `python3 tools/maquettes/retouche-site.py <support.html> <arbre.html> <decoration.html>
+  <dossier arbres> public/atelier-outils` à partir des sorties des trois générateurs de maquettes ; habillage du site, titre et prix masqués ;
+  arbre : flèches ← → ↑ ↓ − + ↺ pour chaque prénom et le texte du pied ; seul l'arbre « life » est copié, les 8 autres sont masqués, 37 Mo).
+  Il change tout dans l'outil, « Fabriquer les fichiers » → liste « Vos fichiers » (aperçu, Télécharger, « Envoyer vers… » sur iPhone),
+  « Retoucher encore » retrouve l'outil tel qu'il l'a laissé. Rien n'est enregistré sur le site (fichiers perdus si la page est quittée).
+- **Fabrication dans le navigateur** = `public/atelier-outils/fabrique.js` (`NivFabrique.fabriquer(specs)`, `specs.support / arbre / deco`) : même
+  découpage en objets que `fichiers-laser-test.cjs` (vect / cut / grav / image), sans Playwright ni potrace : chaque objet est rendu en image
+  (SVG → canvas, polices Google embarquées en data URI, 25 points / mm, 3800 points de côté au plus pour l'iPhone), puis suivi de contour maison
+  (carrés mobiles au demi-ton + allègement à 0,3 point) → tracés en mm. Vérifié contre les 9 fichiers de Tests : mêmes objets, tailles égales à
+  0,04 mm près. **Contrôle des écritures** (`policesKo`) : chaque écriture utilisée est rendue des deux façons et comparée ; si l'appareil ne
+  l'a pas chargée, l'écran l'écrit en rouge (jamais un nom livré en silence dans une autre écriture). ⚠️ Non essayé sur un vrai iPhone
+  (seulement Chromium, vue iPhone 13) : à lui de dire si l'écriture sort bien ; la machine de test a Great Vibes, Playfair et Cinzel installées.
+- xTool ne lit PAS les textes d'un SVG (aide xTool, article 544 : le texte disparaît) : un vrai texte double-cliquable demanderait un fichier
+  projet `.xcs` (JSON non documenté) ; il faut un exemple de sa part (un projet avec un texte, enregistré) avant de promettre quoi que ce soit.
+- `next.config.js` : `X-Robots-Tag: noindex` sur `/atelier-outils/` et `/atelier-tests/`. ⚠️ Ces pages sont dans `public/` : joignables par
+  leur adresse sans mot de passe (comme les fichiers de test), liées nulle part ailleurs que dans Gestion.
+
 ## 🔧 RAPPORT PRODUITS DU 12/11/2026 — POINTS 2, 3, 4, 5, 7 (gérant : « corriger les points 2, 3, 4, 5 et le 7 ») — ✅ EN LIGNE LE 12/11/2026 SOIR (« OK, mets la correction en ligne », d7a2dcbf, déploiement réussi, les 4 fiches vérifiées en ligne)
 - ② « Hypoallergénique » : `sansAllegations` (catalog.js) retire aussi le mot en TÊTE d'une liste (« Hypoallergénique • Résistant… », description de la
   gourmette enregistrée dans Gestion) · ③ décoration de Noël en cristal ajoutée à `PIECES_ACHETEES` (plus d'encadré « Fait main dans notre atelier ») ·

@@ -33,6 +33,9 @@ const nextConfig = {
       { source: "/:path*", headers: securite },
       { source: "/produits/:path*", headers: [{ key: "Access-Control-Allow-Origin", value: "*" }] },
       { source: "/motifs/:path*", headers: [{ key: "Access-Control-Allow-Origin", value: "*" }] },
+      // Outils et fichiers de l'atelier (Gestion › Tests) : jamais dans Google.
+      { source: "/atelier-outils/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      { source: "/atelier-tests/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
     ];
   },
   // SEO : les anciennes adresses à filtre /boutique?cat=X renvoient (301) vers
