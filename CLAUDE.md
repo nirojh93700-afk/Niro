@@ -44,6 +44,8 @@
   hasard sont RÉPARTIS tout autour de la forme (`placerAuto(e, cible)`, un angle par décor : 2 = les deux côtés, 3 = coins du haut + bas, 4 = les
   4 coins…) ; en Classique le centre du décor peut aller partout sur la barre du cadre (avant, il devait tenir entièrement dans la forme, donc
   seul le nœud du haut était assez large). « Placer automatiquement » d'un seul dessin garde l'endroit le plus loin des autres pièces.
+  **v10 (12/11 soir, gérant : « pour les tailles, deux euros de plus à chaque fois »)** : Petite 7 cm = compris · Moyenne 9 cm **+ 2 €** · Grande
+  11 cm **+ 4 €** (4ᵉ valeur de `tailles`, `prixTaille()` dans le total, affiché sous chaque taille et dans le résumé).
   ⛔ Leçon : « fais exactement comme le logiciel » = TOUS ses réglages ; ce qu'il exclut se retire seulement si c'est EXACTEMENT ce qu'il a nommé.
 - ✅✅ **V6 ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») : c'est CELLE à reproduire au « applique » (remplace la v5), ne plus la modifier sans sa demande.**
 - ✅ **v6 (12/11 soir, captures iPhone : « les noms quand ils dépassent de l'objet ça coupe, on voit pas, il faut pas que ça se coupe »)** = VERSION 6 de l'artifact, CELLE à reproduire : en style **Classique**, un nom ou une photo est une pièce COLLÉE par-dessus le cadre → affiché ENTIER même s'il dépasse (plus de découpe à la forme sur l'aperçu de face) ; en **Plaque pleine** (tout gravé sur la plaque) rien ne sort de la forme, comme avant.

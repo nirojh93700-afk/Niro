@@ -171,7 +171,7 @@ MATIERES = [  # celles du générateur Atomm ; couleur de gravure propre à chaq
     {"id": "acr-bleu", "nom": "Acrylique bleu", "c": ["#4b7be0", "#2f5fc6", "#2449a0"], "bord": "#183473", "grav": "#e3ebfb", "acrylique": True},
 ]
 DONNEES = json.dumps({"contours": CONTOURS, "matieres": MATIERES, "mini": 30, "maxi": 150, "photos": PHOTOS, "dessins": [], "elements": ELEMENTS, "lettres": {}, "planche": "", "exemple": EXEMPLE, "logo": LOGO, "logoR": LOGO_R, "polices": POLICES,
-                      "prix": {"base": 9.9, "acrylique": 2, "element": 3, "dessin": 1}, "tailles": [["petite", "Petite", 70], ["moyenne", "Moyenne", 90], ["grande", "Grande", 110]]},
+                      "prix": {"base": 9.9, "acrylique": 2, "element": 3, "dessin": 1}, "tailles": [["petite", "Petite", 70, 0], ["moyenne", "Moyenne", 90, 2], ["grande", "Grande", 110, 4]]},
                      ensure_ascii=False, separators=(",", ":"))
 
 CSS_MAQ = r"""
@@ -345,6 +345,7 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 .sc-tailles-deco{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .sc-tailles-deco .sc-taille{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink)}
 .sc-tailles-deco .sc-taille span{font-size:1.05rem;font-weight:700}.sc-tailles-deco .sc-taille small{font-size:.72rem;color:var(--ink-soft);display:block!important}
+.sc-tailles-deco .sc-tprix{font-style:normal;font-size:.78rem;font-weight:700;color:var(--gold-dark);margin-top:2px}
 .sc-tailles-deco .sc-taille.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
 .sc-mats.sc-mats5{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin:6px 0}.sc-mats5 .sc-mat{font-size:.68rem;padding:8px 2px}.sc-mats5 .sc-mat i{width:30px;height:30px}
 .sc-formes-deco{grid-template-columns:repeat(auto-fill,minmax(78px,1fr));margin-top:10px;max-height:340px;overflow:auto;padding:2px}
@@ -417,7 +418,7 @@ HTML_ATELIER = r"""
    <ul class="sc-points">
     <li><b>Les 46 formes du générateur Atomm</b>Noël, Pâques, paniers, croix et formes simples, trou du ruban compris. En « Classique », le cadre (l'intérieur est vide) ; en « Plaque pleine », la forme entière.</li>
     <li><b>Chaque pièce rangée à plat, numérotée</b>En « Classique », chaque texte et chaque photo est une pièce à part, rangée à côté du cadre avec son numéro : un nom découpé (lettres soudées), un texte gravé sur une pièce découpée 1,6 mm autour, une photo gravée sur sa pièce. On découpe tout, puis on colle les pièces sur le cadre comme sur l'aperçu de la cliente.</li>
-    <li><b>Trois tailles</b>Petite 7 cm, moyenne 9 cm, grande 11 cm (plus grand côté). Le fichier tient dans la zone de 200 × 200 mm de la F2 Ultra UV.</li>
+    <li><b>Trois tailles</b>Petite 7 cm (compris), moyenne 9 cm (+ 2 €), grande 11 cm (+ 4 €), plus grand côté. Le fichier tient dans la zone de 200 × 200 mm de la F2 Ultra UV.</li>
     <li><b>Contreplaqué, et acrylique de couleur pour les noms</b>Le cadre (ou la plaque) et les photos en contreplaqué 3 mm ; chaque nom ou texte découpé en contreplaqué ou en acrylique blanc, noir, rouge ou bleu. Le fichier dit dans quelle matière découper chaque pièce.</li>
     <li><b>Dans Gestion, comme les autres commandes</b>L'aperçu de la cliente et le fichier apparaissent dans la fiche atelier et dans le dossier du jour, avec l'aperçu qui montre où coller chaque pièce.</li>
    </ul>
@@ -425,7 +426,6 @@ HTML_ATELIER = r"""
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
   <li>Prix proposés par moi : décoration 9,90 € (le cadre ou la plaque, en contreplaqué), + 3 € par texte ou photo, + 2 € pour un nom en acrylique. À vous de les fixer.</li>
-  <li>Tailles proposées : 7, 9 et 11 cm (plus grand côté), même prix. Faut-il un prix plus élevé pour la grande ?</li>
   <li>Le ruban est-il fourni ? Quelle colle pour les pièces ? Une vraie photo par forme sera à prendre avant la mise en vente.</li>
   <li>Pas d'impression en couleur (votre machine grave et découpe, elle n'imprime pas) : l'option « Couleur » d'Atomm n'est donc pas reprise.</li>
  </ul></div>
@@ -651,7 +651,7 @@ function majFormes(){
 function dims(L){var r=F().W/F().H;return r>=1?[L,Math.round(L/r*10)/10]:[Math.round(L*r*10)/10,L]}
 function appliquerTaille(){for(var i=0;i<D.tailles.length;i++)if(D.tailles[i][0]===S.taille){var d=dims(D.tailles[i][2]);S.W=d[0];S.H=d[1]}}
 function majTaille(){appliquerTaille();$('tailles').innerHTML=D.tailles.map(function(t){var d=dims(t[2]);
- return '<button type="button" class="sc-taille'+(t[0]===S.taille?' on':'')+'" data-t="'+t[0]+'"><b>'+t[1]+'</b><span>'+String(t[2]/10).replace('.',',')+' cm</span><small>'+String(d[0]).replace('.',',')+' × '+String(d[1]).replace('.',',')+' mm</small></button>'}).join('')}
+ return '<button type="button" class="sc-taille'+(t[0]===S.taille?' on':'')+'" data-t="'+t[0]+'"><b>'+t[1]+'</b><span>'+String(t[2]/10).replace('.',',')+' cm</span><small>'+String(d[0]).replace('.',',')+' × '+String(d[1]).replace('.',',')+' mm</small><em class="sc-tprix">'+(t[3]?'+ '+eur(t[3]):'compris')+'</em></button>'}).join('')}
 function majMatiere(){}
 function Mde(id){for(var i=0;i<MATIERES.length;i++)if(MATIERES[i].id===id)return MATIERES[i];return MATIERES[0]}
 (function(){var dg=svg.querySelector('defs');MATIERES.forEach(function(m){dg.insertAdjacentHTML('beforeend','<linearGradient id="g-'+m.id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+m.c[0]+'"/><stop offset=".55" stop-color="'+m.c[1]+'"/><stop offset="1" stop-color="'+m.c[2]+'"/></linearGradient>')})})();
@@ -815,10 +815,11 @@ function dessinerSansListe(){var l=liste;liste=function(){};dessiner();liste=l}
 
 /* ---- étape 6 : résumé et prix ---- */
 function pret(){return true}
-function total(){var t=D.prix.base;S.els.forEach(function(e){t+=prixEl(e)});return t}
+function prixTaille(){for(var i=0;i<D.tailles.length;i++)if(D.tailles[i][0]===S.taille)return D.tailles[i][3]||0;return 0}
+function total(){var t=D.prix.base+prixTaille();S.els.forEach(function(e){t+=prixEl(e)});return t}
 function resume(){var cl=S.style==='classique';
  var R=$('resume'),h='<div class="prc-sumrow"><span>Forme</span><b>'+F().nom+' — '+eur(D.prix.base)+'</b></div>'
-  +'<div class="prc-sumrow"><span>Taille</span><b>'+String(S.W).replace('.',',')+' × '+String(S.H).replace('.',',')+' mm</b></div>'
+  +'<div class="prc-sumrow"><span>Taille</span><b>'+String(S.W).replace('.',',')+' × '+String(S.H).replace('.',',')+' mm'+(prixTaille()?' — + '+eur(prixTaille()):'')+'</b></div>'
   +'<div class="prc-sumrow"><span>Style</span><b>'+(cl?'Cadre découpé, pièces collées':'Plaque pleine, gravée')+'</b></div>'
   +'<div class="prc-sumrow"><span>Matière</span><b>Contreplaqué 3 mm</b></div>';
  S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(cl?'Pièce '+(i+2):e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':'Photo')+'</span><b>'+esc(nomEl(e))+' · '+commentEl(e)+' — + '+eur(prixEl(e))+'</b></div>'});
