@@ -1087,6 +1087,7 @@ window.scDemo=function(o){o=o||{};S.forme=o.forme||'xmas_gift_box';S.taille=o.ta
  majFormes();majTaille();majMatiere();majStyle();dessiner();
  if(o.photo)ajouter({type:'photo',src:D.exemple,nom:'exemple',forme:o.forme2||'ovale'});
  ajouter({type:'texte',texte:o.texte||'Camille',police:o.police||'great-vibes',mode:o.mode||'decoupe',mat:o.mat||'contreplaque',esp:0,courbe:0,creux:false});S.sel=null;dessiner()};
+window.scAtelier={S:S,dessiner:function(){dessiner()}};
 window.scEtat=function(){return {S:S,total:total(),forme:F().nom,W:S.W,H:S.H}};
 })();
 """

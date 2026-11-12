@@ -474,6 +474,8 @@ function nomDansForme(sl,txt,uid){
  if(!txt)return;
  var t=sl.t,h=t[3],fs=h*2.36,cx=t[0]+t[2]/2,base=t[1]+h*1.76,pol=police(S.police)[2];
  var e=encre(txt,pol,fs);if(e.l+e.r>t[2]){fs*=t[2]/(e.l+e.r);e=encre(txt,pol,fs)}
+ /* retouche de l'atelier (Gestion) : décalage et taille de ce prénom, absents côté cliente */
+ var aj=(S.aj||[])[uid];if(aj){cx+=aj.dx||0;base+=aj.dy||0;if(aj.s&&aj.s!==1){fs*=aj.s;e=encre(txt,pol,fs)}}
  var outer=el('g',{'clip-path':'url(#cp'+uid+')'},$('noms'));
  var cp=el('clipPath',{id:'cp'+uid},outer);el('path',{d:sl.o},cp);
  var g=el('g',{filter:'url(#bordF)'},outer);
@@ -488,8 +490,9 @@ var P=D.pied,PIO=10.2,SOL=300+PIO/K; /* le bas de l'arbre est à 10,2 mm du sol,
 function piedGrave(){return S.pied.grave&&S.pied.texte.trim()?S.pied.texte.trim():''}
 function piedGrav(f,uid,fill){var t=piedGrave();if(!t||(f==='b'&&S.pied.ou!=='deux'))return '';
  var pol=police(S.pied.police)[2],fs=P.txt.size,e=encre(t,pol,fs);if(e.l+e.r>P.txt.maxw)fs*=P.txt.maxw/(e.l+e.r);
- var x=f==='a'?P.txt.x:P.larg-P.txt.x,anc=f==='a'?'start':'end';
- return '<clipPath id="pc'+uid+'"><path d="'+P[f]+'"/></clipPath><text clip-path="url(#pc'+uid+')" x="'+x+'" y="'+P.txt.base+'" text-anchor="'+anc
+ var x=f==='a'?P.txt.x:P.larg-P.txt.x,anc=f==='a'?'start':'end',yb=P.txt.base;
+ var pj=S.pied.aj;if(pj){x+=(f==='a'?1:-1)*(pj.dx||0);yb+=pj.dy||0;fs*=pj.s||1}
+ return '<clipPath id="pc'+uid+'"><path d="'+P[f]+'"/></clipPath><text clip-path="url(#pc'+uid+')" x="'+x+'" y="'+yb+'" text-anchor="'+anc
   +'" font-family="'+esc(pol).replace(/"/g,"'")+'" font-size="'+fs.toFixed(2)+'" fill="'+fill+'">'+esc(t)+'</text>'}
 function dessinerPieds(){
  var c=.7071/K,u=1/K,h='';
@@ -674,6 +677,7 @@ var G={vue:'creation'};
 majArbres();majNoms();majForme();majPolices();majPied();dessiner();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){majPolices();dessiner()});
 [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
+window.abAtelier={S:S,dessiner:function(){dessiner()},maj:function(){majArbres();majForme();majNoms();majPolices();majPied();dessiner()}};
 window.abEtat=function(){return {S:S,total:total(),cle:cle(),pret:!!TR[cle()],slots:slots().length}};
 })();
 """

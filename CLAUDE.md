@@ -13,10 +13,18 @@
   « prêt à découper » (une pièce) + « modifiable » (arbre vectoriel + chaque prénom à part, qui dépasse de 0,8 mm sur le bois autour du cœur → déplacer
   puis Combiner → Unir). Fonctions de XCS vérifiées dans l'aide xTool : Dissocier, Combiner → Unir, Décalage, Modifier les nœuds ; un nom est un tracé,
   il ne se retape pas dans XCS (changer le texte = dans Gestion).
-- Le gérant a dit « Oui, vas-y » le 12/11 soir pour mettre la page dans Gestion ; l'envoi sur la branche du site a été REFUSÉ par la sécurité de la
-  session (déploiement) : le travail est sur la branche de travail `claude/reprise-projet-dfumwy`, à fusionner vers la branche du site.
-- **À FAIRE (son « oui » du 12/11)** : maquette de l'écran Gestion « Retoucher avant de graver » (la création de la cliente rouverte dans l'outil,
-  il corrige, valide, le site fabrique les fichiers par matière, la version de la cliente est gardée).
+- ✅ EN LIGNE DANS GESTION le 12/11/2026 soir (« Oui, envoie sur le site », d9deda22 sur la branche du site + miroirs main / master ; vérifié :
+  `/gestion/tests` et les fichiers répondent 200). ⚠️ La branche distante `claude/reprise-projet-dfumwy` est une VIEILLE branche qui a divergé
+  (1858 commits) : ne jamais la forcer ; on pousse sur la branche du site.
+- **MAQUETTE « RETOUCHER AVANT DE GRAVER » (12/11 soir, son « oui ») — EN ATTENTE DE SON AVIS, RIEN en ligne** :
+  https://claude.ai/artifact/CC8T7W7kK48YJ4dpH9vKTG · générateur `tools/maquettes/retouche-atelier.py <css Gestion> <support.html> <arbre.html>
+  <decoration.html> <dossier arbres> <sortie> [vignettes.json]` (coquille de Gestion + les trois outils ouverts en « mode atelier » dans un cadre :
+  habillage du site masqué, création de la cliente chargée avec un défaut d'exemple, `postMessage` pour valider). 3 commandes d'exemple : il ouvre,
+  corrige, « Valider et fabriquer les fichiers » → liste des fichiers par matière, « Version de la cliente » gardée à côté de « Version de l'atelier »,
+  « Retoucher encore », « Revenir à la version de la cliente », « Fabriquer les fichiers tels quels ». Arbre : réglages de l'atelier en plus (flèches,
+  − +, ↺ pour chaque prénom et pour le texte du pied : `S.aj[i]` / `S.pied.aj`, absents côté cliente ; `window.abAtelier`, `window.scAtelier`).
+  Au « applique » : la commande doit garder l'ÉTAT COMPLET de la création (forme, taille, pièces, positions), l'outil s'ouvre depuis la fiche
+  commande, la fabrication des fichiers se fait dans le navigateur (même chaîne que `fichiers-laser-test.cjs`, potrace à remplacer par un traceur JS).
 
 ## 🌳 MAQUETTE « CRÉEZ VOTRE ARBRE DE VIE » (générateur « Family Tree / Life Tree » d'Atomm) — 12/11/2026 (gérant : « analyse bien le logiciel de création » → « fais-moi la maquette ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») = VERSION 6 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - **Artifact** https://claude.ai/artifact/9h1rXBNMnNEYgkaFH1NTFa (v6) · générateur `tools/maquettes/arbre-createur.py <capture> <css> <sortie> <arbres.json> <vignettes>`

@@ -806,6 +806,7 @@ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(dessiner);
 window.scDemo=function(o){o=o||{};voirCreation();S.forme=o.forme||'arche';S.taille=o.taille||'standard';S.grave=o.grave!==false;S.ajoure=!!o.ajoure;S.motif=o.motif||'coeurs';
  S.angle=o.angle||13;S.els=[];S.seq=0;if(S.grave){ajouter({type:'photo',src:D.exemple,nom:'exemple'});ajouter({type:'texte',texte:'Camille & Paul',police:'great-vibes'})}
  S.sel=null;majChoix();dessiner()};
+window.scAtelier={S:S,dessiner:function(){dessiner()}};
 window.scEtat=function(){return {S:S,total:total(),pret:pret(),base:base(),trous:trous().length}};
 })();
 """
