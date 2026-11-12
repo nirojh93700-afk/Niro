@@ -466,6 +466,9 @@ function plaque(){ /* classique = le cadre découpé (intérieur vide) ; pleine 
  var f=F(),m=M(),t=tf(),cl=S.style==='classique',dd=cl?f.cadre:f.d;
  ['dos','dosV','dosB'].forEach(function(i){$(i).setAttribute('d',dd);$(i).setAttribute('transform',t)});
  $('decoupeP').setAttribute('d',f.d);$('decoupeP').setAttribute('transform',t);
+ /* Classique : les noms et les photos sont des pièces collées par-dessus le cadre, on les voit entières même quand elles dépassent ;
+    Plaque pleine : tout est gravé sur la plaque, donc rien ne sort de la forme */
+ if(cl)grav.removeAttribute('clip-path');else grav.setAttribute('clip-path','url(#decoupe)');
  $('ombreP').setAttribute('d',dd);$('ombreP').setAttribute('transform','translate(5,4) '+t);
  $('b0').setAttribute('stop-color',m.c[0]);$('b1').setAttribute('stop-color',m.c[1]);$('b2').setAttribute('stop-color',m.c[2]);
  $('dos').setAttribute('fill','url(#bois)');

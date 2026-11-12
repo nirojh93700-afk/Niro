@@ -1,5 +1,5 @@
-## 🌳 MAQUETTE « CRÉEZ VOTRE ARBRE DE VIE » (générateur « Family Tree / Life Tree » d'Atomm) — 12/11/2026 (gérant : « analyse bien le logiciel de création » → « fais-moi la maquette ») — EN ATTENTE DE SON AVIS, RIEN en ligne
-- **Artifact** https://claude.ai/artifact/9h1rXBNMnNEYgkaFH1NTFa (v1) · générateur `tools/maquettes/arbre-createur.py <capture> <css> <sortie> <arbres.json> <vignettes>`
+## 🌳 MAQUETTE « CRÉEZ VOTRE ARBRE DE VIE » (générateur « Family Tree / Life Tree » d'Atomm) — 12/11/2026 (gérant : « analyse bien le logiciel de création » → « fais-moi la maquette ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») = VERSION 6 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
+- **Artifact** https://claude.ai/artifact/9h1rXBNMnNEYgkaFH1NTFa (v6) · générateur `tools/maquettes/arbre-createur.py <capture> <css> <sortie> <arbres.json> <vignettes>`
   (même capture / css que le support de téléphone) · données `python3 -I tools/maquettes/arbre-atomm-donnees.py <dl> <availability.json> <sortie>`
   (gabarits téléchargés sur `family-tree-life-tree-generator.generator.atommapps.com` : `templates/availability.json`, chaque gabarit = 1 tracé + un
   `.svg.patch.json` (copies de JETONS de commandes du tracé source, empreinte sha256 vérifiée) + métadonnées des emplacements : centre, contour, trou,
@@ -27,6 +27,7 @@
 - **À valider** : contour de la maquette = aperçu (vrais tracés soudés à la construction) ; dessins d'Atomm repris (sa décision, comme le support).
 
 ## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCORATION À SUSPENDRE » (générateur « Ornament » d'Atomm) — 12/11/2026 (gérant : « fais la même chose pour cette création… tout comme sur le site ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR = VERSION 5 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
+- ✅ **v6 (12/11 soir, captures iPhone : « les noms quand ils dépassent de l'objet ça coupe, on voit pas, il faut pas que ça se coupe »)** = VERSION 6 de l'artifact, CELLE à reproduire : en style **Classique**, un nom ou une photo est une pièce COLLÉE par-dessus le cadre → affiché ENTIER même s'il dépasse (plus de découpe à la forme sur l'aperçu de face) ; en **Plaque pleine** (tout gravé sur la plaque) rien ne sort de la forme, comme avant.
 - ⛔ **RÈGLE (gérant, 12/11, après une 1re version fausse) : quand il donne un logiciel ou un site à reproduire, L'ANALYSER À FOND AVANT de construire**
   (ouvrir l'outil avec Playwright, ajouter un texte, un élément, une photo, regarder chaque mode, la 3D tournée, l'export, chaque réglage du panneau de
   droite) pour faire EXACTEMENT la même chose. J'avais d'abord fait une forme pleine à graver, puis « découpe seule » : faux. Atomm fait des
