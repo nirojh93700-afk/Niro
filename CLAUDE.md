@@ -1,5 +1,16 @@
 ## 🛠️ MAQUETTE « CRÉEZ VOTRE SUPPORT DE TÉLÉPHONE » — 12/11/2026 (gérant, lien du générateur Atomm de xTool : « est-ce qu'on peut utiliser cet outil de création sur mon site ? … fais-moi une maquette pour la deuxième solution ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 (« Tout est bon… enregistre la maquette ») = VERSION 4 (lettre fleurie comprise) : c'est CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne.
-- **Avant de construire : le VRAI fichier de découpe des formes** (les 6 formes sont dessinées par moi, rien d'Atomm). Il faut son fichier actuel du support (SVG / DXF) ou les mesures (dossier, épaisseur du bois, fentes d'emboîtement) ; il découpe une forme d'essai avant toute vente.
+- **v5 (12/11, gérant : « regarde la page Atomm… fais exactement les mêmes formes… donne-moi les fichiers de découpe »)** — CELLE à reproduire au « applique ».
+  Atomm (xTool, `phone-stand-generator.generator.atommapps.com`, autorisé dans l'environnement le 12/11 avec atomm.com) propose : 4 contours
+  (Rounded rect · Round arch · Cat head · Bear ears), dossier gravé (aigle, chat, chien, lapin, montagnes, image, texte) ou ajouré (cœurs, pattes,
+  soleil, nid d'abeille, losanges, persienne, fenêtre, étoiles + densité), téléphone, inclinaison (13°), épaisseur (3 mm), passage du câble, vue 3D,
+  « Download SVG ». ⛔ Leurs conditions (blog/608-copyright-statement) interdisent de redistribuer ou d'utiliser ailleurs leurs fichiers / modèles :
+  RIEN n'est copié d'eux (ni fichier, ni dessin, ni code). Nos 4 formes (Rectangle arrondi · Arche · Tête de chat · Oreilles d'ours) et l'emboîtement
+  sont DESSINÉS ET CALCULÉS par nous : `tools/maquettes/support_geometrie.py` (dossier 80 × 150 mm penché de 13°, pied PERPENDICULAIRE au dossier,
+  3 pattes de 16 mm dans 3 fentes de 16,2 × épaisseur, les 2 pattes des côtés dépassent de 15 mm = rebord à 20 mm du bureau, celle du milieu
+  affleure, pied 90,9 mm pour du 3 mm, encoche câble 26 × 12 mm). `python3 tools/maquettes/support_geometrie.py <dossier> [épaisseur]` écrit un SVG
+  à la taille réelle par forme (rouge = découpe) → `docs/maquettes/assets/support-telephone/decoupe/*-3mm.svg`, envoyés au gérant le 12/11 pour
+  une découpe d'essai. La maquette lit la même géométrie (aperçu, vignettes, fichier de l'atelier en mm, gravure posée dans le contour).
+  Pas repris (à proposer) : dossier ajouré à motifs, choix du téléphone et de l'inclinaison, vue 3D.
 - L'outil d'Atomm (xTool) ne s'installe pas sur un autre site : on construit le nôtre. ⛔ Ne pas se servir de `morluto/rea` (outil qui démonte un logiciel) pour recopier le leur.
 - https://claude.ai/artifact/ARNf7BxbQxsTvkpJxgQKD7 (v1) · générateur `tools/maquettes/support-createur.py <capture> <dossier css> <sortie>`
   (capture = `curl https://nivcreation.fr/produit/support-telephone-bois-grave` + ses feuilles de style ; sortie de 2 Mo non commitée).
@@ -7,7 +18,7 @@
   personnalisation un parcours en 3 étapes : ① forme du dossier (Classique · Arche · Cœur · Chat · Nuage · Maison, MES propositions) ·
   ② texte (8 écritures), dessin (modèles n° du site), photo (gravée en brun), plusieurs possibles, chacun se glisse au doigt, taille − / +,
   Centrer, retirer · ③ résumé et total. En bas : le fichier que l'atelier recevrait (rouge = découpe, noir = gravure).
-- Prix LUS dans la fiche en ligne : texte 12,90 · dessin 14,90 · photo 19,90, chaque élément en plus +3 € (photo + texte = 22,90 comme aujourd'hui).
+- Prix LUS dans la fiche en ligne : texte 12,90 · dessin 14,90 · lettre fleurie 14,90 · photo 19,90, chaque élément en plus +3 € (photo + texte = 22,90 comme aujourd'hui).
 - À trancher par lui : les formes à vendre et leur prix, les autres produits en bois où réutiliser l'outil.
   Vérifié Chromium 390 / 1280 : 0 erreur JS, 0 débordement, 6 formes sans chevauchement, glisser, modifier, retirer.
 - **v2 (12/11, « Et les photos qu'on a déjà mises sur le site ? » → « oui ajoute-le »)** : la galerie montre d'abord les VRAIES photos de la fiche

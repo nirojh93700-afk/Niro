@@ -14,6 +14,8 @@ capture = curl https://nivcreation.fr/produit/support-telephone-bois-grave ; dos
 La sortie (photos intégrées) ne se commite pas.
 """
 import base64, io, json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import support_geometrie as geo
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -161,7 +163,13 @@ POLICES = [
     ["allura", "Allura", "'Allura',cursive"], ["pacifico", "Pacifico", "'Pacifico',cursive"],
 ]
 
-DONNEES = json.dumps({"photos": PHOTOS, "dessins": DESSINS, "lettres": LETTRES, "planche": PLANCHE, "exemple": EXEMPLE, "polices": POLICES,
+_sc, _mm, _vi, _pd = geo.chemins(3, 3, 80, 80), geo.chemins(3, 1, 5, 5), geo.chemins(3, 1, 0, 0), geo.chemins(3, 1, 5 + geo.W + 10, 5)
+GEO = {"formes": [{"id": a["id"], "nom": a["nom"], "haut": a["haut"], "d": a["d"], "dmm": b["d"], "dvi": c["d"]}
+                  for a, b, c in zip(_sc["formes"], _mm["formes"], _vi["formes"])],
+       "fentesSc": _sc["fentes"], "fentesMm": _mm["fentes"], "piedMm": _pd["pied"], "fenteHaut": _sc["fente_haut"],
+       "pattes": geo.PATTES, "t": 3, "W": geo.W, "H": geo.H, "lw": 5 + geo.W + 10 + geo.W + 5, "lh": max(geo.H, _pd["pied_h"]) + 10,
+       "pied": round(_pd["pied_h"], 1), "angle": geo.ANGLE}
+DONNEES = json.dumps({"geo": GEO, "photos": PHOTOS, "dessins": DESSINS, "lettres": LETTRES, "planche": PLANCHE, "exemple": EXEMPLE, "polices": POLICES,
                       "prix": {"texte": P_TEXTE, "dessin": P_DESSIN, "lettre": P_LETTRE, "photo": P_PHOTO, "plus": 3}}, ensure_ascii=False)
 
 CSS_MAQ = r"""
@@ -184,18 +192,18 @@ background:linear-gradient(180deg,#f4efe6 0%,#efe8dc 58%,#e3d6c0 58.2%,#eadfcb 1
 .gallery-thumbs .sc-thc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#fbf3df;border:1.5px dashed #c9b88a;
 color:#7c6120;font:inherit;font-size:.58rem;font-weight:700;line-height:1.1;text-align:center}
 .gallery-thumbs .sc-thc svg{width:24px;height:30px}
-.gallery-thumbs .sc-thc svg path{fill:#e9d6b4;stroke:#9c6b3f;stroke-width:6}
+.gallery-thumbs .sc-thc svg path{fill:#e9d6b4;stroke:#9c6b3f;stroke-width:2}
 .gallery-thumbs .sc-thc.active{border-style:solid}
 .gallery-thumbs button img{width:100%;height:100%;object-fit:cover;display:block}
 .sc-stage .sc-el:active{cursor:grabbing}
 .sc-tag{position:absolute;left:10px;top:10px;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
 background:rgba(43,38,32,.82);color:#fff;border-radius:999px;padding:5px 10px}
 .sc-aide{font-size:.8rem;color:var(--ink-soft);font-style:italic;margin:10px 2px 0;line-height:1.4}
-.sc-formes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sc-formes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .sc-forme{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px 8px;border:1.5px solid var(--line);border-radius:12px;
 background:var(--paper);cursor:pointer;font:inherit;color:var(--ink);font-size:.78rem;font-weight:600}
 .sc-forme svg{width:44px;height:56px}
-.sc-forme svg path{fill:#e9d6b4;stroke:#9c6b3f;stroke-width:5}
+.sc-forme svg path{fill:#e9d6b4;stroke:#9c6b3f;stroke-width:1.6}
 .sc-forme.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
 .sc-ajouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 @media (max-width:520px){.sc-ajouts{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -262,7 +270,7 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
  .sc-aide{margin-bottom:14px}
  .gallery-thumbs{margin-bottom:4px}
  .sc-agrid{grid-template-columns:1fr}
- .sc-formes{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .sc-formes{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 @media (max-width:420px){.sc-ajout{font-size:.76rem;padding:10px 4px}.sc-forme{font-size:.72rem}}
 """
@@ -304,18 +312,19 @@ HTML_ATELIER = r"""
  <h2>De votre côté : le fichier pour le laser se fabrique tout seul</h2>
  <p>À la commande, le site range dans le dossier de la commande le fichier de la création, à la taille réelle. Il change en direct ci-dessous quand vous modifiez le support au-dessus.</p>
  <div class="sc-agrid">
-  <div class="sc-feuille"><svg id="fichier" viewBox="0 0 600 500" role="img" aria-label="Fichier de découpe et de gravure"></svg><p class="sc-fnom" id="fnom"></p></div>
+  <div class="sc-feuille"><svg id="fichier" viewBox="0 0 180 160" role="img" aria-label="Fichier de découpe et de gravure"></svg><p class="sc-fnom" id="fnom"></p></div>
   <div>
    <ul class="sc-legende"><li><i style="border-color:#d32f2f"></i>Trait rouge : à découper</li><li><i style="border-color:#111"></i>Noir : à graver</li></ul>
    <ul class="sc-points">
-    <li><b>Le dossier, à la forme choisie</b>Le contour suit la forme que la cliente a choisie ; le pied reste le même.</li>
+    <li><b>Deux pièces, à la taille réelle</b>À gauche le dossier à la forme choisie, avec les trois fentes et le passage du câble ; à droite le pied, dont les pattes traversent les fentes. Les deux pattes des côtés dépassent devant et forment le rebord du téléphone.</li>
+    <li><b>Calculé pour du bois de 3 mm</b>Dossier 80 × 150 mm, penché de 13°, rebord à 20 mm du bureau et 15 mm de profondeur. Une autre épaisseur se recalcule toute seule.</li>
     <li><b>La gravure, là où elle l'a posée</b>Texte, dessin et photo sont à la place et à la taille de son aperçu : plus de doute sur « plus haut ou plus bas ».</li>
     <li><b>Dans Gestion, comme les autres commandes</b>L'aperçu de la cliente et le fichier apparaissent dans la fiche atelier et dans le dossier de gravure du jour.</li>
    </ul>
   </div>
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
-  <li>Les six formes du dossier sont des propositions : lesquelles voulez-vous vendre, et au même prix ?</li>
+  <li>Les quatre formes (rectangle arrondi, arche, tête de chat, oreilles d'ours) sont dessinées par nous, sur le modèle des formes courantes de ces supports. Découpez-en une pour l'essayer avant la vente : si les pattes sont trop serrées ou trop lâches, je règle le jeu.</li>
   <li>Les prix viennent de la fiche actuelle (texte, dessin, lettre fleurie, photo, élément en plus). Avec la lettre fleurie, le nom dans la bande est compris, comme aujourd'hui.</li>
   <li>Le même outil peut ensuite servir à d'autres créations en bois (porte-stylo, plaque de porte, marque-pages).</li>
  </ul></div>
@@ -330,22 +339,22 @@ function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttr
 function eur(n){return n.toFixed(2).replace('.',',')+' €'}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 
-/* ---- les formes du dossier (panneau : x 80→320, bas y 440) ---- */
-var FORMES=[
- {id:'classique',nom:'Classique',haut:60,d:'M80,440V62a22,22 0 0 1 22,-22H298a22,22 0 0 1 22,22V440Z'},
- {id:'arche',nom:'Arche',haut:95,d:'M80,440V160A120,120 0 0 1 320,160V440Z'},
- {id:'coeur',nom:'Cœur',haut:125,d:'M80,440V138C80,34 188,26 200,112C212,26 320,34 320,138V440Z'},
- {id:'chat',nom:'Chat',haut:125,d:'M80,440V58Q80,44 92,52L138,104Q200,88 262,104L308,52Q320,44 320,58V440Z'},
- {id:'nuage',nom:'Nuage',haut:115,d:'M80,440V150A45,45 0 0 1 140,112A62,62 0 0 1 258,108A45,45 0 0 1 320,150V440Z'},
- {id:'maison',nom:'Maison',haut:140,d:'M80,440V150L200,48L320,150V440Z'}
-];
-var PIED='M80,446H320V518a12,12 0 0 1 -12,12H238V500a10,10 0 0 0 -10,-10H172a10,10 0 0 0 -10,10V530H92a12,12 0 0 1 -12,-12Z';
-var S={forme:'classique',els:[],sel:null,panneau:null,police:'playfair',seq:0};
+/* ---- les formes du dossier : calculées par support_geometrie.py (mm × 3, dossier de x 80 à 320, bas à 530) ---- */
+var GEO=D.geo, FORMES=GEO.formes;
+function mm(v){return 80+3*v}
+var S={forme:'rectangle',els:[],sel:null,panneau:null,police:'playfair',seq:0};
 function forme(){for(var i=0;i<FORMES.length;i++)if(FORMES[i].id===S.forme)return FORMES[i]}
 function police(k){for(var i=0;i<D.polices.length;i++)if(D.polices[i][0]===k)return D.polices[i];return D.polices[0]}
 
 /* ---- la scène ---- */
 var svg=$('scene');
+function rebordSvg(){ /* les deux pattes du pied dépassent devant le dossier et font le rebord ; celle du milieu affleure */
+ var y=mm(GEO.fenteHaut),h='',P=GEO.pattes;
+ [P[0],P[2]].forEach(function(p){var x0=mm(p[0]),x1=mm(p[1]);
+  h+='<path d="M'+(x0-4)+','+(y-9)+'L'+(x1+4)+','+(y-9)+'L'+x1+','+y+'L'+x0+','+y+'Z" fill="#ead6ae" stroke="#a9834f" stroke-width="1"/>'
+   +'<rect x="'+x0+'" y="'+y+'" width="'+(x1-x0)+'" height="'+(3*GEO.t)+'" fill="#c9a874" stroke="#a9834f" stroke-width="1"/>'});
+ var m=P[1];h+='<rect x="'+mm(m[0])+'" y="'+y+'" width="'+(3*(m[1]-m[0]))+'" height="'+(3*GEO.t)+'" fill="#b48c58" opacity=".55"/>';
+ return h}
 svg.innerHTML='<defs>'
  +'<linearGradient id="bois" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1dfbd"/><stop offset=".55" stop-color="#e8d2ab"/><stop offset="1" stop-color="#dfc59a"/></linearGradient>'
  +'<linearGradient id="bois2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcc296"/><stop offset="1" stop-color="#e9d5b0"/></linearGradient>'
@@ -361,14 +370,11 @@ svg.innerHTML='<defs>'
  +'<path id="dos" fill="url(#bois)"/><path id="dosV" fill="#fff" filter="url(#veine)" opacity=".5"/>'
  +'<path id="dosB" fill="none" stroke="#a9834f" stroke-width="1.2" opacity=".7"/>'
  +'<g id="grav" clip-path="url(#decoupe)"></g>'
- +'<rect x="74" y="438" width="252" height="9" rx="3" fill="#4b3018"/>'
- +'<path d="'+PIED+'" fill="url(#bois2)"/><path d="'+PIED+'" fill="#fff" filter="url(#veine)" opacity=".45"/>'
- +'<path d="M80,446H320L250,490H80Z" fill="#6b4a25" opacity=".13"/>'
- +'<path d="'+PIED+'" fill="none" stroke="#a9834f" stroke-width="1.2" opacity=".7"/>'
+ +rebordSvg()
  +'<g id="poignee"></g>';
 var grav=$('grav'), poignee=$('poignee');
 
-function limites(){var f=forme();return{x0:92,x1:308,y0:f.haut,y1:428}}
+function limites(){var f=forme();return{x0:mm(5),x1:mm(GEO.W-5),y0:mm(f.haut),y1:mm(GEO.fenteHaut-6)}}
 function taille(e){ /* largeur et hauteur de l'élément dans la scène */
  if(e.type==='texte'){return{w:0,h:30*e.s}}
  if(e.type==='dessin'){var w=118*e.s;return{w:w,h:w/e.r}}
@@ -404,7 +410,7 @@ function dessiner(){
    el('rect',{x:b.x-5,y:b.y-5,width:b.width+10,height:b.height+10,rx:6,fill:'none',stroke:'#a98935','stroke-width':1.6,'stroke-dasharray':'6 5','pointer-events':'none'},poignee)}
  });
  fichier();liste();resume();
- if(G.commence){var v=document.querySelector('.sc-thc path');if(v)v.setAttribute('d',forme().d)}
+ if(G.commence){var v=document.querySelector('.sc-thc path');if(v)v.setAttribute('d',forme().dvi)}
 }
 
 /* ---- glisser ---- */
@@ -421,7 +427,7 @@ svg.addEventListener('pointerup',lacher);svg.addEventListener('pointercancel',la
 
 /* ---- étape 1 : formes ---- */
 (function(){var h='';FORMES.forEach(function(f){
- h+='<button type="button" class="sc-forme" data-f="'+f.id+'"><svg viewBox="60 20 280 440"><path d="'+f.d+'"/></svg>'+f.nom+'</button>'});
+ h+='<button type="button" class="sc-forme" data-f="'+f.id+'"><svg viewBox="-3 -3 86 156"><path d="'+f.dvi+'"/></svg>'+f.nom+'</button>'});
  $('formes').innerHTML=h;
  $('formes').addEventListener('click',function(ev){var b=ev.target.closest('.sc-forme');if(!b)return;S.forme=b.getAttribute('data-f');majFormes();voirCreation();S.els.forEach(borner);if(chevauche())ranger();dessiner()})})();
 /* la forme change : si deux éléments se retrouvent l'un sur l'autre, on les range du haut vers le bas */
@@ -549,21 +555,22 @@ $('ajouter').addEventListener('click',function(){if(!S.els.length)return;this.te
 
 /* ---- le fichier de l'atelier ---- */
 function fichier(){
- var F=$('fichier'),f=forme(),h='<g transform="translate(-40,10)"><path d="'+f.d+'" fill="none" stroke="#d32f2f" stroke-width="1.6"/>';
+ var F=$('fichier'),f=forme(),R='fill="none" stroke="#FF0000" stroke-width="0.25"';
+ function X(v){return ((v-80)/3+5).toFixed(2)} function L(v){return (v/3).toFixed(2)}
+ F.setAttribute('viewBox','0 0 '+GEO.lw+' '+GEO.lh);
+ var h='';
  S.els.forEach(function(e){var t=taille(e);
-  if(e.type==='texte'){h+='<text x="'+e.x+'" y="'+e.y+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+t.h+'" fill="#111" data-t="'+e.id+'">'+esc(e.texte||'')+'</text>'}
-  else if(e.type==='dessin'){h+='<image href="'+e.src+'" x="'+(e.x-t.w/2)+'" y="'+(e.y-t.h/2)+'" width="'+t.w+'" height="'+t.h+'"/>'}
-  else if(e.type==='lettre'){h+='<image href="'+e.src+'" x="'+(e.x-t.w/2)+'" y="'+(e.y-t.h/2)+'" width="'+t.w+'" height="'+t.h+'"/>';
-   if(e.nom){var bh=t.h*(e.b[1]-e.b[0]);h+='<text x="'+e.x+'" y="'+(e.y-t.h/2+t.h*(e.b[0]+e.b[1])/2)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+(bh*.82)+'" fill="#111" data-tl="'+(t.w*.92)+'">'+esc(e.nom)+'</text>'}}
-  else{h+='<image href="'+e.src+'" x="'+(e.x-t.w/2)+'" y="'+(e.y-t.h/2)+'" width="'+t.w+'" height="'+t.h+'" preserveAspectRatio="xMidYMid slice" style="filter:grayscale(1) contrast(1.15)"/>'
-   +'<rect x="'+(e.x-t.w/2)+'" y="'+(e.y-t.h/2)+'" width="'+t.w+'" height="'+t.h+'" fill="none" stroke="#111" stroke-width="1"/>'}});
- h+='<text x="200" y="476" text-anchor="middle" font-size="13" fill="#5a5247" font-family="Inter,sans-serif">Dossier</text></g>'
-  +'<g transform="translate(270,-150)"><path d="'+PIED+'" fill="none" stroke="#d32f2f" stroke-width="1.6"/><rect x="96" y="462" width="208" height="7" fill="none" stroke="#d32f2f" stroke-width="1.6"/>'
-  +'<text x="200" y="560" text-anchor="middle" font-size="13" fill="#5a5247" font-family="Inter,sans-serif">Pied</text></g>';
+  if(e.type==='texte'){h+='<text x="'+X(e.x)+'" y="'+X(e.y)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+L(t.h)+'" fill="#111" data-t="'+(208/3)+'">'+esc(e.texte||'')+'</text>'}
+  else if(e.type==='dessin'){h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+X(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'"/>'}
+  else if(e.type==='lettre'){h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+X(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'"/>';
+   if(e.nom){var bh=t.h*(e.b[1]-e.b[0]);h+='<text x="'+X(e.x)+'" y="'+X(e.y-t.h/2+t.h*(e.b[0]+e.b[1])/2)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+L(bh*.82)+'" fill="#111" data-t="'+L(t.w*.92)+'">'+esc(e.nom)+'</text>'}}
+  else{h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+X(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'" preserveAspectRatio="xMidYMid slice" style="filter:grayscale(1) contrast(1.15)"/>'
+   +'<rect x="'+X(e.x-t.w/2)+'" y="'+X(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'" fill="none" stroke="#111" stroke-width="0.3"/>'}});
+ h='<g clip-path="url(#fclip)">'+h+'</g><clipPath id="fclip"><path d="'+f.dmm+'"/></clipPath>'
+  +'<path '+R+' d="'+f.dmm+'"/><path '+R+' d="'+GEO.fentesMm+'"/><path '+R+' d="'+GEO.piedMm+'"/>';
  F.innerHTML=h;
- [].forEach.call(F.querySelectorAll('text[data-t]'),function(t){var b=t.getBBox();if(b.width>208)t.setAttribute('font-size',parseFloat(t.getAttribute('font-size'))*208/b.width)});
- [].forEach.call(F.querySelectorAll('text[data-tl]'),function(t){var b=t.getBBox(),m=+t.getAttribute('data-tl');if(b.width>m)t.setAttribute('font-size',parseFloat(t.getAttribute('font-size'))*m/b.width)});
- $('fnom').textContent='support-telephone-'+f.id+'-<n° de commande>.svg';
+ [].forEach.call(F.querySelectorAll('text[data-t]'),function(t){var b=t.getBBox(),m=+t.getAttribute('data-t');if(b.width>m)t.setAttribute('font-size',parseFloat(t.getAttribute('font-size'))*m/b.width)});
+ $('fnom').textContent='support-telephone-'+f.id+'-<n° de commande>.svg · '+GEO.lw+' × '+GEO.lh+' mm · bois 3 mm';
 }
 
 /* l'en-tête du site reste collé en haut : l'aperçu se colle juste dessous */
@@ -587,7 +594,7 @@ window.addEventListener('resize',decoller);
 var G={vue:'photo',i:0,commence:false};
 function vignettes(){
  var h='';
- if(G.commence)h+='<button type="button" class="sc-thc'+(G.vue==='creation'?' active':'')+'" data-v="c" aria-label="Voir votre création"><svg viewBox="60 20 280 440"><path d="'+forme().d+'"/></svg>Votre<br>création</button>';
+ if(G.commence)h+='<button type="button" class="sc-thc'+(G.vue==='creation'?' active':'')+'" data-v="c" aria-label="Voir votre création"><svg viewBox="-3 -3 86 156"><path d="'+forme().dvi+'"/></svg>Votre<br>création</button>';
  D.photos.forEach(function(u,i){h+='<button type="button" class="'+(G.vue==='photo'&&G.i===i?'active':'')+'" data-v="'+i+'" aria-label="Voir la photo '+(i+1)+'"><img src="'+u+'" alt=""></button>'});
  $('vignettes').innerHTML=h;
  $('stage').setAttribute('data-vue',G.vue);
