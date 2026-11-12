@@ -170,7 +170,30 @@ MATIERES = [  # celles du générateur Atomm ; couleur de gravure propre à chaq
     {"id": "acr-rouge", "nom": "Acrylique rouge", "c": ["#e2504a", "#c62f2f", "#a32323"], "bord": "#7c1717", "grav": "#f6e2df", "acrylique": True},
     {"id": "acr-bleu", "nom": "Acrylique bleu", "c": ["#4b7be0", "#2f5fc6", "#2449a0"], "bord": "#183473", "grav": "#e3ebfb", "acrylique": True},
 ]
-DONNEES = json.dumps({"contours": CONTOURS, "matieres": MATIERES, "mini": 30, "maxi": 150, "photos": PHOTOS, "dessins": [], "elements": ELEMENTS, "lettres": {}, "planche": "", "exemple": EXEMPLE, "logo": LOGO, "logoR": LOGO_R, "polices": POLICES,
+# Nos modèles prêts à personnaliser (gérant, 12/11 : « prépare quelques exemples… ils commanderont en changeant le nom »).
+# Les prénoms sont des exemples. Le 6e argument (modeles-maquette.json, fait par decoration-modeles.cjs) donne pour chacun
+# les pièces déjà posées (els), le prix et l'image : le modèle s'ouvre alors EXACTEMENT comme sur sa vignette.
+MODELES = [
+    {"id": "flocons", "titre": "Flocons de neige", "sous": "Boule · prénom en acrylique bleu", "forme": "xmas_bauble", "taille": "moyenne", "style": "classique",
+     "textes": [{"texte": "Camille", "police": "great-vibes", "mat": "acr-bleu"}], "decos": ["30b2ae60dd", "77a6742cdf", "f33cd5031f"]},
+    {"id": "foret", "titre": "La forêt de Noël", "sous": "Sapin · prénom en acrylique rouge", "forme": "xmas_tree", "taille": "moyenne", "style": "classique",
+     "textes": [{"texte": "Léo", "police": "pacifico", "mat": "acr-rouge"}], "decos": ["d96206e7c5", "8e251e8cc0", "74a2e4c5de"]},
+    {"id": "etoile", "titre": "Étoile d'hiver", "sous": "Étoile · prénom en acrylique blanc", "forme": "xmas_star", "taille": "moyenne", "style": "classique",
+     "textes": [{"texte": "Inès", "police": "allura", "mat": "acr-blanc"}], "decos": ["30bffad1b1", "88eeea4a1b"]},
+    {"id": "couple", "titre": "Notre premier Noël", "sous": "Cœur · deux prénoms et l'année", "forme": "Heart", "taille": "moyenne", "style": "classique",
+     "textes": [{"texte": "Léa & Tom", "police": "great-vibes", "mat": "acr-rouge"}, {"texte": "2026", "police": "cinzel", "mat": "contreplaque"}], "decos": ["97cf54d2c7", "62a26c0328"]},
+    {"id": "mamie", "titre": "Pour Mamie", "sous": "Cadeau · plaque pleine gravée", "forme": "xmas_gift_box", "taille": "moyenne", "style": "pleine",
+     "textes": [{"texte": "Mamie", "police": "great-vibes", "mat": "contreplaque"}], "decos": ["f3e058ed97", "7d907193e8", "cb69615933"]},
+]
+FAITS = json.load(open(sys.argv[6], encoding="utf-8")) if len(sys.argv) > 6 else {}
+for m in MODELES:
+    f = FAITS.get(m["id"])
+    if f:
+        m["els"], m["total"] = f["els"], f["total"]
+        im = Image.open(f["img"]).convert("RGB"); im.thumbnail((360, 420), Image.LANCZOS)
+        bb = io.BytesIO(); im.save(bb, "WEBP", quality=80); m["img"] = "data:image/webp;base64," + base64.b64encode(bb.getvalue()).decode()
+
+DONNEES = json.dumps({"modeles": MODELES, "contours": CONTOURS, "matieres": MATIERES, "mini": 30, "maxi": 150, "photos": PHOTOS, "dessins": [], "elements": ELEMENTS, "lettres": {}, "planche": "", "exemple": EXEMPLE, "logo": LOGO, "logoR": LOGO_R, "polices": POLICES,
                       "prix": {"base": 9.9, "acrylique": 2, "element": 3, "dessin": 1}, "tailles": [["petite", "Petite", 70, 0], ["moyenne", "Moyenne", 90, 2], ["grande", "Grande", 110, 4]]},
                      ensure_ascii=False, separators=(",", ":"))
 
@@ -362,10 +385,23 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 .sc-mat.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
 @media (min-width:901px){.sc-stage.sc-deco svg#scene{max-height:max(300px,min(560px,calc(100vh - var(--sc-top,0px) - 120px)))}}
 @media (max-width:900px){.sc-stage.sc-deco svg#scene{max-height:34vh}.sc-formes-deco{max-height:none;overflow:visible}}
+.sc-modeles{margin:0 0 16px}.sc-mt{font-family:var(--font-display),serif;font-size:1.12rem;font-weight:600;margin:0 0 2px;color:var(--ink)}
+.sc-mrail{display:flex;gap:10px;overflow-x:auto;padding:8px 2px 10px;scroll-snap-type:x mandatory}
+.sc-mod{flex:0 0 150px;scroll-snap-align:start;display:flex;flex-direction:column;gap:4px;padding:8px;border:1.5px solid var(--line);border-radius:14px;background:var(--paper,#fff);cursor:pointer;font:inherit;text-align:left;color:var(--ink)}
+.sc-mod img{width:100%;aspect-ratio:6/7;object-fit:contain;border-radius:9px;background:#f4ece0}
+.sc-mod b{font-size:.84rem;line-height:1.2}.sc-mod small{font-size:.72rem;color:var(--muted,#6b5d4a);line-height:1.25}
+.sc-mod em{font-style:normal;font-size:.78rem;font-weight:700;color:var(--gold-dark,#a98935)}
+.sc-mod.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold)}
+.sc-mod-ok{margin:-4px 0 12px;padding:9px 12px;border-radius:10px;background:#fffaf0;border:1px solid var(--gold);font-size:.84rem}
+.sc-item input[data-edit].sc-pulse{box-shadow:0 0 0 3px var(--gold);transition:box-shadow .3s}
+@media (min-width:901px){.sc-mod{flex-basis:160px}}
 @media (max-width:420px){.sc-ajout{font-size:.76rem;padding:10px 4px}.sc-forme{font-size:.72rem}.sc-taille small{display:none}.sc-motif{font-size:.68rem}}
 """
 
 HTML_OUTIL = r"""
+<div class="sc-modeles" id="modeles" hidden><p class="sc-mt">Nos modèles prêts à personnaliser</p>
+ <p class="prc-hint">Choisissez un modèle, puis changez le prénom ou le texte à l'étape 4. Tout reste modifiable.</p>
+ <div class="sc-mrail" id="mrail"></div></div>
 <div class="prc" id="prc">
  <div class="prc-head"><p class="prc-title">Créez votre décoration</p><p class="prc-sub">Cinq petites étapes. Votre décoration se dessine au fur et à mesure.</p></div>
  <section class="prc-step">
@@ -914,6 +950,11 @@ function texture3D(cb){
  var src='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+X+' '+Y+' '+W+' '+H+'" width="'+(W*3)+'" height="'+(H*3)+'">'+svg.querySelector('defs').outerHTML+'<g clip-path="url(#decoupe)">'+grav.innerHTML+'</g></svg>';
  var im=new Image();im.onload=function(){var c=document.createElement('canvas');c.width=W*3;c.height=H*3;c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c)};
  im.onerror=function(){cb(null)};im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(src)}
+/* le dos d'une pièce : sa couleur sans le détail gravé (moyenne de la couleur sur de petites zones, découpée à la forme de la pièce) */
+function dosDe(cv){var w=cv.width,h=cv.height,n=Math.max(4,Math.round(Math.max(w,h)/48)),p=document.createElement('canvas');
+ p.width=Math.max(1,Math.round(w/n));p.height=Math.max(1,Math.round(h/n));var px=p.getContext('2d');px.imageSmoothingEnabled=true;px.drawImage(cv,0,0,p.width,p.height);
+ var d=document.createElement('canvas');d.width=w;d.height=h;var dx=d.getContext('2d');dx.imageSmoothingEnabled=true;dx.drawImage(p,0,0,w,h);
+ dx.globalCompositeOperation='destination-in';dx.drawImage(cv,0,0);return d}
 function aire(p){var a=0;for(var i=0,j=p.length-1;i<p.length;j=i++)a+=(p[j][0]+p[i][0])*(p[j][1]-p[i][1]);return Math.abs(a/2)}
 V3.ouvrir=function(){
  $('stage').setAttribute('data-3d','1');majVue();$('msg3d').textContent='Chargement de la vue 3D…';
@@ -921,7 +962,7 @@ V3.ouvrir=function(){
   if(!V3.pret){
    var c=$('vue3d'),r=new THREE.WebGLRenderer({canvas:c,antialias:true,alpha:true});r.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
    var sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(32,1,1,3000);
-   sc.add(new THREE.HemisphereLight(0xfff4e0,0x6b4f30,.6));var dl=new THREE.DirectionalLight(0xffffff,.55);dl.position.set(-120,220,260);sc.add(dl);
+   sc.add(new THREE.HemisphereLight(0xfff4e0,0x6b4f30,.6));var dl=new THREE.DirectionalLight(0xffffff,.55);dl.position.set(-120,220,260);sc.add(dl);var dl2=new THREE.DirectionalLight(0xffffff,.4);dl2.position.set(140,160,-260);sc.add(dl2);
    var mur=new THREE.Mesh(new THREE.PlaneGeometry(1200,900),new THREE.MeshBasicMaterial({color:0xf3ede3}));mur.position.set(0,0,-220);sc.add(mur);
    var lw=60,lh=lw/D.logoR,cadre=new THREE.Mesh(new THREE.BoxGeometry(lw+7,lh+7,2.5),new THREE.MeshStandardMaterial({color:0x9a7442,roughness:.6}));
    cadre.position.set(-120,55,-218.6);sc.add(cadre);
@@ -965,8 +1006,11 @@ V3.maj=function(){if(!V3.actif)return;
    /* les pièces collées sont posées sur le cadre (3 mm plus haut) ; en plaque pleine, la gravure est sur la face */
    var pl=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshStandardMaterial({map:tx,transparent:true,roughness:.9}));
    pl.position.set(W/2,H/2,cl?6.05:3.05);porte.add(pl);
-   if(cl){var dos=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:tx,transparent:true,color:0x5a4228,opacity:.85}));
-    for(var z=3.4;z<6;z+=.6){var c=dos.clone();c.position.set(W/2,H/2,z);porte.add(c)}}}
+   if(cl){var dos=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:tx,transparent:true,color:0x5a4228,opacity:.85,side:THREE.DoubleSide,alphaTest:.3}));
+    for(var z=3.4;z<6;z+=.6){var c=dos.clone();c.position.set(W/2,H/2,z);porte.add(c)}
+    /* vue de dos : le dos des pièces collées (même couleur que la pièce, sans la gravure), vu en miroir dans l'ouverture du cadre */
+    var arriere=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(dosDe(cv)),transparent:true,alphaTest:.3,side:THREE.BackSide,roughness:.85}));
+    arriere.position.set(W/2,H/2,3.05);porte.add(arriere)}}
   $('msg3d').textContent='Faites glisser pour tourner la décoration.';V3.rendre()});
  V3.rendre()};
 function majVue(){[].forEach.call(document.querySelectorAll('.sc-vue button'),function(x){x.classList.toggle('on',(x.getAttribute('data-vue')==='3d')===V3.actif)})}
@@ -1013,6 +1057,30 @@ ajouter({type:'texte',texte:'Camille',police:'great-vibes',mode:'decoupe',mat:'a
 function reposer(){S.els.forEach(function(e){if(e.type==='texte'&&e.auto&&S.style==='classique')ajusterAuCadre(e)});dessiner()}
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(reposer);
 [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
+/* ---- nos modèles prêts à personnaliser ---- */
+function famDe(did){for(var i=0;i<D.elements.elements.length;i++)if(D.elements.elements[i].id===did)return D.elements.elements[i].cats[0];return ''}
+function grpDe(f){for(var i=0;i<C.length;i++)if(C[i].id===f)return C[i].groupe;return 'tout'}
+function baseModele(m){S.forme=m.forme;S.groupe=grpDe(m.forme);S.taille=m.taille;S.style=m.style;S.els=[];S.seq=0;S.sel=null;S.panneau=null;
+ majFormes();majTaille();majMatiere();majStyle();panneau();dessiner()}
+function composerModele(m){baseModele(m);
+ m.textes.forEach(function(t){ajouter({type:'texte',texte:t.texte,police:t.police,mode:'decoupe',mat:t.mat,esp:0,courbe:0,creux:false})});
+ var n=m.decos.length,debut=n===1?-90:-90+180/n;
+ m.decos.forEach(function(did,i){var o={type:'dessin',did:did,fam:famDe(did),mode:'decoupe',mat:'contreplaque',rot:0,flip:false,s:.55};
+  o.id=++S.seq;var p=place(o);o.x=p.x;o.y=p.y;S.els.push(o);dessiner();if(!placerAuto(o,debut+360*i/n))S.els=S.els.filter(function(x){return x!==o})});
+ S.sel=null;S.panneau=null;panneau();dessiner()}
+function appliquerModele(m){if(!m.els)return composerModele(m);baseModele(m);
+ S.els=JSON.parse(JSON.stringify(m.els));S.seq=S.els.reduce(function(a,e){return Math.max(a,e.id)},0);
+ var t=S.els.filter(function(e){return e.type==='texte'})[0];S.sel=t?t.id:null;dessiner()}
+(function(){var R=$('mrail');if(!D.modeles||!D.modeles.length||!D.modeles[0].img)return;$('modeles').hidden=false;
+ R.innerHTML=D.modeles.map(function(m,i){return '<button type="button" class="sc-mod" data-m="'+i+'"><img src="'+m.img+'" alt="Modèle '+esc(m.titre)+'"><b>'+esc(m.titre)+'</b><small>'+esc(m.sous)+'</small><em>'+eur(m.total)+'</em></button>'}).join('');
+ R.addEventListener('click',function(ev){var b=ev.target.closest('.sc-mod');if(!b)return;var m=D.modeles[+b.getAttribute('data-m')];
+  [].forEach.call(R.querySelectorAll('.sc-mod'),function(x){x.classList.toggle('on',x===b)});
+  if(V3.actif)V3.fermer();voirCreation();appliquerModele(m);
+  var ok=$('modOk');if(!ok){ok=document.createElement('p');ok.id='modOk';ok.className='sc-mod-ok';$('liste').parentNode.insertBefore(ok,$('liste'))}
+  ok.innerHTML='Modèle « '+esc(m.titre)+' » choisi. <b>Écrivez votre prénom</b> à la place de « '+esc(m.textes[0].texte)+' » ci-dessous.';
+  var inp=document.querySelector('#liste input[data-edit]');ok.scrollIntoView({behavior:'smooth',block:'center'});
+  if(inp){inp.classList.add('sc-pulse');setTimeout(function(){inp.classList.remove('sc-pulse')},2400)}})})();
+window.scComposer=function(i){composerModele(D.modeles[i]);return {els:JSON.parse(JSON.stringify(S.els)),total:total()}};
 window.scDemo=function(o){o=o||{};S.forme=o.forme||'xmas_gift_box';S.taille=o.taille||'moyenne';S.style=o.style||'classique';S.els=[];S.seq=0;
  majFormes();majTaille();majMatiere();majStyle();dessiner();
  if(o.photo)ajouter({type:'photo',src:D.exemple,nom:'exemple',forme:o.forme2||'ovale'});

@@ -50,6 +50,14 @@
   « Placer automatiquement ») se pose DANS l'ouverture du cadre, collé contre le bord intérieur ou posé sur le haut du nom (jamais à cheval
   sur la barre, jamais sur les lettres) : `endroitClassique` (ouverture lue sur une grille mise en cache `carte()`, bois ≤ 30 %, nom ≤ 30 %
   de la hauteur du décor), décor réduit jusqu'à 5 fois s'il ne trouve pas de place. Vérifié sur 5 formes × 3 / 5 décors : 0 flottant, 0 erreur.
+  **v12 (12/11 soir, capture 3D de dos : « quand je retourne, le nom disparaît » + « prépare quatre ou cinq exemples, ils commanderont en
+  changeant le nom »)** : en 3D, vu de dos, on voit le dos des pièces collées (en miroir, à la couleur de la pièce, sans la gravure,
+  `dosDe(cv)` + plan `BackSide`, 2ᵉ lumière derrière). Rangée « Nos modèles prêts à personnaliser » en tête de l'outil : 5 modèles
+  (`MODELES` du générateur : Flocons de neige · boule « Camille » acrylique bleu 19,90 · La forêt de Noël · sapin « Léo » acrylique rouge
+  19,90 · Étoile d'hiver · étoile « Inès » acrylique blanc 18,90 · Notre premier Noël · cœur « Léa & Tom » + « 2026 » 21,90 · Pour Mamie ·
+  cadeau plaque pleine 17,90 ; prénoms d'exemple). Toucher un modèle = la création s'ouvre telle que sur la vignette, le prénom est ouvert
+  à l'étape 4 pour être changé. Fabrication : générateur → `node tools/maquettes/decoration-modeles.cjs <page> <dossier>` (compose chaque
+  modèle avec le placement automatique, garde les pièces, le prix et l'image → modeles-maquette.json) → générateur avec ce 6ᵉ argument.
   ⛔ Leçon : « fais exactement comme le logiciel » = TOUS ses réglages ; ce qu'il exclut se retire seulement si c'est EXACTEMENT ce qu'il a nommé.
 - ✅✅ **V6 ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») : c'est CELLE à reproduire au « applique » (remplace la v5), ne plus la modifier sans sa demande.**
 - ✅ **v6 (12/11 soir, captures iPhone : « les noms quand ils dépassent de l'objet ça coupe, on voit pas, il faut pas que ça se coupe »)** = VERSION 6 de l'artifact, CELLE à reproduire : en style **Classique**, un nom ou une photo est une pièce COLLÉE par-dessus le cadre → affiché ENTIER même s'il dépasse (plus de découpe à la forme sur l'aperçu de face) ; en **Plaque pleine** (tout gravé sur la plaque) rien ne sort de la forme, comme avant.
