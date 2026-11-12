@@ -8,19 +8,21 @@ la galerie devient un aperçu DESSINÉ (forme du dossier au choix, texte, dessin
 personnalisation devient un parcours en étapes. En bas : le fichier que l'atelier recevrait (rouge = découpe,
 noir = gravure).
 
-  python3 tools/maquettes/support-createur.py <capture.html> <dossier css> <sortie.html>
+  python3 tools/maquettes/support-createur.py <capture.html> <dossier css> <sortie.html> <support-atomm.json>
+
+v6 (12/11/2026, gérant : « tu crées pas toi-même, tu prends sur le site ») : les formes, tailles, fentes, pied et motifs
+ajourés viennent de la couche DÉCOUPE des fichiers du générateur Atomm (téléchargés par support-atomm-telecharge.cjs,
+triés par support-atomm-donnees.py) ; leurs dessins gravés ne sont pas repris (nos dessins, lettres, photos, textes).
 
 capture = curl https://nivcreation.fr/produit/support-telephone-bois-grave ; dossier css = ses feuilles de style.
 La sortie (photos intégrées) ne se commite pas.
 """
 import base64, io, json, os, re, sys
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import support_geometrie as geo
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PUB = os.path.join(ROOT, "public")
-cap, cssdir, sortie = sys.argv[1], sys.argv[2], sys.argv[3]
+cap, cssdir, sortie, atomm = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
 
 
 def raw_uri(path):
@@ -163,14 +165,10 @@ POLICES = [
     ["allura", "Allura", "'Allura',cursive"], ["pacifico", "Pacifico", "'Pacifico',cursive"],
 ]
 
-_sc, _mm, _vi, _pd = geo.chemins(3, 3, 80, 80), geo.chemins(3, 1, 5, 5), geo.chemins(3, 1, 0, 0), geo.chemins(3, 1, 5 + geo.W + 10, 5)
-GEO = {"formes": [{"id": a["id"], "nom": a["nom"], "haut": a["haut"], "d": a["d"], "dmm": b["d"], "dvi": c["d"]}
-                  for a, b, c in zip(_sc["formes"], _mm["formes"], _vi["formes"])],
-       "fentesSc": _sc["fentes"], "fentesMm": _mm["fentes"], "piedMm": _pd["pied"], "fenteHaut": _sc["fente_haut"],
-       "pattes": geo.PATTES, "t": 3, "W": geo.W, "H": geo.H, "lw": 5 + geo.W + 10 + geo.W + 5, "lh": max(geo.H, _pd["pied_h"]) + 10,
-       "pied": round(_pd["pied_h"], 1), "angle": geo.ANGLE}
-DONNEES = json.dumps({"geo": GEO, "photos": PHOTOS, "dessins": DESSINS, "lettres": LETTRES, "planche": PLANCHE, "exemple": EXEMPLE, "polices": POLICES,
-                      "prix": {"texte": P_TEXTE, "dessin": P_DESSIN, "lettre": P_LETTRE, "photo": P_PHOTO, "plus": 3}}, ensure_ascii=False)
+ATOMM = json.load(open(atomm, encoding="utf-8"))
+DONNEES = json.dumps({"atomm": ATOMM, "photos": PHOTOS, "dessins": DESSINS, "lettres": LETTRES, "planche": PLANCHE, "exemple": EXEMPLE, "polices": POLICES,
+                      "prix": {"texte": P_TEXTE, "dessin": P_DESSIN, "lettre": P_LETTRE, "photo": P_PHOTO, "plus": 3, "ajoure": 16.9, "grand": 2}},
+                     ensure_ascii=False, separators=(",", ":"))
 
 CSS_MAQ = r"""
 :root{color-scheme:light;--font-display:'Playfair Display';--font-body:'Inter';--font-cinzel:'Cinzel';--font-cinzel-deco:'Cinzel Decorative';
@@ -272,33 +270,83 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
  .sc-agrid{grid-template-columns:1fr}
  .sc-formes{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
-@media (max-width:420px){.sc-ajout{font-size:.76rem;padding:10px 4px}.sc-forme{font-size:.72rem}}
+.sc-sous{font-size:.84rem;font-weight:700;margin:16px 0 8px}
+.sc-tailles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sc-taille{display:flex;flex-direction:column;gap:3px;padding:10px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink);text-align:left}
+.sc-taille b{font-size:.88rem}.sc-taille em{font-style:normal;font-size:.74rem;font-weight:700;color:var(--gold-dark)}
+.sc-taille small{font-size:.72rem;color:var(--ink-soft);line-height:1.3}.sc-taille span{font-size:.72rem;font-weight:600;color:#7c6120;font-variant-numeric:tabular-nums}
+.sc-taille.on,.sc-mode.on,.sc-motif.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
+.sc-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.sc-mode{display:flex;flex-direction:column;gap:3px;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink);text-align:left}
+.sc-mode b{font-size:.95rem}.sc-mode small{font-size:.76rem;color:var(--ink-soft);line-height:1.35}
+.sc-motifs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.sc-motif{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;color:var(--ink);font-size:.74rem;font-weight:600;text-align:center}
+.sc-motif svg{width:42px;height:62px}
+.sc-motif small{font-weight:400;font-size:.66rem;color:var(--ink-soft)}
+.sc-motif svg path{fill:#e9d6b4;stroke:#9c6b3f;stroke-width:1.1;fill-rule:evenodd}
+.sc-case{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:.88rem;cursor:pointer;min-height:44px}
+.sc-case input{width:22px;height:22px;accent-color:var(--gold-dark);flex:none}
+.sc-vue{position:absolute;right:10px;top:10px;z-index:3;display:flex;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;padding:3px}
+.sc-vue button{border:0;background:none;font:inherit;font-size:.78rem;font-weight:700;padding:7px 14px;border-radius:999px;cursor:pointer;color:var(--ink-soft);min-height:34px}
+.sc-vue button.on{background:var(--ink);color:#fff}
+.sc-3d{position:absolute;inset:0;width:100%;height:100%;display:none;touch-action:none;cursor:grab}
+.sc-stage[data-3d="1"] .sc-3d{display:block}.sc-stage[data-3d="1"] svg#scene{visibility:hidden}
+.sc-stage[data-vue=photo] .sc-vue,.sc-stage[data-vue=photo] .sc-3d{display:none}
+.sc-3dmsg{position:absolute;left:0;right:0;bottom:8px;margin:0;text-align:center;font-size:.76rem;color:var(--ink-soft);pointer-events:none}
+.sc-stage:not([data-3d="1"]) .sc-3dmsg{display:none}
+.sc-stage[data-vue=creation] .sc-tag{display:none}
+.sc-stage [hidden]{display:none!important}
+@media (max-width:420px){.sc-ajout{font-size:.76rem;padding:10px 4px}.sc-forme{font-size:.72rem}.sc-taille small{display:none}.sc-motif{font-size:.68rem}}
 """
 
 HTML_OUTIL = r"""
 <div class="prc" id="prc">
- <div class="prc-head"><p class="prc-title">Créez votre support</p><p class="prc-sub">Trois petites étapes. Votre support se dessine au fur et à mesure, et vous placez chaque élément du bout du doigt.</p></div>
+ <div class="prc-head"><p class="prc-title">Créez votre support</p><p class="prc-sub">Quatre petites étapes. Votre support se dessine au fur et à mesure.</p></div>
 
  <section class="prc-step">
-  <div class="prc-sh"><span class="prc-num done" id="n1">1</span><h3>La forme du dossier</h3></div>
+  <div class="prc-sh"><span class="prc-num done" id="n1">1</span><h3>La forme et la taille</h3></div>
   <div class="sc-formes" id="formes"></div>
+  <p class="sc-sous">Pour quel téléphone ?</p>
+  <div class="sc-tailles" id="tailles"></div>
  </section>
 
  <section class="prc-step">
-  <div class="prc-sh"><span class="prc-num" id="n2">2</span><h3>Ce que vous gravez</h3></div>
-  <p class="prc-legend">Ajoutez un texte, un dessin, votre photo ou une lettre fleurie. Vous pouvez en mettre plusieurs : le premier est compris, chaque élément en plus coûte <b id="lplus"></b>.</p>
-  <div class="sc-ajouts">
-   <button type="button" class="sc-ajout" data-a="texte"><svg viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg>Un texte<small>prénom, date, petit mot</small></button>
-   <button type="button" class="sc-ajout" data-a="dessin"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 8a4 4 0 0 1 7 2.4C19 15.6 12 20 12 20z"/></svg>Un dessin<small>nos modèles</small></button>
-   <button type="button" class="sc-ajout" data-a="photo"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>Ma photo<small>gravée en brun</small></button>
-   <button type="button" class="sc-ajout" data-a="lettre"><svg viewBox="0 0 24 24"><path d="M6 20L12 4l6 16M8.5 14h7"/><path d="M3 12h18" stroke-dasharray="2 2"/></svg>Une lettre fleurie<small>votre initiale + un nom</small></button>
+  <div class="prc-sh"><span class="prc-num" id="n2">2</span><h3>La décoration</h3></div>
+  <div class="sc-modes" id="modes">
+   <button type="button" class="sc-mode" data-m="grave"><b>Gravé</b><small>texte, dessin, photo ou lettre fleurie</small></button>
+   <button type="button" class="sc-mode" data-m="ajoure"><b>Ajouré · <span id="lajoure"></span></b><small>un motif découpé à travers le bois</small></button>
   </div>
-  <div class="sc-panneau" id="panneau"></div>
-  <div id="liste"></div>
+  <div id="blocGrave">
+   <p class="prc-legend">Ajoutez un texte, un dessin, votre photo ou une lettre fleurie. Le premier est compris, chaque élément en plus coûte <b id="lplus"></b>.</p>
+   <div class="sc-ajouts">
+    <button type="button" class="sc-ajout" data-a="texte"><svg viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg>Un texte<small>prénom, date, petit mot</small></button>
+    <button type="button" class="sc-ajout" data-a="dessin"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 8a4 4 0 0 1 7 2.4C19 15.6 12 20 12 20z"/></svg>Un dessin<small>nos modèles</small></button>
+    <button type="button" class="sc-ajout" data-a="photo"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>Ma photo<small>gravée en brun</small></button>
+    <button type="button" class="sc-ajout" data-a="lettre"><svg viewBox="0 0 24 24"><path d="M6 20L12 4l6 16M8.5 14h7"/><path d="M3 12h18" stroke-dasharray="2 2"/></svg>Une lettre fleurie<small>votre initiale + un nom</small></button>
+   </div>
+   <div class="sc-panneau" id="panneau"></div>
+   <div id="liste"></div>
+  </div>
+  <div id="blocAjoure" hidden>
+   <p class="prc-legend">Le motif est découpé à travers le bois : on voit au travers. Un support ajouré n'est pas gravé.</p>
+   <div class="sc-motifs" id="motifs"></div>
+   <p class="sc-sous">Combien de motifs ?</p>
+   <div class="prc-chips" id="densites"></div>
+   <label class="sc-case"><input type="checkbox" id="piedMotif" checked> Le motif aussi sur le pied</label>
+   <p class="prc-hint" id="notePied" hidden>Avec ce motif, la découpe se fait sur le pied : le dossier reste plein.</p>
+  </div>
+ </section>
+
+ <section class="prc-step">
+  <div class="prc-sh"><span class="prc-num done" id="n3">3</span><h3>Les réglages</h3></div>
+  <p class="sc-sous" style="margin-top:0">Inclinaison du téléphone</p>
+  <div class="prc-chips" id="angles"></div>
+  <label class="sc-case"><input type="checkbox" id="cable" checked> Passage pour le câble de charge</label>
+  <p class="prc-hint">Contreplaqué de 3 mm. Les deux pièces s'emboîtent sans colle.</p>
  </section>
 
  <section class="prc-step" id="etape3">
-  <div class="prc-sh"><span class="prc-num" id="n3">3</span><h3>Votre création</h3></div>
+  <div class="prc-sh"><span class="prc-num" id="n4">4</span><h3>Votre création</h3></div>
   <div class="prc-sum" id="resume"></div>
  </section>
 </div>
@@ -316,17 +364,18 @@ HTML_ATELIER = r"""
   <div>
    <ul class="sc-legende"><li><i style="border-color:#d32f2f"></i>Trait rouge : à découper</li><li><i style="border-color:#111"></i>Noir : à graver</li></ul>
    <ul class="sc-points">
-    <li><b>Deux pièces, à la taille réelle</b>À gauche le dossier à la forme choisie, avec les trois fentes et le passage du câble ; à droite le pied, dont les pattes traversent les fentes. Les deux pattes des côtés dépassent devant et forment le rebord du téléphone.</li>
-    <li><b>Calculé pour du bois de 3 mm</b>Dossier 80 × 150 mm, penché de 13°, rebord à 20 mm du bureau et 15 mm de profondeur. Une autre épaisseur se recalcule toute seule.</li>
-    <li><b>La gravure, là où elle l'a posée</b>Texte, dessin et photo sont à la place et à la taille de son aperçu : plus de doute sur « plus haut ou plus bas ».</li>
+    <li><b>Les formes de découpe du générateur Atomm</b>Les quatre contours, les trois tailles, les fentes, le pied, le passage du câble et les huit motifs ajourés sont repris tels quels de leurs fichiers (couche découpe). Leurs dessins à graver ne sont pas repris : la gravure, ce sont nos dessins, nos lettres fleuries, la photo ou le texte de la cliente.</li>
+    <li><b>Deux pièces, pour du bois de 3 mm</b>À gauche le dossier, à droite le pied, dont les pattes traversent les trois fentes. Petit 76 × 142 mm, standard 80 × 151 mm, grand 86 × 165 mm : la planche la plus grande fait 186 × 175 mm et tient dans la zone de 200 × 200 mm de la F2 Ultra UV.</li>
+    <li><b>L'inclinaison change la longueur du pied</b>10°, 13°, 16° ou 20° : le fichier suit le choix de la cliente.</li>
+    <li><b>La gravure, là où elle l'a posée</b>Texte, dessin et photo sont à la place et à la taille de son aperçu.</li>
     <li><b>Dans Gestion, comme les autres commandes</b>L'aperçu de la cliente et le fichier apparaissent dans la fiche atelier et dans le dossier de gravure du jour.</li>
    </ul>
   </div>
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
-  <li>Les quatre formes (rectangle arrondi, arche, tête de chat, oreilles d'ours) sont dessinées par nous, sur le modèle des formes courantes de ces supports. Découpez-en une pour l'essayer avant la vente : si les pattes sont trop serrées ou trop lâches, je règle le jeu.</li>
-  <li>Les prix viennent de la fiche actuelle (texte, dessin, lettre fleurie, photo, élément en plus). Avec la lettre fleurie, le nom dans la bande est compris, comme aujourd'hui.</li>
-  <li>Le même outil peut ensuite servir à d'autres créations en bois (porte-stylo, plaque de porte, marque-pages).</li>
+  <li>Découpez un support de chaque taille pour l'essayer : si les pattes sont trop serrées ou trop lâches dans les fentes, je règle le jeu.</li>
+  <li>Prix proposés : gravé = les prix de la fiche actuelle (le premier élément compris, + 3 € par élément en plus) ; ajouré 16,90 € ; taille grand + 2 €.</li>
+  <li>Une vraie photo par forme et par motif ajouré sera à prendre avant la mise en vente.</li>
  </ul></div>
 </div></section>
 """
@@ -336,65 +385,91 @@ JS = r"""
 var D=__DONNEES__, NS='http://www.w3.org/2000/svg';
 function $(i){return document.getElementById(i)}
 function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
-function eur(n){return n.toFixed(2).replace('.',',')+' €'}
+function eur(n){return n.toFixed(2).replace('.',',')+' €'}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 
-/* ---- les formes du dossier : calculées par support_geometrie.py (mm × 3, dossier de x 80 à 320, bas à 530) ---- */
-var GEO=D.geo, FORMES=GEO.formes;
-function mm(v){return 80+3*v}
-var S={forme:'rectangle',els:[],sel:null,panneau:null,police:'playfair',seq:0};
-function forme(){for(var i=0;i<FORMES.length;i++)if(FORMES[i].id===S.forme)return FORMES[i]}
+/* ---- formes, tailles, fentes, pied et motifs ajourés : couche découpe des fichiers du générateur Atomm (mm, coin haut gauche = 0,0) ---- */
+var A=D.atomm;
+var FORMES=[{id:'rectangle',nom:'Rectangle arrondi'},{id:'arche',nom:'Arche'},{id:'chat',nom:'Tête de chat'},{id:'ours',nom:"Oreilles d'ours"}];
+var TAILLES=[{id:'petit',nom:'Petit',ex:'iPhone SE, petits téléphones'},{id:'standard',nom:'Standard',ex:'iPhone 16 / 17, Galaxy S'},{id:'grand',nom:'Grand',ex:'Pro Max, Ultra, grands téléphones'}];
+var MOTIFS=[{id:'coeurs',nom:'Cœurs'},{id:'pattes',nom:'Pattes'},{id:'soleil',nom:'Soleil'},{id:'nid',nom:"Nid d'abeille"},{id:'losanges',nom:'Losanges'},{id:'persienne',nom:'Persienne'},{id:'fenetre',nom:'Fenêtre'},{id:'etoiles',nom:'Étoiles'}];
+var DENSITES=[{id:'moins',nom:'Moins'},{id:'moyen',nom:'Moyen'},{id:'plus',nom:'Plus'}], ANGLES=[10,13,16,20];
+var S={forme:'rectangle',taille:'standard',mode:'grave',motif:'coeurs',densite:'moyen',piedMotif:true,angle:13,cable:true,
+ els:[],sel:null,panneau:null,police:'playfair',seq:0};
+function T(){return A.tailles[S.taille]}
+function base(){return A.base[S.taille+'|'+S.forme+'|'+(S.cable?1:0)+'|'+S.angle]}
+function trous(){return S.mode==='ajoure'?(A.trous[S.taille+'|'+S.forme+'|'+S.motif+'|'+S.densite]||''):''}
+function piedSeul(){return S.mode==='ajoure'&&!(A.trous[S.taille+'|'+S.forme+'|'+S.motif+'|'+S.densite])}
+function trousPied(){return S.mode==='ajoure'&&(S.piedMotif||piedSeul())?(A.trousPied[S.taille+'|'+S.motif+'|'+S.densite+'|'+S.angle]||''):''}
+function fentesD(b){return b.fentes.map(function(f){return 'M'+f[0]+' '+f[1]+'H'+f[2]+'V'+f[3]+'H'+f[0]+'Z'}).join('')}
+function vignetteD(f){return A.base['standard|'+f+'|1|13'].dos}
+function poly(d){return d.split(/(?=M)/).filter(Boolean).map(function(sp){var n=sp.match(/-?[\d.]+/g).map(Number),o=[];for(var i=0;i+1<n.length;i+=2)o.push([n[i],n[i+1]]);return o})}
+function nomDe(l,id){for(var i=0;i<l.length;i++)if(String(l[i].id)===String(id))return l[i].nom;return id}
 function police(k){for(var i=0;i<D.polices.length;i++)if(D.polices[i][0]===k)return D.polices[i];return D.polices[0]}
+/* la scène : le dossier à l'échelle 3 (1 mm = 3 unités), bas du dossier à y = 532, centré sur x = 200 */
+function ox(){return 200-1.5*T().W} function oy(){return 532-3*T().H}
+function zoneHaut(){ /* première hauteur (mm) où le dossier a toute sa largeur : la gravure commence dessous */
+ var c=poly(base().dos)[0],W=T().W;
+ for(var y=1;y<70;y+=.5){var xs=[];
+  for(var i=0,j=c.length-1;i<c.length;j=i++){var a=c[i],b=c[j];if((a[1]>y)!==(b[1]>y))xs.push(a[0]+(y-a[1])*(b[0]-a[0])/(b[1]-a[1]))}
+  if(xs.length>=2&&Math.max.apply(0,xs)-Math.min.apply(0,xs)>=W*.88)return y+4}
+ return 10}
 
-/* ---- la scène ---- */
 var svg=$('scene');
-function rebordSvg(){ /* les deux pattes du pied dépassent devant le dossier et font le rebord ; celle du milieu affleure */
- var y=mm(GEO.fenteHaut),h='',P=GEO.pattes;
- [P[0],P[2]].forEach(function(p){var x0=mm(p[0]),x1=mm(p[1]);
-  h+='<path d="M'+(x0-4)+','+(y-9)+'L'+(x1+4)+','+(y-9)+'L'+x1+','+y+'L'+x0+','+y+'Z" fill="#ead6ae" stroke="#a9834f" stroke-width="1"/>'
-   +'<rect x="'+x0+'" y="'+y+'" width="'+(x1-x0)+'" height="'+(3*GEO.t)+'" fill="#c9a874" stroke="#a9834f" stroke-width="1"/>'});
- var m=P[1];h+='<rect x="'+mm(m[0])+'" y="'+y+'" width="'+(3*(m[1]-m[0]))+'" height="'+(3*GEO.t)+'" fill="#b48c58" opacity=".55"/>';
- return h}
 svg.innerHTML='<defs>'
  +'<linearGradient id="bois" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1dfbd"/><stop offset=".55" stop-color="#e8d2ab"/><stop offset="1" stop-color="#dfc59a"/></linearGradient>'
- +'<linearGradient id="bois2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcc296"/><stop offset="1" stop-color="#e9d5b0"/></linearGradient>'
- +'<filter id="veine" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.9 0.012" numOctaves="3" seed="7" result="n"/>'
+ +'<filter id="veine" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.3 0.004" numOctaves="3" seed="7" result="n"/>'
  +'<feColorMatrix in="n" type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.28  0 0 0 0 0.12  0 0 0 0.55 -0.12"/><feComposite operator="in" in2="SourceGraphic"/></filter>'
  +'<filter id="brun" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 0.33  0 0 0 0 0.19  0 0 0 0 0.08  0 0 0 0.92 0"/></filter>'
  +'<filter id="sepia" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.33 0.5 0.17 0 0  0.33 0.5 0.17 0 0  0.33 0.5 0.17 0 0  0 0 0 1 0"/>'
  +'<feComponentTransfer><feFuncR type="table" tableValues="0.26 0.62 0.93"/><feFuncG type="table" tableValues="0.14 0.44 0.82"/><feFuncB type="table" tableValues="0.06 0.26 0.64"/></feComponentTransfer></filter>'
  +'<filter id="flou"><feGaussianBlur stdDeviation="9"/></filter>'
  +'<clipPath id="decoupe"><path id="decoupeP"/></clipPath></defs>'
- +'<ellipse cx="214" cy="536" rx="150" ry="13" fill="#3a2a16" opacity=".22" filter="url(#flou)"/>'
- +'<path id="ombreP" fill="#6b4a25" opacity=".35" transform="translate(5,3)"/>'
- +'<path id="dos" fill="url(#bois)"/><path id="dosV" fill="#fff" filter="url(#veine)" opacity=".5"/>'
- +'<path id="dosB" fill="none" stroke="#a9834f" stroke-width="1.2" opacity=".7"/>'
+ +'<ellipse cx="200" cy="538" rx="150" ry="13" fill="#3a2a16" opacity=".22" filter="url(#flou)"/>'
+ +'<g id="ombreG"><path id="ombreP" fill="#6b4a25" opacity=".35" fill-rule="evenodd"/></g>'
+ +'<g id="plaqueG"><path id="dos" fill="url(#bois)" fill-rule="evenodd"/><path id="dosV" fill="#fff" fill-rule="evenodd" filter="url(#veine)" opacity=".5"/>'
+ +'<path id="dosB" fill="none" stroke="#a9834f" stroke-width=".4" opacity=".75"/><path id="trousB" fill="none" stroke="#7a5631" stroke-width=".35" opacity=".7"/></g>'
  +'<g id="grav" clip-path="url(#decoupe)"></g>'
- +rebordSvg()
- +'<g id="poignee"></g>';
+ +'<g id="rebord"></g><g id="poignee"></g>';
 var grav=$('grav'), poignee=$('poignee');
 
-function limites(){var f=forme();return{x0:mm(5),x1:mm(GEO.W-5),y0:mm(f.haut),y1:mm(GEO.fenteHaut-6)}}
+function plaque(){ /* contour, fentes, trous ajourés et rebord, tels que dans le fichier de découpe */
+ var b=base(),tr=trous(),d=b.dos+fentesD(b)+tr,X=ox(),Y=oy();
+ $('plaqueG').setAttribute('transform','translate('+X+','+Y+') scale(3)');
+ $('ombreG').setAttribute('transform','translate('+(X+5)+','+(Y+3)+') scale(3)');
+ $('decoupeP').setAttribute('transform','translate('+X+','+Y+') scale(3)');
+ $('decoupeP').setAttribute('d',b.dos);
+ ['dos','dosV','ombreP'].forEach(function(i){$(i).setAttribute('d',d)});
+ $('dosB').setAttribute('d',b.dos);$('trousB').setAttribute('d',tr);
+ var h='';
+ b.fentes.forEach(function(f,i){var x0=X+3*f[0],x1=X+3*f[2],y=Y+3*f[1],ep=3*(f[3]-f[1]);
+  if(i===1){h+='<rect x="'+x0+'" y="'+y+'" width="'+(x1-x0)+'" height="'+ep+'" fill="#b48c58" opacity=".6"/>';return}
+  h+='<path d="M'+(x0-4)+','+(y-10)+'L'+(x1+4)+','+(y-10)+'L'+x1+','+y+'L'+x0+','+y+'Z" fill="#ead6ae" stroke="#a9834f" stroke-width="1"/>'
+   +'<rect x="'+x0+'" y="'+y+'" width="'+(x1-x0)+'" height="'+ep+'" fill="#c9a874" stroke="#a9834f" stroke-width="1"/>'});
+ $('rebord').innerHTML=h}
+
+function limites(){var t=T(),f=base().fentes[0];return{x0:ox()+15,x1:ox()+3*(t.W-5),y0:oy()+3*zoneHaut(),y1:oy()+3*(f[1]-5)}}
 function taille(e){ /* largeur et hauteur de l'élément dans la scène */
- if(e.type==='texte'){return{w:0,h:30*e.s}}
- if(e.type==='dessin'){var w=118*e.s;return{w:w,h:w/e.r}}
- if(e.type==='lettre'){var w2=e.r>1.05?165*e.s:150*e.s;return{w:w2,h:w2/e.r}}
- var c=128*e.s;return{w:c,h:c}}
+ var k=T().W/80;
+ if(e.type==='texte'){return{w:0,h:30*e.s*k}}
+ if(e.type==='dessin'){var w=118*e.s*k;return{w:w,h:w/e.r}}
+ if(e.type==='lettre'){var w2=(e.r>1.05?165:150)*e.s*k;return{w:w2,h:w2/e.r}}
+ var c=128*e.s*k;return{w:c,h:c}}
+function largTexte(){return 3*T().W-32}
 function borner(e){var L=limites(),t=taille(e),hw=e.type==='texte'?36:t.w/2,hh=t.h/2,lo=L.x0+hw,hi=L.x1-hw;
  e.x=lo>hi?200:Math.max(lo,Math.min(hi,e.x));
  e.y=Math.max(L.y0+hh,Math.min(L.y1-hh,e.y))}
 
 function dessiner(){
- var f=forme();
- ['decoupeP','ombreP','dos','dosV','dosB'].forEach(function(i){$(i).setAttribute('d',f.d)});
+ plaque();
  grav.innerHTML='';poignee.innerHTML='';
- S.els.forEach(function(e){
+ if(S.mode==='grave')S.els.forEach(function(e){
   borner(e);
   var g=el('g',{'class':'sc-el','data-id':e.id},grav),t=taille(e);
   if(e.type==='texte'){
    var tx=el('text',{x:e.x,y:e.y,'text-anchor':'middle','dominant-baseline':'central','font-family':police(e.police)[2],'font-size':t.h,fill:'#55331a',opacity:.9},g);
    tx.textContent=e.texte||'Votre texte';
-   var bb=tx.getBBox(),max=208; if(bb.width>max){tx.setAttribute('font-size',t.h*max/bb.width)}
+   var bb=tx.getBBox(),max=largTexte(); if(bb.width>max){tx.setAttribute('font-size',t.h*max/bb.width)}
   }else if(e.type==='dessin'){
    el('image',{href:e.src,x:e.x-t.w/2,y:e.y-t.h/2,width:t.w,height:t.h,filter:'url(#brun)',opacity:.92},g);
   }else if(e.type==='lettre'){
@@ -409,8 +484,8 @@ function dessiner(){
   if(S.sel===e.id){var b=g.getBBox();
    el('rect',{x:b.x-5,y:b.y-5,width:b.width+10,height:b.height+10,rx:6,fill:'none',stroke:'#a98935','stroke-width':1.6,'stroke-dasharray':'6 5','pointer-events':'none'},poignee)}
  });
- fichier();liste();resume();
- if(G.commence){var v=document.querySelector('.sc-thc path');if(v)v.setAttribute('d',forme().dvi)}
+ fichier();liste();resume();if(V3.pret)V3.maj();
+ if(G.commence){var v=document.querySelector('.sc-thc path');if(v)v.setAttribute('d',vignetteD(S.forme))}
 }
 
 /* ---- glisser ---- */
@@ -425,22 +500,38 @@ svg.addEventListener('pointermove',function(ev){if(!prise)return;var p=pt(ev);pr
 function lacher(){prise=null}
 svg.addEventListener('pointerup',lacher);svg.addEventListener('pointercancel',lacher);
 
-/* ---- étape 1 : formes ---- */
-(function(){var h='';FORMES.forEach(function(f){
- h+='<button type="button" class="sc-forme" data-f="'+f.id+'"><svg viewBox="-3 -3 86 156"><path d="'+f.dvi+'"/></svg>'+f.nom+'</button>'});
- $('formes').innerHTML=h;
- $('formes').addEventListener('click',function(ev){var b=ev.target.closest('.sc-forme');if(!b)return;S.forme=b.getAttribute('data-f');majFormes();voirCreation();S.els.forEach(borner);if(chevauche())ranger();dessiner()})})();
-/* la forme change : si deux éléments se retrouvent l'un sur l'autre, on les range du haut vers le bas */
-function larg(e){return e.type==='texte'?200:taille(e).w}
+/* ---- étapes 1 et 3 : forme, taille, motif, densité, inclinaison ---- */
+function boutons(id,liste,cls,html){$(id).innerHTML=liste.map(function(o){return '<button type="button" class="'+cls+'" data-v="'+o.id+'">'+html(o)+'</button>'}).join('')}
+boutons('formes',FORMES,'sc-forme',function(f){return '<svg viewBox="-3 -3 86 157"><path d="'+vignetteD(f.id)+'"/></svg>'+f.nom});
+boutons('tailles',TAILLES,'sc-taille',function(t){var a=A.tailles[t.id];return '<b>'+t.nom+'</b><small>'+t.ex+'</small><span>'+a.W+' × '+a.H+' mm</span>'+(t.id==='grand'?'<em>+ '+eur(D.prix.grand)+'</em>':'')});
+boutons('motifs',MOTIFS,'sc-motif',function(m){var b=A.base['standard|rectangle|1|13'],t=A.trous['standard|rectangle|'+m.id+'|moyen'];
+ if(t)return '<svg viewBox="-3 -3 86 157"><path d="'+b.dos+t+'"/></svg>'+m.nom;
+ return '<svg viewBox="-3 -3 86 '+(b.piedH+6)+'"><path d="'+b.pied+(A.trousPied['standard|'+m.id+'|moyen|13']||'')+'"/></svg>'+m.nom+'<small>sur le pied</small>'});
+boutons('densites',DENSITES,'prc-chip',function(d){return d.nom});
+boutons('angles',ANGLES.map(function(a){return{id:a}}),'prc-chip',function(a){return a.id+'°'+(a.id===13?' · conseillé':'')});
+function majChoix(){
+ function on(id,v){[].forEach.call($(id).querySelectorAll('button'),function(b){b.classList.toggle('on',b.getAttribute('data-v')===String(v))})}
+ on('formes',S.forme);on('tailles',S.taille);on('motifs',S.motif);on('densites',S.densite);on('angles',S.angle);
+ [].forEach.call(document.querySelectorAll('.sc-mode'),function(b){b.classList.toggle('on',b.getAttribute('data-m')===S.mode)});
+ $('blocGrave').hidden=S.mode!=='grave';$('blocAjoure').hidden=S.mode!=='ajoure';
+ $('piedMotif').checked=S.piedMotif||piedSeul();$('piedMotif').disabled=piedSeul();
+ $('notePied').hidden=!piedSeul();$('cable').checked=S.cable}
+function choisir(cle,val,num){S[cle]=num?+val:val;majChoix();voirCreation();S.els.forEach(borner);if(chevauche())ranger();dessiner()}
+[['formes','forme'],['tailles','taille'],['motifs','motif'],['densites','densite'],['angles','angle',1]].forEach(function(c){
+ $(c[0]).addEventListener('click',function(ev){var b=ev.target.closest('button');if(b)choisir(c[1],b.getAttribute('data-v'),c[2])})});
+$('modes').addEventListener('click',function(ev){var b=ev.target.closest('.sc-mode');if(!b)return;S.sel=null;S.panneau=null;panneau();choisir('mode',b.getAttribute('data-m'))});
+$('piedMotif').addEventListener('change',function(){S.piedMotif=this.checked;voirCreation();dessiner()});
+$('cable').addEventListener('change',function(){S.cable=this.checked;voirCreation();dessiner()});
+/* un changement de forme ou de taille : si deux éléments se retrouvent l'un sur l'autre, on les range du haut vers le bas */
+function larg(e){return e.type==='texte'?largTexte():taille(e).w}
 function chevauche(){for(var i=0;i<S.els.length;i++)for(var j=i+1;j<S.els.length;j++){var a=S.els[i],b=S.els[j];
  if(Math.abs(a.y-b.y)<(taille(a).h+taille(b).h)/2+4&&Math.abs(a.x-b.x)<(larg(a)+larg(b))/2)return true}return false}
 function ranger(){var L=limites(),els=S.els.slice().sort(function(a,b){return a.y-b.y}),n=els.length,dispo=L.y1-L.y0-8*(n-1),tot=0;
  els.forEach(function(e){tot+=taille(e).h});
  if(tot>dispo){var k=dispo/tot;els.forEach(function(e){e.s=Math.max(.4,e.s*k)});tot=0;els.forEach(function(e){tot+=taille(e).h})}
  var y=L.y0+Math.max(0,(dispo-tot)/2);els.forEach(function(e){var h=taille(e).h;e.y=y+h/2;y+=h+8})}
-function majFormes(){[].forEach.call(document.querySelectorAll('.sc-forme'),function(b){b.classList.toggle('on',b.getAttribute('data-f')===S.forme)})}
 
-/* ---- étape 2 : ajouter ---- */
+/* ---- étape 2 (gravé) : ajouter ---- */
 function centre(){var L=limites();return{x:200,y:(L.y0+L.y1)/2}}
 function place(o){ /* la place la plus libre : un texte va d'abord en bas, une image d'abord au milieu */
  var L=limites(),c=centre().y,h=taille(o).h/2,haut=L.y0+h+6,bas=L.y1-h-6,
@@ -476,7 +567,7 @@ function panneau(){
  }else if(S.panneau==='photo'){
   h='<div class="prc-fields"><p class="prc-legend">Un portrait, un couple, un animal : la photo est gravée en brun dans le bois. Choisissez une image nette et bien éclairée.</p>'
    +'<div class="sc-photo"><label class="sc-btn">Choisir ma photo<input type="file" accept="image/*" id="fphoto"></label>'
-   +'<button type="button" class="sc-btn clair" id="exPhoto">Essayer avec une photo d\'exemple</button></div><p class="prc-hint">&nbsp;</p></div>';
+   +'<button type="button" class="sc-btn clair" id="exPhoto">Essayer avec une photo d\'exemple</button></div></div>';
  }
  P.innerHTML=h;
  var n=$('ntexte'); if(n){n.focus()}
@@ -507,7 +598,7 @@ function principal(){ /* l'élément qui fixe le prix de départ : la photo, sin
  var o=['photo','dessin','lettre','texte'];for(var k=0;k<o.length;k++)for(var i=0;i<S.els.length;i++)if(S.els[i].type===o[k])return i;return -1}
 function liste(){
  var L=$('liste'),act=document.activeElement,garde=act&&act.getAttribute&&act.getAttribute('data-edit');
- if(garde){ /* on tape dans un champ : ne pas le reconstruire */
+ if(garde){
   [].forEach.call(L.querySelectorAll('.sc-item'),function(d){d.classList.toggle('on',+d.getAttribute('data-id')===S.sel)});
   var t=L.querySelector('.sc-item[data-id="'+garde+'"] .sc-inom b'),e=trouver(+garde); if(t&&e)t.textContent=nomEl(e); return}
  if(!S.els.length){L.innerHTML='<p class="sc-vide">Rien n\'est encore gravé. Ajoutez un texte, un dessin ou votre photo.</p>';return}
@@ -536,49 +627,112 @@ $('liste').addEventListener('click',function(ev){
  S.sel=e.id;dessiner()});
 $('liste').addEventListener('input',function(ev){var id=ev.target.getAttribute('data-edit');if(!id)return;var e=trouver(+id);if(e.type==='lettre')e.nom=ev.target.value;else e.texte=ev.target.value;dessiner()});
 
-/* ---- étape 3 : résumé et prix ---- */
-function total(){var i=principal();if(i<0)return 0;return D.prix[S.els[i].type]+(S.els.length-1)*D.prix.plus}
+/* ---- étape 4 : résumé et prix ---- */
+function pret(){return S.mode==='ajoure'||S.els.length>0}
+function total(){var g=S.taille==='grand'?D.prix.grand:0;if(S.mode==='ajoure')return D.prix.ajoure+g;
+ var i=principal();if(i<0)return 0;return D.prix[S.els[i].type]+(S.els.length-1)*D.prix.plus+g}
 function resume(){
- var R=$('resume'),h='<div class="prc-sumrow"><span>Forme du dossier</span><b>'+forme().nom+'</b></div>',p=principal();
- if(!S.els.length)h+='<div class="prc-sumrow"><span>Gravure</span><b class="prc-miss">à choisir</b></div>';
- S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':e.type==='lettre'?'Lettre fleurie':'Photo')+'</span><b>'+esc(nomEl(e))
-  +(e.type==='texte'||(e.type==='lettre'&&e.nom)?' · '+police(e.police)[1]:'')+' — '+(i===p?eur(D.prix[e.type]):'+ '+eur(D.prix.plus))+'</b></div>'});
- h+='<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+(S.els.length?eur(total()):'dès '+eur(D.prix.texte))+'</b></div>';
+ var R=$('resume'),p=principal(),h='<div class="prc-sumrow"><span>Forme</span><b>'+nomDe(FORMES,S.forme)+'</b></div>'
+  +'<div class="prc-sumrow"><span>Taille</span><b>'+nomDe(TAILLES,S.taille)+' · '+T().W+' × '+T().H+' mm'+(S.taille==='grand'?' — + '+eur(D.prix.grand):'')+'</b></div>';
+ if(S.mode==='ajoure'){h+='<div class="prc-sumrow"><span>Ajouré</span><b>'+nomDe(MOTIFS,S.motif)+' · '+nomDe(DENSITES,S.densite).toLowerCase()+(piedSeul()?' · découpé sur le pied':S.piedMotif?' · aussi sur le pied':'')+' — '+eur(D.prix.ajoure)+'</b></div>'}
+ else{
+  if(!S.els.length)h+='<div class="prc-sumrow"><span>Gravure</span><b class="prc-miss">à choisir</b></div>';
+  S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':e.type==='lettre'?'Lettre fleurie':'Photo')+'</span><b>'+esc(nomEl(e))
+   +(e.type==='texte'||(e.type==='lettre'&&e.nom)?' · '+police(e.police)[1]:'')+' — '+(i===p?eur(D.prix[e.type]):'+ '+eur(D.prix.plus))+'</b></div>'})}
+ h+='<div class="prc-sumrow"><span>Réglages</span><b>'+S.angle+'° · '+(S.cable?'passage du câble':'sans passage du câble')+' · bois 3 mm</b></div>';
+ h+='<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+(pret()?eur(total()):'dès '+eur(D.prix.texte))+'</b></div>';
  R.innerHTML=h;
- $('total').textContent=S.els.length?eur(total()):'dès '+eur(D.prix.texte);
- $('n2').classList.toggle('done',S.els.length>0);$('n3').classList.toggle('done',S.els.length>0);
- $('ajouter').disabled=!S.els.length;$('ajouter').style.opacity=S.els.length?1:.5;
- $('manque').textContent=S.els.length?'':'Il manque la gravure : ajoutez un texte, un dessin ou votre photo.';
- $('prixtete').textContent=S.els.length?eur(total()):'dès '+eur(D.prix.texte);
+ var txt=pret()?eur(total()):'dès '+eur(D.prix.texte);
+ $('total').textContent=txt;$('prixtete').textContent=txt;
+ $('n2').classList.toggle('done',pret());$('n4').classList.toggle('done',pret());
+ $('ajouter').disabled=!pret();$('ajouter').style.opacity=pret()?1:.5;
+ $('manque').textContent=pret()?'':'Il manque la décoration : ajoutez un texte, un dessin ou votre photo, ou choisissez « Ajouré ».';
 }
-$('ajouter').addEventListener('click',function(){if(!S.els.length)return;this.textContent='Ajouté au panier ✓ (maquette)'});
+$('ajouter').addEventListener('click',function(){if(!pret())return;this.textContent='Ajouté au panier ✓ (maquette)'});
 
-/* ---- le fichier de l'atelier ---- */
+/* ---- le fichier de l'atelier : les deux pièces à la taille réelle, rouge = découpe, noir = gravure ---- */
 function fichier(){
- var F=$('fichier'),f=forme(),R='fill="none" stroke="#FF0000" stroke-width="0.25"';
- function X(v){return ((v-80)/3+5).toFixed(2)} function L(v){return (v/3).toFixed(2)}
- F.setAttribute('viewBox','0 0 '+GEO.lw+' '+GEO.lh);
+ var F=$('fichier'),b=base(),t0=T(),R='fill="none" stroke="#FF0000" stroke-width="0.25"',lh=Math.max(t0.lh,b.lh);
+ function X(v){return ((v-ox())/3+5).toFixed(2)} function Y(v){return ((v-oy())/3+5).toFixed(2)} function L(v){return (v/3).toFixed(2)}
+ F.setAttribute('viewBox','0 0 '+t0.lw+' '+lh);
  var h='';
- S.els.forEach(function(e){var t=taille(e);
-  if(e.type==='texte'){h+='<text x="'+X(e.x)+'" y="'+X(e.y)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+L(t.h)+'" fill="#111" data-t="'+(208/3)+'">'+esc(e.texte||'')+'</text>'}
-  else if(e.type==='dessin'){h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+X(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'"/>'}
-  else if(e.type==='lettre'){h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+X(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'"/>';
-   if(e.nom){var bh=t.h*(e.b[1]-e.b[0]);h+='<text x="'+X(e.x)+'" y="'+X(e.y-t.h/2+t.h*(e.b[0]+e.b[1])/2)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+L(bh*.82)+'" fill="#111" data-t="'+L(t.w*.92)+'">'+esc(e.nom)+'</text>'}}
-  else{h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+X(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'" preserveAspectRatio="xMidYMid slice" style="filter:grayscale(1) contrast(1.15)"/>'
-   +'<rect x="'+X(e.x-t.w/2)+'" y="'+X(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'" fill="none" stroke="#111" stroke-width="0.3"/>'}});
- h='<g clip-path="url(#fclip)">'+h+'</g><clipPath id="fclip"><path d="'+f.dmm+'"/></clipPath>'
-  +'<path '+R+' d="'+f.dmm+'"/><path '+R+' d="'+GEO.fentesMm+'"/><path '+R+' d="'+GEO.piedMm+'"/>';
+ if(S.mode==='grave')S.els.forEach(function(e){var t=taille(e);
+  if(e.type==='texte'){h+='<text x="'+X(e.x)+'" y="'+Y(e.y)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+L(t.h)+'" fill="#111" data-t="'+L(largTexte())+'">'+esc(e.texte||'')+'</text>'}
+  else if(e.type==='dessin'){h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+Y(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'"/>'}
+  else if(e.type==='lettre'){h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+Y(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'"/>';
+   if(e.nom){var bh=t.h*(e.b[1]-e.b[0]);h+='<text x="'+X(e.x)+'" y="'+Y(e.y-t.h/2+t.h*(e.b[0]+e.b[1])/2)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+L(bh*.82)+'" fill="#111" data-t="'+L(t.w*.92)+'">'+esc(e.nom)+'</text>'}}
+  else{h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+Y(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'" preserveAspectRatio="xMidYMid slice" style="filter:grayscale(1) contrast(1.15)"/>'
+   +'<rect x="'+X(e.x-t.w/2)+'" y="'+Y(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'" fill="none" stroke="#111" stroke-width="0.3"/>'}});
+ h='<g clip-path="url(#fclip)">'+h+'</g><clipPath id="fclip"><path transform="translate(5 5)" d="'+b.dos+'"/></clipPath>'
+  +'<g transform="translate(5 5)"><path '+R+' d="'+b.dos+fentesD(b)+trous()+'"/></g>'
+  +'<g transform="translate('+t0.piedX+' 5)"><path '+R+' d="'+b.pied+trousPied()+'"/></g>';
  F.innerHTML=h;
- [].forEach.call(F.querySelectorAll('text[data-t]'),function(t){var b=t.getBBox(),m=+t.getAttribute('data-t');if(b.width>m)t.setAttribute('font-size',parseFloat(t.getAttribute('font-size'))*m/b.width)});
- $('fnom').textContent='support-telephone-'+f.id+'-<n° de commande>.svg · '+GEO.lw+' × '+GEO.lh+' mm · bois 3 mm';
+ [].forEach.call(F.querySelectorAll('text[data-t]'),function(t){var bb=t.getBBox(),m=+t.getAttribute('data-t');if(bb.width>m)t.setAttribute('font-size',parseFloat(t.getAttribute('font-size'))*m/bb.width)});
+ $('fnom').textContent='support-telephone-'+S.taille+'-'+S.forme+(S.mode==='ajoure'?'-'+S.motif:'')+'-'+S.angle+'deg-<n° de commande>.svg · '+t0.lw+' × '+lh+' mm · bois 3 mm';
 }
+
+/* ---- la vue 3D : les deux pièces emboîtées (three.js, chargé seulement quand on touche « 3D ») ---- */
+var V3={pret:false,actif:false};
+function chargerThree(fn){if(window.THREE)return fn();var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+ s.onload=fn;s.onerror=function(){$('msg3d').textContent='La vue 3D n\'a pas pu se charger.'};document.head.appendChild(s)}
+function texture3D(cb){ /* la gravure telle que dessinée sur l'aperçu, découpée au contour, en image */
+ var X=ox(),Y=oy(),W=3*T().W,H=3*T().H;
+ if(S.mode!=='grave'||!S.els.length)return cb(null);
+ var src='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+X+' '+Y+' '+W+' '+H+'" width="'+(W*3)+'" height="'+(H*3)+'">'+svg.querySelector('defs').outerHTML+'<g clip-path="url(#decoupe)">'+grav.innerHTML+'</g></svg>';
+ var im=new Image();im.onload=function(){var c=document.createElement('canvas');c.width=W*3;c.height=H*3;c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c)};
+ im.onerror=function(){cb(null)};im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(src)}
+function forme3D(contour,trousL){
+ var sh=new THREE.Shape(contour.map(function(p){return new THREE.Vector2(p[0],p[1])}));
+ trousL.forEach(function(t){sh.holes.push(new THREE.Path(t.map(function(p){return new THREE.Vector2(p[0],p[1])})))});return sh}
+V3.ouvrir=function(){
+ $('stage').setAttribute('data-3d','1');majVue();$('msg3d').textContent='Chargement de la vue 3D…';
+ chargerThree(function(){
+  if(!V3.pret){
+   var c=$('vue3d'),r=new THREE.WebGLRenderer({canvas:c,antialias:true,alpha:true});r.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
+   var sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(32,1,1,2000);
+   sc.add(new THREE.HemisphereLight(0xfff4e0,0x6b4f30,.55));var dl=new THREE.DirectionalLight(0xffffff,.55);dl.position.set(-120,220,260);sc.add(dl);
+   var sol=new THREE.Mesh(new THREE.CircleGeometry(170,48),new THREE.MeshBasicMaterial({color:0x3a2a16,transparent:true,opacity:.12}));sol.rotation.x=-Math.PI/2;sc.add(sol);
+   V3.r=r;V3.sc=sc;V3.cam=cam;V3.rot=-.45;V3.pret=true;
+   var tir=null;c.addEventListener('pointerdown',function(e){tir={x:e.clientX,r:V3.rot};try{c.setPointerCapture(e.pointerId)}catch(_){ }});
+   c.addEventListener('pointermove',function(e){if(!tir)return;V3.rot=tir.r+(e.clientX-tir.x)/120;V3.rendre()});
+   c.addEventListener('pointerup',function(){tir=null});c.addEventListener('pointercancel',function(){tir=null});
+   window.addEventListener('resize',function(){if(V3.actif)V3.rendre()});
+  }
+  V3.actif=true;majVue();vignettes();V3.maj();
+ })};
+V3.fermer=function(){V3.actif=false;$('stage').removeAttribute('data-3d');majVue();vignettes()};
+V3.rendre=function(){if(!V3.pret||!V3.actif)return;var c=$('vue3d'),w=c.clientWidth,h=c.clientHeight;if(!w||!h)return;
+ V3.r.setSize(w,h,false);V3.cam.aspect=w/h;V3.cam.updateProjectionMatrix();if(V3.g)V3.g.rotation.y=V3.rot;V3.r.render(V3.sc,V3.cam)};
+V3.maj=function(){if(!V3.actif)return;
+ var b=base(),t=T(),H=t.H,fl=function(pp){return pp.map(function(p){return [p[0],H-p[1]]})};
+ var bois=new THREE.MeshStandardMaterial({color:0xc49a62,roughness:.8,metalness:0});
+ var cont=fl(poly(b.dos)[0]),trs=b.fentes.map(function(f){return fl([[f[0],f[1]],[f[2],f[1]],[f[2],f[3]],[f[0],f[3]]])}).concat(poly(trous()).map(fl));
+ var gd=new THREE.ExtrudeGeometry(forme3D(cont,trs),{depth:3,bevelEnabled:false,curveSegments:1});
+ var dos=new THREE.Mesh(gd,bois);
+ var pc=poly(b.pied),pied=new THREE.Mesh(new THREE.ExtrudeGeometry(forme3D(pc[0],poly(trousPied())),{depth:3,bevelEnabled:false}),bois);
+ var f=b.fentes[0];pied.rotation.x=-Math.PI/2;pied.position.set(0,H-f[3],18);
+ var g=new THREE.Group(),porte=new THREE.Group();porte.add(dos);porte.add(pied);
+ var a=S.angle*Math.PI/180;porte.rotation.x=-a;porte.position.x=-t.W/2;g.add(porte);
+ g.updateMatrixWorld(true);var bx=new THREE.Box3().setFromObject(g);porte.position.y-=bx.min.y;porte.position.z-=(bx.min.z+bx.max.z)/2;
+ if(V3.g){V3.sc.remove(V3.g);V3.g.traverse(function(o){if(o.geometry)o.geometry.dispose()})}
+ V3.g=g;V3.sc.add(g);
+ var hh=bx.max.y-bx.min.y;V3.cam.position.set(0,hh*.72,hh*2.55);V3.cam.lookAt(0,hh*.42,0);
+ var id=++V3.n;V3.n=id;
+ texture3D(function(cv){if(id!==V3.n)return;
+  if(cv){var tx=new THREE.CanvasTexture(cv);var pl=new THREE.Mesh(new THREE.PlaneGeometry(t.W,H),new THREE.MeshStandardMaterial({map:tx,transparent:true,roughness:.9}));
+   pl.position.set(t.W/2,H/2,3.05);porte.add(pl)}
+  $('msg3d').textContent='Faites glisser pour tourner le support.';V3.rendre()});
+ V3.rendre()};
+V3.n=0;
+function majVue(){[].forEach.call(document.querySelectorAll('.sc-vue button'),function(x){x.classList.toggle('on',(x.getAttribute('data-vue')==='3d')===V3.actif)})}
+$('vueBtns').addEventListener('click',function(ev){var x=ev.target.closest('button');if(!x)return;voirCreation();if(x.getAttribute('data-vue')==='3d')V3.ouvrir();else{V3.fermer();dessiner()}});
 
 /* l'en-tête du site reste collé en haut : l'aperçu se colle juste dessous */
 function sousEntete(){var h=document.querySelector('header'),t=0;
  if(h&&/sticky|fixed/.test(getComputedStyle(h).position))t=h.offsetHeight;
  document.documentElement.style.setProperty('--sc-top',t+'px')}
 sousEntete();window.addEventListener('resize',sousEntete);window.addEventListener('load',sousEntete);
-/* sur téléphone : l'aperçu reste collé en haut pendant les étapes 1 et 2, puis se décolle dès que la cliente arrive au résumé et aux prix */
+/* sur téléphone : l'aperçu reste collé en haut pendant les étapes, puis se décolle dès que la cliente arrive au résumé et aux prix */
 var attente=false;
 function decoller(){attente=false;
  var st=$('stage'),e3=$('etape3'),d=0;
@@ -594,27 +748,29 @@ window.addEventListener('resize',decoller);
 var G={vue:'photo',i:0,commence:false};
 function vignettes(){
  var h='';
- if(G.commence)h+='<button type="button" class="sc-thc'+(G.vue==='creation'?' active':'')+'" data-v="c" aria-label="Voir votre création"><svg viewBox="-3 -3 86 156"><path d="'+forme().dvi+'"/></svg>Votre<br>création</button>';
+ if(G.commence)h+='<button type="button" class="sc-thc'+(G.vue==='creation'?' active':'')+'" data-v="c" aria-label="Voir votre création"><svg viewBox="-3 -3 86 157"><path d="'+vignetteD(S.forme)+'"/></svg>Votre<br>création</button>';
  D.photos.forEach(function(u,i){h+='<button type="button" class="'+(G.vue==='photo'&&G.i===i?'active':'')+'" data-v="'+i+'" aria-label="Voir la photo '+(i+1)+'"><img src="'+u+'" alt=""></button>'});
  $('vignettes').innerHTML=h;
  $('stage').setAttribute('data-vue',G.vue);
  $('grande').src=D.photos[G.i];
  $('prec').hidden=$('suiv').hidden=G.vue!=='photo';
- $('aide').textContent=G.vue==='creation'?'Faites glisser un élément pour le déplacer. Aperçu indicatif : sur le bois, la gravure ressort en brun.'
+ $('aide').textContent=G.vue==='creation'?(V3.actif?'Vue 3D indicative : les deux pièces emboîtées, à l\'inclinaison choisie.':S.mode==='ajoure'?'Le motif est découpé à travers le bois : on voit au travers.':'Faites glisser un élément pour le déplacer. Aperçu indicatif : sur le bois, la gravure ressort en brun.')
   :"Aperçu indicatif : sur le bois, la gravure ressort en brun, comme sur la photo d'exemple."+(G.commence?' Touchez « Votre création » pour revenir à votre support.':'');
 }
 function voirCreation(){G.commence=true;G.vue='creation';vignettes()}
 $('vignettes').addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;var v=b.getAttribute('data-v');
- if(v==='c'){G.vue='creation'}else{G.vue='photo';G.i=+v}vignettes();if(G.vue==='creation')dessiner()});
+ if(v==='c'){G.vue='creation'}else{G.vue='photo';G.i=+v;if(V3.actif)V3.fermer()}vignettes();if(G.vue==='creation')dessiner()});
 $('prec').addEventListener('click',function(){G.i=(G.i+D.photos.length-1)%D.photos.length;vignettes()});
 $('suiv').addEventListener('click',function(){G.i=(G.i+1)%D.photos.length;vignettes()});
 /* ---- départ ---- */
-$('lplus').textContent=eur(D.prix.plus);
-majFormes();panneau();vignettes();dessiner();
+$('lplus').textContent=eur(D.prix.plus);$('lajoure').textContent=eur(D.prix.ajoure);
+majChoix();panneau();vignettes();dessiner();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(dessiner);
-/* logo : s'il ne charge pas dans l'aperçu, la case est masquée (sur le site il s'affiche) */
 [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
-window.scDemo=function(){voirCreation();S.forme='arche';S.els=[];S.seq=0;ajouter({type:'photo',src:D.exemple,nom:'exemple'});ajouter({type:'texte',texte:'Camille & Paul',police:'great-vibes'});S.sel=null;majFormes();dessiner()};
+window.scDemo=function(o){o=o||{};voirCreation();S.forme=o.forme||'arche';S.taille=o.taille||'standard';S.mode=o.mode||'grave';S.motif=o.motif||'coeurs';
+ S.angle=o.angle||13;S.els=[];S.seq=0;if(S.mode==='grave'){ajouter({type:'photo',src:D.exemple,nom:'exemple'});ajouter({type:'texte',texte:'Camille & Paul',police:'great-vibes'})}
+ S.sel=null;majChoix();dessiner()};
+window.scEtat=function(){return {S:S,total:total(),pret:pret(),base:base(),trous:trous().length}};
 })();
 """
 
@@ -632,7 +788,9 @@ page = f"""<title>Créateur support téléphone</title>
    <img class="sc-photo-g" id="grande" alt="Support téléphone en bois gravé">
    <button type="button" class="gallery-arrow gallery-arrow-prev" id="prec" aria-label="Photo précédente">‹</button>
    <button type="button" class="gallery-arrow gallery-arrow-next" id="suiv" aria-label="Photo suivante">›</button>
-   <svg id="scene" viewBox="40 14 320 536" role="img" aria-label="Aperçu de votre support de téléphone"></svg></div>
+   <svg id="scene" viewBox="40 14 320 536" role="img" aria-label="Aperçu de votre support de téléphone"></svg>
+   <div class="sc-vue" id="vueBtns"><button type="button" data-vue="2d" class="on">Face</button><button type="button" data-vue="3d">3D</button></div>
+   <canvas class="sc-3d" id="vue3d" aria-label="Vue 3D du support"></canvas><p class="sc-3dmsg" id="msg3d"></p></div>
   <div class="gallery-thumbs" id="vignettes"></div>
   <p class="sc-aide" id="aide">Aperçu indicatif : sur le bois, la gravure ressort en brun, comme sur la photo d'exemple.</p>
  </div>
