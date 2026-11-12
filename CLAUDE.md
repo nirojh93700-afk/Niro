@@ -1,3 +1,18 @@
+## 🌳 MAQUETTE « CRÉEZ VOTRE ARBRE DE VIE » (générateur « Family Tree / Life Tree » d'Atomm) — 12/11/2026 (gérant : « analyse bien le logiciel de création » → « fais-moi la maquette ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- **Artifact** https://claude.ai/artifact/9h1rXBNMnNEYgkaFH1NTFa (v1) · générateur `tools/maquettes/arbre-createur.py <capture> <css> <sortie> <arbres.json> <vignettes>`
+  (même capture / css que le support de téléphone) · données `python3 -I tools/maquettes/arbre-atomm-donnees.py <dl> <availability.json> <sortie>`
+  (gabarits téléchargés sur `family-tree-life-tree-generator.generator.atommapps.com` : `templates/availability.json`, chaque gabarit = 1 tracé + un
+  `.svg.patch.json` (copies de JETONS de commandes du tracé source, empreinte sha256 vérifiée) + métadonnées des emplacements : centre, contour, trou,
+  cadre du texte) → `arbres/<arbre>-<heart|circle>-<n>.txt` (117 tracés, 38 Mo, publiés À CÔTÉ de la page et chargés à la demande) + `arbres.json`.
+- **Ses décisions** : **18 cm** (zone 200 × 200 de la F2 Ultra UV, avec marge, « pas au maximum ») · **6 prénoms au plus** (« ok ») · chaque prénom
+  ajouté fait apparaître SON cœur (comme Atomm : un gabarit par nombre de prénoms) · **PAS de photo** (« on peut pas graver de photo ») · **PAS de collage
+  ni de prénoms seuls** (« c'est découpe ») · **PAS d'acrylique** (les matières d'Atomm ne sont qu'un aperçu) → une seule pièce en contreplaqué 3 mm.
+- **Parcours** : ① 9 arbres (vie, chêne, saule, pommier, olivier, cèdre, cerisier, jacaranda, figuier) · ② prénoms 1 à 6 (10 lettres, ↑ ↓ ✕, bouton
+  « 6 prénoms au maximum ») · ③ cœurs ou cercles · ④ 10 écritures d'Atomm (Pacifico, Lobster, Courgette, Lobster Two, Oleo Script, Pattaya, Leckerli One,
+  Berkshire Swash, Sriracha, Lily Script One, OFL) · ⑤ résumé, prénom vide = panier bloqué. Prénom = bois dans le trou de son cœur, 1re lettre reliée au
+  bord gauche, dernière au bord droit, accents reliés (comme Atomm). Vue Face / 3D (logo au mur), fichier atelier 180 × 180 mm en rouge.
+- **À valider** : prix PROPOSÉ par moi 24,90 € ; contour de la maquette = aperçu (vrais tracés soudés à la construction) ; dessins d'Atomm repris (sa décision, comme le support).
+
 ## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCORATION À SUSPENDRE » (générateur « Ornament » d'Atomm) — 12/11/2026 (gérant : « fais la même chose pour cette création… tout comme sur le site ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR = VERSION 5 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - ⛔ **RÈGLE (gérant, 12/11, après une 1re version fausse) : quand il donne un logiciel ou un site à reproduire, L'ANALYSER À FOND AVANT de construire**
   (ouvrir l'outil avec Playwright, ajouter un texte, un élément, une photo, regarder chaque mode, la 3D tournée, l'export, chaque réglage du panneau de
