@@ -10,7 +10,7 @@
   pleine (`maskImg`) avec palettes et sortie « Score lines » (traits à peindre) ou « Color print ». Export = compte exigé.
 - **Décisions du gérant** : PAS de dessins (« pas ces images, tu mets que les photos » : ni les dessins de Noël, ni nos modèles, ni la lettre fleurie) ;
   **pas d'impression couleur** (« c'est avec une autre machine, je peux pas imprimer ») → le mode Color devient « Plaque pleine » gravée.
-- **Artifact** https://claude.ai/artifact/6Gs8LNkzpdvWMRDNZpE775 (v1) · générateur `tools/maquettes/decoration-createur.py <capture> <css> <sortie> <contours.json>`
+- **Artifact** https://claude.ai/artifact/6Gs8LNkzpdvWMRDNZpE775 (v3) · générateur `tools/maquettes/decoration-createur.py <capture> <css> <sortie> <contours.json>`
   (même capture / css que le support de téléphone) · contours `tools/maquettes/decoration-contours.py <layouts.json> <masques> <sortie.json> <cadres>`
   (layouts = `api.xtool.com/efficacy/v1/data/type/aimake_cms_generator_layouts/items`, masques = `maskImg`, cadres = `mainImg`, OpenCV, plus grand côté 100 mm).
 - **Parcours** : ① forme (46, par groupe) · ② taille 30–150 mm, proportions liées · ③ style **Classique** (cadre découpé + pièces collées) / **Plaque pleine**
@@ -18,7 +18,12 @@
   espacement, courbe, 8 écritures du site) et photos (gravées sur une pièce rectangle ou ovale) · ⑥ résumé. Un nom se pose tout seul d'un bord du cadre
   à l'autre (encre mesurée) ; une pièce qui ne pose pas sur le cadre est entourée de rouge et bloque « Ajouter au panier ». 3D : cadre + pièces 3 mm
   devant, logo au mur. Fichier atelier : cadre + chaque pièce rangée dessous, numérotée (rouge = découpe, noir = gravure), alerte au-delà de 200 × 200 mm.
-- **Prix PROPOSÉS par moi, à valider** : 9,90 € (cadre ou plaque) + 3 € par texte ou photo + 2 € en acrylique. Questions : matières en stock, ruban, colle.
+- **v3 (12/11, gérant : « en matière tu gardes que contreplaqué et les acryliques, les couleurs c'est juste pour les noms et les textes ; il faut que ça
+  touche quelque part, il faut pas que ça tombe ; les tailles tu laisses pas décider les clients, tu donnes quelques tailles »)** : cadre / plaque / photo =
+  **contreplaqué 3 mm seulement** ; chaque nom ou texte = contreplaqué ou **acrylique blanc / noir / rouge / bleu** (+ 2 €) ; **3 tailles** Petite 7 cm ·
+  Moyenne 9 cm · Grande 11 cm (plus grand côté, même prix, à valider) ; une pièce doit toucher le cadre **ou une pièce qui tient** (sinon rouge,
+  « elle tomberait », panier bloqué) ; le fichier atelier dit la matière de chaque pièce. v2 = aperçu réduit sur téléphone (34vh).
+- **Prix PROPOSÉS par moi, à valider** : 9,90 € (cadre ou plaque) + 3 € par texte ou photo + 2 € pour un nom en acrylique. Questions : ruban, colle, prix de la grande.
 
 ## 🛠️ MAQUETTE « CRÉEZ VOTRE SUPPORT DE TÉLÉPHONE » — 12/11/2026 (gérant, lien du générateur Atomm de xTool : « est-ce qu'on peut utiliser cet outil de création sur mon site ? … fais-moi une maquette pour la deuxième solution ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 (« Tout est bon… enregistre la maquette ») = VERSION 4 (lettre fleurie comprise), puis refaite à sa demande en v5 et v6 (formes Atomm, ci-dessous). ✅ **V6 ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette telle quelle »), artifact version 6 : c'est CELLE à reproduire au « applique », ne plus la modifier sans sa demande.** Au « applique » : à la commande, le site range UN fichier SVG à la taille réelle (rouge = découpe, noir = gravure) dans le dossier de la commande ; textes passés en tracés (comme `fichierGravure.js`), dessins en vectoriel (`public/vectoriel/`), photo en image. RIEN en ligne.
 - **v6 (12/11 soir, gérant : « tu crées pas toi-même, tu prends sur le site » ; « prends vraiment les formes qu'ils ont de découpe » ; « pas de tablettes,
