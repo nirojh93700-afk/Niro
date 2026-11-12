@@ -5,6 +5,8 @@
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
 ## 🦌 MAQUETTE « DÉCORATION À PRÉNOM » — ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (version 4, fil blanc), RIEN en ligne
+
+- **12/11/2026 soir — maquette « Suspension à prénoms »** (d'après « Create Your Stack » d'Atomm, 170 mm de haut au plus) : https://claude.ai/artifact/PpnA3aSf9gMaxuoSr5onFp. En attente de son avis : sens de « 170 mm », prix (12,90 € avec 2 prénoms, + 3 € par prénom), réglages laissés à la cliente, écritures. Rien en ligne.
 - Décoration à suspendre : enregistrée le même soir en version 14 (fil blanc), https://claude.ai/artifact/6Gs8LNkzpdvWMRDNZpE775.
 - https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga · générateur `tools/maquettes/prenom-createur.py` (détail dans CLAUDE.md). Peinture comme Atomm,
   deux pièces par prénom (fond + lettre), tout suit le prénom tapé. Ne plus la modifier sans sa demande.

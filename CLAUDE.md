@@ -1,4 +1,19 @@
-## 🧱 GÉNÉRATEUR ATOMM « CREATE YOUR STACK » — ANALYSÉ LE 12/11/2026 SOIR (gérant : lien donné, « Analyse bien ») — ANALYSE SEULE, AUCUNE MAQUETTE DEMANDÉE, RIEN en ligne
+## 🧱 GÉNÉRATEUR ATOMM « CREATE YOUR STACK » — ANALYSÉ LE 12/11/2026 SOIR (gérant : lien donné, « Analyse bien ») puis MAQUETTE « SUSPENSION À PRÉNOMS » (gérant : « 170mm ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- 🧱 **MAQUETTE v1 (12/11/2026 soir, sa réponse « 170mm » à « je prépare la maquette ? »)** : https://claude.ai/artifact/PpnA3aSf9gMaxuoSr5onFp ·
+  générateur `python3 tools/maquettes/empile-createur.py <page de base = sortie d'un autre créateur> docs/maquettes/assets/empile/formes.json <sortie>` ·
+  formes : `NODE_PATH=$(npm root -g) node tools/maquettes/empile-formes.cjs <paper-full.min.js> docs/maquettes/assets/empile/brut <formes.json>`
+  (les 21 formes à leur taille de travail : contour `o`, fenêtre `i`, boîtes, décalages du texte et de l'anneau). La page charge paper.js 0.12.17
+  (cdnjs, autorisé dans un artifact ; à servir par le site au « applique ») et refait le calcul d'Atomm : fond = formes pleines + anneau, devant = contour évidé.
+  **« 170 mm » = hauteur maximale de la suspension, anneau compris (MA lecture, à confirmer)** : au-delà les formes se rapprochent toutes seules
+  (jusqu'à 20 mm de chevauchement), puis le nombre de prénoms est limité (cœur : 6 ; « + Ajouter » grisé), bordure trop large = panier bloqué.
+  Parcours : ① prénoms (un champ par prénom, ↑ ↓ ✕, 14 lettres) ② forme (21, 8 visibles + « Voir les 13 autres », chaque vignette porte le prénom en
+  cours) ③ écriture (les 14 d'Atomm) ④ les 3 réglages d'Atomm (taille des prénoms 20–100 %, rapprocher 0–20 mm, bordure du fond 100–140 %) ⑤ résumé.
+  Fil blanc, pas de 3D. Planche de l'atelier : fond à gauche, devant à droite, rouge = découpe, noir = prénoms (deux planches au-delà de 200 mm de large).
+  **Proposé par moi, à valider** : 12,90 € avec 2 prénoms, + 3 € par prénom en plus ; contreplaqué 3 mm pour les deux pièces ; les 3 réglages laissés à
+  la cliente ; 14 écritures d'Atomm. Garde-fou ajouté : la taille des prénoms ne dépasse jamais 85 % du pas (deux prénoms ne se touchent pas).
+  Vérifié Chromium 390 / 1280 : 3 cœurs = 140,16 mm (comme Atomm), 21 formes × 3 prénoms ≤ 170 mm, 6 prénoms = 169,7 mm et 24,90 €, 0 erreur, 0 débordement.
+  ⚠️ À 6 prénoms les cœurs se chevauchent tant qu'ils forment un ruban festonné (pareil chez Atomm au plus serré). ⚠️ La maquette « décoration à prénom »
+  (enregistrée) écrit ses lignes de résumé avec une classe sans style (`prc-sum-l` au lieu de `prc-sumrow`) : à corriger seulement s'il le demande.
 - Hôte `create-your-stack.generator.atommapps.com` (ajouté au réseau). Outil d'une seule page (28 Ko) + `paper.js` 0.12.17 (cdnjs, bloqué d'ici : servi en local au navigateur,
   `npm pack paper@0.12.17`). Relevé : `NODE_PATH=$(npm root -g) node tools/maquettes/empile-atomm-analyse.cjs <paper-full.min.js> <dossier de sortie>` (LEUR outil ouvert dans
   le navigateur). Formes d'origine : `docs/maquettes/assets/empile/brut/` (21 formes + 12 « -paths ») + `planche-formes-atomm.png`.
