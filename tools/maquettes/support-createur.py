@@ -300,6 +300,10 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 .sc-stage:not([data-3d="1"]) .sc-3dmsg{display:none}
 .sc-stage[data-vue=creation] .sc-tag{display:none}
 .sc-stage [hidden]{display:none!important}
+.sc-mur{position:absolute;left:clamp(10px,3%,22px);top:clamp(12px,3%,22px);width:clamp(62px,16%,104px);z-index:0;border:4px solid #9a7442;border-radius:2px;background:#fff;box-shadow:3px 4px 8px rgba(60,40,20,.22)}
+.sc-mur img{display:block;width:100%;height:auto}
+.sc-stage svg#scene{position:relative;z-index:1}
+.sc-stage[data-vue=photo] .sc-mur,.sc-stage[data-3d="1"] .sc-mur{display:none}
 .sc-pied{position:absolute;left:10px;bottom:10px;z-index:2;width:clamp(62px,15%,104px);background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:10px;padding:6px 6px 4px;text-align:center;font-size:.66rem;font-weight:700;color:var(--ink-soft);line-height:1.2}
 .sc-pied svg{display:block;width:100%;height:auto;margin-bottom:3px}
 .sc-pied path{fill:#e6cfa5;stroke:#9c6b3f;stroke-width:.6;fill-rule:evenodd}
@@ -809,6 +813,7 @@ page = f"""<title>Créateur support téléphone</title>
    <img class="sc-photo-g" id="grande" alt="Support téléphone en bois gravé">
    <button type="button" class="gallery-arrow gallery-arrow-prev" id="prec" aria-label="Photo précédente">‹</button>
    <button type="button" class="gallery-arrow gallery-arrow-next" id="suiv" aria-label="Photo suivante">›</button>
+   <div class="sc-mur" aria-hidden="true"><img src="__LOGO__" alt=""></div>
    <svg id="scene" viewBox="40 14 320 536" role="img" aria-label="Aperçu de votre support de téléphone"></svg>
    <div class="sc-vue" id="vueBtns"><button type="button" data-vue="2d" class="on">Face</button><button type="button" data-vue="3d">3D</button></div>
    <div class="sc-pied" id="piedVue" hidden><svg id="piedSvg"><path id="piedP"/></svg>Le pied, vu de dessus</div>
@@ -830,5 +835,6 @@ page = f"""<title>Créateur support téléphone</title>
 {footer}
 <script>{JS.replace("__DONNEES__", DONNEES)}</script>
 """
+page = page.replace("__LOGO__", LOGO, 1)
 open(sortie, "w", encoding="utf-8").write(page)
 print(f"{sortie} : {len(page) // 1024} Ko")
