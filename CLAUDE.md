@@ -1,3 +1,18 @@
+## 🧱 GÉNÉRATEUR ATOMM « CREATE YOUR STACK » — ANALYSÉ LE 12/11/2026 SOIR (gérant : lien donné, « Analyse bien ») — ANALYSE SEULE, AUCUNE MAQUETTE DEMANDÉE, RIEN en ligne
+- Hôte `create-your-stack.generator.atommapps.com` (ajouté au réseau). Outil d'une seule page (28 Ko) + `paper.js` 0.12.17 (cdnjs, bloqué d'ici : servi en local au navigateur,
+  `npm pack paper@0.12.17`). Relevé : `NODE_PATH=$(npm root -g) node tools/maquettes/empile-atomm-analyse.cjs <paper-full.min.js> <dossier de sortie>` (LEUR outil ouvert dans
+  le navigateur). Formes d'origine : `docs/maquettes/assets/empile/brut/` (21 formes + 12 « -paths ») + `planche-formes-atomm.png`.
+- **Ce que fait l'outil** : une « pile » à suspendre = UNE forme par prénom, empilées de haut en bas et soudées. **21 formes** : cœur, fleur, ornement, écusson, hexagone, diamant,
+  goutte, nuage, coquillage, cloche, sapin, boule, étoile, maison, maison à pignon (« canal »), feston, crâne, fantôme, cercle, ovale, œuf. **Deux pièces** : le FOND (toutes les
+  formes pleines soudées + l'anneau en haut, Ø 9 mm, trou 3,8 mm ; les prénoms sont GRAVÉS dessus) et le DEVANT (le même contour évidé = un cadre autour de chaque prénom), collé
+  sur le fond. Réglages : prénoms (un par ligne, sans limite, lignes vides ignorées) · 14 écritures (Arial, Fredoka, Twinkle Star, Sniglet, Grand Hotel, Luckiest Guy, Pacifico,
+  Courgette, Dancing Script, Montserrat, Patua One, Lobster Two, Special Elite, Viga) · taille du texte 20–100 % de la place (85 %), LA MÊME pour tous les prénoms (le plus long
+  commande) · espacement 0 à −20 mm (les formes se chevauchent : pas de 42 mm à 22 mm) · taille du fond 100–140 % (le fond dépasse et fait une bordure) · aperçu « Visual » /
+  « SVG's ». Export `stackdesign.svg` en mm : fond à gauche, cadre à droite, rouge = découpe, noir = texte (texte NON passé en tracés).
+- **Ce qu'il n'a PAS** : aucun choix de taille (largeur fixe par forme, 28 mm « canal » à 78 mm ovale ; cœur 56 mm), aucune matière ni couleur, pas de 3D, pas de dessin ni de photo,
+  une seule forme pour toute la pile. Mesures relevées (cœur, espacement 0) : 1 prénom ≈ 56 × 56 mm · 3 prénoms ≈ 56 × 140 mm · 8 prénoms ≈ 56 × 350 mm (dépasse la zone 200 mm).
+  À 190 mm de haut : 4 prénoms à l'espacement 0, 7 au plus serré.
+
 ## 🦌 MAQUETTE « CRÉEZ VOTRE DÉCORATION À PRÉNOM » (générateur « Personalized Holiday Name Ornament » d'Atomm) — 12/11/2026 SOIR (gérant : lien donné, « analyse bien le nouveau truc… il faut que ça soit fait correctement… tu me prépares comme pour cela ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») = VERSION 4 de l'artifact (v3 + fil d'accroche BLANC), RÉ-ENREGISTRÉE le 12/11 soir (« Enregistre les maquettes »), CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - **Artifact** https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (v4) · générateur `python3 tools/maquettes/prenom-createur.py <page de base = sortie d'un autre créateur, ex. arbre> docs/maquettes/assets/prenom/formes <sortie>`
   (index.html + formes/ publiés ensemble) · formes : `node tools/maquettes/prenom-atomm-releve.cjs` (LEUR outil ouvert dans le navigateur, hôte

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   height="519.44971"
+   width="466.89096"
+   version="1.1"
+   id="_x32_"
+   viewBox="0 0 298.81021 332.44781"
+   xml:space="preserve"
+   sodipodi:docname="ball.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs1" /><sodipodi:namedview
+   id="namedview1"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   inkscape:zoom="0.68412581"
+   inkscape:cx="2.1925792"
+   inkscape:cy="78.93285"
+   inkscape:current-layer="g2" />
+<style
+   type="text/css"
+   id="style1">
+	.st0{fill:#000000;}
+</style>
+<g
+   id="g2"
+   transform="matrix(0.72890853,0,0,0.72890853,-37.195473,-40.753357)">
+	<path
+   class="st0"
+   d="M 304.473,107.879 V 84.64 c 0,-11.596 -0.51846,-23.226944 -16.326,-26.559 -15.80754,-3.332056 -49.14792,-2.421385 -64.293,0 -15.14508,2.421385 -16.31,14.964 -16.31,26.559 v 23.231 C 117.726,129.66 51.029,210.526 51.029,307.033 51.029,420.24 142.805,512 256.004,512 c 113.191,0 204.967,-91.76 204.967,-204.967 0,-96.499 -66.697,-177.373 -156.498,-199.154 z"
+   id="path2"
+   sodipodi:nodetypes="cszzscsssc" />
+</g>
+</svg>
