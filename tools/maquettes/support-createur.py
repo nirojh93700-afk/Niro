@@ -104,6 +104,12 @@ for n in NUMS:
     f = os.path.join(PUB, "produits", (FICHIERS.get(n) or f"vin-motif-{n:02d}") + ".png")
     u, r = png_uri(f)
     DESSINS.append({"n": n, "src": u, "r": round(r, 3)})
+PHOTOS = []
+for u in re.findall(r'<div class="gallery-thumbs">(.*?)</div>', main, re.S)[0].split("<button")[1:]:
+    m = re.search(r'src="(/[^"]+)"', u)
+    if m and os.path.exists(os.path.join(PUB, m.group(1).lstrip("/"))):
+        PHOTOS.append(jpg_uri(os.path.join(PUB, m.group(1).lstrip("/")), w=900, q=80))
+assert PHOTOS, "aucune photo trouvée dans la galerie de la capture"
 EXEMPLE = jpg_uri(os.path.join(ROOT, "docs/maquettes/assets/marque-pages/exemples/portraits/couple.jpg"))
 
 POLICES = [
@@ -113,7 +119,7 @@ POLICES = [
     ["allura", "Allura", "'Allura',cursive"], ["pacifico", "Pacifico", "'Pacifico',cursive"],
 ]
 
-DONNEES = json.dumps({"dessins": DESSINS, "exemple": EXEMPLE, "polices": POLICES,
+DONNEES = json.dumps({"photos": PHOTOS, "dessins": DESSINS, "exemple": EXEMPLE, "polices": POLICES,
                       "prix": {"texte": P_TEXTE, "dessin": P_DESSIN, "photo": P_PHOTO, "plus": 3}}, ensure_ascii=False)
 
 CSS_MAQ = r"""
@@ -129,6 +135,16 @@ main>nav.container{padding-left:clamp(16px,4vw,40px)!important;padding-right:cla
 background:linear-gradient(180deg,#f4efe6 0%,#efe8dc 58%,#e3d6c0 58.2%,#eadfcb 100%)}
 .sc-stage svg{display:block;width:100%;height:auto;max-height:max(300px,min(620px,calc(100vh - var(--sc-top,0px) - 120px)));touch-action:pan-y}
 .sc-stage .sc-el{cursor:grab;touch-action:none}
+.sc-stage .sc-photo-g{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.sc-stage[data-vue=photo] svg,.sc-stage[data-vue=photo] .sc-tag{display:none}
+.sc-stage[data-vue=creation] .sc-photo-g{display:none}
+.sc-stage .gallery-arrow-prev{left:10px}.sc-stage .gallery-arrow-next{right:10px}
+.gallery-thumbs .sc-thc{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#fbf3df;border:1.5px dashed #c9b88a;
+color:#7c6120;font:inherit;font-size:.58rem;font-weight:700;line-height:1.1;text-align:center}
+.gallery-thumbs .sc-thc svg{width:24px;height:30px}
+.gallery-thumbs .sc-thc svg path{fill:#e9d6b4;stroke:#9c6b3f;stroke-width:6}
+.gallery-thumbs .sc-thc.active{border-style:solid}
+.gallery-thumbs button img{width:100%;height:100%;object-fit:cover;display:block}
 .sc-stage .sc-el:active{cursor:grabbing}
 .sc-tag{position:absolute;left:10px;top:10px;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
 background:rgba(43,38,32,.82);color:#fff;border-radius:999px;padding:5px 10px}
@@ -193,9 +209,11 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 @media (max-width:900px){
  .sc-layout{display:block;padding-top:14px}
  .sc-left{display:contents}
+ .sc-stage[data-vue=photo]{position:relative!important;top:auto!important;z-index:auto!important;border-radius:var(--radius);margin:0;border:1px solid var(--line);box-shadow:none}
  .sc-stage{position:sticky;top:var(--sc-top,0px);z-index:20;border-radius:0 0 var(--radius) var(--radius);margin:0 -16px;border-left:0;border-right:0;box-shadow:0 8px 18px rgba(43,38,32,.12)}
  .sc-stage svg{max-height:36vh}
  .sc-aide{margin-bottom:14px}
+ .gallery-thumbs{margin-bottom:4px}
  .sc-agrid{grid-template-columns:1fr}
  .sc-formes{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
@@ -332,6 +350,7 @@ function dessiner(){
    el('rect',{x:b.x-5,y:b.y-5,width:b.width+10,height:b.height+10,rx:6,fill:'none',stroke:'#a98935','stroke-width':1.6,'stroke-dasharray':'6 5','pointer-events':'none'},poignee)}
  });
  fichier();liste();resume();
+ if(G.commence){var v=document.querySelector('.sc-thc path');if(v)v.setAttribute('d',forme().d)}
 }
 
 /* ---- glisser ---- */
@@ -350,7 +369,7 @@ svg.addEventListener('pointerup',lacher);svg.addEventListener('pointercancel',la
 (function(){var h='';FORMES.forEach(function(f){
  h+='<button type="button" class="sc-forme" data-f="'+f.id+'"><svg viewBox="60 20 280 440"><path d="'+f.d+'"/></svg>'+f.nom+'</button>'});
  $('formes').innerHTML=h;
- $('formes').addEventListener('click',function(ev){var b=ev.target.closest('.sc-forme');if(!b)return;S.forme=b.getAttribute('data-f');majFormes();S.els.forEach(borner);if(chevauche())ranger();dessiner()})})();
+ $('formes').addEventListener('click',function(ev){var b=ev.target.closest('.sc-forme');if(!b)return;S.forme=b.getAttribute('data-f');majFormes();voirCreation();S.els.forEach(borner);if(chevauche())ranger();dessiner()})})();
 /* la forme change : si deux éléments se retrouvent l'un sur l'autre, on les range du haut vers le bas */
 function larg(e){return e.type==='texte'?200:taille(e).w}
 function chevauche(){for(var i=0;i<S.els.length;i++)for(var j=i+1;j<S.els.length;j++){var a=S.els[i],b=S.els[j];
@@ -373,7 +392,7 @@ function place(o){ /* la place la plus libre : un texte va d'abord en bas, une i
 function ajouter(o){o.id=++S.seq;o.s=o.s||1;
  if(o.type!=='texte'&&S.els.length){o.s=.7}
  var p=place(o);o.x=p.x;o.y=p.y;
- S.els.push(o);S.sel=o.id;S.panneau=null;panneau();dessiner()}
+ S.els.push(o);S.sel=o.id;S.panneau=null;panneau();voirCreation();dessiner()}
 function polsHtml(courante){var h='<div class="prc-pols">';D.polices.forEach(function(p){
  h+='<button type="button" class="prc-pol'+(p[0]===courante?' on':'')+'" data-pol="'+p[0]+'" style="font-family:'+p[2].replace(/"/g,"'")+'">'+p[1]+'</button>'});return h+'</div>'}
 function panneau(){
@@ -482,13 +501,31 @@ function sousEntete(){var h=document.querySelector('header'),t=0;
  if(h&&/sticky|fixed/.test(getComputedStyle(h).position))t=h.offsetHeight;
  document.documentElement.style.setProperty('--sc-top',t+'px')}
 sousEntete();window.addEventListener('resize',sousEntete);window.addEventListener('load',sousEntete);
+/* ---- la galerie : vos photos, puis « Votre création » dès qu'elle commence ---- */
+var G={vue:'photo',i:0,commence:false};
+function vignettes(){
+ var h='';
+ if(G.commence)h+='<button type="button" class="sc-thc'+(G.vue==='creation'?' active':'')+'" data-v="c" aria-label="Voir votre création"><svg viewBox="60 20 280 440"><path d="'+forme().d+'"/></svg>Votre<br>création</button>';
+ D.photos.forEach(function(u,i){h+='<button type="button" class="'+(G.vue==='photo'&&G.i===i?'active':'')+'" data-v="'+i+'" aria-label="Voir la photo '+(i+1)+'"><img src="'+u+'" alt=""></button>'});
+ $('vignettes').innerHTML=h;
+ $('stage').setAttribute('data-vue',G.vue);
+ $('grande').src=D.photos[G.i];
+ $('prec').hidden=$('suiv').hidden=G.vue!=='photo';
+ $('aide').textContent=G.vue==='creation'?'Faites glisser un élément pour le déplacer. Aperçu indicatif : sur le bois, la gravure ressort en brun.'
+  :"Aperçu indicatif : sur le bois, la gravure ressort en brun, comme sur la photo d'exemple."+(G.commence?' Touchez « Votre création » pour revenir à votre support.':'');
+}
+function voirCreation(){G.commence=true;G.vue='creation';vignettes()}
+$('vignettes').addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;var v=b.getAttribute('data-v');
+ if(v==='c'){G.vue='creation'}else{G.vue='photo';G.i=+v}vignettes();if(G.vue==='creation')dessiner()});
+$('prec').addEventListener('click',function(){G.i=(G.i+D.photos.length-1)%D.photos.length;vignettes()});
+$('suiv').addEventListener('click',function(){G.i=(G.i+1)%D.photos.length;vignettes()});
 /* ---- départ ---- */
 $('lplus').textContent=eur(D.prix.plus);
-majFormes();panneau();dessiner();
+majFormes();panneau();vignettes();dessiner();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(dessiner);
 /* logo : s'il ne charge pas dans l'aperçu, la case est masquée (sur le site il s'affiche) */
 [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
-window.scDemo=function(){S.forme='arche';S.els=[];S.seq=0;ajouter({type:'photo',src:D.exemple,nom:'exemple'});ajouter({type:'texte',texte:'Camille & Paul',police:'great-vibes'});S.sel=null;majFormes();dessiner()};
+window.scDemo=function(){voirCreation();S.forme='arche';S.els=[];S.seq=0;ajouter({type:'photo',src:D.exemple,nom:'exemple'});ajouter({type:'texte',texte:'Camille & Paul',police:'great-vibes'});S.sel=null;majFormes();dessiner()};
 })();
 """
 
@@ -502,8 +539,13 @@ page = f"""<title>Créateur support téléphone</title>
 {fil}
 <div class="container"><div class="product-layout sc-layout">
  <div class="sc-left">
-  <div class="sc-stage"><span class="sc-tag">Votre support, en direct</span><svg id="scene" viewBox="40 14 320 536" role="img" aria-label="Aperçu de votre support de téléphone"></svg></div>
-  <p class="sc-aide">Faites glisser un élément pour le déplacer. Aperçu indicatif : sur le bois, la gravure ressort en brun.</p>
+  <div class="sc-stage" id="stage" data-vue="photo"><span class="sc-tag">Votre support, en direct</span>
+   <img class="sc-photo-g" id="grande" alt="Support téléphone en bois gravé">
+   <button type="button" class="gallery-arrow gallery-arrow-prev" id="prec" aria-label="Photo précédente">‹</button>
+   <button type="button" class="gallery-arrow gallery-arrow-next" id="suiv" aria-label="Photo suivante">›</button>
+   <svg id="scene" viewBox="40 14 320 536" role="img" aria-label="Aperçu de votre support de téléphone"></svg></div>
+  <div class="gallery-thumbs" id="vignettes"></div>
+  <p class="sc-aide" id="aide">Aperçu indicatif : sur le bois, la gravure ressort en brun, comme sur la photo d'exemple.</p>
  </div>
  <div class="product-info">
   <div class="breadcrumb"><a href="#">Boutique</a> / <a href="#">Déco &amp; Maison</a></div>

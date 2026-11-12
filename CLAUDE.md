@@ -9,6 +9,10 @@
 - Prix LUS dans la fiche en ligne : texte 12,90 · dessin 14,90 · photo 19,90, chaque élément en plus +3 € (photo + texte = 22,90 comme aujourd'hui).
 - À trancher par lui : les formes à vendre et leur prix, la lettre fleurie (absente de la maquette), les autres produits en bois où réutiliser l'outil.
   Vérifié Chromium 390 / 1280 : 0 erreur JS, 0 débordement, 6 formes sans chevauchement, glisser, modifier, retirer.
+- **v2 (12/11, « Et les photos qu'on a déjà mises sur le site ? » → « oui ajoute-le »)** : la galerie montre d'abord les VRAIES photos de la fiche
+  (lues dans la capture, flèches + vignettes) ; dès que la cliente choisit une forme ou ajoute un élément, la grande image devient son aperçu et une
+  vignette « Votre création » (silhouette de la forme) s'ajoute en tête ; elle passe de l'un à l'autre sans rien perdre. Sur téléphone, seule la création
+  reste collée sous l'en-tête. ⚠️ Pas de vraie photo pour les formes autres que « Classique » : une par forme à prévoir.
 
 ## 🧰 LOT DU 09/11/2026 SOIR — SITE 1, 4, 7, 8, 9 + GESTION 1 À 6 (gérant : « tu me fais ça », numéros choisis dans ma liste) — CONSTRUIT SUR LA BRANCHE DE TRAVAIL `claude/cool-maxwell-qh1kcw`, PAS EN LIGNE : attendre son « mets en ligne » (puis fusion vers `claude/site-product-overview-1t2de`)
 - **Site** : ① provenance des commandes (`src/lib/provenance.js`, `ProvenanceCapture.jsx`, `metadata.prov` → `order.provenance`, pastille « Venue de » + filtre dans la file,
