@@ -4,6 +4,12 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
+## 🦌 MAQUETTE « DÉCORATION À PRÉNOM » — ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (version 3), RIEN en ligne
+- https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga · générateur `tools/maquettes/prenom-createur.py` (détail dans CLAUDE.md). Peinture comme Atomm,
+  deux pièces par prénom (fond + lettre), tout suit le prénom tapé. Ne plus la modifier sans sa demande.
+- **À valider par lui avant tout « applique »** : prix (12,90 € · + 2 / + 4 € selon la taille · + 4 € peinte) · tailles (lettre 6 / 8 / 10 cm) ·
+  garder ou non « Bois naturel » · réglages d'Atomm non proposés (bordure, taille du décor, largeur du nez, anneau, taille du prénom) · vue 3D (absente).
+
 ## ✎ BOUTON « CORRIGER » DES COMMANDES — CAS 2, POUR PLUS TARD (gérant, 12/11/2026 soir : « le 2 garde en mémoire, on verra plus tard »)
 - Le bouton « Corriger dans l'outil » existe pour le support de téléphone, l'arbre de vie et la décoration (construit le 12/11, pas poussé,
   et visible seulement quand ces trois produits seront en vente). **Reste à faire sur sa demande** : le même bouton pour les produits déjà
