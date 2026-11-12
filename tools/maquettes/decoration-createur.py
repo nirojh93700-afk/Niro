@@ -336,7 +336,8 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 .sc-mat{display:flex;flex-direction:column;align-items:center;gap:6px;padding:9px 4px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);cursor:pointer;font:inherit;font-size:.72rem;font-weight:600;color:var(--ink);text-align:center;line-height:1.2}
 .sc-mat i{width:38px;height:38px;border-radius:9px;border:1px solid rgba(0,0,0,.12)}
 .sc-mat.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
-.sc-deco .sc-stage svg#scene,.sc-stage.sc-deco svg#scene{max-height:max(300px,min(560px,calc(100vh - var(--sc-top,0px) - 120px)))}
+@media (min-width:901px){.sc-stage.sc-deco svg#scene{max-height:max(300px,min(560px,calc(100vh - var(--sc-top,0px) - 120px)))}}
+@media (max-width:900px){.sc-stage.sc-deco svg#scene{max-height:34vh}.sc-formes-deco{max-height:none;overflow:visible}}
 @media (max-width:420px){.sc-ajout{font-size:.76rem;padding:10px 4px}.sc-forme{font-size:.72rem}.sc-taille small{display:none}.sc-motif{font-size:.68rem}}
 """
 
