@@ -249,7 +249,7 @@ function trou(g){ /* le trou de l'anneau : le plus petit contour du fond */
   var w=x1-x0,h=y1-y0;if(w<9&&h<9&&Math.abs(w-h)<1&&(!best||w<best.w))best={x:(x0+x1)/2,y:(y0+y1)/2,w:w}});
  g._t=best;return best}
 function ornement(n,opt){var g=forme(n);if(!g)return'';opt=opt||{};var couleur=S.finition==='couleur',h='',t=trou(g);
- if(opt.ruban&&t)h+='<path d="M'+t.x+','+(t.y-1)+'L'+t.x+','+(g.b[1]-60)+'" stroke="#b3202a" stroke-width="1.1" fill="none"/>';
+ if(opt.ruban&&t){var fil='M'+t.x+','+(t.y-1)+'L'+t.x+','+(g.b[1]-60);h+='<path d="'+fil+'" stroke="#b9a788" stroke-width="1.7" fill="none" opacity=".75"/><path d="'+fil+'" stroke="#ffffff" stroke-width="1.1" fill="none"/>'}
  if(!opt.plat)h+='<path d="'+g.f+'" fill="#5b4326" opacity=".28" transform="translate(.9 1.6)"/>';
  h+='<path d="'+g.f+'" fill="url(#g-bois)" stroke="#a9834f" stroke-width=".25"/>';
  if(!opt.plat)h+='<path d="'+g.d+'" fill="#6b5433" opacity=".3" transform="translate(.4 .9)"/>';

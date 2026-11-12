@@ -507,7 +507,8 @@ svg.innerHTML='<defs>'
  +'<filter id="flou"><feGaussianBlur stdDeviation="9"/></filter>'
  +'<filter id="pieceF" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="1.3" dy="1.8" stdDeviation="1.1" flood-color="#2b1d0e" flood-opacity=".45"/></filter>'
  +'<clipPath id="decoupe"><path id="decoupeP" clip-rule="evenodd"/></clipPath></defs>'
- +'<path id="ruban" fill="none" stroke="#b3262d" stroke-width="3" stroke-linecap="round"/>'
+ +'<path id="rubanO" fill="none" stroke="#b9a788" stroke-width="4.4" stroke-linecap="round" opacity=".75"/>'
+ +'<path id="ruban" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>'
  +'<ellipse id="ombreSol" cx="200" cy="540" rx="120" ry="10" fill="#3a2a16" opacity=".16" filter="url(#flou)"/>'
  +'<path id="ombreP" fill="#6b4a25" opacity=".3" fill-rule="evenodd"/>'
  +'<path id="dos" fill="url(#bois)" fill-rule="evenodd"/><path id="dosV" fill="#fff" fill-rule="evenodd" filter="url(#veine)" opacity=".5"/>'
@@ -532,7 +533,7 @@ function plaque(){ /* classique = le cadre découpé (intérieur vide) ; pleine 
  var b=hexRgb(m.c[1]);['sR','sG','sB'].forEach(function(id,i){$(id).setAttribute('tableValues',g[i]+' '+((g[i]+b[i])/2).toFixed(3)+' '+b[i])});
  var top=[0,1e9];poly(f.d)[0].forEach(function(p){if(p[1]<top[1])top=p});
  var rx=ox()+top[0]*k()*sx(),ry=oy()+top[1]*k()*sy()+8;
- $('ruban').setAttribute('d','M'+rx+' 14L'+rx+' '+ry);
+ $('ruban').setAttribute('d','M'+rx+' 14L'+rx+' '+ry);$('rubanO').setAttribute('d','M'+rx+' 14L'+rx+' '+ry);
  $('ombreSol').setAttribute('cy',oy()+S.H*k()+12)}
 
 function limites(){var w=S.W*k(),h=S.H*k();return{x0:ox()+w*.02,x1:ox()+w*.98,y0:oy()+h*.1,y1:oy()+h*.98}}
@@ -1025,7 +1026,7 @@ V3.maj=function(){if(!V3.actif)return;
  var g=new THREE.Group();g.add(porte);
  var tout=poly(f.d).map(function(p){return p.map(function(q){return [q[0]*a,H-q[1]*b]})});
  var top=[0,-1e9];tout[0].forEach(function(p){if(p[1]>top[1])top=p});
- var rub=new THREE.Mesh(new THREE.CylinderGeometry(.9,.9,200,8),new THREE.MeshStandardMaterial({color:0xb3262d}));rub.position.set(top[0]-W/2,top[1]-H/2+96,0);g.add(rub);
+ var rub=new THREE.Mesh(new THREE.CylinderGeometry(.9,.9,200,8),new THREE.MeshStandardMaterial({color:0xffffff,roughness:.55}));rub.position.set(top[0]-W/2,top[1]-H/2+96,0);g.add(rub);
  if(V3.g){V3.sc.remove(V3.g);V3.g.traverse(function(o){if(o.geometry)o.geometry.dispose()})}
  V3.g=g;V3.sc.add(g);
  var t=Math.max(W,H);V3.cam.position.set(0,t*.08,t*2.75);V3.cam.lookAt(0,0,0);

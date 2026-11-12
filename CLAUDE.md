@@ -1,5 +1,5 @@
-## 🦌 MAQUETTE « CRÉEZ VOTRE DÉCORATION À PRÉNOM » (générateur « Personalized Holiday Name Ornament » d'Atomm) — 12/11/2026 SOIR (gérant : lien donné, « analyse bien le nouveau truc… il faut que ça soit fait correctement… tu me prépares comme pour cela ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») = VERSION 3 de l'artifact (peinture, 2 pièces par prénom, tout suit le prénom tapé), CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
-- **Artifact** https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (v3) · générateur `python3 tools/maquettes/prenom-createur.py <page de base = sortie d'un autre créateur, ex. arbre> docs/maquettes/assets/prenom/formes <sortie>`
+## 🦌 MAQUETTE « CRÉEZ VOTRE DÉCORATION À PRÉNOM » (générateur « Personalized Holiday Name Ornament » d'Atomm) — 12/11/2026 SOIR (gérant : lien donné, « analyse bien le nouveau truc… il faut que ça soit fait correctement… tu me prépares comme pour cela ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») = VERSION 4 de l'artifact (v3 + fil d'accroche BLANC, 12/11 soir), CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
+- **Artifact** https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (v4) · générateur `python3 tools/maquettes/prenom-createur.py <page de base = sortie d'un autre créateur, ex. arbre> docs/maquettes/assets/prenom/formes <sortie>`
   (index.html + formes/ publiés ensemble) · formes : `node tools/maquettes/prenom-atomm-releve.cjs` (LEUR outil ouvert dans le navigateur, hôte
   `personalized-holiday-name-ornament.generator.atommapps.com` ajouté au réseau ; à lancer depuis un dossier qui a `brut/`) → `python3 -I tools/maquettes/prenom-atomm-donnees.py <brut> <formes>`
   (16 fichiers = 4 modèles × 4 polices d'initiale, 26 lettres, 2,6 Mo).
@@ -165,6 +165,10 @@
 - **À valider** : contour de la maquette = aperçu (vrais tracés soudés à la construction) ; dessins d'Atomm repris (sa décision, comme le support).
 
 ## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCORATION À SUSPENDRE » (générateur « Ornament » d'Atomm) — 12/11/2026 (gérant : « fais la même chose pour cette création… tout comme sur le site ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR = VERSION 6 de l'artifact (v5 + noms jamais coupés en Classique), CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
+- 🤍 **FIL D'ACCROCHE BLANC (12/11/2026 soir, gérant : « les fils qui sont accrochés, tu peux les mettre en blanc, pas rouge, pour ça et l'autre maquette déco Noël »)** :
+  décoration à suspendre = **VERSION 14** de l'artifact https://claude.ai/artifact/6Gs8LNkzpdvWMRDNZpE775 (v13 + fil blanc, de face `#ruban` + liseré `#rubanO`, et en 3D) ;
+  décoration à prénom = version 4. ⛔ Plus de fil rouge dans les créateurs. L'outil de Gestion (`public/atelier-outils/atelier-decoration.html`) garde encore le fil rouge :
+  il passera au blanc à sa prochaine régénération (`retouche-site.py`), pas refait ce soir (non demandé).
 - ✅✅ **ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« tu enregistres les maquettes, les trois maquettes et dans admin ») = VERSION 13 de l'artifact**
   (v12 + bouton « Tout recaler sur le cadre » : chaque pièce mal posée retrouve une place collée, `recalerTout` ; + « Plan de collage » numéroté dans
   la partie atelier, `plan()`, mêmes numéros que le fichier). C'est CELLE à reproduire au « applique », elle remplace la v6.
