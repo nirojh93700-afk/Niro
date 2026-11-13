@@ -4,6 +4,11 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
+## 🧰 « L'ATELIER », UN SEUL LOGICIEL (13/11/2026 soir) — démonstration v1, RIEN en ligne
+- https://claude.ai/artifact/S43Tkb7YKhWEb1B4JoHkh4 : 8 produits dans une seule page + « Ma machine » réglée une fois (suivie par l'outil Lettre seulement pour l'instant).
+- En attente de son avis : la liste des produits, la mise dans Gestion, les 4 créateurs à passer en vrais outils d'atelier, l'ouverture de chaque outil au grand format (un par un).
+- Lettre v4 : signes en dessins gravés, horloge gravée (ou ajourée avec détrompeur), vraie règle, nuages / cœurs / lune, places échangées, repères là où il y a de la place : à confirmer par lui.
+
 ## 🔠 OUTIL « LETTRE À INCRUSTER » (13/11/2026) — démonstration à essayer, RIEN en ligne
 - https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw : toutes les lettres, 12 signes, chaque pièce réglable, fichiers pour la machine (fond, dessus à emplacements, pièces blanches, gravure).
 - **v2 (13/11)** : 48 animaux détaillés (collection libre Noto de Google) + la BOÎTE sous la lettre (fond à encoches, bande à fentes en morceaux selon la machine, couronne, cale du couvercle, dos), lettres ET chiffres.

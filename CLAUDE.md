@@ -1,3 +1,17 @@
+## 🧰 « L'ATELIER » : UN SEUL LOGICIEL POUR TOUTES LES CRÉATIONS — 13/11/2026 soir (gérant : « rassembler toutes les maquettes pour que ça fasse un seul logiciel, pas une dizaine d'outils… je choisis Noël, le support de téléphone, je paramètre, dans le même logiciel » ; « plus tard, avec un grand format, pouvoir changer les tailles de gravure et de découpe ») — DÉMONSTRATION v1, RIEN en ligne, PAS dans Gestion
+- **Artifact** https://claude.ai/artifact/S43Tkb7YKhWEb1B4JoHkh4 (v1, capacité `downloads`, 41 fichiers, 26 Mo) · `python3 tools/maquettes/atelier-unique.py <demo> <lettre complet> <prenom> <suspension.html> <fleur.html>
+  <maison.html> <sortie>` (`<demo>` = sortie de `editeur-demo.py` ; les autres = sorties des générateurs de chaque créateur ; publier `index.html` + tous les fichiers du dossier, `root` = le dossier).
+- **Ce que c'est** : un accueil « Que voulez-vous fabriquer ? » (8 produits) + « ☰ Produits » pour y revenir ; chaque outil s'ouvre dans la même page (cadre), un outil déjà ouvert garde ses réglages.
+  ① Lettre ou chiffre à incruster + boîte (fichiers dans l'outil) · ② Support de téléphone ③ Arbre de vie ④ Décoration à suspendre = les trois outils de Gestion (éditeur pièce par pièce, bouton
+  « Fabriquer les fichiers » en haut) · ⑤ Décoration à prénom ⑥ Suspension à prénoms ⑦ Fleur à prénom ⑧ Maisonnette = les maquettes ENREGISTRÉES, ouvertes telles quelles (NON modifiées :
+  leurs planches sont en bas de la page, avec l'habillage du site).
+- **« Ma machine »** (accueil) : zone, trait de coupe, jeu, épaisseur, réglés UNE fois, gardés sur l'appareil (`niv-atelier-machine`). ⚠️ Aujourd'hui seul l'outil « Lettre » suit ce réglage (essayé :
+  600 × 400 → bande de la boîte en 2 morceaux). Les 7 autres ont des tailles FIXES pensées pour 200 × 200 (arbre 18 cm, fleur 18 cm, suspension 170 mm, décoration 7 / 9 / 11 cm…) : les ouvrir au
+  grand format = un travail par outil, à faire sur son accord (et ce sont ses décisions de taille enregistrées).
+- Vérifié Chromium 390 / 1280 : 8 produits ouverts, 0 erreur, 0 débordement, machine suivie, « Fabriquer les fichiers » du support, retour à l'accueil.
+- **Proposé par moi, à valider** : la liste et l'ordre des produits · mettre ce logiciel dans Gestion (un seul écran « Atelier » à la place de Tests → Retoucher) · passer les outils ⑤ à ⑧ en vrais
+  outils d'atelier (sans l'habillage du site, fichiers à télécharger) · ouvrir chaque outil au grand format.
+
 ## 🔠 OUTIL DE L'ATELIER « LETTRE À INCRUSTER » — 13/11/2026 (gérant, photo d'une lettre « K » de naissance vue sur Instagram : « tu me crées un petit logiciel… dans admin… le blanc en plusieurs morceaux et les emplacements pour que je l'intègre après sur le K » ; « c'est un exemple, il faut les autres lettres, tous les zodiaques, que je personnalise ») — DÉMONSTRATION À ESSAYER, RIEN en ligne, PAS encore dans Gestion
 - **Artifact** https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw (v2 du 13/11 = animaux + boîte, voir plus bas ; capacité `downloads`) · `python3 tools/maquettes/lettre-incrustee.py <clipper.js> <opentype.min.js> <sortie.html> [complet]`
   (`npm pack clipper-lib@6.4.2 opentype.js@1.3.4`, écrites DANS la page ; « complet » = page entière pour Gestion plus tard) · calcul `tools/maquettes/lettre-incrustee.js`
@@ -34,6 +48,17 @@
   · Vérifié Chromium 390 / 1280 : 26 lettres + 10 chiffres × 3 formes sans erreur (calcul ≤ 0,4 s), 48 animaux, 26 gestes de la boîte + les 28 d'avant, 380 mm sur 600 × 400, 0 débordement.
   · **Proposé par moi, à valider** : hauteur 40 mm · rayon 8 mm · fentes tous les 2 mm (Atomm : 1,5) · rebord 5 mm · la boîte suit la lettre seule · trous de lettre fermés · dos plein coché.
     ⚠️ À essayer sur SON bois avant tout : l'essai de pliage, puis une boîte entière (fil du bois dans le sens des fentes). L'Arc Box d'Atomm (boîte rectangulaire à coins ronds) n'est PAS repris.
+- 🧰 **v3 / v4 (13/11/2026 soir, ses retours)** — même artifact, VERSION 4 :
+  · **Signe = DESSIN gravé** (bélier, taureau, jumeaux, crabe, lion, ange pour la Vierge, balance, scorpion, arc, chèvre, amphore, poisson : `SIGNE_DESSIN`, même collection libre) dans un rond
+    blanc d'une seule pièce ; « En symbole découpé » reste au choix (`S.signeStyle`). **Places échangées** : le signe en bas à droite (à la place de l'animal), l'animal en haut à droite.
+  · **Horloge** (« comment je sais où coller pour 10 heures ? ») : par défaut **cadran blanc d'une seule pièce, tour, traits, 12 · 3 · 6 · 9 et aiguilles GRAVÉS** à l'heure tapée (rien à orienter) ;
+    « Ajourée comme le modèle » reste au choix, avec un détrompeur (grand trait à 12, trait moyen à 3 : le rond de couleur ne rentre que dans un sens), dit dans la liste (`S.horloge`).
+  · **Règle** comme une vraie : un trait gravé par millimètre, plus long à 5 et à 10, chiffres 0 · 1 · 2. ⛔ Règle du gérant : **tous les détails sont GRAVÉS**, pas découpés.
+  · **Petits décors** (`S.decor`) : étoiles · nuages · cœurs · une lune et des étoiles · mélange. La liste « Animal ou dessin » a 10 dessins de plus (bébé emmailloté, biberon, couronne, ballon,
+    arc-en-ciel, fleur, soleil, cadeau, trèfle, empreintes de pattes) : 58 au total, `animaux.ttf` = 69 dessins.
+  · **Repères de la boîte** placés là où il y a de la place : sur la bande, au milieu de la plus grande partie sans fentes (sinon en petit sur le premier tenon, caché une fois emboîté) ;
+    sur le fond, en grand, vers le milieu de la lettre. (MA lecture de « graver où il y a de la place pour que ce soit plus sympa emboîté », à confirmer.)
+  · L'outil écoute `niv-machine` (zone, trait, jeu, épaisseur) et envoie `niv-enregistrer` quand il est ouvert dans « L'atelier ». Essais : 54 gestes sur 54, 12 signes, 58 dessins.
 - **Suite, sur son mot** : le mettre dans Gestion (ex. Tests / Atelier, `public/atelier-outils/`), autres animaux, autres modèles (« à chaque fois que je te donnerai des modèles » :
   un modèle de plus dans la liste « Modèle » du même outil), essai de découpe pour régler le jeu.
 

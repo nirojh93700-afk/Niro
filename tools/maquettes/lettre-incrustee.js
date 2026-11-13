@@ -65,9 +65,9 @@ var SIGNES = ['Capricorne', 'Verseau', 'Poissons', 'Bélier', 'Taureau', 'Gémea
 var SIGNE_CODE = [0x2651, 0x2652, 0x2653, 0x2648, 0x2649, 0x264a, 0x264b, 0x264c, 0x264d, 0x264e, 0x264f, 0x2650];
 var ELS = [
   { id: 'date', nom: 'Date', grp: 1, scan: 'hg' }, { id: 'horloge', nom: 'Horloge', grp: 1, scan: 'hg' }, { id: 'heure', nom: 'Heure', grp: 1, scan: 'hg' },
-  { id: 'signe', nom: 'Signe', scan: 'hd' },
+  { id: 'signe', nom: 'Signe', scan: 'bd' },
   { id: 'taille', nom: 'Taille', grp: 2, scan: 'bg' }, { id: 'regle', nom: 'Règle', grp: 2, scan: 'bg' }, { id: 'pieds', nom: 'Pieds', grp: 2, scan: 'bg' }, { id: 'poids', nom: 'Poids', grp: 2, scan: 'bg' },
-  { id: 'animal', nom: 'Animal', scan: 'bd' }, { id: 'libre', nom: 'Texte libre', scan: 'loin' },
+  { id: 'animal', nom: 'Animal', scan: 'hd' }, { id: 'libre', nom: 'Texte libre', scan: 'loin' },
   { id: 'et1', nom: 'Grande étoile', scan: 'loin', d: 16 }, { id: 'et2', nom: 'Étoile 2', scan: 'loin', d: 10 }, { id: 'et3', nom: 'Étoile 3', scan: 'loin', d: 10 },
   { id: 'et4', nom: 'Étoile 4', scan: 'loin', d: 9 }, { id: 'et5', nom: 'Étoile 5', scan: 'loin', d: 9 }, { id: 'et6', nom: 'Étoile 6', scan: 'loin', d: 8 }];
 /* 48 animaux : dessins de la police Noto Emoji de Google (licence libre OFL), gardés dans animaux.ttf */
@@ -77,13 +77,24 @@ var ANIMAUX = [['chat', 'Chat', 0x1F408], ['chat-tete', 'Chat (tête)', 0x1F431]
   ['licorne', 'Licorne', 0x1F984], ['cheval', 'Cheval', 0x1F40E], ['mouton', 'Mouton', 0x1F411], ['vache', 'Vache', 0x1F404], ['cochon', 'Cochon', 0x1F416], ['poussin', 'Poussin', 0x1F425], ['canard', 'Canard', 0x1F986],
   ['hibou', 'Hibou', 0x1F989], ['cygne', 'Cygne', 0x1F9A2], ['pingouin', 'Pingouin', 0x1F427], ['baleine', 'Baleine', 0x1F40B], ['dauphin', 'Dauphin', 0x1F42C], ['tortue', 'Tortue', 0x1F422], ['papillon', 'Papillon', 0x1F98B],
   ['coccinelle', 'Coccinelle', 0x1F41E], ['abeille', 'Abeille', 0x1F41D], ['escargot', 'Escargot', 0x1F40C], ['grenouille', 'Grenouille', 0x1F438], ['dinosaure', 'Dinosaure', 0x1F995], ['trex', 'Tyrannosaure', 0x1F996],
-  ['paon', 'Paon', 0x1F99A], ['flamant', 'Flamant rose', 0x1F9A9], ['loutre', 'Loutre', 0x1F9A6], ['paresseux', 'Paresseux', 0x1F9A5], ['lama', 'Lama', 0x1F999], ['kangourou', 'Kangourou', 0x1F998], ['poisson', 'Poisson', 0x1F420], ['pieuvre', 'Pieuvre', 0x1F419]];
+  ['paon', 'Paon', 0x1F99A], ['flamant', 'Flamant rose', 0x1F9A9], ['loutre', 'Loutre', 0x1F9A6], ['paresseux', 'Paresseux', 0x1F9A5], ['lama', 'Lama', 0x1F999], ['kangourou', 'Kangourou', 0x1F998], ['poisson', 'Poisson', 0x1F420], ['pieuvre', 'Pieuvre', 0x1F419],
+  ['bebe', 'Bébé emmailloté', 0x1F476], ['biberon', 'Biberon', 0x1F37C], ['couronne', 'Couronne', 0x1F451], ['ballon', 'Ballon', 0x1F388], ['arcenciel', 'Arc-en-ciel', 0x1F308], ['fleur', 'Fleur', 0x1F338],
+  ['soleil', 'Soleil', 0x2600], ['cadeau', 'Cadeau', 0x1F381], ['trefle', 'Trèfle', 0x1F340], ['pattes', 'Empreintes de pattes', 0x1F43E]];
+/* les 12 signes en dessins (même collection), dans l'ordre de SIGNES */
+var SIGNE_DESSIN = [0x1F410, 0x1F3FA, 0x1F41F, 0x1F40F, 0x1F402, 0x1F46D, 0x1F980, 0x1F981, 0x1F47C, 0x2696, 0x1F982, 0x1F3F9];
+var DECORS = { etoiles: ['etoile'], nuages: ['nuage'], coeurs: ['coeur'], lune: ['lune', 'etoile', 'etoile', 'etoile', 'etoile', 'etoile'], melange: ['etoile', 'nuage', 'coeur', 'lune', 'etoile', 'nuage'] }, DECOR_NOM = { etoile: 'Étoile', nuage: 'Nuage', coeur: 'Cœur', lune: 'Lune' };
+function decorDe(id) { var l = DECORS[S.decor] || DECORS.etoiles; return l[(+id.slice(2) - 1) % l.length]; }
+function decorForme(k, d) { var p = [], i, t;
+  if (k === 'nuage') { var w = d * 1.5; return centrer(decaler(decaler(unir([cercle(-0.27 * w, 0.06 * w, 0.19 * w), cercle(-0.04 * w, -0.1 * w, 0.26 * w), cercle(0.25 * w, 0.03 * w, 0.2 * w), rect(-0.27 * w, 0.04 * w, 0.52 * w, 0.21 * w)]), -0.35), 0.35)); }
+  if (k === 'coeur') { for (i = 0; i < 64; i++) { t = i / 64 * 2 * Math.PI; p.push(pt(d * 1.08 / 32 * 16 * Math.pow(Math.sin(t), 3), -d * 1.08 / 32 * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)))); } return centrer([po(p)]); }
+  if (k === 'lune') return centrer(decaler(decaler(moins([cercle(0, 0, d * 0.56)], [cercle(d * 0.26, -d * 0.1, d * 0.47)]), -0.4), 0.4));
+  return etoile(d / 2); }
 function animalChoisi() { return ANIMAUX.filter(function (a) { return a[0] === S.animal; })[0] || null; }
 var EXEMPLE = { nom: 'Katia', date: '2022-04-13', heure: '09:20', taille: '51', poids: '3160' };
 function neuf() { var el = { plaque: { on: true, mode: 'inc', k: 1, auto: true, fx: 0, fy: 0 } };
   ELS.forEach(function (e) { el[e.id] = { on: true, mode: 'inc', k: 1, auto: true, fx: 0, fy: 0 }; });
   return { v: 1, modele: 'naissance', nom: '', lettre: '', pol: 'fredoka', polNom: 'pacifico', H: 170, gras: 0, bord: 3, coul: 'rose', date: '', heure: '', taille: '', poids: '', libre: '',
-    signe: 'auto', animal: 'chat', nbEt: 6, el: el, zw: 200, zh: 200, trait: 0.1, jeu: 0.1, ep: 3, sel: null, vue: 'face', num: false, exemple: false,
+    signe: 'auto', signeStyle: 'dessin', horloge: 'grave', decor: 'etoiles', animal: 'chat', nbEt: 6, el: el, zw: 200, zh: 200, trait: 0.1, jeu: 0.1, ep: 3, sel: null, vue: 'face', num: false, exemple: false,
     bt: { on: true, prof: 40, rayon: 8, cour: 5, jeuC: 0.2, pas: 2, pad: 10, nb: 0, dos: true, rep: true, plaque: false } }; }
 var S = neuf();
 function garder() { try { localStorage.setItem('niv-lettre-incrustee', JSON.stringify(S)); } catch (e) {} }
@@ -104,7 +115,7 @@ function etoile(R) { var p = []; for (var i = 0; i < 10; i++) { var r = i % 2 ? 
 function pied() { var rx = 4.2, ry = 6.3, a = [ellipse(0, 2, rx, ry, 40)], r = [1.9, 1.5, 1.35, 1.2, 1.05], t = [-52, -78, -101, -122, -141];
   r.forEach(function (rr, i) { var an = t[i] * Math.PI / 180; a.push(cercle(Math.cos(an) * (rx + 0.4 * rr), 2 + Math.sin(an) * (ry + 0.4 * rr), rr)); }); return unir(a); }
 function forme(id) { var T = textes(), cle, g = null, P = S.pol;
-  if (id === 'date') cle = id + T.d1 + T.d2 + P; else if (id === 'horloge' || id === 'heure') cle = id + T.heure + P; else if (id === 'signe') cle = id + signeChoisi();
+  if (id === 'date') cle = id + T.d1 + T.d2 + P; else if (id === 'horloge' || id === 'heure') cle = id + T.heure + P + S.horloge; else if (id === 'signe') cle = id + signeChoisi() + S.signeStyle; else if (id.indexOf('et') === 0) cle = id + S.decor;
   else if (id === 'taille' || id === 'regle') cle = id + T.taille + P; else if (id === 'pieds' || id === 'poids') cle = id + T.poids + P; else if (id === 'animal') cle = id + S.animal; else if (id === 'libre') cle = id + S.libre + P; else cle = id;
   if (CACHE[cle] !== undefined) return CACHE[cle];
   if (id === 'date' && T.d1) { var l1 = centrer(texteH(P, T.d1, 9)), l2 = centrer(texteH(P, T.d2, 9)); g = { blanc: limiter(centrer(unir(bouger(l1, 0, -6), bouger(l2, 0, 6))), 36) }; }
@@ -112,20 +123,31 @@ function forme(id) { var T = textes(), cle, g = null, P = S.pol;
   else if (id === 'heure' && T.heure) g = { blanc: limiter(centrer(texteH(P, T.heure, 8)), 34) };
   else if (id === 'taille' && T.taille) g = { blanc: limiter(centrer(texteH(P, T.taille, 8)), 34) };
   else if (id === 'poids' && T.poids) g = { blanc: limiter(centrer(texteH(P, T.poids, 8)), 34) };
-  else if (id === 'horloge' && T.heure) { var tr = []; for (var i = 0; i < 12; i++) { var an = i * 30 * Math.PI / 180; tr.push([[Math.sin(an) * 12, -Math.cos(an) * 12], [Math.sin(an) * 10.1, -Math.cos(an) * 10.1]]); }
-    var an1 = ((T.hh % 12) + T.mm / 60) * 30 * Math.PI / 180, an2 = T.mm * 6 * Math.PI / 180;
-    var anneau = unir(moins([cercle(0, 0, 14)], [cercle(0, 0, 11.5)]), trait(tr, 1.4));
-    var aig = unir([cercle(0, 0, 1.7)], unir(trait([[[0, 0], [Math.sin(an1) * 5.2, -Math.cos(an1) * 5.2]]], 2), trait([[[0, 0], [Math.sin(an2) * 7.4, -Math.cos(an2) * 7.4]]], 1.8)));
-    g = { blanc: unir(anneau, aig) }; }
+  else if (id === 'horloge' && T.heure) { var tr = [], tg = [], i, an, an1 = ((T.hh % 12) + T.mm / 60) * 30 * Math.PI / 180, an2 = T.mm * 6 * Math.PI / 180;
+    if (S.horloge === 'ajour') { /* comme le modèle : anneau et aiguilles blancs. Le grand trait de 12 et le trait moyen de 3 font que le centre de couleur ne rentre que dans un sens */
+      for (i = 0; i < 12; i++) { an = i * 30 * Math.PI / 180; var r1 = i === 0 ? 8.3 : (i === 3 ? 9.3 : 10.1); tr.push([[Math.sin(an) * 12, -Math.cos(an) * 12], [Math.sin(an) * r1, -Math.cos(an) * r1]]); }
+      var anneau = unir(moins([cercle(0, 0, 14)], [cercle(0, 0, 11.5)]), unir(trait(tr.slice(1), 1.4), trait([tr[0]], 2.2)));
+      var aig = unir([cercle(0, 0, 1.7)], unir(trait([[[0, 0], [Math.sin(an1) * 5.2, -Math.cos(an1) * 5.2]]], 2), trait([[[0, 0], [Math.sin(an2) * 7.4, -Math.cos(an2) * 7.4]]], 1.8)));
+      g = { blanc: unir(anneau, aig) }; }
+    else { /* cadran blanc d'une seule pièce : le tour, les traits, 12 · 3 · 6 · 9 et les aiguilles à l'heure donnée sont gravés */
+      for (i = 0; i < 12; i++) { an = i * 30 * Math.PI / 180; if (i % 3 === 0) continue; tg.push([[Math.sin(an) * 12.3, -Math.cos(an) * 12.3], [Math.sin(an) * 10.9, -Math.cos(an) * 10.9]]); }
+      var gh = unir(moins([cercle(0, 0, 13.1)], [cercle(0, 0, 12.55)]), trait(tg, 0.5));
+      [['12', 0, -9.7], ['3', 9.9, 0], ['6', 0, 9.7], ['9', -9.9, 0]].forEach(function (q) { gh = unir(gh, bouger(centrer(texteH(P, q[0], 3.1)), q[1], q[2])); });
+      gh = unir(gh, unir([cercle(0, 0, 1.2)], unir(trait([[[0, 0], [Math.sin(an1) * 5, -Math.cos(an1) * 5]]], 1.5), trait([[[0, 0], [Math.sin(an2) * 7.6, -Math.cos(an2) * 7.6]]], 1.0))));
+      g = { blanc: [cercle(0, 0, 14)], grav: gh, dessin: gh }; } }
+  else if (id === 'signe' && signeChoisi() >= 0 && S.signeStyle !== 'symbole') { var sd = ecrit('animaux', String.fromCodePoint(SIGNE_DESSIN[signeChoisi()]), 100), sb = boite(sd), sz = bouger(centrer(sd), 0, 0, 19 / Math.max(sb.w, sb.h));
+    var gs = unir(sz, moins([cercle(0, 0, 13.1)], [cercle(0, 0, 12.6)])); g = { blanc: [cercle(0, 0, 14)], grav: gs, dessin: gs }; }
   else if (id === 'signe' && signeChoisi() >= 0) { var s = ecrit('signes', String.fromCodePoint(SIGNE_CODE[signeChoisi()]), 100), b = boite(s), k = 13.5 / Math.max(b.w, b.h);
     g = { blanc: unir(moins([cercle(0, 0, 14)], [cercle(0, 0, 11.6)]), decaler(bouger(centrer(s), 0, 0, k), 0.25)) }; }
-  else if (id === 'regle' && T.taille) { var tk = []; for (var j = 0; j <= 10; j++) { var x = -12 + j * 2.4; tk.push([[x, 3.2], [x, j % 5 === 0 ? -1.6 : (j % 2 ? 1 : -0.3)]]); }
-    g = { blanc: decaler([rect(-13.8, -3.3, 27.6, 6.6)], 1.2), grav: trait(tk, 0.5) }; }
+  else if (id === 'regle' && T.taille) { /* comme une vraie règle : un trait par millimètre, plus long tous les 5 et tous les 10, les chiffres des centimètres ; tout est gravé */
+    var tk = [], gr; for (var j = 0; j <= 25; j++) { var x = -12.5 + j; tk.push([[x, -3.7], [x, -3.7 + (j % 10 === 0 ? 3.3 : (j % 5 === 0 ? 2.5 : 1.6))]]); }
+    gr = trait(tk, 0.28); [0, 1, 2].forEach(function (n) { gr = unir(gr, bouger(centrer(texteH(P, String(n), 2.3)), -12.5 + 10 * n + (n ? 0 : 0.9), 2.2)); });
+    g = { blanc: decaler([rect(-14, -3.4, 28, 6.8)], 1), grav: gr }; }
   else if (id === 'pieds' && T.poids) g = { blanc: centrer(unir(bouger(tourner(pied(), -9), -6.2, 0), bouger(tourner(miroir(pied()), 9), 6.2, 0))) };
   else if (id === 'animal' && animalChoisi()) { var an = ecrit('animaux', String.fromCodePoint(animalChoisi()[2]), 100), ab = boite(an), dz = bouger(centrer(an), 0, 0, 36 / Math.max(ab.w, ab.h));
     /* pièce blanche = la silhouette du dessin, avec 1,2 mm de marge, creux fermés ; le dessin lui-même est gravé dessus */
     g = { blanc: decaler(pleins(decaler(dz, 2.6)), -1.4), grav: dz, dessin: dz }; }
-  else if (id.indexOf('et') === 0) { var e = ELS.filter(function (q) { return q.id === id; })[0]; g = { blanc: etoile(e.d / 2) }; }
+  else if (id.indexOf('et') === 0) { var e = ELS.filter(function (q) { return q.id === id; })[0]; g = { blanc: decorForme(decorDe(id), e.d) }; }
   if (g) { g.b = boite(g.blanc); g.grav = g.grav || []; }
   return CACHE[cle] = g; }
 
@@ -162,7 +184,7 @@ function chercher(carte, w, h, scan) { var W = carte.W, H = carte.H, x, y, pas =
   return null; }
 
 /* ---------- tout calculer ---------- */
-function calculer() { var an0 = animalChoisi(); ELS.forEach(function (d) { if (d.id === 'animal') d.nom = an0 ? an0[1] : 'Animal'; });
+function calculer() { var an0 = animalChoisi(); var nd = {}; ELS.forEach(function (d) { if (d.id === 'animal') d.nom = an0 ? an0[1] : 'Animal'; else if (d.id.indexOf('et') === 0) { var kd = decorDe(d.id); nd[kd] = (nd[kd] || 0) + 1; d.nom = DECOR_NOM[kd] + ' ' + nd[kd]; } });
   var u = S.H / 170, L = lettre(), bl = boite(L), W = bl.w, H = S.H, alertes = [], T = textes();
   var g = { u: u, L: L, W: W, H: H, els: [], alertes: alertes };
   /* le prénom et sa plaque */
@@ -290,8 +312,12 @@ function calculerBoite2(g) { var B = S.bt, T = +S.ep || 3, al = g.alertes;
   function repere(txt, x, y, h) { var t = centrer(texteH(S.pol, txt, h)); return bouger(t, x, y); }
   var dedans = function (x, y) { return CL.Clipper.PointInPolygon(pt(x, y), O[0]) !== 0; }, gravBase = [], mor = [];
   for (j = 0; j < n; j++) { var a = coupes[j] * p, b = coupes[j + 1] * p, nom = String.fromCharCode(65 + j), m = morceauBande({ a: a, b: b, p: p, T: T, Hm: Hm, d: d, pas: +B.pas || 2, souple: tout ? function () { return true; } : zs.dans, tenon: function (i) { return tenons[((i % N) + N) % N]; } });
-    m.nom = nom; m.grav = B.rep ? repere(nom, p, T + 4.5, Math.min(5, p * 0.4)) : [];
-    if (B.rep) { var q = pointA(c, a + p / 2), nx = -q.ty, ny = q.tx; if (!dedans(q.x + nx * (T + 1), q.y + ny * (T + 1))) { nx = -nx; ny = -ny; } gravBase = gravBase.concat(repere(nom, q.x + nx * (T / 2 + 5), q.y + ny * (T / 2 + 5), 4.5)); }
+    m.nom = nom; m.grav = [];
+    if (B.rep) { /* sur la bande : au milieu de la plus grande partie sans fentes ; s'il n'y en a pas, en petit sur le premier tenon (caché une fois emboîté) */
+      var xs = [2].concat(m.lignes.map(function (l) { return l[0][0]; }).sort(function (u, v) { return u - v; })).concat([b - a - 2]), gx = 0, gl = 0, xi; for (xi = 1; xi < xs.length; xi++) if (xs[xi] - xs[xi - 1] > gl) { gl = xs[xi] - xs[xi - 1]; gx = (xs[xi] + xs[xi - 1]) / 2; }
+      if (gl >= 9) m.grav = repere(nom, gx, Hm / 2, Math.min(8, gl - 4, Hm * 0.22));
+      else { var it = 0; while (it < Math.round((b - a) / p) - 1 && !tenons[((coupes[j] + it) % N + N) % N]) it++; m.grav = repere(nom, (it + 0.5) * p, T / 2, Math.min(2.4, T - 0.7)); } }
+    if (B.rep) { var q = pointA(c, a + p / 2), nx = -q.ty, ny = q.tx; if (!dedans(q.x + nx * (T + 1), q.y + ny * (T + 1))) { nx = -nx; ny = -ny; } var dr = T / 2 + B.cour + 9, hr = 6.5; if (!dedans(q.x + nx * (dr + 5), q.y + ny * (dr + 5))) { dr = T / 2 + 5; hr = 4.5; } gravBase = gravBase.concat(repere(nom, q.x + nx * dr, q.y + ny * dr, hr)); }
     mor.push(m); }
   g.bt = { O: O, I: decaler(O, -T), base: base, cour: cour, cale: cale, dos: B.dos ? O : null, gravBase: gravBase, mor: mor, n: n, nAuto: nAuto, L: c.L, N: nT, p: p, T: T, Hm: Hm, part: zs.part, tout: tout,
     fentes: mor.reduce(function (t, m) { return t + m.fentes; }, 0), haut: Hm + 2 * T + (B.dos ? T : 0), utile: Hm - 2 * T, coupesSouples: mieux }; }
@@ -426,6 +452,7 @@ function listeTexte() { var g = G, T = [], c = (COULEURS.filter(function (q) { r
     bt.mor.forEach(function (m) { T.push(m.nom + '  Bande ' + m.nom + ' : ' + fr(m.long, 0) + ' x ' + fr(bt.Hm, 0) + ' mm, ' + m.fentes + ' fentes.'); });
     T.push('Montage de la boîte : 1. plier doucement chaque morceau de bande (fil du bois dans le sens des fentes), la lettre gravée sur la bande va en face de la même lettre gravée sur le fond. 2. emboîter et coller les tenons du bas dans le fond, morceau après morceau, en fermant les jonctions. 3. poser et coller la couronne sur les tenons du haut.'
       + (bt.dos ? ' 4. coller le dos sous le fond.' : '') + ' Couvercle : poser la cale dans la couronne, mettre de la colle dessus, poser le couvercle bien aligné sur le contour, laisser sécher : la cale est à sa place.'); }
+  var Tx = textes(); if (Tx.heure && g.els.some(function (a) { return a.d.id === 'horloge'; })) T.push('', 'Horloge : aiguilles à ' + Tx.heure + '. ' + (S.horloge === 'ajour' ? 'Le rond de couleur du milieu ne rentre que dans un sens : le grand trait blanc est en haut (12), le trait moyen à droite (3). Les aiguilles blanches se posent dans leur emplacement.' : 'Cadran d\'une seule pièce : le tour, les traits, les chiffres et les aiguilles sont gravés, rien à orienter.'));
   T.push('', 'Ordre de montage : 1. coller le dessus de couleur sur le fond blanc. 2. poser chaque pièce blanche dans son emplacement (numéros du plan de pose). 3. recoller les petits centres de couleur. 4. coller le prénom sur sa plaque.');
   if (g.alertes.length) { T.push('', 'À revoir :'); g.alertes.forEach(function (t) { T.push('- ' + t); }); }
   return T.join('\n') + '\n'; }
@@ -434,13 +461,14 @@ function planSvg() { var num = S.num, sel = S.sel; S.num = true; S.sel = null; d
   S.num = num; S.sel = sel; dessiner(); return t; }
 function sauver(nom, texte, type) { function lien() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([texte], { type: type })); a.download = nom; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800); }
   if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (!d) return lien(); return d.save({ filename: nom, data: texte }); }).catch(function (e) { if (!e || e.code !== 'declined') $('aide').textContent = 'Le fichier n\'a pas pu être enregistré ici.'; });
+  else if (window.parent !== window) { window.parent.postMessage({ type: 'niv-enregistrer', nom: nom, texte: texte, mime: type }, '*'); }
   else lien(); }
 
 /* ---------- tout rafraîchir ---------- */
 function maj(sansChamps) { try { calculer(); } catch (e) { $('aide').textContent = 'Erreur de calcul : ' + e.message; throw e; }
   dessiner(); listePieces(); fichiers(); if (S.vue === '3d') trois(); if (!sansChamps) champs(); garder(); }
 function champs() { ['nom', 'lettre', 'H', 'gras', 'bord', 'date', 'heure', 'taille', 'poids', 'libre', 'zw', 'zh', 'trait', 'jeu', 'ep', 'nbEt'].forEach(function (k) { var el = $('f-' + k); if (el && document.activeElement !== el) el.value = S[k]; });
-  ['pol', 'polNom', 'signe', 'animal'].forEach(function (k) { $('f-' + k).value = S[k]; });
+  ['pol', 'polNom', 'signe', 'animal', 'signeStyle', 'horloge', 'decor'].forEach(function (k) { $('f-' + k).value = S[k]; });
   $('f-lettre').placeholder = lettreChoisie(); var sg = signeChoisi(); $('signeAuto').textContent = S.signe === 'auto' ? (sg >= 0 ? 'Calculé avec la date : ' + SIGNES[sg] + '.' : 'Se calcule avec la date.') : '';
   $('coul').innerHTML = COULEURS.map(function (c) { return '<button type="button" data-c="' + c[0] + '" class="' + (S.coul === c[0] ? 'on' : '') + '" aria-pressed="' + (S.coul === c[0]) + '"><i style="background:' + c[2] + '"></i>' + c[1] + '</button>'; }).join('');
   ['prof', 'rayon', 'cour', 'jeuC', 'pas', 'pad'].forEach(function (k) { var el = $('b-' + k); if (el && document.activeElement !== el) el.value = S.bt[k]; }); $('b-on').checked = !!S.bt.on; $('b-dos').checked = !!S.bt.dos; $('b-rep').checked = !!S.bt.rep; $('b-plaque').checked = !!S.bt.plaque; $('b-nb').value = String(S.bt.nb); $('b-regl').hidden = !S.bt.on;
@@ -489,6 +517,10 @@ function init() {
   function lacher() { if (!prise) return; var p = prise; prise = null; if (p.bouge) { var e = S.el[p.id]; e.fx += p.dx / S.H; e.fy += p.dy / S.H; e.auto = false; S.sel = p.id; maj(); } else { S.sel = p.id; dessiner(); listePieces(); } }
   sv.addEventListener('pointerup', lacher); sv.addEventListener('pointercancel', lacher);
   window.addEventListener('resize', function () { if (S.vue === '3d') trois(); });
+  /* ouvert dans « L'atelier » (un seul logiciel) : la machine se règle une fois, là-bas */
+  window.addEventListener('message', function (ev) { var d = ev.data || {}; if (d.type !== 'niv-machine' || !d.machine) return; var ch = false;
+    ['zw', 'zh', 'trait', 'jeu', 'ep'].forEach(function (k) { var v = +d.machine[k]; if (!isNaN(v) && v >= 0 && S[k] !== v) { S[k] = v; ch = true; } }); if (ch) maj(); });
+  if (window.parent !== window) window.parent.postMessage({ type: 'niv-pret' }, '*');
   champs(); maj(); vue('face'); }
 window.NivLettre = { etat: function () { return S; }, calcul: function () { return G; }, maj: maj, svg: function (i) { return svgPlanche(G.pages[i], false); }, liste: listeTexte };
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
