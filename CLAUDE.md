@@ -1,3 +1,30 @@
+## 🏠 MAQUETTE « MAISONNETTE EN BOIS » (générateur « House Ornament » d'Atomm) — 13/11/2026 (gérant : lien donné, « analyses bien pour le faire ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- **Artifact** https://claude.ai/artifact/BWVe3PyAdcb18PeKpZtxK4 (v1) · `python3 tools/maquettes/maison-createur.py <page de base> docs/maquettes/assets/maison/motifs.json <clipper.js> <sortie>`
+  (`npm pack clipper-lib@6.4.2`, écrite DANS la page avec `tools/maquettes/maison-geo.js` ; three.js r128 chargé de cdnjs pour la 3D, la vue « De face » marche sans lui).
+- **Ce que fait Atomm (analysé le 13/11 : leur outil ouvert dans le navigateur, état lu dans la page, texte de leur programme lu)** : une petite maison de 3 mm en **8 pièces à tenons** :
+  2 pignons (dessin central découpé + petites découpes autour), 2 murs (fenêtres), 1 base à fentes, 2 pans de toit (tuiles GRAVÉES), 1 poutre d'accroche avec anneau. Deux usages : « ornament »
+  (anneau) ou « String light shade » (trou pour le fil d'une guirlande, pas de poutre = 7 pièces). 16 dessins de Noël (renne, sapin, flocon, cloche, pain d'épices, chaussette, ange, houx, bougie,
+  boule, bonnet, sucre d'orge, traîneau, chalet, bonhomme de neige, nœud) + étoile, rond, cœur, lune, aucun + dessin par IA (compte). Réglages et limites : largeur 45–140 (64), profondeur 40–140
+  (52), murs 42–150 (60), murs resserrés 0–8 (4), toit 18–65 (30), épaisseur 1,5–5 (3), jeu 0–0,5 (0,15), trait de coupe 0–0,5 (0,13), débord du toit 2–12 (5), débord de la base 1–10 (3) ;
+  dessin 10–65 (30), hauteur 15–100 (32), même dessin devant / derrière ou non ; découpes autour étoile / rond / cœur / aucune, 0–12 (6), taille 3–9 (5), distance 7–18 (9), retirées toutes
+  seules si elles touchent le dessin ou un assemblage ; fenêtres arche / carrée / ronde / aucune, 1–3 rangées × 1–3, largeur 4–20 (8), hauteur 6–28 (14), écart 3–14 (7), croisillon 0–3,
+  côté droit différent possible ; anneau trou 2–8 (4), diamètre 7–18 (10), place 20–80 % ; fil 2–12 (5), ampoule Ø 3–20 (8) × 5–40 (20) ; tuiles 5–16 (8). Alertes : pièce coupée en deux,
+  découpe trop fine pour le trait de coupe, ampoule trop grosse. Vues 3D / Assembly (éclatée) / Export (rouge = découpe, bleu = tuiles) + démonstration de montage en 8 étapes.
+  Le trait de coupe est DÉJÀ compensé dans leur tracé (pièces élargies d'un demi-trait). Matières = aperçu. Aucun prénom ni texte. Export = compte.
+- **Le calcul est le même que le leur** : `maison-geo.js` (`NivMaison.calculer(params)` → `parts` / `cutParts` / `warnings`), vérifié par
+  `node tools/maquettes/maison-test.cjs <clipper.js> docs/maquettes/assets/maison/motifs.json docs/maquettes/assets/maison/ref-atomm.json` : 498 vérifications sur 6 maisons
+  (surfaces, boîtes, tenons, tuiles, trait de coupe, place en 3D). Références relevées dans LEUR outil : `NODE_PATH=$(npm root -g) node tools/maquettes/maison-atomm-releve.cjs <ref-atomm.json>`
+  (leur magasin de données `houseOrnamentGeneratorConfig` se lit et se règle depuis la page).
+- **La maquette** : 6 étapes (taille · dessin de la façade, autre dessin à l'arrière possible · petites découpes autour · fenêtres, côté droit différent possible · toit · suspendue ou sur
+  guirlande) ; TOUS les réglages d'Atomm, rangés dans des volets fermés ; ceux de la MACHINE (épaisseur réelle, jeu, trait de coupe, débord de la base) sont dans la partie atelier, pas côté
+  cliente. Vues « De face » / « 3D » (fil blanc, ampoule allumée en mode guirlande) / « Pièces » (éclatée). Atelier : planches de 19 cm au plus (2 pour la petite, 3 pour les autres), pièces
+  numérotées, rouge = découpe, NOIR = tuiles gravées ; montage pièce après pièce en 3D (8 étapes, pièce du moment en doré). `sousEntete()` / `decoller()` repris.
+  Vérifié Chromium 390 / 1280 : 21 dessins × 3 tailles sans alerte, 0 erreur, 0 débordement, aperçu jamais derrière l'en-tête.
+- **Proposé par moi, à valider** : 3 tailles fixes (petite 6,4 × 5,2 × 9,3 cm = la maison de départ d'Atomm · moyenne 8 × 6,5 × 11,6 · grande 9,6 × 7,8 × 13,8) au lieu des dimensions libres ;
+  19,90 / 24,90 / 29,90 € (marché relevé : lanterne de Noël en bois découpé 20 €, photophore chalet personnalisé 12,90–21 €) ; vendue MONTÉE et collée (kit à plat possible) ; guirlande
+  non fournie, LED seulement ; pas de prénom (Atomm n'en a pas : à ajouter seulement s'il le demande) ; pas de dessin par IA ; lien éventuel avec l'interrupteur Noël.
+  ⚠️ Avant toute vente : une maison d'essai découpée pour régler le jeu des tenons sur son bois.
+
 ## 🌹 MAQUETTE « FLEUR À PRÉNOM » (générateur « Flower » d'Atomm) + 🧭 MAQUETTE DE LA PAGE « CRÉEZ LE VÔTRE » — 13/11/2026 (gérant : « pour mettre sur le site, cherche sur Internet comment on peut mettre » → « fais-moi une maquette en même temps… analyse bien » + lien du générateur de fleurs) — EN ATTENTE DE SON AVIS, RIEN en ligne
 - 🧭 **Page « Créez le vôtre »** : https://claude.ai/artifact/1UafcEcee7BUjU42SxZ3kN (v1) · `python3 tools/maquettes/creez-le-votre.py <page de base> docs/maquettes/assets/creez-le-votre <sortie>` ·
   images = l'aperçu de CHAQUE outil photographié sur fond transparent (`NODE_PATH=$(npm root -g) node tools/maquettes/creez-le-votre-images.cjs <racine des 6 maquettes> <paper-full.min.js> <sortie>`

@@ -4,6 +4,11 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
+## 🏠 MAQUETTE « MAISONNETTE EN BOIS » — 13/11/2026 (en attente de son avis, RIEN en ligne)
+- https://claude.ai/artifact/BWVe3PyAdcb18PeKpZtxK4 (v1), d'après le générateur « House Ornament » d'Atomm ; détail dans CLAUDE.md.
+- À trancher par lui : les 3 tailles fixes, les prix 19,90 / 24,90 / 29,90 €, montée ou en kit, un prénom gravé ou non, Noël seulement ou toute l'année,
+  l'ajouter à la page « Créez le vôtre ». Avant toute vente : une maison d'essai découpée (jeu des tenons).
+
 ## 🧭 MAQUETTE « CRÉEZ LE VÔTRE » + 🌹 MAQUETTE « FLEUR À PRÉNOM » — 13/11/2026, EN ATTENTE DE SON AVIS, RIEN en ligne
 - Page « Créez le vôtre » (menu, modèles prêts, 6 outils, bloc d'accueil) : https://claude.ai/artifact/1UafcEcee7BUjU42SxZ3kN
 - Fleur à prénom (d'après le générateur Flower d'Atomm) : https://claude.ai/artifact/VX8XHyYdfhCnJzhj7WdnN6
