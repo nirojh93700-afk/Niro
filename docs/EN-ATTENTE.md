@@ -806,6 +806,19 @@ En attente de SA décision :
 - Maquette « Décoration à prénom » v1 : https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (peinture ou acrylique collé ? prix, tailles, réglages d'Atomm non proposés, vue 3D).
 - Éditeur de l'atelier, plan de collage, liste des pièces : EN LIGNE dans Gestion (6a495d0e). Les trois produits (support, arbre, décoration) ne sont toujours pas en vente.
 
+## ♈ SIGNES DU ZODIAQUE ROUVERTS PAR LUI — 13/11/2026 nuit (en attente de son choix, RIEN changé dans l'outil)
+- Il garde la GRAVURE (il essaiera de la peinture foncée dans la gravure, essuyée) ; découper au lieu de graver = expliqué, pas construit.
+- Il n'aime AUCUN des dessins des quatre signes (Gémeaux, Lion, Vierge, Verseau), ni ceux du début, ni ceux d'aujourd'hui, ni les symboles calligraphiés.
+  « Va chercher sur Internet dans le monde entier » → cherché : collection Iconify (116 collections, presque que des symboles) puis Openclipart (domaine public, CC0).
+- Montré le 13/11 nuit, deux planches (`scratchpad/zod/serie-1-douze-signes.png`, `autres-dessins.png`, refaites par `scratchpad/zod/outil/planche2.py`) :
+  · **Série 1, les douze signes** (Openclipart, Firkin, « … drawing 4 », n° 273320 à 273331 : silhouettes classiques d'horoscope, tirées d'images Pixabay) ;
+  · **A à F** pour les quatre signes : A Gémeaux deux visages (169970), B Lion tête (169967), C Vierge jeune fille à la fleur (169966), D Gémeaux orné (279179), E Lion orné (279180),
+    F Verseau gravure ancienne (181794). La série « ornée » (2791xx) n'a ni Vierge ni Verseau ; la série « star sign » (1699xx) n'a que six signes.
+- À son choix : télécharger les SVG (`https://openclipart.org/download/<n°>`), les ajouter à `animaux.ttf` par `lettre-signes.py`, changer `SIGNE_DESSIN`, refaire la démonstration, la version cliente et Gestion.
+  Si la série 1 est prise, la mettre sur les DOUZE signes (style différent des animaux actuels).
+- Réseau : `openclipart.org`, `commons.wikimedia.org`, `upload.wikimedia.org` ajoutés au réglage « Default » avec son accord (Wikimedia répond 429 sans vrai nom de client). Un réglage « Niro » a aussi été créé (mêmes accès),
+  inutilisé : cette conversation ne pouvait pas y passer.
+
 ## 🖨️ IMPRESSION 3D + MACHINES xTOOL — 13/11/2026 soir (à reprendre sur son mot)
 - Fait : bouton « OK ✓ » corrigé partout · liste des machines xTool dans L'atelier (en ligne dans Gestion) · impression 3D à l'essai dans l'outil « Lettre à incruster » : démonstration v15 ET Gestion (13/11 soir, avec une petite image de chaque pièce à côté de sa case).
 - En attente de lui : essayer le fichier 3MF dans le logiciel d'une imprimante dès qu'il en a une · dire s'il veut la 3D pour les décorations à couches et pour ses fichiers achetés ·
