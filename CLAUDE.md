@@ -1,5 +1,5 @@
 ## 👶 MAQUETTE « LETTRE DE NAISSANCE », VERSION SIMPLE POUR LES CLIENTES — 13/11/2026 soir (gérant, devant l'outil lettre : « tu touches pas à l'atelier que tu m'as fait, j'aime bien tous les détails… il faut que tu facilites au maximum pour les clients, pour mettre sur le site. Ne mets rien sur le site… dans admin tu laisses comme c'est… une deuxième version des produits qu'on a mis ») — EN ATTENTE DE SON AVIS, RIEN en ligne
-- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v4) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
+- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v5) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
   (`<page de base>` = sortie d'un autre créateur, ex. `arbre-base.html` ; sortie de 2,1 Mo non commitée).
 - **Principe** : la fiche du site + un parcours court, par-dessus le MÊME calcul que l'outil d'atelier, sans y toucher : `lettre-incrustee.js` et les champs de `lettre-incrustee.py`
   sont posés dans la page mais CACHÉS (`<div hidden id="moteur">`), la couche cliente (`window.NivLettreCliente`) écrit dans `NivLettre.etat()` puis `NivLettre.maj()`.
@@ -22,6 +22,13 @@
   centré là où il repose le plus (`bandes`, `meilleur`), et il rétrécit (jusqu'à 0,4) tant que moins de la moitié de sa plaque est sur la lettre (`partReelle`, mesure de surface ; `poser`,
   cache `PLQ`). Mesuré sur 78 prénoms (26 lettres × court, moyen, long) : au moins 52 % sur la lettre partout, plus petite taille 0,46. ⛔ L'outil d'atelier et L'atelier de Gestion gardent
   LEUR placement (non touchés, sa consigne) : question posée, veut-il la même règle là aussi ? Images d'exemple refaites. Essais : t2, t5, t8 au vert, planche des 26 lettres regardée.
+- 🤏 **LANGUETTE DU COUVERCLE (13/11 soir, gérant : « pour les boîtes, tu peux faire des petites poignées discrètes… c'est pour ouvrir »)** : dans le MOTEUR (`lettre-incrustee.js`,
+  `languette(g)`, `S.bt.poig`, coché d'office, case « Petite languette discrète sur le bord du couvercle, pour l'ouvrir » dans le volet de la boîte) : une petite patte arrondie
+  (14 × 5 mm à 170 mm de haut, jamais moins de 11 × 4 mm) qui fait partie du couvercle (fond blanc de la lettre, ou couvercle plein `CV` de la boîte seule) et dépasse du bord de la boîte,
+  là où le contour va le plus loin : à droite d'abord, sinon à gauche, en bas, en haut, du côté où le couvercle tient encore dans la zone de la machine (raccourcie jusqu'à 3,5 mm si besoin) ;
+  pied adouci ; dite dans le texte de montage. Essais : 36 lettres et chiffres + 8 boîtes seules (`scratchpad/lettre/tp.cjs`), t3, t7, t14, t15 au vert, t11 = ses 2 faux KO connus.
+  Lettre d'atelier **v12**, cliente **v5**. ⛔ PAS encore dans Gestion (`public/atelier-outils/lettre.html`) ni dans l'artifact L'atelier : attendre son mot (il a dit le même soir « dans admin tu laisses comme c'est »).
+  ⚠️ Constaté au passage : à 165 mm de haut, les lettres M (184 mm), Q (179 mm) et W (220 mm) sont plus larges que la zone de 180 mm (déjà avant la languette ; l'outil le signale).
 - ✅ **PRIX DONNÉ PAR LE GÉRANT LE 13/11 SOIR (« pour la boîte, ça va ensemble de toute façon, pour les deux 54,90 € »)** : **54,90 € la lettre ET sa boîte, toujours ensemble** (plus de « lettre seule », plus de supplément boîte ; tout ce que la cliente choisit est compris). `PRIX = {"ensemble": 54.9}`, `C.boite` toujours vrai. Maquette v4. Anciens prix proposés : `docs/prix-historique.md`.
 - **Proposé par moi, à valider** : une seule taille, 16,5 cm · les 7 couleurs = celles de l'aperçu de l'outil, à remplacer par ses vraies couleurs · texte libre, horloge ajourée, « Gravé »,
   réglages de la boîte non proposés à la cliente · catégorie « Bébé & Enfant ».

@@ -156,6 +156,7 @@ HTML = r"""<div class="li">
    <label class="l2">Bande de côté en combien de morceaux<select id="b-nb"><option value="0">Automatique (selon la zone de la machine)</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option></select><small id="b-info"></small></label>
    <label class="li-case l2 pasb"><input type="checkbox" id="b-plaque"> La boîte suit aussi la plaque du prénom (sinon la plaque dépasse de la boîte et sert de prise)</label>
    <label class="li-case l2"><input type="checkbox" id="b-dos"> Plaque pleine sous la boîte (elle cache les tenons)</label>
+   <label class="li-case l2"><input type="checkbox" id="b-poig"> Petite languette discrète sur le bord du couvercle, pour l'ouvrir</label>
    <label class="li-case l2"><input type="checkbox" id="b-rep"> Graver une lettre de repère (A, B, C…) sur chaque morceau de bande et sur le fond</label>
    <small class="l2" id="b-note"></small>
   </div></div></details>
