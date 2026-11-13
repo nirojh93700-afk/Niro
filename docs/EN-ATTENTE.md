@@ -4,7 +4,9 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
-## 🧭 AUDIT DU 13/11/2026 + MAQUETTE « LE SITE REFAIT » (en attente de son avis, RIEN en ligne)
+## 🧭 AUDIT DU 13/11/2026 + MAQUETTE « LE SITE REFAIT » (accueil REFUSÉ, le reste enregistré pour plus tard, RIEN en ligne)
+- ⛔ 13/11 : « j'aime pas l'accueil, on va laisser comme c'est » → l'accueil du site ne change pas. Le reste de la maquette (catégorie, fiche, Créez le vôtre, panier, avis,
+  menu, barre du bas, pied de page) est enregistré tel quel (v1) pour plus tard : c'est lui qui en reparle.
 - Maquette https://claude.ai/artifact/9G8KcTBKPQnwUMtC4tfTh8 (v1), détail dans CLAUDE.md. À trancher par lui : la barre du bas sur téléphone, la fenêtre −10 %, le menu à 7 entrées,
   l'accueil raccourci (mur retiré, blocs par famille réunis), la fiche (nom court, volets), puis l'ordre dans lequel appliquer.
 - ⚖️ **Rétractation en ligne (obligatoire depuis le 19/06/2026 pour les articles non personnalisés)** : absente du site. À construire sur son mot, à faire valider par un professionnel.

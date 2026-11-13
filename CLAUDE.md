@@ -1,4 +1,8 @@
-## 🧭 AUDIT DU 13/11/2026 + MAQUETTE « LE SITE REFAIT » (gérant : « fais une vraie audit du site… refaire le site organisé correctement, toutes les mises en page, l'accueil… une vraie maquette, sans toucher au site ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+## 🧭 AUDIT DU 13/11/2026 + MAQUETTE « LE SITE REFAIT » (gérant : « fais une vraie audit du site… refaire le site organisé correctement, toutes les mises en page, l'accueil… une vraie maquette, sans toucher au site ») — ⛔ ACCUEIL REFUSÉ, LE RESTE ENREGISTRÉ POUR PLUS TARD (13/11/2026), RIEN en ligne
+- ⛔✅ **SA RÉPONSE DU 13/11/2026 : « j'aime pas l'accueil, on va laisser comme c'est, les restes enregistre pour plus tard »** : l'ACCUEIL du site reste
+  tel qu'il est en ligne, ne plus proposer cet accueil refait (ni ses blocs : tuiles des 8 univers, vitrine à onglets, « En ce moment », accueil raccourci). Le RESTE de la
+  maquette (page de catégorie, fiche produit, Créez le vôtre, panier, avis, menu, barre du bas, pied de page, lien de rétractation) est ENREGISTRÉ TEL QUEL = version 1
+  de l'artifact, pour plus tard : ne pas le modifier, ne rien appliquer, ne pas le relancer ; c'est LUI qui en reparle.
 - **Artifact** https://claude.ai/artifact/9G8KcTBKPQnwUMtC4tfTh8 (v1) · relevé du catalogue EN LIGNE `python3 -I tools/maquettes/site-refait-releve.py <sortie>` (pages `/boutique/<univers>` : 91 créations,
   prix du jour, photos 360 px) → `python3 tools/maquettes/site-refait.py <sortie>/catalogue.json <sortie>/img <sortie>/grand <sortie>/maq` (2,3 Mo, non commité). Sept vues : Accueil · Catégorie
   (les 8 univers + toute la boutique) · Fiche produit (Collier Cœur gravé, vrais prix et textes) · Créez le vôtre (7 outils, maisonnette comprise) · Panier · Avis · « Ce qui change ».
