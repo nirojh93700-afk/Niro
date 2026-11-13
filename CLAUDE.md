@@ -1,4 +1,4 @@
-## 🏠 MAQUETTE « MAISONNETTE EN BOIS » (générateur « House Ornament » d'Atomm) — 13/11/2026 (gérant : lien donné, « analyses bien pour le faire ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+## 🏠 MAQUETTE « MAISONNETTE EN BOIS » (générateur « House Ornament » d'Atomm) — 13/11/2026 (gérant : lien donné, « analyses bien pour le faire ») — ENREGISTRÉE LE 13/11/2026 (« t'as enregistré », MA lecture : v1 de l'artifact, comme la fleur v2 et « Créez le vôtre » v1 ; ne plus les modifier sans sa demande ; ses réponses aux points « à valider » restent attendues). RIEN en ligne
 - **Artifact** https://claude.ai/artifact/BWVe3PyAdcb18PeKpZtxK4 (v1) · `python3 tools/maquettes/maison-createur.py <page de base> docs/maquettes/assets/maison/motifs.json <clipper.js> <sortie>`
   (`npm pack clipper-lib@6.4.2`, écrite DANS la page avec `tools/maquettes/maison-geo.js` ; three.js r128 chargé de cdnjs pour la 3D, la vue « De face » marche sans lui).
 - **Ce que fait Atomm (analysé le 13/11 : leur outil ouvert dans le navigateur, état lu dans la page, texte de leur programme lu)** : une petite maison de 3 mm en **8 pièces à tenons** :
