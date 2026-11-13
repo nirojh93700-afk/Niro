@@ -9,8 +9,10 @@
   F2 115 × 115 (rallonge 115 × 400) · F1 / F1 Lite 115 × 115 (rallonge 115 × 400) · X1 615 × 320 (tapis 610 × 1220) · P3 915 × 458 · P2S / P2 600 × 305 (nid d'abeille 556 × 280) · S1 40 W 498 × 319, 20 W 498 × 330 ·
   M2 40 W 426 × 312, 10 / 20 W 426 × 320 · M1 Ultra 300 × 300 · M1 385 × 300 · D1 Pro 430 × 390 (xTool écrit aussi 430 × 348 ailleurs). ⛔ Le trait de coupe et le jeu NE changent PAS avec la machine
   (ils dépendent du bois, pièce d'essai) ; puissance et vitesse se règlent dans le logiciel de xTool, pas dans le fichier : c'est écrit sous la liste. Essai `scratchpad/ok/tm.cjs` 22 sur 22.
-- **Impression 3D, À L'ESSAI, dans la DÉMONSTRATION seulement** (lettre d'atelier **v14**, https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw ; ⛔ PAS dans Gestion : `public/atelier-outils/lettre.html` non régénéré,
-  à faire sur son mot) : volet « 7 · Impression 3D (à l'essai) » de l'outil lettre et boîte (et boîte seule). Cases par pièce (fond blanc, dessus de couleur, pièces blanches, prénom et plaque, détails gravés,
+- **Impression 3D, À L'ESSAI** (lettre d'atelier **v15**, https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw ; ✅ **DANS GESTION depuis le 13/11 soir** (« Oui mets l'impression 3D dans Gestion, tu peux mettre
+  une petite photo du produit pour pas que je me trompe ») : `public/atelier-outils/lettre.html` régénéré (lettre ET boîte seule), **une petite image de chaque pièce à côté de sa case** (`i3Img(id)` : la pièce en clair,
+  le reste de l'objet en ombre, dessinée avec les mêmes tracés que les fichiers, seulement volet ouvert) ; essai de la version Gestion `scratchpad/i3/tg.cjs` 24 sur 24 (outil seul, boîte seule, dans L'atelier, 3MF
+  enregistré et relu), `npm run build` OK. ⚠️ Sur iPhone, le STL (plusieurs fichiers) ne sortira peut-être qu'un fichier à la fois : préférer le 3MF) : volet « 7 · Impression 3D (à l'essai) » de l'outil lettre et boîte (et boîte seule). Cases par pièce (fond blanc, dessus de couleur, pièces blanches, prénom et plaque, détails gravés,
   cale, fond de boîte, contour, couronne), boutons « Le couvercle en une pièce » / « La boîte en une pièce », couleurs du couvercle (plusieurs couleurs = un morceau par couleur · blanc puis couleur avec
   changement de bobine à l'épaisseur du fond · une seule couleur = pièces en creux de 1 mm, détails en relief), fichier 3MF (un seul, objets = couvercle / boîte / cale côte à côte) ou STL (un par morceau),
   case « Retirer ces pièces des planches à découper » (= le choix imprimer OU découper, `i3Hors`), taille de chaque objet et du plateau nécessaire, alerte « détails de moins de 0,8 mm ».
@@ -21,7 +23,7 @@
   ⚠️ PAS essayé dans un logiciel d'imprimante (Bambu Studio, PrusaSlicer, Cura) ni sur une imprimante : l'imprimante n'est pas choisie. Les couleurs du 3MF sont des noms de morceaux : c'est dans le logiciel
   de l'imprimante qu'il dit quelle bobine prend quel morceau.
 - **Répondu, rien construit** : « coller une adresse Internet dans L'atelier et un agent transforme » → transformer des FICHIERS (SVG à couches → 3D, fichiers achetés) = faisable dans L'atelier (case à cocher) ;
-  reproduire seul tout un générateur depuis un lien = non, ça reste un travail fait ici, à sa demande. **Suite proposée, à valider** : la 3D dans Gestion · les décorations à couches (décoration à suspendre,
+  reproduire seul tout un générateur depuis un lien = non, ça reste un travail fait ici, à sa demande. **Suite proposée, à valider** : les décorations à couches (décoration à suspendre,
   décoration à prénom, fleur, suspension : fond + devant) · un outil « mon fichier SVG → 3D » pour les fichiers achetés · les réglages de son imprimante le jour où il la connaît.
 
 ## 👶 MAQUETTE « LETTRE DE NAISSANCE », VERSION SIMPLE POUR LES CLIENTES — 13/11/2026 soir (gérant, devant l'outil lettre : « tu touches pas à l'atelier que tu m'as fait, j'aime bien tous les détails… il faut que tu facilites au maximum pour les clients, pour mettre sur le site. Ne mets rien sur le site… dans admin tu laisses comme c'est… une deuxième version des produits qu'on a mis ») — EN ATTENTE DE SON AVIS, RIEN en ligne

@@ -600,9 +600,25 @@ function i3Objets() { var I = window.NivImpr3D, g = G, c = i3Choix(), m = i3().c
       notes.push('La cale s\'imprime à part et se colle sous le couvercle : c\'est elle qui tient le couvercle en place.' + (c.parois && !c.cour ? ' Elle est ajustée à l\'intérieur du contour imprimé (0,3 mm de jeu).' : '')); } }
   var x = 0; objets.forEach(function (o) { o.x = x; x += o.t.w + 8; });
   return { objets: objets, notes: notes }; }
-function i3Maj() { var el = $('i3-liste'); if (!el) return; var o = i3(), c = i3Choix(), d = i3Dispo(), I = window.NivImpr3D, h = '', grp = { cv: SEULE ? 'Le couvercle' : 'Le couvercle (la lettre décorée)', cale: '', bt: 'La boîte' }, vu = {};
+/* la petite image de chaque pièce, à côté de sa case : la pièce en clair, le reste de l'objet en ombre (13/11/2026, « une petite photo
+   pour pas que je me trompe »). Dessinée avec les mêmes tracés que les fichiers : elle suit la lettre, la couleur et la boîte. */
+function i3Img(id) { var g = G, bt = g.bt, c = couleur(), tout = bt ? g.fond.concat(bt.O) : g.fond, b = boite(tout), m = Math.max(b.w, b.h) * 0.06, k = Math.max(b.w, b.h) / 70,
+    bois = '#dcbf91', boisT = '#9c7c4c', blanc = '#fbfaf6', gris = '#8f887a', h = '';
+  function p(a, fill, stroke, sw, op) { return a && a.length ? '<path d="' + dPath(a) + '" fill="' + fill + '"' + (stroke ? ' stroke="' + stroke + '" stroke-width="' + (sw || 1) * k + '"' : '') + (op ? ' opacity="' + op + '"' : '') + '/>' : ''; }
+  function ombre(a) { return p(a, 'currentColor', '', 0, 0.13); }
+  if (id === 'fond') h = (bt ? ombre(bt.O) : '') + p(g.fond, SEULE ? bois : blanc, SEULE ? boisT : gris, 1);
+  else if (id === 'dessus') h = ombre(g.fond) + p(g.dessus, c, fonce(c, 0.7), 0.6);
+  else if (id === 'pieces') { var inc = []; g.els.forEach(function (a) { if (a.e.mode === 'inc') inc = inc.concat(a.B); }); h = ombre(g.fond) + p(g.dessus, c, '', 0, 0.22) + p(unir(inc), blanc, '#4a443c', 0.8); }
+  else if (id === 'prenom') h = ombre(g.fond) + p(g.dessus, c, '', 0, 0.22) + (g.P && S.el.plaque.mode === 'inc' ? p(g.P.plaqueA, blanc, gris, 0.9) : '') + (g.P ? p(g.P.nomA, c, fonce(c, 0.6), 0.7) : '');
+  else if (id === 'grav') { var inc2 = []; g.els.forEach(function (a) { if (a.e.mode === 'inc') inc2 = inc2.concat(a.B); }); h = ombre(g.fond) + p(g.dessus, c, '', 0, 0.22) + p(inc2, blanc, '', 0, 0.9) + p(i3Gv(), '#2f2a24', '#2f2a24', 0.35) + p(g.gravD, fonce(c, 0.5), fonce(c, 0.5), 0.35); }
+  else if (id === 'cale' && bt) h = ombre(bt.O) + p(bt.cale, SEULE ? bois : blanc, SEULE ? boisT : gris, 1);
+  else if (id === 'bfond' && bt) h = p(bt.base, bois, boisT, 1);
+  else if (id === 'parois' && bt) h = ombre(bt.O) + p(moins(bt.O, bt.I), bois, boisT, 0.9);
+  else if (id === 'cour' && bt) h = ombre(bt.O) + p(bt.cour, bois, boisT, 0.9);
+  return '<span class="li-i3v" aria-hidden="true"><svg viewBox="' + (b.x - m).toFixed(1) + ' ' + (b.y - m).toFixed(1) + ' ' + (b.w + 2 * m).toFixed(1) + ' ' + (b.h + 2 * m).toFixed(1) + '">' + h + '</svg></span>'; }
+function i3Maj() { var el = $('i3-liste'); if (!el) return; var volet = $('i3'), ouvert = !volet || volet.open; var o = i3(), c = i3Choix(), d = i3Dispo(), I = window.NivImpr3D, h = '', grp = { cv: SEULE ? 'Le couvercle' : 'Le couvercle (la lettre décorée)', cale: '', bt: 'La boîte' }, vu = {};
   d.forEach(function (q) { if (grp[q[2]] && !vu[q[2]]) { vu[q[2]] = 1; h += '<p class="li-i3t">' + grp[q[2]] + '</p>'; }
-    h += '<label class="li-case"><input type="checkbox" data-i3="' + q[0] + '"' + (c[q[0]] ? ' checked' : '') + '> ' + i3Nom(q) + '</label>'; });
+    h += '<label class="li-case"><input type="checkbox" data-i3="' + q[0] + '"' + (c[q[0]] ? ' checked' : '') + '>' + (ouvert ? i3Img(q[0]) : '') + '<span>' + i3Nom(q) + '</span></label>'; });
   el.innerHTML = h; $('i3-coul').value = o.coul; $('i3-fmt').value = o.fmt; $('i3-retire').checked = o.retire; $('i3-bt').hidden = !G.bt; $('l-i3coul').hidden = SEULE;
   var info = $('i3-info'), go = $('i3-go'); go.disabled = !c.n || !I;
   if (!I) { info.textContent = 'La fabrication des fichiers 3D n\'est pas chargée dans cette page.'; return; }
@@ -682,6 +698,7 @@ function init() { SOUS = $('sous').textContent; $('f-bforme').innerHTML = FORMES
     else if (t.id === 'bNum') { S.num = !S.num; dessiner(); champs(); }
     else if (t.id === 'bAuto') { Object.keys(S.el).forEach(function (id) { S.el[id].auto = true; S.el[id].k = 1; }); maj(); }
     else if (t.id === 'bVider') { var z = neuf(); z.zw = S.zw; z.zh = S.zh; z.trait = S.trait; z.jeu = S.jeu; z.ep = S.ep; z.bt = S.bt; S = z; maj(); } });
+  if ($('i3')) $('i3').addEventListener('toggle', function () { i3Maj(); });   // les petites images ne se dessinent que volet ouvert
   /* glisser une pièce sur l'aperçu */
   var sv = $('svg'), prise = null;
   function mm(ev) { var p = sv.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY; return p.matrixTransform(sv.getScreenCTM().inverse()); }

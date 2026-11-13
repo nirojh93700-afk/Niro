@@ -89,7 +89,7 @@ body{background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,
 .li-lien{justify-self:start;background:none;border:0;padding:4px 0;color:var(--or);font:600 .85rem/1.2 system-ui,sans-serif;text-decoration:underline;cursor:pointer}
 .li-info{margin:0;font-size:.8rem;color:var(--doux)}
 .li-i3b{display:flex;flex-wrap:wrap;gap:8px}.li-btn2{font:600 .82rem/1 system-ui,sans-serif;padding:9px 12px;border-radius:999px;border:1px solid var(--ligne);background:var(--carte);color:var(--fg);cursor:pointer}
-.li-i3l{display:grid;gap:8px}.li-i3t{margin:6px 0 0;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--doux)}
+.li-i3l{display:grid;gap:8px}.li-i3l label.li-case{align-items:center;gap:10px}.li-i3v{width:76px;height:76px;flex:none;border-radius:9px;background:var(--scene);border:1px solid var(--ligne);color:var(--fg);display:grid;place-items:center;overflow:hidden}.li-i3v svg{width:70px;height:70px;display:block}.li-i3t{margin:6px 0 0;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--doux)}
 #i3-info{line-height:1.5}#i3-go:disabled{opacity:.5;cursor:default}
 .li-al{margin:0;font-size:.82rem;color:var(--al);background:var(--alf);border-radius:8px;padding:6px 9px}
 .li-ok{margin:0;font-size:.85rem;color:var(--ok);background:var(--okf);border-radius:8px;padding:8px 10px}
