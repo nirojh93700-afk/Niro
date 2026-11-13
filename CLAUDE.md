@@ -17,13 +17,18 @@
   `V.pt` (évènement) et `V.pm` (masqué) dans `niv-atelier-site`. Avec « Voir comme sur le site », la décoration à prénom et la maisonnette s'ouvrent sans ce qui est masqué
   (message `niv-masques`, écouté par `prenom-createur.py` et `maison-createur.py`) ; dans l'outil d'atelier de la décoration à suspendre, rien ne disparaît (c'est du site que ça partira).
   MON rangement de départ, à valider. ⚠️ Toujours une démonstration : rien n'est en vente, ce réglage ne commande rien sur le site (consigne du jour de la mise en vente plus bas).
-- **4 NON, puis « j'aime pas ceci non plus zodiaque »** : il n'aime ni l'ange / l'amphore ni le médaillon. Essai en ligne dans la lettre v10 et L'atelier v10 : Vierge = jeune femme,
-  Verseau = eau qui se verse (`SIGNE_DESSIN`, `animaux.ttf` = 71 dessins). **Planche de 4 styles envoyée (A médaillon actuel · B symbole en grand · C constellation + symbole + nom ·
-  D ses figures des cristaux, à vectoriser) : EN ATTENTE DE SON CHOIX**, ne rien changer d'autre avant.
+- **4 NON, puis « j'aime pas ceci non plus zodiaque », puis (13/11 soir) « je préfère le A mais j'aime pas les jumeaux, j'aime pas le lion, tu dois refaire Vierge et Verseau »** :
+  le MÉDAILLON (style A : symbole en haut, dessin au milieu, nom en rond) est GARDÉ ; 8 signes gardent leur dessin Noto Emoji ; **4 sont refaits** avec des pictogrammes libres composés
+  et tracés (`docs/maquettes/assets/lettre/signes-dessins/*.svg` + `LICENCES.txt`, ajoutés à `animaux.ttf` par `python3 tools/maquettes/lettre-signes.py <dossier> <animaux.ttf>`, cases U+E001…) :
+  Gémeaux = deux jumeaux face à face (U+E001) · Lion = lion rugissant de profil (U+E004) · Vierge = dame en robe et épis de blé (U+E006) · Verseau = la jarre qui verse l'eau (U+E009).
+  Autres choix montrés au gérant et gardés dans la police (il dit le numéro) : Gémeaux 2 garçons / 3 filles main dans la main (E002, E003) · Lion 2 tête de face (E005) ·
+  Vierge 2 jeune femme aux cheveux longs / 3 gerbe de blé (E007, E008) · Verseau 2 porteur d'eau à genoux / 3 amphore (E00A, E00B). **EN ATTENTE DE SON AVIS** sur ces quatre dessins.
+  ⚠️ Sources game-icons.net (CC BY 3.0) et EmojiOne (CC BY 4.0) : le jour de la mise en vente, une ligne de crédit sur le site (mentions légales). Mes essais de silhouettes
+  tirées de SES figures des cristaux : pas nets à 14 mm, abandonnés. `sous.py` (scratchpad) refait la police SANS ces cases : relancer `lettre-signes.py` après.
 - **6 OK** : le rangement par évènement (Noël = décoration à suspendre, décoration à prénom, maisonnette · Naissance = lettre).
 - **Prix** : maisonnette petite **24,90 €** (donné par lui), moyenne 29,90 € et grande 34,90 € = MON choix (+ 5 € chacun), à confirmer · fleur à prénom **19,90 €**, fond peint **+ 4 €**
   (donnés par lui). Maisonnette **v5**, fleur **v5**. La page « Créez le vôtre » (artifact v1) affiche encore l'ancien prix de la fleur : générateur corrigé, pas republié.
-- Versions : L'atelier **v10**, lettre **v10**. Essais du 13/11 soir : atelier 26 + 36, familles 40, version Gestion 36 (9 créations ouvertes, fabrication du support, téléchargement sur
+- Versions : L'atelier **v11**, lettre **v11** (quatre signes refaits ; Gestion `public/atelier-outils/lettre.html` à jour). Essais du 13/11 soir : atelier 26 + 36, familles 40, version Gestion 36 (9 créations ouvertes, fabrication du support, téléchargement sur
   ordinateur, partage sur écran tactile), trois outils seuls 18 + bouton OK 3, `npm run build` OK. ⚠️ Pas essayé sur un vrai iPhone ni sur la machine ; la page `/gestion/logiciel`
   elle-même n'a pas été ouverte dans un navigateur (seulement compilée), la page du logiciel oui.
 - Points de ma liste encore sans réponse : 5 (lettre 165 mm par défaut), 7 (réglages de la boîte), 8 (pieds), 11 à 14, essais sur la machine.

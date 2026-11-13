@@ -1,0 +1,28 @@
+Dessins des quatre signes refaits le 13/11/2026 (Gémeaux, Lion, Vierge, Verseau) — outil « Lettre à incruster ».
+Chaque fichier .svg est un dessin composé puis tracé en noir (potrace) à partir de pictogrammes de collections libres.
+Les huit autres signes gardent leur dessin Noto Emoji (animaux-LICENCE-OFL.txt).
+
+Collections utilisées
+- game-icons.net (Lorc, Delapouite et contributeurs) — licence Creative Commons Attribution 3.0 (CC BY 3.0)
+  https://game-icons.net · https://creativecommons.org/licenses/by/3.0/
+- EmojiOne 2 « monotone » — licence Creative Commons Attribution 4.0 (CC BY 4.0)
+  https://creativecommons.org/licenses/by/4.0/
+
+Ces deux licences permettent l'usage commercial et la modification, À CONDITION DE CITER LA SOURCE.
+Le jour où la lettre à incruster est mise en vente : ajouter une ligne de crédit sur le site (mentions légales),
+par exemple « Pictogrammes des signes : game-icons.net (CC BY 3.0) ».
+
+Fichier      Signe     Dessins d'origine
+gem-a.svg    Gémeaux   game-icons « face-to-face »                          (dans l'outil)
+gem-b.svg    Gémeaux   EmojiOne « two men holding hands »
+gem-c.svg    Gémeaux   EmojiOne « two women holding hands »
+lion-a.svg   Lion      game-icons « lion »                                  (dans l'outil)
+lion-b.svg   Lion      EmojiOne « lion face »
+vie-a.svg    Vierge    game-icons « ample-dress » + « wheat », tête et cheveux dessinés par nous   (dans l'outil)
+vie-b.svg    Vierge    EmojiOne « woman dancing »
+vie-c.svg    Vierge    game-icons « grain-bundle »
+ver-a.svg    Verseau   game-icons « pouring-pot » + « waves »               (dans l'outil)
+ver-b.svg    Verseau   game-icons « tarot-17-the-star »
+ver-c.svg    Verseau   game-icons « amphora » + « waves »
+
+Fabrication : python3 tools/maquettes/lettre-signes.py docs/maquettes/assets/lettre/signes-dessins docs/maquettes/assets/lettre/animaux.ttf

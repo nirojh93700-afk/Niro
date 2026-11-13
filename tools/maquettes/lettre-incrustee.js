@@ -81,7 +81,10 @@ var ANIMAUX = [['chat', 'Chat', 0x1F408], ['chat-tete', 'Chat (tête)', 0x1F431]
   ['bebe', 'Bébé emmailloté', 0x1F476], ['biberon', 'Biberon', 0x1F37C], ['couronne', 'Couronne', 0x1F451], ['ballon', 'Ballon', 0x1F388], ['arcenciel', 'Arc-en-ciel', 0x1F308], ['fleur', 'Fleur', 0x1F338],
   ['soleil', 'Soleil', 0x2600], ['cadeau', 'Cadeau', 0x1F381], ['trefle', 'Trèfle', 0x1F340], ['pattes', 'Empreintes de pattes', 0x1F43E]];
 /* les 12 signes en dessins (même collection), dans l'ordre de SIGNES */
-var SIGNE_DESSIN = [0x1F410, 0x1FAD7, 0x1F41F, 0x1F40F, 0x1F402, 0x1F46D, 0x1F980, 0x1F981, 0x1F469, 0x2696, 0x1F982, 0x1F3F9]; /* Verseau : l'eau qui se verse ; Vierge : une jeune femme (13/11/2026, l'amphore et l'ange refusés) */
+/* 13/11/2026 soir, le gérant garde le médaillon mais refuse quatre dessins : « j'aime pas les jumeaux, j'aime pas le lion, tu dois refaire Vierge et Verseau ».
+   Ces quatre-là ne viennent plus de Noto Emoji : dessins libres composés et tracés (tools/maquettes/lettre-signes.py, cases U+E001… de la police).
+   Verseau : la jarre qui verse l'eau · Gémeaux : deux jumeaux face à face · Lion : lion rugissant de profil · Vierge : dame en robe et épis de blé. */
+var SIGNE_DESSIN = [0x1F410, 0xE009, 0x1F41F, 0x1F40F, 0x1F402, 0xE001, 0x1F980, 0xE004, 0xE006, 0x2696, 0x1F982, 0x1F3F9];
 var DECORS = { etoiles: ['etoile'], nuages: ['nuage'], coeurs: ['coeur'], lune: ['lune', 'etoile', 'etoile', 'etoile', 'etoile', 'etoile'], melange: ['etoile', 'nuage', 'coeur', 'lune', 'etoile', 'nuage'] }, DECOR_NOM = { etoile: 'Étoile', nuage: 'Nuage', coeur: 'Cœur', lune: 'Lune' };
 function decorDe(id) { var l = DECORS[S.decor] || DECORS.etoiles; return l[(+id.slice(2) - 1) % l.length]; }
 function decorForme(k, d) { var p = [], i, t;
@@ -155,7 +158,6 @@ function forme(id) { var T = textes(), cle, g = null, P = S.pol;
   else if (id === 'signe' && signeChoisi() >= 0 && S.signeStyle !== 'symbole') { /* un médaillon de signe : le symbole en haut, le dessin au milieu, le nom du signe écrit en rond en bas ; tout est gravé sur un rond blanc */
     var si = signeChoisi(), sd = ecrit('animaux', String.fromCodePoint(SIGNE_DESSIN[si]), 100), sb = boite(sd), sz = bouger(centrer(sd), 0, 0.2, 14.2 / Math.max(sb.w, sb.h)), RS = 15.5;
     var sy = ecrit('signes', String.fromCodePoint(SIGNE_CODE[si]), 100), yb = boite(sy), gs = unir(sz, decaler(bouger(centrer(sy), 0, -10.7, 3.9 / Math.max(yb.w, yb.h)), 0.14));
-    if (si === 5) gs = decaler(bouger(centrer(sy), 0, -1.2, 12.5 / Math.max(yb.w, yb.h)), 0.2); /* les Gémeaux : pas de dessin qui se reconnaisse dans la collection, le symbole en grand */
     gs = unir(gs, moins([cercle(0, 0, RS - 0.9)], [cercle(0, 0, RS - 1.4)]));
     var lts = SIGNES[si].split('').map(function (ch) { var q = texteH(P, ch, 2.5), qb = boite(q); return { p: bouger(q, -(qb.x + qb.w / 2), 0), w: qb.w }; }), ec = 0.42, rt = 12.4, tot = -ec, pos = 0; lts.forEach(function (l) { tot += l.w + ec; });
     lts.forEach(function (l) { var th = (pos + l.w / 2 - tot / 2) / rt; pos += l.w + ec; gs = unir(gs, bouger(tourner(bouger(l.p, 0, rt + 1.25), -th * 180 / Math.PI), 0, 0)); });

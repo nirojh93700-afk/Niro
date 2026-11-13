@@ -6,6 +6,7 @@
 
 
 ## 🧰 13/11/2026 SOIR — L'ATELIER DANS GESTION : CE QUI ATTEND SON AVIS
+- **Signes du zodiaque (13/11 soir)** : médaillon A gardé, Gémeaux / Lion / Vierge / Verseau refaits (image envoyée, n° 1 de chaque ligne dans l'outil, autres choix numérotés) : attendre son avis. Lettre v11, L'atelier v11, Gestion à jour.
 - **Signes du zodiaque** : il n'aime pas le médaillon. Planche de 4 styles envoyée (A, B, C, D) : attendre son choix avant de toucher aux signes.
 - **En ligne dans Gestion** (admin seulement) : Tests → « L'atelier (toutes les créations) » ; bouton OK et support 179 mm dans les trois outils ; 2 mm de marge dans tous les fichiers fabriqués.
   À lui demander après essai sur son iPhone : l'enregistrement des fichiers (partage) lui convient-il ?
