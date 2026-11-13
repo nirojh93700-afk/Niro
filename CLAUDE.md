@@ -1,3 +1,24 @@
+## 🧭 AUDIT DU 13/11/2026 + MAQUETTE « LE SITE REFAIT » (gérant : « fais une vraie audit du site… refaire le site organisé correctement, toutes les mises en page, l'accueil… une vraie maquette, sans toucher au site ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- **Artifact** https://claude.ai/artifact/9G8KcTBKPQnwUMtC4tfTh8 (v1) · relevé du catalogue EN LIGNE `python3 -I tools/maquettes/site-refait-releve.py <sortie>` (pages `/boutique/<univers>` : 91 créations,
+  prix du jour, photos 360 px) → `python3 tools/maquettes/site-refait.py <sortie>/catalogue.json <sortie>/img <sortie>/grand <sortie>/maq` (2,3 Mo, non commité). Sept vues : Accueil · Catégorie
+  (les 8 univers + toute la boutique) · Fiche produit (Collier Cœur gravé, vrais prix et textes) · Créez le vôtre (7 outils, maisonnette comprise) · Panier · Avis · « Ce qui change ».
+- **Audit** `docs/audits/audit-2026-11-13.md` : 0 ❌ · 7 ⚠️ connus (pas de CSP · Google Analytics sans demande d'accord · 38 prix barrés permanents · accueil et cristal 4,4 Mo · contraste de 34 éléments).
+  **Nouveau, trouvé en vérifiant les règles sur Internet : depuis le 19/06/2026 (ordonnance du 05/01/2026, art. L221-21) la rétractation doit pouvoir se faire EN LIGNE par une fonction du site**
+  pour les articles non personnalisés ; le site n'a qu'un texte et un e-mail. Contrôle ajouté à `tools/audit-complet.mjs` (❌ tant qu'il n'y a pas de lien `/retractation` ou équivalent).
+  RIEN corrigé sur le site : à faire sur son mot (page « Me rétracter d'une commande » : n° de commande, e-mail, article ; accusé de réception par e-mail), à faire valider par un professionnel.
+- **Constats d'organisation (mesurés sur le site en ligne, téléphone 390 px)** : accueil 18,7 écrans, 12 blocs, 220 liens produits ; à l'arrivée 4 choses sur le titre (fenêtre −10 %, 2 boutons
+  flottants, bulle « Nouveauté ») · menu d'ordinateur 16 entrées sur 2 lignes (en-tête 214 px) · fiches 13 à 18 écrans, « demande particulière » AVANT le titre et le prix, réassurance 3 fois, pas de
+  bouton d'achat toujours visible · « Toute la boutique » 19 écrans (91 cartes d'un coup) · page Avis 66 écrans · pied de page ≈ 2,5 écrans · les 7 créateurs n'ont pas de place.
+- **Ce que propose la maquette** : ligne « −10 % » à la place de la fenêtre à l'arrivée · accueil ≈ 7 écrans (cristal → ruban → 8 univers en tuiles photo → UNE vitrine à onglets, 2 lignes qui
+  glissent → Créez le vôtre → « En ce moment » Noël / carafe / marque-pages → Trouver un cadeau en 2 étapes → avis + confiance une fois → sur mesure) · menu 7 entrées (Boutique ▾ · ✦ Créez le vôtre ·
+  Cristal photo 3D · Offrir ▾ · Promotions · Idées & conseils · L'atelier ▾) · téléphone : barre du bas (Accueil · Boutique · Créer · Favoris · Panier) à la place des boutons flottants, menu avec les
+  8 univers en photos · rayon : 12 cartes puis « Afficher les autres », Budget et Tri en 2 menus · fiche ≈ 4,5 écrans : nom court, prix, choix numérotés, total + « Ajouter au panier » collés en bas,
+  le reste en volets · avis : 6 puis « Afficher plus » · pied de page en volets · lien « Me rétracter d'une commande ». Logo = fichier d'origine, même taille, au milieu ; couleurs et polices du site.
+  Vérifié Chromium 390 / 1280 : 0 erreur, 0 débordement, 9 vues, total de la fiche 30,11 € (22,41 + 2 faces + sac), panier, filtres.
+- **Proposé par moi, à valider** : la barre du bas (remplace « La boutique » / « Une question ? » flottants, qu'il avait choisis) · la fenêtre −10 % qui ne s'ouvre plus toute seule · le mur de
+  toutes les créations retiré de l'accueil · les blocs par famille (bijoux, verres, bébé, marque-pages, carafe) réunis · le menu à 7 entrées · le nom court en titre de fiche (le titre long reste pour
+  Google). ⛔ L'en-tête du site reste intouché tant qu'il n'a pas dit « applique ».
+
 ## 🏠 MAQUETTE « MAISONNETTE EN BOIS » (générateur « House Ornament » d'Atomm) — 13/11/2026 (gérant : lien donné, « analyses bien pour le faire ») — ENREGISTRÉE LE 13/11/2026 (« t'as enregistré », MA lecture : v1 de l'artifact, comme la fleur v2 et « Créez le vôtre » v1 ; ne plus les modifier sans sa demande ; ses réponses aux points « à valider » restent attendues). RIEN en ligne
 - **Artifact** https://claude.ai/artifact/BWVe3PyAdcb18PeKpZtxK4 (v1) · `python3 tools/maquettes/maison-createur.py <page de base> docs/maquettes/assets/maison/motifs.json <clipper.js> <sortie>`
   (`npm pack clipper-lib@6.4.2`, écrite DANS la page avec `tools/maquettes/maison-geo.js` ; three.js r128 chargé de cdnjs pour la 3D, la vue « De face » marche sans lui).

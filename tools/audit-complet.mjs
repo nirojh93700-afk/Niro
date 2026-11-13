@@ -173,6 +173,10 @@ section("3. Légal (mentions, CGV, retours, confidentialité, cookies)");
   /consumers\/odr/i.test(cgv + ret) ? ko("lien vers la plateforme européenne de litiges (fermée le 20/07/2025)") : ok("plus de lien vers l'ancienne plateforme européenne de litiges");
   /photo sous \d+ ?h|sous 24 ?h[^.]{0,40}défaut|défaut[^.]{0,60}sous \d+ (h|jours)/i.test(ret) ? ko("Retours : délai imposé pour signaler un défaut (limite la garantie légale)") : ok("Retours : aucun délai imposé pour signaler un défaut");
   /garantie légale de conformité/i.test(ret) ? ok("Retours : garantie légale de conformité rappelée") : warn("Retours : la garantie légale de conformité n'est pas rappelée");
+  // Depuis le 19/06/2026 (ordonnance du 05/01/2026, art. L221-21) : la rétractation doit pouvoir se faire EN LIGNE, par une fonction du site, pour tout article qui y a droit (non personnalisé).
+  /href="\/retractation"|se rétracter en ligne|formulaire de rétractation en ligne|bouton de rétractation/i.test(acc + (pages[SITE + "/retours"]?.body || "") + (pages[SITE + "/cgv"]?.body || ""))
+    ? ok("Rétractation en ligne : une fonction du site permet de se rétracter (obligatoire depuis le 19/06/2026)")
+    : ko("Rétractation en ligne : aucune fonction du site ne permet de se rétracter (obligatoire depuis le 19/06/2026 pour les articles non personnalisés, art. L221-21 ; un e-mail ou un PDF ne suffit plus) — à faire valider par un professionnel");
   exiger(conf, "Confidentialité", [["droits RGPD", /RGPD|droit d'accès/i], ["réclamation CNIL", /CNIL/i], ["cookies", /cookies/i], ["durée de conservation", /conserv/i]]);
   const ga = /googletagmanager\.com\/gtag|gtag\(/.test(acc);
   if (ga && !/Google Analytics/i.test(conf)) ko("Google Analytics est sur le site mais la page Confidentialité ne le dit pas");
