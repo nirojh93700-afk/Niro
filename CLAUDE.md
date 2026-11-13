@@ -1,3 +1,20 @@
+## 🗓️ « L'ATELIER » v3 : MASQUER PAR ÉVÈNEMENT + BOÎTE SEULE + PIEDS GRAVÉS — 13/11/2026 soir (gérant : « après Noël je masque tous les trucs de Noël… dans le logiciel ça disparaît pas, mais du site ça peut disparaître… un accès dans admin… après y aura la Saint-Valentin » ; « que je puisse faire que la boîte, les boîtes de chiffre ou normales » ; « pour les pieds aussi il faut les détails gravés, comme pour l'animal ») — DÉMONSTRATION, RIEN en ligne, RIEN dans Gestion
+- **L'atelier v3** https://claude.ai/artifact/S43Tkb7YKhWEb1B4JoHkh4 (9 créations) · **Lettre v6** https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw.
+- **Évènements** (`atelier-unique.py`, objet `V`, gardé sur l'appareil `niv-atelier-site`) : Noël, Saint-Valentin, Pâques, Fête des mères, Fête des pères, Naissance + « Ajouter un évènement ».
+  Accueil : filtres « Tout · Noël · Naissance · Toute l'année », pastilles sur chaque création (évènement, « Nouveau », « Masqué sur le site »), case « Voir comme sur le site ».
+  Écran « Masquer ou afficher sur le site… » : par évènement « Tout masquer » / « Tout afficher » ; par création : case « Affichée sur le site », case « Étiquette Nouveau », évènements à cocher.
+  ⛔ Règle du gérant : dans le logiciel RIEN ne disparaît (une création masquée reste, grisée, et s'ouvre) ; c'est du SITE qu'elle disparaît.
+  Rangement de départ (MON choix, à valider) : Noël = décoration à suspendre, décoration à prénom, maisonnette · Naissance = lettre à incruster · le reste toute l'année.
+  ⚠️ Les créations ne sont pas en vente : ce réglage ne commande rien sur le site aujourd'hui. Au « applique » : le mettre dans Gestion (section de réglage à part, fusion clé par clé), le site le lit,
+  et l'interrupteur Noël de Gestion → Fêtes éteint tout Noël d'un coup. PAS fait : masquer une partie À L'INTÉRIEUR d'un outil (dessins de Noël de la décoration à suspendre, modèles renne / bonnet…).
+- **Boîte seule** = le même outil que la lettre, ouvert avec `#boite` (`SEULE`, mémoire à part `niv-boite-seule`, boutons « Lettre décorée et sa boîte » / « La boîte seule » dans la page seule,
+  masqués dans L'atelier) : forme Lettre ou chiffre · Rectangle · Rond · Ovale · Cœur (`S.bforme`, `S.bw`, `lettre()` rend la forme, `bordB()` = 0 pour une forme simple), couvercle PLEIN (pièce `CV`),
+  cale, fond à encoches, couronne, dos, bande en morceaux ; planches « bois de la boîte » seulement, liste et montage écrits (`listeBoite`), fichiers `boite-<forme>-planche-N.svg`.
+  Un cœur de 170 mm sort à 158 mm de haut (la pointe est arrondie au rayon). Suit « Ma machine ». Essais 390 / 1280 : 40 sur 40 (P, 8, 4, A, 0, 4 formes, 150 × 80, 3D, retour à la lettre).
+- **Pieds** : pièce blanche à la silhouette des deux pieds + empreintes GRAVÉES (plante avec la voûte, deux plis, cinq orteils séparés), `pied()` ; en « Gravé », les empreintes seules sur le dessus.
+  ⛔ Règle confirmée : toute pièce à dessin = pièce blanche + détails gravés (animal, signe, horloge, règle, pieds).
+- Essais rejoués : lettre 54 sur 54, boîte seule 40, atelier 26 + 36, 0 erreur, 0 débordement. Pas essayé sur les pages publiées ni sur un vrai iPhone.
+- **Proposé par moi, à valider** : masquer aussi par famille DANS chaque outil · un texte gravé sur le couvercle de la boîte seule · d'autres formes de boîte (étoile, sapin, hexagone).
 ## 🗂️ « PAPETERIE & BUREAU » — ✅ EN LIGNE LE 13/11/2026 (gérant : « mets en ligne la maquette Papeterie & Bureau, dans le menu aussi »)
 - Maquette https://claude.ai/artifact/W5k33bztj4JPMfdo8uExoF. L'univers `papeterie` (`src/lib/univers.js`) s'appelle « Papeterie & Bureau » (menu du
   haut, onglets, page, fil d'Ariane des fiches marque-pages / carnet et des 6 produits `subcategory: "bureau"`) : marque-pages bois, métal, carnets +

@@ -83,6 +83,26 @@ body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system
 .prod b{font-size:.98rem;overflow-wrap:anywhere}
 .prod span{font-size:.82rem;color:var(--doux)}
 .prod em{font-style:normal;font-size:.72rem;font-weight:700;letter-spacing:.03em;color:var(--or);text-transform:uppercase}
+.prod.m{opacity:.62;border-style:dashed}
+.past{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.past i{font-style:normal;font-size:.7rem;font-weight:600;padding:2px 7px;border-radius:999px;border:1px solid var(--ligne);color:var(--doux);background:var(--bg)}
+.past i.nv{border-color:var(--or2);color:var(--or)}
+.past i.ms{border-color:var(--al);color:var(--al)}
+.filtres{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;margin:0 -16px 10px;padding:0 16px 4px;-webkit-overflow-scrolling:touch}
+.filtres button,.puces button{flex:none;min-height:38px;padding:0 13px;border-radius:999px;border:1px solid var(--ligne);background:var(--carte);color:var(--fg);font:600 .82rem/1 system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.filtres button.on,.puces button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.sous{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:12px 0 0}
+.case{display:flex;align-items:center;gap:9px;min-height:40px;font-size:.88rem;color:var(--fg);cursor:pointer}
+.case input{width:22px;height:22px;flex:none;accent-color:#a98935}
+.lg{display:grid;gap:8px;padding:11px 13px;border:1px solid var(--ligne);border-radius:14px;background:var(--carte);min-width:0}
+.lg.vide{grid-template-columns:1fr auto;align-items:center;padding:6px 8px 6px 13px}
+.lg.vide .btn{min-height:36px;font-weight:500;color:var(--doux)}
+.lg b{font-size:.95rem;overflow-wrap:anywhere}
+.lg small{font-size:.8rem;color:var(--doux)}
+.lg .bts,.puces{display:flex;flex-wrap:wrap;gap:6px}
+.liste{display:grid;gap:8px;max-width:760px}
+.aj{display:flex;gap:8px;max-width:760px;margin-top:8px}
+.aj input{flex:1;min-width:0;font:inherit;font-size:16px;color:var(--fg);background:var(--carte);border:1px solid var(--ligne);border-radius:10px;padding:9px 11px}
 .mach{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));padding:12px 14px;border:1px solid var(--ligne);border-radius:14px;background:var(--carte);max-width:760px}
 .mach label{display:grid;gap:3px;font-size:.8rem;color:var(--doux);min-width:0}
 .mach input{font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--ligne);border-radius:9px;padding:8px 10px;width:100%;min-width:0;font-variant-numeric:tabular-nums}
@@ -101,7 +121,9 @@ body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system
  <div class="ecran" id="accueil">
   <h1>Que voulez-vous fabriquer ?</h1>
   <p>Un seul logiciel pour toutes les créations : choisissez le produit, réglez-le, puis sortez les fichiers pour la machine. « ☰ Produits » ramène ici ; un produit déjà ouvert garde ses réglages.</p>
+  <div class="filtres" id="filtres" role="group" aria-label="Trier par évènement"></div>
   <div class="grille" id="produits"></div>
+  <div class="sous"><label class="case"><input type="checkbox" id="commeSite"> Voir comme sur le site</label><button type="button" class="btn" id="bGerer">Masquer ou afficher sur le site…</button></div>
   <h2>Ma machine</h2>
   <p>À régler une fois. Le jour où la machine change (grand format), changez la zone ici : les planches se rangent à cette taille.</p>
   <div class="mach">
@@ -110,19 +132,28 @@ body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system
   </div>
   <p style="margin-top:8px" id="machNote"></p>
  </div>
+ <div class="ecran" id="gerer" hidden></div>
  <div class="ecran" id="fich" hidden></div>
 </div>
 <script>
 (function(){
  var OUTILS=[
-  {id:'lettre',t:'Lettre ou chiffre à incruster, avec sa boîte',d:'Naissance : date, heure, signe, animal, prénom, et la boîte qui va dessous.',page:'lettre.html',e:'Fichiers dans l’outil · suit « Ma machine »',machine:true},
+  {id:'lettre',t:'Lettre ou chiffre à incruster, avec sa boîte',d:'Naissance : date, heure, signe, animal, prénom, et la boîte qui va dessous.',page:'lettre.html',e:'Fichiers dans l’outil · suit « Ma machine »',machine:true,ev:['naissance']},
+  {id:'boite',t:'Boîte seule',d:'En forme de lettre, de chiffre, ou simple : rectangle, rond, ovale, cœur. Couvercle plein.',page:'lettre.html#boite',e:'Fichiers dans l’outil · suit « Ma machine »',machine:true},
   {id:'support',t:'Support de téléphone',d:'Formes, tailles, gravure, motif ajouré.',page:'atelier-support.html',e:'Retouche pièce par pièce · fichiers',pont:true},
   {id:'arbre',t:'Arbre de vie à prénoms',d:'9 arbres, 1 à 6 prénoms, le pied.',page:'atelier-arbre.html',e:'Retouche pièce par pièce · fichiers',pont:true},
-  {id:'deco',t:'Décoration à suspendre (Noël)',d:'46 formes, textes, photos, dessins.',page:'atelier-decoration.html',e:'Retouche pièce par pièce · fichiers',pont:true},
-  {id:'prenom',t:'Décoration à prénom (Noël)',d:'Grande initiale, renne, bonnet, oreilles, cornes.',page:'prenom/index.html',e:'Créateur · planches en bas de la page'},
+  {id:'deco',t:'Décoration à suspendre',d:'46 formes, textes, photos, dessins.',page:'atelier-decoration.html',e:'Retouche pièce par pièce · fichiers',pont:true,ev:['noel']},
+  {id:'prenom',t:'Décoration à prénom',d:'Grande initiale, renne, bonnet, oreilles, cornes.',page:'prenom/index.html',e:'Créateur · planches en bas de la page',ev:['noel']},
   {id:'suspension',t:'Suspension à prénoms',d:'Une forme par prénom, empilées.',page:'suspension.html',e:'Créateur · planches en bas de la page'},
   {id:'fleur',t:'Fleur à prénom',d:'26 fleurs, la tige porte le prénom.',page:'fleur.html',e:'Créateur · planches en bas de la page'},
-  {id:'maison',t:'Maisonnette en bois',d:'8 pièces à tenons, suspendue ou sur guirlande.',page:'maison.html',e:'Créateur · planches en bas de la page'}];
+  {id:'maison',t:'Maisonnette en bois',d:'8 pièces à tenons, suspendue ou sur guirlande.',page:'maison.html',e:'Créateur · planches en bas de la page',ev:['noel']}];
+ /* ce qui se voit sur le site : évènements, créations masquées, étiquette « Nouveau » (gardé sur cet appareil ; dans Gestion le jour où les créations sont en vente) */
+ var V={ev:[['noel','Noël'],['valentin','Saint-Valentin'],['paques','Pâques'],['meres','Fête des mères'],['peres','Fête des pères'],['naissance','Naissance']].map(function(e){return {id:e[0],nom:e[1]}}),tags:{},masque:{},nouveau:{}},filtre='tout',commeSite=false,gerer=false;
+ OUTILS.forEach(function(o){V.tags[o.id]=(o.ev||[]).slice()});
+ try{var v0=JSON.parse(localStorage.getItem('niv-atelier-site')||'null');if(v0&&v0.ev&&v0.tags){V.ev=v0.ev;OUTILS.forEach(function(o){if(v0.tags[o.id])V.tags[o.id]=v0.tags[o.id]});V.masque=v0.masque||{};V.nouveau=v0.nouveau||{}}}catch(e){}
+ function garderV(){try{localStorage.setItem('niv-atelier-site',JSON.stringify(V))}catch(e){}}
+ function evDe(id){return V.ev.filter(function(x){return x.id===id})[0]}
+ function avec(ev){return OUTILS.filter(function(o){return V.tags[o.id].indexOf(ev)>=0})}
  var $=function(i){return document.getElementById(i)},cadres={},prets={},cur=null,occupe=false,dl=null,resultat=null;
  var M={zw:200,zh:200,trait:0.1,jeu:0.1,ep:3};try{var t=JSON.parse(localStorage.getItem('niv-atelier-machine')||'null');if(t)for(var k in M)if(typeof t[k]==='number')M[k]=t[k]}catch(e){}
  function esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
@@ -131,27 +162,59 @@ body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system
  function etat(t){$('etat').textContent=t}
  function maj(){var o=cur?outil(cur):null;
   for(var k in cadres)cadres[k].hidden=k!==cur||!!resultat;
-  $('accueil').hidden=!!cur;$('fich').hidden=!resultat;$('nom').textContent=o?o.t:'';
+  $('accueil').hidden=!!cur||gerer;$('gerer').hidden=!!cur||!gerer;$('fich').hidden=!resultat;$('nom').textContent=o?o.t:(gerer?'Ce qui se voit sur le site':'');
   $('fab').hidden=!(o&&o.pont);$('fab').disabled=occupe||!prets[cur]||!!resultat;
-  if(!occupe)etat(!o?'Choisissez un produit.':resultat?'Vos fichiers sont prêts.':o.pont?(prets[cur]?'Touchez une pièce pour la régler, puis « Fabriquer les fichiers ».':'L’outil se charge…'):o.machine?'Les fichiers se téléchargent en bas de l’outil (étape 6).':'Créateur : les planches pour la machine sont tout en bas de la page.')}
- function envoyerMachine(){var f=cadres.lettre;if(f&&f.contentWindow)f.contentWindow.postMessage({type:'niv-machine',machine:M},'*')}
- function ouvrir(id){if(occupe)return;cur=id;resultat=null;
+  if(!occupe)etat(!o?(gerer?'Une création masquée reste dans ce logiciel.':'Choisissez un produit.'):resultat?'Vos fichiers sont prêts.':o.pont?(prets[cur]?'Touchez une pièce pour la régler, puis « Fabriquer les fichiers ».':'L’outil se charge…'):o.machine?'Les fichiers se téléchargent en bas de l’outil.':'Créateur : les planches pour la machine sont tout en bas de la page.')}
+ function envoyerMachine(){OUTILS.forEach(function(o){var f=o.machine&&cadres[o.id];if(f&&f.contentWindow)f.contentWindow.postMessage({type:'niv-machine',machine:M},'*')})}
+ function ouvrir(id){if(occupe)return;cur=id;resultat=null;if(id)gerer=false;
   if(id&&!cadres[id]){var o=outil(id),f=document.createElement('iframe');f.title='Outil : '+o.t;f.src=o.page;if(o.machine)f.addEventListener('load',function(){setTimeout(envoyerMachine,300)});$('corps').appendChild(f);cadres[id]=f}
   maj()}
- $('produits').innerHTML=OUTILS.map(function(o){return '<button type="button" class="prod" data-id="'+o.id+'"><em>'+esc(o.e)+'</em><b>'+esc(o.t)+'</b><span>'+esc(o.d)+'</span></button>'}).join('');
+ function tuiles(){var sans=OUTILS.filter(function(o){return !V.tags[o.id].length}).length;
+  if(filtre!=='tout'&&(filtre==='annee'?!sans:!avec(filtre).length))filtre='tout';
+  var h='<button type="button" data-f="tout" class="'+(filtre==='tout'?'on':'')+'" aria-pressed="'+(filtre==='tout')+'">Tout · '+OUTILS.length+'</button>';
+  V.ev.forEach(function(e){var n=avec(e.id).length;if(n)h+='<button type="button" data-f="'+e.id+'" class="'+(filtre===e.id?'on':'')+'" aria-pressed="'+(filtre===e.id)+'">'+esc(e.nom)+' · '+n+'</button>'});
+  if(sans)h+='<button type="button" data-f="annee" class="'+(filtre==='annee'?'on':'')+'" aria-pressed="'+(filtre==='annee')+'">Toute l’année · '+sans+'</button>';
+  $('filtres').innerHTML=h;
+  var l=OUTILS.filter(function(o){if(commeSite&&V.masque[o.id])return false;return filtre==='tout'||(filtre==='annee'?!V.tags[o.id].length:V.tags[o.id].indexOf(filtre)>=0)});
+  $('produits').innerHTML=l.length?l.map(function(o){var p=V.tags[o.id].map(function(e){var x=evDe(e);return x?'<i>'+esc(x.nom)+'</i>':''}).join('')+(V.nouveau[o.id]?'<i class="nv">Nouveau</i>':'')+(V.masque[o.id]?'<i class="ms">Masqué sur le site</i>':'');
+   return '<button type="button" class="prod'+(V.masque[o.id]?' m':'')+'" data-id="'+o.id+'"><em>'+esc(o.e)+'</em><b>'+esc(o.t)+'</b><span>'+esc(o.d)+'</span>'+(p?'<span class="past">'+p+'</span>':'')+'</button>'}).join(''):'<p>Aucune création à montrer ici.</p>';
+  $('commeSite').checked=commeSite}
+ function ecranGerer(){var h='<h1>Ce qui se voit sur le site</h1><p>Masquez une création, ou toutes celles d’un évènement, quand la saison est passée ; réaffichez-les l’année suivante. Dans ce logiciel rien ne disparaît : une création masquée reste ici, marquée « Masqué sur le site ».</p>'
+   +'<p>Démonstration : ces créations ne sont pas encore en vente. Le jour où elles le seront, ce réglage sera dans Gestion et le site le suivra.</p><p><button type="button" class="btn" id="gRetour">‹ Retour aux créations</button></p><h2>Par évènement</h2><div class="liste">';
+  V.ev.forEach(function(e){var l=avec(e.id),vis=l.filter(function(o){return !V.masque[o.id]}).length;
+   h+='<div class="lg'+(l.length?'':' vide')+'"><div><b>'+esc(e.nom)+'</b> <small>'+(l.length?l.length+' création'+(l.length>1?'s':'')+' · '+(vis===l.length?(l.length>1?'toutes affichées':'affichée'):vis?vis+' affichée'+(vis>1?'s':''):(l.length>1?'toutes masquées':'masquée')):'aucune création pour l’instant')+'</small></div><div class="bts">'
+    +(l.length?'<button type="button" class="btn" data-evm="'+e.id+'"'+(vis?'':' disabled')+'>Tout masquer</button><button type="button" class="btn" data-eva="'+e.id+'"'+(vis<l.length?'':' disabled')+'>Tout afficher</button>':'<button type="button" class="btn" data-evx="'+e.id+'" aria-label="Retirer l’évènement '+esc(e.nom)+'">Retirer</button>')+'</div></div>'});
+  h+='</div><div class="aj"><input id="evNom" maxlength="24" autocomplete="off" placeholder="Nouvel évènement (ex. Rentrée)" aria-label="Nom du nouvel évènement"><button type="button" class="btn or" id="evAj">Ajouter</button></div><h2>Création par création</h2><div class="liste">';
+  OUTILS.forEach(function(o){h+='<div class="lg"><b>'+esc(o.t)+'</b><label class="case"><input type="checkbox" data-vis="'+o.id+'"'+(V.masque[o.id]?'':' checked')+'> Affichée sur le site</label><label class="case"><input type="checkbox" data-nv="'+o.id+'"'+(V.nouveau[o.id]?' checked':'')+'> Étiquette « Nouveau »</label>'
+   +'<small>Évènements (aucun = toute l’année)</small><div class="puces">'+V.ev.map(function(e){var on=V.tags[o.id].indexOf(e.id)>=0;return '<button type="button" data-tag="'+o.id+'|'+e.id+'" class="'+(on?'on':'')+'" aria-pressed="'+on+'">'+esc(e.nom)+'</button>'}).join('')+'</div></div>'});
+  var y=$('gerer').scrollTop;$('gerer').innerHTML=h+'</div>';$('gerer').scrollTop=y}
+ function changeV(){garderV();tuiles();ecranGerer()}
  $('produits').addEventListener('click',function(ev){var b=ev.target.closest('button');if(b)ouvrir(b.getAttribute('data-id'))});
- $('menu').addEventListener('click',function(){ouvrir(null)});
+ $('filtres').addEventListener('click',function(ev){var b=ev.target.closest('button');if(b){filtre=b.getAttribute('data-f');tuiles()}});
+ $('commeSite').addEventListener('change',function(){commeSite=this.checked;tuiles()});
+ $('bGerer').addEventListener('click',function(){gerer=true;ecranGerer();$('gerer').scrollTop=0;maj()});
+ $('gerer').addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;var a;
+  if(b.id==='gRetour'){gerer=false;maj();return}
+  if((a=b.getAttribute('data-evm'))){avec(a).forEach(function(o){V.masque[o.id]=true});changeV()}
+  else if((a=b.getAttribute('data-eva'))){avec(a).forEach(function(o){delete V.masque[o.id]});changeV()}
+  else if((a=b.getAttribute('data-evx'))){V.ev=V.ev.filter(function(e){return e.id!==a});changeV()}
+  else if((a=b.getAttribute('data-tag'))){a=a.split('|');var l=V.tags[a[0]],i=l.indexOf(a[1]);if(i>=0)l.splice(i,1);else l.push(a[1]);changeV()}
+  else if(b.id==='evAj'){var n=$('evNom').value.trim();if(!n)return;if(V.ev.some(function(e){return e.nom.toLowerCase()===n.toLowerCase()})){etat('Cet évènement existe déjà.');return}V.ev.push({id:'ev'+Date.now(),nom:n});changeV();etat('Évènement « '+n+' » ajouté : rangez-y des créations plus bas.')}});
+ $('gerer').addEventListener('change',function(ev){var t=ev.target,a;
+  if((a=t.getAttribute('data-vis'))){if(t.checked)delete V.masque[a];else V.masque[a]=true;changeV()}
+  else if((a=t.getAttribute('data-nv'))){if(t.checked)V.nouveau[a]=true;else delete V.nouveau[a];changeV()}});
+ $('menu').addEventListener('click',function(){gerer=false;ouvrir(null)});
  $('fab').addEventListener('click',function(){if(!prets[cur]||occupe)return;occupe=true;etat('Fabrication des fichiers…');maj();cadres[cur].contentWindow.postMessage({type:'niv-fabriquer'},'*')});
  /* ma machine */
  function champsM(){['zw','zh','trait','jeu','ep'].forEach(function(k){var el=$('m-'+k);if(document.activeElement!==el)el.value=String(M[k]).replace('.',',')});
-  $('machNote').textContent='Aujourd’hui ce réglage est suivi par « Lettre ou chiffre à incruster » (zone '+mm(M.zw)+' × '+mm(M.zh)+' mm). Les sept autres outils ont encore leurs tailles fixes, prévues pour 200 × 200 mm : à ouvrir un par un, sur votre accord.'}
+  $('machNote').textContent='Aujourd’hui ce réglage est suivi par « Lettre ou chiffre à incruster » et « Boîte seule » (zone '+mm(M.zw)+' × '+mm(M.zh)+' mm). Les sept autres outils ont encore leurs tailles fixes, prévues pour 200 × 200 mm : à ouvrir un par un, sur votre accord.'}
  document.addEventListener('input',function(ev){var t=ev.target;if(!t.id||t.id.indexOf('m-')!==0)return;var k=t.id.slice(2),v=parseFloat(String(t.value).replace(',','.')),lim={zw:[50,3000],zh:[50,3000],trait:[0,0.6],jeu:[0,0.6],ep:[1,20]}[k];
   if(isNaN(v)||v<lim[0]||v>lim[1])return;M[k]=v;try{localStorage.setItem('niv-atelier-machine',JSON.stringify(M))}catch(e){}champsM();envoyerMachine()});
  function de(ev){for(var k in cadres)if(cadres[k].contentWindow===ev.source)return k;return null}
  function enregistrer(nom,texte,suite){if(!dl){suite('L’enregistrement n’est pas disponible ici.');return}
   dl.save({filename:nom,data:texte}).then(function(){suite('Fichier enregistré.')},function(e){var c=e&&e.code;suite(c==='declined'?'':c==='rate_limited'?'Un instant, puis réessayez.':'L’enregistrement n’a pas abouti ici.')})}
  window.addEventListener('message',function(ev){var d=ev.data||{},k=de(ev);if(!k||!d.type)return;
-  if(d.type==='niv-pret'){prets[k]=true;if(k==='lettre')envoyerMachine();maj()}
+  if(d.type==='niv-pret'){prets[k]=true;if(outil(k).machine)envoyerMachine();maj()}
   if(d.type==='niv-enregistrer'){enregistrer(d.nom,d.texte,function(m){if(m)etat(m+' ('+d.nom+')')});return}
   if(k!==cur)return;
   if(d.type==='niv-progres')etat('Fabrication des fichiers… '+d.fait+' / '+d.total);
@@ -169,7 +232,7 @@ body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system
   if(b.id==='encore'){resultat=null;maj();return}
   var i=b.getAttribute('data-i');if(i==null||!resultat)return;var f=resultat.fichiers[+i],ok=b.nextElementSibling;ok.textContent='';enregistrer(f.nom,f.svg,function(m){ok.textContent=m})});
  if(window.claude&&claude.use)claude.use('downloads').then(function(n){dl=n||null},function(){});
- champsM();maj();
+ champsM();tuiles();maj();
 })();
 </script>
 """

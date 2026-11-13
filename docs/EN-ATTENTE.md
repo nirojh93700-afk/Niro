@@ -4,6 +4,10 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
+## 🗓️ L'ATELIER v3 (13/11/2026 soir) — masquer par évènement, boîte seule, pieds gravés : démonstration, RIEN en ligne
+- https://claude.ai/artifact/S43Tkb7YKhWEb1B4JoHkh4 (v3) · lettre v6 https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw.
+- En attente de son avis : le rangement par évènement (Noël = 3 créations), la boîte seule (formes, couvercle plein), les pieds.
+- À lui demander : masquer aussi par famille à l'intérieur d'un outil (dessins de Noël) ? mettre cet écran dans Gestion (au moment où les créations seront en vente) ?
 
 ## 🗂️ « PAPETERIE & BUREAU » — ✅ EN LIGNE LE 13/11/2026 (« Mets en ligne la maquette… dans le menu aussi »)
 - https://claude.ai/artifact/W5k33bztj4JPMfdo8uExoF : la vraie page du site construite en local (`univers.js` modifié sur la machine puis remis), capturée

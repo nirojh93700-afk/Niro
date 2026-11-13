@@ -37,6 +37,10 @@ body{background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,
 .li{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:14px 48px}
 .li *{box-sizing:border-box}
 .li-top h1{font:700 1.45rem/1.2 Georgia,"Times New Roman",serif;margin:0 0 2px;text-wrap:balance}
+.li.seule .pasb,.li:not(.seule) .seulb{display:none!important}
+.li-modes{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.li-modes button{font:600 .86rem/1.2 system-ui,sans-serif;padding:9px 14px;border-radius:999px;border:1px solid var(--ligne);background:var(--carte);color:var(--fg);cursor:pointer;min-height:40px}
+.li-modes button.on{background:var(--sel);color:var(--bg);border-color:var(--sel)}
 .li-top p{margin:0 0 12px;color:var(--doux);font-size:.9rem;max-width:68ch}
 .li-ex{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;background:var(--carte);border:1px solid var(--or2);border-radius:10px;padding:8px 12px;margin:0 0 12px;font-size:.88rem}
 .li-corps{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
@@ -98,30 +102,33 @@ body{background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,
 """
 
 HTML = r"""<div class="li">
-<header class="li-top"><h1>Lettre à incruster</h1>
-<p>Outil de l'atelier : le fond, le dessus de couleur avec ses emplacements, les pièces blanches à y poser et la gravure, prêts pour la machine. Démonstration : rien n'est en ligne.</p></header>
+<header class="li-top"><h1 id="titre">Lettre à incruster</h1>
+<p id="sous">Outil de l'atelier : le fond, le dessus de couleur avec ses emplacements, les pièces blanches à y poser et la gravure, prêts pour la machine. Démonstration : rien n'est en ligne.</p></header>
 <p class="li-ex" id="exemple" hidden><span>Un exemple est chargé pour essayer. Remplacez-le par les informations de la commande.</span><button type="button" id="bVider">Tout vider</button></p>
+<div class="li-modes" id="modes" role="group" aria-label="Que fabriquer"><button type="button" id="mLettre" class="on">Lettre décorée et sa boîte</button><button type="button" id="mBoite">La boîte seule</button></div>
 <div class="li-corps">
 <section class="li-vue" aria-label="Aperçu">
- <div class="li-barre"><button type="button" id="vFace" class="on">De face</button><button type="button" id="v3d">3D</button><span class="sp"></span><button type="button" id="bNum">Numéros</button><button type="button" id="bAuto">Tout replacer</button></div>
+ <div class="li-barre"><button type="button" id="vFace" class="on">De face</button><button type="button" id="v3d">3D</button><span class="sp"></span><button type="button" id="bNum" class="pasb">Numéros</button><button type="button" id="bAuto" class="pasb">Tout replacer</button></div>
  <div class="li-scene" id="scene"><svg id="svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aperçu de la lettre"></svg><canvas id="c3d" hidden></canvas></div>
  <p class="li-aide" id="aide"></p>
 </section>
 <section class="li-regl">
- <details open><summary><i>1</i>La lettre</summary><div class="li-in">
+ <details open><summary id="s-1"><i>1</i>La lettre</summary><div class="li-in">
   <div class="li-g">
-   <label class="l2">Modèle<select id="f-modele" disabled><option>Lettre de naissance</option></select></label>
-   <label>Prénom<input id="f-nom" maxlength="16" autocomplete="off" placeholder="Prénom"></label>
-   <label>Lettre<input id="f-lettre" maxlength="1" autocomplete="off"></label>
-   <label>Forme de la lettre<select id="f-pol"></select></label>
-   <label>Écriture du prénom<select id="f-polNom"></select></label>
-   <label>Hauteur de la lettre (mm)<input id="f-H" inputmode="decimal"></label>
-   <label>Bord blanc autour (mm)<input id="f-bord" inputmode="decimal"></label>
-   <label class="l2">Épaissir la lettre (mm)<input id="f-gras" inputmode="decimal"><small>Pour une lettre fine (I, J, L…) : 3 à 6 mm donnent plus de place aux pièces.</small></label>
+   <label class="l2 pasb">Modèle<select id="f-modele" disabled><option>Lettre de naissance</option></select></label>
+   <label class="l2 seulb">Forme de la boîte<select id="f-bforme"></select><small>Une lettre, un chiffre, ou une boîte simple. Les angles sont arrondis au rayon réglé à l'étape 2.</small></label>
+   <label class="pasb">Prénom<input id="f-nom" maxlength="16" autocomplete="off" placeholder="Prénom"></label>
+   <label id="l-lettre">Lettre ou chiffre<input id="f-lettre" maxlength="1" autocomplete="off"></label>
+   <label id="l-pol">Forme de la lettre<select id="f-pol"></select></label>
+   <label class="pasb">Écriture du prénom<select id="f-polNom"></select></label>
+   <label><span id="t-H">Hauteur de la lettre (mm)</span><input id="f-H" inputmode="decimal"></label>
+   <label id="l-bw" class="seulb">Largeur (mm)<input id="f-bw" inputmode="decimal"></label>
+   <label id="l-bord"><span id="t-bord">Bord blanc autour (mm)</span><input id="f-bord" inputmode="decimal"></label>
+   <label class="l2" id="l-gras">Épaissir la lettre (mm)<input id="f-gras" inputmode="decimal"><small>Pour une lettre fine (I, J, L…) : 3 à 6 mm donnent plus de place.</small></label>
   </div>
-  <div><small>Couleur du dessus (pour l'aperçu)</small><div class="li-coul" id="coul"></div></div>
+  <div class="pasb"><small>Couleur du dessus (pour l'aperçu)</small><div class="li-coul" id="coul"></div></div>
  </div></details>
- <details open><summary><i>2</i>Les informations</summary><div class="li-in"><div class="li-g">
+ <details open class="pasb"><summary><i>2</i>Les informations</summary><div class="li-in"><div class="li-g">
    <label>Date de naissance<input id="f-date" type="date"></label>
    <label>Heure<input id="f-heure" type="time"></label>
    <label>Taille (cm)<input id="f-taille" inputmode="decimal" maxlength="5"></label>
@@ -134,11 +141,11 @@ HTML = r"""<div class="li">
    <label>Combien de décors (0 à 6)<input id="f-nbEt" inputmode="numeric" maxlength="1"></label>
    <label class="l2">Texte libre (facultatif)<input id="f-libre" maxlength="18" autocomplete="off"></label>
  </div></div></details>
- <details open><summary><i>3</i>Les pièces</summary><div class="li-in">
+ <details open class="pasb"><summary><i>3</i>Les pièces</summary><div class="li-in">
   <small>Touchez une pièce pour la régler. « Incrusté » : pièce blanche dans son emplacement. « Gravé » : dessiné sur le dessus, sans découpe. Vous pouvez aussi la glisser sur l'aperçu.</small>
   <div id="pieces"></div></div></details>
  <details open><summary><i>4</i>La boîte</summary><div class="li-in">
-  <label class="li-case"><input type="checkbox" id="b-on"> Faire une boîte sous la lettre (la lettre décorée devient le couvercle)</label>
+  <label class="li-case pasb"><input type="checkbox" id="b-on"> Faire une boîte sous la lettre (la lettre décorée devient le couvercle)</label>
   <div class="li-g" id="b-regl">
    <label>Hauteur des côtés (mm)<input id="b-prof" inputmode="decimal"></label>
    <label>Rayon des angles (mm)<input id="b-rayon" inputmode="decimal"></label>
@@ -147,10 +154,10 @@ HTML = r"""<div class="li">
    <label>Écart entre les fentes (mm)<input id="b-pas" inputmode="decimal"></label>
    <label>Fentes en plus avant et après une courbe (mm)<input id="b-pad" inputmode="decimal"></label>
    <label class="l2">Bande de côté en combien de morceaux<select id="b-nb"><option value="0">Automatique (selon la zone de la machine)</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option></select><small id="b-info"></small></label>
-   <label class="li-case l2"><input type="checkbox" id="b-plaque"> La boîte suit aussi la plaque du prénom (sinon la plaque dépasse de la boîte et sert de prise)</label>
+   <label class="li-case l2 pasb"><input type="checkbox" id="b-plaque"> La boîte suit aussi la plaque du prénom (sinon la plaque dépasse de la boîte et sert de prise)</label>
    <label class="li-case l2"><input type="checkbox" id="b-dos"> Plaque pleine sous la boîte (elle cache les tenons)</label>
    <label class="li-case l2"><input type="checkbox" id="b-rep"> Graver une lettre de repère (A, B, C…) sur chaque morceau de bande et sur le fond</label>
-   <small class="l2">La bande de côté a des fentes là où la lettre tourne : c'est ce qui la laisse plier. Elle s'emboîte par des tenons dans le fond et dans la couronne du haut. L'épaisseur du bois se règle à l'étape 5.</small>
+   <small class="l2" id="b-note"></small>
   </div></div></details>
  <details><summary><i>5</i>La machine</summary><div class="li-in"><div class="li-g">
    <label>Zone de travail, largeur (mm)<input id="f-zw" inputmode="decimal"></label>
