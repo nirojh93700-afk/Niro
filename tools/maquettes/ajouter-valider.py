@@ -4,7 +4,7 @@
   python3 tools/maquettes/ajouter-valider.py <page.html> [<page.html> …]
 
 À lancer sur la SORTIE de chaque générateur de créateur (support, décoration, arbre, prénom, suspension, fleur, maisonnette…)
-avant de publier : sur téléphone, le bouton range le clavier pour que l'aperçu se revoie. Sans effet si la page l'a déjà.
+avant de publier : sur téléphone, le bouton range le clavier pour que l'aperçu se revoie. Si la page l'a déjà, son bloc est remplacé par la version du jour.
 """
 import os, sys
 
@@ -14,7 +14,13 @@ MARQUE = "<!-- niv-ok -->"
 BLOC = MARQUE + "<script>" + JS + "</script>"
 
 def ajouter(t):
-    if MARQUE in t: return t, False
+    # Une page qui a déjà le bouton reçoit la version du jour (l'ancien bloc est remplacé), jamais deux blocs.
+    i = t.find(MARQUE)
+    if i >= 0:
+        j = t.find("</script>", i)
+        if j < 0: return t, False
+        neuf = t[:i] + BLOC + t[j + len("</script>"):]
+        return neuf, neuf != t
     i = t.lower().rfind("</body>")
     return (t[:i] + BLOC + t[i:], True) if i >= 0 else (t + "\n" + BLOC + "\n", True)
 
@@ -22,4 +28,4 @@ if __name__ == "__main__":
     for f in sys.argv[1:]:
         t, fait = ajouter(open(f, encoding="utf-8").read())
         if fait: open(f, "w", encoding="utf-8").write(t)
-        print(f, "bouton ajouté" if fait else "déjà là")
+        print(f, "bouton ajouté ou mis à jour" if fait else "déjà à jour")
