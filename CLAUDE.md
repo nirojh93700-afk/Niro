@@ -3,7 +3,7 @@
   (grand **179 × 169 mm**, standard 167 × 155, petit 159 × 146) ; `fabrique.js` met **2 mm de marge** (au lieu de 5) autour des pièces de TOUS les fichiers fabriqués
   (support, arbre 184 × 184, décoration). Réglages réunis dans **`tools/maquettes/atelier_patchs.py`** (`ok`, `support_180`, `marges`, `pont`, chacun ne s'applique qu'une fois ;
   `python3 tools/maquettes/atelier_patchs.py public/atelier-outils`) : `retouche-site.py`, `editeur-demo.py` et `atelier-unique.py` passent par lui (une régénération les garde).
-- **9 (L'atelier dans Gestion)** : Gestion → Tests → **« L'atelier (toutes les créations) »** (`/gestion/logiciel`, `src/app/gestion/logiciel/page.jsx`) ouvre en plein écran
+- **9 (L'atelier dans Gestion)** : Gestion → **« Logiciel de création »** (catégorie à part du menu depuis le 13/11 soir : « pas dans ton test… une nouvelle catégorie » ; « Fichiers laser à essayer » et « Retoucher et fabriquer » restent dans Tests) → **« L'atelier (toutes les créations) »** (`/gestion/logiciel`, `src/app/gestion/logiciel/page.jsx`) ouvre en plein écran
   `public/atelier-outils/logiciel.html` (+ `lettre.html`, `prenom/`, `suspension.html`, `fleur.html`, `maison.html` ; les trois outils déjà en ligne sont réutilisés, avec un pont de
   messages `<!-- niv-pont -->` sans effet hors d'un cadre). Fabrication : `python3 tools/maquettes/atelier-unique.py <demo> <lettre complet> <prenom> <suspension.html> <fleur.html>
   <maison.html> public/atelier-outils gestion` (8e mot « gestion » : `SITE=true`, bouton « ‹ Gestion » qui referme le cadre sans le décharger, fichiers enregistrés par un lien de
@@ -22,7 +22,10 @@
   et tracés (`docs/maquettes/assets/lettre/signes-dessins/*.svg` + `LICENCES.txt`, ajoutés à `animaux.ttf` par `python3 tools/maquettes/lettre-signes.py <dossier> <animaux.ttf>`, cases U+E001…) :
   Gémeaux = deux jumeaux face à face (U+E001) · Lion = lion rugissant de profil (U+E004) · Vierge = dame en robe et épis de blé (U+E006) · Verseau = la jarre qui verse l'eau (U+E009).
   Autres choix montrés au gérant et gardés dans la police (il dit le numéro) : Gémeaux 2 garçons / 3 filles main dans la main (E002, E003) · Lion 2 tête de face (E005) ·
-  Vierge 2 jeune femme aux cheveux longs / 3 gerbe de blé (E007, E008) · Verseau 2 porteur d'eau à genoux / 3 amphore (E00A, E00B). **EN ATTENTE DE SON AVIS** sur ces quatre dessins.
+  Vierge 2 jeune femme aux cheveux longs / 3 gerbe de blé (E007, E008) · Verseau 2 porteur d'eau à genoux / 3 amphore (E00A, E00B). 
+  ⏸️ **ZODIAQUE MIS DE CÔTÉ PAR LUI (13/11 soir : « j'aime bien avec des animaux des signes… mets ça de côté, on va voir après, tu finis les autres »)** : il a donné une image de
+  douze symboles calligraphiés, je les ai essayés pour les quatre signes, puis il a dit « j'aime pas les trucs que je t'ai donné » → essai retiré, rien d'enregistré. L'état gardé =
+  celui-ci (animaux + les quatre dessins ci-dessus). Ne plus toucher aux signes tant qu'il n'en reparle pas.
   ⚠️ Sources game-icons.net (CC BY 3.0) et EmojiOne (CC BY 4.0) : le jour de la mise en vente, une ligne de crédit sur le site (mentions légales). Mes essais de silhouettes
   tirées de SES figures des cristaux : pas nets à 14 mm, abandonnés. `sous.py` (scratchpad) refait la police SANS ces cases : relancer `lettre-signes.py` après.
 - **6 OK** : le rangement par évènement (Noël = décoration à suspendre, décoration à prénom, maisonnette · Naissance = lettre).

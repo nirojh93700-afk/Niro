@@ -1,6 +1,7 @@
 "use client";
 
-// L'ATELIER DANS GESTION (13/11/2026, gérant : « pour le neuf oui tu mets dans le gestion »).
+// L'ATELIER DANS GESTION (13/11/2026, gérant : « pour le neuf oui tu mets dans le gestion »), dans sa propre catégorie
+// « Logiciel de création » du menu (13/11 soir : « pas dans ton test… une nouvelle catégorie »).
 // Un seul logiciel pour toutes les créations : lettre à incruster et sa boîte, boîte seule, support de téléphone,
 // arbre de vie, décoration à suspendre, décoration à prénom, suspension à prénoms, fleur à prénom, maisonnette.
 // La page du logiciel est public/atelier-outils/logiciel.html, fabriquée par
@@ -27,7 +28,7 @@ export default function LogicielPage() {
   return (
     <div>
       <PageHead
-        eyebrow="Tests"
+        eyebrow="Logiciel de création"
         title="L'atelier"
         subtitle="Un seul logiciel pour toutes les créations : choisissez le produit, réglez-le, sortez les fichiers pour la machine. Rien n'est vendu ni enregistré sur le site."
         actions={<button type="button" className="fq-btn primary" onClick={() => setVisible(true)}>Ouvrir L&apos;atelier</button>}

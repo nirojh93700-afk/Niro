@@ -117,10 +117,12 @@ const SECTIONS = [
     { id: "notifications", t: "Notifications & résumés", href: "/gestion/notifications" },
     { id: "journal", t: "Journal d'activité", href: "/gestion/journal" },
     { id: "etat", t: "État du système", href: "/gestion/etat" } ] },
+  // Logiciel de création (13/11/2026 soir, gérant : « pas dans ton test… c'est des réglages, logiciel de création, il faut que ça soit à part, une nouvelle catégorie ») :
+  // L'atelier = un seul logiciel pour toutes les créations (public/atelier-outils/logiciel.html). Il n'est plus rangé dans Tests.
+  { id: "logiciel", t: "Logiciel de création", ic: "star", tabs: [
+    { id: "logiciel", t: "L'atelier (toutes les créations)", href: "/gestion/logiciel" } ] },
   // Tests (12/11/2026, gérant : « fais une catégorie test dans admin ») : fichiers laser des maquettes à essayer sur la machine.
   { id: "tests", t: "Tests", ic: "bolt", tabs: [
-    // 13/11/2026 (« oui tu mets dans le gestion ») : L'atelier = un seul logiciel pour toutes les créations (public/atelier-outils/logiciel.html).
-    { id: "tests-logiciel", t: "L'atelier (toutes les créations)", href: "/gestion/logiciel" },
     { id: "tests-laser", t: "Fichiers laser à essayer", href: "/gestion/tests" },
     // 12/11/2026 soir (« je veux avoir accès pour tout corriger ») : les trois outils en mode atelier + fabrication des fichiers.
     { id: "tests-retouche", t: "Retoucher et fabriquer", href: "/gestion/retouche" } ] },
