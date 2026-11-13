@@ -24,6 +24,10 @@
   (jusqu'à 40 %), une fleur trop fine est agrandie toute seule au choix (violette → 150 %), sinon panier bloqué ; la tige passe SOUS le prénom (un prénom en deux mots tient en un morceau) ; un signe à part
   élargit le contour tout seul ; une pièce détachée (fleur glissée trop loin) bloque le panier. Vérifié Chromium 390 / 1280 : 26 fleurs, 8 feuillages, 10 écritures, prénoms accentués et composés, 0 erreur,
   0 débordement, calcul ≈ 30 ms.
+- 🔧 **v2 (13/11, capture iPhone : « quand je descends, le visuel est coupé en deux »)** : l'aperçu se collait en haut de l'écran, DERRIÈRE l'en-tête du site. La page de base perd ses scripts
+  quand on la reprend : toute nouvelle maquette de créateur doit reprendre `sousEntete()` (pose `--sc-top` = hauteur de l'en-tête) et `decoller()` (l'aperçu se retire au résumé). ⚠️ Les maquettes
+  ENREGISTRÉES « suspension à prénoms » et « décoration à prénom » ont le même défaut (pas de `sousEntete`) : à corriger seulement sur sa demande. Test à 390 px de large (pas l'émulation
+  « iPhone » de Playwright : sans balise viewport dans le fichier, elle affiche la page en largeur d'ordinateur).
 - **Proposé par moi, à valider** : 18 cm ; 16,90 € en bois naturel, fond peint à la main + 4 € (noir, blanc, rouge, rose poudré, vert sauge) ; 8 écritures libres à la place des 7 payantes d'Atomm ; pas de fleur par IA.
 
 ## 🧱 GÉNÉRATEUR ATOMM « CREATE YOUR STACK » — ANALYSÉ LE 12/11/2026 SOIR (gérant : lien donné, « Analyse bien ») puis MAQUETTE « SUSPENSION À PRÉNOMS » (gérant : « 170mm ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« OK, enregistre la maquette ») = VERSION 1 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne

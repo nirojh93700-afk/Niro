@@ -419,6 +419,16 @@ $('vFace').addEventListener('click',function(){vue('face')});$('v3d').addEventLi
  svg.addEventListener('pointermove',function(e){if(!bas)return;S.fx=Math.round(bas.fx+(e.clientX-bas.x)/bas.m/G.vue.k);S.fy=Math.round(bas.fy+(e.clientY-bas.y)/bas.m/G.vue.k);redessiner()});
  function fin(){bas=null}svg.addEventListener('pointerup',fin);svg.addEventListener('pointercancel',fin)})();
 window.addEventListener('resize',function(){if(S.vue==='3d')trois()});
+/* l'en-tête du site reste collé en haut : l'aperçu se colle juste dessous, jamais derrière */
+function sousEntete(){var h=document.querySelector('header'),t=0;if(h&&/sticky|fixed/.test(getComputedStyle(h).position))t=h.offsetHeight;document.documentElement.style.setProperty('--sc-top',t+'px')}
+sousEntete();window.addEventListener('resize',sousEntete);window.addEventListener('load',sousEntete);
+/* sur téléphone : l'aperçu suit les étapes, puis se retire quand la cliente arrive au résumé et au prix */
+var glisse=false;
+function decoller(){glisse=false;var st=$('stage'),fin=$('resume'),d=0;
+ if(window.matchMedia('(max-width:900px)').matches){var top=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sc-top'))||0;
+  d=Math.min(0,fin.getBoundingClientRect().top-(top+st.offsetHeight+8));d=Math.max(d,-(top+st.offsetHeight+30))}
+ st.style.transform=d?'translateY('+Math.round(d)+'px)':'';st.style.visibility=d<=-(st.offsetHeight)?'hidden':''}
+window.addEventListener('scroll',function(){if(!glisse){glisse=true;requestAnimationFrame(decoller)}},{passive:true});window.addEventListener('resize',decoller);
 
 majFleurs();majFeuilles();majPols();majFonds();dessiner();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){majPols()});
