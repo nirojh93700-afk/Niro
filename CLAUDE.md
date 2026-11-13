@@ -1,3 +1,12 @@
+## 📐 ZONE DE LA MACHINE PAR DÉFAUT = 180 × 180 mm — 13/11/2026 soir (gérant, capture de « Ma machine » réglée à 180 : « en attendant que j'achète l'autre machine, par défaut tu mets 180 »)
+- L'atelier (`M` dans `atelier-unique.py`) et l'outil lettre / boîte seule (`neuf()` : `zw: 180, zh: 180, zdef: 180`) partent de 180 × 180. Un réglage resté à l'ancienne valeur par défaut (200 × 200) suit tout seul ;
+  une zone qu'il a choisie lui-même (ex. 600 × 400) est gardée.
+- ⚠️ Conséquence : une lettre de 170 mm + 3 mm de bord = 176 mm, qui ne tient plus dans 180 avec les marges de la planche → **hauteur par défaut de la lettre et de la boîte seule = 165 mm** (MON choix, à valider ;
+  une lettre restée à 170 par défaut passe à 165 avec la zone). La bande de la boîte du « K » sort en 4 morceaux au lieu de 3.
+- ⚠️ Les autres outils ont des tailles FIXES pensées pour 200 × 200 : planches de la maisonnette et de la décoration à prénom jusqu'à 190 mm, planche du support de téléphone 186 × 175 mm, arbre de vie 180 × 180 (juste à la limite).
+  L'accueil de L'atelier l'écrit sous « Ma machine » quand la zone fait moins de 190 mm. RIEN changé dans ces outils : à faire sur son accord, un par un.
+- Lettre **v8**, L'atelier **v6**. Essais rejoués : lettre 54, boîte seule 40, atelier 26 + 36.
+
 ## ⛔ JAMAIS LE NOMBRE DE PIÈCES CÔTÉ CLIENTE — 13/11/2026 soir (gérant : « sur la maquette de la maison et tout, tu mets le nombre de pièces ; les clients n'ont pas ça, je vais coller avant d'envoyer ; le nombre de pièces c'est juste pour moi »)
 - Dans un créateur, la partie que voit la cliente ne dit JAMAIS combien de pièces, de couches ou de morceaux composent l'objet, et ne montre pas de vue « Pièces » : l'atelier colle avant d'envoyer.
   On écrit « montée et collée dans notre atelier », « en relief sur son fond », l'épaisseur si utile. Le nombre de pièces, les planches et le montage restent dans la partie de l'atelier (« De votre côté »).

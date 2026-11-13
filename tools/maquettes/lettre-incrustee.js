@@ -93,8 +93,8 @@ function animalChoisi() { return ANIMAUX.filter(function (a) { return a[0] === S
 var EXEMPLE = { nom: 'Katia', date: '2022-04-13', heure: '09:20', taille: '51', poids: '3160' };
 function neuf() { var el = { plaque: { on: true, mode: 'inc', k: 1, auto: true, fx: 0, fy: 0 } };
   ELS.forEach(function (e) { el[e.id] = { on: true, mode: 'inc', k: 1, auto: true, fx: 0, fy: 0 }; });
-  return { v: 1, modele: 'naissance', nom: '', lettre: '', pol: 'fredoka', polNom: 'pacifico', H: 170, gras: 0, bord: 3, coul: 'rose', date: '', heure: '', taille: '', poids: '', libre: '',
-    signe: 'auto', signeStyle: 'dessin', horloge: 'grave', decor: 'etoiles', animal: 'chat', nbEt: 6, el: el, zw: 200, zh: 200, trait: 0.1, jeu: 0.1, ep: 3, sel: null, vue: 'face', num: false, exemple: false,
+  return { v: 1, modele: 'naissance', nom: '', lettre: '', pol: 'fredoka', polNom: 'pacifico', H: 165, gras: 0, bord: 3, coul: 'rose', date: '', heure: '', taille: '', poids: '', libre: '',
+    signe: 'auto', signeStyle: 'dessin', horloge: 'grave', decor: 'etoiles', animal: 'chat', nbEt: 6, el: el, zw: 180, zh: 180, zdef: 180, trait: 0.1, jeu: 0.1, ep: 3, sel: null, vue: 'face', num: false, exemple: false,
     bforme: 'lettre', bw: 120,
     bt: { on: true, prof: 40, rayon: 8, cour: 5, jeuC: 0.2, pas: 2, pad: 10, nb: 0, dos: true, rep: true, plaque: false } }; }
 /* « boîte seule » : le même outil, sans la lettre décorée. La boîte prend la forme d'une lettre, d'un chiffre ou d'une forme simple ; le couvercle est une pièce pleine */
@@ -106,7 +106,7 @@ function nomForme() { return formeSimple() ? (FORMES.filter(function (f) { retur
 function prefixe() { return SEULE ? 'boite-' + (formeSimple() ? S.bforme : lettreChoisie()) : 'lettre-' + lettreChoisie(); }
 var S = neuf();
 function garder() { try { localStorage.setItem(cleMem(), JSON.stringify(S)); } catch (e) {} }
-function relire() { try { var t = JSON.parse(localStorage.getItem(cleMem()) || 'null'); if (t && t.v === 1) { var n = neuf(); Object.keys(n).forEach(function (k) { if (t[k] === undefined) t[k] = n[k]; });
+function relire() { try { var t = JSON.parse(localStorage.getItem(cleMem()) || 'null'); if (t && t.v === 1) { var n = neuf(); /* zone par défaut passée de 200 à 180 mm (13/11/2026) : un réglage resté à l'ancienne valeur par défaut suit */ if (t.zdef !== 180 && t.zw === 200 && t.zh === 200) { t.zw = 180; t.zh = 180; if (t.H === 170) t.H = 165; /* 170 + le bord ne tient plus dans 180 */ } Object.keys(n).forEach(function (k) { if (t[k] === undefined) t[k] = n[k]; });
   Object.keys(n.el).forEach(function (k) { if (!t.el[k]) t.el[k] = n.el[k]; }); Object.keys(n.bt).forEach(function (k) { if (t.bt[k] === undefined) t.bt[k] = n.bt[k]; }); S = t; S.vue = 'face'; S.sel = null; return true; } } catch (e) {} return false; }
 
 function lettreChoisie() { var l = (S.lettre || S.nom || 'P').trim().charAt(0) || 'P'; l = l.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase(); return /[A-Z0-9]/.test(l) ? l : 'P'; }
@@ -317,7 +317,7 @@ function calculerBoite2(g) { var B = S.bt, T = +S.ep || 3, al = g.alertes;
   g.fond = unir(plein, O); g.bf = boite(g.fond);
   var c = courbeDe(C[0]), N = Math.max(4, Math.round(c.L / 12)), p = c.L / N, zs = zonesSouples(c, +B.pad || 0), zj = zonesSouples(c, 7), tout = zs.part > 0.85;
   /* le nombre de morceaux : ce qui tient dans la largeur de la zone */
-  var Lmax = (+S.zw || 200) - 4 - d - 2 * k2 - 0.5, nAuto = 1; while (nAuto < N / 2 && Math.ceil(N / nAuto) * p > Lmax) nAuto++;
+  var Lmax = (+S.zw || 180) - 4 - d - 2 * k2 - 0.5, nAuto = 1; while (nAuto < N / 2 && Math.ceil(N / nAuto) * p > Lmax) nAuto++;
   var n = B.nb > 0 ? Math.min(Math.floor(N / 2), +B.nb) : nAuto, maxP = Math.max(2, Math.floor(Lmax / p), Math.ceil(N / n)), coupes = null, mieux = 1e9, lmin = 1e9, k, j;
   /* où couper la bande : de préférence dans une partie droite, sans dépasser la longueur que la machine accepte */
   for (k = 0; k < N; k++) { var cs = [k], sc = (!tout && zj.dans(k * p)) ? 1 : 0, lm = 0;
@@ -331,7 +331,7 @@ function calculerBoite2(g) { var B = S.bt, T = +S.ep || 3, al = g.alertes;
   var enc = [], i, tenons = [], nT = 0; for (i = 0; i < N; i++) { tenons.push(virage(c, (i + 0.25) * p - 4, (i + 0.75) * p + 4) / (p / 2 + 8) < 0.085); if (!tenons[i]) continue; nT++; var ban = bandeAutour(morceauDe(c, (i + 0.25) * p - jeu / 2, (i + 0.75) * p + jeu / 2), T / 2 + 0.3 + jeu / 2), pts = []; ban.forEach(function (q) { pts = pts.concat(q); }); if (pts.length > 2) enc.push(enveloppe(pts)); }
   var base = moins(O, unir(enc)), cour = moins(base, ouv), cale = decaler(O, -(T + B.cour + B.jeuC));
   if (!ouv.length || !cale.length) al.push('La boîte : le rebord du haut (' + fr(B.cour) + ' mm) ne laisse pas d\'ouverture. Réduisez-le, ou agrandissez la lettre.');
-  if (Hm + 2 * k2 > (+S.zh || 200) - 4) al.push('La boîte : les côtés (' + fr(Hm, 0) + ' mm) sont plus hauts que la zone de la machine.');
+  if (Hm + 2 * k2 > (+S.zh || 180) - 4) al.push('La boîte : les côtés (' + fr(Hm, 0) + ' mm) sont plus hauts que la zone de la machine.');
   /* repères gravés : la même lettre sur le morceau de bande et sur le fond, à côté de sa première encoche */
   function repere(txt, x, y, h) { var t = centrer(texteH(S.pol, txt, h)); return bouger(t, x, y); }
   var dedans = function (x, y) { return CL.Clipper.PointInPolygon(pt(x, y), O[0]) !== 0; }, gravBase = [], mor = [];
@@ -367,7 +367,7 @@ function planches(g) { var k2 = S.trait / 2, blancs = [], coul = [];
   coul.push(bloc('dessus', 'Dessus de couleur', decaler(g.dessus, k2), g.gravD, 'D'));
   if (g.P) coul.push(bloc('prenom', 'Prénom', decaler(g.P.nomA, k2), null, 'N'));
   g.pages = ranger(blancs, 'Blanc').concat(ranger(coul, 'Couleur')).concat(g.bt ? ranger(blocsBoite(g), 'Bois de la boîte', 'boite') : []); }
-function ranger(blocs, matiere, cle) { var zw = +S.zw || 200, zh = +S.zh || 200, m = 2, ec = 3, pages = [];
+function ranger(blocs, matiere, cle) { var zw = +S.zw || 180, zh = +S.zh || 180, m = 2, ec = 3, pages = [];
   blocs.slice().sort(function (a, b) { return b.b.h - a.b.h; }).forEach(function (bl) { var w = bl.b.w, h = bl.b.h, mis = false;
     for (var i = 0; i < pages.length && !mis; i++) { var p = pages[i]; if (p.trop) continue;
       for (var j = 0; j < p.rangs.length && !mis; j++) { var r = p.rangs[j]; if (r.x + w <= zw - m && h <= r.h) { p.items.push({ bl: bl, x: r.x, y: r.y }); r.x += w + ec; mis = true; } }

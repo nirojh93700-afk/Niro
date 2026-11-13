@@ -155,7 +155,7 @@ body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system
  function evDe(id){return V.ev.filter(function(x){return x.id===id})[0]}
  function avec(ev){return OUTILS.filter(function(o){return V.tags[o.id].indexOf(ev)>=0})}
  var $=function(i){return document.getElementById(i)},cadres={},prets={},cur=null,occupe=false,dl=null,resultat=null;
- var M={zw:200,zh:200,trait:0.1,jeu:0.1,ep:3};try{var t=JSON.parse(localStorage.getItem('niv-atelier-machine')||'null');if(t)for(var k in M)if(typeof t[k]==='number')M[k]=t[k]}catch(e){}
+ var M={zw:180,zh:180,trait:0.1,jeu:0.1,ep:3,zdef:180};try{var t=JSON.parse(localStorage.getItem('niv-atelier-machine')||'null');if(t){for(var k in M)if(typeof t[k]==='number')M[k]=t[k];if(t.zdef!==180&&t.zw===200&&t.zh===200){M.zw=180;M.zh=180}M.zdef=180}}catch(e){}
  function esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
  function mm(v){return String(Math.round(v*10)/10).replace('.',',')}
  function outil(id){return OUTILS.filter(function(x){return x.id===id})[0]}
@@ -207,7 +207,7 @@ body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system
  $('fab').addEventListener('click',function(){if(!prets[cur]||occupe)return;occupe=true;etat('Fabrication des fichiers…');maj();cadres[cur].contentWindow.postMessage({type:'niv-fabriquer'},'*')});
  /* ma machine */
  function champsM(){['zw','zh','trait','jeu','ep'].forEach(function(k){var el=$('m-'+k);if(document.activeElement!==el)el.value=String(M[k]).replace('.',',')});
-  $('machNote').textContent='Aujourd’hui ce réglage est suivi par « Lettre ou chiffre à incruster » et « Boîte seule » (zone '+mm(M.zw)+' × '+mm(M.zh)+' mm). Les sept autres outils ont encore leurs tailles fixes, prévues pour 200 × 200 mm : à ouvrir un par un, sur votre accord.'}
+  $('machNote').textContent='Aujourd’hui ce réglage est suivi par « Lettre ou chiffre à incruster » et « Boîte seule » (zone '+mm(M.zw)+' × '+mm(M.zh)+' mm). Les sept autres outils ont encore leurs tailles fixes, prévues pour 200 × 200 mm : à ouvrir un par un, sur votre accord.'+(Math.min(M.zw,M.zh)<190?' Attention, avec une zone de moins de 190 mm : les planches de la maisonnette et de la décoration à prénom vont jusqu’à 190 mm, celle du support de téléphone jusqu’à 186 mm ; l’arbre de vie (180 mm) est juste à la limite.':'')}
  document.addEventListener('input',function(ev){var t=ev.target;if(!t.id||t.id.indexOf('m-')!==0)return;var k=t.id.slice(2),v=parseFloat(String(t.value).replace(',','.')),lim={zw:[50,3000],zh:[50,3000],trait:[0,0.6],jeu:[0,0.6],ep:[1,20]}[k];
   if(isNaN(v)||v<lim[0]||v>lim[1])return;M[k]=v;try{localStorage.setItem('niv-atelier-machine',JSON.stringify(M))}catch(e){}champsM();envoyerMachine()});
  function de(ev){for(var k in cadres)if(cadres[k].contentWindow===ev.source)return k;return null}
