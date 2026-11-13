@@ -1,3 +1,15 @@
+## ✅ BOUTON « OK ✓ » DANS CHAQUE CHAMP À ÉCRIRE — 13/11/2026 soir (gérant, capture iPhone de la décoration à prénom : « dès que le clavier apparaît l'image 3D se coupe… mets un bouton à côté du nom pour valider pour que le clavier disparaisse tout de suite… pour les autres maquettes aussi… les clients vont pas chercher les boutons »)
+- ⛔ **Règle : dans un créateur, tout ce qui se valide est À CÔTÉ du champ.** Dès qu'on touche un champ (prénom, texte, chiffre), un bouton doré « OK ✓ » apparaît AU BOUT du champ ;
+  le toucher (ou la touche Entrée) range le clavier, l'aperçu se revoit. Seulement sur appareil tactile ou écran de moins de 760 px ; rien ne change sur ordinateur.
+- Code : `tools/maquettes/valider-champ.js` (un seul bouton flottant `.niv-ok`, posé sur le champ en cours ; champs `input` texte / nombre et `textarea` de 120 px au moins) ·
+  `python3 tools/maquettes/ajouter-valider.py <page.html> …` l'ajoute à une page déjà faite (repère `<!-- niv-ok -->`, sans doublon). **Toute nouvelle maquette de créateur y passe** ;
+  `lettre-incrustee.py` et `atelier-unique.py` l'ajoutent tout seuls.
+- Republié le 13/11 soir (même contenu qu'avant + le bouton ; ce sont CES versions qui valent maintenant) : support téléphone **v12** · décoration à suspendre **v15** · arbre de vie **v9** ·
+  décoration à prénom **v5** · suspension à prénoms **v2** · fleur à prénom **v3** · maisonnette **v2** · lettre à incruster **v5** · L'atelier **v2**.
+- Essayé en vue téléphone 390 px (Chromium tactile) sur prénom, suspension, fleur, arbre, lettre : bouton dans le champ, le toucher retire le clavier, 0 erreur, 0 débordement.
+  ⚠️ Pas essayé sur un vrai iPhone. Support, décoration à suspendre et maisonnette : le champ n'apparaît qu'après un choix, pas essayé là.
+- **Proposé par moi, à valider** : le même bouton dans les trois outils de Gestion déjà en ligne (`public/atelier-outils/`, PAS touchés) et, plus tard, sur les fiches du site (champs de gravure).
+
 ## 🧰 « L'ATELIER » : UN SEUL LOGICIEL POUR TOUTES LES CRÉATIONS — 13/11/2026 soir (gérant : « rassembler toutes les maquettes pour que ça fasse un seul logiciel, pas une dizaine d'outils… je choisis Noël, le support de téléphone, je paramètre, dans le même logiciel » ; « plus tard, avec un grand format, pouvoir changer les tailles de gravure et de découpe ») — DÉMONSTRATION v1, RIEN en ligne, PAS dans Gestion
 - **Artifact** https://claude.ai/artifact/S43Tkb7YKhWEb1B4JoHkh4 (v1, capacité `downloads`, 41 fichiers, 26 Mo) · `python3 tools/maquettes/atelier-unique.py <demo> <lettre complet> <prenom> <suspension.html> <fleur.html>
   <maison.html> <sortie>` (`<demo>` = sortie de `editeur-demo.py` ; les autres = sorties des générateurs de chaque créateur ; publier `index.html` + tous les fichiers du dossier, `root` = le dossier).

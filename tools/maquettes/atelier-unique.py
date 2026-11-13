@@ -17,6 +17,9 @@ Les maquettes enregistrées ne sont PAS modifiées : elles sont ouvertes telles 
 (zone, trait de coupe, jeu, épaisseur) est envoyé à l'outil « Lettre » ; les autres outils ont encore leurs tailles fixes.
 """
 import os, shutil, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from importlib import import_module
+VAL = import_module('ajouter-valider')   # le bouton « OK ✓ » des champs, dans chaque outil
 
 demo, lettre, prenom, suspension, fleur, maison, out = sys.argv[1:8]
 os.makedirs(out, exist_ok=True)
@@ -40,9 +43,12 @@ TETE = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="
 def page(src, dst):
     t = open(src, encoding="utf-8").read()
     if not t.lstrip().lower().startswith("<!doctype"): t = TETE + t + "</body></html>"
+    t = VAL.ajouter(t)[0]
     os.makedirs(os.path.dirname(dst) or ".", exist_ok=True)
     open(dst, "w", encoding="utf-8").write(t)
 
+for n in ("atelier-support.html", "atelier-arbre.html", "atelier-decoration.html"):
+    page(os.path.join(out, n), os.path.join(out, n))
 page(lettre, os.path.join(out, "lettre.html"))
 copier_dossier(prenom, os.path.join(out, "prenom"))
 page(os.path.join(prenom, "index.html"), os.path.join(out, "prenom", "index.html"))
@@ -167,7 +173,7 @@ body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system
 })();
 </script>
 """
-open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(INDEX)
+open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(VAL.ajouter(INDEX)[0])
 tot = 0; nb = 0
 for d, _, fs in os.walk(out):
     for n in fs: tot += os.path.getsize(os.path.join(d, n)); nb += 1

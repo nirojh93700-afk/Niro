@@ -4,6 +4,10 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
+## ✅ BOUTON « OK ✓ » DANS LES CHAMPS (13/11/2026 soir) — fait dans les 7 maquettes, la lettre (v5) et L'atelier (v2), RIEN en ligne
+- En attente de son essai sur son iPhone (le clavier doit se ranger au toucher de « OK ✓ »).
+- À lui demander : le même bouton dans les trois outils de Gestion déjà en ligne ? sur les fiches du site ?
+
 ## 🧰 « L'ATELIER », UN SEUL LOGICIEL (13/11/2026 soir) — démonstration v1, RIEN en ligne
 - https://claude.ai/artifact/S43Tkb7YKhWEb1B4JoHkh4 : 8 produits dans une seule page + « Ma machine » réglée une fois (suivie par l'outil Lettre seulement pour l'instant).
 - En attente de son avis : la liste des produits, la mise dans Gestion, les 4 créateurs à passer en vrais outils d'atelier, l'ouverture de chaque outil au grand format (un par un).

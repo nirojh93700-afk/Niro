@@ -166,7 +166,8 @@ HTML = r"""<div class="li">
 
 corps = ("<title>Lettre à incruster</title>\n<style>" + CSS + "</style>\n" + HTML
          + "<script>" + open(fclip, encoding="utf-8").read() + "</script>\n<script>" + open(fopen, encoding="utf-8").read() + "</script>\n"
-         + "<script>window.LI_DONNEES=" + DONNEES + ";</script>\n<script>" + open(os.path.join(ici, "lettre-incrustee.js"), encoding="utf-8").read() + "</script>\n")
+         + "<script>window.LI_DONNEES=" + DONNEES + ";</script>\n<script>" + open(os.path.join(ici, "lettre-incrustee.js"), encoding="utf-8").read() + "</script>\n"
+         + "<!-- niv-ok --><script>" + open(os.path.join(ici, "valider-champ.js"), encoding="utf-8").read() + "</script>\n")
 if complet:
     corps = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
              '<meta name="robots" content="noindex"><style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body>' + corps + "</body></html>")
