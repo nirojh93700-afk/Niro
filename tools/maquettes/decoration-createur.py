@@ -20,21 +20,40 @@ ELEMENTS = json.load(open(sys.argv[5], encoding='utf-8')) if len(sys.argv) > 5 e
 
 
 def epaisseurs(E):
-    """Le trait le plus fin de chaque dessin, en part de sa largeur (champ « ep ») : la page dit « traits très fins » quand un
-    dessin découpé avec le cadre serait fragile à la taille choisie. Sans OpenCV, rien n'est mesuré (pas d'alerte)."""
+    """Pour chaque dessin : « det » = ses DÉTAILS (les blancs enfermés dans la forme : yeux, traits, étoiles), à GRAVER quand la forme
+    est découpée pleine (gérant, 13/11 nuit : « il faut que les détails soient gravés aussi », comme le renne de ses exemples) ;
+    « ep » = le trait le plus fin du dessin ajouré et « eps » = celui de la forme pleine, en part de la largeur (alerte « traits fins »).
+    Sans OpenCV, rien n'est mesuré : la page découpe alors les dessins ajourés, comme avant."""
     try:
         import cv2, numpy as np
     except Exception:
         return
+
+    def fin(m, larg):
+        d = cv2.distanceTransform(m.astype('uint8'), cv2.DIST_L2, 5)
+        crete = (d >= cv2.dilate(d, np.ones((3, 3), np.uint8)) - 1e-6) & (d > 0.9)   # le milieu de chaque trait
+        v = d[crete]
+        return round(float(np.percentile(v, 15)) * 2 / larg, 4) if v.size else None
+
     for e in E.get('elements', []):
         try:
             im = Image.open(io.BytesIO(base64.b64decode(e['img'].split(',', 1)[1]))).convert('RGBA')
-            a = (np.array(im)[:, :, 3] > 60).astype('uint8')
-            d = cv2.distanceTransform(a, cv2.DIST_L2, 5)
-            crete = (d >= cv2.dilate(d, np.ones((3, 3), np.uint8)) - 1e-6) & (d > 0.9)   # le milieu de chaque trait
-            v = d[crete]
-            if v.size:
-                e['ep'] = round(float(np.percentile(v, 15)) * 2 / im.size[0], 4)
+            al = np.array(im)[:, :, 3]
+            a = (al > 60).astype('uint8')
+            h, w = a.shape
+            vide = np.ones((h + 2, w + 2), np.uint8); vide[1:-1, 1:-1] = 1 - a
+            cv2.floodFill(vide, np.zeros((h + 4, w + 4), np.uint8), (0, 0), 2)           # 2 = l'extérieur du dessin
+            trous = (vide[1:-1, 1:-1] == 1)                                              # les blancs enfermés dans la forme
+            v = fin(a, w)
+            if v is not None: e['ep'] = v
+            v = fin(a | trous.astype('uint8'), w)
+            if v is not None: e['eps'] = v
+            if trous.sum() >= 8:
+                pres = cv2.dilate(trous.astype('uint8'), np.ones((3, 3), np.uint8)) > 0
+                det = Image.new('RGBA', im.size, (0, 0, 0, 0))
+                det.putalpha(Image.fromarray(np.where(pres, 255 - al, 0).astype('uint8')))
+                bb = io.BytesIO(); det.save(bb, 'WEBP', quality=80, method=3)
+                e['det'] = 'data:image/webp;base64,' + base64.b64encode(bb.getvalue()).decode()
         except Exception:
             pass
 
@@ -620,11 +639,11 @@ function soudee(e){return !!e.soude&&soudable(e)}
 function num(e){var n=1;for(var i=0;i<S.els.length;i++){var o=S.els[i];if(!soudee(o))n++;if(o===e)return soudee(e)?0:n}return 0}
 /* la silhouette d'un dessin en petite grille (lue une fois dans son image) : sert à mesurer ce qui mord sur le bois */
 var ALPHA={},ALPHA_T=0;
-function alpha(e){var d=elem(e.did);if(!d)return null;var cle=e.did+(e.mode==='grave'?'|s':'|i'),a=ALPHA[cle];if(a)return a.ok?a:null;
+function alpha(e){var d=elem(e.did);if(!d)return null;var plein=e.mode==='grave'||e.mode==='detail',cle=e.did+(plein?'|s':'|i'),a=ALPHA[cle];if(a)return a.ok?a:null;
  a=ALPHA[cle]={ok:false};var im=new Image();im.onload=function(){var w=64,h=Math.max(8,Math.round(64*(d.r||1))),c=document.createElement('canvas');c.width=w;c.height=h;
   var x=c.getContext('2d');x.drawImage(im,0,0,w,h);var px=x.getImageData(0,0,w,h).data,m=new Uint8Array(w*h);for(var i=0;i<w*h;i++)m[i]=px[i*4+3]>60?1:0;
   a.w=w;a.h=h;a.m=m;a.ok=true;if(!ALPHA_T&&S.els.some(function(o){return o.type==='dessin'&&o.did===e.did}))ALPHA_T=setTimeout(function(){ALPHA_T=0;dessiner();recaserDessins(true)},0)};
- im.src=e.mode==='grave'?d.sil:d.img;return null}
+ im.src=plein?d.sil:d.img;return null}
 /* la silhouette du dessin posée sur la grille de la forme : la liste de ses cases (décalages i, j), à sa taille et dans son sens du moment */
 function cases(e){var a=alpha(e);if(!a)return null;var t=taille(e),c=carte(),n=Math.ceil(Math.hypot(t.w,t.h)/2/c.st),th=(e.rot||0)*Math.PI/180,co=Math.cos(th),si=Math.sin(th),L=[];
  for(var j=-n;j<=n;j++)for(var i=-n;i<=n;i++){var dx=i*c.st,dy=j*c.st,lx=dx*co+dy*si,ly=-dx*si+dy*co;if(e.flip)lx=-lx;
@@ -647,7 +666,7 @@ function endroitSoude(e,x,y,hw,hh,L){var c=carte();if(lieu(c,x,y)===0)return nul
   var part=ix*iy/(4*hw*hh);if(b.nom){if(part>.3)ok=false;else sous+=part}else if(part>.06)ok=false});
  return ok?{bord:true,nom:false,bois:r.pb,aire:r.bois,sous:sous}:null}
 /* le trait le plus fin d'un dessin découpé, en mm, à sa taille du moment (mesuré sur l'image par le générateur) */
-function traitFin(e){var d=elem(e.did);if(!d||!d.ep||e.mode==='grave')return null;return d.ep*taille(e).w/k()}
+function traitFin(e){var d=elem(e.did),v=d&&(e.mode==='detail'?d.eps:d.ep);if(!v||e.mode==='grave')return null;return v*taille(e).w/k()}
 function masque(id,src,x,y,w,h,r){return '<mask id="'+id+'" maskUnits="userSpaceOnUse" x="'+(x-r-2)+'" y="'+(y-r-2)+'" width="'+(w+2*r+4)+'" height="'+(h+2*r+4)+'">'
   +'<filter id="'+id+'f" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">'+(r>0?'<feMorphology in="SourceAlpha" operator="dilate" radius="'+r.toFixed(3)+'" result="a"/>':'')
   +'<feFlood flood-color="#fff"/><feComposite in2="'+(r>0?'a':'SourceAlpha')+'" operator="in"/></filter>'
@@ -661,6 +680,10 @@ function pieceDessin(e,cx,cy,w,h,P,uid){var d=elem(e.did);if(!d)return '';var x=
   if(P.trait)T+=masque('mt'+uid,d.sil,x,y,w,h,o+P.coupe)+'<rect x="'+(x-o-3)+'" y="'+(y-o-3)+'" width="'+(w+2*o+6)+'" height="'+(h+2*o+6)+'" fill="'+P.trait+'" mask="url(#mt'+uid+')"/>';
   s+=masque('mp'+uid,d.sil,x,y,w,h,o)+'<g'+(P.ombre?' filter="url(#pieceF)"':'')+'><rect x="'+(x-o-2)+'" y="'+(y-o-2)+'" width="'+(w+2*o+4)+'" height="'+(h+2*o+4)+'" fill="'+P.plein+'" mask="url(#mp'+uid+')"/></g>'
    +teinte('t'+uid,d.img,x,y,w,h,col)}
+ else if(e.mode==='detail'){   /* la forme pleine du dessin est découpée, ses détails (les blancs enfermés : yeux, traits) sont gravés */
+  if(P.trait)T+=masque('mt'+uid,d.sil,x,y,w,h,P.coupe)+'<rect x="'+(x-2)+'" y="'+(y-2)+'" width="'+(w+4)+'" height="'+(h+4)+'" fill="'+P.trait+'" mask="url(#mt'+uid+')"/>';
+  s+=masque('mp'+uid,d.sil,x,y,w,h,0)+'<g'+(P.ombre?' filter="url(#pieceF)"':'')+'><rect x="'+(x-1)+'" y="'+(y-1)+'" width="'+(w+2)+'" height="'+(h+2)+'" fill="'+P.plein+'" mask="url(#mp'+uid+')"/></g>'
+   +(d.det?teinte('t'+uid,d.det,x,y,w,h,col):'')}
  else{
   if(P.trait)T+=masque('mt'+uid,d.img,x,y,w,h,P.coupe)+'<rect x="'+(x-2)+'" y="'+(y-2)+'" width="'+(w+4)+'" height="'+(h+4)+'" fill="'+P.trait+'" mask="url(#mt'+uid+')"/>';
   s+=masque('mp'+uid,d.img,x,y,w,h,0)+'<g'+(P.ombre?' filter="url(#pieceF)"':'')+'><rect x="'+(x-1)+'" y="'+(y-1)+'" width="'+(w+2)+'" height="'+(h+2)+'" fill="'+P.plein+'" mask="url(#mp'+uid+')"/></g>'}
@@ -730,7 +753,7 @@ function auHasard(){var fam=S.famille||D.elements.familles[0],pool=D.elements.el
  S.els=S.els.filter(function(e){return !e.hasard});dessiner();
  pool=pool.slice();for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=pool[i];pool[i]=pool[j];pool[j]=x}
  var debut=n===1?-90:-90+180/n;
- pool.slice(0,n).forEach(function(d,i){var o={type:'dessin',did:d.id,fam:fam,mode:'decoupe',mat:'contreplaque',soude:true,rot:Math.random()<.5?0:(Math.random()<.5?-15:15),flip:Math.random()<.3,hasard:true,s:grand()?tdS(S.tHasard||'m'):.55};
+ pool.slice(0,n).forEach(function(d,i){var o={type:'dessin',did:d.id,fam:fam,mode:'decoupe',mat:'contreplaque',soude:true,rot:Math.random()<.5?0:(Math.random()<.5?-15:15),flip:Math.random()<.3,hasard:true,s:grand()?tdS(S.tHasard||'m'):.55};if(d.det)o.mode='detail';
   o.id=++S.seq;var p=place(o);o.x=p.x;o.y=p.y;S.els.push(o);dessiner();if(placerAuto(o,debut+360*i/n))pris.push(o);else{S.els=S.els.filter(function(x){return x!==o})}});
  S.sel=null;S.aBouge=true;dessiner();
  var m=$('msgHasard');if(m)m.textContent=pris.length<n?pris.length+' décor'+(pris.length>1?'s':'')+' posé'+(pris.length>1?'s':'')+' : il n\'y a plus de place sur le cadre pour les autres.':n+' décor'+(n>1?'s':'')+' posé'+(n>1?'s':'')+(pris.some(soudee)?', découpé'+(n>1?'s':'')+' avec le cadre':' et collé'+(n>1?'s':''))+'. Touchez encore pour un autre tirage.'}
@@ -869,7 +892,8 @@ function polsHtml(courante){var h='<div class="prc-pols">';D.polices.forEach(fun
  h+='<button type="button" class="prc-pol'+(p[0]===courante?' on':'')+'" data-pol="'+p[0]+'" style="font-family:'+p[2].replace(/"/g,"'")+'">'+p[1]+'</button>'});return h+'</div>'}
 function seg(nom,valeurs,courante,data){var h='<div class="sc-seg" role="group" aria-label="'+nom+'">';
  valeurs.forEach(function(v){h+='<button type="button" class="'+(v[0]===courante?'on':'')+'" data-'+data+'="'+v[0]+'">'+v[1]+'</button>'});return h+'</div>'}
-var MODES=[['decoupe','Découpé'],['grave','Gravé']],FORMES=[['rect','Rectangle'],['ovale','Ovale']];
+var MODES=[['decoupe','Découpé'],['grave','Gravé']],MODESD=[['detail','Détails gravés'],['decoupe','Ajouré'],['grave','Sur une pièce']],
+ AIDED={detail:'La forme du dessin est découpée ; ses détails (yeux, traits, étoiles) sont gravés.',decoupe:'Tout est découpé : les détails sont des trous.',grave:'Le dessin est gravé sur une pièce découpée 1,6 mm autour.'},FORMES=[['rect','Rectangle'],['ovale','Ovale']];
 function panneau(){
  var P=$('panneau'),h='',cl=S.style==='classique';
  [].forEach.call(document.querySelectorAll('.sc-ajout'),function(b){b.classList.toggle('on',b.getAttribute('data-a')===S.panneau)});
@@ -887,7 +911,7 @@ function panneau(){
    +'<button type="button" class="sc-btn clair" id="exPhoto">Essayer avec une photo d\'exemple</button></div></div>';
  }
  else if(S.panneau==='dessin'){var fam=S.famille||D.elements.familles[0];
-  h='<div class="prc-fields"><p class="prc-legend">Touchez un dessin : il se pose sur la décoration, vous le placez ensuite où vous voulez. '+(cl&&S.taille!=='petite'?'En bois, il est <b>découpé avec le cadre</b>, d\'une seule pièce : rien à coller. Dans sa fiche, vous choisissez s\'il est ajouré (à sa forme) ou plein avec ses détails gravés.':cl?'Il est <b>découpé</b> (une pièce à sa forme, collée sur le cadre) ou <b>gravé</b> sur une pièce découpée autour : vous choisissez dans sa fiche.':'Il est gravé sur la plaque.')+'</p>'
+  h='<div class="prc-fields"><p class="prc-legend">Touchez un dessin : il se pose sur la décoration, vous le placez ensuite où vous voulez. '+(cl&&S.taille!=='petite'?'En bois, il est <b>découpé avec le cadre</b>, d\'une seule pièce : rien à coller, et <b>ses détails sont gravés</b>. Dans sa fiche, vous choisissez sa taille, ou de l\'ajourer.':cl?'Il est <b>découpé</b> (une pièce à sa forme, collée sur le cadre) ou <b>gravé</b> sur une pièce découpée autour : vous choisissez dans sa fiche.':'Il est gravé sur la plaque.')+'</p>'
    +'<div class="sc-fams">'+D.elements.familles.map(function(f){return '<button type="button" class="'+(f===fam?'on':'')+'" data-fam="'+esc(f)+'">'+esc(f)+'</button>'}).join('')+'</div>'
    +'<div class="sc-hasard"><b>Au hasard</b><span class="sc-nb"><button type="button" class="sc-o" data-h="-" aria-label="Moins de décors">−</button><output>'+(S.nHasard||3)+'</output><button type="button" class="sc-o" data-h="+" aria-label="Plus de décors">+</button></span>'
    +(grand()?'<span class="sc-thz">Taille</span>'+seg('Taille des décors',TD.map(function(t){return [t[0],t[1]]}),S.tHasard||'m','th'):'')
@@ -910,7 +934,7 @@ $('panneau').addEventListener('click',function(ev){
   if(v==='go'){auHasard();return}
   S.nHasard=Math.max(1,Math.min(10,(S.nHasard||3)+(v==='+'?1:-1)));panneau();return}
  var fa=ev.target.closest('[data-fam]');if(fa){S.famille=fa.getAttribute('data-fam');panneau();return}
- var de=ev.target.closest('[data-dessin]');if(de){ajouter({type:'dessin',did:de.getAttribute('data-dessin'),fam:S.famille||D.elements.familles[0],mode:'decoupe',mat:'contreplaque',soude:true,rot:0,flip:false});return}
+ var de=ev.target.closest('[data-dessin]');if(de){ajouter({type:'dessin',did:de.getAttribute('data-dessin'),fam:S.famille||D.elements.familles[0],mode:(elem(de.getAttribute('data-dessin'))||{}).det?'detail':'decoupe',mat:'contreplaque',soude:true,rot:0,flip:false});return}
  if(ev.target.id==='exPhoto'){ajouter({type:'photo',src:D.exemple,nom:"photo d'exemple",forme:S.formePhoto})}});
 $('panneau').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&ev.target.id==='ntexte'){ev.preventDefault();$('okTexte').click()}});
 $('panneau').addEventListener('change',function(ev){if(ev.target.id!=='fphoto')return;var f=ev.target.files&&ev.target.files[0];if(!f)return;
@@ -921,9 +945,9 @@ $('panneau').addEventListener('change',function(ev){if(ev.target.id!=='fphoto')r
 /* ---- la liste des pièces ---- */
 function nomEl(e){return e.type==='texte'?'« '+(e.texte||'')+' »':e.type==='dessin'?'Dessin · '+(e.fam||'décor'):'Ma photo'}
 function commentEl(e){
- if(soudee(e))return e.type==='dessin'?'découpé avec le cadre'+(e.mode==='grave'?' · détails gravés':'')+' · rien à coller'+(e.rot?' · tourné de '+e.rot+'°':'')+(e.flip?' · retourné':'')
+ if(soudee(e))return e.type==='dessin'?'découpé avec le cadre'+(e.mode==='grave'||e.mode==='detail'?' · détails gravés':' · ajouré')+' · rien à coller'+(e.rot?' · tourné de '+e.rot+'°':'')+(e.flip?' · retourné':'')
   :'découpé avec le cadre'+(e.mode==='grave'?' · texte gravé':'')+(e.creux?' · lettres creuses':'')+' · '+police(e.police)[1];
- if(e.type==='dessin')return S.style!=='classique'?'gravé':(e.mode==='grave'?'gravé sur une pièce découpée':'découpé')+(e.mode==='grave'?'':' · '+matEl(e).nom.toLowerCase())+(e.rot?' · tourné de '+e.rot+'°':'')+(e.flip?' · retourné':'');
+ if(e.type==='dessin')return S.style!=='classique'?'gravé':(e.mode==='grave'?'gravé sur une pièce découpée':e.mode==='detail'?'découpé, détails gravés':'découpé, ajouré')+(e.mode==='grave'?'':' · '+matEl(e).nom.toLowerCase())+(e.rot?' · tourné de '+e.rot+'°':'')+(e.flip?' · retourné':'');
  if(e.type==='photo')return 'photo gravée'+(S.style==='classique'?' sur une pièce découpée':'')+' · '+(e.forme==='ovale'?'ovale':'rectangle');
  if(S.style!=='classique')return 'gravé · '+police(e.police)[1];
  return (e.mode==='grave'?'gravé sur une pièce découpée':'lettres découpées')+(e.creux?' · creuses':'')+' · '+matEl(e).nom.toLowerCase()+' · '+police(e.police)[1]}
@@ -940,7 +964,7 @@ function liste(){
    +'<span class="sc-inom"><b>'+esc(nomEl(e))+'</b><small>'+(cl&&num(e)?'Pièce '+num(e)+' · ':'')+commentEl(e)+' · + '+eur(prixEl(e))+'</small></span>'
    +'<button type="button" class="sc-x" data-act="x" aria-label="Retirer">✕</button></div>';
   if(e.flottant)h+='<p class="sc-warn">'+(e.so&&e.type==='dessin'?'Ce dessin ne mord pas assez sur le bois du cadre : il casserait. Faites-le glisser vers le cadre, ou touchez « Placer automatiquement ».':e.so?'Ce nom est découpé avec le cadre, mais il ne le touche pas. Faites-le glisser jusqu\'au cadre, ou touchez « Poser d\'un bord du cadre à l\'autre ».':'Cette pièce ne touche ni le cadre ni une autre pièce : elle tomberait. Faites-la glisser jusqu\'au cadre pour qu\'on puisse la coller.')+'</p>';
-  else if(e.so&&e.type==='dessin'&&traitFin(e)!=null&&traitFin(e)<.8)h+='<p class="sc-warn">À cette taille, ce dessin a des traits très fins : il serait fragile. Agrandissez-le avec « + », ou choisissez « Gravé ».</p>';
+  else if(e.so&&e.type==='dessin'&&traitFin(e)!=null&&traitFin(e)<.8)h+='<p class="sc-warn">À cette taille, ce dessin a des traits très fins : il serait fragile. Choisissez une taille plus grande'+(e.mode==='decoupe'?', ou « Détails gravés »':'')+'.</p>';
   if(S.sel===e.id){
    if(e.type==='texte'){h+='<input type="text" maxlength="24" value="'+esc(e.texte)+'" data-edit="'+e.id+'" aria-label="Modifier le texte">'+polsHtml(e.police);
     if(cl)h+=matsHtml(e.mat||'contreplaque','emat')+seg('Découpé ou gravé',MODES,e.mode,'em');
@@ -951,7 +975,7 @@ function liste(){
      +'<div class="sc-outils"><span>Espacement</span><button type="button" class="sc-o" data-act="esp-" aria-label="Lettres plus serrées">−</button><button type="button" class="sc-o" data-act="esp+" aria-label="Lettres plus espacées">+</button></div>'
      +'<button type="button" class="sc-o sc-poser" data-act="poser">Poser d\'un bord du cadre à l\'autre</button>'
      +'<label class="sc-courbe">Courbe <input type="range" min="-100" max="100" step="5" value="'+(e.courbe||0)+'" data-act="courbe" aria-label="Courbe du texte"><output>'+(e.courbe||0)+'</output></label>'}
-   else if(e.type==='dessin'){if(cl){h+=seg('Découpé ou gravé',MODES,e.mode,'em');if(e.mode!=='grave')h+=matsHtml(e.mat||'contreplaque','emat');
+   else if(e.type==='dessin'){if(cl){h+='<div class="sc-tdz">'+seg('Détails gravés, ajouré ou gravé sur une pièce',MODESD,e.mode,'em')+'</div><p class="prc-hint">'+(AIDED[e.mode]||'')+'</p>';if(e.mode!=='grave')h+=matsHtml(e.mat||'contreplaque','emat');
      h+='<p class="prc-hint">'+(soudee(e)?'Découpé avec le cadre, d\'une seule pièce : rien à coller.':S.taille==='petite'?'À 7 cm, le dessin est une pièce à part, collée sur le cadre.':'En acrylique, le dessin est une pièce à part, collée sur le cadre.')+'</p>'}
     if(grand())h+='<div class="field sc-tdz"><label>Taille du dessin</label>'+seg('Taille du dessin',TD.map(function(t){return [t[0],t[1]+' · '+tdCm(e,t[2])]}),tdDe(e),'td')+'</div>';
     h+='<div class="sc-outils"><span>Tourner</span><button type="button" class="sc-o" data-act="rot-" aria-label="Tourner à gauche">↺</button><button type="button" class="sc-o" data-act="rot+" aria-label="Tourner à droite">↻</button><button type="button" class="sc-o" data-act="flip">Retourner</button></div>'
@@ -1212,7 +1236,7 @@ function recaserDessins(seuls){if(S.style!=='classique'||prise)return;var n=0;
   if(placerAuto(e,e.cib))n++;else if(e.hasard){S.els=S.els.filter(function(x){return x!==e});n++}});   /* un décor tiré au hasard qui n'a plus de place est retiré */
  if(n){S.sel=null;dessiner()}}
 /* les silhouettes des dessins sont lues en arrière-plan dès l'ouverture : le placement tient compte du bois tout de suite */
-(function(){var L=D.elements.elements,i=0;function lot(){for(var n=0;n<16&&i<L.length;n++,i++)alpha({did:L[i].id,mode:'decoupe'});if(i<L.length)setTimeout(lot,25)}setTimeout(lot,250)})();
+(function(){var L=D.elements.elements,i=0;function lot(){for(var n=0;n<16&&i<L.length;n++,i++)alpha({did:L[i].id,mode:'detail'});if(i<L.length)setTimeout(lot,25)}setTimeout(lot,250)})();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(reposer);
 [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
 /* ---- nos modèles prêts à personnaliser ---- */
@@ -1223,7 +1247,7 @@ function baseModele(m){S.forme=m.forme;S.groupe=grpDe(m.forme);S.taille=m.taille
 function composerModele(m){baseModele(m);
  m.textes.forEach(function(t){ajouter({type:'texte',texte:t.texte,police:t.police,mode:'decoupe',mat:t.mat,esp:0,courbe:0,creux:false})});
  var n=m.decos.length,debut=n===1?-90:-90+180/n;
- m.decos.forEach(function(did,i){var o={type:'dessin',did:did,fam:famDe(did),mode:'decoupe',mat:'contreplaque',soude:true,rot:0,flip:false,s:m.style==='classique'&&m.taille!=='petite'?tdS('m'):.55};
+ m.decos.forEach(function(did,i){var o={type:'dessin',did:did,fam:famDe(did),mode:(elem(did)||{}).det?'detail':'decoupe',mat:'contreplaque',soude:true,rot:0,flip:false,s:m.style==='classique'&&m.taille!=='petite'?tdS('m'):.55};
   o.id=++S.seq;var p=place(o);o.x=p.x;o.y=p.y;S.els.push(o);dessiner();if(!placerAuto(o,debut+360*i/n))S.els=S.els.filter(function(x){return x!==o})});
  S.sel=null;S.panneau=null;panneau();dessiner()}
 function appliquerModele(m){if(!m.els)return composerModele(m);baseModele(m);
