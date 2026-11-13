@@ -4,6 +4,14 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
+
+## 🗂️ MAQUETTE « PAPETERIE & BUREAU » (13/11/2026, gérant : « fais la maquette juste pour le 1 ») — RIEN en ligne
+- https://claude.ai/artifact/W5k33bztj4JPMfdo8uExoF : la vraie page du site construite en local (`univers.js` modifié sur la machine puis remis), capturée
+  à 390 px. Papeterie devient « Papeterie & Bureau » (10 créations) : marque-pages bois, métal, carnets + rayon « Bureau » (2 supports téléphone, 4 porte-stylos)
+  pris dans Petits cadeaux (qui passe à 7 : clés USB, porte-clés, pièce). Adresse `/boutique/papeterie` inchangée.
+- Au « mets en ligne » : `univers.js` (nom, short, accroche des deux univers, rayon déplacé) + fil d'Ariane des fiches marque-pages / carnet
+  (`produit/[handle]/page.jsx`, « Papeterie ») + guides si besoin. La déco de Noël en cristal dans Maison & Déco : refusée pour l'instant (« juste pour le 1 »).
+
 ## ✅ BOUTON « OK ✓ » DANS LES CHAMPS (13/11/2026 soir) — fait dans les 7 maquettes, la lettre (v5) et L'atelier (v2), RIEN en ligne
 - En attente de son essai sur son iPhone (le clavier doit se ranger au toucher de « OK ✓ »).
 - À lui demander : le même bouton dans les trois outils de Gestion déjà en ligne ? sur les fiches du site ?
