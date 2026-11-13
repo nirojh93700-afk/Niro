@@ -337,6 +337,7 @@ function resume(){var v=valides(),m=D.modeles.filter(function(x){return x.id===S
 
 /* ---- les planches de l'atelier : une par matière, pièces numérotées, à la taille réelle ---- */
 function boiteDe(d){var n=d.match(/-?\d+(\.\d+)?/g).map(Number),x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(var i=0;i<n.length;i+=2){x0=Math.min(x0,n[i]);x1=Math.max(x1,n[i]);y0=Math.min(y0,n[i+1]);y1=Math.max(y1,n[i+1])}return[x0,y0,x1-x0,y1-y0]}
+var ZONE=176;window.addEventListener('message',function(ev){var d=ev.data;if(d&&d.type==='niv-machine'&&d.machine){var z=Math.min(+d.machine.zw||180,+d.machine.zh||180)-4;if(z>=60&&z!==ZONE){ZONE=z;feuilles()}}});
 function feuilles(){var v=valides(),q=k(),couleur=S.finition==='couleur',P={},ordre=[],num=0;
  function mettre(mat,piece){if(!P[mat]){P[mat]=[];ordre.push(mat)}P[mat].push(piece)}
  v.forEach(function(n){var g=forme(n);if(!g)return;
@@ -346,7 +347,7 @@ function feuilles(){var v=valides(),q=k(),couleur=S.finition==='couleur',P={},or
   var f=placer(n),t='';if(f){var p=polN(),e=f.e,x=f.cx-((e.r-e.l)/2)*f.fs/100,y=f.cy+((e.a-e.d)/2)*f.fs/100;
    t='<text x="'+x.toFixed(2)+'" y="'+y.toFixed(2)+'" font-family="'+p[2]+',cursive" font-weight="'+p[3]+'" font-size="'+f.fs.toFixed(2)+'" fill="#111"'+(f.ang?' transform="rotate('+f.ang+' '+f.cx.toFixed(2)+' '+f.cy.toFixed(2)+')"':'')+'>'+esc(String(n).trim())+'</text>'}
   mettre('Contreplaqué 3 mm',{n:++num,nom:'lettre « '+n+' »'+(couleur?' (à peindre)':''),b:boiteDe(g.d),h:'<path d="'+g.d+'" fill="none" stroke="#d32f2f" stroke-width=".35"/>'+grav+t})});
- var G=6,LMAX=190,out='';
+ var G=6,LMAX=ZONE,out='';
  ordre.forEach(function(mat){var pages=[],cur=null;
   function ouvrir(){cur={x:0,y:0,hl:0,W:0,h:'',noms:[]};pages.push(cur)}
   ouvrir();
@@ -357,7 +358,7 @@ function feuilles(){var v=valides(),q=k(),couleur=S.finition==='couleur',P={},or
    cur.noms.push(p.n+' '+p.nom);cur.x+=w+G;cur.hl=Math.max(cur.hl,ht);cur.W=Math.max(cur.W,cur.x-G)});
   pages.forEach(function(pg,i){var H=pg.y+pg.hl;
    out+='<div class="sc-feuille"><h4>'+esc(mat)+(pages.length>1?' · planche '+(i+1)+' sur '+pages.length:'')+' · '+fr(pg.W)+' × '+fr(H)+' mm</h4><svg viewBox="-4 -4 '+(pg.W+8).toFixed(1)+' '+(H+8).toFixed(1)+'" style="max-height:340px" role="img" aria-label="Planche '+esc(mat)+'">'+pg.h+'</svg>'
-    +'<p class="sc-fnom">'+pg.noms.join(' · ')+'</p>'+(pg.W>200||H>200?'<p class="al">Cette pièce dépasse 200 × 200 mm.</p>':'')+'</div>'})});
+    +'<p class="sc-fnom">'+pg.noms.join(' · ')+'</p>'+(pg.W>ZONE+4||H>ZONE+4?'<p class="al">Cette pièce dépasse la zone de la machine.</p>':'')+'</div>'})});
  $('feuilles').innerHTML=out||'<p class="prc-hint">Écrivez un prénom : les planches apparaissent ici.</p>'}
 
 majModeles();majNoms();majPolI();majTailles();majFinitions();majPolN();majPlaces();charger(cle());attendrePolice();

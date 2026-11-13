@@ -1,3 +1,16 @@
+## 📐 TROIS OUTILS RANGÉS POUR 180 mm, L'ARBRE RESTE À 18 cm — 13/11/2026 soir (gérant : « oui fais les trois et laisse l'arbre à 18 cm », après ma réponse « y aura-t-il des problèmes ? »)
+- AUCUNE pièce ne change de taille (tenons, fentes, objets identiques) ; seul le rangement change. Démonstration : rien en ligne, `public/atelier-outils/` (Gestion) PAS touché.
+- **Maisonnette** (`maison-createur.py`, `D.planche` 190 → **176**) et **décoration à prénom** (`prenom-createur.py`, `ZONE` 176 à la place de `LMAX=190`) : planches de 176 mm au plus (zone 180 moins 2 mm de marge
+  de chaque côté) ; elles écoutent `niv-machine` (zone de « Ma machine » moins 4 mm). Mesuré : maisonnette petite 2 planches · moyenne 3 · grande 5 (plus grande 174,4 mm) ; à 400 × 400 → 1 planche.
+  Maquettes republiées : maisonnette **v4**, décoration à prénom **v6**.
+- **Support de téléphone, dans L'atelier seulement** (`atelier-unique.py` : `support_180` corrige la copie de `atelier-support.html`, `marges_fichiers` corrige la copie de `fabrique.js`) : marges de 2 mm au lieu de 5,
+  3 mm entre le dossier et le pied → fichier grand **179 × 169 mm** (avant 186 × 175), standard 167 × 155, petit 159 × 146. Conséquence de `marges_fichiers` : TOUS les fichiers fabriqués dans L'atelier
+  (support, arbre, décoration à suspendre) ont 2 mm de marge au lieu de 5.
+- **Arbre de vie : laissé à 18 cm** (sa décision). ⚠️ Constaté en lisant `fabrique.js` : le FICHIER de l'arbre fait 190 × 190 mm dans Gestion (184 × 184 dans L'atelier), l'arbre dedans fait 180 mm :
+  c'est l'objet qui compte pour la machine, pas le cadre du fichier.
+- L'atelier **v8**. Essais : 10 mesures + 36 + 26, 0 erreur. Pas d'essai machine.
+- **À lui demander** : appliquer le même rangement du support à l'outil de Gestion déjà en ligne (aujourd'hui les deux diffèrent).
+
 ## ♈ SIGNES EN MÉDAILLON + ⛔ LE JOUR DE LA MISE EN VENTE DES CRÉATIONS : MASQUAGE RELIÉ À GESTION — 13/11/2026 soir
 - **Signes (gérant : « ça ressemble pas au zodiaque, on dirait un animal, il faut qu'on reconnaisse les signes »)** : le signe « en dessin » est un MÉDAILLON gravé sur un rond blanc de 28 mm :
   le symbole (♈…) en haut, le dessin au milieu, le NOM du signe écrit en rond en bas (`forme('signe')`, lettres posées une à une sur un arc). Gémeaux = le symbole en grand (aucun dessin reconnaissable).

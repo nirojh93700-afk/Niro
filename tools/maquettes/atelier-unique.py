@@ -49,6 +49,31 @@ def page(src, dst):
 
 for n in ("atelier-support.html", "atelier-arbre.html", "atelier-decoration.html"):
     page(os.path.join(out, n), os.path.join(out, n))
+
+# le fichier du support tient dans 180 mm : mêmes pièces, marges de 2 mm au lieu de 5 et 3 mm entre le dossier et le pied
+# (grand : 186 → 179 mm de large). L'outil de Gestion en ligne (public/atelier-outils) n'est pas touché.
+def support_180(f):
+    t = open(f, encoding="utf-8").read()
+    for a, b in [("function X(v){return ((v-ox())/3+5).toFixed(2)} function Y(v){return ((v-oy())/3+5).toFixed(2)}", "function X(v){return ((v-ox())/3+2).toFixed(2)} function Y(v){return ((v-oy())/3+2).toFixed(2)}"),
+                 ("F.setAttribute('viewBox','0 0 '+t0.lw+' '+lh);", "F.setAttribute('viewBox','0 0 '+(t0.lw-7)+' '+(lh-6));"),
+                 ('<clipPath id="fclip"><path transform="translate(5 5)"', '<clipPath id="fclip"><path transform="translate(2 2)"'),
+                 ("+'<g transform=\"translate(5 5)\"><path '+R+' d=\"'+b.dos+fentesD(b)+trous()+'\"/></g>'", "+'<g transform=\"translate(2 2)\"><path '+R+' d=\"'+b.dos+fentesD(b)+trous()+'\"/></g>'"),
+                 ("+'<g transform=\"translate('+t0.piedX+' 5)\">", "+'<g transform=\"translate('+(t0.piedX-4)+' 2)\">"),
+                 (".svg · '+t0.lw+' × '+lh+' mm · bois 3 mm';", ".svg · '+(t0.lw-7)+' × '+(lh-6)+' mm · bois 3 mm';")]:
+        assert t.count(a) == 1, a
+        t = t.replace(a, b)
+    open(f, "w", encoding="utf-8").write(t)
+support_180(os.path.join(out, "atelier-support.html"))
+
+# les fichiers fabriqués : 2 mm de marge autour des pièces au lieu de 5 (support grand : 185 → 179 mm de large)
+def marges_fichiers(f):
+    t = open(f, encoding="utf-8").read()
+    for a, b in [("W = r2(tb.width + 10), H = r2(tb.height + 10);", "W = r2(tb.width + 4), H = r2(tb.height + 4);"),
+                 ("'translate(' + r2(5 - tb.x) + ' ' + r2(5 - tb.y) + ')'", "'translate(' + r2(2 - tb.x) + ' ' + r2(2 - tb.y) + ')'")]:
+        assert t.count(a) == 1, a
+        t = t.replace(a, b)
+    open(f, "w", encoding="utf-8").write(t)
+marges_fichiers(os.path.join(out, "fabrique.js"))
 page(lettre, os.path.join(out, "lettre.html"))
 copier_dossier(prenom, os.path.join(out, "prenom"))
 page(os.path.join(prenom, "index.html"), os.path.join(out, "prenom", "index.html"))
@@ -165,9 +190,9 @@ body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system
   $('accueil').hidden=!!cur||gerer;$('gerer').hidden=!!cur||!gerer;$('fich').hidden=!resultat;$('nom').textContent=o?o.t:(gerer?'Ce qui se voit sur le site':'');
   $('fab').hidden=!(o&&o.pont);$('fab').disabled=occupe||!prets[cur]||!!resultat;
   if(!occupe)etat(!o?(gerer?'Une création masquée reste dans ce logiciel.':'Choisissez un produit.'):resultat?'Vos fichiers sont prêts.':o.pont?(prets[cur]?'Touchez une pièce pour la régler, puis « Fabriquer les fichiers ».':'L’outil se charge…'):o.machine?'Les fichiers se téléchargent en bas de l’outil.':'Créateur : les planches pour la machine sont tout en bas de la page.')}
- function envoyerMachine(){OUTILS.forEach(function(o){var f=o.machine&&cadres[o.id];if(f&&f.contentWindow)f.contentWindow.postMessage({type:'niv-machine',machine:M},'*')})}
+ function envoyerMachine(){OUTILS.forEach(function(o){var f=cadres[o.id];if(f&&f.contentWindow)f.contentWindow.postMessage({type:'niv-machine',machine:M},'*')})}
  function ouvrir(id){if(occupe)return;cur=id;resultat=null;if(id)gerer=false;
-  if(id&&!cadres[id]){var o=outil(id),f=document.createElement('iframe');f.title='Outil : '+o.t;f.src=o.page;if(o.machine)f.addEventListener('load',function(){setTimeout(envoyerMachine,300)});$('corps').appendChild(f);cadres[id]=f}
+  if(id&&!cadres[id]){var o=outil(id),f=document.createElement('iframe');f.title='Outil : '+o.t;f.src=o.page;f.addEventListener('load',function(){setTimeout(envoyerMachine,300)});$('corps').appendChild(f);cadres[id]=f}
   maj()}
  function tuiles(){var sans=OUTILS.filter(function(o){return !V.tags[o.id].length}).length;
   if(filtre!=='tout'&&(filtre==='annee'?!sans:!avec(filtre).length))filtre='tout';
@@ -207,7 +232,7 @@ body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,-apple-system
  $('fab').addEventListener('click',function(){if(!prets[cur]||occupe)return;occupe=true;etat('Fabrication des fichiers…');maj();cadres[cur].contentWindow.postMessage({type:'niv-fabriquer'},'*')});
  /* ma machine */
  function champsM(){['zw','zh','trait','jeu','ep'].forEach(function(k){var el=$('m-'+k);if(document.activeElement!==el)el.value=String(M[k]).replace('.',',')});
-  $('machNote').textContent='Aujourd’hui ce réglage est suivi par « Lettre ou chiffre à incruster » et « Boîte seule » (zone '+mm(M.zw)+' × '+mm(M.zh)+' mm). Les sept autres outils ont encore leurs tailles fixes, prévues pour 200 × 200 mm : à ouvrir un par un, sur votre accord.'+(Math.min(M.zw,M.zh)<190?' Attention, avec une zone de moins de 190 mm : les planches de la maisonnette et de la décoration à prénom vont jusqu’à 190 mm, celle du support de téléphone jusqu’à 186 mm ; l’arbre de vie (180 mm) est juste à la limite.':'')}
+  $('machNote').textContent='Zone '+mm(M.zw)+' × '+mm(M.zh)+' mm. La suivent en entier : « Lettre ou chiffre à incruster » et « Boîte seule ». Rangent leurs planches à cette taille : la maisonnette et la décoration à prénom. Support de téléphone : sa planche fait 179 mm au plus. Arbre de vie : 180 × 180 mm, sans marge dans une zone de 180. Les autres créations ont des tailles fixes, plus petites.'}
  document.addEventListener('input',function(ev){var t=ev.target;if(!t.id||t.id.indexOf('m-')!==0)return;var k=t.id.slice(2),v=parseFloat(String(t.value).replace(',','.')),lim={zw:[50,3000],zh:[50,3000],trait:[0,0.6],jeu:[0,0.6],ep:[1,20]}[k];
   if(isNaN(v)||v<lim[0]||v>lim[1])return;M[k]=v;try{localStorage.setItem('niv-atelier-machine',JSON.stringify(M))}catch(e){}champsM();envoyerMachine()});
  function de(ev){for(var k in cadres)if(cadres[k].contentWindow===ev.source)return k;return null}

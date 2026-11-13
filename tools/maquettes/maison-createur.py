@@ -41,7 +41,7 @@ DESSINS = [["christmas_deer", "Renne"], ["christmas_tree", "Sapin"], ["christmas
 # Les tailles (proposées) : [id, nom, largeur, profondeur, hauteur des murs, hauteur du toit, prix]. La petite = la maison de départ d'Atomm.
 TAILLES = [["p", "Petite", 64, 52, 60, 30, 19.9], ["m", "Moyenne", 80, 65, 75, 37.5, 24.9], ["g", "Grande", 96, 78, 90, 45, 29.9]]
 
-DONNEES = json.dumps({"motifs": motifs, "dessins": DESSINS, "tailles": TAILLES, "planche": 190}, ensure_ascii=False, separators=(",", ":"))
+DONNEES = json.dumps({"motifs": motifs, "dessins": DESSINS, "tailles": TAILLES, "planche": 176}, ensure_ascii=False, separators=(",", ":"))
 
 CSS = r"""
 .ms-grille{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
@@ -339,7 +339,7 @@ function resume(){var g=G,t=g.params,ta=taille(),nd=g.decors[0],fen=function(f){
  $('infoDecor').textContent=t.decoration==='none'?'':nd<t.decorCount?nd+' sur '+t.decorCount+' : celles qui toucheraient le dessin, le bord ou un assemblage ne sont pas faites.':'';
  $('dim').textContent=fr(t.width/10)+' × '+fr(t.depth/10)+' cm · '+fr(g.hauteur/10)+' cm de haut'+(t.topMode==='ornament'?' avec l\'anneau':'')}
 
-/* ---- les planches de l'atelier, à la taille réelle : les pièces rangées dans des feuilles de 19 cm ---- */
+/* ---- les planches de l'atelier, à la taille réelle : les pièces rangées dans des feuilles de 176 mm (zone de 180 mm), ou de la zone donnée par « Ma machine » ---- */
 var NOMS={front:'Pignon de façade',back:'Pignon arrière',left:'Mur gauche',right:'Mur droit',base:'Base',roofLeft:'Pan de toit gauche',roofRight:'Pan de toit droit',hanger:'Poutre d\'accroche'};
 function planches(){var g=G,Z=D.planche,Ec=4,rouge=' fill="none" stroke="#d32f2f" stroke-width=".3"',noir=' fill="none" stroke="#1a1206" stroke-width=".3"';
  var ps=g.cutParts.map(function(p,i){return {n:i+1,id:p.id,b:M.boite(p.rings),p:p}}),tri=ps.slice().sort(function(a,b){return b.b.h-a.b.h}),feuilles=[],trop=false;
@@ -352,7 +352,7 @@ function planches(){var g=G,Z=D.planche,Ec=4,rouge=' fill="none" stroke="#d32f2f
    h+='<path d="'+M.chemin(o.q.p.rings,dx,dy)+'"'+rouge+'/>'+(o.q.p.scores.length?'<path d="'+M.chemin(o.q.p.scores,dx,dy,true)+'"'+noir+'/>':'')
     +'<g transform="translate('+(o.x+b.w/2).toFixed(1)+' '+(o.y+Math.min(b.h-5,b.h*.82)).toFixed(1)+')"><circle r="3.4" fill="#1a1206"/><text text-anchor="middle" dominant-baseline="central" font-size="3.8" font-weight="700" fill="#fff" font-family="sans-serif">'+o.q.n+'</text></g>'});
   return '<div class="sc-feuille"><h4>Contreplaqué '+fr(g.params.thickness)+' mm · planche '+(i+1)+' sur '+feuilles.length+' · '+fr(fe.w)+' × '+fr(fe.h)+' mm</h4><svg viewBox="-3 -3 '+(fe.w+6).toFixed(1)+' '+(fe.h+6).toFixed(1)+'" role="img" aria-label="Planche de découpe '+(i+1)+'">'+h+'</svg>'
-   +'<p class="sc-fnom">'+fe.l.map(function(o){return o.q.n+' '+NOMS[o.q.id]}).sort().join(' · ')+'</p></div>'}).join('')+(trop?'<p class="al">Une pièce dépasse 19 cm : elle ne tient pas dans votre machine.</p>':'');
+   +'<p class="sc-fnom">'+fe.l.map(function(o){return o.q.n+' '+NOMS[o.q.id]}).sort().join(' · ')+'</p></div>'}).join('')+(trop?'<p class="al">Une pièce dépasse '+fr(Z/10)+' cm : elle ne tient pas dans votre machine.</p>':'');
  return {feuilles:feuilles.length,trop:trop}}
 
 /* ---- le montage, pièce après pièce ---- */
@@ -405,6 +405,7 @@ tout();S.pas=etapes().length-1;montage();vue('face');
 /* la 3D se charge après : dès qu'elle est là, c'est elle qu'on montre (sauf si la cliente a déjà choisi une vue) */
 charger3(function(){montage();if(!S.choisie)vue('3d')});
 window.msAtelier={S:S,dessiner:dessiner,maj:tout,vue:vue};
+window.addEventListener('message',function(ev){var d=ev.data;if(d&&d.type==='niv-machine'&&d.machine){var z=Math.min(+d.machine.zw||180,+d.machine.zh||180)-4;if(z>=60&&z!==D.planche){D.planche=z;planches()}}});
 window.msEtat=function(){var p=planches();return{S:S,trois:TROIS.ok,vue:S.vue,pieces:G.parts.length,alertes:G.warnings,decors:G.decors,hauteur:G.hauteur,planches:p.feuilles,trop:p.trop,
  total:taille()[6],bloque:$('ajouter').disabled,manque:$('manque').textContent}};
 })();
