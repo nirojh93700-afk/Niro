@@ -420,6 +420,9 @@ function trois() { charger3(function () { var TH = window.THREE, cv = $('c3d'), 
   var c = new TH.Color(couleur()), bl = new TH.Color('#f6f3ec'), ep = +S.ep || 3, blancs = []; G.els.forEach(function (a) { if (a.e.mode === 'inc') blancs = blancs.concat(a.B); });
   T3.g.add(couche(G.fond, 0, ep, SEULE ? new TH.Color('#e2c79b') : bl)); if (G.dessus.length) T3.g.add(couche(G.dessus, ep, ep, c)); if (blancs.length) T3.g.add(couche(unir(blancs), ep, ep, bl));
   if (G.P) { if (S.el.plaque.mode === 'inc') T3.g.add(couche(G.P.plaqueA, ep, ep, bl)); T3.g.add(couche(G.P.nomA, 2 * ep, ep * 0.6, new TH.Color(fonce(couleur(), 0.9)))); }
+  /* les détails gravés se voient aussi en 3D : sur les pièces blanches (cadran, animal, signe, règle, pieds) et sur le dessus (pièces en « Gravé ») */
+  var gv = []; G.els.forEach(function (a) { if (a.e.mode === 'inc' && a.Gv.length) gv = gv.concat(a.Gv); });
+  if (gv.length) T3.g.add(couche(unir(gv), 2 * ep, 0.16, new TH.Color('#4a443c'))); if (G.gravD.length) T3.g.add(couche(G.gravD, 2 * ep, 0.16, new TH.Color(fonce(couleur(), 0.6))));
   if (G.bt) { var bt = G.bt, bois = new TH.Color('#d9bb8c'), bois2 = new TH.Color('#c9a878'), lev = 14, kk = 100 / G.bf.h, dz = (bt.Hm + lev) / 2 * kk;
     T3.g.add(couche(bt.cale, -bt.T, bt.T, bois2)); T3.g.add(couche(moins(bt.O, bt.I), -lev - bt.Hm, bt.Hm, bois)); T3.g.add(couche(bt.cour, -lev - bt.T, bt.T, bois2)); T3.g.add(couche(bt.I, -lev - bt.Hm, bt.T, bois2));
     if (bt.dos) T3.g.add(couche(bt.dos, -lev - bt.Hm - bt.T, bt.T, bois2)); T3.g.children.forEach(function (ch) { ch.position.z = dz; }); }

@@ -13,6 +13,9 @@
   Un cœur de 170 mm sort à 158 mm de haut (la pointe est arrondie au rayon). Suit « Ma machine ». Essais 390 / 1280 : 40 sur 40 (P, 8, 4, A, 0, 4 formes, 150 × 80, 3D, retour à la lettre).
 - **Pieds** : pièce blanche à la silhouette des deux pieds + empreintes GRAVÉES (plante avec la voûte, deux plis, cinq orteils séparés), `pied()` ; en « Gravé », les empreintes seules sur le dessus.
   ⛔ Règle confirmée : toute pièce à dessin = pièce blanche + détails gravés (animal, signe, horloge, règle, pieds).
+- **3D (13/11 soir, capture : « c'est en 3D et les détails qui disparaissent »)** : la vue 3D montre maintenant la gravure (cadran, animal, signe, règle, pieds sur les pièces blanches ; pièces
+  en « Gravé » sur le dessus) : couche de 0,16 mm posée dessus dans `trois()`. Lettre **v7**, L'atelier **v4**. Confirmé au gérant : les emplacements sont découpés par la machine (pièce + jeu),
+  il pose chaque pièce blanche dans son emplacement et colle ; rien à tracer à la main.
 - Essais rejoués : lettre 54 sur 54, boîte seule 40, atelier 26 + 36, 0 erreur, 0 débordement. Pas essayé sur les pages publiées ni sur un vrai iPhone.
 - **Proposé par moi, à valider** : masquer aussi par famille DANS chaque outil · un texte gravé sur le couvercle de la boîte seule · d'autres formes de boîte (étoile, sapin, hexagone).
 ## 🗂️ « PAPETERIE & BUREAU » — ✅ EN LIGNE LE 13/11/2026 (gérant : « mets en ligne la maquette Papeterie & Bureau, dans le menu aussi »)
