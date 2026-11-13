@@ -1,3 +1,21 @@
+## 🎄 DÉCORATION À SUSPENDRE : MOTIFS DÉCOUPÉS AVEC LE CADRE, EN GRAND — 13/11/2026 nuit (gérant, deux boules ajourées d'un autre atelier en exemple : « c'est bien collé avec le contour pour pas que ça se casse » → « le motif est découpé dans un seul morceau, et après le prénom, je peux coller au-dessus en superposé, ou le client choisit » → « c'est trop petit… il faut qu'il puisse sélectionner les tailles ») — NOUVELLE maquette à juger, RIEN en ligne, Gestion PAS régénéré
+- **Artifact NEUF** https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v1). L'ancienne maquette enregistrée (6Gs8LNkzpdvWMRDNZpE775, v16) n'est PAS touchée. Même générateur
+  `decoration-createur.py` (mêmes 6 arguments ; modèles refaits : `$S/soude/mod/modeles-maquette.json` par `decoration-modeles.cjs`), puis `ajouter-valider.py`.
+- **Règle** (Classique, tailles 9 et 11 cm) : un dessin en contreplaqué est DÉCOUPÉ AVEC LE CADRE, d'une seule pièce (`e.soude`, mis d'office ; `soudable` / `soudee`) ; il doit
+  MORDRE sur le bois (`AIRE` = 6 mm² au moins, mesuré sur sa vraie silhouette : `alpha`, `cases`, `pose`, `mord`), ne pas dépasser de la forme, ne pas être à moitié caché dans le bois ;
+  il peut passer un peu sous le nom. Le NOM reste collé par-dessus (en relief) ; dans sa fiche, la cliente peut choisir « Découpé avec le cadre » (bois seulement). À 7 cm, en acrylique,
+  ou pour une photo : pièce à part, collée, comme avant. Plaque pleine : inchangée.
+- **Tailles des dessins** : Petit · Moyen · Grand (`TD` : 24 %, 33 %, 44 % de la largeur de la décoration ; les − + restent) dans la fiche du dessin et dans « Au hasard » ; départ = Moyen.
+  Sur ses exemples : flocons d'un quart à un tiers de la boule, renne presque la moitié. Placement `endroitSoude` ; `placerAuto(e, cible, fixe)` ne réduit jamais sous 0,62.
+- Aperçu : pièces soudées dans le calque `#gravS`, SOUS le bois du cadre (un seul contour, pas de couture) ; 3D : dans l'épaisseur du cadre. Atelier : dans le fichier, la pièce soudée est
+  dessinée à sa place sur le cadre (`data-soude`, trait rouge seulement hors du bois), « surface qui tient chaque dessin », alerte « traits fins » (`ep` mesuré par OpenCV, `traitFin`) ;
+  plan de collage : « ✓ découpé avec le cadre : rien à coller », numéros = pièces à coller seulement (`num`).
+- Essai `scratchpad/soude/t.cjs` : 56 sur 56 (390 et 1280 px). ⚠️ Pas essayé sur un vrai iPhone ni sur la machine. ⚠️ Beaucoup de dessins ont des traits de moins de 0,8 mm en « Petit ».
+- ⚠️ **Gestion** (`public/atelier-outils/atelier-decoration.html`) n'est PAS régénéré : à sa prochaine régénération (`retouche-site.py`, `atelier-unique.py`) il prendra cette règle ;
+  vérifier alors `editeur.js` (son « Soudée au cadre » lit le même champ `e.soude`, sans la condition de taille) et `fabrique.js` (il replace lui-même les pièces soudées).
+- **Proposé par moi, à valider** : le seuil de 6 mm² · passer tout seul en « Gravé » (forme pleine, détails gravés, comme le renne de ses exemples) un dessin aux traits trop fins ·
+  la même règle dans Gestion.
+
 ## 🖨️ BOUTON OK CORRIGÉ + MACHINES xTOOL DANS « MA MACHINE » + IMPRESSION 3D À L'ESSAI — 13/11/2026 soir (gérant : « corrige le bouton OK… pour l'imprimante 3D je te verrai plus tard, tu prépares… je veux le choix, imprimer ou découper… je sélectionne les composants, j'appuie sur le bouton création… intègre les paramètres xTool, toutes les machines »)
 - **Bouton « OK ✓ »** (`valider-champ.js`) : il restait posé PAR-DESSUS l'aperçu collé quand on faisait défiler (capture de l'arbre). Maintenant `visible(r)` (champ dans l'écran ET non recouvert,
   `elementFromPoint`) : le bouton se cache dès que son champ passe sous l'aperçu ou sort de l'écran, et revient avec lui. `ajouter-valider.py` REMPLACE l'ancien bloc `<!-- niv-ok -->` d'une page.

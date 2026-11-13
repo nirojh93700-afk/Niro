@@ -9,6 +9,11 @@
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
 
+## 🎄 DÉCORATION À SUSPENDRE « MOTIFS DÉCOUPÉS AVEC LE CADRE » — 13/11/2026 nuit, EN ATTENTE DE SON AVIS
+- Nouvelle maquette https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v1) : motifs en bois découpés avec le cadre (9 et 11 cm), trois tailles de motif, prénom collé par-dessus ou
+  découpé avec le cadre au choix. L'ancienne maquette enregistrée n'est pas touchée. Rien en ligne, Gestion pas régénéré. Détail : CLAUDE.md, section du 13/11 nuit.
+- À lui de dire : il garde cette version ? · je la mets dans l'outil de Gestion ? · un dessin aux traits trop fins passe tout seul en « forme pleine, détails gravés » ?
+
 ## 🧰 13/11/2026 SOIR — L'ATELIER DANS GESTION : CE QUI ATTEND SON AVIS
 - **Lettre de naissance, version simple pour les clientes** : maquette https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v4 : rotation 360°, boîte qui s'ouvre, prénom posé sur la barre de la lettre, **54,90 € la lettre et sa boîte ensemble**, prix donné par lui le 13/11), rien en ligne. À valider : taille unique 16,5 cm, vraies couleurs, livraison (une boîte = colis). Questions posées : la même règle de placement du prénom dans l'outil d'atelier ? simplifier aussi les 7 autres créations et la boîte seule côté cliente ?
 - **Signes du zodiaque : MIS DE CÔTÉ par le gérant le 13/11 soir** (« on va voir après ») : état gardé = animaux + Gémeaux / Lion / Vierge / Verseau refaits en dessins (lettre v11, L'atelier v11) ; son image de symboles essayée puis refusée par lui. C'est LUI qui en reparle.

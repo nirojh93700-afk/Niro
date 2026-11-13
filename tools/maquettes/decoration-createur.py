@@ -19,6 +19,29 @@ cap, cssdir, sortie, contours = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[
 ELEMENTS = json.load(open(sys.argv[5], encoding='utf-8')) if len(sys.argv) > 5 else {'familles': [], 'elements': []}
 
 
+def epaisseurs(E):
+    """Le trait le plus fin de chaque dessin, en part de sa largeur (champ « ep ») : la page dit « traits très fins » quand un
+    dessin découpé avec le cadre serait fragile à la taille choisie. Sans OpenCV, rien n'est mesuré (pas d'alerte)."""
+    try:
+        import cv2, numpy as np
+    except Exception:
+        return
+    for e in E.get('elements', []):
+        try:
+            im = Image.open(io.BytesIO(base64.b64decode(e['img'].split(',', 1)[1]))).convert('RGBA')
+            a = (np.array(im)[:, :, 3] > 60).astype('uint8')
+            d = cv2.distanceTransform(a, cv2.DIST_L2, 5)
+            crete = (d >= cv2.dilate(d, np.ones((3, 3), np.uint8)) - 1e-6) & (d > 0.9)   # le milieu de chaque trait
+            v = d[crete]
+            if v.size:
+                e['ep'] = round(float(np.percentile(v, 15)) * 2 / im.size[0], 4)
+        except Exception:
+            pass
+
+
+epaisseurs(ELEMENTS)
+
+
 def raw_uri(path):
     ext = path.rsplit(".", 1)[-1].lower()
     mime = {"png": "image/png", "jpg": "image/jpeg", "jpeg": "image/jpeg", "webp": "image/webp"}[ext]
@@ -347,6 +370,7 @@ background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#fff}
 .sc-hasard{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:2px 0 10px;padding:10px;border:1px dashed #cdb98f;border-radius:12px;background:#fffaf0}
 .sc-hasard .sc-nb{display:inline-flex;align-items:center;gap:6px}.sc-hasard output{min-width:20px;text-align:center;font-weight:700}
 .sc-hasard .prc-hint{flex-basis:100%;margin:0}
+.sc-thz{font-weight:600;font-size:.85rem}.sc-hasard .sc-seg{margin:0}.sc-tdz .sc-seg{display:flex;flex-wrap:wrap;border-radius:14px}.sc-tdz .sc-seg button{flex:1 1 auto}
 .sc-vig img.sc-vd{object-fit:contain;padding:4px;background:#fff}
 .sc-seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:#fff;gap:2px;margin:6px 0}
 .sc-seg button{border:0;background:none;padding:7px 14px;border-radius:999px;font:inherit;font-size:.84rem;cursor:pointer;color:var(--ink)}
@@ -434,7 +458,7 @@ HTML_OUTIL = r"""
   </div>
   <div class="sc-panneau" id="panneau"></div>
   <div id="liste"></div>
-  <div class="sc-recale" id="zoneRecale" hidden><button type="button" class="sc-btn" id="recaler">Tout recaler sur le cadre</button><span class="prc-hint" id="msgRecale">Chaque pièce est remise à une place où elle est bien collée.</span></div>
+  <div class="sc-recale" id="zoneRecale" hidden><button type="button" class="sc-btn" id="recaler">Tout recaler sur le cadre</button><span class="prc-hint" id="msgRecale">Chaque pièce est remise à une place où elle tient bien.</span></div>
  </section>
  <section class="prc-step" id="etape3">
   <div class="prc-sh"><span class="prc-num done" id="n6">5</span><h3>Votre création</h3></div>
@@ -458,7 +482,8 @@ HTML_ATELIER = r"""
    <ul class="sc-legende"><li><i style="border-color:#d32f2f"></i>Trait rouge : à découper</li><li><i style="border-color:#111"></i>Noir : à graver</li></ul>
    <ul class="sc-points">
     <li><b>Les 46 formes du générateur Atomm</b>Noël, Pâques, paniers, croix et formes simples, trou du ruban compris. En « Classique », le cadre (l'intérieur est vide) ; en « Plaque pleine », la forme entière.</li>
-    <li><b>Chaque pièce rangée à plat, numérotée</b>En « Classique », chaque texte et chaque photo est une pièce à part, rangée à côté du cadre avec son numéro : un nom découpé (lettres soudées), un texte gravé sur une pièce découpée 1,6 mm autour, une photo gravée sur sa pièce. On découpe tout, puis on colle les pièces sur le cadre comme sur l'aperçu de la cliente.</li>
+    <li><b>Les dessins découpés avec le cadre</b>En « Classique », aux tailles 9 et 11 cm, un dessin en contreplaqué est découpé avec le cadre, d'une seule pièce : il est dessiné à sa place sur le cadre, avec un seul contour rouge, et il n'y a rien à coller. Le fichier dit la surface qui tient chaque dessin au cadre. Le nom est collé par-dessus, ou découpé avec le cadre si la cliente l'a choisi. À 7 cm, ou en acrylique, tout reste une pièce à part.</li>
+    <li><b>Chaque pièce à coller rangée à plat, numérotée</b>En « Classique », chaque texte et chaque photo est une pièce à part, rangée à côté du cadre avec son numéro : un nom découpé (lettres soudées), un texte gravé sur une pièce découpée 1,6 mm autour, une photo gravée sur sa pièce. On découpe tout, puis on colle les pièces sur le cadre comme sur l'aperçu de la cliente.</li>
     <li><b>Trois tailles</b>Petite 7 cm (compris), moyenne 9 cm (+ 2 €), grande 11 cm (+ 4 €), plus grand côté. Le fichier tient dans la zone de 200 × 200 mm de la F2 Ultra UV.</li>
     <li><b>Contreplaqué, et acrylique de couleur pour les noms</b>Le cadre (ou la plaque) et les photos en contreplaqué 3 mm ; chaque nom ou texte découpé en contreplaqué ou en acrylique blanc, noir, rouge ou bleu. Le fichier dit dans quelle matière découper chaque pièce.</li>
     <li><b>Dans Gestion, comme les autres commandes</b>L'aperçu de la cliente et le fichier apparaissent dans la fiche atelier et dans le dossier du jour, avec l'aperçu qui montre où coller chaque pièce.</li>
@@ -505,17 +530,19 @@ svg.innerHTML='<defs>'
  +'<filter id="sepia" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0.33 0.5 0.17 0 0  0.33 0.5 0.17 0 0  0.33 0.5 0.17 0 0  0 0 0 1 0"/>'
  +'<feComponentTransfer><feFuncR id="sR" type="table" tableValues="0.26 0.62 0.93"/><feFuncG id="sG" type="table" tableValues="0.14 0.44 0.82"/><feFuncB id="sB" type="table" tableValues="0.06 0.26 0.64"/></feComponentTransfer></filter>'
  +'<filter id="flou"><feGaussianBlur stdDeviation="9"/></filter>'
+ +'<filter id="soudeF" x="-10%" y="-10%" width="120%" height="120%"><feMorphology in="SourceAlpha" operator="dilate" radius=".8" result="a"/><feFlood id="soudeC" flood-color="#9c7744" flood-opacity=".8"/><feComposite in2="a" operator="in" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
  +'<filter id="pieceF" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="1.3" dy="1.8" stdDeviation="1.1" flood-color="#2b1d0e" flood-opacity=".45"/></filter>'
  +'<clipPath id="decoupe"><path id="decoupeP" clip-rule="evenodd"/></clipPath></defs>'
  +'<path id="rubanO" fill="none" stroke="#b9a788" stroke-width="4.4" stroke-linecap="round" opacity=".75"/>'
  +'<path id="ruban" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>'
  +'<ellipse id="ombreSol" cx="200" cy="540" rx="120" ry="10" fill="#3a2a16" opacity=".16" filter="url(#flou)"/>'
  +'<path id="ombreP" fill="#6b4a25" opacity=".3" fill-rule="evenodd"/>'
- +'<path id="dos" fill="url(#bois)" fill-rule="evenodd"/><path id="dosV" fill="#fff" fill-rule="evenodd" filter="url(#veine)" opacity=".5"/>'
  +'<path id="dosB" fill="none" stroke-width=".5" opacity=".8"/>'
+ +'<g id="gravS"></g>'
+ +'<path id="dos" fill="url(#bois)" fill-rule="evenodd"/><path id="dosV" fill="#fff" fill-rule="evenodd" filter="url(#veine)" opacity=".5"/>'
  +'<g id="grav" clip-path="url(#decoupe)"></g>'
  +'<g id="poignee"></g>';
-var grav=$('grav'), poignee=$('poignee');
+var grav=$('grav'), gravS=$('gravS'), poignee=$('poignee');
 function hexRgb(h){return [parseInt(h.substr(1,2),16)/255,parseInt(h.substr(3,2),16)/255,parseInt(h.substr(5,2),16)/255]}
 function plaque(){ /* classique = le cadre découpé (intérieur vide) ; pleine = la forme entière, tout est gravé dessus */
  var f=F(),m=M(),t=tf(),cl=S.style==='classique',dd=cl?f.cadre:f.d;
@@ -528,7 +555,7 @@ function plaque(){ /* classique = le cadre découpé (intérieur vide) ; pleine 
  $('b0').setAttribute('stop-color',m.c[0]);$('b1').setAttribute('stop-color',m.c[1]);$('b2').setAttribute('stop-color',m.c[2]);
  $('dos').setAttribute('fill','url(#bois)');
  $('dosV').setAttribute('opacity',m.bois?.5:0);$('dosB').setAttribute('stroke',m.bord);
- $('dosB').setAttribute('stroke-width',1.2/(k()*sx()));
+ $('dosB').setAttribute('stroke-width',1.6/(k()*sx()));$('soudeC').setAttribute('flood-color',m.bord);   /* la moitié du trait est sous le bois */
  var g=hexRgb(m.grav);$('brunM').setAttribute('values','0 0 0 0 '+g[0]+'  0 0 0 0 '+g[1]+'  0 0 0 0 '+g[2]+'  0 0 0 0.92 0');
  var b=hexRgb(m.c[1]);['sR','sG','sB'].forEach(function(id,i){$(id).setAttribute('tableValues',g[i]+' '+((g[i]+b[i])/2).toFixed(3)+' '+b[i])});
  var top=[0,1e9];poly(f.d)[0].forEach(function(p){if(p[1]<top[1])top=p});
@@ -557,40 +584,88 @@ function txt(e,cx,cy,fs,extra,uid){var ff=police(e.police)[2].replace(/"/g,"'"),
 /* une pièce de texte : découpée (lettres soudées) ou gravée sur une pièce découpée autour */
 function pieceTexte(e,cx,cy,fs,P,uid){
  /* P = {plein, trait, grav, cl, couleur, o, coupe} : couleurs et épaisseurs dans l'unité du dessin */
- var h=arcDef(e,cx,cy,fs,uid),soude=fs*.07,cr=fs*.05;
+ var h=arcDef(e,cx,cy,fs,uid),soude=fs*.07,cr=fs*.05,ct=P.clipT?' clip-path="'+P.clipT+'"':'';
  if(!P.cl)return h+(e.creux?txt(e,cx,cy,fs,'fill="none" stroke="'+P.grav+'" stroke-width="'+cr+'"',uid):txt(e,cx,cy,fs,'fill="'+P.grav+'" opacity=".92"',uid));
  if(e.mode==='grave'){
   h+='<g'+(P.ombre?' filter="url(#pieceF)"':'')+'>'+txt(e,cx,cy,fs,'fill="'+P.plein+'" stroke="'+P.plein+'" stroke-width="'+(2*P.o)+'"',uid)+'</g>';
-  if(P.trait)h=h.replace('<g>','<g>'+txt(e,cx,cy,fs,'fill="'+P.trait+'" stroke="'+P.trait+'" stroke-width="'+(2*P.o+P.coupe)+'"',uid));
+  if(P.trait)h=h.replace('<g>','<g>'+txt(e,cx,cy,fs,'fill="'+P.trait+'" stroke="'+P.trait+'" stroke-width="'+(2*P.o+P.coupe)+'"'+ct,uid));
   return h+(e.creux?txt(e,cx,cy,fs,'fill="none" stroke="'+P.grav+'" stroke-width="'+cr+'"',uid):txt(e,cx,cy,fs,'fill="'+P.grav+'" opacity=".92"',uid))}
  if(e.creux){var a='',w=cr+P.coupe;
-  if(P.trait)a+=txt(e,cx,cy,fs,'fill="none" stroke="'+P.trait+'" stroke-width="'+(cr+2*P.coupe)+'"',uid);
+  if(P.trait)a+=txt(e,cx,cy,fs,'fill="none" stroke="'+P.trait+'" stroke-width="'+(cr+2*P.coupe)+'"'+ct,uid);
   a+=txt(e,cx,cy,fs,'fill="none" stroke="'+P.plein+'" stroke-width="'+cr+'"',uid);
   return h+'<g'+(P.ombre?' filter="url(#pieceF)"':'')+'>'+a+'</g>'}
  var b='';
- if(P.trait)b+=txt(e,cx,cy,fs,'fill="'+P.trait+'" stroke="'+P.trait+'" stroke-width="'+(soude+2*P.coupe)+'"',uid);
+ if(P.trait)b+=txt(e,cx,cy,fs,'fill="'+P.trait+'" stroke="'+P.trait+'" stroke-width="'+(soude+2*P.coupe)+'"'+ct,uid);
  b+=txt(e,cx,cy,fs,'fill="'+P.plein+'" stroke="'+P.plein+'" stroke-width="'+soude+'"',uid);
  return h+'<g'+(P.ombre?' filter="url(#pieceF)"':'')+'>'+b+'</g>'}
 /* une pièce « dessin » (les Éléments d'Atomm) : découpée (la pièce a la forme du dessin) ou gravée (le dessin gravé sur une
    pièce découpée 1,6 mm autour de sa silhouette) ; en plaque pleine, le dessin est gravé sur la plaque */
 function elem(id){for(var i=0;i<D.elements.elements.length;i++)if(D.elements.elements[i].id===id)return D.elements.elements[i];return null}
+/* ---- DÉCOUPÉ AVEC LE CADRE (gérant, 13/11 nuit, deux boules ajourées en exemple : « le motif est découpé dans un seul morceau, et
+   après le prénom, je peux coller au-dessus en superposé, ou le client choisit ») ----
+   En Classique, aux tailles 9 et 11 cm, un dessin en contreplaqué fait partie du cadre : une seule pièce, rien à coller, il doit
+   MORDRE sur le bois (AIRE mm² au moins). Le nom reste collé par-dessus, ou soudé lui aussi si la cliente le choisit (e.soude).
+   Jamais une photo, jamais de l'acrylique (autre matière que le cadre), jamais à 7 cm (attaches trop fines). */
+var AIRE=6;
+/* tailles d'un dessin, en part de la largeur de la décoration (0,3 × s) : petit 24 %, moyen 33 %, grand 44 % — sur les exemples du
+   gérant, un flocon fait un quart à un tiers de la boule, le renne presque la moitié */
+var TD=[['p','Petit',.8],['m','Moyen',1.1],['g','Grand',1.45]];
+function tdS(id){for(var i=0;i<TD.length;i++)if(TD[i][0]===id)return TD[i][2];return TD[1][2]}
+function tdDe(e){for(var i=0;i<TD.length;i++)if(Math.abs(TD[i][2]-e.s)<.03)return TD[i][0];return ''}
+function tdCm(e,sv){var d=elem(e.did),w=.3*S.W*sv,h=w*(d?d.r:1);return String(Math.round(Math.max(w,h))/10).replace('.',',')+' cm'}
+function grand(){return S.style==='classique'&&S.taille!=='petite'}
+function soudable(e){return S.style==='classique'&&S.taille!=='petite'&&e.type!=='photo'&&matEl(e).id==='contreplaque'}
+function soudee(e){return !!e.soude&&soudable(e)}
+/* le numéro d'une pièce à coller (le cadre est la pièce 1) ; 0 pour une pièce découpée avec le cadre */
+function num(e){var n=1;for(var i=0;i<S.els.length;i++){var o=S.els[i];if(!soudee(o))n++;if(o===e)return soudee(e)?0:n}return 0}
+/* la silhouette d'un dessin en petite grille (lue une fois dans son image) : sert à mesurer ce qui mord sur le bois */
+var ALPHA={},ALPHA_T=0;
+function alpha(e){var d=elem(e.did);if(!d)return null;var cle=e.did+(e.mode==='grave'?'|s':'|i'),a=ALPHA[cle];if(a)return a.ok?a:null;
+ a=ALPHA[cle]={ok:false};var im=new Image();im.onload=function(){var w=64,h=Math.max(8,Math.round(64*(d.r||1))),c=document.createElement('canvas');c.width=w;c.height=h;
+  var x=c.getContext('2d');x.drawImage(im,0,0,w,h);var px=x.getImageData(0,0,w,h).data,m=new Uint8Array(w*h);for(var i=0;i<w*h;i++)m[i]=px[i*4+3]>60?1:0;
+  a.w=w;a.h=h;a.m=m;a.ok=true;if(!ALPHA_T&&S.els.some(function(o){return o.type==='dessin'&&o.did===e.did}))ALPHA_T=setTimeout(function(){ALPHA_T=0;dessiner();recaserDessins(true)},0)};
+ im.src=e.mode==='grave'?d.sil:d.img;return null}
+/* la silhouette du dessin posée sur la grille de la forme : la liste de ses cases (décalages i, j), à sa taille et dans son sens du moment */
+function cases(e){var a=alpha(e);if(!a)return null;var t=taille(e),c=carte(),n=Math.ceil(Math.hypot(t.w,t.h)/2/c.st),th=(e.rot||0)*Math.PI/180,co=Math.cos(th),si=Math.sin(th),L=[];
+ for(var j=-n;j<=n;j++)for(var i=-n;i<=n;i++){var dx=i*c.st,dy=j*c.st,lx=dx*co+dy*si,ly=-dx*si+dy*co;if(e.flip)lx=-lx;
+  var u=Math.floor((lx/t.w+.5)*a.w),v=Math.floor((ly/t.h+.5)*a.h);if(u>=0&&v>=0&&u<a.w&&v<a.h&&a.m[v*a.w+u])L.push(i,j)}
+ return L}
+/* ce que la silhouette recouvre, posée en (x, y) : bois = surface (mm²) qui mord sur le cadre, pb = part du dessin dans le bois,
+   pd = part du dessin hors de la forme (elle dépasserait du cadre) */
+function pose(e,x,y,L){L=L||cases(e);if(!L)return null;var c=carte(),q=k(),i0=Math.round((x-c.x0)/c.st),j0=Math.round((y-c.y0)/c.st),b=0,d=0,n=L.length/2;
+ for(var p=0;p<L.length;p+=2){var i=i0+L[p],j=j0+L[p+1];if(i<0||j<0||i>=c.nx||j>=c.ny){d++;continue}var v=c.a[j*c.nx+i];if(v===2)b++;else if(v===0)d++}
+ return{bois:b*(c.st/q)*(c.st/q),pb:n?b/n:0,pd:n?d/n:1}}
+/* la surface (mm²) du dessin qui mord sur le bois du cadre, posé en (x, y) ; -1 tant que sa silhouette n'est pas lue */
+function mord(e,x,y){var r=pose(e,x,y);return r?r.bois:-1}
+/* un endroit pour un dessin découpé avec le cadre (comme les boules ajourées données en exemple) : sa silhouette mord sur le bois,
+   ne dépasse pas de la forme, n'est pas à moitié cachée dans le bois ; elle peut passer un peu sous le nom (collé par-dessus),
+   pas sur un autre dessin */
+function endroitSoude(e,x,y,hw,hh,L){var c=carte();if(lieu(c,x,y)===0)return null;var r=pose(e,x,y,L);if(!r)return null;
+ if(r.pd>.02||r.bois<AIRE+3||r.pb>.5)return null;
+ var sous=0,ok=true;S.els.forEach(function(o){if(o===e||!ok)return;var b=boiteDe(o);if(!b)return;
+  var ix=Math.min(x+hw,b.x1)-Math.max(x-hw,b.x0),iy=Math.min(y+hh,b.y1)-Math.max(y-hh,b.y0);if(ix<=0||iy<=0)return;
+  var part=ix*iy/(4*hw*hh);if(b.nom){if(part>.3)ok=false;else sous+=part}else if(part>.06)ok=false});
+ return ok?{bord:true,nom:false,bois:r.pb,aire:r.bois,sous:sous}:null}
+/* le trait le plus fin d'un dessin découpé, en mm, à sa taille du moment (mesuré sur l'image par le générateur) */
+function traitFin(e){var d=elem(e.did);if(!d||!d.ep||e.mode==='grave')return null;return d.ep*taille(e).w/k()}
 function masque(id,src,x,y,w,h,r){return '<mask id="'+id+'" maskUnits="userSpaceOnUse" x="'+(x-r-2)+'" y="'+(y-r-2)+'" width="'+(w+2*r+4)+'" height="'+(h+2*r+4)+'">'
   +'<filter id="'+id+'f" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">'+(r>0?'<feMorphology in="SourceAlpha" operator="dilate" radius="'+r.toFixed(3)+'" result="a"/>':'')
   +'<feFlood flood-color="#fff"/><feComposite in2="'+(r>0?'a':'SourceAlpha')+'" operator="in"/></filter>'
   +'<image href="'+src+'" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" preserveAspectRatio="none" filter="url(#'+id+'f)"/></mask>'}
 function teinte(id,src,x,y,w,h,col,op){return '<filter id="'+id+'" color-interpolation-filters="sRGB"><feFlood flood-color="'+col+'"/><feComposite in2="SourceAlpha" operator="in"/></filter>'
   +'<image href="'+src+'" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" preserveAspectRatio="none" filter="url(#'+id+')" opacity="'+(op||.92)+'"/>'}
-function pieceDessin(e,cx,cy,w,h,P,uid){var d=elem(e.did);if(!d)return '';var x=cx-w/2,y=cy-h/2,s='',col=/^url/.test(P.grav)?'#5a3a1e':P.grav,
+function pieceDessin(e,cx,cy,w,h,P,uid){var d=elem(e.did);if(!d)return '';var x=cx-w/2,y=cy-h/2,s='',T='',col=/^url/.test(P.grav)?'#5a3a1e':P.grav,
   tr=(e.rot?' rotate('+e.rot+' '+cx+' '+cy+')':'')+(e.flip?' translate('+(2*cx)+' 0) scale(-1 1)':'');
  if(!P.cl)s+=teinte('t'+uid,d.img,x,y,w,h,col);
  else if(e.mode==='grave'){var o=P.o;
-  if(P.trait)s+=masque('mt'+uid,d.sil,x,y,w,h,o+P.coupe)+'<rect x="'+(x-o-3)+'" y="'+(y-o-3)+'" width="'+(w+2*o+6)+'" height="'+(h+2*o+6)+'" fill="'+P.trait+'" mask="url(#mt'+uid+')"/>';
+  if(P.trait)T+=masque('mt'+uid,d.sil,x,y,w,h,o+P.coupe)+'<rect x="'+(x-o-3)+'" y="'+(y-o-3)+'" width="'+(w+2*o+6)+'" height="'+(h+2*o+6)+'" fill="'+P.trait+'" mask="url(#mt'+uid+')"/>';
   s+=masque('mp'+uid,d.sil,x,y,w,h,o)+'<g'+(P.ombre?' filter="url(#pieceF)"':'')+'><rect x="'+(x-o-2)+'" y="'+(y-o-2)+'" width="'+(w+2*o+4)+'" height="'+(h+2*o+4)+'" fill="'+P.plein+'" mask="url(#mp'+uid+')"/></g>'
    +teinte('t'+uid,d.img,x,y,w,h,col)}
  else{
-  if(P.trait)s+=masque('mt'+uid,d.img,x,y,w,h,P.coupe)+'<rect x="'+(x-2)+'" y="'+(y-2)+'" width="'+(w+4)+'" height="'+(h+4)+'" fill="'+P.trait+'" mask="url(#mt'+uid+')"/>';
+  if(P.trait)T+=masque('mt'+uid,d.img,x,y,w,h,P.coupe)+'<rect x="'+(x-2)+'" y="'+(y-2)+'" width="'+(w+4)+'" height="'+(h+4)+'" fill="'+P.trait+'" mask="url(#mt'+uid+')"/>';
   s+=masque('mp'+uid,d.img,x,y,w,h,0)+'<g'+(P.ombre?' filter="url(#pieceF)"':'')+'><rect x="'+(x-1)+'" y="'+(y-1)+'" width="'+(w+2)+'" height="'+(h+2)+'" fill="'+P.plein+'" mask="url(#mp'+uid+')"/></g>'}
- return tr?'<g transform="'+tr.trim()+'">'+s+'</g>':s}
+ function W(c){return tr?'<g transform="'+tr.trim()+'">'+c+'</g>':c}
+ return (T?(P.clipT?'<g clip-path="'+P.clipT+'">'+W(T)+'</g>':W(T)):'')+W(s)}
 /* ---- le placement automatique d'un dessin (gérant, 12/11, capture à l'appui) ----
    CLASSIQUE : le décor se met DANS l'ouverture du cadre, jamais à cheval sur la barre ni en dehors de la forme. Il est collé
    soit contre le bord intérieur du cadre (il ne le recouvre qu'un tout petit peu : c'est là qu'on met la colle), soit posé sur le
@@ -609,28 +684,30 @@ function ecartAngle(a,b){var d=Math.abs(a-b)%360;return d>180?360-d:d}
 function boiteDe(o){if(o.type==='texte'&&o.inkL!=null)return{x0:o.inkL,x1:o.inkR,y0:o.bh?o.by:o.y-o.fs*.45,y1:o.bh?o.by+o.bh:o.y+o.fs*.3,nom:true};
  return o.bw?{x0:o.bx,x1:o.bx+o.bw,y0:o.by,y1:o.by+o.bh,nom:o.type==='texte'}:null}
 /* ce que donne un endroit en classique : null s'il ne va pas, sinon {bord, nom} (collé contre le cadre / posé sur le nom) */
-function endroitClassique(e,x,y,hw,hh){var N=6,trou=0,bois=0,dehors=0,tot=0,c=carte();if(lieu(c,x,y)!==1)return null;
+function endroitClassique(e,x,y,hw,hh){var N=6,trou=0,bois=0,dehors=0,tot=0,c=carte(),so=soudee(e);if(lieu(c,x,y)!==1)return null;
  for(var i=0;i<=N;i++)for(var j=0;j<=N;j++){var px=x-hw+2*hw*i/N,py=y-hh+2*hh*j/N;tot++;
   var v=lieu(c,px,py);if(v===0){dehors++;break}if(v===2)bois++;else trou++}
  if(dehors>0)return null;                 /* rien ne sort de la forme, le milieu du décor est dans l'ouverture */
- if(bois/tot>.3)return null;                            /* pas à cheval sur la barre : il la touche seulement */
- var surNom=false,ok=true;
+ if(bois/tot>(so?.55:.3))return null;                   /* collé : il touche seulement la barre ; découpé avec le cadre : il entre dedans */
+ var surNom=false,ok=true,sous=0;
  S.els.forEach(function(o){if(o===e||!ok)return;var b=boiteDe(o);if(!b)return;
   var ix=Math.min(x+hw,b.x1)-Math.max(x-hw,b.x0),iy=Math.min(y+hh,b.y1)-Math.max(y-hh,b.y0);
   if(ix<=-2||iy<=-2)return;                             /* loin de cette pièce */
+  if(so&&b.nom&&!o.so&&ix>0&&iy>0&&ix*iy<=4*hw*hh*.28){sous+=ix*iy/(4*hw*hh);return}   /* un peu sous le nom collé par-dessus : permis */
   /* posé sur le nom : le bas du décor descend un peu dans le haut des lettres, pas plus */
   if(b.nom&&y<b.y0&&iy>4&&iy<=Math.max(6,hh*.3)&&ix>hw*.8){surNom=true;return}
   ok=false});
  if(!ok)return null;
+ if(so){var ar=mord(e,x,y);if(ar>=0)return ar<AIRE+3?null:{bord:true,nom:surNom,bois:bois/tot,aire:ar,sous:sous}}   /* découpé avec le cadre : il doit mordre sur le bois */
  if(bois<3&&!surNom)return null;                        /* il doit toucher le cadre ou le nom, sinon il tomberait */
  return{bord:bois>=3,nom:surNom,bois:bois/tot}}
 /* cible : un angle (degrés, 0 = à droite, 90 = en bas) autour du centre de la forme ; sans cible, l'endroit le plus loin des autres pièces */
-function placerAuto(e,cible){var cl=S.style==='classique',L=limites(),q=k(),W=S.W*q,H=S.H*q,essai=0,C=centre();
+function placerAuto(e,cible,fixe){var cl=S.style==='classique',L=limites(),q=k(),W=S.W*q,H=S.H*q,essai=0,C=centre();if(cible!=null)e.cib=cible;
  while(essai++<5){var t=taille(e),pas=Math.max(2.5,Math.min(W,H)/48),pts=[];
-  if(cl){var hw=t.w/2,hh=t.h/2;
-   for(var y=L.y0;y<=oy()+H;y+=pas)for(var x=ox();x<=ox()+W;x+=pas){var r=endroitClassique(e,x,y,hw,hh);if(!r)continue;
+  if(cl){var hw=t.w/2,hh=t.h/2,Lc=soudee(e)?cases(e):null,cg=carte(),pg=Math.max(1,Math.round(pas/cg.st))*cg.st;
+   for(var y=Lc?cg.y0:L.y0;y<=oy()+H;y+=Lc?pg:pas)for(var x=Lc?cg.x0:ox();x<=ox()+W;x+=Lc?pg:pas){var r=Lc?endroitSoude(e,x,y,hw,hh,Lc):endroitClassique(e,x,y,hw,hh);if(!r)continue;
     var dmin=1e9;S.els.forEach(function(o){if(o===e||!o.bw)return;dmin=Math.min(dmin,Math.hypot(x-(o.bx+o.bw/2),y-(o.by+o.bh/2)))});
-    var sc=(r.nom?20:0)-r.bois*40+Math.random()*6;
+    var sc=r.aire!=null?Math.min(r.aire,14)*1.2-r.bois*45-(r.sous||0)*40+Math.random()*4:(r.nom?20:0)-r.bois*40+Math.random()*6;
     if(cible==null)sc+=Math.min(dmin,W)*.6;
     else sc+=-ecartAngle(Math.atan2(y-C.y,x-C.x)*180/Math.PI,cible)*3+Math.min(dmin,W*.5)*.2;
     pts.push([x,y,sc])}}
@@ -645,17 +722,18 @@ function placerAuto(e,cible){var cl=S.style==='classique',L=limites(),q=k(),W=S.
     pts.push([x2,y2,cible==null?dm+Math.random()*pas*2:-ecartAngle(Math.atan2(y2-C.y,x2-C.x)*180/Math.PI,cible)*4+Math.hypot(x2-C.x,y2-C.y)*.15])}}
   if(pts.length){pts.sort(function(a,b){return b[2]-a[2]});
    for(var i=0;i<Math.min(10,pts.length);i++){e.x=pts[i][0];e.y=pts[i][1];dessiner();if(!e.flottant)return true}}
-  e.s=Math.max(.28,e.s*.82)}
+  if(fixe)break;
+  var bas=soudee(e)?.62:.28;if(e.s<=bas+.001)break;e.s=Math.max(bas,e.s*.86)}
  return false}
 /* des décors au hasard : la cliente dit combien, on les tire dans la famille choisie et on les colle sur le cadre */
 function auHasard(){var fam=S.famille||D.elements.familles[0],pool=D.elements.elements.filter(function(d){return d.cats.indexOf(fam)>=0}),n=S.nHasard||3,pris=[];
  S.els=S.els.filter(function(e){return !e.hasard});dessiner();
  pool=pool.slice();for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),x=pool[i];pool[i]=pool[j];pool[j]=x}
  var debut=n===1?-90:-90+180/n;
- pool.slice(0,n).forEach(function(d,i){var o={type:'dessin',did:d.id,fam:fam,mode:'decoupe',mat:'contreplaque',rot:Math.random()<.5?0:(Math.random()<.5?-15:15),flip:Math.random()<.3,hasard:true,s:.55};
+ pool.slice(0,n).forEach(function(d,i){var o={type:'dessin',did:d.id,fam:fam,mode:'decoupe',mat:'contreplaque',soude:true,rot:Math.random()<.5?0:(Math.random()<.5?-15:15),flip:Math.random()<.3,hasard:true,s:grand()?tdS(S.tHasard||'m'):.55};
   o.id=++S.seq;var p=place(o);o.x=p.x;o.y=p.y;S.els.push(o);dessiner();if(placerAuto(o,debut+360*i/n))pris.push(o);else{S.els=S.els.filter(function(x){return x!==o})}});
  S.sel=null;S.aBouge=true;dessiner();
- var m=$('msgHasard');if(m)m.textContent=pris.length<n?pris.length+' décor'+(pris.length>1?'s':'')+' posé'+(pris.length>1?'s':'')+' : il n\'y a plus de place sur le cadre pour les autres.':n+' décor'+(n>1?'s':'')+' posé'+(n>1?'s':'')+' et collé'+(n>1?'s':'')+'. Touchez encore pour un autre tirage.'}
+ var m=$('msgHasard');if(m)m.textContent=pris.length<n?pris.length+' décor'+(pris.length>1?'s':'')+' posé'+(pris.length>1?'s':'')+' : il n\'y a plus de place sur le cadre pour les autres.':n+' décor'+(n>1?'s':'')+' posé'+(n>1?'s':'')+(pris.some(soudee)?', découpé'+(n>1?'s':'')+' avec le cadre':' et collé'+(n>1?'s':''))+'. Touchez encore pour un autre tirage.'}
 /* une pièce photo : la photo gravée, la pièce découpée 1,6 mm autour (rectangle arrondi ou ovale) */
 function forme(e,x,y,w,h,attr){return e.forme==='ovale'?'<ellipse cx="'+(x+w/2)+'" cy="'+(y+h/2)+'" rx="'+w/2+'" ry="'+h/2+'" '+attr+'/>':'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(w*.09)+'" '+attr+'/>'}
 function piecePhoto(e,cx,cy,w,h,P,uid){var o=P.o,x=cx-w/2,y=cy-h/2,s='';
@@ -666,12 +744,13 @@ function piecePhoto(e,cx,cy,w,h,P,uid){var o=P.o,x=cx-w/2,y=cy-h/2,s='';
  return s}
 
 function dessiner(){
- plaque();grav.innerHTML='';poignee.innerHTML='';
+ plaque();grav.innerHTML='';gravS.innerHTML='';poignee.innerHTML='';
  var cl=S.style==='classique',m=M();
  var P={cl:cl,plein:'url(#bois)',grav:m.grav,o:off(),coupe:0,ombre:true,filtre:'filter="url(#sepia)"'};
  S.els.forEach(function(e){
   borner(e);var g=el('g',{'class':'sc-el','data-id':e.id},grav),t=taille(e),me=matEl(e);
-  var Pe={cl:cl,plein:me.id==='contreplaque'?'url(#bois)':'url(#g-'+me.id+')',grav:cl?me.grav:m.grav,o:P.o,coupe:0,ombre:true,filtre:P.filtre};
+  var so=cl&&soudee(e);e.so=so;
+  var Pe={cl:cl,plein:me.id==='contreplaque'?'url(#bois)':'url(#g-'+me.id+')',grav:cl?me.grav:m.grav,o:P.o,coupe:0,ombre:!so,filtre:P.filtre};
   if(e.type==='texte'){var fs=t.h;g.innerHTML=pieceTexte(e,e.x,e.y,fs,Pe,'s'+e.id);
    var tt=g.querySelector('text:last-of-type'),bw=tt.getBBox().width;
    if(!e.courbe&&bw>largTexte()){fs=fs*largTexte()/bw;g.innerHTML=pieceTexte(e,e.x,e.y,fs,Pe,'s'+e.id)}
@@ -679,11 +758,15 @@ function dessiner(){
   else if(e.type==='dessin')g.innerHTML=pieceDessin(e,e.x,e.y,t.w,t.h,Pe,'s'+e.id);
   else g.innerHTML=piecePhoto(e,e.x,e.y,t.w,t.h,Pe,'s'+e.id);
   var b=g.getBBox();e.bw=b.width;e.bh=b.height;e.bx=b.x;e.by=b.y;
-  e.flottant=cl&&!toucheCadre(b,e);
+  e.aire=null;
+  if(so&&e.type==='dessin'){var ar=mord(e,e.x,e.y);e.aire=ar<0?null:ar;e.flottant=ar<0?!toucheCadre(b,e):ar<AIRE}
+  else e.flottant=cl&&!toucheCadre(b,e);
  });
+ /* ce qui est découpé avec le cadre est au niveau du cadre : dessous les pièces collées */
+ S.els.forEach(function(e){if(!e.so)return;var g=grav.querySelector('.sc-el[data-id="'+e.id+'"]');if(g){g.setAttribute('filter','url(#soudeF)');gravS.appendChild(g)}});
  /* une pièce qui ne touche pas le cadre tient si elle est collée sur une autre pièce qui, elle, tient */
- if(cl){var change=true;while(change){change=false;S.els.forEach(function(e){if(!e.flottant)return;
-  if(S.els.some(function(o){return o!==e&&!o.flottant&&recouvre(boite(e),boite(o))})){e.flottant=false;change=true}})}}
+ if(cl){var change=true;while(change){change=false;S.els.forEach(function(e){if(!e.flottant||(e.so&&e.type==='dessin'))return;
+  if(S.els.some(function(o){return o!==e&&!o.flottant&&(!e.so||o.so)&&recouvre(boite(e),boite(o))})){e.flottant=false;change=true}})}}
  S.els.forEach(function(e){if(S.sel===e.id||e.flottant)el('rect',{x:e.bx-5,y:e.by-5,width:e.bw+10,height:e.bh+10,rx:6,fill:'none',stroke:e.flottant?'#c62828':'#a98935','stroke-width':1.6,'stroke-dasharray':'6 5','pointer-events':'none'},poignee)});
  fichier();liste();resume();if(V3.pret)V3.maj();
  $('astuce').hidden=!S.els.length||S.aBouge||V3.actif||G.vue!=='creation';vignettes();
@@ -730,7 +813,7 @@ function majTaille(){appliquerTaille();$('tailles').innerHTML=D.tailles.map(func
 function majMatiere(){}
 function Mde(id){for(var i=0;i<MATIERES.length;i++)if(MATIERES[i].id===id)return MATIERES[i];return MATIERES[0]}
 (function(){var dg=svg.querySelector('defs');MATIERES.forEach(function(m){dg.insertAdjacentHTML('beforeend','<linearGradient id="g-'+m.id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+m.c[0]+'"/><stop offset=".55" stop-color="'+m.c[1]+'"/><stop offset="1" stop-color="'+m.c[2]+'"/></linearGradient>')})})();
-$('tailles').addEventListener('click',function(ev){var b=ev.target.closest('.sc-taille');if(!b)return;S.taille=b.getAttribute('data-t');majTaille();voirCreation();S.els.forEach(borner);dessiner();reposer()});
+$('tailles').addEventListener('click',function(ev){var b=ev.target.closest('.sc-taille');if(!b)return;S.taille=b.getAttribute('data-t');majTaille();majStyle();panneau();voirCreation();S.els.forEach(borner);dessiner();reposer()});
 $('groupes').addEventListener('click',function(ev){var b=ev.target.closest('[data-g]');if(!b)return;S.groupe=b.getAttribute('data-g');majFormes()});
 $('formes').addEventListener('click',function(ev){var b=ev.target.closest('.sc-forme');if(!b)return;S.forme=b.getAttribute('data-v');
  majFormes();majTaille();voirCreation();S.els.forEach(borner);if(chevauche())ranger();dessiner();reposer()});
@@ -746,7 +829,8 @@ function ranger(){var L=limites(),els=S.els.slice().sort(function(a,b){return a.
 /* ---- étape 3 : le style ---- */
 function majStyle(){[].forEach.call($('styles').querySelectorAll('.sc-style'),function(b){b.classList.toggle('on',b.getAttribute('data-v')===S.style)});
  var cl=S.style==='classique';
- $('legTextes').innerHTML=cl?'Chaque texte, chaque dessin et chaque photo est une <b>pièce découpée à part</b>, que l\'on colle sur le cadre. <b>Vous la placez où vous voulez</b> : touchez-la dans l\'aperçu et faites-la glisser, ou utilisez les flèches. Elle doit toucher le cadre (ou une autre pièce) : c\'est là qu\'elle est collée. Chaque texte ou photo : + 3 € ; chaque petit dessin : + 1 €.'
+ $('legTextes').innerHTML=cl&&S.taille!=='petite'?'Les <b>dessins en bois sont découpés avec le cadre</b>, d\'une seule pièce : rien ne peut se décoller. Le <b>nom est collé par-dessus</b>, en relief, ou découpé avec le cadre lui aussi : vous choisissez dans sa fiche. Une photo, ou une pièce en acrylique de couleur, est toujours collée. <b>Vous placez tout où vous voulez</b> : touchez dans l\'aperçu et faites glisser, ou utilisez les flèches. Un dessin doit mordre sur le bois du cadre, un nom doit le toucher. Chaque texte ou photo : + 3 € ; chaque petit dessin : + 1 €.'
+  :cl?'À la taille de 7 cm, chaque texte, chaque dessin et chaque photo est une <b>pièce découpée à part</b>, que l\'on colle sur le cadre (à partir de 9 cm, les dessins en bois sont découpés avec le cadre, d\'une seule pièce). <b>Vous la placez où vous voulez</b> : touchez-la dans l\'aperçu et faites-la glisser, ou utilisez les flèches. Elle doit toucher le cadre (ou une autre pièce) : c\'est là qu\'elle est collée. Chaque texte ou photo : + 3 € ; chaque petit dessin : + 1 €.'
   :'Les textes, les dessins et les photos sont <b>gravés directement</b> sur la plaque. <b>Vous les placez où vous voulez</b> : touchez-les dans l\'aperçu et faites-les glisser, ou utilisez les flèches. Chaque texte ou photo gravé : + 3 € ; chaque petit dessin : + 1 €.';
  [].forEach.call(document.querySelectorAll('.sc-sicl'),function(x){x.hidden=!cl})}
 $('styles').addEventListener('click',function(ev){var b=ev.target.closest('.sc-style');if(!b)return;S.style=b.getAttribute('data-v');majStyle();voirCreation();panneau();dessiner();reposer()});
@@ -761,7 +845,7 @@ function place(o){var L=limites(),c=centre().y,h=taille(o).h/2,haut=L.y0+h+6,bas
  return{x:200,y:meilleur}}
 function ajouter(o){o.id=++S.seq;o.s=o.s||1;
  if(o.type==='photo'&&S.els.length)o.s=.75;
- if(o.type==='dessin')o.s=S.els.length?.8:1;
+ if(o.type==='dessin')o.s=grand()?tdS('m'):S.els.length?.8:1;
  var p=place(o);o.x=p.x;o.y=p.y;S.els.push(o);S.sel=o.id;S.panneau=null;panneau();voirCreation();dessiner();
  if(o.type==='texte'){o.auto=true;if(S.style==='classique')poserTexte(o)}
  if(o.type==='dessin'){placerAuto(o);panneau()}}
@@ -803,11 +887,12 @@ function panneau(){
    +'<button type="button" class="sc-btn clair" id="exPhoto">Essayer avec une photo d\'exemple</button></div></div>';
  }
  else if(S.panneau==='dessin'){var fam=S.famille||D.elements.familles[0];
-  h='<div class="prc-fields"><p class="prc-legend">Touchez un dessin : il se pose sur la décoration, vous le placez ensuite où vous voulez. '+(cl?'Il est <b>découpé</b> (une pièce à sa forme, collée sur le cadre) ou <b>gravé</b> sur une pièce découpée autour : vous choisissez dans sa fiche.':'Il est gravé sur la plaque.')+'</p>'
+  h='<div class="prc-fields"><p class="prc-legend">Touchez un dessin : il se pose sur la décoration, vous le placez ensuite où vous voulez. '+(cl&&S.taille!=='petite'?'En bois, il est <b>découpé avec le cadre</b>, d\'une seule pièce : rien à coller. Dans sa fiche, vous choisissez s\'il est ajouré (à sa forme) ou plein avec ses détails gravés.':cl?'Il est <b>découpé</b> (une pièce à sa forme, collée sur le cadre) ou <b>gravé</b> sur une pièce découpée autour : vous choisissez dans sa fiche.':'Il est gravé sur la plaque.')+'</p>'
    +'<div class="sc-fams">'+D.elements.familles.map(function(f){return '<button type="button" class="'+(f===fam?'on':'')+'" data-fam="'+esc(f)+'">'+esc(f)+'</button>'}).join('')+'</div>'
    +'<div class="sc-hasard"><b>Au hasard</b><span class="sc-nb"><button type="button" class="sc-o" data-h="-" aria-label="Moins de décors">−</button><output>'+(S.nHasard||3)+'</output><button type="button" class="sc-o" data-h="+" aria-label="Plus de décors">+</button></span>'
+   +(grand()?'<span class="sc-thz">Taille</span>'+seg('Taille des décors',TD.map(function(t){return [t[0],t[1]]}),S.tHasard||'m','th'):'')
    +'<button type="button" class="sc-btn" data-h="go">Tirer '+(S.nHasard||3)+' décor'+((S.nHasard||3)>1?'s':'')+' au hasard</button>'
-   +'<p class="prc-hint" id="msgHasard">Pris dans la famille « '+esc(fam)+' », posés'+(cl?' dans l\'ouverture, collés contre le cadre ou sur le nom':' sur la plaque')+' tout seuls. 1 € chacun.</p></div>'
+   +'<p class="prc-hint" id="msgHasard">Pris dans la famille « '+esc(fam)+' », posés'+(cl&&S.taille!=='petite'?' dans l\'ouverture, contre le cadre, et découpés avec lui':cl?' dans l\'ouverture, collés contre le cadre ou sur le nom':' sur la plaque')+' tout seuls. 1 € chacun.</p></div>'
    +'<div class="sc-dessins">'+D.elements.elements.filter(function(d){return d.cats.indexOf(fam)>=0}).map(function(d){return '<button type="button" data-dessin="'+d.id+'" aria-label="Ajouter ce dessin"><img src="'+d.img+'" alt="" loading="lazy"></button>'}).join('')+'</div></div>'}
  P.innerHTML=h;var n=$('ntexte');if(n)n.focus()}
 function matsHtml(cour,data){return '<div class="sc-mats sc-mats5">'+MATIERES.map(function(m){return '<button type="button" class="sc-mat'+(m.id===cour?' on':'')+'" data-'+data+'="'+m.id+'"><i style="background:linear-gradient(135deg,'+m.c[0]+','+m.c[2]+')"></i>'+m.nom.replace('Acrylique ','Acrylique<br>')+'</button>'}).join('')+'</div>'}
@@ -820,11 +905,12 @@ $('panneau').addEventListener('click',function(ev){
  var tm=ev.target.closest('[data-tm]');if(tm){S.matTexte=tm.getAttribute('data-tm');[].forEach.call($('panneau').querySelectorAll('[data-tm]'),function(x){x.classList.toggle('on',x===tm)});return}
  var fp=ev.target.closest('[data-fp]');if(fp){S.formePhoto=fp.getAttribute('data-fp');[].forEach.call($('panneau').querySelectorAll('[data-fp]'),function(x){x.classList.toggle('on',x===fp)});return}
  if(ev.target.id==='okTexte'){var v=$('ntexte').value.trim();if(!v){$('ntexte').focus();return}ajouter({type:'texte',texte:v,police:S.police,mode:S.modeTexte,mat:S.matTexte,esp:0,courbe:0,creux:false});return}
+ var th=ev.target.closest('[data-th]');if(th){S.tHasard=th.getAttribute('data-th');panneau();return}
  var hz=ev.target.closest('[data-h]');if(hz){var v=hz.getAttribute('data-h');
   if(v==='go'){auHasard();return}
   S.nHasard=Math.max(1,Math.min(10,(S.nHasard||3)+(v==='+'?1:-1)));panneau();return}
  var fa=ev.target.closest('[data-fam]');if(fa){S.famille=fa.getAttribute('data-fam');panneau();return}
- var de=ev.target.closest('[data-dessin]');if(de){ajouter({type:'dessin',did:de.getAttribute('data-dessin'),fam:S.famille||D.elements.familles[0],mode:'decoupe',mat:'contreplaque',rot:0,flip:false});return}
+ var de=ev.target.closest('[data-dessin]');if(de){ajouter({type:'dessin',did:de.getAttribute('data-dessin'),fam:S.famille||D.elements.familles[0],mode:'decoupe',mat:'contreplaque',soude:true,rot:0,flip:false});return}
  if(ev.target.id==='exPhoto'){ajouter({type:'photo',src:D.exemple,nom:"photo d'exemple",forme:S.formePhoto})}});
 $('panneau').addEventListener('keydown',function(ev){if(ev.key==='Enter'&&ev.target.id==='ntexte'){ev.preventDefault();$('okTexte').click()}});
 $('panneau').addEventListener('change',function(ev){if(ev.target.id!=='fphoto')return;var f=ev.target.files&&ev.target.files[0];if(!f)return;
@@ -834,7 +920,10 @@ $('panneau').addEventListener('change',function(ev){if(ev.target.id!=='fphoto')r
 
 /* ---- la liste des pièces ---- */
 function nomEl(e){return e.type==='texte'?'« '+(e.texte||'')+' »':e.type==='dessin'?'Dessin · '+(e.fam||'décor'):'Ma photo'}
-function commentEl(e){if(e.type==='dessin')return S.style!=='classique'?'gravé':(e.mode==='grave'?'gravé sur une pièce découpée':'découpé')+(e.mode==='grave'?'':' · '+matEl(e).nom.toLowerCase())+(e.rot?' · tourné de '+e.rot+'°':'')+(e.flip?' · retourné':'');
+function commentEl(e){
+ if(soudee(e))return e.type==='dessin'?'découpé avec le cadre'+(e.mode==='grave'?' · détails gravés':'')+' · rien à coller'+(e.rot?' · tourné de '+e.rot+'°':'')+(e.flip?' · retourné':'')
+  :'découpé avec le cadre'+(e.mode==='grave'?' · texte gravé':'')+(e.creux?' · lettres creuses':'')+' · '+police(e.police)[1];
+ if(e.type==='dessin')return S.style!=='classique'?'gravé':(e.mode==='grave'?'gravé sur une pièce découpée':'découpé')+(e.mode==='grave'?'':' · '+matEl(e).nom.toLowerCase())+(e.rot?' · tourné de '+e.rot+'°':'')+(e.flip?' · retourné':'');
  if(e.type==='photo')return 'photo gravée'+(S.style==='classique'?' sur une pièce découpée':'')+' · '+(e.forme==='ovale'?'ovale':'rectangle');
  if(S.style!=='classique')return 'gravé · '+police(e.police)[1];
  return (e.mode==='grave'?'gravé sur une pièce découpée':'lettres découpées')+(e.creux?' · creuses':'')+' · '+matEl(e).nom.toLowerCase()+' · '+police(e.police)[1]}
@@ -848,19 +937,25 @@ function liste(){
  S.els.forEach(function(e,i){
   var vig=e.type==='texte'?'Aa':e.type==='dessin'?'<img class="sc-vd" src="'+(elem(e.did)||{}).img+'" alt="">':'<img src="'+e.src+'" alt="">';
   h+='<div class="sc-item'+(S.sel===e.id?' on':'')+'" data-id="'+e.id+'"><div class="sc-itete"><span class="sc-vig">'+vig+'</span>'
-   +'<span class="sc-inom"><b>'+esc(nomEl(e))+'</b><small>'+(cl?'Pièce '+(i+2)+' · ':'')+commentEl(e)+' · + '+eur(prixEl(e))+'</small></span>'
+   +'<span class="sc-inom"><b>'+esc(nomEl(e))+'</b><small>'+(cl&&num(e)?'Pièce '+num(e)+' · ':'')+commentEl(e)+' · + '+eur(prixEl(e))+'</small></span>'
    +'<button type="button" class="sc-x" data-act="x" aria-label="Retirer">✕</button></div>';
-  if(e.flottant)h+='<p class="sc-warn">Cette pièce ne touche ni le cadre ni une autre pièce : elle tomberait. Faites-la glisser jusqu\'au cadre pour qu\'on puisse la coller.</p>';
+  if(e.flottant)h+='<p class="sc-warn">'+(e.so&&e.type==='dessin'?'Ce dessin ne mord pas assez sur le bois du cadre : il casserait. Faites-le glisser vers le cadre, ou touchez « Placer automatiquement ».':e.so?'Ce nom est découpé avec le cadre, mais il ne le touche pas. Faites-le glisser jusqu\'au cadre, ou touchez « Poser d\'un bord du cadre à l\'autre ».':'Cette pièce ne touche ni le cadre ni une autre pièce : elle tomberait. Faites-la glisser jusqu\'au cadre pour qu\'on puisse la coller.')+'</p>';
+  else if(e.so&&e.type==='dessin'&&traitFin(e)!=null&&traitFin(e)<.8)h+='<p class="sc-warn">À cette taille, ce dessin a des traits très fins : il serait fragile. Agrandissez-le avec « + », ou choisissez « Gravé ».</p>';
   if(S.sel===e.id){
    if(e.type==='texte'){h+='<input type="text" maxlength="24" value="'+esc(e.texte)+'" data-edit="'+e.id+'" aria-label="Modifier le texte">'+polsHtml(e.police);
     if(cl)h+=matsHtml(e.mat||'contreplaque','emat')+seg('Découpé ou gravé',MODES,e.mode,'em');
+    if(cl)h+=soudable(e)?seg('Collé ou découpé avec le cadre',[['0','Collé par-dessus'],['1','Découpé avec le cadre']],e.soude?'1':'0','sd')
+      +'<p class="prc-hint">'+(e.soude?'Le nom fait partie du cadre : une seule pièce, à plat.':'Le nom est une pièce à part, collée par-dessus le cadre et les dessins : il est en relief.')+'</p>'
+     :'<p class="prc-hint">'+(S.taille==='petite'?'À 7 cm, le nom est toujours collé par-dessus.':'Un nom en acrylique est toujours collé par-dessus : ce n\'est pas la matière du cadre.')+'</p>';
     h+='<label class="sc-case"><input type="checkbox" data-act="creux"'+(e.creux?' checked':'')+'> Lettres creuses (seulement le contour)</label>'
      +'<div class="sc-outils"><span>Espacement</span><button type="button" class="sc-o" data-act="esp-" aria-label="Lettres plus serrées">−</button><button type="button" class="sc-o" data-act="esp+" aria-label="Lettres plus espacées">+</button></div>'
      +'<button type="button" class="sc-o sc-poser" data-act="poser">Poser d\'un bord du cadre à l\'autre</button>'
      +'<label class="sc-courbe">Courbe <input type="range" min="-100" max="100" step="5" value="'+(e.courbe||0)+'" data-act="courbe" aria-label="Courbe du texte"><output>'+(e.courbe||0)+'</output></label>'}
-   else if(e.type==='dessin'){if(cl){h+=seg('Découpé ou gravé',MODES,e.mode,'em');if(e.mode!=='grave')h+=matsHtml(e.mat||'contreplaque','emat')}
+   else if(e.type==='dessin'){if(cl){h+=seg('Découpé ou gravé',MODES,e.mode,'em');if(e.mode!=='grave')h+=matsHtml(e.mat||'contreplaque','emat');
+     h+='<p class="prc-hint">'+(soudee(e)?'Découpé avec le cadre, d\'une seule pièce : rien à coller.':S.taille==='petite'?'À 7 cm, le dessin est une pièce à part, collée sur le cadre.':'En acrylique, le dessin est une pièce à part, collée sur le cadre.')+'</p>'}
+    if(grand())h+='<div class="field sc-tdz"><label>Taille du dessin</label>'+seg('Taille du dessin',TD.map(function(t){return [t[0],t[1]+' · '+tdCm(e,t[2])]}),tdDe(e),'td')+'</div>';
     h+='<div class="sc-outils"><span>Tourner</span><button type="button" class="sc-o" data-act="rot-" aria-label="Tourner à gauche">↺</button><button type="button" class="sc-o" data-act="rot+" aria-label="Tourner à droite">↻</button><button type="button" class="sc-o" data-act="flip">Retourner</button></div>'
-    +'<button type="button" class="sc-o sc-poser" data-act="auto">Placer automatiquement'+(cl?' (collé contre le cadre ou sur le nom)':'')+'</button>'}
+    +'<button type="button" class="sc-o sc-poser" data-act="auto">Placer automatiquement'+(cl?(soudee(e)?' (contre le cadre : il mord sur le bois)':' (collé contre le cadre ou sur le nom)'):'')+'</button>'}
    else h+=seg('Forme',FORMES,e.forme,'ef');
    h+='<div class="sc-outils sc-fleches"><span>Placer</span><button type="button" class="sc-o" data-act="g" aria-label="Vers la gauche">←</button><button type="button" class="sc-o" data-act="h" aria-label="Vers le haut">↑</button><button type="button" class="sc-o" data-act="b" aria-label="Vers le bas">↓</button><button type="button" class="sc-o" data-act="d" aria-label="Vers la droite">→</button></div>'
     +'<div class="sc-outils"><span>Taille</span><button type="button" class="sc-o" data-act="moins" aria-label="Plus petit">−</button><button type="button" class="sc-o" data-act="plus" aria-label="Plus grand">+</button>'
@@ -869,7 +964,7 @@ function liste(){
  L.innerHTML=h+'</div>'}
 $('liste').addEventListener('click',function(ev){
  var it=ev.target.closest('.sc-item');if(!it)return;var e=trouver(+it.getAttribute('data-id'));if(!e)return;
- var a=ev.target.getAttribute('data-act'),p=ev.target.closest('[data-pol]'),em=ev.target.closest('[data-em]'),ef=ev.target.closest('[data-ef]'),emt=ev.target.closest('[data-emat]');
+ var a=ev.target.getAttribute('data-act'),p=ev.target.closest('[data-pol]'),em=ev.target.closest('[data-em]'),ef=ev.target.closest('[data-ef]'),emt=ev.target.closest('[data-emat]'),sd=ev.target.closest('[data-sd]'),td=ev.target.closest('[data-td]');
  if(a==='x'){S.els=S.els.filter(function(x){return x!==e});if(S.sel===e.id)S.sel=null;dessiner();return}
  if(a==='moins'){e.s=Math.max(.4,e.s-.1);e.auto=false}else if(a==='plus'){e.s=Math.min(3,e.s+.1);e.auto=false}else if(a==='centre'){e.x=200}
  else if(a==='poser'){S.sel=e.id;e.auto=true;ajusterAuCadre(e);return}
@@ -877,10 +972,13 @@ $('liste').addEventListener('click',function(ev){
  else if(a==='g'||a==='d'||a==='h'||a==='b'){var pas=S.W*k()*.03;if(a==='g')e.x-=pas;if(a==='d')e.x+=pas;if(a==='h')e.y-=pas;if(a==='b')e.y+=pas;e.auto=false;S.aBouge=true}
  else if(a==='rot-'){e.rot=((e.rot||0)-15+360)%360}else if(a==='rot+'){e.rot=((e.rot||0)+15)%360}else if(a==='flip'){e.flip=!e.flip}
  else if(a==='esp-'){e.esp=Math.max(-2,(e.esp||0)-1)}else if(a==='esp+'){e.esp=Math.min(8,(e.esp||0)+1)}
+ else if(sd){if(sd.getAttribute('data-sd')==='1')e.soude=true;else delete e.soude}
+ else if(td){e.s=tdS(td.getAttribute('data-td'));S.sel=e.id;dessiner();if(e.flottant){placerAuto(e,e.cib,true);dessiner()}return}
  else if(emt){e.mat=emt.getAttribute('data-emat')}
  else if(p){e.police=p.getAttribute('data-pol')}else if(em){e.mode=em.getAttribute('data-em')}else if(ef){e.forme=ef.getAttribute('data-ef')}
  else if(ev.target.tagName==='INPUT'||ev.target.closest('label')){return}
- S.sel=e.id;if(e.type==='texte'&&e.auto&&S.style==='classique'&&(p||em||a==='esp-'||a==='esp+')){ajusterAuCadre(e);return}dessiner()});
+ S.sel=e.id;if(e.type==='texte'&&e.auto&&S.style==='classique'&&(p||em||sd||a==='esp-'||a==='esp+')){ajusterAuCadre(e);return}dessiner();
+ if((emt||em)&&e.type==='dessin'&&e.flottant&&S.style==='classique'){placerAuto(e,e.cib);dessiner()}});
 $('liste').addEventListener('input',function(ev){var id=ev.target.getAttribute('data-edit');
  if(id){var e=trouver(+id);e.texte=ev.target.value;if(e.auto&&S.style==='classique')ajusterAuCadre(e);else dessiner();return}
  if(ev.target.getAttribute('data-act')==='creux'){var e3=trouver(+ev.target.closest('.sc-item').getAttribute('data-id'));e3.creux=ev.target.checked;dessiner();return}
@@ -895,14 +993,14 @@ function total(){var t=D.prix.base+prixTaille();S.els.forEach(function(e){t+=pri
 function resume(){var cl=S.style==='classique';
  var R=$('resume'),h='<div class="prc-sumrow"><span>Forme</span><b>'+F().nom+' — '+eur(D.prix.base)+'</b></div>'
   +'<div class="prc-sumrow"><span>Taille</span><b>'+String(S.W).replace('.',',')+' × '+String(S.H).replace('.',',')+' mm'+(prixTaille()?' — + '+eur(prixTaille()):'')+'</b></div>'
-  +'<div class="prc-sumrow"><span>Style</span><b>'+(cl?'Cadre découpé, pièces collées':'Plaque pleine, gravée')+'</b></div>'
+  +'<div class="prc-sumrow"><span>Style</span><b>'+(cl?(S.els.some(soudee)?'Cadre et dessins découpés d\'une seule pièce'+(S.els.some(function(e){return !soudee(e)})?', le reste collé par-dessus':''):'Cadre découpé, pièces collées'):'Plaque pleine, gravée')+'</b></div>'
   +'<div class="prc-sumrow"><span>Matière</span><b>Contreplaqué 3 mm</b></div>';
- S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(cl?'Pièce '+(i+2):e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':'Photo')+'</span><b>'+esc(nomEl(e))+' · '+commentEl(e)+' — + '+eur(prixEl(e))+'</b></div>'});
+ S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(cl&&num(e)?'Pièce '+num(e):e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':'Photo')+'</span><b>'+esc(nomEl(e))+' · '+commentEl(e)+' — + '+eur(prixEl(e))+'</b></div>'});
  h+='<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+eur(total())+'</b></div>';
  R.innerHTML=h;$('total').textContent=eur(total());$('prixtete').textContent=eur(total());
  $('n5').classList.toggle('done',S.els.length>0);
  var fl=S.els.filter(function(e){return e.flottant}).length;
- $('manque').textContent=fl?(fl>1?fl+' pièces ne touchent rien et tomberaient : faites-les glisser jusqu\'au cadre.':'Une pièce ne touche rien et tomberait : faites-la glisser jusqu\'au cadre.'):'';
+ $('manque').textContent=fl?(fl>1?fl+' pièces ne tiennent pas au cadre : faites-les glisser jusqu\'au cadre.':'Une pièce ne tient pas au cadre : faites-la glisser jusqu\'au cadre.'):'';
  $('ajouter').disabled=!!fl}
 $('ajouter').addEventListener('click',function(){if(!this.disabled)this.textContent='Ajouté au panier ✓ (maquette)'});
 
@@ -911,15 +1009,23 @@ $('ajouter').addEventListener('click',function(){if(!this.disabled)this.textCont
    plaque pleine : la forme, et la gravure à sa place */
 function fichier(){
  var Fh=$('fichier'),f=F(),cl=S.style==='classique',q=k(),W=S.W,H=S.H,R='#FF0000';
- function mm(v){return v/q}
+ function mm(v){return v/q} function X(v){return (v-ox())/q+5} function Y(v){return (v-oy())/q+5}
  var fo='translate(5 5) scale('+sx().toFixed(5)+' '+sy().toFixed(5)+')';
- var h='<g data-mat="contreplaque" data-piece="1" transform="'+fo+'"><path fill="none" stroke="'+R+'" stroke-width="'+(.25/sx()).toFixed(3)+'" fill-rule="evenodd" d="'+(cl?f.cadre:f.d)+'"/></g>';
+ var ns=cl?S.els.filter(function(e){return e.so}).length:0,ng=S.els.length-ns,aires=[],fins=[];
+ var h=(ns?'<clipPath id="fhors"><path transform="'+fo+'" clip-rule="evenodd" d="M-600 -600H1600V1600H-600Z '+f.cadre+'"/></clipPath>':'')
+  +'<g data-mat="contreplaque" data-piece="1" transform="'+fo+'"><path fill="none" stroke="'+R+'" stroke-width="'+(.25/sx()).toFixed(3)+'" fill-rule="evenodd" d="'+(cl?f.cadre:f.d)+'"/></g>';
  var lw=Math.ceil(W+10),lh=Math.ceil(H+10);
  var Pf={cl:cl,plein:'#fff',trait:R,grav:'#111',o:1.6,coupe:.25,ombre:false,filtre:'style="filter:grayscale(1) contrast(1.15)"'};
  if(cl){
-  h+='<text x="5" y="'+(H+9)+'" font-size="3" fill="#888" font-family="sans-serif">1 · cadre · contreplaqué</text>';
-  var x=5,y=H+14,rang=0;
+  h+='<text x="5" y="'+(H+9)+'" font-size="3" fill="#888" font-family="sans-serif">1 · cadre'+(ns?' et '+ns+' pièce'+(ns>1?'s':'')+' découpée'+(ns>1?'s':'')+' avec lui':'')+' · contreplaqué</text>';
+  var x=5,y=H+14,rang=0,Ps={cl:cl,plein:'#fff',trait:R,grav:'#111',o:1.6,coupe:.25,ombre:false,filtre:Pf.filtre,clipT:'url(#fhors)'};
   S.els.forEach(function(e,i){
+   if(e.so){   /* découpée avec le cadre : à sa place sur le cadre, le trait de coupe seulement hors du bois (un seul contour) */
+    h+='<g data-mat="contreplaque" data-piece="'+(i+2)+'" data-nom="'+esc(nomEl(e))+'" data-soude="1">';
+    if(e.type==='texte')h+=pieceTexte(e,X(e.x),Y(e.y),mm(e.fs),Ps,'f'+e.id);
+    else{var ts=taille(e);h+=pieceDessin(e,X(e.x),Y(e.y),mm(ts.w),mm(ts.h),Ps,'f'+e.id);
+     if(e.aire!=null)aires.push(Math.round(e.aire));var tf2=traitFin(e);if(tf2!=null&&tf2<.8)fins.push(String(Math.round(tf2*10)/10).replace('.',','))}
+    h+='</g>';return}
    var pw=mm(e.bw)+1,ph=mm(e.bh)+1;
    if(x>5&&x+pw>195){x=5;y+=rang+8;rang=0}
    var cx=x+pw/2,cy=y+ph/2;h+='<g data-mat="'+matEl(e).id+'" data-piece="'+(i+2)+'" data-nom="'+esc(nomEl(e))+'">';
@@ -927,11 +1033,10 @@ function fichier(){
    else if(e.type==='dessin'){var t=taille(e);h+=pieceDessin(e,cx,cy,mm(t.w),mm(t.h),Pf,'f'+e.id)}
    else{var t=taille(e);h+=piecePhoto(e,cx,cy,mm(t.w),mm(t.h),Pf,'f'+e.id)}
    h+='</g>';
-   h+='<text x="'+x+'" y="'+(y+ph+3.5)+'" font-size="3" fill="#888" font-family="sans-serif">'+(i+2)+' · '+matEl(e).nom.toLowerCase()+'</text>';
+   h+='<text x="'+x+'" y="'+(y+ph+3.5)+'" font-size="3" fill="#888" font-family="sans-serif">'+num(e)+' · '+matEl(e).nom.toLowerCase()+'</text>';
    x+=pw+6;rang=Math.max(rang,ph+4);lw=Math.max(lw,Math.ceil(x));lh=Math.max(lh,Math.ceil(y+rang+3))});
  }else{
   var gr='';
-  function X(v){return (v-ox())/q+5} function Y(v){return (v-oy())/q+5}
   S.els.forEach(function(e,i){gr+='<g data-piece="'+(i+2)+'" data-nom="'+esc(nomEl(e))+'">';
    if(e.type==='texte')gr+=pieceTexte(e,X(e.x),Y(e.y),mm(e.fs),Pf,'f'+e.id);
    else if(e.type==='dessin'){var t=taille(e);gr+=pieceDessin(e,X(e.x),Y(e.y),mm(t.w),mm(t.h),Pf,'f'+e.id)}
@@ -944,23 +1049,29 @@ function fichier(){
  var n=S.els.length;
  var trop=lw>200||lh>200;
  $('fnom').textContent=(trop?'⚠ plus grand que 200 × 200 mm : deux passages sur la F2 Ultra UV · ':'')+'decoration-'+f.id+'-'+S.taille+'-<n° de commande>.svg · '+lw+' × '+lh+' mm · '+'contreplaqué 3 mm · '
-  +(cl?(n+1)+' pièce'+(n?'s':'')+' à découper'+(n?', puis à coller sur le cadre':''):'une seule pièce, gravée');
+  +(cl?(ng+1)+' pièce'+(ng?'s':'')+' à découper'+(ns?' (le cadre porte '+ns+' pièce'+(ns>1?'s':'')+' découpée'+(ns>1?'s':'')+' avec lui)':'')+(ng?', puis '+ng+' à coller sur le cadre':', rien à coller'):'une seule pièce, gravée')
+  +(aires.length?' · surface qui tient chaque dessin au cadre : '+aires.join(', ')+' mm²':'')+(fins.length?' · ⚠ traits fins : '+fins.join(', ')+' mm':'');
  var acr={};S.els.forEach(function(e){var m=matEl(e);if(m.acrylique)acr[m.nom.toLowerCase()]=(acr[m.nom.toLowerCase()]||0)+1});
  var ks=Object.keys(acr);if(cl&&ks.length)$('fnom').textContent+=' · à découper aussi dans : '+ks.map(function(x){return x+' ('+acr[x]+')'}).join(', ');
 }
 
 /* ---- le plan de collage (atelier) : la décoration assemblée, chaque pièce avec son numéro (le même que dans le fichier) ---- */
-function plan(){var B=$('planBloc');if(!B)return;var cl=S.style==='classique';B.hidden=!cl||!S.els.length;if(B.hidden)return;
+function plan(){var B=$('planBloc');if(!B)return;var cl=S.style==='classique';B.hidden=!cl||!S.els.some(function(e){return !e.so});if(B.hidden)return;
  var f=F(),q=k(),W=S.W,H=S.H;function mm(v){return v/q} function X(v){return (v-ox())/q+5} function Y(v){return (v-oy())/q+5}
- var h='<g transform="translate(5 5) scale('+sx().toFixed(5)+' '+sy().toFixed(5)+')"><path fill="#f1e6cf" stroke="#9c7744" stroke-width="'+(.3/sx()).toFixed(3)+'" fill-rule="evenodd" d="'+f.cadre+'"/></g>';
+ var h='<clipPath id="phors"><path transform="translate(5 5) scale('+sx().toFixed(5)+' '+sy().toFixed(5)+')" clip-rule="evenodd" d="M-600 -600H1600V1600H-600Z '+f.cadre+'"/></clipPath>'
+  +'<g transform="translate(5 5) scale('+sx().toFixed(5)+' '+sy().toFixed(5)+')"><path fill="#f1e6cf" stroke="#9c7744" stroke-width="'+(.3/sx()).toFixed(3)+'" fill-rule="evenodd" d="'+f.cadre+'"/></g>';
  var Pp={cl:true,plein:'#fff',trait:'#555',grav:'#bbb',o:1.6,coupe:.3,ombre:false,filtre:'style="filter:grayscale(1) opacity(.45)"'},pastilles='',leg='<li><b>1</b> le cadre · contreplaqué</li>';
+ var Pc={cl:true,plein:'#f1e6cf',trait:'#9c7744',grav:'#c9b48c',o:1.6,coupe:.3,ombre:false,filtre:Pp.filtre,clipT:'url(#phors)'};
+ /* d'abord ce qui est découpé avec le cadre (même couleur que lui, sans numéro), puis les pièces à coller */
+ S.els.forEach(function(e){if(!e.so)return;var t=taille(e);h+=e.type==='texte'?pieceTexte(e,X(e.x),Y(e.y),mm(e.fs),Pc,'p'+e.id):pieceDessin(e,X(e.x),Y(e.y),mm(t.w),mm(t.h),Pc,'p'+e.id)});
  S.els.forEach(function(e,i){var t=taille(e);
+  if(e.so){leg+='<li><b>✓</b> '+esc(nomEl(e))+' · découpé avec le cadre : rien à coller</li>';return}
   if(e.type==='texte')h+=pieceTexte(e,X(e.x),Y(e.y),mm(e.fs),Pp,'p'+e.id);
   else if(e.type==='dessin')h+=pieceDessin(e,X(e.x),Y(e.y),mm(t.w),mm(t.h),Pp,'p'+e.id);
   else h+=piecePhoto(e,X(e.x),Y(e.y),mm(t.w),mm(t.h),Pp,'p'+e.id);
   var cx=e.bw?X(e.bx+e.bw/2):X(e.x),cy=e.bh?Y(e.by+e.bh/2):Y(e.y);
-  pastilles+='<circle cx="'+cx+'" cy="'+cy+'" r="3.4" fill="#1a1206"/><text x="'+cx+'" y="'+cy+'" text-anchor="middle" dominant-baseline="central" font-size="4" font-weight="700" fill="#fff" font-family="sans-serif">'+(i+2)+'</text>';
-  leg+='<li><b>'+(i+2)+'</b> '+esc(nomEl(e))+' · '+matEl(e).nom.toLowerCase()+'</li>'});
+  pastilles+='<circle cx="'+cx+'" cy="'+cy+'" r="3.4" fill="#1a1206"/><text x="'+cx+'" y="'+cy+'" text-anchor="middle" dominant-baseline="central" font-size="4" font-weight="700" fill="#fff" font-family="sans-serif">'+num(e)+'</text>';
+  leg+='<li><b>'+num(e)+'</b> '+esc(nomEl(e))+' · '+matEl(e).nom.toLowerCase()+'</li>'});
  $('plan').setAttribute('viewBox','0 0 '+Math.ceil(W+10)+' '+Math.ceil(H+10));$('plan').innerHTML=h+pastilles;$('planLeg').innerHTML=leg}
 /* ---- « Tout recaler » : chaque pièce mal posée retrouve une place où elle est collée (les noms d'abord, puis les dessins) ---- */
 function recalerTout(){var n=0;
@@ -974,10 +1085,10 @@ $('recaler').addEventListener('click',recalerTout);
 var V3={pret:false,actif:false,n:0};
 function chargerThree(fn){if(window.THREE)return fn();var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
  s.onload=fn;s.onerror=function(){$('msg3d').textContent='La vue 3D n\'a pas pu se charger.'};document.head.appendChild(s)}
-function texture3D(cb){
+function texture3D(html,cb){
  var X=ox(),Y=oy(),W=S.W*k(),H=S.H*k();
- if(!S.els.length)return cb(null);
- var src='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+X+' '+Y+' '+W+' '+H+'" width="'+(W*3)+'" height="'+(H*3)+'">'+svg.querySelector('defs').outerHTML+'<g clip-path="url(#decoupe)">'+grav.innerHTML+'</g></svg>';
+ if(!html)return cb(null);
+ var src='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+X+' '+Y+' '+W+' '+H+'" width="'+(W*3)+'" height="'+(H*3)+'">'+svg.querySelector('defs').outerHTML+'<g clip-path="url(#decoupe)">'+html+'</g></svg>';
  var im=new Image();im.onload=function(){var c=document.createElement('canvas');c.width=W*3;c.height=H*3;c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c)};
  im.onerror=function(){cb(null)};im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(src)}
 /* le dos d'une pièce : sa couleur sans le détail gravé (moyenne de la couleur sur de petites zones, découpée à la forme de la pièce) */
@@ -1030,8 +1141,17 @@ V3.maj=function(){if(!V3.actif)return;
  if(V3.g){V3.sc.remove(V3.g);V3.g.traverse(function(o){if(o.geometry)o.geometry.dispose()})}
  V3.g=g;V3.sc.add(g);
  var t=Math.max(W,H);V3.cam.position.set(0,t*.08,t*2.75);V3.cam.lookAt(0,0,0);
- var id=++V3.n;
- texture3D(function(cv){if(id!==V3.n)return;
+ var id=++V3.n,hs='',hc='';
+ [].forEach.call(gravS.children,function(gg){hs+=gg.outerHTML});hc=grav.innerHTML;
+ /* ce qui est découpé avec le cadre : dans l'épaisseur du cadre (de 0 à 3 mm), pas par-dessus */
+ texture3D(hs,function(cs){if(id!==V3.n)return;
+  if(cs){var ts=new THREE.CanvasTexture(cs);
+   var ps=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshStandardMaterial({map:ts,transparent:true,alphaTest:.3,roughness:.9}));ps.position.set(W/2,H/2,3.03);porte.add(ps);
+   var es=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshBasicMaterial({map:ts,transparent:true,color:0x5a4228,opacity:.85,side:THREE.DoubleSide,alphaTest:.3}));
+   for(var zs=.3;zs<3;zs+=.6){var c2=es.clone();c2.position.set(W/2,H/2,zs);porte.add(c2)}
+   var as=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(dosDe(cs)),transparent:true,alphaTest:.3,side:THREE.BackSide,roughness:.85}));
+   as.position.set(W/2,H/2,-.03);porte.add(as);V3.rendre()}
+ texture3D(hc,function(cv){if(id!==V3.n)return;
   if(cv){var tx=new THREE.CanvasTexture(cv);
    /* les pièces collées sont posées sur le cadre (3 mm plus haut) ; en plaque pleine, la gravure est sur la face */
    var pl=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshStandardMaterial({map:tx,transparent:true,roughness:.9}));
@@ -1041,7 +1161,7 @@ V3.maj=function(){if(!V3.actif)return;
     /* vue de dos : le dos des pièces collées (même couleur que la pièce, sans la gravure), vu en miroir dans l'ouverture du cadre */
     var arriere=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshStandardMaterial({map:new THREE.CanvasTexture(dosDe(cv)),transparent:true,alphaTest:.3,side:THREE.BackSide,roughness:.85}));
     arriere.position.set(W/2,H/2,3.05);porte.add(arriere)}}
-  $('msg3d').textContent='Faites glisser pour tourner la décoration.';V3.rendre()});
+  $('msg3d').textContent='Faites glisser pour tourner la décoration.';V3.rendre()})});
  V3.rendre()};
 function majVue(){[].forEach.call(document.querySelectorAll('.sc-vue button'),function(x){x.classList.toggle('on',(x.getAttribute('data-vue')==='3d')===V3.actif)})}
 $('vueBtns').addEventListener('click',function(ev){var x=ev.target.closest('button');if(!x)return;voirCreation();if(x.getAttribute('data-vue')==='3d')V3.ouvrir();else{V3.fermer();dessiner()}});
@@ -1084,7 +1204,15 @@ $('suiv').addEventListener('click',function(){G.i=(G.i+1)%D.photos.length;vignet
 /* ---- départ ---- */
 majFormes();majTaille();majMatiere();majStyle();panneau();vignettes();dessiner();
 ajouter({type:'texte',texte:'Camille',police:'great-vibes',mode:'decoupe',mat:'acr-rouge',esp:0,courbe:0,creux:false});S.sel=null;dessiner();
-function reposer(){S.els.forEach(function(e){if(e.type==='texte'&&e.auto&&S.style==='classique')ajusterAuCadre(e)});dessiner()}
+function reposer(){S.els.forEach(function(e){if(e.type==='texte'&&e.auto&&S.style==='classique')ajusterAuCadre(e)});dessiner();recaserDessins()}
+/* un dessin qui ne tient plus (autre taille, autre forme, silhouette enfin lue) retrouve une place où il tient ;
+   seuls = seulement ceux que la cliente n'a pas déplacés elle-même */
+function recaserDessins(seuls){if(S.style!=='classique'||prise)return;var n=0;
+ S.els.slice().forEach(function(e){if(e.type!=='dessin'||!e.flottant||(seuls&&e.auto===false))return;
+  if(placerAuto(e,e.cib))n++;else if(e.hasard){S.els=S.els.filter(function(x){return x!==e});n++}});   /* un décor tiré au hasard qui n'a plus de place est retiré */
+ if(n){S.sel=null;dessiner()}}
+/* les silhouettes des dessins sont lues en arrière-plan dès l'ouverture : le placement tient compte du bois tout de suite */
+(function(){var L=D.elements.elements,i=0;function lot(){for(var n=0;n<16&&i<L.length;n++,i++)alpha({did:L[i].id,mode:'decoupe'});if(i<L.length)setTimeout(lot,25)}setTimeout(lot,250)})();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(reposer);
 [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
 /* ---- nos modèles prêts à personnaliser ---- */
@@ -1095,12 +1223,14 @@ function baseModele(m){S.forme=m.forme;S.groupe=grpDe(m.forme);S.taille=m.taille
 function composerModele(m){baseModele(m);
  m.textes.forEach(function(t){ajouter({type:'texte',texte:t.texte,police:t.police,mode:'decoupe',mat:t.mat,esp:0,courbe:0,creux:false})});
  var n=m.decos.length,debut=n===1?-90:-90+180/n;
- m.decos.forEach(function(did,i){var o={type:'dessin',did:did,fam:famDe(did),mode:'decoupe',mat:'contreplaque',rot:0,flip:false,s:.55};
+ m.decos.forEach(function(did,i){var o={type:'dessin',did:did,fam:famDe(did),mode:'decoupe',mat:'contreplaque',soude:true,rot:0,flip:false,s:m.style==='classique'&&m.taille!=='petite'?tdS('m'):.55};
   o.id=++S.seq;var p=place(o);o.x=p.x;o.y=p.y;S.els.push(o);dessiner();if(!placerAuto(o,debut+360*i/n))S.els=S.els.filter(function(x){return x!==o})});
  S.sel=null;S.panneau=null;panneau();dessiner()}
 function appliquerModele(m){if(!m.els)return composerModele(m);baseModele(m);
  S.els=JSON.parse(JSON.stringify(m.els));S.seq=S.els.reduce(function(a,e){return Math.max(a,e.id)},0);
- var t=S.els.filter(function(e){return e.type==='texte'})[0];S.sel=t?t.id:null;dessiner()}
+ S.els.forEach(function(e){if(e.type==='dessin'&&e.soude===undefined)e.soude=true});
+ var t=S.els.filter(function(e){return e.type==='texte'})[0];S.sel=t?t.id:null;dessiner();recaserDessins();
+ if(t){S.sel=t.id;dessiner()}}
 (function(){var R=$('mrail');if(!D.modeles||!D.modeles.length||!D.modeles[0].img)return;$('modeles').hidden=false;
  R.innerHTML=D.modeles.map(function(m,i){return '<button type="button" class="sc-mod" data-m="'+i+'"><img src="'+m.img+'" alt="Modèle '+esc(m.titre)+'"><b>'+esc(m.titre)+'</b><small>'+esc(m.sous)+'</small><em>'+eur(m.total)+'</em></button>'}).join('');
  R.addEventListener('click',function(ev){var b=ev.target.closest('.sc-mod');if(!b)return;var m=D.modeles[+b.getAttribute('data-m')];
