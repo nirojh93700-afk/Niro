@@ -1,3 +1,31 @@
+## 🌹 MAQUETTE « FLEUR À PRÉNOM » (générateur « Flower » d'Atomm) + 🧭 MAQUETTE DE LA PAGE « CRÉEZ LE VÔTRE » — 13/11/2026 (gérant : « pour mettre sur le site, cherche sur Internet comment on peut mettre » → « fais-moi une maquette en même temps… analyse bien » + lien du générateur de fleurs) — EN ATTENTE DE SON AVIS, RIEN en ligne
+- 🧭 **Page « Créez le vôtre »** : https://claude.ai/artifact/1UafcEcee7BUjU42SxZ3kN (v1) · `python3 tools/maquettes/creez-le-votre.py <page de base> docs/maquettes/assets/creez-le-votre <sortie>` ·
+  images = l'aperçu de CHAQUE outil photographié sur fond transparent (`NODE_PATH=$(npm root -g) node tools/maquettes/creez-le-votre-images.cjs <racine des 6 maquettes> <paper-full.min.js> <sortie>`
+  puis WebP 560 px ; les fichiers sont donnés au navigateur par `ctx.route('http://maq.local/**')`, ⛔ pas de serveur lancé en arrière-plan : refusé par la sécurité).
+  Trois vues : la page (titre, 3 pas, rail « Nos modèles prêts à personnaliser » = 8 exemples, « Ou partez de zéro » = les 6 outils avec « dès … € » et « Créer le mien », 3 réassurances) ·
+  le bloc de l'accueil « Créez votre cadeau vous-même » (proposé entre « Verres, carafes & gobelets » et « Les dernières sorties ») · le menu du téléphone. UNE entrée de menu en plus,
+  dorée, juste après « Boutique » (`.clv-menu`) ; rien d'autre ne change dans l'en-tête. Recherche du 13/11 : Nike By You et Zazzle (une page d'entrée), Popcarte / Vistaprint / YourSurprise
+  (modèles prêts dont on change le prénom), 4 à 7 entrées de menu, prix toujours visible sur téléphone. **Proposé, à valider** : le nom de l'entrée, sa place, la place du bloc, les 8 modèles,
+  une fiche par outil dans son rayon, les 2 décorations de Noël liées à l'interrupteur Noël, un outil mis en vente à la fois après ses essais de découpe.
+- 🌹 **Fleur à prénom** : https://claude.ai/artifact/VX8XHyYdfhCnJzhj7WdnN6 (v1) · relevé `python3 -I tools/maquettes/fleur-atomm-releve.py <dossier>` (listes de leur service : 26 fleurs, 8 feuillages,
+  9 écritures + images) → `python3 -I tools/maquettes/fleur-formes.py <relevé> docs/maquettes/assets/fleur/formes.json [planche]` (images suivies au contour par OpenCV, 1 unité = 1/72 de pouce,
+  épaisseur des traits mesurée) → `python3 tools/maquettes/fleur-createur.py <page de base> <formes.json> docs/maquettes/assets/fleur/polices <clipper.js> <opentype.min.js> <sortie>`
+  (`npm pack clipper-lib@6.4.2 opentype.js@1.3.4` ; les deux sont écrites DANS la page ; three.js r128 chargé seulement pour la 3D).
+- **Ce que fait Atomm (analysé le 13/11, leur outil ouvert dans le navigateur + lecture de leurs réglages)** : « Custom name flower » = une fleur au bout d'une tige, deux feuilles, le prénom sur la tige.
+  26 fleurs (les 12 fleurs de naissance : œillet janvier, violette, jonquille, marguerite, muguet ×2, rose ×3, delphinium, coquelicot, volubilis ×2, souci, pivoine ×2, houx ; puis dahlia, arum, lys,
+  bouquet de roses, lotus, frangipanier, fleur de cerisier, iris, monstera) + fleur inventée par IA (compte exigé) ; la fleur se déplace, se tourne, se redimensionne ; 8 feuillages (dont « sans feuille »),
+  taille et décalage de chaque feuille ; 9 écritures (Praegefest, Bukhari Script, Pacifico, Mistery, Brestina, Lobster, Rilley, Black, Local Wisdom : seules Pacifico et Lobster sont libres) ;
+  texte : taille 24–200, gauche / droite / vertical −50…50, contour 0–100, espacement ; tige : partie 1 (35–141 mm), partie 2 (0–353 mm), largeur 2,8–14 mm ; matières = aperçu (contreplaqué, MDF,
+  acrylique) ; vues 2D / 3D / Export. **DEUX COUCHES** : dessus = réunion (tiges, feuilles, contour du prénom) − prénom, + fleur ; fond = silhouette pleine. Atomm conseille de PEINDRE. Pièce de 379 × 107 mm
+  au départ ; export = compte (1 gratuit par mois).
+- **La maquette** : 6 étapes (prénom 14 lettres, facultatif · fleur, filtres « Fleurs de naissance » / « Autres » · feuilles · écriture · tige · couleur du fond) ; TOUS les réglages d'Atomm, rangés dans des volets
+  fermés ; la fleur se glisse sur l'aperçu ; vue de face / 3D ; planche de l'atelier (fond + dessus, rouge = découpe, nombre de petits morceaux à recoller, traits les plus fins).
+  **Toujours 18 cm de long** (machine 200 × 200 ; chez Atomm 38 cm) : tout est mis à l'échelle. Garde-fous : traits de la fleur ≥ 0,8 mm, sinon le prénom et le bout de tige se réduisent tout seuls
+  (jusqu'à 40 %), une fleur trop fine est agrandie toute seule au choix (violette → 150 %), sinon panier bloqué ; la tige passe SOUS le prénom (un prénom en deux mots tient en un morceau) ; un signe à part
+  élargit le contour tout seul ; une pièce détachée (fleur glissée trop loin) bloque le panier. Vérifié Chromium 390 / 1280 : 26 fleurs, 8 feuillages, 10 écritures, prénoms accentués et composés, 0 erreur,
+  0 débordement, calcul ≈ 30 ms.
+- **Proposé par moi, à valider** : 18 cm ; 16,90 € en bois naturel, fond peint à la main + 4 € (noir, blanc, rouge, rose poudré, vert sauge) ; 8 écritures libres à la place des 7 payantes d'Atomm ; pas de fleur par IA.
+
 ## 🧱 GÉNÉRATEUR ATOMM « CREATE YOUR STACK » — ANALYSÉ LE 12/11/2026 SOIR (gérant : lien donné, « Analyse bien ») puis MAQUETTE « SUSPENSION À PRÉNOMS » (gérant : « 170mm ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« OK, enregistre la maquette ») = VERSION 1 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - 🧱 **MAQUETTE v1 (12/11/2026 soir, sa réponse « 170mm » à « je prépare la maquette ? »)** : https://claude.ai/artifact/PpnA3aSf9gMaxuoSr5onFp ·
   générateur `python3 tools/maquettes/empile-createur.py <page de base = sortie d'un autre créateur> docs/maquettes/assets/empile/formes.json <sortie>` ·
