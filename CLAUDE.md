@@ -1,3 +1,25 @@
+## 🔠 OUTIL DE L'ATELIER « LETTRE À INCRUSTER » — 13/11/2026 (gérant, photo d'une lettre « K » de naissance vue sur Instagram : « tu me crées un petit logiciel… dans admin… le blanc en plusieurs morceaux et les emplacements pour que je l'intègre après sur le K » ; « c'est un exemple, il faut les autres lettres, tous les zodiaques, que je personnalise ») — DÉMONSTRATION À ESSAYER, RIEN en ligne, PAS encore dans Gestion
+- **Artifact** https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw (v1, capacité `downloads`) · `python3 tools/maquettes/lettre-incrustee.py <clipper.js> <opentype.min.js> <sortie.html> [complet]`
+  (`npm pack clipper-lib@6.4.2 opentype.js@1.3.4`, écrites DANS la page ; « complet » = page entière pour Gestion plus tard) · calcul `tools/maquettes/lettre-incrustee.js`
+  (`window.NivLettre` : `etat()`, `calcul()`, `maj()`, `svg(i)`, `liste()`) · écritures `docs/maquettes/assets/lettre/` (Fredoka Bold, Lilita One, Titan One allégées + `signes.ttf` =
+  les 12 signes tirés de DejaVu Sans Bold) et `docs/maquettes/assets/fleur/polices` (prénom).
+- **Ce qu'il sort** : ① FOND blanc (lettre + bord réglable, 3 mm, + forme de la plaque) ② DESSUS de couleur = la lettre avec un EMPLACEMENT découpé par pièce (les petits centres de
+  couleur des chiffres / anneaux tombent à la découpe : à garder et recoller) ③ PIÈCES BLANCHES numérotées (date sur 2 lignes, horloge à l'heure donnée, heure, signe dans son rond,
+  taille + règle, pieds + poids, chat endormi, 0 à 6 étoiles, texte libre) ④ plaque blanche du prénom dans son emplacement + prénom de couleur collé dessus ⑤ gravure noire par-dessus
+  (graduations de la règle, visage du chat). Par pièce : Incrusté / Gravé (dessiné sur le dessus, sans découpe) / Retiré, taille − +, flèches 1 mm, glisser sur l'aperçu,
+  « Placer automatiquement ». Toutes les lettres A–Z et chiffres, 3 formes de lettre, « Épaissir la lettre » pour I, J, L ; signe calculé avec la date ou choisi (12) ; 7 couleurs d'aperçu.
+- **Machine** : zone de travail (200 × 200 par défaut), trait de coupe et jeu (0,1 mm : pièce tracée +trait/2, emplacement = pièce + jeu), épaisseur. Planches rangées par matière
+  (blanc / couleur), SVG en mm, rouge #FF0000 = découpe, noir = gravure, un `<path id>` par pièce, aucune transformation ; + plan de pose numéroté + liste des pièces (texte).
+  Grand format : changer la zone et la hauteur de la lettre (essayé 380 mm sur 600 × 400). Alertes : sort de la lettre, trop près du bord, se touchent, traits < 1 mm, centres < 2 mm,
+  planche plus grande que la zone, pièce sans place (elle n'est alors PAS découpée).
+- Place automatique = carte de la lettre à 1 point par mm (`Carte`, `chercher`) : date / horloge / heure en bloc en haut à gauche, signe en haut à droite, taille / règle / pieds / poids en
+  bloc en bas à gauche, chat en bas à droite, étoiles là où il reste le plus de place ; réduction jusqu'à ×0,47. Vérifié Chromium 390 / 1280 : 26 lettres × 3 formes, 12 signes,
+  28 gestes, 0 erreur, 0 débordement, calcul ≈ 0,2 s. Exemple de départ « Katia » (bouton « Tout vider » ; vide = « P » et « Prénom »). État gardé sur l'appareil (`niv-lettre-incrustee`).
+- **Proposé par moi, à valider** : 170 mm de haut · bord 3 mm · même épaisseur partout (3 mm) · dessins faits par moi (chat, pieds, règle, horloge : le modèle est le produit d'un autre
+  créateur, on reprend le principe, pas ses dessins) · à 170 mm les centres des chiffres font moins de 2 mm (les passer en « Gravé » ou agrandir).
+- **Suite, sur son mot** : le mettre dans Gestion (ex. Tests / Atelier, `public/atelier-outils/`), autres animaux, autres modèles (« à chaque fois que je te donnerai des modèles » :
+  un modèle de plus dans la liste « Modèle » du même outil), essai de découpe pour régler le jeu.
+
 ## 🧭 AUDIT DU 13/11/2026 + MAQUETTE « LE SITE REFAIT » (gérant : « fais une vraie audit du site… refaire le site organisé correctement, toutes les mises en page, l'accueil… une vraie maquette, sans toucher au site ») — ⛔ ACCUEIL REFUSÉ, LE RESTE ENREGISTRÉ POUR PLUS TARD (13/11/2026), RIEN en ligne
 - ⛔✅ **SA RÉPONSE DU 13/11/2026 : « j'aime pas l'accueil, on va laisser comme c'est, les restes enregistre pour plus tard »** : l'ACCUEIL du site reste
   tel qu'il est en ligne, ne plus proposer cet accueil refait (ni ses blocs : tuiles des 8 univers, vitrine à onglets, « En ce moment », accueil raccourci). Le RESTE de la
