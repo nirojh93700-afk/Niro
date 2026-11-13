@@ -2363,6 +2363,10 @@ n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même compo
   commande. (Le fil Aperçu/BAT reste disponible dans Gestion si LUI décide d'envoyer un aperçu,
   mais on ne le promet plus à la cliente.) ⚠️ Une promesse d'aperçu a DÉJÀ été faite à Rose
   Catarino (#1Z17IKQ8, les 14 et 15/09) — celle-là est au choix du gérant : la tenir ou graver.
+  ⚠️ **Exception décidée par le gérant le 13/11/2026** : Mohammad Abu Jamous (m.abujamous94@hotmail.com, commande **06W69SNX**, cristal vertical Petit + socle, cadeau pour Dayana) : photo tirée d'une
+  capture de vidéo, symboles du bas effacés par le gérant → aperçu envoyé le 13/11 à 19 h 08 « pour qu'il valide l'image pour graver ». Ne pas graver avant son accord.
+  Envoyé SANS la clé de Gestion, par la réponse « à valider » restée ouverte (`POST /api/reply/<jeton>` `{action:"send", subject, text, image:"/api/img/<id>"}`, jeton lu dans l'alerte
+  « [À valider] » de Gmail, image déposée par `/api/upload`) : canal du site autorisé, une seule image, à réutiliser quand la clé manque et qu'une réponse est encore ouverte.
   ⚠️ **Exception décidée par le gérant le 07/11/2026** : Cynthia Belkacem (cynthiabelkacem17@gmail.com, commande **05WMONLB**, cristal
   horizontal Moyen + socle LED, photo montage avec inscription arabe, arche et mosquée) : « on enverra un visuel avant la gravure » → promis
   dans le mail du 07/11 (11 h 35). Elle ne veut PAS l'inscription arabe. Envoyer l'aperçu (couple seul) par le fil Aperçu / BAT AVANT de graver.

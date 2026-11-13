@@ -1,4 +1,5 @@
 # 📋 TOUT CE QUI EST EN ATTENTE — inventaire de reprise
+- **13/11 — Commande 06W69SNX (cristal vertical Petit + socle, cadeau de Mohammad Abu Jamous pour Dayana, Express Chronopost)** : sa photo venait d'une capture de vidéo (bouton lecture et icône de son en bas) ; le gérant les a effacés. Mail « aperçu à valider » envoyé par le site le 13/11 à 19 h 08 (image `/api/img/qNQIokUoOyyZrXeqaQbx` = aperçu + ce qui a été effacé). ⛔ **Ne pas graver avant son accord** ; sa réponse arrive dans le dossier de la commande. Rappels : aucun prix ni facture dans le colis, emballage soigné (promis le 11/11).
 - **06/11 — Maquette « Gravure en tamoul »** (https://claude.ai/artifact/A1LsiJozYynsZoRGYnrjcx) : v2 = aperçus du SITE : 6 verres + 3 mots courts + 5 bijoux 3D, 19 phrases.
   En attente de son avis : quels produits / phrases garder, relecture des phrases (Noël, meilleur papa / maman composées par moi), puis « applique »
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
