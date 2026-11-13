@@ -51,6 +51,7 @@ export default function Footer({ masques = [] }) {
             {vis("bijoux") && <Link href="/boutique/bijoux?sub=femme">Bijoux femme</Link>}
             {vis("bijoux") && <Link href="/boutique/bijoux?sub=homme">Bijoux homme</Link>}
             {vis("mariage") && <Link href="/boutique/mariage">Mariage & Réception</Link>}
+            {vis("papeterie") && <Link href="/boutique/papeterie">Papeterie & Bureau</Link>}
             {vis("cadeaux") && <Link href="/boutique/cadeaux">Petits cadeaux</Link>}
             {vis("maison") && <Link href="/boutique/maison">Maison & Déco</Link>}
             <Link href="/boutique">Tout voir</Link>
