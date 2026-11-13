@@ -6,6 +6,7 @@
 
 
 ## 🧰 13/11/2026 SOIR — L'ATELIER DANS GESTION : CE QUI ATTEND SON AVIS
+- **Lettre de naissance, version simple pour les clientes** : maquette https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v1), rien en ligne. Attendre son avis ; à valider : 34,90 € + 15 € la boîte, taille unique 16,5 cm, vraies couleurs ; faut-il simplifier aussi les 7 autres créations et faire la boîte seule côté cliente ?
 - **Signes du zodiaque : MIS DE CÔTÉ par le gérant le 13/11 soir** (« on va voir après ») : état gardé = animaux + Gémeaux / Lion / Vierge / Verseau refaits en dessins (lettre v11, L'atelier v11) ; son image de symboles essayée puis refusée par lui. C'est LUI qui en reparle.
 - **L'atelier** est dans sa propre catégorie « Logiciel de création » du menu de Gestion (plus dans Tests).
 - **Signes du zodiaque** : il n'aime pas le médaillon. Planche de 4 styles envoyée (A, B, C, D) : attendre son choix avant de toucher aux signes.

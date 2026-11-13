@@ -1,3 +1,27 @@
+## 👶 MAQUETTE « LETTRE DE NAISSANCE », VERSION SIMPLE POUR LES CLIENTES — 13/11/2026 soir (gérant, devant l'outil lettre : « tu touches pas à l'atelier que tu m'as fait, j'aime bien tous les détails… il faut que tu facilites au maximum pour les clients, pour mettre sur le site. Ne mets rien sur le site… dans admin tu laisses comme c'est… une deuxième version des produits qu'on a mis ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v1) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
+  (`<page de base>` = sortie d'un autre créateur, ex. `arbre-base.html` ; sortie de 2,1 Mo non commitée).
+- **Principe** : la fiche du site + un parcours court, par-dessus le MÊME calcul que l'outil d'atelier, sans y toucher : `lettre-incrustee.js` et les champs de `lettre-incrustee.py`
+  sont posés dans la page mais CACHÉS (`<div hidden id="moteur">`), la couche cliente (`window.NivLettreCliente`) écrit dans `NivLettre.etat()` puis `NivLettre.maj()`.
+  Mémoire à part (`niv-lettre-cliente`, moteur `niv-lettre-cliente-moteur`) : celle de l'atelier n'est jamais touchée. ⛔ L'outil d'atelier et L'atelier de Gestion ne sont PAS modifiés.
+- **Parcours** : ① prénom (la 1re lettre fait la grande lettre) · ② naissance : date, heure, taille, poids, tous facultatifs (vide = pas posé) + case « signe du zodiaque » ·
+  ③ couleur (les 7 de l'outil) · ④ dessin (11 visibles + « Voir tous les dessins », « Aucun ») + petits décors (étoiles, nuages, cœurs, lune, mélange, sans) + volet replié
+  « forme de la lettre / écriture du prénom » · ⑤ la lettre seule ou avec sa boîte · ⑥ résumé, total, bouton grisé sans prénom. Aperçu De face / 3D collé sous l'en-tête.
+  Tant que rien n'est écrit : un exemple « Camille » avec l'étiquette « Exemple », retiré dès la 1re lettre tapée. La cliente ne déplace rien ; lettre fine (I, J, V) épaissie
+  toute seule (0 → 3 → 6 mm) ; ce qui ne tient toujours pas (I : signe et dessin) est DIT (« il n'y a pas la place pour… »), jamais caché.
+  Aucun réglage de machine, aucune planche, jamais le nombre de pièces. Bas de page « De votre côté » + « À valider ».
+- **Proposé par moi, à valider** : 34,90 € la lettre décorée, + 15 € avec sa boîte (marché relevé : lettre en bois simplement gravée 12 à 21 €, prénom de naissance en bois
+  35 à 45 €) · une seule taille, 16,5 cm · les 7 couleurs = celles de l'aperçu de l'outil, à remplacer par ses vraies couleurs · texte libre, horloge ajourée, « Gravé »,
+  réglages de la boîte non proposés à la cliente · catégorie « Bébé & Enfant ».
+- **Sa question du même message (prénom « Ishaan » sur la lettre I : « il a pas de place pour le nom… on retire le signe ? »)** : répondu sans rien modifier : la plaque du prénom
+  dépasse de la lettre par construction (elle fait partie du fond blanc, elle tient) ; retirer le signe ne suffit pas, le prénom est plus large que le I ; « Épaissir la lettre »
+  (3 à 6 mm) le fait mieux tenir ; il peut aussi glisser la plaque (pièce P).
+- Essais 390 / 1280 : 60 vérifications (exemple, prénom seul, naissance, signe, couleur, dessins, décors, écritures, boîte 49,90 €, résumé, 3D, rechargement, 26 lettres), 0 erreur,
+  0 débordement. ⚠️ Pas essayé sur un vrai iPhone. ⚠️ `animaux.ttf` (avec les dessins de signes ajoutés) est refusée par le navigateur comme police d'affichage (tables
+  verticales non mises à jour par `lettre-signes.py`) : le calcul (opentype.js) la lit bien ; la page cliente donne aux boutons une copie sans `vhea` / `vmtx` / `STAT`.
+- **Les 7 autres créations ont déjà leur version cliente** (support, arbre, décoration à suspendre, décoration à prénom, suspension, fleur, maisonnette = les maquettes enregistrées).
+  Question posée : veut-il que je les simplifie aussi, et la boîte seule en version cliente ?
+
 ## 🧰 L'ATELIER EST DANS GESTION + OUTILS DE GESTION MIS À JOUR + MASQUAGE PAR FAMILLE + PRIX — 13/11/2026 soir (gérant : « Oui pour le 1 et le 2 et 3, pour le quatre non, pour le six c'est bon, pour le neuf oui tu mets dans le gestion, pour le 10 le premier prix tu commences à 24,90 €, tu augmentes après, pour les fleurs 19,90 € plus quatre euros pour la peinture »)
 - **1 et 2 (Gestion en ligne, ADMIN seulement)** : les trois outils `public/atelier-outils/atelier-*.html` ont le bouton « OK ✓ » des champs ; le support est rangé pour 180 mm
   (grand **179 × 169 mm**, standard 167 × 155, petit 159 × 146) ; `fabrique.js` met **2 mm de marge** (au lieu de 5) autour des pièces de TOUS les fichiers fabriqués
