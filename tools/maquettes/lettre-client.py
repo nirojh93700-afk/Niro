@@ -35,6 +35,9 @@ cle = "function cleMem() { return SEULE ? 'niv-boite-seule' : 'niv-lettre-incrus
 assert moteur.count(cle) == 1
 moteur = moteur.replace(cle, "function cleMem() { return 'niv-lettre-cliente-moteur'; }")   # jamais la mémoire de l'atelier
 bloc = re.search(r"var ANIMAUX = \[(.*?)\]\];", moteur, flags=re.S).group(1)
+rd = "function rendre() { if (!T3) return;"
+assert moteur.count(rd) == 1
+moteur = moteur.replace(rd, rd + " window.NivLettre3 = T3;")                                  # la page cliente anime cette scène
 ANIMAUX = [[a, n, int(c, 16)] for a, n, c in re.findall(r"\['([\w-]+)', '([^']+)', (0x[0-9A-Fa-f]+)\]", bloc)]
 assert len(ANIMAUX) > 40
 coul = re.search(r"var COULEURS = (\[\[.*?\]\]);", moteur).group(1)
@@ -61,6 +64,16 @@ def police_boutons():
     for t in ("vhea", "vmtx", "STAT"):
         if t in f: del f[t]
     b = io.BytesIO(); f.save(b); return base64.b64encode(b.getvalue()).decode()
+
+# Images d'exemple (lettre seule, boîte fermée, boîte ouverte), dessinées par l'outil lui-même :
+#   NODE_PATH=$(npm root -g) node tools/maquettes/lettre-client-images.cjs <page fabriquée> <three.min.js> docs/maquettes/assets/lettre-cliente
+# puis relancer ce générateur. Sans ces images, la page se fabrique quand même (le bloc « Une vraie boîte » est caché).
+def image(nom):
+    f = os.path.join(A, "lettre-cliente", nom + ".webp")
+    return "data:image/webp;base64," + base64.b64encode(open(f, "rb").read()).decode() if os.path.exists(f) else ""
+IMG = {n: image(n) for n in ("lettre-seule", "boite-fermee", "boite-ouverte")}
+def img(nom, alt):
+    return '<img src="%s" alt="%s" loading="lazy">' % (IMG[nom], alt) if IMG[nom] else ""
 
 DONNEES = json.dumps({"prix": PRIX, "policeDessins": police_boutons(), "haut": HAUT, "exemple": EXEMPLE, "animaux": ANIMAUX, "couleurs": COULEURS,
                       "formes": [[p["id"], re.sub(r"\s*\(.*\)", "", p["nom"])] for p in pol if p["role"] == "lettre"],
@@ -108,6 +121,14 @@ CSS = r"""
 .lc-plus summary::-webkit-details-marker{display:none}.lc-plus summary::after{content:"▾";color:var(--ink-soft)}.lc-plus[open] summary::after{content:"▴"}
 .lc-plus .in{padding:0 14px 14px;display:grid;gap:10px}
 .lc-boites{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.lc-boites .sc-style{display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:8px}
+.lc-boites .sc-style img{width:100%;max-width:170px;aspect-ratio:1;object-fit:contain;border-radius:10px;background:linear-gradient(#fbf7ee,#f1e7d4)}
+.lc-tour{position:absolute;left:10px;bottom:10px;z-index:3;border:1px solid var(--line);background:rgba(255,255,255,.92);border-radius:999px;font:inherit;font-size:.78rem;font-weight:700;padding:7px 13px;min-height:34px;color:var(--ink);cursor:pointer}
+.lc-vraie{margin:18px 0 0;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+.lc-vraie h3{margin:0 0 4px;font-size:1.05rem}.lc-vraie p{margin:0 0 10px;font-size:.9rem;color:var(--ink-soft);line-height:1.45}
+.lc-vraie .im{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.lc-vraie figure{margin:0}.lc-vraie img{display:block;width:100%;aspect-ratio:1;object-fit:contain;border-radius:12px;background:linear-gradient(#fbf7ee,#f1e7d4)}
+.lc-vraie figcaption{font-size:.8rem;color:var(--ink);margin-top:5px;line-height:1.3;text-align:center}
 .lc-note{margin:10px 0 0;padding:9px 12px;border-radius:10px;background:#fdf3e4;color:#7a4a12;font-size:.86rem;line-height:1.4}
 .lc-points{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:.9rem;color:var(--ink)}
 .lc-points li{padding-left:22px;position:relative}.lc-points li::before{content:"✦";position:absolute;left:0;color:var(--gold-dark)}
@@ -121,6 +142,7 @@ __FIL__
    <span class="lc-ex" id="exTag" hidden>Exemple</span>
    <div class="lc-vue" role="group" aria-label="Vue"><button type="button" id="vFace" class="on">De face</button><button type="button" id="v3d">3D</button></div>
    <div class="li-scene" id="scene"><svg id="svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aperçu de votre lettre"></svg><canvas id="c3d" hidden></canvas></div>
+   <button type="button" class="lc-tour" id="lcTour" hidden>↻ Faire tourner</button>
    <button type="button" id="bNum" hidden></button><button type="button" id="bAuto" hidden></button><p id="aide" hidden></p>
   </div>
   <p class="sc-aide" id="aideC">Votre lettre se dessine au fur et à mesure, tout se place tout seul. Environ __HAUTCM__ cm de haut.</p>
@@ -166,10 +188,10 @@ __FIL__
  <section class="prc-step">
   <div class="prc-sh"><span class="prc-num done">5</span><h3>Avec sa boîte ?</h3></div>
   <div class="sc-styles lc-boites" id="boites">
-   <button type="button" class="sc-style" data-v="0"><b>La lettre seule</b><small>À poser ou à accrocher</small></button>
-   <button type="button" class="sc-style" data-v="1"><b>La lettre et sa boîte</b><small id="prixBoite"></small></button>
+   <button type="button" class="sc-style" data-v="0">__IMG_SEULE__<b>La lettre seule</b><small>À poser ou à accrocher</small></button>
+   <button type="button" class="sc-style" data-v="1">__IMG_OUVERTE_C__<b>La lettre et sa boîte</b><small id="prixBoite"></small></button>
   </div>
-  <p class="prc-hint">Avec la boîte, la lettre décorée devient le couvercle d'une boîte en bois de la même forme : pour garder son bracelet de naissance, sa première tétine, ses petits souvenirs.</p>
+  <p class="prc-hint">Avec la boîte, la lettre décorée devient le couvercle d'une boîte en bois de la même forme : pour garder son bracelet de naissance, sa première tétine, ses petits souvenirs. Choisissez-la : elle s'ouvre devant vous, dans l'aperçu.</p>
  </section>
  <section class="prc-step" id="etape3">
   <div class="prc-sh"><span class="prc-num done">6</span><h3>Votre commande</h3></div>
@@ -180,6 +202,11 @@ __FIL__
 <div class="pd-totbox"><span class="lab">Total tout compris</span><span class="val" id="total"></span></div>
 <p class="prc-hint prc-miss" id="manque"></p>
 <div class="qty-row"><button class="btn btn-gold" id="ajouter" style="flex:1" type="button">Ajouter au panier</button></div>
+<div class="lc-vraie"__VRAIE_CACHE__>
+ <h3>Une vraie boîte, en forme de sa lettre</h3>
+ <p>La lettre décorée est le couvercle. On le soulève : dessous, une boîte en bois de la même forme, pour garder ses premiers souvenirs.</p>
+ <div class="im"><figure>__IMG_FERMEE__<figcaption>Fermée : la lettre décorée est le couvercle</figcaption></figure><figure>__IMG_OUVERTE__<figcaption>Ouverte : la place pour ses souvenirs</figcaption></figure></div>
+</div>
 <ul class="lc-points">
  <li>Montée et collée dans notre atelier : elle arrive prête à offrir.</li>
  <li>Environ __HAUTCM__ cm de haut. Les informations en blanc sont incrustées dans la lettre de couleur, les détails sont gravés.</li>
@@ -195,6 +222,7 @@ __FIL__
   <li>Prix proposés par moi : __PRIXL__ la lettre décorée, __PRIXB__ de plus avec sa boîte. Relevé du marché : lettre en bois simplement gravée 12 à 21 €, prénom de naissance en bois 35 à 45 €.</li>
   <li>Une seule taille : environ __HAUTCM__ cm de haut (ce que votre machine découpe aujourd'hui dans 180 × 180 mm).</li>
   <li>La cliente ne déplace rien et ne règle aucune pièce : tout se place tout seul. Sur une lettre fine (I, J, L…), la lettre est épaissie toute seule pour faire de la place, et le prénom dépasse sur le côté, comme sur votre outil.</li>
+  <li>En 3D, la lettre tourne toute seule sur 360° et, avec la boîte, le couvercle se soulève et se repose : la cliente voit que c'est une boîte. Les images « fermée / ouverte » sont un exemple (prénom Camille) dessiné par l'outil : à remplacer par de vraies photos dès que vous en avez.</li>
   <li>Les sept couleurs sont celles de l'aperçu de votre outil : à remplacer par vos vraies couleurs (peinture ou matière).</li>
   <li>Le signe du zodiaque reste tel qu'il est aujourd'hui dans l'outil (vous l'avez mis de côté) ; la case permet de ne pas le mettre.</li>
   <li>Le texte libre, l'horloge ajourée, « Gravé » au lieu d'« Incrusté » et les réglages de la boîte ne sont pas proposés à la cliente.</li>
@@ -254,14 +282,29 @@ function ecran(){
  $('note').hidden=!note;$('note').textContent=note;
  $('total').textContent=eur(total());$('prixtete').innerHTML='<span class="price">'+eur(D.prix.lettre)+'</span> <span style="color:var(--ink-soft);font-size:.9rem">la lettre décorée</span>';
  var ok=!!C.nom.trim();$('ajouter').disabled=!ok;$('manque').textContent=ok?'':'Écrivez le prénom pour continuer.';if(ok&&$('ajouter').textContent!=='Ajouter au panier')$('ajouter').textContent='Ajouter au panier';
- decoller()}
+ if(N.etat().vue==='3d')lancer();decoller()}
+/* ---- la 3D s'anime : un tour complet, et la boîte s'ouvre et se referme ---- */
+var A={auto:!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches),t:0,dern:0,raf:0},POSE=null;
+function lis(u){return u*u*(3-2*u)}
+function ouverture(t){var x=t%6.4;return x<1.2?-14:x<2.8?-14+24*lis((x-1.2)/1.6):x<4.8?10:10-24*lis((x-4.8)/1.6)}   /* mm : -14 = posé sur la boîte, +10 = soulevé */
+function image(ts){A.raf=0;var S=N.etat(),T=window.NivLettre3;if(S.vue!=='3d')return;if(!T||!T.g.children.length){A.raf=requestAnimationFrame(image);return}
+ var g=N.calcul(),dt=A.dern?Math.min(.05,(ts-A.dern)/1000):0;A.dern=ts;
+ if(POSE){T.rx=POSE.rx;T.ry=POSE.ry}else{A.t+=dt;if(A.auto)T.ry+=dt*2*Math.PI/12}
+ if(g&&g.bt){var ch=T.g.children,nb=g.bt.dos?4:3,kk=100/g.bf.h,dz=(g.bt.Hm+14)/2*kk,o=POSE?POSE.ouv:ouverture(A.t),i;for(i=0;i<ch.length-nb;i++){ch[i].position.z=dz+o*kk;ch[i].position.x=POSE&&POSE.dx?POSE.dx*kk:0}}
+ T.g.rotation.set(T.rx,T.ry,0);T.r.render(T.sc,T.cam);if(!POSE&&(A.auto||(g&&g.bt)))A.raf=requestAnimationFrame(image)}
+function lancer(){if(!A.raf){A.dern=0;A.raf=requestAnimationFrame(image)}}
+function aide3(){var S=N.etat(),en3=S.vue==='3d';$('lcTour').hidden=!en3||A.auto;
+ $('aideC').textContent=!en3?'Votre lettre se dessine au fur et à mesure, tout se place tout seul. Environ '+String(D.haut/10).replace('.',',')+' cm de haut.':(C.boite?'Votre lettre est le couvercle : la boîte s\'ouvre et se referme. Faites-la tourner avec le doigt.':'Votre lettre tourne sur elle-même. Faites-la tourner avec le doigt.')}
+$('c3d').addEventListener('pointerdown',function(){if(A.auto){A.auto=false;aide3()}});
 var att=null;function plusTard(){clearTimeout(att);att=setTimeout(function(){garder();appliquer()},140)}
 ['nom','date','heure','taille','poids'].forEach(function(k){var el=$('c-'+k);el.value=C[k];el.addEventListener('input',function(){C[k]=el.value;plusTard()});el.addEventListener('change',function(){C[k]=el.value;plusTard()})});
 $('c-signe').addEventListener('change',function(){C.signe=this.checked;garder();appliquer()});
 document.addEventListener('click',function(ev){var b=ev.target.closest?ev.target.closest('button'):null,a;if(!b)return;
  if((a=b.getAttribute('data-coul')))C.coul=a;else if((a=b.getAttribute('data-an')))C.animal=a;else if((a=b.getAttribute('data-dec')))C.decor=a;
  else if((a=b.getAttribute('data-pol')))C.pol=a;else if((a=b.getAttribute('data-ecr')))C.polNom=a;
- else if(b.parentNode&&b.parentNode.id==='boites')C.boite=b.getAttribute('data-v')==='1';
+ else if(b.parentNode&&b.parentNode.id==='boites'){C.boite=b.getAttribute('data-v')==='1';garder();appliquer();if(C.boite){A.t=0;if(N.etat().vue!=='3d')$('v3d').click();else{lancer();aide3()}}else aide3();return}
+ else if(b.id==='v3d'||b.id==='vFace'){setTimeout(function(){if(b.id==='v3d'){A.t=0;lancer()}aide3()},0);return}
+ else if(b.id==='lcTour'){A.auto=true;lancer();aide3();return}
  else if(b.id==='tousDessins'){tous=!tous;ecran();return}
  else if(b.id==='ajouter'){b.textContent='Ajouté ✓ (maquette : rien n\'est commandé)';return}
  else return;
@@ -275,12 +318,15 @@ function decoller(){glisse=false;var st=$('stage'),fin=$('resume'),d=0;
   d=Math.min(0,fin.getBoundingClientRect().top-(top+st.offsetHeight+8));d=Math.max(d,-(top+st.offsetHeight+30))}
  st.style.transform=d?'translateY('+Math.round(d)+'px)':'';st.style.visibility=d<=-(st.offsetHeight)?'hidden':''}
 window.addEventListener('scroll',function(){if(!glisse){glisse=true;requestAnimationFrame(decoller)}},{passive:true});window.addEventListener('resize',decoller);
-window.NivLettreCliente={etat:function(){return C},appliquer:appliquer};
+window.NivLettreCliente={etat:function(){return C},appliquer:appliquer,pose:function(p){POSE=p;A.raf=0;requestAnimationFrame(image)}};
 appliquer();
 })();
 """
 
 def eur(v): return ("%.2f" % v).replace(".", ",") + " €"
+MAIN = (MAIN.replace("__IMG_SEULE__", img("lettre-seule", "La lettre décorée seule")).replace("__IMG_OUVERTE_C__", img("boite-ouverte", "La lettre et sa boîte, ouverte"))
+        .replace("__IMG_FERMEE__", img("boite-fermee", "La boîte fermée")).replace("__IMG_OUVERTE__", img("boite-ouverte", "La boîte ouverte"))
+        .replace("__VRAIE_CACHE__", "" if IMG["boite-fermee"] and IMG["boite-ouverte"] else " hidden"))
 MAIN = (MAIN.replace("__FIL__", fil).replace("__HAUTCM__", ("%.1f" % (HAUT / 10)).replace(".", ","))
         .replace("__PRIXL__", eur(PRIX["lettre"])).replace("__PRIXB__", eur(PRIX["boite"])))
 page = (tete + "<style>" + CSS + "</style>" + MAIN

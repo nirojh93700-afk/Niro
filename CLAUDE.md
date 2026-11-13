@@ -1,5 +1,5 @@
 ## 👶 MAQUETTE « LETTRE DE NAISSANCE », VERSION SIMPLE POUR LES CLIENTES — 13/11/2026 soir (gérant, devant l'outil lettre : « tu touches pas à l'atelier que tu m'as fait, j'aime bien tous les détails… il faut que tu facilites au maximum pour les clients, pour mettre sur le site. Ne mets rien sur le site… dans admin tu laisses comme c'est… une deuxième version des produits qu'on a mis ») — EN ATTENTE DE SON AVIS, RIEN en ligne
-- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v1) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
+- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v2) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
   (`<page de base>` = sortie d'un autre créateur, ex. `arbre-base.html` ; sortie de 2,1 Mo non commitée).
 - **Principe** : la fiche du site + un parcours court, par-dessus le MÊME calcul que l'outil d'atelier, sans y toucher : `lettre-incrustee.js` et les champs de `lettre-incrustee.py`
   sont posés dans la page mais CACHÉS (`<div hidden id="moteur">`), la couche cliente (`window.NivLettreCliente`) écrit dans `NivLettre.etat()` puis `NivLettre.maj()`.
@@ -10,6 +10,13 @@
   Tant que rien n'est écrit : un exemple « Camille » avec l'étiquette « Exemple », retiré dès la 1re lettre tapée. La cliente ne déplace rien ; lettre fine (I, J, V) épaissie
   toute seule (0 → 3 → 6 mm) ; ce qui ne tient toujours pas (I : signe et dessin) est DIT (« il n'y a pas la place pour… »), jamais caché.
   Aucun réglage de machine, aucune planche, jamais le nombre de pièces. Bas de page « De votre côté » + « À valider ».
+- **v2 (13/11 soir, gérant : « il faut que tu fasses des images aussi pour montrer que c'est des boîtes, tu ouvres la boîte… une petite animation… tu fais tourner à 360 »)** :
+  en 3D la lettre TOURNE TOUTE SEULE sur 360° (un tour en 12 s ; toucher l'arrête, bouton « ↻ Faire tourner ») et, avec la boîte, le couvercle SE SOULÈVE ET SE REPOSE en boucle
+  (`ouverture(t)`, −14 mm = posé, +10 mm = soulevé) ; choisir « La lettre et sa boîte » ouvre la vue 3D toute seule. Le moteur expose sa scène (`window.NivLettre3`,
+  remplacement d'une ligne de `rendre()` fait par le générateur, fichier du moteur intact). Images d'exemple « lettre seule / boîte fermée / boîte ouverte » (exemple Camille,
+  dessinées par l'outil) sur les deux cartes de l'étape 5 et dans le bloc « Une vraie boîte, en forme de sa lettre » :
+  `NODE_PATH=$(npm root -g) node tools/maquettes/lettre-client-images.cjs <page> <three.min.js> docs/maquettes/assets/lettre-cliente` puis relancer le générateur.
+  À remplacer par de vraies photos dès qu'il en a. Essais : 60 + 22 vérifications, 0 erreur. « Même pour les autres trucs » : question posée (quels produits ?).
 - **Proposé par moi, à valider** : 34,90 € la lettre décorée, + 15 € avec sa boîte (marché relevé : lettre en bois simplement gravée 12 à 21 €, prénom de naissance en bois
   35 à 45 €) · une seule taille, 16,5 cm · les 7 couleurs = celles de l'aperçu de l'outil, à remplacer par ses vraies couleurs · texte libre, horloge ajourée, « Gravé »,
   réglages de la boîte non proposés à la cliente · catégorie « Bébé & Enfant ».
