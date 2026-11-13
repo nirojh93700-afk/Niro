@@ -221,6 +221,7 @@ __FIL__
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
   <li>Prix proposés par moi : __PRIXL__ la lettre décorée, __PRIXB__ de plus avec sa boîte. Relevé du marché : lettre en bois simplement gravée 12 à 21 €, prénom de naissance en bois 35 à 45 €.</li>
   <li>Une seule taille : environ __HAUTCM__ cm de haut (ce que votre machine découpe aujourd'hui dans 180 × 180 mm).</li>
+  <li>Le prénom est posé sur la barre de la lettre, à peu près centré dessus, juste sous l'heure (votre demande du 13/11) : jamais plus de la moitié en dehors de la lettre. Sur une lettre fine, il rétrécit pour tenir.</li>
   <li>La cliente ne déplace rien et ne règle aucune pièce : tout se place tout seul. Sur une lettre fine (I, J, L…), la lettre est épaissie toute seule pour faire de la place, et le prénom dépasse sur le côté, comme sur votre outil.</li>
   <li>En 3D, la lettre tourne toute seule sur 360° et, avec la boîte, le couvercle se soulève et se repose : la cliente voit que c'est une boîte. Les images « fermée / ouverte » sont un exemple (prénom Camille) dessiné par l'outil : à remplacer par de vraies photos dès que vous en avez.</li>
   <li>Les sept couleurs sont celles de l'aperçu de votre outil : à remplacer par vos vraies couleurs (peinture ou matière).</li>
@@ -245,13 +246,43 @@ L.pol.forEach(function(p){try{var f=new FontFace('lc-'+p.id,'url(data:font/ttf;b
 function vide(){return !C.nom.trim()&&!C.date&&!C.heure&&!String(C.taille).trim()&&!String(C.poids).trim()}
 function initiale(){var l=(vide()?D.exemple.nom:C.nom||'P').trim().charAt(0)||'P';l=l.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase();return /[A-Z0-9]/.test(l)?l:'P'}
 var DECORS=[['etoiles','Étoiles'],['nuages','Nuages'],['coeurs','Cœurs'],['lune','Lune et étoiles'],['melange','Mélange'],['sans','Sans décor']],tous=false,note='';
+/* Le prénom se pose SUR la barre de la lettre (gérant, 13/11 : « il faut pas que la lettre soit aussi à l'extérieur… à peu près centré sur le L, sur la barre ») :
+   on cherche le milieu de la matière de la lettre à la hauteur de la plaque (le pied d'un L, l'ouverture d'un C ne comptent pas), et on y centre la plaque. */
+var PLQ={};
+/* les bandes de matière de la lettre, ligne par ligne, à la hauteur de la plaque (en mm) */
+function bandes(g){var L=g.L,P=g.P;if(!L||!L.length||!P)return null;var x0=1e18,x1=-1e18;L.forEach(function(r){r.forEach(function(q){if(q.X<x0)x0=q.X;if(q.X>x1)x1=q.X})});
+ var E=(x1-x0)/g.W,ya=P.b.y*E,yb=(P.b.y+P.b.h)*E,o=[],n=24,i,k;
+ for(i=0;i<n;i++){var y=ya+(yb-ya)*(i+.5)/n,xs=[];L.forEach(function(r){for(var j=0;j<r.length;j++){var a=r[j],b=r[(j+1)%r.length];if((a.Y<=y&&b.Y>y)||(b.Y<=y&&a.Y>y))xs.push(a.X+(y-a.Y)*(b.X-a.X)/(b.Y-a.Y))}});
+  xs.sort(function(a,b){return a-b});var l=[];for(k=0;k+1<xs.length;k+=2)l.push([xs[k]/E,xs[k+1]/E]);o.push(l)}
+ return o}
+function milieuBarre(B){var som=0,poids=0;B.forEach(function(l){l.forEach(function(q){var w=q[1]-q[0];som+=w*(q[0]+q[1])/2;poids+=w})});return poids?som/poids:null}
+/* la part de la plaque (large de w, centrée en cx) qui repose sur la lettre */
+function partDedans(B,cx,w){var d=0;B.forEach(function(l){l.forEach(function(q){d+=Math.max(0,Math.min(q[1],cx+w/2)-Math.max(q[0],cx-w/2))})});return d/(w*B.length)}
+/* l'endroit où le prénom repose le plus sur la lettre ; à égalité, le plus près du milieu de la matière */
+function meilleur(B,w){var cm=milieuBarre(B),x0=1e9,x1=-1e9,l=[],mx=0,x,bx=cm;B.forEach(function(r){r.forEach(function(q){if(q[0]<x0)x0=q[0];if(q[1]>x1)x1=q[1]})});
+ for(x=x0-w/2;x<=x1+w/2;x+=0.5){var pp=partDedans(B,x,w);l.push([x,pp]);if(pp>mx)mx=pp}
+ var d=1e9;l.forEach(function(q){if(q[1]>=mx-0.02&&Math.abs(q[0]-cm)<d){d=Math.abs(q[0]-cm);bx=q[0]}});return{x:bx,part:mx}}
+/* la part RÉELLE de la plaque posée sur la lettre (surface, mesurée sur une petite grille) */
+function partReelle(g){var b=g.P.b,k=3,cv=document.createElement('canvas');cv.width=Math.max(2,Math.ceil(b.w*k));cv.height=Math.max(2,Math.ceil(b.h*k));var x=cv.getContext('2d'),x0=1e18,x1=-1e18;
+ g.L.forEach(function(r){r.forEach(function(q){if(q.X<x0)x0=q.X;if(q.X>x1)x1=q.X})});var E=(x1-x0)/g.W;
+ function tr(rs){x.beginPath();rs.forEach(function(r){r.forEach(function(q,i){var px=(q.X/E-b.x)*k,py=(q.Y/E-b.y)*k;if(i)x.lineTo(px,py);else x.moveTo(px,py)});x.closePath()});x.fill('evenodd')}
+ x.fillStyle='#000';tr(g.P.plaqueA);var d=x.getImageData(0,0,cv.width,cv.height).data,tot=0,ded=0,i;for(i=3;i<d.length;i+=4)if(d[i]>128)tot++;
+ x.globalCompositeOperation='destination-in';tr(g.L);d=x.getImageData(0,0,cv.width,cv.height).data;for(i=3;i<d.length;i+=4)if(d[i]>128)ded++;return tot?ded/tot:1}
+function poser(S){var pq=S.el.plaque,cle=[S.nom,S.polNom,S.pol,S.gras,S.H].join('|'),g,c=PLQ[cle];
+ if(c){pq.auto=false;pq.k=c.k;pq.fx=c.fx;pq.fy=0.565;N.maj();return N.calcul()}
+ pq.auto=true;pq.k=1;N.maj();g=N.calcul();var B=g.P?bandes(g):null;if(!B||milieuBarre(B)==null)return g;
+ /* jamais plus de la moitié du prénom en dehors de la lettre : sinon il rétrécit (jusqu'à 0,4), et on revérifie sur la vraie forme */
+ var w0=g.P.b.w,m=meilleur(B,w0),k=1,t,r;if(m.part<0.6){k=Math.max(0.4,m.part/0.6);m=meilleur(B,w0*k)}
+ for(t=0;t<5;t++){pq.auto=false;pq.k=k;pq.fx=m.x/g.H;pq.fy=0.565;N.maj();g=N.calcul();if(!g.P)break;r=partReelle(g);if(r>=0.52||k<=0.4)break;
+  k=Math.max(0.4,k*Math.max(0.8,r/0.56));B=bandes(g);m=meilleur(B,g.P.b.w*k/pq.k)}
+ PLQ[cle]={fx:pq.fx,k:pq.k};return g}
 function appliquer(){var S=N.etat(),ex=vide(),src=ex?D.exemple:C;
  S.nom=String(src.nom||'').trim();S.lettre='';S.date=src.date||'';S.heure=src.heure||'';S.taille=String(src.taille||'').trim();S.poids=String(src.poids||'').trim();S.libre='';
  S.coul=C.coul;S.animal=C.animal;S.decor=C.decor==='sans'?'etoiles':C.decor;S.nbEt=C.decor==='sans'?0:6;S.signe=C.signe?'auto':'aucun';S.signeStyle='dessin';S.horloge='grave';
  S.pol=C.pol;S.polNom=C.polNom;S.H=D.haut;S.bord=3;S.bt.on=!!C.boite;S.exemple=false;S.num=false;S.sel=null;
  Object.keys(S.el).forEach(function(i){var e=S.el[i];e.on=true;e.mode='inc';e.auto=true;e.k=1});
  /* une lettre fine : on l'épaissit jusqu'à ce que tout tienne */
- var g=null,gras=[0,3,6],i;for(i=0;i<gras.length;i++){S.gras=gras[i];N.maj();g=N.calcul();if(!g.perdus||!g.perdus.length)break}
+ var g=null,gras=[0,3,6],i;for(i=0;i<gras.length;i++){S.gras=gras[i];g=poser(S);if(!g.perdus||!g.perdus.length)break}
  note=g&&g.perdus&&g.perdus.length?'Sur cette lettre, il n\'y a pas la place pour : '+g.perdus.map(function(a){return a.d.nom.toLowerCase()}).join(', ')+'. Pour lui faire de la place, retirez le signe du zodiaque ou une information.':'';
  $('exTag').hidden=!ex;
  ecran()}

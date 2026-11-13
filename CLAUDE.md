@@ -1,5 +1,5 @@
 ## 👶 MAQUETTE « LETTRE DE NAISSANCE », VERSION SIMPLE POUR LES CLIENTES — 13/11/2026 soir (gérant, devant l'outil lettre : « tu touches pas à l'atelier que tu m'as fait, j'aime bien tous les détails… il faut que tu facilites au maximum pour les clients, pour mettre sur le site. Ne mets rien sur le site… dans admin tu laisses comme c'est… une deuxième version des produits qu'on a mis ») — EN ATTENTE DE SON AVIS, RIEN en ligne
-- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v2) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
+- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v3) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
   (`<page de base>` = sortie d'un autre créateur, ex. `arbre-base.html` ; sortie de 2,1 Mo non commitée).
 - **Principe** : la fiche du site + un parcours court, par-dessus le MÊME calcul que l'outil d'atelier, sans y toucher : `lettre-incrustee.js` et les champs de `lettre-incrustee.py`
   sont posés dans la page mais CACHÉS (`<div hidden id="moteur">`), la couche cliente (`window.NivLettreCliente`) écrit dans `NivLettre.etat()` puis `NivLettre.maj()`.
@@ -17,6 +17,11 @@
   dessinées par l'outil) sur les deux cartes de l'étape 5 et dans le bloc « Une vraie boîte, en forme de sa lettre » :
   `NODE_PATH=$(npm root -g) node tools/maquettes/lettre-client-images.cjs <page> <three.min.js> docs/maquettes/assets/lettre-cliente` puis relancer le générateur.
   À remplacer par de vraies photos dès qu'il en a. Essais : 60 + 22 vérifications, 0 erreur. « Même pour les autres trucs » : question posée (quels produits ?).
+- **v3 (13/11 soir, capture « Léa » sur le L : « il faut pas que la lettre soit aussi à l'extérieur… à peu près centré sur le L, sur la barre… même pour les autres lettres, pas la moitié
+  de la matière à l'extérieur… juste en dessous de l'heure »)** : dans la version cliente, le prénom est posé SUR la matière de la lettre, à la hauteur juste sous l'heure (`fy = 0.565`),
+  centré là où il repose le plus (`bandes`, `meilleur`), et il rétrécit (jusqu'à 0,4) tant que moins de la moitié de sa plaque est sur la lettre (`partReelle`, mesure de surface ; `poser`,
+  cache `PLQ`). Mesuré sur 78 prénoms (26 lettres × court, moyen, long) : au moins 52 % sur la lettre partout, plus petite taille 0,46. ⛔ L'outil d'atelier et L'atelier de Gestion gardent
+  LEUR placement (non touchés, sa consigne) : question posée, veut-il la même règle là aussi ? Images d'exemple refaites. Essais : t2, t5, t8 au vert, planche des 26 lettres regardée.
 - **Proposé par moi, à valider** : 34,90 € la lettre décorée, + 15 € avec sa boîte (marché relevé : lettre en bois simplement gravée 12 à 21 €, prénom de naissance en bois
   35 à 45 €) · une seule taille, 16,5 cm · les 7 couleurs = celles de l'aperçu de l'outil, à remplacer par ses vraies couleurs · texte libre, horloge ajourée, « Gravé »,
   réglages de la boîte non proposés à la cliente · catégorie « Bébé & Enfant ».
