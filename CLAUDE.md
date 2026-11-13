@@ -1,5 +1,5 @@
 ## 👶 MAQUETTE « LETTRE DE NAISSANCE », VERSION SIMPLE POUR LES CLIENTES — 13/11/2026 soir (gérant, devant l'outil lettre : « tu touches pas à l'atelier que tu m'as fait, j'aime bien tous les détails… il faut que tu facilites au maximum pour les clients, pour mettre sur le site. Ne mets rien sur le site… dans admin tu laisses comme c'est… une deuxième version des produits qu'on a mis ») — EN ATTENTE DE SON AVIS, RIEN en ligne
-- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v5) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
+- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v6) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
   (`<page de base>` = sortie d'un autre créateur, ex. `arbre-base.html` ; sortie de 2,1 Mo non commitée).
 - **Principe** : la fiche du site + un parcours court, par-dessus le MÊME calcul que l'outil d'atelier, sans y toucher : `lettre-incrustee.js` et les champs de `lettre-incrustee.py`
   sont posés dans la page mais CACHÉS (`<div hidden id="moteur">`), la couche cliente (`window.NivLettreCliente`) écrit dans `NivLettre.etat()` puis `NivLettre.maj()`.
@@ -22,6 +22,14 @@
   centré là où il repose le plus (`bandes`, `meilleur`), et il rétrécit (jusqu'à 0,4) tant que moins de la moitié de sa plaque est sur la lettre (`partReelle`, mesure de surface ; `poser`,
   cache `PLQ`). Mesuré sur 78 prénoms (26 lettres × court, moyen, long) : au moins 52 % sur la lettre partout, plus petite taille 0,46. ⛔ L'outil d'atelier et L'atelier de Gestion gardent
   LEUR placement (non touchés, sa consigne) : question posée, veut-il la même règle là aussi ? Images d'exemple refaites. Essais : t2, t5, t8 au vert, planche des 26 lettres regardée.
+- 👆 **LA CLIENTE DÉPLACE LES ÉLÉMENTS AU DOIGT (13/11 soir, gérant : « ils avaient accès avant pour toucher avec le doigt, déplacer les éléments, t'as enlevé cette option… remets-la pour les clients…
+  il faut qu'ils aient accès même dans les autres maquettes »)** : maquette cliente **v6**. C'est le glisser de l'outil d'atelier (`.li-el`, non modifié) rouvert côté cliente : prénom, date, horloge, heure, signe,
+  dessin, étoiles. Places gardées dans `C.pos[id] = {fx, fy, k}` (mémoire `niv-lettre-cliente`), valables pour UNE lettre et UNE forme (`C.posCle` = initiale + forme : une autre lettre repart de
+  l'automatique). Bouton « ↺ Tout replacer » (visible dès qu'une place est choisie), phrase d'aide « glissez-le avec le doigt ». Un élément posé hors de la lettre ou sur un autre est entouré de rouge,
+  la note dit « À replacer : … » et le panier est grisé ; le prénom déplacé ne doit pas sortir de plus de la moitié. Essai `scratchpad/lettre-cliente/td.cjs` : 24 sur 24 (à la souris, 390 et 1280 px ;
+  ⚠️ pas essayé avec un vrai doigt sur iPhone). ⛔ Leçon : « simplifier pour les clientes » ne veut PAS dire retirer une liberté qu'ils avaient (déplacer) : la garder, en plus du placement automatique.
+  **Les autres maquettes** : déplacement déjà possible sur le support de téléphone, la décoration à suspendre et la fleur (la fleur seulement) ; PAS possible sur l'arbre de vie (prénoms),
+  la décoration à prénom (prénom), la suspension et la maisonnette → à faire, questions posées sur ce qui doit bouger dans la suspension et la maisonnette.
 - 🤏 **LANGUETTE DU COUVERCLE (13/11 soir, gérant : « pour les boîtes, tu peux faire des petites poignées discrètes… c'est pour ouvrir »)** : dans le MOTEUR (`lettre-incrustee.js`,
   `languette(g)`, `S.bt.poig`, coché d'office, case « Petite languette discrète sur le bord du couvercle, pour l'ouvrir » dans le volet de la boîte) : une petite patte arrondie
   (14 × 5 mm à 170 mm de haut, jamais moins de 11 × 4 mm) qui fait partie du couvercle (fond blanc de la lettre, ou couvercle plein `CV` de la boîte seule) et dépasse du bord de la boîte,

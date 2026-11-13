@@ -83,7 +83,9 @@ CSS = r"""
 .lc-stage{background:linear-gradient(#fbf7ee,#f1e7d4)}
 .lc-stage .li-scene{position:relative;height:42vh;min-height:250px;max-height:440px}
 .lc-stage .li-scene svg,.lc-stage .li-scene canvas{position:absolute;inset:0;width:100%;height:100%;max-height:none;display:block}
-.lc-stage .li-scene svg{pointer-events:none;padding:50px 0 12px;box-sizing:border-box}
+.lc-stage .li-scene svg{pointer-events:auto;touch-action:pan-y;padding:50px 0 12px;box-sizing:border-box}
+.lc-stage .li-el{touch-action:none;cursor:grab}
+.lc-stage .li-zone.sel{stroke:#1a1206}.lc-stage .li-zone.al{stroke:#d3392f}
 .lc-stage .li-zone{fill:transparent;stroke:none}
 .lc-stage .li-scene canvas{touch-action:none;cursor:grab}
 .lc-vue{position:absolute;right:10px;top:10px;z-index:3;display:flex;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:999px;padding:3px}
@@ -143,9 +145,10 @@ __FIL__
    <div class="lc-vue" role="group" aria-label="Vue"><button type="button" id="vFace" class="on">De face</button><button type="button" id="v3d">3D</button></div>
    <div class="li-scene" id="scene"><svg id="svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aperçu de votre lettre"></svg><canvas id="c3d" hidden></canvas></div>
    <button type="button" class="lc-tour" id="lcTour" hidden>↻ Faire tourner</button>
+   <button type="button" class="lc-tour" id="lcReplacer" hidden>↺ Tout replacer</button>
    <button type="button" id="bNum" hidden></button><button type="button" id="bAuto" hidden></button><p id="aide" hidden></p>
   </div>
-  <p class="sc-aide" id="aideC">Votre lettre se dessine au fur et à mesure, tout se place tout seul. Environ __HAUTCM__ cm de haut.</p>
+  <p class="sc-aide" id="aideC">Tout se place tout seul. Pour déplacer un élément (le prénom, la date, le dessin…), glissez-le avec le doigt. Environ __HAUTCM__ cm de haut.</p>
  </div>
  <div class="product-info">
   <div class="breadcrumb"><a href="#">Boutique</a> / <a href="#">Bébé &amp; Enfant</a></div>
@@ -217,7 +220,7 @@ __FIL__
   <li>Prix donné par vous le 13/11 : __PRIXL__ la lettre et sa boîte, ensemble. La lettre ne se vend pas sans sa boîte, et tout ce que la cliente choisit (prénom, naissance, signe, couleur, dessin, décors) est compris.</li>
   <li>Une seule taille : environ __HAUTCM__ cm de haut (ce que votre machine découpe aujourd'hui dans 180 × 180 mm).</li>
   <li>Le prénom est posé sur la barre de la lettre, à peu près centré dessus, juste sous l'heure (votre demande du 13/11) : jamais plus de la moitié en dehors de la lettre. Sur une lettre fine, il rétrécit pour tenir.</li>
-  <li>La cliente ne déplace rien et ne règle aucune pièce : tout se place tout seul. Sur une lettre fine (I, J, L…), la lettre est épaissie toute seule pour faire de la place, et le prénom dépasse sur le côté, comme sur votre outil.</li>
+  <li>Tout se place tout seul, et la cliente peut déplacer chaque élément avec le doigt (le prénom, la date, l'heure, le dessin, le signe, les étoiles), comme dans votre outil (votre demande du 13/11). « Tout replacer » revient au placement automatique. Un élément posé hors de la lettre ou sur un autre est entouré de rouge, et le panier reste grisé tant qu'il n'est pas replacé. Sur une lettre fine (I, J, L…), la lettre est épaissie toute seule pour faire de la place.</li>
   <li>En 3D, la lettre tourne toute seule sur 360° et, avec la boîte, le couvercle se soulève et se repose : la cliente voit que c'est une boîte. Les images « fermée / ouverte » sont un exemple (prénom Camille) dessiné par l'outil : à remplacer par de vraies photos dès que vous en avez.</li>
   <li>Les sept couleurs sont celles de l'aperçu de votre outil : à remplacer par vos vraies couleurs (peinture ou matière).</li>
   <li>Le signe du zodiaque reste tel qu'il est aujourd'hui dans l'outil (vous l'avez mis de côté) ; la case permet de ne pas le mettre.</li>
@@ -233,9 +236,10 @@ function $(i){return document.getElementById(i)}
 function esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;')}
 function eur(v){return v.toFixed(2).replace('.',',')+' €'}
 var CLE='niv-lettre-cliente';
-var C={nom:'',date:'',heure:'',taille:'',poids:'',signe:true,coul:D.couleurs[0][0],animal:D.animaux[0][0],decor:'etoiles',pol:D.formes[0][0],polNom:D.ecritures[0][0],boite:true};
+var C={nom:'',date:'',heure:'',taille:'',poids:'',signe:true,coul:D.couleurs[0][0],animal:D.animaux[0][0],decor:'etoiles',pol:D.formes[0][0],polNom:D.ecritures[0][0],boite:true,pos:{},posCle:''};
 try{var m=JSON.parse(localStorage.getItem(CLE)||'null');if(m)Object.keys(C).forEach(function(k){if(m[k]!==undefined)C[k]=m[k]})}catch(e){}
 C.boite=true;   /* la lettre va toujours avec sa boîte (gérant, 13/11) */
+if(!C.pos||typeof C.pos!=='object')C.pos={};
 function garder(){try{localStorage.setItem(CLE,JSON.stringify(C))}catch(e){}}
 /* les écritures de l'outil servent aussi aux boutons */
 L.pol.forEach(function(p){try{var f=new FontFace('lc-'+p.id,'url(data:font/ttf;base64,'+(p.id==='animaux'?D.policeDessins:p.b)+')');f.load().then(function(x){document.fonts.add(x)},function(){})}catch(e){}});
@@ -264,7 +268,8 @@ function partReelle(g){var b=g.P.b,k=3,cv=document.createElement('canvas');cv.wi
  function tr(rs){x.beginPath();rs.forEach(function(r){r.forEach(function(q,i){var px=(q.X/E-b.x)*k,py=(q.Y/E-b.y)*k;if(i)x.lineTo(px,py);else x.moveTo(px,py)});x.closePath()});x.fill('evenodd')}
  x.fillStyle='#000';tr(g.P.plaqueA);var d=x.getImageData(0,0,cv.width,cv.height).data,tot=0,ded=0,i;for(i=3;i<d.length;i+=4)if(d[i]>128)tot++;
  x.globalCompositeOperation='destination-in';tr(g.L);d=x.getImageData(0,0,cv.width,cv.height).data;for(i=3;i<d.length;i+=4)if(d[i]>128)ded++;return tot?ded/tot:1}
-function poser(S){var pq=S.el.plaque,cle=[S.nom,S.polNom,S.pol,S.gras,S.H].join('|'),g,c=PLQ[cle];
+function poser(S){var pq=S.el.plaque,cle=[S.nom,S.polNom,S.pol,S.gras,S.H].join('|'),g,c=PLQ[cle],mp=C.pos.plaque;
+ if(mp){pq.auto=false;pq.k=mp.k||1;pq.fx=mp.fx;pq.fy=mp.fy;N.maj();return N.calcul()}   /* la cliente a déplacé le prénom */
  if(c){pq.auto=false;pq.k=c.k;pq.fx=c.fx;pq.fy=0.565;N.maj();return N.calcul()}
  pq.auto=true;pq.k=1;N.maj();g=N.calcul();var B=g.P?bandes(g):null;if(!B||milieuBarre(B)==null)return g;
  /* jamais plus de la moitié du prénom en dehors de la lettre : sinon il rétrécit (jusqu'à 0,4), et on revérifie sur la vraie forme */
@@ -272,14 +277,22 @@ function poser(S){var pq=S.el.plaque,cle=[S.nom,S.polNom,S.pol,S.gras,S.H].join(
  for(t=0;t<5;t++){pq.auto=false;pq.k=k;pq.fx=m.x/g.H;pq.fy=0.565;N.maj();g=N.calcul();if(!g.P)break;r=partReelle(g);if(r>=0.52||k<=0.4)break;
   k=Math.max(0.4,k*Math.max(0.8,r/0.56));B=bandes(g);m=meilleur(B,g.P.b.w*k/pq.k)}
  PLQ[cle]={fx:pq.fx,k:pq.k};return g}
+function clePos(){return initiale()+'|'+C.pol}
+var bloque=false,note2='';
 function appliquer(){var S=N.etat(),ex=vide(),src=ex?D.exemple:C;
+ /* les places choisies au doigt valent pour UNE lettre : une autre lettre ou une autre forme repart du placement automatique */
+ if(C.posCle!==clePos()){C.pos={};C.posCle=clePos()}
  S.nom=String(src.nom||'').trim();S.lettre='';S.date=src.date||'';S.heure=src.heure||'';S.taille=String(src.taille||'').trim();S.poids=String(src.poids||'').trim();S.libre='';
  S.coul=C.coul;S.animal=C.animal;S.decor=C.decor==='sans'?'etoiles':C.decor;S.nbEt=C.decor==='sans'?0:6;S.signe=C.signe?'auto':'aucun';S.signeStyle='dessin';S.horloge='grave';
  S.pol=C.pol;S.polNom=C.polNom;S.H=D.haut;S.bord=3;S.bt.on=!!C.boite;S.exemple=false;S.num=false;S.sel=null;
- Object.keys(S.el).forEach(function(i){var e=S.el[i];e.on=true;e.mode='inc';e.auto=true;e.k=1});
+ Object.keys(S.el).forEach(function(i){var e=S.el[i],m=i!=='plaque'?C.pos[i]:null;e.on=true;e.mode='inc';if(m){e.auto=false;e.fx=m.fx;e.fy=m.fy;e.k=m.k||1}else{e.auto=true;e.k=1}});
  /* une lettre fine : on l'épaissit jusqu'à ce que tout tienne */
  var g=null,gras=[0,3,6],i;for(i=0;i<gras.length;i++){S.gras=gras[i];g=poser(S);if(!g.perdus||!g.perdus.length)break}
  note=g&&g.perdus&&g.perdus.length?'Sur cette lettre, il n\'y a pas la place pour : '+g.perdus.map(function(a){return a.d.nom.toLowerCase()}).join(', ')+'. Pour lui faire de la place, retirez le signe du zodiaque ou une information.':'';
+ /* ce que la cliente a posé elle-même doit rester dans la lettre et ne rien toucher */
+ var mal=[];if(g){(g.els||[]).forEach(function(a){if(!C.pos[a.d.id])return;var t=(a.al||[]).filter(function(x){return !/traits/.test(x)});if(t.length)mal.push('« '+a.d.nom+' » '+t.join(', '))});
+  if(C.pos.plaque&&g.P&&partReelle(g)<0.5)mal.push('le prénom dépasse trop de la lettre')}
+ bloque=mal.length>0;note2=bloque?'À replacer : '+mal.join(' ; ')+'. Glissez-le dans la lettre, ou touchez « Tout replacer ».':'';
  $('exTag').hidden=!ex;
  ecran()}
 function total(){return D.prix.ensemble}
@@ -305,9 +318,9 @@ function ecran(){
  l.push(['Forme de la lettre',esc(nomDe(D.formes,C.pol))]);l.push(['Écriture du prénom',esc(nomDe(D.ecritures,C.polNom))]);
  l.push(['La lettre et sa boîte',eur(D.prix.ensemble)]);
  $('resume').innerHTML=l.map(function(r){return '<div class="prc-sumrow"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>'}).join('');
- $('note').hidden=!note;$('note').textContent=note;
+ var nt=[note,note2].filter(Boolean).join(' ');$('note').hidden=!nt;$('note').textContent=nt;
  $('total').textContent=eur(total());$('prixtete').innerHTML='<span class="price">'+eur(D.prix.ensemble)+'</span> <span style="color:var(--ink-soft);font-size:.9rem">la lettre et sa boîte</span>';
- var ok=!!C.nom.trim();$('ajouter').disabled=!ok;$('manque').textContent=ok?'':'Écrivez le prénom pour continuer.';if(ok&&$('ajouter').textContent!=='Ajouter au panier')$('ajouter').textContent='Ajouter au panier';
+ var ok=!!C.nom.trim()&&!bloque;$('ajouter').disabled=!ok;$('manque').textContent=ok?'':(!C.nom.trim()?'Écrivez le prénom pour continuer.':'Un élément est mal placé : glissez-le dans la lettre, ou touchez « Tout replacer ».');aide3();if(ok&&$('ajouter').textContent!=='Ajouter au panier')$('ajouter').textContent='Ajouter au panier';
  if(N.etat().vue==='3d')lancer();decoller()}
 /* ---- la 3D s'anime : un tour complet, et la boîte s'ouvre et se referme ---- */
 var A={auto:!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches),t:0,dern:0,raf:0},POSE=null;
@@ -319,9 +332,16 @@ function image(ts){A.raf=0;var S=N.etat(),T=window.NivLettre3;if(S.vue!=='3d')re
  if(g&&g.bt){var ch=T.g.children,nb=g.bt.dos?4:3,kk=100/g.bf.h,dz=(g.bt.Hm+14)/2*kk,o=POSE?POSE.ouv:ouverture(A.t),i;for(i=0;i<ch.length-nb;i++){ch[i].position.z=dz+o*kk;ch[i].position.x=POSE&&POSE.dx?POSE.dx*kk:0}}
  T.g.rotation.set(T.rx,T.ry,0);T.r.render(T.sc,T.cam);if(!POSE&&(A.auto||(g&&g.bt)))A.raf=requestAnimationFrame(image)}
 function lancer(){if(!A.raf){A.dern=0;A.raf=requestAnimationFrame(image)}}
-function aide3(){var S=N.etat(),en3=S.vue==='3d';$('lcTour').hidden=!en3||A.auto;
- $('aideC').textContent=!en3?'Votre lettre se dessine au fur et à mesure, tout se place tout seul. Environ '+String(D.haut/10).replace('.',',')+' cm de haut.':(C.boite?'Votre lettre est le couvercle : la boîte s\'ouvre et se referme. Faites-la tourner avec le doigt.':'Votre lettre tourne sur elle-même. Faites-la tourner avec le doigt.')}
+function aide3(){var S=N.etat(),en3=S.vue==='3d';$('lcTour').hidden=!en3||A.auto;$('lcReplacer').hidden=en3||!Object.keys(C.pos).length;
+ $('aideC').textContent=!en3?'Tout se place tout seul. Pour déplacer un élément (le prénom, la date, le dessin…), glissez-le avec le doigt. Environ '+String(D.haut/10).replace('.',',')+' cm de haut.':(C.boite?'Votre lettre est le couvercle : la boîte s\'ouvre et se referme. Faites-la tourner avec le doigt.':'Votre lettre tourne sur elle-même. Faites-la tourner avec le doigt.')}
 $('c3d').addEventListener('pointerdown',function(){if(A.auto){A.auto=false;aide3()}});
+/* la cliente déplace un élément au doigt : c'est le glisser de l'outil d'atelier, on garde seulement la place choisie */
+var svgA=$('svg'),avant=null;
+svgA.addEventListener('touchstart',function(ev){if(ev.target.closest&&ev.target.closest('.li-el'))ev.preventDefault()},{passive:false});
+svgA.addEventListener('pointerdown',function(ev){var gl=ev.target.closest?ev.target.closest('.li-el'):null;avant=null;if(!gl)return;var id=gl.getAttribute('data-el'),e=N.etat().el[id];if(e)avant={id:id,fx:e.fx,fy:e.fy}});
+function finGlisse(){if(!avant)return;var a=avant,e=N.etat().el[a.id];avant=null;if(!e||(Math.abs(e.fx-a.fx)<1e-4&&Math.abs(e.fy-a.fy)<1e-4)){N.etat().sel=null;N.maj();return}
+ C.pos[a.id]={fx:e.fx,fy:e.fy,k:e.k};C.posCle=clePos();garder();appliquer()}
+svgA.addEventListener('pointerup',finGlisse);svgA.addEventListener('pointercancel',finGlisse);
 var att=null;function plusTard(){clearTimeout(att);att=setTimeout(function(){garder();appliquer()},140)}
 ['nom','date','heure','taille','poids'].forEach(function(k){var el=$('c-'+k);el.value=C[k];el.addEventListener('input',function(){C[k]=el.value;plusTard()});el.addEventListener('change',function(){C[k]=el.value;plusTard()})});
 $('c-signe').addEventListener('change',function(){C.signe=this.checked;garder();appliquer()});
@@ -331,6 +351,7 @@ document.addEventListener('click',function(ev){var b=ev.target.closest?ev.target
  else if(b.id==='voirBoite'){A.t=0;A.auto=true;if(N.etat().vue!=='3d')$('v3d').click();else{lancer();aide3()}var st=$('stage'),rr=st?st.getBoundingClientRect():null;if(rr&&(rr.bottom<80||rr.top>window.innerHeight-80))st.scrollIntoView({block:'center'});return}
  else if(b.id==='v3d'||b.id==='vFace'){setTimeout(function(){if(b.id==='v3d'){A.t=0;lancer()}aide3()},0);return}
  else if(b.id==='lcTour'){A.auto=true;lancer();aide3();return}
+ else if(b.id==='lcReplacer'){C.pos={};garder();appliquer();return}
  else if(b.id==='tousDessins'){tous=!tous;ecran();return}
  else if(b.id==='ajouter'){b.textContent='Ajouté ✓ (maquette : rien n\'est commandé)';return}
  else return;
