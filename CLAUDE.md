@@ -1,20 +1,20 @@
 ## 👶 MAQUETTE « LETTRE DE NAISSANCE », VERSION SIMPLE POUR LES CLIENTES — 13/11/2026 soir (gérant, devant l'outil lettre : « tu touches pas à l'atelier que tu m'as fait, j'aime bien tous les détails… il faut que tu facilites au maximum pour les clients, pour mettre sur le site. Ne mets rien sur le site… dans admin tu laisses comme c'est… une deuxième version des produits qu'on a mis ») — EN ATTENTE DE SON AVIS, RIEN en ligne
-- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v3) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
+- **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v4) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
   (`<page de base>` = sortie d'un autre créateur, ex. `arbre-base.html` ; sortie de 2,1 Mo non commitée).
 - **Principe** : la fiche du site + un parcours court, par-dessus le MÊME calcul que l'outil d'atelier, sans y toucher : `lettre-incrustee.js` et les champs de `lettre-incrustee.py`
   sont posés dans la page mais CACHÉS (`<div hidden id="moteur">`), la couche cliente (`window.NivLettreCliente`) écrit dans `NivLettre.etat()` puis `NivLettre.maj()`.
   Mémoire à part (`niv-lettre-cliente`, moteur `niv-lettre-cliente-moteur`) : celle de l'atelier n'est jamais touchée. ⛔ L'outil d'atelier et L'atelier de Gestion ne sont PAS modifiés.
 - **Parcours** : ① prénom (la 1re lettre fait la grande lettre) · ② naissance : date, heure, taille, poids, tous facultatifs (vide = pas posé) + case « signe du zodiaque » ·
   ③ couleur (les 7 de l'outil) · ④ dessin (11 visibles + « Voir tous les dessins », « Aucun ») + petits décors (étoiles, nuages, cœurs, lune, mélange, sans) + volet replié
-  « forme de la lettre / écriture du prénom » · ⑤ la lettre seule ou avec sa boîte · ⑥ résumé, total, bouton grisé sans prénom. Aperçu De face / 3D collé sous l'en-tête.
+  « forme de la lettre / écriture du prénom » · ⑤ sa boîte, comprise (deux images fermée / ouverte + « Voir ma boîte s'ouvrir ») · ⑥ résumé, total, bouton grisé sans prénom. Aperçu De face / 3D collé sous l'en-tête.
   Tant que rien n'est écrit : un exemple « Camille » avec l'étiquette « Exemple », retiré dès la 1re lettre tapée. La cliente ne déplace rien ; lettre fine (I, J, V) épaissie
   toute seule (0 → 3 → 6 mm) ; ce qui ne tient toujours pas (I : signe et dessin) est DIT (« il n'y a pas la place pour… »), jamais caché.
   Aucun réglage de machine, aucune planche, jamais le nombre de pièces. Bas de page « De votre côté » + « À valider ».
 - **v2 (13/11 soir, gérant : « il faut que tu fasses des images aussi pour montrer que c'est des boîtes, tu ouvres la boîte… une petite animation… tu fais tourner à 360 »)** :
   en 3D la lettre TOURNE TOUTE SEULE sur 360° (un tour en 12 s ; toucher l'arrête, bouton « ↻ Faire tourner ») et, avec la boîte, le couvercle SE SOULÈVE ET SE REPOSE en boucle
   (`ouverture(t)`, −14 mm = posé, +10 mm = soulevé) ; choisir « La lettre et sa boîte » ouvre la vue 3D toute seule. Le moteur expose sa scène (`window.NivLettre3`,
-  remplacement d'une ligne de `rendre()` fait par le générateur, fichier du moteur intact). Images d'exemple « lettre seule / boîte fermée / boîte ouverte » (exemple Camille,
-  dessinées par l'outil) sur les deux cartes de l'étape 5 et dans le bloc « Une vraie boîte, en forme de sa lettre » :
+  remplacement d'une ligne de `rendre()` fait par le générateur, fichier du moteur intact). Images d'exemple « boîte fermée / boîte ouverte » (exemple Camille,
+  dessinées par l'outil) à l'étape 5 :
   `NODE_PATH=$(npm root -g) node tools/maquettes/lettre-client-images.cjs <page> <three.min.js> docs/maquettes/assets/lettre-cliente` puis relancer le générateur.
   À remplacer par de vraies photos dès qu'il en a. Essais : 60 + 22 vérifications, 0 erreur. « Même pour les autres trucs » : question posée (quels produits ?).
 - **v3 (13/11 soir, capture « Léa » sur le L : « il faut pas que la lettre soit aussi à l'extérieur… à peu près centré sur le L, sur la barre… même pour les autres lettres, pas la moitié
@@ -22,13 +22,13 @@
   centré là où il repose le plus (`bandes`, `meilleur`), et il rétrécit (jusqu'à 0,4) tant que moins de la moitié de sa plaque est sur la lettre (`partReelle`, mesure de surface ; `poser`,
   cache `PLQ`). Mesuré sur 78 prénoms (26 lettres × court, moyen, long) : au moins 52 % sur la lettre partout, plus petite taille 0,46. ⛔ L'outil d'atelier et L'atelier de Gestion gardent
   LEUR placement (non touchés, sa consigne) : question posée, veut-il la même règle là aussi ? Images d'exemple refaites. Essais : t2, t5, t8 au vert, planche des 26 lettres regardée.
-- **Proposé par moi, à valider** : 34,90 € la lettre décorée, + 15 € avec sa boîte (marché relevé : lettre en bois simplement gravée 12 à 21 €, prénom de naissance en bois
-  35 à 45 €) · une seule taille, 16,5 cm · les 7 couleurs = celles de l'aperçu de l'outil, à remplacer par ses vraies couleurs · texte libre, horloge ajourée, « Gravé »,
+- ✅ **PRIX DONNÉ PAR LE GÉRANT LE 13/11 SOIR (« pour la boîte, ça va ensemble de toute façon, pour les deux 54,90 € »)** : **54,90 € la lettre ET sa boîte, toujours ensemble** (plus de « lettre seule », plus de supplément boîte ; tout ce que la cliente choisit est compris). `PRIX = {"ensemble": 54.9}`, `C.boite` toujours vrai. Maquette v4. Anciens prix proposés : `docs/prix-historique.md`.
+- **Proposé par moi, à valider** : une seule taille, 16,5 cm · les 7 couleurs = celles de l'aperçu de l'outil, à remplacer par ses vraies couleurs · texte libre, horloge ajourée, « Gravé »,
   réglages de la boîte non proposés à la cliente · catégorie « Bébé & Enfant ».
 - **Sa question du même message (prénom « Ishaan » sur la lettre I : « il a pas de place pour le nom… on retire le signe ? »)** : répondu sans rien modifier : la plaque du prénom
   dépasse de la lettre par construction (elle fait partie du fond blanc, elle tient) ; retirer le signe ne suffit pas, le prénom est plus large que le I ; « Épaissir la lettre »
   (3 à 6 mm) le fait mieux tenir ; il peut aussi glisser la plaque (pièce P).
-- Essais 390 / 1280 : 60 vérifications (exemple, prénom seul, naissance, signe, couleur, dessins, décors, écritures, boîte 49,90 €, résumé, 3D, rechargement, 26 lettres), 0 erreur,
+- Essais 390 / 1280 : 60 vérifications (exemple, prénom seul, naissance, signe, couleur, dessins, décors, écritures, boîte, résumé, 3D, rechargement, 26 lettres), 0 erreur,
   0 débordement. ⚠️ Pas essayé sur un vrai iPhone. ⚠️ `animaux.ttf` (avec les dessins de signes ajoutés) est refusée par le navigateur comme police d'affichage (tables
   verticales non mises à jour par `lettre-signes.py`) : le calcul (opentype.js) la lit bien ; la page cliente donne aux boutons une copie sans `vhea` / `vmtx` / `STAT`.
 - **Les 7 autres créations ont déjà leur version cliente** (support, arbre, décoration à suspendre, décoration à prénom, suspension, fleur, maisonnette = les maquettes enregistrées).

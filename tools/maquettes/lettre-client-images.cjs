@@ -1,4 +1,4 @@
-// Images d'exemple de la maquette « Lettre de naissance » côté cliente (13/11/2026) : la lettre seule, la boîte fermée, la boîte ouverte.
+// Images d'exemple de la maquette « Lettre de naissance » côté cliente (13/11/2026) : la boîte fermée, la boîte ouverte (la lettre va toujours avec sa boîte).
 // Le gérant : « il faut que tu fasses des images aussi pour montrer que c'est des boîtes, tu ouvres la boîte ».
 // Elles sont dessinées par l'outil lui-même (vue 3D de l'exemple « Camille »), pas par un autre moteur.
 //
@@ -7,7 +7,7 @@
 // puis relancer lettre-client.py : il range les trois images .webp dans la page.
 const { chromium } = require('playwright'); const path = require('path'); const fs = require('fs'); const { execFileSync } = require('child_process');
 const [page, three, out] = process.argv.slice(2);
-const VUES = [['lettre-seule', false, { rx: -0.32, ry: 0.5, ouv: 0 }], ['boite-fermee', true, { rx: -0.5, ry: 0.62, ouv: -14 }], ['boite-ouverte', true, { rx: -0.78, ry: 0.42, ouv: 6, dx: 27 }]];
+const VUES = [['boite-fermee', true, { rx: -0.5, ry: 0.62, ouv: -14 }], ['boite-ouverte', true, { rx: -0.78, ry: 0.42, ouv: 6, dx: 27 }]];
 (async () => {
   fs.mkdirSync(out, { recursive: true });
   const b = await chromium.launch({ args: ['--no-sandbox', '--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });

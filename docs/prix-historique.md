@@ -331,3 +331,9 @@ Après (même grille pour tous les pays) : lettre ≤100 g 8,90 · ≤250 g 15,9
 - Maisonnette, avant (proposés par moi) : petite **19,90 €** · moyenne **24,90 €** · grande **29,90 €**. Maintenant : **24,90 €** (donné par lui) · 29,90 € · 34,90 € (mes choix, + 5 € chacun, à confirmer).
 - Fleur à prénom, avant (proposé par moi) : **16,90 €** en bois naturel, fond peint + 4 €. Maintenant : **19,90 €**, fond peint + 4 € (donnés par lui).
 - Pour revenir en arrière : `TAILLES` dans `tools/maquettes/maison-createur.py`, `"prix"` dans `tools/maquettes/fleur-createur.py`, les deux lignes « fleur » de `tools/maquettes/creez-le-votre.py`.
+
+## 13/11/2026 — Maquette « Lettre de naissance » côté cliente (gérant : « pour la boîte, ça va ensemble de toute façon, pour les deux 54,90 € »)
+- Rien n'est en vente : c'est le prix écrit dans la maquette.
+- Avant (proposés par moi) : la lettre décorée seule **34,90 €**, avec sa boîte **+ 15 €** (49,90 €), la cliente choisissait.
+- Maintenant : **54,90 €** la lettre et sa boîte, toujours ensemble (donné par lui).
+- Pour revenir en arrière : `PRIX` et l'étape 5 de `tools/maquettes/lettre-client.py` (commit `76c2996d` = la version avec le choix).

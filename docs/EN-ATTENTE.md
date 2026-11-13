@@ -6,7 +6,7 @@
 
 
 ## 🧰 13/11/2026 SOIR — L'ATELIER DANS GESTION : CE QUI ATTEND SON AVIS
-- **Lettre de naissance, version simple pour les clientes** : maquette https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v3 : rotation 360°, boîte qui s'ouvre, prénom posé sur la barre de la lettre), rien en ligne. Question posée : la même règle de placement du prénom dans l'outil d'atelier ? Attendre son avis ; à valider : 34,90 € + 15 € la boîte, taille unique 16,5 cm, vraies couleurs ; faut-il simplifier aussi les 7 autres créations et faire la boîte seule côté cliente ?
+- **Lettre de naissance, version simple pour les clientes** : maquette https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v4 : rotation 360°, boîte qui s'ouvre, prénom posé sur la barre de la lettre, **54,90 € la lettre et sa boîte ensemble**, prix donné par lui le 13/11), rien en ligne. À valider : taille unique 16,5 cm, vraies couleurs, livraison (une boîte = colis). Questions posées : la même règle de placement du prénom dans l'outil d'atelier ? simplifier aussi les 7 autres créations et la boîte seule côté cliente ?
 - **Signes du zodiaque : MIS DE CÔTÉ par le gérant le 13/11 soir** (« on va voir après ») : état gardé = animaux + Gémeaux / Lion / Vierge / Verseau refaits en dessins (lettre v11, L'atelier v11) ; son image de symboles essayée puis refusée par lui. C'est LUI qui en reparle.
 - **L'atelier** est dans sa propre catégorie « Logiciel de création » du menu de Gestion (plus dans Tests).
 - **Signes du zodiaque** : il n'aime pas le médaillon. Planche de 4 styles envoyée (A, B, C, D) : attendre son choix avant de toucher aux signes.
