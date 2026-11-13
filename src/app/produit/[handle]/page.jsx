@@ -155,8 +155,10 @@ export default async function ProductPage({ params, searchParams }) {
   // → affiché par Google à la place de l'URL brute (meilleur taux de clic).
   // categorieAffichee : un produit rangé dans un autre univers que sa catégorie (gobelet → Verres & Carafes & Gobelets).
   const catAff = product.categorieAffichee || product.category;
-  const catLabel = product.marquePages || product.carnet ? "Papeterie" : (getCategoryLabel(catAff) || "Boutique");
-  const catUrl = product.marquePages || product.carnet ? "/boutique/papeterie" : categoryUrl(catAff);
+  // Papeterie & Bureau (13/11/2026) : marque-pages, carnet, et les accessoires de bureau (supports téléphone, porte-stylos).
+  const papeterie = product.marquePages || product.carnet || product.subcategory === "bureau";
+  const catLabel = papeterie ? "Papeterie & Bureau" : (getCategoryLabel(catAff) || "Boutique");
+  const catUrl = papeterie ? "/boutique/papeterie" : categoryUrl(catAff);
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

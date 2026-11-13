@@ -74,17 +74,19 @@ export const UNIVERS = [
   // Marque-pages (27/10/2026, gérant : « tu fais pas un petit cadeau… change le nom dans le menu » → « Marque-pages »).
   // 07/11/2026 (maquette https://claude.ai/artifact/8LUUWhWoLbd9hJZ9smto4s, « Papeterie avec le carnet ») : l'onglet devient
   // « Papeterie » — marque-pages en bois, en métal, et le carnet A5 gravé. /boutique/marque-pages redirige ici.
-  { id: "papeterie", nom: "Papeterie", short: "Papeterie", neuf: true, img: "/marque-pages/m1/groupe.jpg",
-    accroche: "Des marque-pages et des carnets à graver d'un prénom, d'un dessin ou d'une photo, et des marque-pages en métal doré d'après Van Gogh et Monet.",
+  // 13/11/2026 (maquette https://claude.ai/artifact/W5k33bztj4JPMfdo8uExoF, « mets en ligne ») : « Papeterie & Bureau »,
+  // le rayon « Bureau » (supports téléphone, porte-stylos) quitte « Petits cadeaux ». Même adresse /boutique/papeterie.
+  { id: "papeterie", nom: "Papeterie & Bureau", short: "Papeterie & Bureau", neuf: true, img: "/marque-pages/m1/groupe.jpg",
+    accroche: "Marque-pages et carnets à graver d'un prénom, d'un dessin ou d'une photo, marque-pages en métal doré d'après Van Gogh et Monet, supports de téléphone et porte-stylos pour le bureau.",
     rayons: [{ nom: "Marque-pages en bois", slugs: ["marque-page-bois-pompon", "marque-page-bois-oiseau"] },
              { nom: "Marque-pages en métal", slugs: ["marque-page-metal-peinture"] },
-             { nom: "Carnets", slugs: ["carnet-a5-grave"] }] },
-  { id: "cadeaux", nom: "Petits cadeaux", short: "Petits cadeaux", pourqui: true, img: "/produits/cle_usb_en_bois_4gb_avec_boite_en_bois.jpg",
-    accroche: "Clés USB, porte-clés, pièce à graver et accessoires de bureau, personnalisés ou prêts à offrir.",
-    rayons: [{ nom: "Clés USB", slugs: ["cle-usb-personnalisee", "cle-usb-bois-coffret", "cle-usb-cristal-3d"] },
-             { nom: "Porte-clés & pièce à graver", slugs: ["porte-cles-cuir-a-graver", "piece-ronde-laiton", "porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle"] },
+             { nom: "Carnets", slugs: ["carnet-a5-grave"] },
              { nom: "Bureau", slugs: ["support-telephone-bois-grave", "support-telephone-bois-ajoure", "porte-stylo-coq-coupe-du-monde",
                                      "porte-stylo-portugal-coupe-du-monde", "porte-stylo-argentine-coupe-du-monde", "porte-stylo-espagne-coupe-du-monde"] }] },
+  { id: "cadeaux", nom: "Petits cadeaux", short: "Petits cadeaux", pourqui: true, img: "/produits/cle_usb_en_bois_4gb_avec_boite_en_bois.jpg",
+    accroche: "Clés USB, porte-clés et pièce à graver, personnalisés ou prêts à offrir.",
+    rayons: [{ nom: "Clés USB", slugs: ["cle-usb-personnalisee", "cle-usb-bois-coffret", "cle-usb-cristal-3d"] },
+             { nom: "Porte-clés & pièce à graver", slugs: ["porte-cles-cuir-a-graver", "piece-ronde-laiton", "porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle"] }] },
 ];
 export const UNIVERS_IDS = UNIVERS.map((u) => u.id);
 export const getUnivers = (id) => UNIVERS.find((u) => u.id === id) || null;

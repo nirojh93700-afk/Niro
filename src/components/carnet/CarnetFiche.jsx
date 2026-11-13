@@ -285,7 +285,7 @@ export default function CarnetFiche({ product, realisations = [] }) {
         </div>
 
         <div className="product-info">
-          <div className="breadcrumb"><Link href="/boutique">Boutique</Link>{" / "}<Link href="/boutique/papeterie">Papeterie</Link></div>
+          <div className="breadcrumb"><Link href="/boutique">Boutique</Link>{" / "}<Link href="/boutique/papeterie">Papeterie & Bureau</Link></div>
           <div className="pd-titrerow">
             <h1>{product.title}</h1>
             <WishlistButton slug={product.slug} name={product.name} image={product.images[0]} price={V[0].price} variant="titre" />

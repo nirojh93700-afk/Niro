@@ -517,7 +517,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
 
         <div className="product-info">
           <div className="breadcrumb">
-            <Link href="/boutique">Boutique</Link>{" / "}<Link href="/boutique/papeterie">Papeterie</Link>
+            <Link href="/boutique">Boutique</Link>{" / "}<Link href="/boutique/papeterie">Papeterie & Bureau</Link>
           </div>
           <div className="pd-titrerow">
             <h1>{product.title}</h1>

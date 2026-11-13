@@ -5,7 +5,7 @@
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
 
-## 🗂️ MAQUETTE « PAPETERIE & BUREAU » (13/11/2026, gérant : « fais la maquette juste pour le 1 ») — RIEN en ligne
+## 🗂️ « PAPETERIE & BUREAU » — ✅ EN LIGNE LE 13/11/2026 (« Mets en ligne la maquette… dans le menu aussi »)
 - https://claude.ai/artifact/W5k33bztj4JPMfdo8uExoF : la vraie page du site construite en local (`univers.js` modifié sur la machine puis remis), capturée
   à 390 px. Papeterie devient « Papeterie & Bureau » (10 créations) : marque-pages bois, métal, carnets + rayon « Bureau » (2 supports téléphone, 4 porte-stylos)
   pris dans Petits cadeaux (qui passe à 7 : clés USB, porte-clés, pièce). Adresse `/boutique/papeterie` inchangée.

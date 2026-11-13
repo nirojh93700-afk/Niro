@@ -1,3 +1,9 @@
+## 🗂️ « PAPETERIE & BUREAU » — ✅ EN LIGNE LE 13/11/2026 (gérant : « mets en ligne la maquette Papeterie & Bureau, dans le menu aussi »)
+- Maquette https://claude.ai/artifact/W5k33bztj4JPMfdo8uExoF. L'univers `papeterie` (`src/lib/univers.js`) s'appelle « Papeterie & Bureau » (menu du
+  haut, onglets, page, fil d'Ariane des fiches marque-pages / carnet et des 6 produits `subcategory: "bureau"`) : marque-pages bois, métal, carnets +
+  rayon « Bureau » (supports téléphone gravé / ajouré, 4 porte-stylos), retiré de « Petits cadeaux » (7 : clés USB, porte-clés, pièce). Adresse
+  `/boutique/papeterie` inchangée. La déco de Noël en cristal reste dans Cristal (Maison & Déco refusé : « juste pour le 1 »). Pied de page non touché.
+
 ## ✅ BOUTON « OK ✓ » DANS CHAQUE CHAMP À ÉCRIRE — 13/11/2026 soir (gérant, capture iPhone de la décoration à prénom : « dès que le clavier apparaît l'image 3D se coupe… mets un bouton à côté du nom pour valider pour que le clavier disparaisse tout de suite… pour les autres maquettes aussi… les clients vont pas chercher les boutons »)
 - ⛔ **Règle : dans un créateur, tout ce qui se valide est À CÔTÉ du champ.** Dès qu'on touche un champ (prénom, texte, chiffre), un bouton doré « OK ✓ » apparaît AU BOUT du champ ;
   le toucher (ou la touche Entrée) range le clavier, l'aperçu se revoit. Seulement sur appareil tactile ou écran de moins de 760 px ; rien ne change sur ordinateur.
