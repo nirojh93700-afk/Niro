@@ -806,7 +806,7 @@ En attente de SA décision :
 - Maquette « Décoration à prénom » v1 : https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (peinture ou acrylique collé ? prix, tailles, réglages d'Atomm non proposés, vue 3D).
 - Éditeur de l'atelier, plan de collage, liste des pièces : EN LIGNE dans Gestion (6a495d0e). Les trois produits (support, arbre, décoration) ne sont toujours pas en vente.
 
-## ♈ SIGNES DU ZODIAQUE ROUVERTS PAR LUI — 13/11/2026 nuit (en attente de son choix, RIEN changé dans l'outil)
+## ♈ SIGNES DU ZODIAQUE — ✅ TRANCHÉ LE 13/11/2026 nuit (« Choix un » : symbole au pinceau pour Gémeaux, Lion, Vierge, Verseau ; fait dans la démonstration v16 et Gestion). Ce qui suit = l'historique de la recherche
 - Il garde la GRAVURE (il essaiera de la peinture foncée dans la gravure, essuyée) ; découper au lieu de graver = expliqué, pas construit.
 - Il n'aime AUCUN des dessins des quatre signes (Gémeaux, Lion, Vierge, Verseau), ni ceux du début, ni ceux d'aujourd'hui, ni les symboles calligraphiés.
   « Va chercher sur Internet dans le monde entier » → cherché : collection Iconify (116 collections, presque que des symboles) puis Openclipart (domaine public, CC0).

@@ -85,6 +85,11 @@ var ANIMAUX = [['chat', 'Chat', 0x1F408], ['chat-tete', 'Chat (tête)', 0x1F431]
    Ces quatre-là ne viennent plus de Noto Emoji : dessins libres composés et tracés (tools/maquettes/lettre-signes.py, cases U+E001… de la police).
    Verseau : la jarre qui verse l'eau · Gémeaux : deux jumeaux face à face · Lion : lion rugissant de profil · Vierge : dame en robe et épis de blé. */
 var SIGNE_DESSIN = [0x1F410, 0xE009, 0x1F41F, 0x1F40F, 0x1F402, 0xE001, 0x1F980, 0xE004, 0xE006, 0x2696, 0x1F982, 0x1F3F9];
+/* 13/11/2026 nuit : il n'aime aucun dessin pour Gémeaux, Lion, Vierge, Verseau (« utilise les signes que je t'ai donné, c'est plus simple, c'est pour les enfants… juste
+   pour les quatre… sinon traite tous ces symboles pour remplacer les autres »). Les douze symboles sont redessinés « au pinceau » (lettre-signes-pinceau.py, cases U+E010…) :
+   ces quatre signes les prennent d'office, en grand au milieu du médaillon ; le style « Symboles au pinceau » les met sur les douze. */
+var SIGNE_PINCEAU = [0xE010, 0xE011, 0xE012, 0xE013, 0xE014, 0xE015, 0xE016, 0xE017, 0xE018, 0xE019, 0xE01A, 0xE01B], SIGNE_SANS_DESSIN = [1, 5, 7, 8];
+function signePinceau(si) { return S.signeStyle === 'pinceau' || SIGNE_SANS_DESSIN.indexOf(si) >= 0; }
 var DECORS = { etoiles: ['etoile'], nuages: ['nuage'], coeurs: ['coeur'], lune: ['lune', 'etoile', 'etoile', 'etoile', 'etoile', 'etoile'], melange: ['etoile', 'nuage', 'coeur', 'lune', 'etoile', 'nuage'] }, DECOR_NOM = { etoile: 'Étoile', nuage: 'Nuage', coeur: 'Cœur', lune: 'Lune' };
 function decorDe(id) { var l = DECORS[S.decor] || DECORS.etoiles; return l[(+id.slice(2) - 1) % l.length]; }
 function decorForme(k, d) { var p = [], i, t;
@@ -156,8 +161,9 @@ function forme(id) { var T = textes(), cle, g = null, P = S.pol;
       gh = unir(gh, unir([cercle(0, 0, 1.2)], unir(trait([[[0, 0], [Math.sin(an1) * 5, -Math.cos(an1) * 5]]], 1.5), trait([[[0, 0], [Math.sin(an2) * 7.6, -Math.cos(an2) * 7.6]]], 1.0))));
       g = { blanc: [cercle(0, 0, 14)], grav: gh, dessin: gh }; } }
   else if (id === 'signe' && signeChoisi() >= 0 && S.signeStyle !== 'symbole') { /* un médaillon de signe : le symbole en haut, le dessin au milieu, le nom du signe écrit en rond en bas ; tout est gravé sur un rond blanc */
-    var si = signeChoisi(), sd = ecrit('animaux', String.fromCodePoint(SIGNE_DESSIN[si]), 100), sb = boite(sd), sz = bouger(centrer(sd), 0, 0.2, 14.2 / Math.max(sb.w, sb.h)), RS = 15.5;
+    var si = signeChoisi(), gp = signePinceau(si), sd = ecrit('animaux', String.fromCodePoint((gp ? SIGNE_PINCEAU : SIGNE_DESSIN)[si]), 100), sb = boite(sd), sz = bouger(centrer(sd), 0, 0.2, 14.2 / Math.max(sb.w, sb.h)), RS = 15.5;
     var sy = ecrit('signes', String.fromCodePoint(SIGNE_CODE[si]), 100), yb = boite(sy), gs = unir(sz, decaler(bouger(centrer(sy), 0, -10.7, 3.9 / Math.max(yb.w, yb.h)), 0.14));
+    if (gp) gs = decaler(bouger(centrer(sd), 0, -1.7, 15.4 / Math.max(sb.w, sb.h)), 0.05); /* le symbole au pinceau, en grand, sans le petit symbole du haut */
     gs = unir(gs, moins([cercle(0, 0, RS - 0.9)], [cercle(0, 0, RS - 1.4)]));
     var lts = SIGNES[si].split('').map(function (ch) { var q = texteH(P, ch, 2.5), qb = boite(q); return { p: bouger(q, -(qb.x + qb.w / 2), 0), w: qb.w }; }), ec = 0.42, rt = 12.4, tot = -ec, pos = 0; lts.forEach(function (l) { tot += l.w + ec; });
     lts.forEach(function (l) { var th = (pos + l.w / 2 - tot / 2) / rt; pos += l.w + ec; gs = unir(gs, bouger(tourner(bouger(l.p, 0, rt + 1.25), -th * 180 / Math.PI), 0, 0)); });

@@ -112,6 +112,13 @@
   ⏸️ **ZODIAQUE MIS DE CÔTÉ PAR LUI (13/11 soir : « j'aime bien avec des animaux des signes… mets ça de côté, on va voir après, tu finis les autres »)** : il a donné une image de
   douze symboles calligraphiés, je les ai essayés pour les quatre signes, puis il a dit « j'aime pas les trucs que je t'ai donné » → essai retiré, rien d'enregistré. L'état gardé =
   celui-ci (animaux + les quatre dessins ci-dessus). Ne plus toucher aux signes tant qu'il n'en reparle pas.
+  ✅ **TRANCHÉ LE 13/11 NUIT (« Choix un »)** : il a rouvert le sujet, n'aimait AUCUN dessin pour Gémeaux, Lion, Vierge, Verseau (ni ceux du début, ni les refaits, ni une série d'Openclipart
+  montrée), puis : « utilise les signes que je t'ai donné, c'est plus simple, c'est pour les enfants ». **Ces quatre signes = le SYMBOLE « au pinceau » en grand dans le médaillon (sans le petit
+  symbole du haut), avec le nom en rond ; les huit autres gardent leur animal.** Les douze symboles sont dessinés par nous (`tools/maquettes/lettre-signes-pinceau.py` → `signes-dessins/cal-*.svg`
+  → cases U+E010 à U+E01B de `animaux.ttf` par `lettre-signes.py`), son image n'est pas recopiée. Moteur : `SIGNE_PINCEAU`, `SIGNE_SANS_DESSIN = [1, 5, 7, 8]`, `signePinceau(si)`.
+  Le choix « Symboles au pinceau, gravés (les douze signes) » existe aussi dans la liste « Le signe » (`signeStyle: 'pinceau'`, son « choix 2 », non retenu comme réglage de départ).
+  Lettre d'atelier **v16**, Gestion `public/atelier-outils/lettre.html` à jour. ⚠️ La maquette cliente (v7) n'est PAS régénérée : elle prendra ces symboles à sa prochaine fabrication.
+  Il garde la GRAVURE (il essaiera de la peinture foncée dans la gravure) ; « découper au lieu de graver » (horloge, pieds en creux) = expliqué, pas construit.
   ⚠️ Sources game-icons.net (CC BY 3.0) et EmojiOne (CC BY 4.0) : le jour de la mise en vente, une ligne de crédit sur le site (mentions légales). Mes essais de silhouettes
   tirées de SES figures des cristaux : pas nets à 14 mm, abandonnés. `sous.py` (scratchpad) refait la police SANS ces cases : relancer `lettre-signes.py` après.
 - **6 OK** : le rangement par évènement (Noël = décoration à suspendre, décoration à prénom, maisonnette · Naissance = lettre).

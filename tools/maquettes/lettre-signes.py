@@ -19,6 +19,9 @@ from fontTools.svgLib.path import parse_path
 CODES = {  # nom du fichier → case de la police
     'gem-a': 0xE001, 'gem-b': 0xE002, 'gem-c': 0xE003, 'lion-a': 0xE004, 'lion-b': 0xE005,
     'vie-a': 0xE006, 'vie-b': 0xE007, 'vie-c': 0xE008, 'ver-a': 0xE009, 'ver-b': 0xE00A, 'ver-c': 0xE00B,
+    # les douze symboles « au pinceau » (lettre-signes-pinceau.py), dans l'ordre de SIGNES du moteur
+    'cal-capricorne': 0xE010, 'cal-verseau': 0xE011, 'cal-poissons': 0xE012, 'cal-belier': 0xE013, 'cal-taureau': 0xE014, 'cal-gemeaux': 0xE015,
+    'cal-cancer': 0xE016, 'cal-lion': 0xE017, 'cal-vierge': 0xE018, 'cal-balance': 0xE019, 'cal-scorpion': 0xE01A, 'cal-sagittaire': 0xE01B,
 }
 
 def glyphe(svg, em):

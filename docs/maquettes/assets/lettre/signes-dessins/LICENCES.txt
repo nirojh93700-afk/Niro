@@ -26,3 +26,5 @@ ver-b.svg    Verseau   game-icons « tarot-17-the-star »
 ver-c.svg    Verseau   game-icons « amphora » + « waves »
 
 Fabrication : python3 tools/maquettes/lettre-signes.py docs/maquettes/assets/lettre/signes-dessins docs/maquettes/assets/lettre/animaux.ttf
+
+cal-*.svg (les douze symboles « au pinceau », 13/11/2026 nuit) : dessinés par nous (tools/maquettes/lettre-signes-pinceau.py), dans l esprit d une image donnée par le gérant mais sans la recopier. Aucun crédit à citer.

@@ -138,7 +138,7 @@ HTML = r"""<div class="li">
    <label>Taille (cm)<input id="f-taille" inputmode="decimal" maxlength="5"></label>
    <label>Poids (g)<input id="f-poids" inputmode="numeric" maxlength="5"></label>
    <label class="l2">Signe du zodiaque<select id="f-signe"></select><small id="signeAuto"></small></label>
-   <label class="l2">Le signe<select id="f-signeStyle"><option value="dessin">En dessin gravé (bélier, lion, balance…)</option><option value="symbole">En symbole découpé (♈ ♌ ♎…)</option></select></label>
+   <label class="l2">Le signe<select id="f-signeStyle"><option value="dessin">En dessin gravé (animaux ; symbole au pinceau pour Gémeaux, Lion, Vierge, Verseau)</option><option value="pinceau">Symboles au pinceau, gravés (les douze signes)</option><option value="symbole">En symbole découpé (♈ ♌ ♎…)</option></select></label>
    <label class="l2">L'horloge<select id="f-horloge"><option value="grave">Cadran blanc, chiffres et aiguilles gravés (rien à orienter)</option><option value="ajour">Ajourée comme le modèle (anneau et aiguilles blancs)</option></select><small>Les aiguilles se mettent toutes seules à l'heure écrite au-dessus.</small></label>
    <label>Animal ou dessin<select id="f-animal"></select></label>
    <label>Petits décors<select id="f-decor"><option value="etoiles">Étoiles</option><option value="nuages">Nuages</option><option value="coeurs">Cœurs</option><option value="lune">Une lune et des étoiles</option><option value="melange">Mélange</option></select></label>
