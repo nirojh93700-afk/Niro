@@ -319,6 +319,12 @@ CSS_MAQ += r"""
 .ab-arbre img{width:64px;height:64px;object-fit:contain}
 .ab-arbre.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
 .ab-nom{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.ab-place{margin:14px 0 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.ab-quinom{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.ab-quinom button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;min-height:36px;font:inherit;font-size:.85rem;font-weight:600;color:var(--ink);cursor:pointer}
+.ab-quinom button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ab-quinom button i{font-style:normal;font-weight:400;opacity:.7}
+.ab-pad{display:flex;flex-wrap:wrap;gap:6px}
 .ab-num{flex:none;width:26px;height:26px;border-radius:50%;background:#f3e8d3;color:var(--gold-dark);font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center}
 .ab-nom input{flex:1;min-width:0;box-sizing:border-box;padding:10px 11px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
 .ab-nom .sc-o{min-width:36px;padding:0 6px}.ab-nom .sc-o:disabled,.ab-nom .sc-x:disabled{opacity:.35;cursor:default}
@@ -354,6 +360,14 @@ HTML_OUTIL = r"""
   <div id="listeNoms"></div>
   <p class="prc-hint prc-miss" id="alerteNoms" style="margin:6px 0 0"></p>
   <button type="button" class="ab-ajout" id="ajoutNom">+ Ajouter un prénom</button>
+  <div class="ab-place" id="placeNoms" hidden>
+   <p class="prc-legend" style="margin:0 0 6px">Déplacer ou agrandir un prénom (facultatif)</p>
+   <p class="prc-hint" style="margin:0 0 8px">Chaque prénom se place tout seul dans son emplacement. Pour le bouger, choisissez-le puis utilisez les flèches.</p>
+   <div class="ab-quinom" id="quiNom"></div>
+   <div class="sc-fleches ab-pad" id="padNom">
+    <button type="button" class="sc-o" data-a="g" aria-label="Vers la gauche">←</button><button type="button" class="sc-o" data-a="d" aria-label="Vers la droite">→</button><button type="button" class="sc-o" data-a="h" aria-label="Vers le haut">↑</button><button type="button" class="sc-o" data-a="b" aria-label="Vers le bas">↓</button><button type="button" class="sc-o" data-a="m" aria-label="Plus petit">−</button><button type="button" class="sc-o" data-a="p" aria-label="Plus grand">+</button><button type="button" class="sc-o" data-a="0" aria-label="Remettre à sa place">↺</button>
+   </div>
+  </div>
   <p class="prc-hint">10 lettres au plus par prénom. Le prénom est découpé dans le bois, attaché au bord de son cœur : rien ne tombe.</p>
  </section>
  <section class="prc-step">
@@ -478,7 +492,7 @@ function nomDansForme(sl,txt,uid){
  if(!txt)return;
  var t=sl.t,h=t[3],fs=h*2.36,cx=t[0]+t[2]/2,base=t[1]+h*1.76,pol=police(S.police)[2];
  var e=encre(txt,pol,fs);if(e.l+e.r>t[2]){var q=t[2]/(e.l+e.r);if(q<.72)PETITS.push(txt);fs*=q;e=encre(txt,pol,fs)}
- /* retouche de l'atelier (Gestion) : décalage et taille de ce prénom, absents côté cliente */
+ /* décalage et taille de ce prénom : choisis par la cliente (bloc « Déplacer ou agrandir un prénom »), ou retouchés par l'atelier dans Gestion */
  var aj=(S.aj||[])[uid];if(aj){cx+=aj.dx||0;base+=aj.dy||0;if(aj.s&&aj.s!==1){fs*=aj.s;e=encre(txt,pol,fs)}}
  var outer=el('g',{'clip-path':'url(#cp'+uid+')'},$('noms'));
  var cp=el('clipPath',{id:'cp'+uid},outer);el('path',{d:sl.o},cp);
@@ -530,7 +544,7 @@ function dessiner(){
 /* ---- étape 1 : l'arbre ---- */
 $('arbres').innerHTML=D.arbres.map(function(a){return '<button type="button" class="ab-arbre" data-v="'+a.id+'"><img src="'+a.vignette+'" alt="">'+a.nom+'</button>'}).join('');
 function majArbres(){[].forEach.call($('arbres').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')===S.arbre)})}
-$('arbres').addEventListener('click',function(ev){var b=ev.target.closest('.ab-arbre');if(!b)return;S.arbre=b.getAttribute('data-v');majArbres();dessiner()});
+$('arbres').addEventListener('click',function(ev){var b=ev.target.closest('.ab-arbre');if(!b)return;S.arbre=b.getAttribute('data-v');S.aj=[];majArbres();dessiner();majPlace()});
 
 /* ---- étape 2 : les prénoms (6 au plus ; un cœur apparaît pour chaque prénom) ---- */
 function majNoms(){var h='';S.noms.forEach(function(t,i){
@@ -539,21 +553,31 @@ function majNoms(){var h='';S.noms.forEach(function(t,i){
    +'<button type="button" class="sc-o" data-act="haut" aria-label="Monter"'+(i?'':' disabled')+'>↑</button>'
    +'<button type="button" class="sc-o" data-act="bas" aria-label="Descendre"'+(i<nb()-1?'':' disabled')+'>↓</button>'
    +'<button type="button" class="sc-x" data-act="x" aria-label="Retirer"'+(nb()>1?'':' disabled')+'>✕</button></div>'});
- $('listeNoms').innerHTML=h;dernierN=nb();
+ $('listeNoms').innerHTML=h;dernierN=nb();majPlace();
  $('ajoutNom').disabled=nb()>=MAX;$('ajoutNom').innerHTML=nb()>=MAX?'6 prénoms au maximum':(nb()<D.prix.inclus?'+ Ajouter un prénom (compris)':'+ Ajouter un prénom (+3 €)');}
-$('listeNoms').addEventListener('click',function(ev){var r=ev.target.closest('.ab-nom');if(!r)return;var i=+r.getAttribute('data-i'),a=ev.target.getAttribute('data-act');
- if(a==='x'&&nb()>1){S.noms.splice(i,1)}
- else if(a==='haut'&&i){S.noms.splice(i-1,0,S.noms.splice(i,1)[0])}
- else if(a==='bas'&&i<nb()-1){S.noms.splice(i+1,0,S.noms.splice(i,1)[0])}
+$('listeNoms').addEventListener('click',function(ev){var r=ev.target.closest('.ab-nom');if(!r)return;var i=+r.getAttribute('data-i'),a=ev.target.getAttribute('data-act');S.aj=S.aj||[];while(S.aj.length<nb())S.aj.push(null);
+ if(a==='x'&&nb()>1){S.noms.splice(i,1);S.aj.splice(i,1)}
+ else if(a==='haut'&&i){S.noms.splice(i-1,0,S.noms.splice(i,1)[0]);S.aj.splice(i-1,0,S.aj.splice(i,1)[0])}
+ else if(a==='bas'&&i<nb()-1){S.noms.splice(i+1,0,S.noms.splice(i,1)[0]);S.aj.splice(i+1,0,S.aj.splice(i,1)[0])}
  else return;
  majNoms();dessiner()});
-$('listeNoms').addEventListener('input',function(ev){var i=ev.target.getAttribute('data-i');if(i===null)return;S.noms[+i]=ev.target.value;dessiner()});
+$('listeNoms').addEventListener('input',function(ev){var i=ev.target.getAttribute('data-i');if(i===null)return;S.noms[+i]=ev.target.value;dessiner();majPlace()});
+/* la cliente déplace ou agrandit un prénom dans son emplacement (gérant, 13/11/2026 : « il faut qu'ils aient accès » ; les mêmes décalages que la retouche de l'atelier, bornés pour que le prénom reste tenu) */
+var quiNom=0;
+function majPlace(){var l=[];S.noms.forEach(function(t,i){if(t.trim())l.push(i)});$('placeNoms').hidden=!l.length;if(!l.length)return;if(l.indexOf(quiNom)<0)quiNom=l[0];
+ $('quiNom').innerHTML=l.map(function(i){var a=(S.aj||[])[i],b=a&&(a.dx||a.dy||(a.s&&a.s!==1));return '<button type="button" data-i="'+i+'" class="'+(i===quiNom?'on':'')+'" aria-pressed="'+(i===quiNom)+'">'+esc(S.noms[i].trim())+(b?' <i>· déplacé</i>':'')+'</button>'}).join('')}
+$('quiNom').addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;quiNom=+b.getAttribute('data-i');majPlace()});
+$('padNom').addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;var a=b.getAttribute('data-a'),sl=slots()[quiNom];if(!sl)return;S.aj=S.aj||[];
+ var o=S.aj[quiNom]=S.aj[quiNom]||{dx:0,dy:0,s:1},w=sl.t[2],h=sl.t[3],pas=Math.max(1,h*.1),mx=w*.3,my=h*.45;
+ if(a==='g')o.dx=Math.max(-mx,o.dx-pas);if(a==='d')o.dx=Math.min(mx,o.dx+pas);if(a==='h')o.dy=Math.max(-my,o.dy-pas);if(a==='b')o.dy=Math.min(my,o.dy+pas);
+ if(a==='m')o.s=Math.max(.7,+(o.s-.06).toFixed(2));if(a==='p')o.s=Math.min(1.3,+(o.s+.06).toFixed(2));if(a==='0')S.aj[quiNom]=null;
+ dessiner();majPlace()});
 $('ajoutNom').addEventListener('click',function(){if(nb()>=MAX)return;S.noms.push('');majNoms();dessiner();
  var ins=$('listeNoms').querySelectorAll('input');ins[ins.length-1].focus()});
 
 /* ---- étape 3 : cœurs ou cercles ---- */
 function majForme(){[].forEach.call($('formesNoms').querySelectorAll('.sc-style'),function(b){b.classList.toggle('on',b.getAttribute('data-v')===S.forme)})}
-$('formesNoms').addEventListener('click',function(ev){var b=ev.target.closest('.sc-style');if(!b)return;S.forme=b.getAttribute('data-v');majForme();dessiner()});
+$('formesNoms').addEventListener('click',function(ev){var b=ev.target.closest('.sc-style');if(!b)return;S.forme=b.getAttribute('data-v');S.aj=[];majForme();dessiner();majPlace()});
 
 /* ---- étape 4 : l'écriture ---- */
 function majPolices(){var ex=(S.noms[0]||'Éloïse').trim()||'Éloïse';

@@ -28,8 +28,13 @@
   l'automatique). Bouton « ↺ Tout replacer » (visible dès qu'une place est choisie), phrase d'aide « glissez-le avec le doigt ». Un élément posé hors de la lettre ou sur un autre est entouré de rouge,
   la note dit « À replacer : … » et le panier est grisé ; le prénom déplacé ne doit pas sortir de plus de la moitié. Essai `scratchpad/lettre-cliente/td.cjs` : 24 sur 24 (à la souris, 390 et 1280 px ;
   ⚠️ pas essayé avec un vrai doigt sur iPhone). ⛔ Leçon : « simplifier pour les clientes » ne veut PAS dire retirer une liberté qu'ils avaient (déplacer) : la garder, en plus du placement automatique.
-  **Les autres maquettes** : déplacement déjà possible sur le support de téléphone, la décoration à suspendre et la fleur (la fleur seulement) ; PAS possible sur l'arbre de vie (prénoms),
-  la décoration à prénom (prénom), la suspension et la maisonnette → à faire, questions posées sur ce qui doit bouger dans la suspension et la maisonnette.
+  **Les autres maquettes (faites le même soir)** : · **Arbre de vie v10** (https://claude.ai/artifact/9h1rXBNMnNEYgkaFH1NTFa) : bloc « Déplacer ou agrandir un prénom (facultatif) » sous la liste des prénoms
+  (on choisit le prénom, puis ← → ↑ ↓ − + ↺ ; `S.aj[i] = {dx, dy, s}`, les mêmes décalages que la retouche de l'atelier, bornés à ± 30 % de la largeur, ± 45 % de la hauteur de l'emplacement, taille 0,7 à 1,3 ;
+  le réglage suit le prénom quand on change l'ordre ; un autre arbre ou une autre forme repart de l'automatique), essai `scratchpad/arbre/tm.cjs` 24 sur 24. · **Décoration à prénom v7**
+  (https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga) : bloc « Déplacer ou agrandir le prénom (facultatif) » à l'étape 6 (`lieu(n)`, `libre(n, f)` : le prénom ne peut ni sortir de la lettre ni toucher un décor,
+  même masque que le placement automatique ; comme il remplit déjà la place, la page dit de le rétrécir avec « − » avant de le bouger), essai `scratchpad/nom/tm.cjs` 22 sur 22.
+  · Déjà possible avant : support de téléphone, décoration à suspendre, fleur (la fleur seulement). · **Suspension à prénoms et maisonnette : rien à déplacer par nature** (formes empilées, maison paramétrée) :
+  question posée au gérant. ⚠️ Ces deux générateurs servent aussi à Gestion (`retouche-site.py`, `atelier-unique.py`) : les fichiers de Gestion ne sont PAS régénérés (rien changé en ligne).
 - 🤏 **LANGUETTE DU COUVERCLE (13/11 soir, gérant : « pour les boîtes, tu peux faire des petites poignées discrètes… c'est pour ouvrir »)** : dans le MOTEUR (`lettre-incrustee.js`,
   `languette(g)`, `S.bt.poig`, coché d'office, case « Petite languette discrète sur le bord du couvercle, pour l'ouvrir » dans le volet de la boîte) : une petite patte arrondie
   (14 × 5 mm à 170 mm de haut, jamais moins de 11 × 4 mm) qui fait partie du couvercle (fond blanc de la lettre, ou couvercle plein `CV` de la boîte seule) et dépasse du bord de la boîte,

@@ -81,6 +81,9 @@ cursor:pointer;font:inherit;color:var(--ink);text-align:center;min-width:0}
 .pn-pol small{display:block;font:500 .68rem Inter,system-ui,sans-serif;color:var(--ink-soft)}
 .pn-pol.on{border-color:var(--gold-dark);box-shadow:0 0 0 2px var(--gold);background:#fffaf0}
 .pn-rang{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.pn-place{margin:14px 0 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.pn-pad{display:flex;flex-wrap:wrap;gap:6px}
+.pn-pad button{min-width:40px;min-height:38px;border:1px solid var(--line);border-radius:9px;background:#fff;cursor:pointer;font:inherit;font-size:.9rem;font-weight:600;padding:0 10px;color:var(--ink)}
 .pn-bande{display:flex;gap:8px;overflow-x:auto;padding:10px 2px 2px;-webkit-overflow-scrolling:touch}
 .pn-bande button{flex:none;width:64px;padding:4px 4px 5px;border:1.5px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;font:600 .66rem Inter,system-ui,sans-serif;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pn-bande button svg{display:block;width:100%;height:56px}
@@ -147,6 +150,14 @@ __FIL__
    <button type="button" class="sc-style" data-v="v"><b>À la verticale</b><small>De bas en haut</small></button>
   </div>
   <p class="prc-hint prc-miss" id="alertePetit" style="margin:8px 0 0"></p>
+  <div class="pn-place" id="placeNom">
+   <p class="prc-legend" style="margin:0 0 6px">Déplacer ou agrandir le prénom (facultatif)</p>
+   <p class="prc-hint" id="quiPlace" style="margin:0 0 8px"></p>
+   <div class="pn-pad" id="padNom">
+    <button type="button" data-a="g" aria-label="Vers la gauche">←</button><button type="button" data-a="d" aria-label="Vers la droite">→</button><button type="button" data-a="h" aria-label="Vers le haut">↑</button><button type="button" data-a="b" aria-label="Vers le bas">↓</button><button type="button" data-a="m" aria-label="Plus petit">−</button><button type="button" data-a="p" aria-label="Plus grand">+</button><button type="button" data-a="0" aria-label="Remettre à sa place">↺</button>
+   </div>
+   <p class="prc-hint prc-miss" id="infoPlace" style="margin:8px 0 0"></p>
+  </div>
  </section>
  <section class="prc-step" id="etape3">
   <div class="prc-sh"><span class="prc-num done">7</span><h3>Votre commande</h3></div>
@@ -234,8 +245,16 @@ function placer(n){var g=forme(n),txt=String(n||'').trim();if(!g||!txt)return nu
  var e=encre(txt,p),ar=(e.l+e.r)/Math.max(1,e.a+e.d),M=masque(g);
  var angles=S.place==='h'?[0]:S.place==='v'?[-90]:[0,-90,-75,-60,-45,-30,-15,15,30,45,60,75],best=null,note=0;
  angles.forEach(function(a){var r=chercher(M,a,ar);if(!r)return;var s=r.w*(a===0?1:a===-90?.8:.72);if(s>note){note=s;best=r}});
- if(best){best.fs=best.w*.95/(e.l+e.r)*100;best.e=e;best.hmm=best.w*.95/ar}
+ if(best){best.fs=best.w*.95/(e.l+e.r)*100;best.e=e;best.hmm=best.w*.95/ar;best.id=id}
  fits[id]=best;return best}
+/* la place choisie par la cliente (flèches « Déplacer ou agrandir le prénom », gérant 13/11/2026) : un décalage et une taille par prénom, par-dessus la place calculée */
+function lieu(n){var f=placer(n);if(!f)return f;var a=(S.aj||{})[f.id];if(!a)return f;var o={},q;for(q in f)o[q]=f[q];o.cx=f.cx+a.dx;o.cy=f.cy+a.dy;o.fs=f.fs*a.s;o.hmm=f.hmm*a.s;return o}
+/* le prénom reste-t-il dans la lettre, sans toucher un décor ? (même masque que le placement automatique) */
+function libre(n,f){var g=forme(n);if(!g||!f)return false;var M=g._M||(g._M=masque(g));if(!M.px)M.px=M.c.getContext('2d').getImageData(0,0,M.W,M.H).data;
+ var e=f.e,wT=(e.l+e.r)*f.fs/100,hT=(e.a+e.d)*f.fs/100,a=(f.ang||0)*Math.PI/180,c=Math.cos(a),si=Math.sin(a),i,j;
+ for(i=0;i<=12;i++)for(j=0;j<=4;j++){var u=(i/12-.5)*wT,v=(j/4-.5)*hT,x=f.cx+u*c-v*si,y=f.cy+u*si+v*c,px=Math.round((x-M.ox)*R),py=Math.round((y-M.oy)*R);
+  if(px<0||py<0||px>=M.W||py>=M.H||M.px[(py*M.W+px)*4]<=127)return false}
+ return true}
 
 /* ---- le dessin d'une décoration (mm, origine au milieu de la lettre) ---- */
 var COUL={bois:['#f0dcb4','#d9b98a'],clair:['#f7ecd6','#ecdcbc']};
@@ -260,11 +279,11 @@ function ornement(n,opt){var g=forme(n);if(!g)return'';opt=opt||{};var couleur=S
    else if(r==='rose')h+='<path d="'+d+'" fill="#f3b3bb"/>';
    else if(r==='reflet')h+='<path d="'+d+'" fill="#fff" opacity=".85"/>'}
   else if(r!=='reflet')h+='<path d="'+d+'" fill="#b08a55" opacity="'+(r==='blanc'?'.35':'.8')+'"/>'});
- var f=placer(n);if(f){var p=polN(),e=f.e,fs=f.fs,x=f.cx-((e.r-e.l)/2)*fs/100,y=f.cy+((e.a-e.d)/2)*fs/100;
+ var f=lieu(n);if(f){var p=polN(),e=f.e,fs=f.fs,x=f.cx-((e.r-e.l)/2)*fs/100,y=f.cy+((e.a-e.d)/2)*fs/100;
   h+='<text x="'+x.toFixed(2)+'" y="'+y.toFixed(2)+'" font-family="'+p[2]+',cursive" font-weight="'+p[3]+'" font-size="'+fs.toFixed(2)+'" fill="'+(opt.noir?'#111':'#3a2a1c')+'"'
    +(f.ang?' transform="rotate('+f.ang+' '+f.cx.toFixed(2)+' '+f.cy.toFixed(2)+')"':'')+'>'+esc(String(n).trim())+'</text>'}
  return h}
-function dessiner(){var n=S.noms[S.sel]||'',g=forme(n),sc=$('scene');
+function dessiner(){majPlaceNom();var n=S.noms[S.sel]||'',g=forme(n),sc=$('scene');
  if(!F[cle()])charger(cle());
  if(!g){sc.innerHTML='<text x="60" y="78" text-anchor="middle" font-size="5" fill="#8a7a62" font-family="Inter,sans-serif">'+(F[cle()]?'Écrivez un prénom':'')+'</text>';sc.setAttribute('viewBox','0 0 120 150');$('dim').textContent=''}
  else{var b=g.b,m=10;sc.setAttribute('viewBox',(b[0]-m)+' '+(b[1]-m-8)+' '+(b[2]+2*m)+' '+(b[3]+2*m+8));sc.innerHTML=defs()+ornement(n,{ruban:true});
@@ -311,6 +330,15 @@ function majFinitions(){$('finitions').innerHTML=D.finitions.map(function(t){ret
 $('finitions').addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;S.finition=b.getAttribute('data-v');majFinitions();majModeles();dessiner()});
 function majPolN(){var n=String(S.noms[S.sel]||'').trim()||'Prénom';$('polN').innerHTML=D.polN.map(function(p){return '<button type="button" class="pn-pol'+(p[0]===S.polN?' on':'')+'" data-v="'+p[0]+'" style="font-family:'+p[2]+',cursive;font-weight:'+p[3]+'">'+esc(n)+'<small>'+esc(p[1])+'</small></button>'}).join('')}
 $('polN').addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;S.polN=b.getAttribute('data-v');majPolN();attendrePolice()});
+/* la cliente déplace ou agrandit le prénom de la décoration choisie ; il ne peut pas sortir de la lettre ni toucher un décor */
+function majPlaceNom(){var n=String(S.noms[S.sel]||'').trim(),f=n?placer(S.noms[S.sel]):null;$('placeNom').hidden=!f;if(!f)return;var a=(S.aj||{})[f.id];
+ $('quiPlace').textContent='« '+n+' » se place tout seul dans la lettre. Il prend toute la place libre : pour le bouger, rétrécissez-le d\'abord avec « − », puis utilisez les flèches'+(a?' (↺ le remet à sa place).':'.')}
+$('padNom').addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;var n=S.noms[S.sel],f0=placer(n);if(!f0)return;S.aj=S.aj||{};
+ var o=S.aj[f0.id],t=o?{dx:o.dx,dy:o.dy,s:o.s}:{dx:0,dy:0,s:1},a=b.getAttribute('data-a'),msg='';
+ if(a==='g')t.dx-=1;if(a==='d')t.dx+=1;if(a==='h')t.dy-=1;if(a==='b')t.dy+=1;if(a==='m')t.s=Math.max(.6,+(t.s-.06).toFixed(2));if(a==='p')t.s=Math.min(1.4,+(t.s+.06).toFixed(2));
+ if(a==='0')delete S.aj[f0.id];
+ else{S.aj[f0.id]=t;if(!libre(n,lieu(n))){if(o)S.aj[f0.id]=o;else delete S.aj[f0.id];msg=a==='p'?'Le prénom ne peut pas être plus grand ici : il sortirait de la lettre.':(t.s>=1?'Le prénom prend déjà toute la place : touchez « − » pour le rétrécir, puis déplacez-le.':'Le prénom ne peut pas aller plus loin de ce côté : il sortirait de la lettre.')}}
+ $('infoPlace').textContent=msg;dessiner();majPlaceNom()});
 function majPlaces(){[].forEach.call($('places').children,function(b){b.classList.toggle('on',b.getAttribute('data-v')===S.place)})}
 $('places').addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;S.place=b.getAttribute('data-v');majPlaces();dessiner()});
 var pretes={};
@@ -332,7 +360,7 @@ function resume(){var v=valides(),m=D.modeles.filter(function(x){return x.id===S
  $('total').textContent=eur(total());$('prixtete').innerHTML='<span class="price-sale">'+eur(D.prix)+'</span> <span style="font-size:.85rem;color:var(--ink-soft)">la décoration, prénom gravé compris</span>';
  var vide=S.noms.some(function(n){return !String(n).trim()}),ko=S.noms.some(function(n){return String(n).trim()&&!initiale(n)});
  $('manque').textContent=vide?'Il manque un prénom.':ko?'Un prénom ne commence pas par une lettre.':'';$('ajouter').disabled=vide||ko||!v.length;
- var petits=v.filter(function(n){var f=placer(n);return f&&f.hmm*k()<3});
+ var petits=v.filter(function(n){var f=lieu(n);return f&&f.hmm*k()<3});
  $('alertePetit').textContent=petits.length?'« '+petits[0]+' » est long pour cette lettre : il sera gravé très petit (moins de 3 mm de haut). Une lettre plus grande ou une autre place lui donnera plus de place.':''}
 
 /* ---- les planches de l'atelier : une par matière, pièces numérotées, à la taille réelle ---- */
@@ -347,7 +375,7 @@ function feuilles(){var v=valides(),q=k(),couleur=S.finition==='couleur',P={},or
   mettre('Contreplaqué 3 mm',{n:++num,nom:'fond « '+n+' »',b:g.b,h:'<path d="'+g.f+'" fill="none" stroke="#d32f2f" stroke-width=".35"/>'});
   var grav='';if(!couleur)g.k.forEach(function(x){if(x[0]!=='reflet')grav+='<path d="'+x[1]+'" fill="#111" opacity="'+(x[0]==='blanc'?'.25':'.6')+'"/>'});
   else g.k.forEach(function(x){grav+='<path d="'+x[1]+'" fill="none" stroke="#1f6feb" stroke-width=".3"/>'});
-  var f=placer(n),t='';if(f){var p=polN(),e=f.e,x=f.cx-((e.r-e.l)/2)*f.fs/100,y=f.cy+((e.a-e.d)/2)*f.fs/100;
+  var f=lieu(n),t='';if(f){var p=polN(),e=f.e,x=f.cx-((e.r-e.l)/2)*f.fs/100,y=f.cy+((e.a-e.d)/2)*f.fs/100;
    t='<text x="'+x.toFixed(2)+'" y="'+y.toFixed(2)+'" font-family="'+p[2]+',cursive" font-weight="'+p[3]+'" font-size="'+f.fs.toFixed(2)+'" fill="#111"'+(f.ang?' transform="rotate('+f.ang+' '+f.cx.toFixed(2)+' '+f.cy.toFixed(2)+')"':'')+'>'+esc(String(n).trim())+'</text>'}
   mettre('Contreplaqué 3 mm',{n:++num,nom:'lettre « '+n+' »'+(couleur?' (à peindre)':''),b:boiteDe(g.d),h:'<path d="'+g.d+'" fill="none" stroke="#d32f2f" stroke-width=".35"/>'+grav+t})});
  var G=6,LMAX=ZONE,out='';
@@ -367,7 +395,7 @@ function feuilles(){var v=valides(),q=k(),couleur=S.finition==='couleur',P={},or
 majModeles();majNoms();majPolI();majTailles();majFinitions();majPolN();majPlaces();charger(cle());attendrePolice();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){majPolI();majPolN()});
 window.pnAtelier={S:S,dessiner:dessiner,maj:function(){majModeles();majNoms();majPolI();majTailles();majFinitions();majPolN();majPlaces();dessiner()}};
-window.pnEtat=function(){var n=S.noms[S.sel];return{S:S,pret:!!F[cle()],total:total(),fit:placer(n),forme:!!forme(n)}};
+window.pnEtat=function(){var n=S.noms[S.sel];return{S:S,pret:!!F[cle()],total:total(),fit:placer(n),lieu:lieu(n),libre:libre(n,lieu(n)),forme:!!forme(n)}};
 })();
 """
 
