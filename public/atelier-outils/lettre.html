@@ -125,6 +125,7 @@ body{background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,
    <label class="l2">Bande de côté en combien de morceaux<select id="b-nb"><option value="0">Automatique (selon la zone de la machine)</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option></select><small id="b-info"></small></label>
    <label class="li-case l2 pasb"><input type="checkbox" id="b-plaque"> La boîte suit aussi la plaque du prénom (sinon la plaque dépasse de la boîte et sert de prise)</label>
    <label class="li-case l2"><input type="checkbox" id="b-dos"> Plaque pleine sous la boîte (elle cache les tenons)</label>
+   <label class="li-case l2"><input type="checkbox" id="b-poig"> Petite languette discrète sur le bord du couvercle, pour l'ouvrir</label>
    <label class="li-case l2"><input type="checkbox" id="b-rep"> Graver une lettre de repère (A, B, C…) sur chaque morceau de bande et sur le fond</label>
    <small class="l2" id="b-note"></small>
   </div></div></details>
@@ -7872,7 +7873,7 @@ function neuf() { var el = { plaque: { on: true, mode: 'inc', k: 1, auto: true, 
   return { v: 1, modele: 'naissance', nom: '', lettre: '', pol: 'fredoka', polNom: 'pacifico', H: 165, gras: 0, bord: 3, coul: 'rose', date: '', heure: '', taille: '', poids: '', libre: '',
     signe: 'auto', signeStyle: 'dessin', horloge: 'grave', decor: 'etoiles', animal: 'chat', nbEt: 6, el: el, zw: 180, zh: 180, zdef: 180, trait: 0.1, jeu: 0.1, ep: 3, sel: null, vue: 'face', num: false, exemple: false,
     bforme: 'lettre', bw: 120,
-    bt: { on: true, prof: 40, rayon: 8, cour: 5, jeuC: 0.2, pas: 2, pad: 10, nb: 0, dos: true, rep: true, plaque: false } }; }
+    bt: { on: true, prof: 40, rayon: 8, cour: 5, jeuC: 0.2, pas: 2, pad: 10, nb: 0, dos: true, rep: true, plaque: false, poig: true } }; }
 /* « boîte seule » : le même outil, sans la lettre décorée. La boîte prend la forme d'une lettre, d'un chiffre ou d'une forme simple ; le couvercle est une pièce pleine */
 var SEULE = /boite/.test(location.hash || ''), FORMES = [['lettre', 'Lettre ou chiffre'], ['rect', 'Rectangle'], ['rond', 'Rond'], ['ovale', 'Ovale'], ['coeur', 'Cœur']];
 function cleMem() { return SEULE ? 'niv-boite-seule' : 'niv-lettre-incrustee'; }
@@ -8030,6 +8031,8 @@ function calculer() { var an0 = animalChoisi(); var nd = {}; ELS.forEach(functio
   g.dessus = moins(L, decaler(toutes, S.jeu)); g.gravD = inter(unir(gravD), L);
   g.fond = unir(decaler(L, bordB()), P && pq.mode === 'inc' ? decaler(P.plaqueA, S.bord) : []); g.bf = boite(g.fond); calculerBoite(g);
   if (SEULE) { g.dessus = []; g.gravD = []; if (g.bt) { g.fond = g.bt.O; g.bf = boite(g.fond); } }
+  /* la petite languette du couvercle, pour l'ouvrir (gérant, 13/11/2026 : « des petites poignées discrètes… c'est pour ouvrir ») */
+  g.poig = null; if (g.bt && S.bt.poig !== false) { var lg = languette(g); if (lg) { g.poig = lg; g.fond = unir(g.fond, lg.a); g.bf = boite(g.fond); } }
   /* les centres de couleur qui tombent à la découpe */
   var ex = exPolys(g.dessus).map(function (e) { return { a: Math.abs(CL.Clipper.Area(e.outer)) / (E * E), b: boite([e.outer]), p: [e.outer].concat(e.holes) }; }).sort(function (a, b) { return b.a - a.a; });
   var bouche = decaler(pleins(toutes), S.jeu + 0.3); g.centres = ex.filter(function (c, i) { return i > 0 && aire(moins(c.p, bouche)) < 0.01; }); g.parts = ex.length - g.centres.length; g.petits = g.centres.filter(function (c) { return Math.min(c.b.w, c.b.h) < 2; }).length;
@@ -8083,6 +8086,29 @@ function morceauBande(o) { var T = o.T, Hm = o.Hm, p = o.p, len = o.b - o.a, d =
     else for (k = 0; k <= nb; k++) { var y0 = k ? T + (k - 0.5) * U + pont / 2 : T, y1 = k < nb ? T + (k + 0.5) * U - pont / 2 : Hm - T; lignes.push([[x, y0], [x, y1]]); } }
   return { poly: [po(poly.map(function (a) { return pt(a[0], a[1]); }))], lignes: lignes, long: len + d, fentes: lignes.length }; }
 var BTC = { cle: '', bt: null, al: [] };
+/* Languette du couvercle : une petite patte arrondie qui dépasse du bord de la boîte, là où le contour va le plus loin (toujours accessible),
+   du côté où le couvercle tient encore dans la zone de la machine. Elle fait partie du couvercle (fond blanc, ou couvercle plein de la boîte seule). */
+function languette(g) { var O = g.bt.O[0], u = Math.min(1.6, Math.max(0.8, (S.H || 170) / 170)) /* jamais trop petite pour le doigt, jamais énorme */, W = 14 * u, L0 = 5 * u, P = 6 * u, k2 = S.trait / 2;
+  var zw = (+S.zw || 180) - 4 - 2 * k2, zh = (+S.zh || 180) - 4 - 2 * k2, b0 = boite(g.fond), bo = boite([O]), mx = bo.x + bo.w / 2, my = bo.y + bo.h / 2, pts = [], i, j;
+  for (i = 0; i < O.length; i++) { var a = O[i], b = O[(i + 1) % O.length], n = Math.max(1, Math.ceil(Math.hypot(b.X - a.X, b.Y - a.Y) / E)); for (j = 0; j < n; j++) pts.push([(a.X + (b.X - a.X) * j / n) / E, (a.Y + (b.Y - a.Y) * j / n) / E]); }
+  function essai(dx, dy, Lg) { var m = -1e9, l = [], gr = [], cur = null, best = null, r = Math.min(Lg, W / 2) * 0.9;
+    pts.forEach(function (q) { var v = q[0] * dx + q[1] * dy; if (v > m) m = v; });
+    pts.forEach(function (q) { if (q[0] * dx + q[1] * dy >= m - 0.3) l.push(-q[0] * dy + q[1] * dx); }); l.sort(function (x, y) { return x - y; });
+    l.forEach(function (v) { if (cur && v - cur[1] <= 6) cur[1] = v; else { cur = [v, v]; gr.push(cur); } });
+    var cen = -mx * dy + my * dx; gr.forEach(function (q) { var c = (q[0] + q[1]) / 2; if (best === null || Math.abs(c - cen) < Math.abs(best - cen)) best = c; });
+    function G2(aa, bb) { return pt(m * dx - best * dy + aa * dx - bb * dy, m * dy + best * dx + aa * dy + bb * dx); }
+    var p = [G2(-P, -W / 2), G2(Lg - r, -W / 2)]; arc(Lg - r, -W / 2 + r, r, -90, 0, 8).forEach(function (q) { p.push(G2(q[0], q[1])); }); arc(Lg - r, W / 2 - r, r, 0, 90, 8).forEach(function (q) { p.push(G2(q[0], q[1])); }); p.push(G2(-P, W / 2));
+    var t = [po(p)], f = unir(g.fond, t), bb = boite(f);
+    /* le pied de la languette est adouci (pas d'angle vif où le bois casserait) */
+    var zone = [po([G2(-P - 3, -W / 2 - 6), G2(Lg + 1, -W / 2 - 6), G2(Lg + 1, W / 2 + 6), G2(-P - 3, W / 2 + 6)])], doux = decaler(decaler(inter(f, zone), 2 * u), -2 * u);
+    /* elle « tient » si elle n'agrandit pas le couvercle au-delà de la zone (une lettre déjà trop large reste signalée par l'alerte des planches) */
+    var dw = bb.w > b0.w + 0.01 ? bb.w - zw : 0, dh = bb.h > b0.h + 0.01 ? bb.h - zh : 0;
+    return { a: unir(t, doux), ok: dw <= 0.01 && dh <= 0.01, trop: Math.max(dw, dh, 0), long: Lg, cote: dx > 0 ? 'à droite' : dx < 0 ? 'à gauche' : dy > 0 ? 'en bas' : 'en haut' }; }
+  var cs = [[1, 0], [-1, 0], [0, 1], [0, -1]], tous = cs.map(function (c) { return essai(c[0], c[1], L0); });
+  for (i = 0; i < 4; i++) if (tous[i].ok) return tous[i];
+  /* aucun côté à la taille prévue : un peu plus courte (jamais moins de 3,5 mm), du côté où elle tient */
+  for (i = 0; i < 4; i++) { var L2 = L0 - tous[i].trop - 0.05; if (L2 >= 3.5 * u) { var e = essai(cs[i][0], cs[i][1], L2); if (e.ok) return e; } }
+  return tous[0]; }
 function calculerBoite(g) { var B = S.bt, T = +S.ep || 3, al = g.alertes; g.bt = null; if (!B || (!B.on && !SEULE)) return;
   var pq0 = S.el.plaque, cle = JSON.stringify([SEULE, S.bforme, S.bw, lettreChoisie(), S.pol, S.gras, S.H, S.bord, S.ep, S.jeu, S.trait, S.zw, S.zh, B, B.plaque && g.P ? [S.nom, S.polNom, pq0.fx, pq0.fy, pq0.k, pq0.mode] : 0]);
   if (BTC.cle === cle) { BTC.al.forEach(function (t) { al.push(t); }); if (BTC.bt) { g.bt = BTC.bt; g.fond = unir(pleins(g.fond), BTC.bt.O); g.bf = boite(g.fond); } return; }
@@ -8142,7 +8168,7 @@ function essaiCharniere() { var B = S.bt, T = +S.ep || 3, Hm = +B.prof || 40, p 
 /* ---------- les planches ---------- */
 function planches(g) { var k2 = S.trait / 2, blancs = [], coul = [];
   function bloc(id, nom, coupe, grav, n) { var b = boite(coupe); return { id: id, nom: nom, n: n, coupe: coupe, grav: grav || [], b: b }; }
-  if (SEULE) { g.pages = g.bt ? ranger([bloc('boite-couvercle', 'Couvercle (pièce pleine)', decaler(g.bt.O, k2), null, 'CV')].concat(blocsBoite(g)), 'Bois de la boîte', 'boite') : []; return; }
+  if (SEULE) { g.pages = g.bt ? ranger([bloc('boite-couvercle', 'Couvercle (pièce pleine)', decaler(g.fond, k2), null, 'CV')].concat(blocsBoite(g)), 'Bois de la boîte', 'boite') : []; return; }
   blancs.push(bloc('fond', 'Fond', decaler(g.fond, k2), null, 'F'));
   if (g.P && S.el.plaque.mode === 'inc') blancs.push(bloc('plaque', 'Plaque du prénom', decaler(g.P.plaqueA, k2), null, 'P'));
   g.els.forEach(function (a) { if (a.e.mode === 'inc') blancs.push(bloc('piece-' + a.n + '-' + a.d.id, a.d.nom, decaler(a.B, k2), a.Gv, a.n)); });
@@ -8258,7 +8284,7 @@ function listeBoite() { var g = G, T = [], bt = g.bt; T.push('BOÎTE SEULE — '
       'BC  Couronne du haut : même contour, mêmes encoches, ' + fr(S.bt.cour) + ' mm de rebord.' + (bt.dos ? '\nBD  Dos : plaque pleine collée sous le fond, elle cache les tenons.' : ''));
     bt.mor.forEach(function (m) { T.push(m.nom + '  Bande ' + m.nom + ' : ' + fr(m.long, 0) + ' x ' + fr(bt.Hm, 0) + ' mm, ' + m.fentes + ' fentes.'); });
     T.push('', 'Montage : 1. plier doucement chaque morceau de bande (fil du bois dans le sens des fentes), la lettre gravée sur la bande va en face de la même lettre gravée sur le fond. 2. emboîter et coller les tenons du bas dans le fond, morceau après morceau, en fermant les jonctions. 3. poser et coller la couronne sur les tenons du haut.'
-      + (bt.dos ? ' 4. coller le dos sous le fond.' : '') + ' Couvercle : poser la cale dans la couronne, mettre de la colle dessus, poser le couvercle bien aligné sur le contour, laisser sécher : la cale est à sa place.'); }
+      + (bt.dos ? ' 4. coller le dos sous le fond.' : '') + ' Couvercle : poser la cale dans la couronne, mettre de la colle dessus, poser le couvercle bien aligné sur le contour, laisser sécher : la cale est à sa place.' + (g.poig ? ' La petite languette du couvercle (' + g.poig.cote + ') dépasse de la boîte : elle sert à l\'ouvrir.' : '')); }
   if (g.alertes.length) { T.push('', 'À revoir :'); g.alertes.forEach(function (t) { T.push('- ' + t); }); }
   return T.join('\n') + '\n'; }
 function listeTexte() { if (SEULE) return listeBoite(); var g = G, T = [], c = (COULEURS.filter(function (q) { return q[0] === S.coul; })[0] || COULEURS[0])[1];
@@ -8274,7 +8300,7 @@ function listeTexte() { if (SEULE) return listeBoite(); var g = G, T = [], c = (
       'BK  Cale du couvercle : à coller sous le couvercle, elle entre dans la couronne (jeu ' + fr(S.bt.jeuC, 2) + ' mm).' + (bt.dos ? '\nBD  Dos : plaque pleine collée sous le fond, elle cache les tenons.' : ''));
     bt.mor.forEach(function (m) { T.push(m.nom + '  Bande ' + m.nom + ' : ' + fr(m.long, 0) + ' x ' + fr(bt.Hm, 0) + ' mm, ' + m.fentes + ' fentes.'); });
     T.push('Montage de la boîte : 1. plier doucement chaque morceau de bande (fil du bois dans le sens des fentes), la lettre gravée sur la bande va en face de la même lettre gravée sur le fond. 2. emboîter et coller les tenons du bas dans le fond, morceau après morceau, en fermant les jonctions. 3. poser et coller la couronne sur les tenons du haut.'
-      + (bt.dos ? ' 4. coller le dos sous le fond.' : '') + ' Couvercle : poser la cale dans la couronne, mettre de la colle dessus, poser le couvercle bien aligné sur le contour, laisser sécher : la cale est à sa place.'); }
+      + (bt.dos ? ' 4. coller le dos sous le fond.' : '') + ' Couvercle : poser la cale dans la couronne, mettre de la colle dessus, poser le couvercle bien aligné sur le contour, laisser sécher : la cale est à sa place.' + (g.poig ? ' La petite languette du couvercle (' + g.poig.cote + ') dépasse de la boîte : elle sert à l\'ouvrir.' : '')); }
   var Tx = textes(); if (Tx.heure && g.els.some(function (a) { return a.d.id === 'horloge'; })) T.push('', 'Horloge : aiguilles à ' + Tx.heure + '. ' + (S.horloge === 'ajour' ? 'Le rond de couleur du milieu ne rentre que dans un sens : le grand trait blanc est en haut (12), le trait moyen à droite (3). Les aiguilles blanches se posent dans leur emplacement.' : 'Cadran d\'une seule pièce : le tour, les traits, les chiffres et les aiguilles sont gravés, rien à orienter.'));
   T.push('', 'Ordre de montage : 1. coller le dessus de couleur sur le fond blanc. 2. poser chaque pièce blanche dans son emplacement (numéros du plan de pose). 3. recoller les petits centres de couleur. 4. coller le prénom sur sa plaque.');
   if (g.alertes.length) { T.push('', 'À revoir :'); g.alertes.forEach(function (t) { T.push('- ' + t); }); }
@@ -8299,7 +8325,7 @@ function champs() { ['bw', 'nom', 'lettre', 'H', 'gras', 'bord', 'date', 'heure'
   ['pol', 'polNom', 'signe', 'animal', 'signeStyle', 'horloge', 'decor'].forEach(function (k) { $('f-' + k).value = S[k]; });
   $('f-lettre').placeholder = lettreChoisie(); var sg = signeChoisi(); $('signeAuto').textContent = S.signe === 'auto' ? (sg >= 0 ? 'Calculé avec la date : ' + SIGNES[sg] + '.' : 'Se calcule avec la date.') : '';
   $('coul').innerHTML = COULEURS.map(function (c) { return '<button type="button" data-c="' + c[0] + '" class="' + (S.coul === c[0] ? 'on' : '') + '" aria-pressed="' + (S.coul === c[0]) + '"><i style="background:' + c[2] + '"></i>' + c[1] + '</button>'; }).join('');
-  ['prof', 'rayon', 'cour', 'jeuC', 'pas', 'pad'].forEach(function (k) { var el = $('b-' + k); if (el && document.activeElement !== el) el.value = S.bt[k]; }); $('b-on').checked = !!S.bt.on; $('b-dos').checked = !!S.bt.dos; $('b-rep').checked = !!S.bt.rep; $('b-plaque').checked = !!S.bt.plaque; $('b-nb').value = String(S.bt.nb); $('b-regl').hidden = !S.bt.on;
+  ['prof', 'rayon', 'cour', 'jeuC', 'pas', 'pad'].forEach(function (k) { var el = $('b-' + k); if (el && document.activeElement !== el) el.value = S.bt[k]; }); $('b-on').checked = !!S.bt.on; $('b-dos').checked = !!S.bt.dos; $('b-rep').checked = !!S.bt.rep; if ($('b-poig')) $('b-poig').checked = S.bt.poig !== false; $('b-plaque').checked = !!S.bt.plaque; $('b-nb').value = String(S.bt.nb); $('b-regl').hidden = !S.bt.on;
   $('b-info').textContent = G && G.bt ? 'Automatique : ' + G.bt.nAuto + ' morceau' + (G.bt.nAuto > 1 ? 'x' : '') + ' pour une zone de ' + S.zw + ' mm de large.' : '';
   $('f-bforme').value = S.bforme; var fs = formeSimple(); $('l-bw').hidden = !SEULE || S.bforme === 'rond' || S.bforme === 'coeur' || !fs;
   ['l-lettre', 'l-pol', 'l-gras', 'l-bord'].forEach(function (i) { $(i).hidden = SEULE && fs; });
@@ -8332,7 +8358,7 @@ function init() { SOUS = $('sous').textContent; $('f-bforme').innerHTML = FORMES
     maj(true); champs(); });
   document.addEventListener('change', function (ev) { var t = ev.target, id = t.getAttribute && t.getAttribute('data-mode');
     if (t.id === 'f-bforme') { S.bforme = t.value; maj(); return; }
-    if (t.id === 'b-on' || t.id === 'b-dos' || t.id === 'b-rep' || t.id === 'b-plaque') { S.bt[t.id.slice(2)] = t.checked; maj(); return; } if (t.id === 'b-nb') { S.bt.nb = +t.value || 0; maj(); return; }
+    if (t.id === 'b-on' || t.id === 'b-dos' || t.id === 'b-rep' || t.id === 'b-plaque' || t.id === 'b-poig') { S.bt[t.id.slice(2)] = t.checked; maj(); return; } if (t.id === 'b-nb') { S.bt.nb = +t.value || 0; maj(); return; }
     if (!id) return; var e = S.el[id];
     if (t.value === 'non') e.on = false; else { e.on = true; e.mode = t.value; } maj(); });
   document.addEventListener('click', function (ev) { var t = ev.target.closest ? ev.target.closest('button') : null; if (!t) return; var e = S.sel ? S.el[S.sel] : null, a;

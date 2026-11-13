@@ -27,7 +27,9 @@
   (14 × 5 mm à 170 mm de haut, jamais moins de 11 × 4 mm) qui fait partie du couvercle (fond blanc de la lettre, ou couvercle plein `CV` de la boîte seule) et dépasse du bord de la boîte,
   là où le contour va le plus loin : à droite d'abord, sinon à gauche, en bas, en haut, du côté où le couvercle tient encore dans la zone de la machine (raccourcie jusqu'à 3,5 mm si besoin) ;
   pied adouci ; dite dans le texte de montage. Essais : 36 lettres et chiffres + 8 boîtes seules (`scratchpad/lettre/tp.cjs`), t3, t7, t14, t15 au vert, t11 = ses 2 faux KO connus.
-  Lettre d'atelier **v12**, cliente **v5**. ⛔ PAS encore dans Gestion (`public/atelier-outils/lettre.html`) ni dans l'artifact L'atelier : attendre son mot (il a dit le même soir « dans admin tu laisses comme c'est »).
+  Lettre d'atelier **v12**, cliente **v5**. ✅ **Dans Gestion depuis le 13/11 soir (« Oui mets la languette dans Gestion aussi… pour les autres boîtes »)** : `public/atelier-outils/lettre.html`
+  régénéré (lettre ET boîte seule : même fichier, ouvert avec `#boite`), essai de la version Gestion 36 sur 36, `npm run build` OK. L'artifact L'atelier (démonstration) reste en v11, sans la languette.
+  Sa question du même message sur « l'arrière-plan derrière les lettres, comme les trucs de boutique » (le mur avec le logo encadré des autres créateurs, que la lettre n'a jamais eu) : il a dit « non c'est bon », rien changé.
   ⚠️ Constaté au passage : à 165 mm de haut, les lettres M (184 mm), Q (179 mm) et W (220 mm) sont plus larges que la zone de 180 mm (déjà avant la languette ; l'outil le signale).
 - ✅ **PRIX DONNÉ PAR LE GÉRANT LE 13/11 SOIR (« pour la boîte, ça va ensemble de toute façon, pour les deux 54,90 € »)** : **54,90 € la lettre ET sa boîte, toujours ensemble** (plus de « lettre seule », plus de supplément boîte ; tout ce que la cliente choisit est compris). `PRIX = {"ensemble": 54.9}`, `C.boite` toujours vrai. Maquette v4. Anciens prix proposés : `docs/prix-historique.md`.
 - **Proposé par moi, à valider** : une seule taille, 16,5 cm · les 7 couleurs = celles de l'aperçu de l'outil, à remplacer par ses vraies couleurs · texte libre, horloge ajourée, « Gravé »,
