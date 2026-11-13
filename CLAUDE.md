@@ -1,3 +1,10 @@
+## ⛔ JAMAIS LE NOMBRE DE PIÈCES CÔTÉ CLIENTE — 13/11/2026 soir (gérant : « sur la maquette de la maison et tout, tu mets le nombre de pièces ; les clients n'ont pas ça, je vais coller avant d'envoyer ; le nombre de pièces c'est juste pour moi »)
+- Dans un créateur, la partie que voit la cliente ne dit JAMAIS combien de pièces, de couches ou de morceaux composent l'objet, et ne montre pas de vue « Pièces » : l'atelier colle avant d'envoyer.
+  On écrit « montée et collée dans notre atelier », « en relief sur son fond », l'épaisseur si utile. Le nombre de pièces, les planches et le montage restent dans la partie de l'atelier (« De votre côté »).
+- Retiré le 13/11 soir (générateurs + pages) : maisonnette **v3** (bouton « Pièces » masqué, « Matière : contreplaqué de 3 mm, montée et collée dans notre atelier », alerte « le bois serait trop fragile ») ·
+  suspension **v3** (« Matière : contreplaqué de 3 mm ») · fleur **v4** (« en relief sur son fond », « 6 mm d'épaisseur ») · support **v13** (« le support monté ») · L'atelier **v5**.
+  Non touchés : décoration à suspendre (le mot « pièce » y explique à la cliente ce qu'elle place, sans nombre), décoration à prénom et arbre (rien côté cliente).
+
 ## 🗓️ « L'ATELIER » v3 : MASQUER PAR ÉVÈNEMENT + BOÎTE SEULE + PIEDS GRAVÉS — 13/11/2026 soir (gérant : « après Noël je masque tous les trucs de Noël… dans le logiciel ça disparaît pas, mais du site ça peut disparaître… un accès dans admin… après y aura la Saint-Valentin » ; « que je puisse faire que la boîte, les boîtes de chiffre ou normales » ; « pour les pieds aussi il faut les détails gravés, comme pour l'animal ») — DÉMONSTRATION, RIEN en ligne, RIEN dans Gestion
 - **L'atelier v3** https://claude.ai/artifact/S43Tkb7YKhWEb1B4JoHkh4 (9 créations) · **Lettre v6** https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw.
 - **Évènements** (`atelier-unique.py`, objet `V`, gardé sur l'appareil `niv-atelier-site`) : Noël, Saint-Valentin, Pâques, Fête des mères, Fête des pères, Naissance + « Ajouter un évènement ».

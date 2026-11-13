@@ -790,7 +790,7 @@ function vignettes(){
  $('stage').setAttribute('data-vue',G.vue);
  $('grande').src=D.photos[G.i];
  $('prec').hidden=$('suiv').hidden=G.vue!=='photo';
- $('aide').textContent=G.vue==='creation'?(V3.actif?'Vue 3D indicative : les deux pièces emboîtées, à l\'inclinaison choisie.':S.ajoure&&!S.els.length?'Le motif est découpé à travers le bois : on voit au travers.':S.els.length?'Faites glisser vos textes, dessins et photos avec le doigt pour les placer, ou utilisez les flèches. Sur le bois, la gravure ressort en brun.':'Aperçu indicatif : sur le bois, la gravure ressort en brun.')
+ $('aide').textContent=G.vue==='creation'?(V3.actif?'Vue 3D indicative : le support monté, à l\'inclinaison choisie.':S.ajoure&&!S.els.length?'Le motif est découpé à travers le bois : on voit au travers.':S.els.length?'Faites glisser vos textes, dessins et photos avec le doigt pour les placer, ou utilisez les flèches. Sur le bois, la gravure ressort en brun.':'Aperçu indicatif : sur le bois, la gravure ressort en brun.')
   :"Aperçu indicatif : sur le bois, la gravure ressort en brun, comme sur la photo d'exemple."+(G.commence?' Touchez « Votre création » pour revenir à votre support.':'');
 }
 function voirCreation(){G.commence=true;G.vue='creation';vignettes()}

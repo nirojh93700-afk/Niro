@@ -297,7 +297,7 @@ $('rFond').addEventListener('input',function(){S.fond=+this.value;majAjout();des
 function total(){return D.prix+Math.max(0,S.noms.length-D.compris)*D.plus}
 function resume(P,fs){var n=S.noms.length,e=S.noms.map(ecrit),vide=e.some(function(t){return !t}),L=[];
  L.push(['Forme',nomForme()]);L.push(['Prénom'+(n>1?'s':''),e.filter(Boolean).join(', ')||'à écrire']);L.push(['Écriture',pol()[1]]);
- L.push(['Taille','environ '+fr(P.H/10)+' cm de haut']);L.push(['Matière','Deux pièces en contreplaqué 3 mm, collées']);
+ L.push(['Taille','environ '+fr(P.H/10)+' cm de haut']);L.push(['Matière','Contreplaqué de 3 mm']);
  L.push(['Prix',n<=D.compris?eur(D.prix)+' ('+D.compris+' prénoms compris)':eur(D.prix)+' + '+(n-D.compris)+' prénom'+(n-D.compris>1?'s':'')+' à '+D.plus+' €']);
  $('resume').innerHTML=L.map(function(l){return '<div class="prc-sumrow"><span>'+esc(l[0])+'</span><b>'+esc(l[1])+'</b></div>'}).join('');
  $('total').textContent=eur(total());

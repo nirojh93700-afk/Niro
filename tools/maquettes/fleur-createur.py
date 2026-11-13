@@ -115,7 +115,7 @@ __FIL__
  <div class="product-info">
   <div class="breadcrumb"><a href="#">Boutique</a> / <a href="#">Maison &amp; Déco</a></div>
   <div class="pd-titrerow"><h1>Fleur à prénom en bois, une fleur qui ne fane pas</h1></div>
-  <p style="color:var(--ink-soft);margin-top:0">Choisissez la fleur, écrivez un prénom : il est découpé sur la tige. La fleur est faite de deux couches de bois collées, pour le relief.</p>
+  <p style="color:var(--ink-soft);margin-top:0">Choisissez la fleur, écrivez un prénom : il est découpé sur la tige. La fleur est en relief sur son fond, collée dans notre atelier.</p>
   <div class="price-lead" id="prixtete"></div>
 <div class="prc" id="prc">
  <div class="prc-head"><p class="prc-title">Créez votre fleur</p><p class="prc-sub">Six petites étapes. La fleur se dessine au fur et à mesure.</p></div>
@@ -317,7 +317,7 @@ function dessiner(){var g=construire();if(!g){$('chargement').hidden=false;retur
   +'<rect class="saisie" id="saisie" x="'+((g.zones.fleur[0]-b[0])*k).toFixed(1)+'" y="'+((g.zones.fleur[1]-oy)*k).toFixed(1)+'" width="'+(g.zones.fleur[2]*k).toFixed(1)+'" height="'+(g.zones.fleur[3]*k).toFixed(1)+'" fill="transparent"/>';
  G.vue={k:k,ox:b[0],oy:oy};
  $('dim').textContent='≈ '+fr(g.lmm/10)+' × '+fr(g.hmm/10)+' cm';$('dim').className='fl-dim'+(g.trop?' trop':'');
- $('aide').textContent=g.detache?message(g.detache):g.q<1&&!g.trop?'Le prénom a été réduit tout seul pour que les traits de la fleur restent assez épais.':g.contour>S.tc?'Le contour des lettres a été élargi tout seul pour que le prénom tienne en un seul morceau.':'Deux couches de bois collées : le fond, puis la fleur, la tige et le prénom par-dessus.';
+ $('aide').textContent=g.detache?message(g.detache):g.q<1&&!g.trop?'Le prénom a été réduit tout seul pour que les traits de la fleur restent assez épais.':g.contour>S.tc?'Le contour des lettres a été élargi tout seul pour que le prénom reste bien solide.':'La fleur, la tige et le prénom sont en relief sur leur fond, collés dans notre atelier.';
  reglages();resume();planches();if(S.vue==='3d')trois()}
 function message(z){return {fleur:'La fleur ne touche plus la tige : rapprochez-la, ou touchez « Place d\'origine ».',feuilleH:'La feuille du haut ne touche plus la tige : ramenez-la vers le milieu.',
  feuilleB:'La feuille du bas ne touche plus la tige : ramenez-la vers le milieu.',texte:'Le prénom ne touche plus la tige : réduisez l\'écart à gauche, ou agrandissez le contour.',
@@ -354,7 +354,7 @@ function total(){return D.prix+fond()[3]}
 function resume(){var g=G,fl=fleur(),fe=feuillage(),p=D.pol.filter(function(q){return q.id===S.pol})[0],fd=fond(),nom=S.nom.trim();
  var l=[['Prénom',nom?ech(nom):'Sans prénom'],['Fleur',fl.nom+(fl.mois?' ('+D.mois[fl.mois]+')':'')],['Feuilles',fe.vide?'Sans feuille':'Feuilles '+(D.feuilles.indexOf(fe)+1)]];
  if(nom)l.push(['Écriture',p.nom]);l.push(['Fond',fd[1]+(fd[3]?' (peint à la main, + '+fd[3]+' €)':'')]);
- l.push(['Taille','≈ '+fr(g.lmm/10)+' × '+fr(g.hmm/10)+' cm, deux couches de 3 mm']);
+ l.push(['Taille','≈ '+fr(g.lmm/10)+' × '+fr(g.hmm/10)+' cm, 6 mm d\'épaisseur']);
  $('resume').innerHTML=l.map(function(r){return '<div class="prc-sumrow"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>'}).join('');
  $('total').textContent=eur(total());$('prixtete').innerHTML='<span class="price">'+eur(D.prix)+'</span> <span style="color:var(--ink-soft);font-size:.9rem">en bois naturel</span>';
  var m=g.manque.length?'Cette écriture n\'a pas '+(g.manque.length>1?'les caractères':'le caractère')+' « '+ech(g.manque.join(' '))+' » : choisissez-en une autre ou changez le prénom.':'';

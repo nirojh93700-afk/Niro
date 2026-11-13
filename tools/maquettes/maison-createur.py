@@ -95,7 +95,7 @@ __FIL__
 <div class="container"><div class="product-layout sc-layout">
  <div class="sc-left">
   <div class="sc-stage ms-stage" id="stage" data-vue="creation"><span class="sc-tag">Votre maisonnette, en direct</span>
-   <div class="sc-vue" role="group" aria-label="Vue"><button type="button" class="on" id="vFace">De face</button><button type="button" id="v3d">3D</button><button type="button" id="vPieces">Pièces</button></div>
+   <div class="sc-vue" role="group" aria-label="Vue"><button type="button" class="on" id="vFace">De face</button><button type="button" id="v3d">3D</button><button type="button" id="vPieces" hidden>Pièces</button></div>
    <svg id="scene" viewBox="0 0 120 120" role="img" aria-label="Aperçu de votre maisonnette"></svg>
    <canvas class="sc-3d" id="c3d"></canvas>
    <span class="ms-dim" id="dim"></span></div>
@@ -323,7 +323,7 @@ function reglages(){document.querySelectorAll('[data-r]').forEach(function(r){va
  document.querySelectorAll('[data-o]').forEach(function(o){o.textContent=valeur(o.getAttribute('data-o'))})}
 
 /* ---- le résumé, le prix, ce qui bloque ---- */
-var ALERTES={disconnected:'Avec ces découpes, une pièce serait coupée en deux. Réduisez le dessin, les fenêtres ou les petites découpes.',
+var ALERTES={disconnected:'Avec ces découpes, le bois serait trop fragile. Réduisez le dessin, les fenêtres ou les petites découpes.',
  kerfDetailLost:'Une découpe est trop fine pour être faite proprement. Agrandissez le dessin, ou choisissez-en un plus simple.',
  bulbFit:'L\'ampoule ne tient pas dans cette maisonnette. Prenez la taille au-dessus, ou indiquez une ampoule plus petite.'};
 function resume(){var g=G,t=g.params,ta=taille(),nd=g.decors[0],fen=function(f){return f.windowShape==='none'?'sans fenêtre':f.windowRows*f.windowCols+' fenêtre'+(f.windowRows*f.windowCols>1?'s ':' ')+{arch:'arrondie',square:'carrée',circle:'ronde'}[f.windowShape]+(f.windowRows*f.windowCols>1?'s':'')};
@@ -332,7 +332,7 @@ function resume(){var g=G,t=g.params,ta=taille(),nd=g.decors[0],fen=function(f){
  l.push(['Autour',t.decoration==='none'||!t.decorCount?'Sans petite découpe':nd+' '+{star:'étoile',circle:'rond',heart:'cœur'}[t.decoration]+(nd>1?'s':'')]);
  l.push(['Côtés',t.syncWindows?fen(t)+' de chaque côté':'à gauche '+fen(t)+', à droite '+fen(t.rightWindow)]);
  l.push(['Toit',t.tiles?'Tuiles gravées':'Lisse']);l.push(['Accroche',t.topMode==='ornament'?'Anneau et fil blanc':'Sur une guirlande lumineuse (non fournie)']);
- l.push(['Matière','Contreplaqué de 3 mm, '+g.parts.length+' pièces montées et collées']);
+ l.push(['Matière','Contreplaqué de 3 mm, montée et collée dans notre atelier']);
  $('resume').innerHTML=l.map(function(r){return '<div class="prc-sumrow"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>'}).join('');
  $('total').textContent=eur(ta[6]);$('prixtete').innerHTML='<span class="price">'+eur(D.tailles[0][6])+'</span> <span style="color:var(--ink-soft);font-size:.9rem">la petite maisonnette</span>';
  var m=g.warnings.length?ALERTES[g.warnings[0]]:'';$('manque').textContent=m;$('ajouter').disabled=!!m;
