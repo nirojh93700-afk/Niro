@@ -4,6 +4,9 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
+## ⛔ À FAIRE LE JOUR DE LA MISE EN VENTE DES CRÉATIONS (consigne du gérant, 13/11/2026 soir)
+- Relier le masquage (par création, par évènement, Nouveau) à Gestion et au site, partout, et l'essayer en ligne avant de dire que c'est fait : voir CLAUDE.md « SIGNES EN MÉDAILLON + … MASQUAGE RELIÉ À GESTION ».
+
 ## 🗓️ L'ATELIER v3 (13/11/2026 soir) — masquer par évènement, boîte seule, pieds gravés : démonstration, RIEN en ligne
 - https://claude.ai/artifact/S43Tkb7YKhWEb1B4JoHkh4 (v3) · lettre v6 https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw.
 - En attente de son avis : le rangement par évènement (Noël = 3 créations), la boîte seule (formes, couvercle plein), les pieds.

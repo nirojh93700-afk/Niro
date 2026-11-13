@@ -132,7 +132,7 @@ function pied() { /* une empreinte de pied gauche (gros orteil à droite) : la p
     prec = [c[0], c[1], rr]; o.push(ellipse(c[0], c[1], rr * 0.92, rr * 1.08, 28)); });
   return unir(plante, unir(o)); }
 function forme(id) { var T = textes(), cle, g = null, P = S.pol;
-  if (id === 'date') cle = id + T.d1 + T.d2 + P; else if (id === 'horloge' || id === 'heure') cle = id + T.heure + P + S.horloge; else if (id === 'signe') cle = id + signeChoisi() + S.signeStyle; else if (id.indexOf('et') === 0) cle = id + S.decor;
+  if (id === 'date') cle = id + T.d1 + T.d2 + P; else if (id === 'horloge' || id === 'heure') cle = id + T.heure + P + S.horloge; else if (id === 'signe') cle = id + signeChoisi() + S.signeStyle + P; else if (id.indexOf('et') === 0) cle = id + S.decor;
   else if (id === 'taille' || id === 'regle') cle = id + T.taille + P; else if (id === 'pieds' || id === 'poids') cle = id + T.poids + P; else if (id === 'animal') cle = id + S.animal; else if (id === 'libre') cle = id + S.libre + P; else cle = id;
   if (CACHE[cle] !== undefined) return CACHE[cle];
   if (id === 'date' && T.d1) { var l1 = centrer(texteH(P, T.d1, 9)), l2 = centrer(texteH(P, T.d2, 9)); g = { blanc: limiter(centrer(unir(bouger(l1, 0, -6), bouger(l2, 0, 6))), 36) }; }
@@ -152,8 +152,15 @@ function forme(id) { var T = textes(), cle, g = null, P = S.pol;
       [['12', 0, -9.7], ['3', 9.9, 0], ['6', 0, 9.7], ['9', -9.9, 0]].forEach(function (q) { gh = unir(gh, bouger(centrer(texteH(P, q[0], 3.1)), q[1], q[2])); });
       gh = unir(gh, unir([cercle(0, 0, 1.2)], unir(trait([[[0, 0], [Math.sin(an1) * 5, -Math.cos(an1) * 5]]], 1.5), trait([[[0, 0], [Math.sin(an2) * 7.6, -Math.cos(an2) * 7.6]]], 1.0))));
       g = { blanc: [cercle(0, 0, 14)], grav: gh, dessin: gh }; } }
-  else if (id === 'signe' && signeChoisi() >= 0 && S.signeStyle !== 'symbole') { var sd = ecrit('animaux', String.fromCodePoint(SIGNE_DESSIN[signeChoisi()]), 100), sb = boite(sd), sz = bouger(centrer(sd), 0, 0, 19 / Math.max(sb.w, sb.h));
-    var gs = unir(sz, moins([cercle(0, 0, 13.1)], [cercle(0, 0, 12.6)])); g = { blanc: [cercle(0, 0, 14)], grav: gs, dessin: gs }; }
+  else if (id === 'signe' && signeChoisi() >= 0 && S.signeStyle !== 'symbole') { /* un médaillon de signe : le symbole en haut, le dessin au milieu, le nom du signe écrit en rond en bas ; tout est gravé sur un rond blanc */
+    var si = signeChoisi(), sd = ecrit('animaux', String.fromCodePoint(SIGNE_DESSIN[si]), 100), sb = boite(sd), sz = bouger(centrer(sd), 0, 0.2, 14.2 / Math.max(sb.w, sb.h)), RS = 15.5;
+    var sy = ecrit('signes', String.fromCodePoint(SIGNE_CODE[si]), 100), yb = boite(sy), gs = unir(sz, decaler(bouger(centrer(sy), 0, -10.7, 3.9 / Math.max(yb.w, yb.h)), 0.14));
+    if (si === 5) gs = decaler(bouger(centrer(sy), 0, -1.2, 12.5 / Math.max(yb.w, yb.h)), 0.2); /* les Gémeaux : pas de dessin qui se reconnaisse dans la collection, le symbole en grand */
+    gs = unir(gs, moins([cercle(0, 0, RS - 0.9)], [cercle(0, 0, RS - 1.4)]));
+    var lts = SIGNES[si].split('').map(function (ch) { var q = texteH(P, ch, 2.5), qb = boite(q); return { p: bouger(q, -(qb.x + qb.w / 2), 0), w: qb.w }; }), ec = 0.42, rt = 12.4, tot = -ec, pos = 0; lts.forEach(function (l) { tot += l.w + ec; });
+    lts.forEach(function (l) { var th = (pos + l.w / 2 - tot / 2) / rt; pos += l.w + ec; gs = unir(gs, bouger(tourner(bouger(l.p, 0, rt + 1.25), -th * 180 / Math.PI), 0, 0)); });
+    gs = bouger(gs, 0, 0, 14 / RS); /* même encombrement que l'ancien rond (28 mm) : les autres pièces gardent leur place */
+    g = { blanc: [cercle(0, 0, 14)], grav: gs, dessin: gs }; }
   else if (id === 'signe' && signeChoisi() >= 0) { var s = ecrit('signes', String.fromCodePoint(SIGNE_CODE[signeChoisi()]), 100), b = boite(s), k = 13.5 / Math.max(b.w, b.h);
     g = { blanc: unir(moins([cercle(0, 0, 14)], [cercle(0, 0, 11.6)]), decaler(bouger(centrer(s), 0, 0, k), 0.25)) }; }
   else if (id === 'regle' && T.taille) { /* comme une vraie règle : un trait par millimètre, plus long tous les 5 et tous les 10, les chiffres des centimètres ; tout est gravé */

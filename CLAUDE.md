@@ -1,3 +1,15 @@
+## ♈ SIGNES EN MÉDAILLON + ⛔ LE JOUR DE LA MISE EN VENTE DES CRÉATIONS : MASQUAGE RELIÉ À GESTION — 13/11/2026 soir
+- **Signes (gérant : « ça ressemble pas au zodiaque, on dirait un animal, il faut qu'on reconnaisse les signes »)** : le signe « en dessin » est un MÉDAILLON gravé sur un rond blanc de 28 mm :
+  le symbole (♈…) en haut, le dessin au milieu, le NOM du signe écrit en rond en bas (`forme('signe')`, lettres posées une à une sur un arc). Gémeaux = le symbole en grand (aucun dessin reconnaissable).
+  « En symbole découpé » reste au choix. Lettre **v9**, L'atelier **v7**. Vierge = toujours l'ange, Verseau = l'amphore (à confirmer par lui).
+- ⛔⛔ **CONSIGNE DU GÉRANT POUR LE JOUR OÙ IL VALIDE ET OÙ LES CRÉATIONS SONT MISES EN VENTE (« oublie pas… il faut que tu relies absolument tout, relié et fonctionnel, pour masquer tout dans Gestion / Atelier, fais attention »)** :
+  ce jour-là, AVANT de pousser : ① le réglage « Masquer ou afficher sur le site » (par création, par évènement, étiquette Nouveau) est ENREGISTRÉ dans Gestion (section à part, fusion clé par clé, jamais en bloc),
+  plus dans le navigateur ; ② le site le LIT partout : page « Créez le vôtre », menu, accueil, fiche de chaque créateur (404 si masqué), plan du site, flux Google, guides, recherche ;
+  ③ l'interrupteur de chaque fête dans Gestion → Fêtes masque d'un coup toutes les créations de cette fête ; ④ dans l'atelier de Gestion rien ne disparaît (création masquée = toujours ouvrable, marquée) ;
+  ⑤ essai réel : masquer Noël → vérifier en ligne que chaque création de Noël a disparu de chaque endroit, réafficher → tout revient ; ⑥ `audit-photos` et `audit-site` relancés. Ne pas dire « c'est en ligne » avant ces essais.
+- **Grand format (sa question : « si je modifie plus tard, je peux augmenter les valeurs, les dessins s'adaptent ? »)** : OUI, confirmé. Toutes les pièces sont dessinées pour une lettre de 170 mm puis mises à l'échelle
+  (`u = S.H / 170`) : augmenter la zone et la hauteur agrandit la lettre, les pièces, les dessins et la boîte ensemble (essayé 380 mm sur 600 × 400). 165 mm n'est que la valeur de départ pour 180 × 180.
+
 ## 📐 ZONE DE LA MACHINE PAR DÉFAUT = 180 × 180 mm — 13/11/2026 soir (gérant, capture de « Ma machine » réglée à 180 : « en attendant que j'achète l'autre machine, par défaut tu mets 180 »)
 - L'atelier (`M` dans `atelier-unique.py`) et l'outil lettre / boîte seule (`neuf()` : `zw: 180, zh: 180, zdef: 180`) partent de 180 × 180. Un réglage resté à l'ancienne valeur par défaut (200 × 200) suit tout seul ;
   une zone qu'il a choisie lui-même (ex. 600 × 400) est gardée.
