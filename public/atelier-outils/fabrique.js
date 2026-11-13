@@ -222,8 +222,8 @@
     }).join('') + '</g></svg>';
     [].forEach.call(z.querySelectorAll('g[data-v] path'), function (e) { e.setAttribute('fill', 'none'); e.setAttribute('stroke', '#FF0000'); e.setAttribute('stroke-width', '0.1'); e.setAttribute('vector-effect', 'non-scaling-stroke'); e.removeAttribute('fill-rule'); });
     [].forEach.call(z.querySelectorAll('g[data-v]'), function (e) { e.removeAttribute('data-v'); [].forEach.call(e.querySelectorAll('[data-mat],[data-piece],[data-nom]'), function (x) { x.removeAttribute('data-mat'); x.removeAttribute('data-piece'); x.removeAttribute('data-nom'); }); });
-    var g = z.querySelector('#nivTout'), tb = g.getBBox(), W = r2(tb.width + 10), H = r2(tb.height + 10);
-    g.setAttribute('transform', 'translate(' + r2(5 - tb.x) + ' ' + r2(5 - tb.y) + ')'); g.removeAttribute('id');
+    var g = z.querySelector('#nivTout'), tb = g.getBBox(), W = r2(tb.width + 4), H = r2(tb.height + 4);
+    g.setAttribute('transform', 'translate(' + r2(2 - tb.x) + ' ' + r2(2 - tb.y) + ')'); g.removeAttribute('id');
     var svg = '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="' + NS + '" xmlns:xlink="' + XL + '" width="' + W + 'mm" height="' + H + 'mm" viewBox="0 0 ' + W + ' ' + H + '">\n' + propre(g.outerHTML).replace(/></g, '>\n<') + '\n</svg>\n';
     z.innerHTML = '';
     return { nom: f.nom + '.svg', svg: svg, w: W, h: H, titre: f.titre, matiere: f.matiere,

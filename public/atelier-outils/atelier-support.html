@@ -554,8 +554,8 @@ $('ajouter').addEventListener('click',function(){if(!pret())return;this.textCont
 /* ---- le fichier de l'atelier : les deux pièces à la taille réelle, rouge = découpe, noir = gravure ---- */
 function fichier(){
  var F=$('fichier'),b=base(),t0=T(),R='fill="none" stroke="#FF0000" stroke-width="0.25"',lh=Math.max(t0.lh,b.lh);
- function X(v){return ((v-ox())/3+5).toFixed(2)} function Y(v){return ((v-oy())/3+5).toFixed(2)} function L(v){return (v/3).toFixed(2)}
- F.setAttribute('viewBox','0 0 '+t0.lw+' '+lh);
+ function X(v){return ((v-ox())/3+2).toFixed(2)} function Y(v){return ((v-oy())/3+2).toFixed(2)} function L(v){return (v/3).toFixed(2)}
+ F.setAttribute('viewBox','0 0 '+(t0.lw-7)+' '+(lh-6));
  var h='';
  if(S.grave)S.els.forEach(function(e){var t=taille(e);
   if(e.type==='texte'){h+='<text x="'+X(e.x)+'" y="'+Y(e.y)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+L(t.h)+'" fill="#111" data-t="'+L(largTexte())+'">'+esc(e.texte||'')+'</text>'}
@@ -564,12 +564,12 @@ function fichier(){
    if(e.nom){var bh=t.h*(e.b[1]-e.b[0]);h+='<text x="'+X(e.x)+'" y="'+Y(e.y-t.h/2+t.h*(e.b[0]+e.b[1])/2)+'" text-anchor="middle" dominant-baseline="central" font-family="'+police(e.police)[2].replace(/"/g,"'")+'" font-size="'+L(bh*.82)+'" fill="#111" data-t="'+L(t.w*.92)+'">'+esc(e.nom)+'</text>'}}
   else{h+='<image href="'+e.src+'" x="'+X(e.x-t.w/2)+'" y="'+Y(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'" preserveAspectRatio="xMidYMid slice" style="filter:grayscale(1) contrast(1.15)"/>'
    +'<rect x="'+X(e.x-t.w/2)+'" y="'+Y(e.y-t.h/2)+'" width="'+L(t.w)+'" height="'+L(t.h)+'" fill="none" stroke="#111" stroke-width="0.3"/>'}});
- h='<g clip-path="url(#fclip)">'+h+'</g><clipPath id="fclip"><path transform="translate(5 5)" clip-rule="evenodd" d="'+b.dos+trous()+'"/></clipPath>'
-  +'<g transform="translate(5 5)"><path '+R+' d="'+b.dos+fentesD(b)+trous()+'"/></g>'
-  +'<g transform="translate('+t0.piedX+' 5)"><path '+R+' d="'+b.pied+trousPied()+'"/></g>';
+ h='<g clip-path="url(#fclip)">'+h+'</g><clipPath id="fclip"><path transform="translate(2 2)" clip-rule="evenodd" d="'+b.dos+trous()+'"/></clipPath>'
+  +'<g transform="translate(2 2)"><path '+R+' d="'+b.dos+fentesD(b)+trous()+'"/></g>'
+  +'<g transform="translate('+(t0.piedX-4)+' 2)"><path '+R+' d="'+b.pied+trousPied()+'"/></g>';
  F.innerHTML=h;
  [].forEach.call(F.querySelectorAll('text[data-t]'),function(t){var bb=t.getBBox(),m=+t.getAttribute('data-t');if(bb.width>m)t.setAttribute('font-size',parseFloat(t.getAttribute('font-size'))*m/bb.width)});
- $('fnom').textContent='support-telephone-'+S.taille+'-'+S.forme+(S.ajoure?'-'+S.motif:'')+'-'+S.angle+'deg-<n° de commande>.svg · '+t0.lw+' × '+lh+' mm · bois 3 mm';
+ $('fnom').textContent='support-telephone-'+S.taille+'-'+S.forme+(S.ajoure?'-'+S.motif:'')+'-'+S.angle+'deg-<n° de commande>.svg · '+(t0.lw-7)+' × '+(lh-6)+' mm · bois 3 mm';
 }
 
 /* ---- la vue 3D : les deux pièces emboîtées (three.js, chargé seulement quand on touche « 3D ») ---- */
@@ -720,5 +720,45 @@ body{background:#fbf7ee;padding-bottom:40px}
   fabriquer:function(progres){return window.NivFabrique.fabriquer(window.NivFabrique.specs[QUOI](),progres)}};
  var essais=0;(function pret(){essais++;var ok=false;try{ok=charge()}catch(e){ok=false}
   if(ok||essais>80){setTimeout(function(){if(window.NivEditeur)try{window.NivEditeur.demarrer(QUOI)}catch(e){};window.nivAtelier.pret=true;try{parent.postMessage({type:'niv-pret',quoi:QUOI},location.origin)}catch(_){}} ,600)}else setTimeout(pret,250)})();
+})();
+</script><!-- niv-ok --><script>/* Bouton « OK ✓ » DANS le champ où l'on écrit (téléphone) — 13/11/2026.
+   Le gérant : « dès que le clavier apparaît, l'aperçu est coupé… il faut un bouton à côté du nom pour valider, pour que le
+   clavier disparaisse tout de suite ; les clients ne vont pas chercher le bouton ». Le bouton apparaît au bout du champ dès qu'on
+   y écrit ; le toucher (ou la touche Entrée) valide et range le clavier. Rien n'est changé dans la page : un seul bouton flottant,
+   posé sur le champ en cours. À écrire en fin de page de CHAQUE créateur (tools/maquettes/ajouter-valider.py). */
+(function () {
+  if (window.__nivOk) return; window.__nivOk = 1;
+  var tactile = function () { return (window.matchMedia && matchMedia('(pointer:coarse)').matches) || window.innerWidth < 760; };
+  var st = document.createElement('style'), b = document.createElement('button'), cur = null, pad = null, boucle = 0;
+  st.textContent = '.niv-ok{position:fixed;z-index:2147483000;display:none;align-items:center;justify-content:center;min-width:62px;padding:0 12px;border:0;border-radius:9px;'
+    + 'background:linear-gradient(135deg,#e2c67e,#c9a24b);color:#1a1206;font:700 15px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;box-shadow:0 1px 5px rgba(0,0,0,.28);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}'
+    + '.niv-ok.on{display:inline-flex}';
+  b.type = 'button'; b.className = 'niv-ok'; b.textContent = 'OK ✓'; b.setAttribute('aria-label', 'Valider et fermer le clavier');
+  function champ(el) { if (!el || el.disabled || el.readOnly) return false; if (el.tagName === 'TEXTAREA') return true; if (el.tagName !== 'INPUT') return false;
+    return ['text', 'search', 'tel', 'number', 'email', 'url'].indexOf((el.getAttribute('type') || 'text').toLowerCase()) >= 0; }
+  function placer() { if (!cur) return; if (!document.contains(cur)) { fermer(); return; } var r = cur.getBoundingClientRect(), h = Math.max(30, Math.min(r.height - 8, 42)), w = b.offsetWidth || 62;
+    b.style.height = h + 'px'; b.style.left = Math.round(r.right - w - 4) + 'px'; b.style.top = Math.round(cur.tagName === 'TEXTAREA' ? r.bottom - h - 4 : r.top + (r.height - h) / 2) + 'px';
+    boucle = requestAnimationFrame(placer); }
+  function ouvrir(el) { if (cur === el) return; fermer(); if (!tactile() || el.getBoundingClientRect().width < 120) return; cur = el; pad = el.style.paddingRight; el.style.paddingRight = '74px'; b.classList.add('on'); placer(); }
+  function fermer() { if (!cur) return; cancelAnimationFrame(boucle); try { cur.style.paddingRight = pad || ''; } catch (e) {} cur = null; b.classList.remove('on'); }
+  function valider() { var el = cur; if (!el) return; fermer(); el.blur(); }
+  b.addEventListener('pointerdown', function (ev) { ev.preventDefault(); });
+  b.addEventListener('mousedown', function (ev) { ev.preventDefault(); });
+  b.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); valider(); });
+  document.addEventListener('focusin', function (ev) { if (champ(ev.target)) ouvrir(ev.target); else fermer(); });
+  document.addEventListener('focusout', function () { setTimeout(function () { if (cur && document.activeElement !== cur) fermer(); }, 0); });
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Enter' && cur && cur.tagName === 'INPUT') setTimeout(valider, 0); });
+  function poser() { document.head.appendChild(st); document.body.appendChild(b); if (champ(document.activeElement)) ouvrir(document.activeElement); }
+  if (document.body) poser(); else document.addEventListener('DOMContentLoaded', poser);
+})();
+</script><!-- niv-pont --><script>
+(function(){
+ if(window.parent===window)return;
+ function dire(m){try{parent.postMessage(m,'*')}catch(_){}}
+ window.addEventListener('message',function(ev){var d=ev.data||{};if(ev.source!==window.parent||d.type!=='niv-fabriquer'||!window.nivAtelier||!nivAtelier.pret)return;
+  nivAtelier.fabriquer(function(f,t){dire({type:'niv-progres',fait:f,total:t})}).then(function(F){var al='';try{al=nivAtelier.alerte()||''}catch(_){}
+   dire({type:'niv-fichiers',alerte:al,policesKo:[].slice.call(F.policesKo||[]),fichiers:[].map.call(F,function(f){return{nom:f.nom,svg:f.svg,w:f.w,h:f.h,titre:f.titre,matiere:f.matiere,note:f.note}})})
+  }).catch(function(e){dire({type:'niv-erreur',message:String(e&&e.message||e)})})});
+ var t=setInterval(function(){if(window.nivAtelier&&nivAtelier.pret){clearInterval(t);dire({type:'niv-pret'})}},300);
 })();
 </script></body></html>

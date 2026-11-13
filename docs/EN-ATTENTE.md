@@ -4,6 +4,15 @@
   (9ᵉ écriture Tamoul, phrases à cocher, page dédiée, vidéos Deepavali / Pongal / Puthandu).
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
+
+## 🧰 13/11/2026 SOIR — L'ATELIER DANS GESTION : CE QUI ATTEND SON AVIS
+- **Signes du zodiaque** : il n'aime pas le médaillon. Planche de 4 styles envoyée (A, B, C, D) : attendre son choix avant de toucher aux signes.
+- **En ligne dans Gestion** (admin seulement) : Tests → « L'atelier (toutes les créations) » ; bouton OK et support 179 mm dans les trois outils ; 2 mm de marge dans tous les fichiers fabriqués.
+  À lui demander après essai sur son iPhone : l'enregistrement des fichiers (partage) lui convient-il ?
+- **Masquage par famille** : mon rangement de départ des familles / modèles / dessins par évènement est à valider.
+- **Prix** : maisonnette 29,90 € (moyenne) et 34,90 € (grande) = mon choix, à confirmer. Page « Créez le vôtre » à republier avec la fleur à 19,90 € s'il le veut.
+- Sans réponse : lettre 165 mm par défaut, réglages de la boîte, pieds, essais sur la machine.
+
 ## ⛔ À FAIRE LE JOUR DE LA MISE EN VENTE DES CRÉATIONS (consigne du gérant, 13/11/2026 soir)
 - Relier le masquage (par création, par évènement, Nouveau) à Gestion et au site, partout, et l'essayer en ligne avant de dire que c'est fait : voir CLAUDE.md « SIGNES EN MÉDAILLON + … MASQUAGE RELIÉ À GESTION ».
 

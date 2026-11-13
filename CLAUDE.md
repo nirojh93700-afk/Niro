@@ -1,10 +1,31 @@
-## 💶 RÉPONSES DU GÉRANT À MA LISTE DE 16 POINTS + PRIX MAISONNETTE / FLEUR — 13/11/2026 soir (« Oui pour le 1 et le 2 et 3, pour le quatre non, pour le six c'est bon, pour le neuf oui tu mets dans le gestion, pour le 10 le premier prix tu commences à 24,90 €, tu augmentes après, pour les fleurs 19,90 € plus quatre euros pour la peinture »)
-- **1 OUI** : bouton « OK ✓ » dans les trois outils de Gestion déjà en ligne · **2 OUI** : rangement du support (179 × 169 mm, marges 2 mm) dans l'outil de Gestion ·
-  **3 OUI** : masquer par famille À L'INTÉRIEUR d'un outil · **4 NON** : Vierge = ange et Verseau = amphore refusés, puis « j'aime pas ceci non plus zodiaque » (le médaillon entier) →
-  planche de 4 styles envoyée (A médaillon · B symbole en grand · C constellation · D ses figures des cristaux), EN ATTENTE DE SON CHOIX, rien changé dans l'outil publié ·
-  **6 OK** : le rangement par évènement · **9 OUI** : L'atelier va dans Gestion.
-- **Prix** : maisonnette petite **24,90 €** (donné par lui), moyenne 29,90 € et grande 34,90 € = MON choix (+ 5 € chacun), à confirmer · fleur à prénom **19,90 €**, fond peint **+ 4 €** (donnés par lui).
-  Maisonnette **v5**, fleur **v5**, L'atelier **v9**. La page « Créez le vôtre » (artifact v1) affiche encore l'ancien prix de la fleur : son générateur est corrigé, pas republié (ses images ne sont plus sur la machine).
+## 🧰 L'ATELIER EST DANS GESTION + OUTILS DE GESTION MIS À JOUR + MASQUAGE PAR FAMILLE + PRIX — 13/11/2026 soir (gérant : « Oui pour le 1 et le 2 et 3, pour le quatre non, pour le six c'est bon, pour le neuf oui tu mets dans le gestion, pour le 10 le premier prix tu commences à 24,90 €, tu augmentes après, pour les fleurs 19,90 € plus quatre euros pour la peinture »)
+- **1 et 2 (Gestion en ligne, ADMIN seulement)** : les trois outils `public/atelier-outils/atelier-*.html` ont le bouton « OK ✓ » des champs ; le support est rangé pour 180 mm
+  (grand **179 × 169 mm**, standard 167 × 155, petit 159 × 146) ; `fabrique.js` met **2 mm de marge** (au lieu de 5) autour des pièces de TOUS les fichiers fabriqués
+  (support, arbre 184 × 184, décoration). Réglages réunis dans **`tools/maquettes/atelier_patchs.py`** (`ok`, `support_180`, `marges`, `pont`, chacun ne s'applique qu'une fois ;
+  `python3 tools/maquettes/atelier_patchs.py public/atelier-outils`) : `retouche-site.py`, `editeur-demo.py` et `atelier-unique.py` passent par lui (une régénération les garde).
+- **9 (L'atelier dans Gestion)** : Gestion → Tests → **« L'atelier (toutes les créations) »** (`/gestion/logiciel`, `src/app/gestion/logiciel/page.jsx`) ouvre en plein écran
+  `public/atelier-outils/logiciel.html` (+ `lettre.html`, `prenom/`, `suspension.html`, `fleur.html`, `maison.html` ; les trois outils déjà en ligne sont réutilisés, avec un pont de
+  messages `<!-- niv-pont -->` sans effet hors d'un cadre). Fabrication : `python3 tools/maquettes/atelier-unique.py <demo> <lettre complet> <prenom> <suspension.html> <fleur.html>
+  <maison.html> public/atelier-outils gestion` (8e mot « gestion » : `SITE=true`, bouton « ‹ Gestion » qui referme le cadre sans le décharger, fichiers enregistrés par un lien de
+  téléchargement, ou par le partage du téléphone sur écran tactile ; l'outil lettre enregistre lui-même quand il n'est pas dans un artifact). « Ma machine » et le masquage restent
+  sur l'appareil. « Retoucher et fabriquer » est GARDÉ (le bouton « Corriger dans l'outil » des commandes s'en sert). Les formes de la décoration à prénom n'existent plus qu'en une
+  copie : `public/atelier-outils/prenom/formes` (retirées de `docs/maquettes/assets/prenom/`). Dépôt : 438 Mo de fichiers suivis (limite ~440).
+- **3 (masquer par famille À L'INTÉRIEUR d'un outil)** : écran « Masquer ou afficher sur le site » → volet « À l'intérieur » sous la décoration à suspendre (17 familles de dessins :
+  Noël, Bougies, Sapins, Cadeaux, Cloches, Flocons, Rennes, Chaussettes, Bonnets = Noël ; Œufs de Pâques, Lapins = Pâques ; le reste toute l'année), la décoration à prénom (4 modèles :
+  renne et bonnet = Noël, oreilles de lapin = Pâques) et la maisonnette (20 dessins : les 16 de Noël + étoile, cœur, lune, rond). Par ligne : case « affiché sur le site » + menu de
+  l'évènement ; « Tout masquer / Tout afficher » d'un évènement prend aussi ces lignes ; tuile « N masqués à l'intérieur ». Données `PARTIES` (Python, fin de `atelier-unique.py`),
+  `V.pt` (évènement) et `V.pm` (masqué) dans `niv-atelier-site`. Avec « Voir comme sur le site », la décoration à prénom et la maisonnette s'ouvrent sans ce qui est masqué
+  (message `niv-masques`, écouté par `prenom-createur.py` et `maison-createur.py`) ; dans l'outil d'atelier de la décoration à suspendre, rien ne disparaît (c'est du site que ça partira).
+  MON rangement de départ, à valider. ⚠️ Toujours une démonstration : rien n'est en vente, ce réglage ne commande rien sur le site (consigne du jour de la mise en vente plus bas).
+- **4 NON, puis « j'aime pas ceci non plus zodiaque »** : il n'aime ni l'ange / l'amphore ni le médaillon. Essai en ligne dans la lettre v10 et L'atelier v10 : Vierge = jeune femme,
+  Verseau = eau qui se verse (`SIGNE_DESSIN`, `animaux.ttf` = 71 dessins). **Planche de 4 styles envoyée (A médaillon actuel · B symbole en grand · C constellation + symbole + nom ·
+  D ses figures des cristaux, à vectoriser) : EN ATTENTE DE SON CHOIX**, ne rien changer d'autre avant.
+- **6 OK** : le rangement par évènement (Noël = décoration à suspendre, décoration à prénom, maisonnette · Naissance = lettre).
+- **Prix** : maisonnette petite **24,90 €** (donné par lui), moyenne 29,90 € et grande 34,90 € = MON choix (+ 5 € chacun), à confirmer · fleur à prénom **19,90 €**, fond peint **+ 4 €**
+  (donnés par lui). Maisonnette **v5**, fleur **v5**. La page « Créez le vôtre » (artifact v1) affiche encore l'ancien prix de la fleur : générateur corrigé, pas republié.
+- Versions : L'atelier **v10**, lettre **v10**. Essais du 13/11 soir : atelier 26 + 36, familles 40, version Gestion 36 (9 créations ouvertes, fabrication du support, téléchargement sur
+  ordinateur, partage sur écran tactile), trois outils seuls 18 + bouton OK 3, `npm run build` OK. ⚠️ Pas essayé sur un vrai iPhone ni sur la machine ; la page `/gestion/logiciel`
+  elle-même n'a pas été ouverte dans un navigateur (seulement compilée), la page du logiciel oui.
 - Points de ma liste encore sans réponse : 5 (lettre 165 mm par défaut), 7 (réglages de la boîte), 8 (pieds), 11 à 14, essais sur la machine.
 
 ## 📐 TROIS OUTILS RANGÉS POUR 180 mm, L'ARBRE RESTE À 18 cm — 13/11/2026 soir (gérant : « oui fais les trois et laisse l'arbre à 18 cm », après ma réponse « y aura-t-il des problèmes ? »)
@@ -18,7 +39,7 @@
 - **Arbre de vie : laissé à 18 cm** (sa décision). ⚠️ Constaté en lisant `fabrique.js` : le FICHIER de l'arbre fait 190 × 190 mm dans Gestion (184 × 184 dans L'atelier), l'arbre dedans fait 180 mm :
   c'est l'objet qui compte pour la machine, pas le cadre du fichier.
 - L'atelier **v8**. Essais : 10 mesures + 36 + 26, 0 erreur. Pas d'essai machine.
-- **À lui demander** : appliquer le même rangement du support à l'outil de Gestion déjà en ligne (aujourd'hui les deux diffèrent).
+- ✅ 13/11 soir : le même rangement est appliqué à l'outil de Gestion en ligne (son « oui pour le 2 »), `public/atelier-outils/` est donc À JOUR lui aussi.
 
 ## ♈ SIGNES EN MÉDAILLON + ⛔ LE JOUR DE LA MISE EN VENTE DES CRÉATIONS : MASQUAGE RELIÉ À GESTION — 13/11/2026 soir
 - **Signes (gérant : « ça ressemble pas au zodiaque, on dirait un animal, il faut qu'on reconnaisse les signes »)** : le signe « en dessin » est un MÉDAILLON gravé sur un rond blanc de 28 mm :
@@ -265,7 +286,7 @@
   À 190 mm de haut : 4 prénoms à l'espacement 0, 7 au plus serré.
 
 ## 🦌 MAQUETTE « CRÉEZ VOTRE DÉCORATION À PRÉNOM » (générateur « Personalized Holiday Name Ornament » d'Atomm) — 12/11/2026 SOIR (gérant : lien donné, « analyse bien le nouveau truc… il faut que ça soit fait correctement… tu me prépares comme pour cela ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« Enregistre la maquette ») = VERSION 4 de l'artifact (v3 + fil d'accroche BLANC), RÉ-ENREGISTRÉE le 12/11 soir (« Enregistre les maquettes »), CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
-- **Artifact** https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (v4) · générateur `python3 tools/maquettes/prenom-createur.py <page de base = sortie d'un autre créateur, ex. arbre> docs/maquettes/assets/prenom/formes <sortie>`
+- **Artifact** https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (v4) · générateur `python3 tools/maquettes/prenom-createur.py <page de base = sortie d'un autre créateur, ex. arbre> public/atelier-outils/prenom/formes <sortie>` (les formes sont là depuis le 13/11 : une seule copie, celle que Gestion sert)
   (index.html + formes/ publiés ensemble) · formes : `node tools/maquettes/prenom-atomm-releve.cjs` (LEUR outil ouvert dans le navigateur, hôte
   `personalized-holiday-name-ornament.generator.atommapps.com` ajouté au réseau ; à lancer depuis un dossier qui a `brut/`) → `python3 -I tools/maquettes/prenom-atomm-donnees.py <brut> <formes>`
   (16 fichiers = 4 modèles × 4 polices d'initiale, 26 lettres, 2,6 Mo).

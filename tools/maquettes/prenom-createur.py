@@ -337,6 +337,9 @@ function resume(){var v=valides(),m=D.modeles.filter(function(x){return x.id===S
 
 /* ---- les planches de l'atelier : une par matière, pièces numérotées, à la taille réelle ---- */
 function boiteDe(d){var n=d.match(/-?\d+(\.\d+)?/g).map(Number),x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(var i=0;i<n.length;i+=2){x0=Math.min(x0,n[i]);x1=Math.max(x1,n[i]);y0=Math.min(y0,n[i+1]);y1=Math.max(y1,n[i+1])}return[x0,y0,x1-x0,y1-y0]}
+/* « L'atelier », case « Voir comme sur le site » : un modèle masqué sur le site n'est plus proposé (rien ne change sans ce message) */
+var MODS0=D.modeles.slice();window.addEventListener('message',function(ev){var d=ev.data;if(!d||d.type!=='niv-masques')return;var c=(d.caches&&d.caches.prenom)||[];
+ var l=MODS0.filter(function(m){return c.indexOf(m.id)<0});if(!l.length)l=MODS0.slice();D.modeles=l;if(!l.some(function(m){return m.id===S.modele}))S.modele=l[0].id;majModeles(true);dessiner()});
 var ZONE=176;window.addEventListener('message',function(ev){var d=ev.data;if(d&&d.type==='niv-machine'&&d.machine){var z=Math.min(+d.machine.zw||180,+d.machine.zh||180)-4;if(z>=60&&z!==ZONE){ZONE=z;feuilles()}}});
 function feuilles(){var v=valides(),q=k(),couleur=S.finition==='couleur',P={},ordre=[],num=0;
  function mettre(mat,piece){if(!P[mat]){P[mat]=[];ordre.push(mat)}P[mat].push(piece)}

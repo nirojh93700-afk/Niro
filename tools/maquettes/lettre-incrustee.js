@@ -81,7 +81,7 @@ var ANIMAUX = [['chat', 'Chat', 0x1F408], ['chat-tete', 'Chat (tête)', 0x1F431]
   ['bebe', 'Bébé emmailloté', 0x1F476], ['biberon', 'Biberon', 0x1F37C], ['couronne', 'Couronne', 0x1F451], ['ballon', 'Ballon', 0x1F388], ['arcenciel', 'Arc-en-ciel', 0x1F308], ['fleur', 'Fleur', 0x1F338],
   ['soleil', 'Soleil', 0x2600], ['cadeau', 'Cadeau', 0x1F381], ['trefle', 'Trèfle', 0x1F340], ['pattes', 'Empreintes de pattes', 0x1F43E]];
 /* les 12 signes en dessins (même collection), dans l'ordre de SIGNES */
-var SIGNE_DESSIN = [0x1F410, 0x1F3FA, 0x1F41F, 0x1F40F, 0x1F402, 0x1F46D, 0x1F980, 0x1F981, 0x1F47C, 0x2696, 0x1F982, 0x1F3F9];
+var SIGNE_DESSIN = [0x1F410, 0x1FAD7, 0x1F41F, 0x1F40F, 0x1F402, 0x1F46D, 0x1F980, 0x1F981, 0x1F469, 0x2696, 0x1F982, 0x1F3F9]; /* Verseau : l'eau qui se verse ; Vierge : une jeune femme (13/11/2026, l'amphore et l'ange refusés) */
 var DECORS = { etoiles: ['etoile'], nuages: ['nuage'], coeurs: ['coeur'], lune: ['lune', 'etoile', 'etoile', 'etoile', 'etoile', 'etoile'], melange: ['etoile', 'nuage', 'coeur', 'lune', 'etoile', 'nuage'] }, DECOR_NOM = { etoile: 'Étoile', nuage: 'Nuage', coeur: 'Cœur', lune: 'Lune' };
 function decorDe(id) { var l = DECORS[S.decor] || DECORS.etoiles; return l[(+id.slice(2) - 1) % l.length]; }
 function decorForme(k, d) { var p = [], i, t;
@@ -509,8 +509,13 @@ function planSvg() { var num = S.num, sel = S.sel; S.num = true; S.sel = null; d
   S.num = num; S.sel = sel; dessiner(); return t; }
 function sauver(nom, texte, type) { function lien() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([texte], { type: type })); a.download = nom; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800); }
   if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (!d) return lien(); return d.save({ filename: nom, data: texte }); }).catch(function (e) { if (!e || e.code !== 'declined') $('aide').textContent = 'Le fichier n\'a pas pu être enregistré ici.'; });
-  else if (window.parent !== window) { window.parent.postMessage({ type: 'niv-enregistrer', nom: nom, texte: texte, mime: type }, '*'); }
-  else lien(); }
+  else { // dans « L'atelier » publié en artifact, c'est la page du dessus qui enregistre ; dans Gestion (même site), l'outil enregistre lui-même
+    var art = false; if (window.parent !== window) { try { art = !!(window.parent.claude && window.parent.claude.use); } catch (e) { art = true; } }
+    if (art) { window.parent.postMessage({ type: 'niv-enregistrer', nom: nom, texte: texte, mime: type }, '*'); return; }
+    var f = null; try { f = new File([texte], nom, { type: type }); } catch (e) { }
+    if (f && navigator.canShare && navigator.canShare({ files: [f] }) && window.matchMedia && matchMedia('(pointer:coarse)').matches)
+      navigator.share({ files: [f], title: nom }).catch(function (e) { if (!e || e.name !== 'AbortError') lien(); });
+    else lien(); } }
 
 /* ---------- tout rafraîchir ---------- */
 function maj(sansChamps) { try { calculer(); } catch (e) { $('aide').textContent = 'Erreur de calcul : ' + e.message; throw e; }

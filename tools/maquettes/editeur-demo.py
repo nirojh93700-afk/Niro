@@ -22,16 +22,8 @@ def lire(url, binaire=False):
     r = urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=60).read()
     return r if binaire else r.decode("utf-8")
 
-PONT = r"""<script>
-(function(){
- function dire(m){try{parent.postMessage(m,'*')}catch(_){}}
- window.addEventListener('message',function(ev){var d=ev.data||{};if(d.type!=='niv-fabriquer'||!window.nivAtelier||!nivAtelier.pret)return;
-  nivAtelier.fabriquer(function(f,t){dire({type:'niv-progres',fait:f,total:t})}).then(function(F){var al='';try{al=nivAtelier.alerte()||''}catch(_){}
-   dire({type:'niv-fichiers',alerte:al,policesKo:[].slice.call(F.policesKo||[]),fichiers:[].map.call(F,function(f){return{nom:f.nom,svg:f.svg,w:f.w,h:f.h,titre:f.titre,matiere:f.matiere,note:f.note}})})
-  }).catch(function(e){dire({type:'niv-erreur',message:String(e&&e.message||e)})})});
- var t=setInterval(function(){if(window.nivAtelier&&nivAtelier.pret){clearInterval(t);dire({type:'niv-pret'})}},300);
-})();
-</script>"""
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import atelier_patchs as PATCHS   # le pont de messages (déjà dans les pages de Gestion depuis le 13/11/2026)
 
 liens = set()
 for n in ("atelier-support.html", "atelier-arbre.html", "atelier-decoration.html"):
@@ -39,7 +31,7 @@ for n in ("atelier-support.html", "atelier-arbre.html", "atelier-decoration.html
     liens.update(re.findall(r'href="(https://fonts\.googleapis\.com/[^"]+)"', s))
     cle = '<script src="fabrique.js"></script>'
     assert s.count(cle) == 1 and s.count("</body></html>") == 1, n
-    s = s.replace(cle, '<script src="polices.js"></script>' + cle).replace("</body></html>", PONT + "</body></html>")
+    s = PATCHS.pont(s.replace(cle, '<script src="polices.js"></script>' + cle))
     open(os.path.join(out, n), "w", encoding="utf-8").write(s)
 
 # Les écritures (latin et latin étendu), embarquées : même tri que fabrique.js

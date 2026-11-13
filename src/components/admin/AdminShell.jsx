@@ -119,6 +119,8 @@ const SECTIONS = [
     { id: "etat", t: "État du système", href: "/gestion/etat" } ] },
   // Tests (12/11/2026, gérant : « fais une catégorie test dans admin ») : fichiers laser des maquettes à essayer sur la machine.
   { id: "tests", t: "Tests", ic: "bolt", tabs: [
+    // 13/11/2026 (« oui tu mets dans le gestion ») : L'atelier = un seul logiciel pour toutes les créations (public/atelier-outils/logiciel.html).
+    { id: "tests-logiciel", t: "L'atelier (toutes les créations)", href: "/gestion/logiciel" },
     { id: "tests-laser", t: "Fichiers laser à essayer", href: "/gestion/tests" },
     // 12/11/2026 soir (« je veux avoir accès pour tout corriger ») : les trois outils en mode atelier + fabrication des fichiers.
     { id: "tests-retouche", t: "Retoucher et fabriquer", href: "/gestion/retouche" } ] },

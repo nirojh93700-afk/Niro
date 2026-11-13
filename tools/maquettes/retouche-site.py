@@ -12,6 +12,8 @@ Les trois .html d'entrée sont les sorties de support-createur.py, arbre-createu
 Seul l'arbre « life » est copié (cœurs et cercles, 1 à 6 prénoms) : les huit autres pèsent 37 Mo.
 """
 import os, shutil, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import atelier_patchs as PATCHS
 
 f_sup, f_arb, f_deco, d_arbres, out = sys.argv[1:6]
 os.makedirs(os.path.join(out, "arbres"), exist_ok=True)
@@ -105,6 +107,7 @@ def atelier(src, quoi, nom):
     s = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow">'
          '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Outil de l\'atelier</title></head><body>'
          + s + f'<style>{CSS_AT}</style><script src="fabrique.js"></script><script src="editeur.js"></script><script>{js}</script></body></html>')
+    s = PATCHS.outil(s, nom)   # bouton « OK ✓ », support rangé pour 180 mm, pont de messages de « L'atelier » (13/11/2026)
     open(os.path.join(out, nom), "w", encoding="utf-8").write(s)
     print(nom, round(len(s.encode("utf-8")) / 1024), "Ko")
 

@@ -405,6 +405,9 @@ tout();S.pas=etapes().length-1;montage();vue('face');
 /* la 3D se charge après : dès qu'elle est là, c'est elle qu'on montre (sauf si la cliente a déjà choisi une vue) */
 charger3(function(){montage();if(!S.choisie)vue('3d')});
 window.msAtelier={S:S,dessiner:dessiner,maj:tout,vue:vue};
+/* « L'atelier », case « Voir comme sur le site » : un dessin masqué sur le site n'est plus proposé (rien ne change sans ce message) */
+var DESS0=D.dessins.slice();window.addEventListener('message',function(ev){var d=ev.data;if(!d||d.type!=='niv-masques')return;var c=(d.caches&&d.caches.maison)||[];
+ var l=DESS0.filter(function(q){return q[0]==='none'||c.indexOf(q[0])<0});D.dessins=l;['front','back'].forEach(function(k){if(!l.some(function(q){return q[0]===S.P[k]}))S.P[k]=l[0][0]});tout()});
 window.addEventListener('message',function(ev){var d=ev.data;if(d&&d.type==='niv-machine'&&d.machine){var z=Math.min(+d.machine.zw||180,+d.machine.zh||180)-4;if(z>=60&&z!==D.planche){D.planche=z;planches()}}});
 window.msEtat=function(){var p=planches();return{S:S,trois:TROIS.ok,vue:S.vue,pieces:G.parts.length,alertes:G.warnings,decors:G.decors,hauteur:G.hauteur,planches:p.feuilles,trop:p.trop,
  total:taille()[6],bloque:$('ajouter').disabled,manque:$('manque').textContent}};
