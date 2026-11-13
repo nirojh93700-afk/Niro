@@ -18,6 +18,7 @@ import base64, json, os, sys
 
 fclip, fopen, out = sys.argv[1:4]
 complet = len(sys.argv) > 4
+fearcut = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vendor", "earcut.min.js")   # découpe en triangles (impression 3D), licence ISC
 ici = os.path.dirname(os.path.abspath(__file__))
 racine = os.path.dirname(os.path.dirname(ici))
 A = os.path.join(racine, "docs/maquettes/assets")
@@ -87,6 +88,9 @@ body{background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,
 .li-rg b{min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
 .li-lien{justify-self:start;background:none;border:0;padding:4px 0;color:var(--or);font:600 .85rem/1.2 system-ui,sans-serif;text-decoration:underline;cursor:pointer}
 .li-info{margin:0;font-size:.8rem;color:var(--doux)}
+.li-i3b{display:flex;flex-wrap:wrap;gap:8px}.li-btn2{font:600 .82rem/1 system-ui,sans-serif;padding:9px 12px;border-radius:999px;border:1px solid var(--ligne);background:var(--carte);color:var(--fg);cursor:pointer}
+.li-i3l{display:grid;gap:8px}.li-i3t{margin:6px 0 0;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--doux)}
+#i3-info{line-height:1.5}#i3-go:disabled{opacity:.5;cursor:default}
 .li-al{margin:0;font-size:.82rem;color:var(--al);background:var(--alf);border-radius:8px;padding:6px 9px}
 .li-ok{margin:0;font-size:.85rem;color:var(--ok);background:var(--okf);border-radius:8px;padding:8px 10px}
 .li-alertes{background:var(--alf);color:var(--al);border-radius:10px;padding:9px 12px;font-size:.84rem}
@@ -168,12 +172,25 @@ HTML = r"""<div class="li">
    <label class="l2">Épaisseur du bois (mm)<input id="f-ep" inputmode="decimal"><small>Sert à la boîte (tenons, encoches), à la vue 3D et à la liste. Avec une machine plus grande : changez la zone et la hauteur de la lettre, tout suit.</small></label>
  </div></div></details>
  <details open><summary><i>6</i>Les fichiers pour la machine</summary><div class="li-in" id="fichiers"></div></details>
+ <details id="i3"><summary><i>7</i>Impression 3D (à l'essai)</summary><div class="li-in">
+  <p class="li-info">Pour une imprimante 3D : cochez les pièces à imprimer au lieu de les découper. Les pièces d'un même ensemble sont réunies en une seule pièce.</p>
+  <div class="li-i3b"><button type="button" class="li-btn2" id="i3-cv">Le couvercle en une pièce</button><button type="button" class="li-btn2" id="i3-bt">La boîte en une pièce</button><button type="button" class="li-btn2" id="i3-0">Tout décocher</button></div>
+  <div id="i3-liste" class="li-i3l"></div>
+  <div class="li-g">
+   <label class="l2" id="l-i3coul">Couleurs du couvercle<select id="i3-coul"><option value="multi">Plusieurs couleurs (imprimante à plusieurs bobines)</option><option value="pause">Blanc puis couleur, avec un changement de bobine</option><option value="relief">Une seule couleur (pièces en creux, détails en relief)</option></select></label>
+   <label class="l2">Fichier<select id="i3-fmt"><option value="3mf">3MF : un seul fichier, avec les couleurs</option><option value="stl">STL : un fichier par couleur</option></select></label>
+  </div>
+  <label class="li-case"><input type="checkbox" id="i3-retire"> Retirer ces pièces des planches à découper</label>
+  <p class="li-info" id="i3-info"></p>
+  <button type="button" class="li-btn" id="i3-go">Créer le fichier 3D</button>
+ </div></details>
 </section>
 </div></div>
 """
 
 corps = ("<title>Lettre à incruster</title>\n<style>" + CSS + "</style>\n" + HTML
          + "<script>" + open(fclip, encoding="utf-8").read() + "</script>\n<script>" + open(fopen, encoding="utf-8").read() + "</script>\n"
+         + "<script>/* earcut 2.2.4, licence ISC (c) Mapbox */" + open(fearcut, encoding="utf-8").read() + "</script>\n<script>" + open(os.path.join(ici, "impression3d.js"), encoding="utf-8").read() + "</script>\n"
          + "<script>window.LI_DONNEES=" + DONNEES + ";</script>\n<script>" + open(os.path.join(ici, "lettre-incrustee.js"), encoding="utf-8").read() + "</script>\n"
          + "<!-- niv-ok --><script>" + open(os.path.join(ici, "valider-champ.js"), encoding="utf-8").read() + "</script>\n")
 if complet:

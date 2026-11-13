@@ -394,13 +394,14 @@ function essaiCharniere() { var B = S.bt, T = +S.ep || 3, Hm = +B.prof || 40, p 
 /* ---------- les planches ---------- */
 function planches(g) { var k2 = S.trait / 2, blancs = [], coul = [];
   function bloc(id, nom, coupe, grav, n) { var b = boite(coupe); return { id: id, nom: nom, n: n, coupe: coupe, grav: grav || [], b: b }; }
-  if (SEULE) { g.pages = g.bt ? ranger([bloc('boite-couvercle', 'Couvercle (pièce pleine)', decaler(g.fond, k2), null, 'CV')].concat(blocsBoite(g)), 'Bois de la boîte', 'boite') : []; return; }
+  function gardes(l) { return l.filter(function (b) { return !i3Hors(b.id); }); }
+  if (SEULE) { g.pages = g.bt ? ranger(gardes([bloc('boite-couvercle', 'Couvercle (pièce pleine)', decaler(g.fond, k2), null, 'CV')].concat(blocsBoite(g))), 'Bois de la boîte', 'boite') : []; return; }
   blancs.push(bloc('fond', 'Fond', decaler(g.fond, k2), null, 'F'));
   if (g.P && S.el.plaque.mode === 'inc') blancs.push(bloc('plaque', 'Plaque du prénom', decaler(g.P.plaqueA, k2), null, 'P'));
   g.els.forEach(function (a) { if (a.e.mode === 'inc') blancs.push(bloc('piece-' + a.n + '-' + a.d.id, a.d.nom, decaler(a.B, k2), a.Gv, a.n)); });
   coul.push(bloc('dessus', 'Dessus de couleur', decaler(g.dessus, k2), g.gravD, 'D'));
   if (g.P) coul.push(bloc('prenom', 'Prénom', decaler(g.P.nomA, k2), null, 'N'));
-  g.pages = ranger(blancs, 'Blanc').concat(ranger(coul, 'Couleur')).concat(g.bt ? ranger(blocsBoite(g), 'Bois de la boîte', 'boite') : []); }
+  g.pages = ranger(gardes(blancs), 'Blanc').concat(ranger(gardes(coul), 'Couleur')).concat(g.bt ? ranger(gardes(blocsBoite(g)), 'Bois de la boîte', 'boite') : []); }
 function ranger(blocs, matiere, cle) { var zw = +S.zw || 180, zh = +S.zh || 180, m = 2, ec = 3, pages = [];
   blocs.slice().sort(function (a, b) { return b.b.h - a.b.h; }).forEach(function (bl) { var w = bl.b.w, h = bl.b.h, mis = false;
     for (var i = 0; i < pages.length && !mis; i++) { var p = pages[i]; if (p.trop) continue;
@@ -493,6 +494,7 @@ function fichiers() { var g = G, h = '';
   else h += '<p class="li-res">Lettre « ' + lettreChoisie() + ' » : ' + fr(g.W) + ' × ' + fr(g.H) + ' mm · avec le fond : ' + fr(g.bf.w) + ' × ' + fr(g.bf.h) + ' mm · ' + g.centres.length + ' petit' + (g.centres.length > 1 ? 's' : '') + ' centre' + (g.centres.length > 1 ? 's' : '') + ' de couleur à garder quand le dessus est découpé.' + (g.parts > 1 ? ' Le dessus sort en ' + g.parts + ' morceaux (la plaque le traverse) : le fond les tient ensemble.' : '') + '</p>';
   if (g.bt) { var bt = g.bt; h += '<p class="li-res"><b>La boîte.</b> Bande de côté : ' + fr(bt.L, 0) + ' mm de tour, en ' + bt.n + ' morceau' + (bt.n > 1 ? 'x' : '') + ' (' + bt.mor.map(function (m) { return m.nom + ' ' + fr(m.long, 0) + ' mm'; }).join(' · ') + '), ' + fr(bt.Hm, 0) + ' mm de haut, ' + bt.N + ' tenons en haut et en bas, ' + bt.fentes + ' fentes pour plier'
       + (bt.tout ? ' sur toute la longueur' : ' dans les courbes') + (bt.coupesSouples ? ' ; ' + bt.coupesSouples + ' jonction' + (bt.coupesSouples > 1 ? 's tombent' : ' tombe') + ' dans une courbe, à bien coller' : '') + '. Boîte fermée : ' + fr(bt.haut, 0) + ' mm de haut, ' + fr(bt.utile, 0) + ' mm utiles à l\'intérieur. ' + (SEULE ? 'Le couvercle est une pièce pleine, sans trou' : 'Les trous de la lettre sont fermés par le fond blanc du couvercle' + (S.bt.plaque || !g.P ? '' : ' ; la plaque du prénom dépasse de la boîte, elle sert de prise')) + '.</p>'; }
+  if (i3().retire && i3Choix().n) h += '<p class="li-res"><b>Imprimé en 3D, donc retiré des planches à découper :</b> ' + i3Dispo().filter(function (q) { return i3Choix()[q[0]] && q[0] !== 'grav'; }).map(function (q) { return i3Nom(q).toLowerCase(); }).join(', ') + '. Le fichier 3D se crée à l\'étape « Impression 3D ».</p>';
   g.pages.forEach(function (p, i) { h += '<div class="li-feuille"><div class="li-ft"><h4>' + p.titre + '</h4><span>' + fr(p.w) + ' × ' + fr(p.h) + ' mm</span></div>' + svgPlanche(p, true)
     + '<p class="li-fn">' + p.items.map(function (it) { return it.bl.n + ' ' + it.bl.nom; }).join(' · ') + '</p>'
     + (p.trop || p.w > S.zw || p.h > S.zh ? '<p class="li-al">Plus grand que la zone de la machine (' + S.zw + ' × ' + S.zh + ' mm) : réduisez la lettre, ou changez la zone à l\'étape 5.</p>' : '')
@@ -535,7 +537,7 @@ function planSvg() { var num = S.num, sel = S.sel; S.num = true; S.sel = null; d
   var t = '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="' + (+vb[2]).toFixed(1) + 'mm" height="' + (+vb[3]).toFixed(1) + 'mm" viewBox="' + vb.join(' ') + '"><style>.li-zone{fill:none;stroke:none}</style>' + sv.innerHTML + '</svg>\n';
   S.num = num; S.sel = sel; dessiner(); return t; }
 function sauver(nom, texte, type) { function lien() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([texte], { type: type })); a.download = nom; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800); }
-  if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (!d) return lien(); return d.save({ filename: nom, data: texte }); }).catch(function (e) { if (!e || e.code !== 'declined') $('aide').textContent = 'Le fichier n\'a pas pu être enregistré ici.'; });
+  if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (!d) return lien(); return d.save({ filename: nom, data: typeof texte === 'string' ? texte : new Blob([texte], { type: type }) }); }).catch(function (e) { if (!e || e.code !== 'declined') $('aide').textContent = 'Le fichier n\'a pas pu être enregistré ici.'; });
   else { // dans « L'atelier » publié en artifact, c'est la page du dessus qui enregistre ; dans Gestion (même site), l'outil enregistre lui-même
     var art = false; if (window.parent !== window) { try { art = !!(window.parent.claude && window.parent.claude.use); } catch (e) { art = true; } }
     if (art) { window.parent.postMessage({ type: 'niv-enregistrer', nom: nom, texte: texte, mime: type }, '*'); return; }
@@ -544,9 +546,81 @@ function sauver(nom, texte, type) { function lien() { var a = document.createEle
       navigator.share({ files: [f], title: nom }).catch(function (e) { if (!e || e.name !== 'AbortError') lien(); });
     else lien(); } }
 
+/* ---------- impression 3D (à l'essai) — 13/11/2026 ----------
+   Le gérant : « j'aimerais choisir quelle pièce imprimer en 3D ou découper… je sélectionne les composants que je veux faire en une
+   seule pièce, j'appuie sur le bouton et ça me fait le fichier… le couvercle en une couleur ou en plusieurs couleurs, le bas de la
+   boîte et le contour en une fois ». Les pièces cochées sont réunies en un objet par ensemble (le couvercle, la boîte, la cale).
+   Le fichier est fabriqué par NivImpr3D (impression3d.js). L'imprimante n'est pas encore connue : rien n'est réglé pour une marque. */
+var I3C = [['fond', 'Fond blanc du couvercle', 'cv'], ['dessus', 'Dessus de couleur (la lettre)', 'cv'], ['pieces', 'Pièces blanches incrustées', 'cv'], ['prenom', 'Prénom et sa plaque', 'cv'],
+  ['grav', 'Détails gravés (cadran, animal, règle…)', 'cv'], ['cale', 'Cale sous le couvercle', 'cale'], ['bfond', 'Fond de la boîte', 'bt'], ['parois', 'Contour de la boîte (les côtés)', 'bt'], ['cour', 'Couronne du haut', 'bt']];
+function i3() { if (!S.i3 || typeof S.i3 !== 'object') S.i3 = {}; var o = S.i3; if (!o.on || typeof o.on !== 'object') o.on = {}; if (['multi', 'pause', 'relief'].indexOf(o.coul) < 0) o.coul = 'multi'; if (o.fmt !== 'stl') o.fmt = '3mf'; o.retire = !!o.retire; return o; }
+function i3Gv() { var gv = []; G.els.forEach(function (a) { if (a.e.mode === 'inc' && a.Gv.length) gv = gv.concat(a.Gv); }); return gv; }
+function i3Dispo() { var g = G; if (!g) return []; return I3C.filter(function (c) { var id = c[0];
+  if (id === 'dessus') return !SEULE && g.dessus.length > 0; if (id === 'pieces') return !SEULE && g.els.some(function (a) { return a.e.mode === 'inc'; });
+  if (id === 'prenom') return !SEULE && !!g.P; if (id === 'grav') return !SEULE && (i3Gv().length > 0 || g.gravD.length > 0);
+  if (id === 'cale') return !!(g.bt && g.bt.cale.length); if (id === 'bfond' || id === 'parois') return !!g.bt; if (id === 'cour') return !!(g.bt && g.bt.cour.length); return true; }); }
+function i3Choix() { var o = i3().on, d = {}, n = 0; i3Dispo().forEach(function (c) { if (o[c[0]]) { d[c[0]] = true; n++; } }); d.n = n; return d; }
+function i3Nom(c) { return SEULE && c[0] === 'fond' ? 'Couvercle (pièce pleine)' : c[1]; }
+/* une pièce découpée (son nom dans les planches) est-elle imprimée en 3D ? */
+function i3Hors(id) { var o = i3(); if (!o.retire) return false; var c = i3Choix();
+  return (c.fond && (id === 'fond' || id === 'boite-couvercle')) || (c.dessus && id === 'dessus') || (c.pieces && id.indexOf('piece-') === 0) || (c.prenom && (id === 'plaque' || id === 'prenom'))
+    || (c.cale && id === 'boite-cale') || (c.bfond && id === 'boite-fond') || (c.parois && id.indexOf('boite-bande-') === 0) || (c.cour && id === 'boite-couronne'); }
+function i3Hex(c) { var m = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(c); if (!m) return c; return '#' + [m[1], m[2], m[3]].map(function (v) { return ('0' + (+v).toString(16)).slice(-2); }).join(''); }
+/* les objets à imprimer : [{ nom, fichier, morceaux: [{ nom, couleur, T }], t: taille }], et les remarques */
+function i3Objets() { var I = window.NivImpr3D, g = G, c = i3Choix(), m = i3().coul, ep = +S.ep || 3, objets = [], notes = [];
+  function mmq(q) { return [q.X / E, q.Y / E]; }
+  function pose(liste, a, z0, z1) { if (!a || !a.length || z1 - z0 < 0.05) return; exPolys(a).forEach(function (e) { var T = I.solide({ outer: e.outer.map(mmq), holes: e.holes.map(function (h) { return h.map(mmq); }) }, z0, z1); for (var i = 0; i < T.length; i++) liste.push(T[i]); }); }
+  function fin(a) { if (!a.length) return false; var s0 = aire(a), s1 = aire(decaler(decaler(a, -0.4), 0.4)); return s0 > 0 && s1 < s0 * 0.85; }   // des traits de moins de 0,8 mm ?
+  function objet(nom, fichier, morceaux) { morceaux = morceaux.filter(function (q) { return q.T.length; }); if (!morceaux.length) return; var tout = []; morceaux.forEach(function (q) { tout = tout.concat(q.T); });
+    var t = I.taille(tout); morceaux.forEach(function (q) { q.T = I.bouger(q.T, -t.x, -t.y, -t.z); }); objets.push({ nom: nom, fichier: fichier, morceaux: morceaux, t: t }); }
+  var blanc = [], coul = [], det = [], zb = c.fond ? ep : 0, creux = Math.min(1, ep / 3), hg = 0.4, inc = [], plaqueInc = g.P && S.el.plaque.mode === 'inc';
+  if (!SEULE) g.els.forEach(function (a) { if (a.e.mode === 'inc') inc = inc.concat(a.B); });
+  if (c.fond) pose(blanc, g.fond, 0, ep);
+  if (c.dessus) pose(coul, g.dessus, zb, zb + ep);
+  if (c.pieces && inc.length) { if (m === 'multi') pose(blanc, unir(inc), zb, zb + ep); else if (m === 'relief') pose(blanc, unir(inc), zb, zb + ep - creux);
+    else notes.push('Avec le changement de bobine, les pièces blanches ne sont pas imprimées : leurs emplacements restent ouverts et laissent voir le fond blanc.'); }
+  if (c.prenom && g.P) { if (!plaqueInc) pose(coul, g.P.nomA, zb + ep, zb + ep * 1.6);
+    else if (m === 'multi') { pose(blanc, g.P.plaqueA, zb, zb + ep); pose(coul, g.P.nomA, zb + ep, zb + ep * 1.6); }
+    else if (m === 'relief') { pose(blanc, g.P.plaqueA, zb, zb + ep - creux); pose(coul, g.P.nomA, zb + ep - creux, zb + ep * 1.6); }
+    else pose(coul, g.P.nomA, zb, zb + ep); }
+  if (c.grav && !SEULE) { var gv = i3Gv(); if (gv.length && c.pieces) { if (m === 'multi') pose(det, unir(gv), zb + ep, zb + ep + hg); else if (m === 'relief') pose(det, unir(gv), zb + ep - creux, zb + ep - creux + 0.6); }
+    if (g.gravD.length && c.dessus) pose(det, g.gravD, zb + ep, zb + ep + hg);
+    if (fin(gv.concat(g.gravD))) notes.push('Des détails gravés font moins de 0,8 mm de large : avec une buse de 0,4 mm, ils risquent de ne pas sortir. Une buse de 0,2 mm, ou les détails décochés, règle le problème.'); }
+  if (c.dessus && fin(g.dessus)) notes.push('Le dessus de couleur a des parties de moins de 0,8 mm de large : elles risquent de ne pas sortir avec une buse de 0,4 mm.');
+  var bl = '#F6F3EC', cl = i3Hex(couleur()), fo = i3Hex(fonce(couleur(), 0.55)), bo = '#D9BB8C', nomCv = SEULE ? 'Couvercle' : 'Couvercle décoré';
+  if (m === 'multi') objet(nomCv, 'couvercle', [{ nom: SEULE ? 'Couvercle' : 'Blanc', couleur: SEULE ? bo : bl, T: blanc }, { nom: 'Couleur', couleur: cl, T: coul }, { nom: 'Détails', couleur: fo, T: det }]);
+  else objet(nomCv, 'couvercle', [{ nom: m === 'pause' ? 'Blanc puis couleur' : 'Une couleur', couleur: m === 'pause' ? bl : cl, T: blanc.concat(coul, det) }]);
+  if (m === 'pause' && (c.dessus || c.prenom)) notes.push(c.fond ? 'Changement de bobine : imprimez en blanc, puis demandez à l\'imprimante une pause à ' + fr(ep) + ' mm de haut et mettez la couleur.' : 'Le changement de bobine demande le fond blanc : cochez-le.');
+  if (g.bt) { var bt = g.bt, T = bt.T, Hm = bt.Hm, bx = [], ca = [];
+    if (c.parois) pose(bx, moins(bt.O, bt.I), 0, Hm);
+    if (c.bfond) pose(bx, c.parois ? bt.O : bt.base, 0, T);
+    if (c.cour) { pose(bx, bt.cour, c.parois ? Hm - T : (c.bfond ? T : 0), c.parois ? Hm : (c.bfond ? 2 * T : T)); if (c.parois) notes.push('La couronne du haut dépasse vers l\'intérieur : l\'imprimante devra mettre des supports dessous. Elle n\'est pas nécessaire quand le contour est imprimé.'); }
+    objet('Boîte', 'boite', [{ nom: 'Boîte', couleur: bo, T: bx }]);
+    if (c.cale) { pose(ca, c.parois && !c.cour ? decaler(bt.I, -0.3) : bt.cale, 0, T); objet('Cale du couvercle', 'cale', [{ nom: 'Cale', couleur: SEULE ? bo : bl, T: ca }]);
+      notes.push('La cale s\'imprime à part et se colle sous le couvercle : c\'est elle qui tient le couvercle en place.' + (c.parois && !c.cour ? ' Elle est ajustée à l\'intérieur du contour imprimé (0,3 mm de jeu).' : '')); } }
+  var x = 0; objets.forEach(function (o) { o.x = x; x += o.t.w + 8; });
+  return { objets: objets, notes: notes }; }
+function i3Maj() { var el = $('i3-liste'); if (!el) return; var o = i3(), c = i3Choix(), d = i3Dispo(), I = window.NivImpr3D, h = '', grp = { cv: SEULE ? 'Le couvercle' : 'Le couvercle (la lettre décorée)', cale: '', bt: 'La boîte' }, vu = {};
+  d.forEach(function (q) { if (grp[q[2]] && !vu[q[2]]) { vu[q[2]] = 1; h += '<p class="li-i3t">' + grp[q[2]] + '</p>'; }
+    h += '<label class="li-case"><input type="checkbox" data-i3="' + q[0] + '"' + (c[q[0]] ? ' checked' : '') + '> ' + i3Nom(q) + '</label>'; });
+  el.innerHTML = h; $('i3-coul').value = o.coul; $('i3-fmt').value = o.fmt; $('i3-retire').checked = o.retire; $('i3-bt').hidden = !G.bt; $('l-i3coul').hidden = SEULE;
+  var info = $('i3-info'), go = $('i3-go'); go.disabled = !c.n || !I;
+  if (!I) { info.textContent = 'La fabrication des fichiers 3D n\'est pas chargée dans cette page.'; return; }
+  if (!c.n) { info.textContent = 'Cochez les pièces à imprimer : celles d\'un même ensemble sont réunies en une seule pièce.'; go.textContent = 'Créer le fichier 3D'; return; }
+  var r; try { r = i3Objets(); } catch (e) { info.textContent = 'Le fichier 3D ne peut pas être préparé : ' + e.message; go.disabled = true; return; }
+  var nf = o.fmt === 'stl' ? r.objets.reduce(function (s, q) { return s + q.morceaux.length; }, 0) : 1;
+  go.textContent = o.fmt === 'stl' ? (nf > 1 ? 'Créer les ' + nf + ' fichiers STL' : 'Créer le fichier STL') : 'Créer le fichier 3D (.3mf)';
+  info.innerHTML = '<b>Ce qui sera dans le fichier.</b> ' + r.objets.map(function (q) { return ech(q.nom) + ' : ' + fr(q.t.w) + ' × ' + fr(q.t.h) + ' mm, ' + fr(q.t.e) + ' mm de haut' + (q.morceaux.length > 1 ? ', en ' + q.morceaux.length + ' couleurs (' + q.morceaux.map(function (z) { return z.nom.toLowerCase(); }).join(', ') + ')' : ''); }).join(' · ') + '.'
+    + ' Le plateau de l\'imprimante doit faire au moins ' + fr(Math.max.apply(null, r.objets.map(function (q) { return q.t.w; })), 0) + ' × ' + fr(Math.max.apply(null, r.objets.map(function (q) { return q.t.h; })), 0) + ' mm.'
+    + (r.notes.length ? '<br>' + r.notes.map(ech).join('<br>') : ''); }
+function i3Creer() { var I = window.NivImpr3D, o = i3(); if (!I) return; var r = i3Objets(); if (!r.objets.length) return;
+  if (o.fmt === 'stl') { var rang = 0; r.objets.forEach(function (q) { q.morceaux.forEach(function (z, j) { setTimeout(function () { sauver(prefixe() + '-3d-' + q.fichier + (q.morceaux.length > 1 ? '-' + (j + 1) + '-' + z.nom.toLowerCase().normalize('NFD').replace(/[^a-z]+/g, '') : '') + '.stl', I.stl(z.T, q.nom), 'model/stl'); }, rang++ * 700); }); }); }
+  else sauver(prefixe() + '-impression-3d.3mf', I.mf3(r.objets, (SEULE ? 'Boîte ' : 'Lettre ') + nomForme()), 'model/3mf'); }
+window.NivLettre3D = { objets: function () { return i3Objets(); }, choix: i3Choix, hors: i3Hors };
+
 /* ---------- tout rafraîchir ---------- */
 function maj(sansChamps) { try { calculer(); } catch (e) { $('aide').textContent = 'Erreur de calcul : ' + e.message; throw e; }
-  dessiner(); listePieces(); fichiers(); if (S.vue === '3d') trois(); if (!sansChamps) champs(); garder(); }
+  dessiner(); listePieces(); fichiers(); i3Maj(); if (S.vue === '3d') trois(); if (!sansChamps) champs(); garder(); }
 function champs() { ['bw', 'nom', 'lettre', 'H', 'gras', 'bord', 'date', 'heure', 'taille', 'poids', 'libre', 'zw', 'zh', 'trait', 'jeu', 'ep', 'nbEt'].forEach(function (k) { var el = $('f-' + k); if (el && document.activeElement !== el) el.value = S[k]; });
   ['pol', 'polNom', 'signe', 'animal', 'signeStyle', 'horloge', 'decor'].forEach(function (k) { $('f-' + k).value = S[k]; });
   $('f-lettre').placeholder = lettreChoisie(); var sg = signeChoisi(); $('signeAuto').textContent = S.signe === 'auto' ? (sg >= 0 ? 'Calculé avec la date : ' + SIGNES[sg] + '.' : 'Se calcule avec la date.') : '';
@@ -584,6 +658,8 @@ function init() { SOUS = $('sous').textContent; $('f-bforme').innerHTML = FORMES
     maj(true); champs(); });
   document.addEventListener('change', function (ev) { var t = ev.target, id = t.getAttribute && t.getAttribute('data-mode');
     if (t.id === 'f-bforme') { S.bforme = t.value; maj(); return; }
+    if (t.getAttribute && t.getAttribute('data-i3')) { i3().on[t.getAttribute('data-i3')] = t.checked; maj(); return; }
+    if (t.id === 'i3-coul') { i3().coul = t.value; maj(); return; } if (t.id === 'i3-fmt') { i3().fmt = t.value; maj(); return; } if (t.id === 'i3-retire') { i3().retire = t.checked; maj(); return; }
     if (t.id === 'b-on' || t.id === 'b-dos' || t.id === 'b-rep' || t.id === 'b-plaque' || t.id === 'b-poig') { S.bt[t.id.slice(2)] = t.checked; maj(); return; } if (t.id === 'b-nb') { S.bt.nb = +t.value || 0; maj(); return; }
     if (!id) return; var e = S.el[id];
     if (t.value === 'non') e.on = false; else { e.on = true; e.mode = t.value; } maj(); });
@@ -599,6 +675,10 @@ function init() { SOUS = $('sous').textContent; $('f-bforme').innerHTML = FORMES
     else if (t.getAttribute('data-essai')) sauver('essai-de-pliage.svg', essaiCharniere(), 'image/svg+xml');
     else if (t.getAttribute('data-liste')) sauver(prefixe() + '-liste-des-pieces.txt', listeTexte(), 'text/plain');
     else if (t.id === 'vFace') vue('face'); else if (t.id === 'v3d') vue('3d'); else if (t.id === 'mLettre') changerMode(false); else if (t.id === 'mBoite') changerMode(true);
+    else if (t.id === 'i3-cv') { ['fond', 'dessus', 'pieces', 'prenom', 'grav'].forEach(function (k) { i3().on[k] = true; }); maj(); }
+    else if (t.id === 'i3-bt') { ['bfond', 'parois', 'cale'].forEach(function (k) { i3().on[k] = true; }); i3().on.cour = false; maj(); }
+    else if (t.id === 'i3-0') { i3().on = {}; maj(); }
+    else if (t.id === 'i3-go') i3Creer();
     else if (t.id === 'bNum') { S.num = !S.num; dessiner(); champs(); }
     else if (t.id === 'bAuto') { Object.keys(S.el).forEach(function (id) { S.el[id].auto = true; S.el[id].k = 1; }); maj(); }
     else if (t.id === 'bVider') { var z = neuf(); z.zw = S.zw; z.zh = S.zh; z.trait = S.trait; z.jeu = S.jeu; z.ep = S.ep; z.bt = S.bt; S = z; maj(); } });

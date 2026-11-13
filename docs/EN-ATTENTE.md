@@ -805,3 +805,8 @@ En attente de SA décision :
 ## 12/11/2026 soir — en attente de l'avis du gérant
 - Maquette « Décoration à prénom » v1 : https://claude.ai/artifact/XY51xPNECRwf4Eemtt9jga (peinture ou acrylique collé ? prix, tailles, réglages d'Atomm non proposés, vue 3D).
 - Éditeur de l'atelier, plan de collage, liste des pièces : EN LIGNE dans Gestion (6a495d0e). Les trois produits (support, arbre, décoration) ne sont toujours pas en vente.
+
+## 🖨️ IMPRESSION 3D + MACHINES xTOOL — 13/11/2026 soir (à reprendre sur son mot)
+- Fait : bouton « OK ✓ » corrigé partout · liste des machines xTool dans L'atelier (en ligne dans Gestion) · impression 3D à l'essai dans la démonstration « Lettre à incruster » v14 (pas dans Gestion).
+- En attente de lui : essayer le fichier 3MF dans le logiciel d'une imprimante dès qu'il en a une · dire s'il veut la 3D dans Gestion, puis pour les décorations à couches et pour ses fichiers achetés ·
+  le nom de l'imprimante le jour où il l'achète (taille du plateau, nombre de couleurs).

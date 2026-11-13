@@ -1,3 +1,29 @@
+## 🖨️ BOUTON OK CORRIGÉ + MACHINES xTOOL DANS « MA MACHINE » + IMPRESSION 3D À L'ESSAI — 13/11/2026 soir (gérant : « corrige le bouton OK… pour l'imprimante 3D je te verrai plus tard, tu prépares… je veux le choix, imprimer ou découper… je sélectionne les composants, j'appuie sur le bouton création… intègre les paramètres xTool, toutes les machines »)
+- **Bouton « OK ✓ »** (`valider-champ.js`) : il restait posé PAR-DESSUS l'aperçu collé quand on faisait défiler (capture de l'arbre). Maintenant `visible(r)` (champ dans l'écran ET non recouvert,
+  `elementFromPoint`) : le bouton se cache dès que son champ passe sous l'aperçu ou sort de l'écran, et revient avec lui. `ajouter-valider.py` REMPLACE l'ancien bloc `<!-- niv-ok -->` d'une page.
+  Republié (même contenu + ce bouton) : arbre **v11** · lettre cliente **v7** · décoration à prénom **v8** · lettre d'atelier **v13** · fleur **v6** · support **v14** · décoration à suspendre **v16** ·
+  suspension **v4** · maisonnette **v6** ; les 9 pages de `public/atelier-outils/` (Gestion) mises à jour et EN LIGNE. Essai `scratchpad/ok/t.cjs` (390 px) sur 7 pages. Pas refait : l'artifact de démonstration L'atelier.
+- **Machines xTool** (L'atelier → « Ma machine », `atelier-unique.py`, `MACHINES`, EN LIGNE dans Gestion `logiciel.html`) : liste « Ma machine xTool », 21 lignes ; choisir une machine met la ZONE toute seule
+  (gardée dans `niv-atelier-machine`, clé `mach`), les champs restent modifiables (il garde 180 sur une zone de 200 s'il veut). Départ = « Réglage à la main », rien ne change tant qu'il ne choisit pas.
+  Zones relevées sur xtool.com / support.xtool.com le 13/11 : F2 Ultra UV 200 × 200 (tapis 200 × 500, dans le verre 70 × 70) · F2 Ultra 220 × 220 (tapis 220 × 500) · F1 Ultra 220 × 220 (tapis 220 × 500) ·
+  F2 115 × 115 (rallonge 115 × 400) · F1 / F1 Lite 115 × 115 (rallonge 115 × 400) · X1 615 × 320 (tapis 610 × 1220) · P3 915 × 458 · P2S / P2 600 × 305 (nid d'abeille 556 × 280) · S1 40 W 498 × 319, 20 W 498 × 330 ·
+  M2 40 W 426 × 312, 10 / 20 W 426 × 320 · M1 Ultra 300 × 300 · M1 385 × 300 · D1 Pro 430 × 390 (xTool écrit aussi 430 × 348 ailleurs). ⛔ Le trait de coupe et le jeu NE changent PAS avec la machine
+  (ils dépendent du bois, pièce d'essai) ; puissance et vitesse se règlent dans le logiciel de xTool, pas dans le fichier : c'est écrit sous la liste. Essai `scratchpad/ok/tm.cjs` 22 sur 22.
+- **Impression 3D, À L'ESSAI, dans la DÉMONSTRATION seulement** (lettre d'atelier **v14**, https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw ; ⛔ PAS dans Gestion : `public/atelier-outils/lettre.html` non régénéré,
+  à faire sur son mot) : volet « 7 · Impression 3D (à l'essai) » de l'outil lettre et boîte (et boîte seule). Cases par pièce (fond blanc, dessus de couleur, pièces blanches, prénom et plaque, détails gravés,
+  cale, fond de boîte, contour, couronne), boutons « Le couvercle en une pièce » / « La boîte en une pièce », couleurs du couvercle (plusieurs couleurs = un morceau par couleur · blanc puis couleur avec
+  changement de bobine à l'épaisseur du fond · une seule couleur = pièces en creux de 1 mm, détails en relief), fichier 3MF (un seul, objets = couvercle / boîte / cale côte à côte) ou STL (un par morceau),
+  case « Retirer ces pièces des planches à découper » (= le choix imprimer OU découper, `i3Hors`), taille de chaque objet et du plateau nécessaire, alerte « détails de moins de 0,8 mm ».
+  Boîte imprimée = fond + contour en UNE pièce (hauteur des côtés), la cale s'imprime à part et se colle sous le couvercle (ajustée à l'intérieur du contour, 0,3 mm de jeu, quand la couronne n'est pas imprimée).
+  Code : `tools/maquettes/impression3d.js` (`NivImpr3D` : `solide` = volume fermé par construction, côtés montés sur le bord réel du dessus ; `stl` ; `mf3` = archive faite main ; `controle`),
+  `tools/maquettes/vendor/earcut.min.js` (libre, ISC), moteur `lettre-incrustee.js` (`I3C`, `i3()`, `i3Objets`, `i3Maj`, `i3Creer`, `S.i3`, `window.NivLettre3D`). Essai `scratchpad/i3/t2.cjs` : 40 sur 40
+  (volumes fermés sur 9 lettres et chiffres + 4 boîtes seules, 3MF relu, 5 STL), anciens essais t3, t7, t14, t15, tp et version cliente td, t2 au vert.
+  ⚠️ PAS essayé dans un logiciel d'imprimante (Bambu Studio, PrusaSlicer, Cura) ni sur une imprimante : l'imprimante n'est pas choisie. Les couleurs du 3MF sont des noms de morceaux : c'est dans le logiciel
+  de l'imprimante qu'il dit quelle bobine prend quel morceau.
+- **Répondu, rien construit** : « coller une adresse Internet dans L'atelier et un agent transforme » → transformer des FICHIERS (SVG à couches → 3D, fichiers achetés) = faisable dans L'atelier (case à cocher) ;
+  reproduire seul tout un générateur depuis un lien = non, ça reste un travail fait ici, à sa demande. **Suite proposée, à valider** : la 3D dans Gestion · les décorations à couches (décoration à suspendre,
+  décoration à prénom, fleur, suspension : fond + devant) · un outil « mon fichier SVG → 3D » pour les fichiers achetés · les réglages de son imprimante le jour où il la connaît.
+
 ## 👶 MAQUETTE « LETTRE DE NAISSANCE », VERSION SIMPLE POUR LES CLIENTES — 13/11/2026 soir (gérant, devant l'outil lettre : « tu touches pas à l'atelier que tu m'as fait, j'aime bien tous les détails… il faut que tu facilites au maximum pour les clients, pour mettre sur le site. Ne mets rien sur le site… dans admin tu laisses comme c'est… une deuxième version des produits qu'on a mis ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - **Artifact** https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v6) · `python3 tools/maquettes/lettre-client.py <page de base> <clipper.js> <opentype.min.js> <sortie.html>`
   (`<page de base>` = sortie d'un autre créateur, ex. `arbre-base.html` ; sortie de 2,1 Mo non commitée).
