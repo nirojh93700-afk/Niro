@@ -325,3 +325,9 @@ Après (même grille pour tous les pays) : lettre ≤100 g 8,90 · ≤250 g 15,9
 - Avant : carnet seul **12,90 €** (les 3 couleurs), couverture gravée +7 € → 19,90 €, les deux faces 26,90 €.
 - Maintenant : carnet seul **15,90 €**, gravure inchangée (+7 € par face) → 22,90 € / 29,90 €.
 - Pour revenir en arrière : remettre `price: 12.9` sur `carnet-marron`, `carnet-noir`, `carnet-gris` dans `src/lib/products.js`.
+
+## 13/11/2026 — Maquettes maisonnette et fleur à prénom (gérant : « le premier prix tu commences à 24,90 €, tu augmentes après pour les autres modèles, pour les fleurs 19,90 € plus quatre euros pour la peinture »)
+- Rien n'est en vente : ce sont les prix écrits dans les maquettes.
+- Maisonnette, avant (proposés par moi) : petite **19,90 €** · moyenne **24,90 €** · grande **29,90 €**. Maintenant : **24,90 €** (donné par lui) · 29,90 € · 34,90 € (mes choix, + 5 € chacun, à confirmer).
+- Fleur à prénom, avant (proposé par moi) : **16,90 €** en bois naturel, fond peint + 4 €. Maintenant : **19,90 €**, fond peint + 4 € (donnés par lui).
+- Pour revenir en arrière : `TAILLES` dans `tools/maquettes/maison-createur.py`, `"prix"` dans `tools/maquettes/fleur-createur.py`, les deux lignes « fleur » de `tools/maquettes/creez-le-votre.py`.

@@ -1,3 +1,12 @@
+## 💶 RÉPONSES DU GÉRANT À MA LISTE DE 16 POINTS + PRIX MAISONNETTE / FLEUR — 13/11/2026 soir (« Oui pour le 1 et le 2 et 3, pour le quatre non, pour le six c'est bon, pour le neuf oui tu mets dans le gestion, pour le 10 le premier prix tu commences à 24,90 €, tu augmentes après, pour les fleurs 19,90 € plus quatre euros pour la peinture »)
+- **1 OUI** : bouton « OK ✓ » dans les trois outils de Gestion déjà en ligne · **2 OUI** : rangement du support (179 × 169 mm, marges 2 mm) dans l'outil de Gestion ·
+  **3 OUI** : masquer par famille À L'INTÉRIEUR d'un outil · **4 NON** : Vierge = ange et Verseau = amphore refusés, puis « j'aime pas ceci non plus zodiaque » (le médaillon entier) →
+  planche de 4 styles envoyée (A médaillon · B symbole en grand · C constellation · D ses figures des cristaux), EN ATTENTE DE SON CHOIX, rien changé dans l'outil publié ·
+  **6 OK** : le rangement par évènement · **9 OUI** : L'atelier va dans Gestion.
+- **Prix** : maisonnette petite **24,90 €** (donné par lui), moyenne 29,90 € et grande 34,90 € = MON choix (+ 5 € chacun), à confirmer · fleur à prénom **19,90 €**, fond peint **+ 4 €** (donnés par lui).
+  Maisonnette **v5**, fleur **v5**, L'atelier **v9**. La page « Créez le vôtre » (artifact v1) affiche encore l'ancien prix de la fleur : son générateur est corrigé, pas republié (ses images ne sont plus sur la machine).
+- Points de ma liste encore sans réponse : 5 (lettre 165 mm par défaut), 7 (réglages de la boîte), 8 (pieds), 11 à 14, essais sur la machine.
+
 ## 📐 TROIS OUTILS RANGÉS POUR 180 mm, L'ARBRE RESTE À 18 cm — 13/11/2026 soir (gérant : « oui fais les trois et laisse l'arbre à 18 cm », après ma réponse « y aura-t-il des problèmes ? »)
 - AUCUNE pièce ne change de taille (tenons, fentes, objets identiques) ; seul le rangement change. Démonstration : rien en ligne, `public/atelier-outils/` (Gestion) PAS touché.
 - **Maisonnette** (`maison-createur.py`, `D.planche` 190 → **176**) et **décoration à prénom** (`prenom-createur.py`, `ZONE` 176 à la place de `LMAX=190`) : planches de 176 mm au plus (zone 180 moins 2 mm de marge
@@ -189,7 +198,7 @@
   numérotées, rouge = découpe, NOIR = tuiles gravées ; montage pièce après pièce en 3D (8 étapes, pièce du moment en doré). `sousEntete()` / `decoller()` repris.
   Vérifié Chromium 390 / 1280 : 21 dessins × 3 tailles sans alerte, 0 erreur, 0 débordement, aperçu jamais derrière l'en-tête.
 - **Proposé par moi, à valider** : 3 tailles fixes (petite 6,4 × 5,2 × 9,3 cm = la maison de départ d'Atomm · moyenne 8 × 6,5 × 11,6 · grande 9,6 × 7,8 × 13,8) au lieu des dimensions libres ;
-  19,90 / 24,90 / 29,90 € (marché relevé : lanterne de Noël en bois découpé 20 €, photophore chalet personnalisé 12,90–21 €) ; vendue MONTÉE et collée (kit à plat possible) ; guirlande
+  prix : 24,90 € la petite (donné par lui le 13/11 soir : « le premier prix tu commences à 24,90 €, tu augmentes après »), 29,90 € et 34,90 € = MON choix (+ 5 € chacun), à confirmer (marché relevé : lanterne de Noël en bois découpé 20 €, photophore chalet personnalisé 12,90–21 €) ; vendue MONTÉE et collée (kit à plat possible) ; guirlande
   non fournie, LED seulement ; pas de prénom (Atomm n'en a pas : à ajouter seulement s'il le demande) ; pas de dessin par IA ; lien éventuel avec l'interrupteur Noël.
   ⚠️ Avant toute vente : une maison d'essai découpée pour régler le jeu des tenons sur son bois.
 
@@ -223,7 +232,7 @@
   quand on la reprend : toute nouvelle maquette de créateur doit reprendre `sousEntete()` (pose `--sc-top` = hauteur de l'en-tête) et `decoller()` (l'aperçu se retire au résumé). ⚠️ Les maquettes
   ENREGISTRÉES « suspension à prénoms » et « décoration à prénom » ont le même défaut (pas de `sousEntete`) : à corriger seulement sur sa demande. Test à 390 px de large (pas l'émulation
   « iPhone » de Playwright : sans balise viewport dans le fichier, elle affiche la page en largeur d'ordinateur).
-- **Proposé par moi, à valider** : 18 cm ; 16,90 € en bois naturel, fond peint à la main + 4 € (noir, blanc, rouge, rose poudré, vert sauge) ; 8 écritures libres à la place des 7 payantes d'Atomm ; pas de fleur par IA.
+- **Prix donnés par lui le 13/11 soir : 19,90 € en bois naturel, fond peint à la main + 4 €.** Proposé par moi, à valider : 18 cm ; couleurs du fond (noir, blanc, rouge, rose poudré, vert sauge) ; 8 écritures libres à la place des 7 payantes d'Atomm ; pas de fleur par IA.
 
 ## 🧱 GÉNÉRATEUR ATOMM « CREATE YOUR STACK » — ANALYSÉ LE 12/11/2026 SOIR (gérant : lien donné, « Analyse bien ») puis MAQUETTE « SUSPENSION À PRÉNOMS » (gérant : « 170mm ») — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (« OK, enregistre la maquette ») = VERSION 1 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - 🧱 **MAQUETTE v1 (12/11/2026 soir, sa réponse « 170mm » à « je prépare la maquette ? »)** : https://claude.ai/artifact/PpnA3aSf9gMaxuoSr5onFp ·

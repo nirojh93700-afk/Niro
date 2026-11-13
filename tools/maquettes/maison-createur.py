@@ -39,7 +39,7 @@ DESSINS = [["christmas_deer", "Renne"], ["christmas_tree", "Sapin"], ["christmas
            ["christmas_bauble", "Boule"], ["christmas_santa_hat", "Bonnet"], ["christmas_candy_cane", "Sucre d'orge"], ["christmas_sleigh", "Traîneau"],
            ["christmas_bow", "Nœud"], ["moon", "Lune"], ["circle", "Rond"], ["none", "Sans dessin"]]
 # Les tailles (proposées) : [id, nom, largeur, profondeur, hauteur des murs, hauteur du toit, prix]. La petite = la maison de départ d'Atomm.
-TAILLES = [["p", "Petite", 64, 52, 60, 30, 19.9], ["m", "Moyenne", 80, 65, 75, 37.5, 24.9], ["g", "Grande", 96, 78, 90, 45, 29.9]]
+TAILLES = [["p", "Petite", 64, 52, 60, 30, 24.9], ["m", "Moyenne", 80, 65, 75, 37.5, 29.9], ["g", "Grande", 96, 78, 90, 45, 34.9]]
 
 DONNEES = json.dumps({"motifs": motifs, "dessins": DESSINS, "tailles": TAILLES, "planche": 176}, ensure_ascii=False, separators=(",", ":"))
 
@@ -196,7 +196,7 @@ __FIL__
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
   <li>Trois tailles proposées par moi : petite (celle de départ d'Atomm), moyenne, grande. Chez Atomm la largeur, la profondeur et la hauteur sont libres, de 4,5 à 14 cm ; j'ai mis des tailles fixes, comme vous l'aviez demandé pour la décoration à suspendre.</li>
-  <li>Prix proposés par moi : 19,90 €, 24,90 € et 29,90 €, maisonnette montée et collée par l'atelier. Sur le marché, une lanterne de Noël en bois découpé se vend autour de 20 €, un photophore chalet personnalisé de 13 à 21 €.</li>
+  <li>Prix (le premier donné par vous le 13/11, les deux autres + 5 € chacun, à confirmer) : 24,90 €, 29,90 € et 34,90 €, maisonnette montée et collée par l'atelier. Sur le marché, une lanterne de Noël en bois découpé se vend autour de 20 €, un photophore chalet personnalisé de 13 à 21 €.</li>
   <li>Vendue montée. Elle peut aussi se vendre en kit à plat, à monter par la cliente : à vous de dire.</li>
   <li>Sur une guirlande : la guirlande n'est pas fournie, et seulement des ampoules LED, qui ne chauffent pas. Jamais de bougie.</li>
   <li>L'outil d'Atomm n'écrit aucun prénom. Je peux ajouter un prénom gravé (sur le toit ou sur la base) si vous le voulez.</li>

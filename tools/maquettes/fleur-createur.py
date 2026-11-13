@@ -49,7 +49,7 @@ FONDS = [["bois", "Bois naturel", "#ecd5ad", 0], ["noir", "Noir", "#2b2622", 4],
 
 DONNEES = json.dumps({
     "fleurs": F["fleurs"], "feuilles": F["feuilles"], "pol": pol, "fonds": FONDS, "logo": LOGO,
-    "long": 180, "fin": 0.8, "maxi": 1.3, "lettres": 14, "prix": 16.9,
+    "long": 180, "fin": 0.8, "maxi": 1.3, "lettres": 14, "prix": 19.9,
     "mois": ["", "janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]},
     ensure_ascii=False, separators=(",", ":"))
 
@@ -206,7 +206,7 @@ __FIL__
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
   <li>Longueur : 18 cm, comme l'arbre de vie. Chez Atomm la pièce fait 38 cm au départ, trop grand pour votre machine en un seul morceau.</li>
-  <li>Prix proposés par moi : 16,90 € en bois naturel, + 4 € si le fond est peint à la main (même supplément que la décoration à prénom).</li>
+  <li>Prix donnés par vous le 13/11 : 19,90 € en bois naturel, + 4 € si le fond est peint à la main (même supplément que la décoration à prénom).</li>
   <li>Les couleurs du fond sont une proposition. Atomm ne fait que montrer des matières (contreplaqué, MDF, acrylique) et conseille de peindre.</li>
   <li>Écritures : Pacifico et Lobster sont celles d'Atomm ; ses sept autres ne sont pas libres de droits, je les ai remplacées par huit écritures libres du même genre.</li>
   <li>Tous les réglages d'Atomm sont là, rangés dans des volets fermés pour ne pas charger la page. Vous pouvez en retirer.</li>

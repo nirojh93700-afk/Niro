@@ -36,7 +36,7 @@ def img(nom):
 A = "https://claude.ai/artifact/"
 # [id, nom, phrase, prix, image, lien de la maquette, étiquette]
 OUTILS = [
-    ["fleur", "Fleur à prénom", "Une fleur en bois, le prénom découpé sur la tige.", "16,90 €", "fleur-3", A + "VX8XHyYdfhCnJzhj7WdnN6", "Nouveau"],
+    ["fleur", "Fleur à prénom", "Une fleur en bois, le prénom découpé sur la tige.", "19,90 €", "fleur-3", A + "VX8XHyYdfhCnJzhj7WdnN6", "Nouveau"],
     ["arbre", "Arbre de vie", "Les prénoms de la famille dans les cœurs de l'arbre.", "dès 24,90 €", "arbre", A + "9h1rXBNMnNEYgkaFH1NTFa", ""],
     ["empile", "Suspension à prénoms", "Une forme par prénom, reliées en une suspension.", "dès 12,90 €", "empile-1", A + "PpnA3aSf9gMaxuoSr5onFp", ""],
     ["deco", "Décoration à suspendre", "46 formes, un prénom découpé ou une photo gravée.", "dès 9,90 €", "deco-2", A + "6Gs8LNkzpdvWMRDNZpE775", "Noël"],
@@ -45,7 +45,7 @@ OUTILS = [
 ]
 # [nom du modèle, outil, ce qu'on change, prix, image, lien]
 MODELES = [
-    ["La rose", "Fleur à prénom", "Changez le prénom", "16,90 €", "fleur-1", OUTILS[0][5]],
+    ["La rose", "Fleur à prénom", "Changez le prénom", "19,90 €", "fleur-1", OUTILS[0][5]],
     ["Notre famille", "Arbre de vie", "Changez les prénoms", "30,90 €", "arbre", OUTILS[1][5]],
     ["Flocons de neige", "Décoration à suspendre", "Changez le prénom", "19,90 €", "deco-1", OUTILS[3][5]],
     ["Les cœurs", "Suspension à prénoms", "Changez les prénoms", "15,90 €", "empile-1", OUTILS[2][5]],

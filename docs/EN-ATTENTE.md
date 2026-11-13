@@ -44,13 +44,13 @@
 
 ## 🏠 MAQUETTE « MAISONNETTE EN BOIS » — 13/11/2026 (en attente de son avis, RIEN en ligne)
 - https://claude.ai/artifact/BWVe3PyAdcb18PeKpZtxK4 (v1), d'après le générateur « House Ornament » d'Atomm ; détail dans CLAUDE.md.
-- À trancher par lui : les 3 tailles fixes, les prix 19,90 / 24,90 / 29,90 €, montée ou en kit, un prénom gravé ou non, Noël seulement ou toute l'année,
+- À trancher par lui : les 3 tailles fixes, les prix 29,90 et 34,90 € des deux grandes tailles (24,90 € la petite : donné par lui le 13/11), montée ou en kit, un prénom gravé ou non, Noël seulement ou toute l'année,
   l'ajouter à la page « Créez le vôtre ». Avant toute vente : une maison d'essai découpée (jeu des tenons).
 
 ## 🧭 MAQUETTE « CRÉEZ LE VÔTRE » + 🌹 MAQUETTE « FLEUR À PRÉNOM » — 13/11/2026, EN ATTENTE DE SON AVIS, RIEN en ligne
 - Page « Créez le vôtre » (menu, modèles prêts, 6 outils, bloc d'accueil) : https://claude.ai/artifact/1UafcEcee7BUjU42SxZ3kN
 - Fleur à prénom (d'après le générateur Flower d'Atomm) : https://claude.ai/artifact/VX8XHyYdfhCnJzhj7WdnN6
-- À valider : nom et place de l'entrée de menu, place du bloc d'accueil, modèles prêts ; fleur : 18 cm, 16,90 € (+ 4 € fond peint), couleurs du fond, écritures. Détail dans CLAUDE.md.
+- À valider : nom et place de l'entrée de menu, place du bloc d'accueil, modèles prêts ; fleur : 19,90 € + 4 € fond peint (donnés par lui le 13/11) ; à valider : 18 cm, couleurs du fond, écritures. Détail dans CLAUDE.md.
 
 ## 🧱 MAQUETTE « SUSPENSION À PRÉNOMS » — ✅ ENREGISTRÉE TELLE QUELLE LE 12/11/2026 SOIR (version 1), RIEN en ligne
 - **12/11/2026 soir — maquette « Suspension à prénoms »** (d'après « Create Your Stack » d'Atomm, 170 mm de haut au plus) : https://claude.ai/artifact/PpnA3aSf9gMaxuoSr5onFp. Ne plus la modifier sans sa demande. Restent à valider avant de construire : sens de « 170 mm », prix (12,90 € avec 2 prénoms, + 3 € par prénom), réglages laissés à la cliente, écritures. Rien en ligne.
