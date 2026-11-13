@@ -10,6 +10,8 @@ et les emplacements pour que je l'intègre après sur le K ». Le K n'est qu'un 
 <clipper.js>      = npm pack clipper-lib@6.4.2 → package/clipper.js ; <opentype.min.js> = npm pack opentype.js@1.3.4 → package/dist/.
 <sortie>          = fichier .html. Sans « complet » : page d'artifact (sans doctype). Avec : page entière (pour Gestion, plus tard).
 Écritures : docs/maquettes/assets/lettre (3 formes de lettre + les 12 signes) et docs/maquettes/assets/fleur/polices (prénom).
+Animaux : docs/maquettes/assets/lettre/animaux.ttf = 48 dessins de la police Noto Emoji de Google (licence libre OFL, à côté).
+Boîte (v2) : même principe que le « Number Box with Living Hinge » d'Atomm, relevé par tools/maquettes/boite-atomm-releve.cjs.
 Le calcul est dans tools/maquettes/lettre-incrustee.js (window.NivLettre).
 """
 import base64, json, os, sys
@@ -20,7 +22,7 @@ ici = os.path.dirname(os.path.abspath(__file__))
 racine = os.path.dirname(os.path.dirname(ici))
 A = os.path.join(racine, "docs/maquettes/assets")
 POL = [["fredoka", "Ronde (Fredoka)", "lettre/Fredoka-Bold.ttf", "lettre"], ["lilita", "Large (Lilita One)", "lettre/LilitaOne-Regular.ttf", "lettre"],
-       ["titan", "Très grasse (Titan One)", "lettre/TitanOne-Regular.ttf", "lettre"], ["signes", "Signes", "lettre/signes.ttf", "signe"],
+       ["titan", "Très grasse (Titan One)", "lettre/TitanOne-Regular.ttf", "lettre"], ["signes", "Signes", "lettre/signes.ttf", "signe"], ["animaux", "Animaux", "lettre/animaux.ttf", "animal"],
        ["pacifico", "Pacifico", "fleur/polices/Pacifico-Regular.ttf", "nom"], ["lobster", "Lobster", "fleur/polices/Lobster-Regular.ttf", "nom"],
        ["leckerli", "Leckerli One", "fleur/polices/LeckerliOne-Regular.ttf", "nom"], ["oleo", "Oleo Script", "fleur/polices/OleoScript-Bold.ttf", "nom"],
        ["courgette", "Courgette", "fleur/polices/Courgette-Regular.ttf", "nom"], ["berkshire", "Berkshire Swash", "fleur/polices/BerkshireSwash-Regular.ttf", "nom"]]
@@ -57,7 +59,9 @@ body{background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,
 .li-in{padding:2px 14px 14px;display:grid;gap:10px}
 .li-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .li label{display:grid;gap:3px;font-size:.8rem;color:var(--doux);min-width:0}
-.li label.l2{grid-column:1/-1}
+.li label.l2,.li-g>small.l2{grid-column:1/-1}
+.li label.li-case{display:flex;flex-direction:row;align-items:flex-start;gap:8px;font-weight:600;color:var(--fg);font-size:.9rem;line-height:1.35}
+.li label.li-case input{width:18px;height:18px;flex:none;margin:1px 0 0;accent-color:var(--or)}
 .li input,.li select{font:inherit;font-size:16px;color:var(--fg);background:var(--bg);border:1px solid var(--ligne);border-radius:9px;padding:8px 10px;width:100%;min-width:0}
 .li small{color:var(--doux);font-size:.78rem}
 .li-coul{display:flex;flex-wrap:wrap;gap:6px}
@@ -123,21 +127,36 @@ HTML = r"""<div class="li">
    <label>Taille (cm)<input id="f-taille" inputmode="decimal" maxlength="5"></label>
    <label>Poids (g)<input id="f-poids" inputmode="numeric" maxlength="5"></label>
    <label class="l2">Signe du zodiaque<select id="f-signe"></select><small id="signeAuto"></small></label>
-   <label>Animal<select id="f-animal"><option value="chat">Chat endormi</option><option value="aucun">Aucun</option></select></label>
+   <label>Animal<select id="f-animal"></select></label>
    <label>Étoiles (0 à 6)<input id="f-nbEt" inputmode="numeric" maxlength="1"></label>
    <label class="l2">Texte libre (facultatif)<input id="f-libre" maxlength="18" autocomplete="off"></label>
  </div></div></details>
  <details open><summary><i>3</i>Les pièces</summary><div class="li-in">
   <small>Touchez une pièce pour la régler. « Incrusté » : pièce blanche dans son emplacement. « Gravé » : dessiné sur le dessus, sans découpe. Vous pouvez aussi la glisser sur l'aperçu.</small>
   <div id="pieces"></div></div></details>
- <details><summary><i>4</i>La machine</summary><div class="li-in"><div class="li-g">
+ <details open><summary><i>4</i>La boîte</summary><div class="li-in">
+  <label class="li-case"><input type="checkbox" id="b-on"> Faire une boîte sous la lettre (la lettre décorée devient le couvercle)</label>
+  <div class="li-g" id="b-regl">
+   <label>Hauteur des côtés (mm)<input id="b-prof" inputmode="decimal"></label>
+   <label>Rayon des angles (mm)<input id="b-rayon" inputmode="decimal"></label>
+   <label>Rebord du haut (mm)<input id="b-cour" inputmode="decimal"></label>
+   <label>Jeu du couvercle (mm)<input id="b-jeuC" inputmode="decimal"></label>
+   <label>Écart entre les fentes (mm)<input id="b-pas" inputmode="decimal"></label>
+   <label>Fentes en plus avant et après une courbe (mm)<input id="b-pad" inputmode="decimal"></label>
+   <label class="l2">Bande de côté en combien de morceaux<select id="b-nb"><option value="0">Automatique (selon la zone de la machine)</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option></select><small id="b-info"></small></label>
+   <label class="li-case l2"><input type="checkbox" id="b-plaque"> La boîte suit aussi la plaque du prénom (sinon la plaque dépasse de la boîte et sert de prise)</label>
+   <label class="li-case l2"><input type="checkbox" id="b-dos"> Plaque pleine sous la boîte (elle cache les tenons)</label>
+   <label class="li-case l2"><input type="checkbox" id="b-rep"> Graver une lettre de repère (A, B, C…) sur chaque morceau de bande et sur le fond</label>
+   <small class="l2">La bande de côté a des fentes là où la lettre tourne : c'est ce qui la laisse plier. Elle s'emboîte par des tenons dans le fond et dans la couronne du haut. L'épaisseur du bois se règle à l'étape 5.</small>
+  </div></div></details>
+ <details><summary><i>5</i>La machine</summary><div class="li-in"><div class="li-g">
    <label>Zone de travail, largeur (mm)<input id="f-zw" inputmode="decimal"></label>
    <label>Zone de travail, hauteur (mm)<input id="f-zh" inputmode="decimal"></label>
    <label>Trait de coupe (mm)<input id="f-trait" inputmode="decimal"></label>
    <label>Jeu autour des pièces (mm)<input id="f-jeu" inputmode="decimal"></label>
-   <label class="l2">Épaisseur de chaque couche (mm)<input id="f-ep" inputmode="decimal"><small>Sert à la vue 3D et à la liste. Avec une machine plus grande : changez la zone et la hauteur de la lettre, tout suit.</small></label>
+   <label class="l2">Épaisseur du bois (mm)<input id="f-ep" inputmode="decimal"><small>Sert à la boîte (tenons, encoches), à la vue 3D et à la liste. Avec une machine plus grande : changez la zone et la hauteur de la lettre, tout suit.</small></label>
  </div></div></details>
- <details open><summary><i>5</i>Les fichiers pour la machine</summary><div class="li-in" id="fichiers"></div></details>
+ <details open><summary><i>6</i>Les fichiers pour la machine</summary><div class="li-in" id="fichiers"></div></details>
 </section>
 </div></div>
 """

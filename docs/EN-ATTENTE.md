@@ -6,7 +6,9 @@
 
 ## 🔠 OUTIL « LETTRE À INCRUSTER » (13/11/2026) — démonstration à essayer, RIEN en ligne
 - https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw : toutes les lettres, 12 signes, chaque pièce réglable, fichiers pour la machine (fond, dessus à emplacements, pièces blanches, gravure).
-- En attente de son avis : taille (170 mm), bord, matières et épaisseurs, dessins (chat, pieds…), autres animaux, mise dans Gestion, essai de découpe pour le jeu.
+- **v2 (13/11)** : 48 animaux détaillés (collection libre Noto de Google) + la BOÎTE sous la lettre (fond à encoches, bande à fentes en morceaux selon la machine, couronne, cale du couvercle, dos), lettres ET chiffres.
+- En attente de son avis : les animaux, la boîte (hauteur 40 mm, rayon 8 mm, fentes tous les 2 mm, rebord 5 mm, la plaque du prénom qui dépasse, trous de lettre fermés), taille (170 mm), bord,
+  matières et épaisseurs, mise dans Gestion. À faire par lui : l'« essai de pliage » sur son bois, puis une boîte entière ; l'épaisseur de bois que sa machine découpe (3 mm ? 5 mm ?).
 
 ## 🧭 AUDIT DU 13/11/2026 + MAQUETTE « LE SITE REFAIT » (accueil REFUSÉ, le reste enregistré pour plus tard, RIEN en ligne)
 - ⛔ 13/11 : « j'aime pas l'accueil, on va laisser comme c'est » → l'accueil du site ne change pas. Le reste de la maquette (catégorie, fiche, Créez le vôtre, panier, avis,

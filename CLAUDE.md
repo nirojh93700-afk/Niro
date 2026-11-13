@@ -1,5 +1,5 @@
 ## 🔠 OUTIL DE L'ATELIER « LETTRE À INCRUSTER » — 13/11/2026 (gérant, photo d'une lettre « K » de naissance vue sur Instagram : « tu me crées un petit logiciel… dans admin… le blanc en plusieurs morceaux et les emplacements pour que je l'intègre après sur le K » ; « c'est un exemple, il faut les autres lettres, tous les zodiaques, que je personnalise ») — DÉMONSTRATION À ESSAYER, RIEN en ligne, PAS encore dans Gestion
-- **Artifact** https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw (v1, capacité `downloads`) · `python3 tools/maquettes/lettre-incrustee.py <clipper.js> <opentype.min.js> <sortie.html> [complet]`
+- **Artifact** https://claude.ai/artifact/WeB2GPqJNDTcntagUx1HSw (v2 du 13/11 = animaux + boîte, voir plus bas ; capacité `downloads`) · `python3 tools/maquettes/lettre-incrustee.py <clipper.js> <opentype.min.js> <sortie.html> [complet]`
   (`npm pack clipper-lib@6.4.2 opentype.js@1.3.4`, écrites DANS la page ; « complet » = page entière pour Gestion plus tard) · calcul `tools/maquettes/lettre-incrustee.js`
   (`window.NivLettre` : `etat()`, `calcul()`, `maj()`, `svg(i)`, `liste()`) · écritures `docs/maquettes/assets/lettre/` (Fredoka Bold, Lilita One, Titan One allégées + `signes.ttf` =
   les 12 signes tirés de DejaVu Sans Bold) et `docs/maquettes/assets/fleur/polices` (prénom).
@@ -17,6 +17,23 @@
   28 gestes, 0 erreur, 0 débordement, calcul ≈ 0,2 s. Exemple de départ « Katia » (bouton « Tout vider » ; vide = « P » et « Prénom »). État gardé sur l'appareil (`niv-lettre-incrustee`).
 - **Proposé par moi, à valider** : 170 mm de haut · bord 3 mm · même épaisseur partout (3 mm) · dessins faits par moi (chat, pieds, règle, horloge : le modèle est le produit d'un autre
   créateur, on reprend le principe, pas ses dessins) · à 170 mm les centres des chiffres font moins de 2 mm (les passer en « Gravé » ou agrandir).
+- 📦 **v2 (13/11/2026, gérant : « pour le chat y a pas assez de détails… cherche des animaux bien dessinés » · « la boîte option 2… des petites bandes pour que ça plie… en plusieurs
+  morceaux… des encoches… ça se pose au-dessus… une vraie boîte » + liens Atomm Arc Box et Number Box with Living Hinge · « on peut utiliser les chiffres aussi »)** — même artifact, VERSION 2 :
+  · **48 animaux détaillés** (liste « Animal ») = dessins de la police **Noto Emoji** de Google (licence libre OFL, usage commercial permis), gardés dans `docs/maquettes/assets/lettre/animaux.ttf`
+    (+ `animaux-LICENCE-OFL.txt`) : pièce blanche à la silhouette du dessin (1,2 mm de marge), dessin GRAVÉ dessus ; en « Gravé », le dessin seul sur le dessus. `ANIMAUX`, `animalChoisi()`.
+    Mon chat dessiné à la main est supprimé. ⛔ Pas d'image prise sur un site (droits) : seulement cette collection libre.
+  · **La boîte (volet 4, cochée d'office)** = le principe du Number Box d'Atomm (analysé : leur outil ouvert dans le navigateur, `tools/maquettes/boite-atomm-releve.cjs`, hôtes
+    `arc-box.` et `number-box-with-living-hinge.generator.atommapps.com` ajoutés au réseau) : **fond à encoches** (BF) · **bande de côté** à tenons haut et bas, **fentes là où le contour
+    tourne** (+ 10 mm avant / après, une colonne sur deux à ponts décalés de 4,2 mm, écart 2 mm réglable 1 à 6), **coupée en morceaux A, B, C… selon la largeur de la zone machine** (jonctions
+    en doigts de 1,5 × l'épaisseur, placées de préférence dans une partie droite ; nombre au choix) · **couronne** du haut (BC, rebord 5 mm) · **cale** collée sous le couvercle (BK, jeu 0,2)
+    · **dos** plein facultatif (BD) · lettres de repère gravées sur chaque morceau et sur le fond. Le couvercle = la lettre décorée (fond blanc + dessus). Contour = lettre + bord, creux et
+    pointes arrondis à 8 mm (réglable), trous de la lettre fermés par le fond blanc ; par défaut la boîte suit la lettre seule (la plaque du prénom dépasse et sert de prise ; case pour la suivre).
+    Pas de tenon dans un virage serré (rayon < 12 mm). Hauteur des côtés 40 mm (15 à 400) → boîte fermée 49 mm, 34 mm utiles. Fichiers : planches « bois de la boîte » (`lettre-K-boite-N.svg`,
+    un tracé `…-fentes` par morceau), **« Essai de pliage »** (bout de bande de 72 mm à découper d'abord), liste et montage écrits. 3D : la boîte sous le couvercle soulevé.
+    Code : `calculerBoite` (résultat gardé en mémoire `BTC`), `morceauBande`, `zonesSouples`, `virage`, `blocsBoite`, `essaiCharniere` ; état `S.bt`.
+  · Vérifié Chromium 390 / 1280 : 26 lettres + 10 chiffres × 3 formes sans erreur (calcul ≤ 0,4 s), 48 animaux, 26 gestes de la boîte + les 28 d'avant, 380 mm sur 600 × 400, 0 débordement.
+  · **Proposé par moi, à valider** : hauteur 40 mm · rayon 8 mm · fentes tous les 2 mm (Atomm : 1,5) · rebord 5 mm · la boîte suit la lettre seule · trous de lettre fermés · dos plein coché.
+    ⚠️ À essayer sur SON bois avant tout : l'essai de pliage, puis une boîte entière (fil du bois dans le sens des fentes). L'Arc Box d'Atomm (boîte rectangulaire à coins ronds) n'est PAS repris.
 - **Suite, sur son mot** : le mettre dans Gestion (ex. Tests / Atelier, `public/atelier-outils/`), autres animaux, autres modèles (« à chaque fois que je te donnerai des modèles » :
   un modèle de plus dans la liste « Modèle » du même outil), essai de découpe pour régler le jeu.
 
