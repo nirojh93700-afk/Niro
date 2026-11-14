@@ -501,7 +501,7 @@ HTML_ATELIER = r"""
    <ul class="sc-legende"><li><i style="border-color:#d32f2f"></i>Trait rouge : à découper</li><li><i style="border-color:#111"></i>Noir : à graver</li></ul>
    <ul class="sc-points">
     <li><b>Les 46 formes du générateur Atomm</b>Noël, Pâques, paniers, croix et formes simples, trou du ruban compris. En « Classique », le cadre (l'intérieur est vide) ; en « Plaque pleine », la forme entière.</li>
-    <li><b>Les dessins découpés avec le cadre</b>En « Classique », aux tailles 9 et 11 cm, un dessin en contreplaqué est découpé avec le cadre, d'une seule pièce : il est dessiné à sa place sur le cadre, avec un seul contour rouge, et il n'y a rien à coller. Le fichier dit la surface qui tient chaque dessin au cadre. Le nom est collé par-dessus, ou découpé avec le cadre si la cliente l'a choisi. À 7 cm, ou en acrylique, tout reste une pièce à part.</li>
+    <li><b>Les dessins découpés avec le cadre</b>En « Classique », aux tailles 9 et 11 cm, un dessin (toujours en contreplaqué, jamais en acrylique) est découpé avec le cadre, d'une seule pièce : il est dessiné à sa place sur le cadre, avec un seul contour rouge, et il n'y a rien à coller. Le fichier dit la surface qui tient chaque dessin au cadre. Le nom est collé par-dessus, ou découpé avec le cadre si la cliente l'a choisi. À 7 cm, le dessin reste une pièce en bois à part ; un nom en acrylique aussi.</li>
     <li><b>Chaque pièce à coller rangée à plat, numérotée</b>En « Classique », chaque texte et chaque photo est une pièce à part, rangée à côté du cadre avec son numéro : un nom découpé (lettres soudées), un texte gravé sur une pièce découpée 1,6 mm autour, une photo gravée sur sa pièce. On découpe tout, puis on colle les pièces sur le cadre comme sur l'aperçu de la cliente.</li>
     <li><b>Trois tailles</b>Petite 7 cm (compris), moyenne 9 cm (+ 2 €), grande 11 cm (+ 4 €), plus grand côté. Le fichier tient dans la zone de 200 × 200 mm de la F2 Ultra UV.</li>
     <li><b>Contreplaqué, et acrylique de couleur pour les noms</b>Le cadre (ou la plaque) et les photos en contreplaqué 3 mm ; chaque nom ou texte découpé en contreplaqué ou en acrylique blanc, noir, rouge ou bleu. Le fichier dit dans quelle matière découper chaque pièce.</li>
@@ -768,6 +768,8 @@ function piecePhoto(e,cx,cy,w,h,P,uid){var o=P.o,x=cx-w/2,y=cy-h/2,s='';
 
 function dessiner(){
  if(S.style==='classique')S.els.forEach(function(e){if(e.type==='texte'&&e.mode==='grave'&&(e.mat||'contreplaque')!=='contreplaque')e.mode='decoupe'});
+ /* un dessin : toujours en contreplaqué, toujours découpé (détails gravés ou ajouré), jamais « gravé sur une pièce » */
+ S.els.forEach(function(e){if(e.type!=='dessin')return;e.mat='contreplaque';if(e.mode==='grave')e.mode=(elem(e.did)||{}).det?'detail':'decoupe'});
  plaque();grav.innerHTML='';gravS.innerHTML='';poignee.innerHTML='';
  var cl=S.style==='classique',m=M();
  var P={cl:cl,plein:'url(#bois)',grav:m.grav,o:off(),coupe:0,ombre:true,filtre:'filter="url(#sepia)"'};
@@ -796,7 +798,8 @@ function dessiner(){
  $('astuce').hidden=!S.els.length||S.aBouge||V3.actif||G.vue!=='creation';vignettes();
  if(G.commence){var v=document.querySelector('.sc-thc path');if(v)v.setAttribute('d',cl?F().cadre:F().d)}
 }
-function matEl(e){return (e.type==='texte'||(e.type==='dessin'&&e.mode!=='grave'))&&S.style==='classique'?Mde(e.mat||'contreplaque'):M()}
+/* Seul un NOM peut être en acrylique : un dessin est toujours en contreplaqué (gérant, 14/11). */
+function matEl(e){return e.type==='texte'&&S.style==='classique'?Mde(e.mat||'contreplaque'):M()}
 function boite(e){return e.type==='texte'&&e.inkL!=null?{x0:e.inkL,x1:e.inkR,y0:e.y-e.fs*.3,y1:e.y+e.fs*.3}:{x0:e.bx,x1:e.bx+e.bw,y0:e.by,y1:e.by+e.bh}}
 function recouvre(a,b){return Math.min(a.x1,b.x1)-Math.max(a.x0,b.x0)>4&&Math.min(a.y1,b.y1)-Math.max(a.y0,b.y0)>4}
 /* l'encre réelle d'un texte (l'écriture anglaise laisse de la marge sur les côtés) */
@@ -853,7 +856,7 @@ function ranger(){var L=limites(),els=S.els.slice().sort(function(a,b){return a.
 /* ---- étape 3 : le style ---- */
 function majStyle(){[].forEach.call($('styles').querySelectorAll('.sc-style'),function(b){b.classList.toggle('on',b.getAttribute('data-v')===S.style)});
  var cl=S.style==='classique';
- $('legTextes').innerHTML=cl&&S.taille!=='petite'?'Les <b>dessins en bois sont découpés avec le cadre</b>, d\'une seule pièce : rien ne peut se décoller. Le <b>nom est collé par-dessus</b>, en relief, ou découpé avec le cadre lui aussi : vous choisissez dans sa fiche. Une photo, ou une pièce en acrylique de couleur, est toujours collée. <b>Vous placez tout où vous voulez</b> : touchez dans l\'aperçu et faites glisser, ou utilisez les flèches. Un dessin doit mordre sur le bois du cadre, un nom doit le toucher. Chaque texte ou photo : + 3 € ; chaque petit dessin : + 1 €.'
+ $('legTextes').innerHTML=cl&&S.taille!=='petite'?'Les <b>dessins en bois sont découpés avec le cadre</b>, d\'une seule pièce : rien ne peut se décoller. Le <b>nom est collé par-dessus</b>, en relief, ou découpé avec le cadre lui aussi : vous choisissez dans sa fiche. Une photo, ou un nom en acrylique de couleur, est toujours collé. Seul le nom peut être en acrylique. <b>Vous placez tout où vous voulez</b> : touchez dans l\'aperçu et faites glisser, ou utilisez les flèches. Un dessin doit mordre sur le bois du cadre, un nom doit le toucher. Chaque texte ou photo : + 3 € ; chaque petit dessin : + 1 €.'
   :cl?'À la taille de 7 cm, chaque texte, chaque dessin et chaque photo est une <b>pièce découpée à part</b>, que l\'on colle sur le cadre (à partir de 9 cm, les dessins en bois sont découpés avec le cadre, d\'une seule pièce). <b>Vous la placez où vous voulez</b> : touchez-la dans l\'aperçu et faites-la glisser, ou utilisez les flèches. Elle doit toucher le cadre (ou une autre pièce) : c\'est là qu\'elle est collée. Chaque texte ou photo : + 3 € ; chaque petit dessin : + 1 €.'
   :'Les textes, les dessins et les photos sont <b>gravés directement</b> sur la plaque. <b>Vous les placez où vous voulez</b> : touchez-les dans l\'aperçu et faites-les glisser, ou utilisez les flèches. Chaque texte ou photo gravé : + 3 € ; chaque petit dessin : + 1 €.';
  [].forEach.call(document.querySelectorAll('.sc-sicl'),function(x){x.hidden=!cl})}
@@ -893,7 +896,7 @@ function polsHtml(courante){var h='<div class="prc-pols">';D.polices.forEach(fun
  h+='<button type="button" class="prc-pol'+(p[0]===courante?' on':'')+'" data-pol="'+p[0]+'" style="font-family:'+p[2].replace(/"/g,"'")+'">'+p[1]+'</button>'});return h+'</div>'}
 function seg(nom,valeurs,courante,data){var h='<div class="sc-seg" role="group" aria-label="'+nom+'">';
  valeurs.forEach(function(v){h+='<button type="button" class="'+(v[0]===courante?'on':'')+'" data-'+data+'="'+v[0]+'">'+v[1]+'</button>'});return h+'</div>'}
-var MODES=[['decoupe','Découpé'],['grave','Gravé']],MODESD=[['detail','Détails gravés'],['decoupe','Ajouré'],['grave','Sur une pièce']],
+var MODES=[['decoupe','Découpé'],['grave','Gravé']],MODESD=[['detail','Détails gravés'],['decoupe','Ajouré']],
  AIDED={detail:'La forme du dessin est découpée ; ses détails (yeux, traits, étoiles) sont gravés.',decoupe:'Tout est découpé : les détails sont des trous.',grave:'Le dessin est gravé sur une pièce découpée 1,6 mm autour.'},FORMES=[['rect','Rectangle'],['ovale','Ovale']];
 function panneau(){
  var P=$('panneau'),h='',cl=S.style==='classique';
@@ -949,11 +952,11 @@ function nomEl(e){return e.type==='texte'?'« '+(e.texte||'')+' »':e.type==='de
 function commentEl(e){
  if(soudee(e))return e.type==='dessin'?'découpé avec le cadre'+(e.mode==='grave'||e.mode==='detail'?' · détails gravés':' · ajouré')+' · rien à coller'+(e.rot?' · tourné de '+e.rot+'°':'')+(e.flip?' · retourné':'')
   :'découpé avec le cadre'+(e.mode==='grave'?' · texte gravé':'')+(e.creux?' · lettres creuses':'')+' · '+police(e.police)[1];
- if(e.type==='dessin')return S.style!=='classique'?'gravé':(e.mode==='grave'?'gravé sur une pièce découpée':e.mode==='detail'?'découpé, détails gravés':'découpé, ajouré')+(e.mode==='grave'?'':' · '+matEl(e).nom.toLowerCase())+(e.rot?' · tourné de '+e.rot+'°':'')+(e.flip?' · retourné':'');
+ if(e.type==='dessin')return S.style!=='classique'?'gravé':(e.mode==='detail'?'découpé, détails gravés':'découpé, ajouré')+' · contreplaqué'+(e.rot?' · tourné de '+e.rot+'°':'')+(e.flip?' · retourné':'');
  if(e.type==='photo')return 'photo gravée'+(S.style==='classique'?' sur une pièce découpée':'')+' · '+(e.forme==='ovale'?'ovale':'rectangle');
  if(S.style!=='classique')return 'gravé · '+police(e.police)[1];
  return (e.mode==='grave'?'gravé sur une pièce découpée':'lettres découpées')+(e.creux?' · creuses':'')+' · '+matEl(e).nom.toLowerCase()+' · '+police(e.police)[1]}
-function prixEl(e){return (e.type==='dessin'?D.prix.dessin:D.prix.element)+((e.type==='texte'||e.type==='dessin')&&S.style==='classique'&&matEl(e).acrylique?D.prix.acrylique:0)}
+function prixEl(e){return (e.type==='dessin'?D.prix.dessin:D.prix.element)+(e.type==='texte'&&S.style==='classique'&&matEl(e).acrylique?D.prix.acrylique:0)}
 function liste(){
  var L=$('liste'),act=document.activeElement,garde=act&&act.getAttribute&&act.getAttribute('data-edit');
  if(garde){[].forEach.call(L.querySelectorAll('.sc-item'),function(d){d.classList.toggle('on',+d.getAttribute('data-id')===S.sel)});
@@ -977,8 +980,8 @@ function liste(){
      +'<div class="sc-outils"><span>Espacement</span><button type="button" class="sc-o" data-act="esp-" aria-label="Lettres plus serrées">−</button><button type="button" class="sc-o" data-act="esp+" aria-label="Lettres plus espacées">+</button></div>'
      +'<button type="button" class="sc-o sc-poser" data-act="poser">Poser d\'un bord du cadre à l\'autre</button>'
      +'<label class="sc-courbe">Courbe <input type="range" min="-100" max="100" step="5" value="'+(e.courbe||0)+'" data-act="courbe" aria-label="Courbe du texte"><output>'+(e.courbe||0)+'</output></label>'}
-   else if(e.type==='dessin'){if(cl){h+='<div class="sc-tdz">'+seg('Détails gravés, ajouré ou gravé sur une pièce',MODESD,e.mode,'em')+'</div><p class="prc-hint">'+(AIDED[e.mode]||'')+'</p>';if(e.mode!=='grave')h+=matsHtml(e.mat||'contreplaque','emat');
-     h+='<p class="prc-hint">'+(soudee(e)?'Découpé avec le cadre, d\'une seule pièce : rien à coller.':S.taille==='petite'?'À 7 cm, le dessin est une pièce à part, collée sur le cadre.':'En acrylique, le dessin est une pièce à part, collée sur le cadre.')+'</p>'}
+   else if(e.type==='dessin'){if(cl){h+='<div class="sc-tdz">'+seg('Détails gravés ou ajouré',MODESD,e.mode,'em')+'</div><p class="prc-hint">'+(AIDED[e.mode]||'')+'</p>';
+     h+='<p class="prc-hint">'+(soudee(e)?'En contreplaqué, découpé avec le cadre, d\'une seule pièce : rien à coller.':S.taille==='petite'?'À 7 cm, le dessin est une pièce en contreplaqué à part, collée sur le cadre.':'En contreplaqué, comme le cadre.')+'</p>'}
     if(grand())h+='<div class="field sc-tdz"><label>Taille du dessin</label>'+seg('Taille du dessin',TD.map(function(t){return [t[0],t[1]+' · '+tdCm(e,t[2])]}),tdDe(e),'td')+'</div>';
     h+='<div class="sc-outils"><span>Tourner</span><button type="button" class="sc-o" data-act="rot-" aria-label="Tourner à gauche">↺</button><button type="button" class="sc-o" data-act="rot+" aria-label="Tourner à droite">↻</button><button type="button" class="sc-o" data-act="flip">Retourner</button></div>'
     +'<button type="button" class="sc-o sc-poser" data-act="auto">Placer automatiquement'+(cl?(soudee(e)?' (contre le cadre : il mord sur le bois)':' (collé contre le cadre ou sur le nom)'):'')+'</button>'}

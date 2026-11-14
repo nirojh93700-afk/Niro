@@ -10,9 +10,9 @@
 
 
 ## 🎄 DÉCORATION À SUSPENDRE « MOTIFS DÉCOUPÉS AVEC LE CADRE » — 13/11/2026 nuit, EN ATTENTE DE SON AVIS
-- Nouvelle maquette https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v3 : un nom en acrylique ne se grave pas, découpe seule) : motifs en bois découpés avec le cadre (9 et 11 cm), trois tailles de motif, prénom collé par-dessus ou
+- Nouvelle maquette https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v4 : un dessin est toujours en contreplaqué, seul le nom peut être en acrylique, et en acrylique il est seulement découpé) : motifs en bois découpés avec le cadre (9 et 11 cm), trois tailles de motif, prénom collé par-dessus ou
   découpé avec le cadre au choix. L'ancienne maquette enregistrée n'est pas touchée. Rien en ligne, Gestion pas régénéré. Détail : CLAUDE.md, section du 13/11 nuit.
-- À lui de dire : il garde cette version ? · je la mets dans l'outil de Gestion ? · un dessin aux traits trop fins passe tout seul en « forme pleine, détails gravés » ?
+- À lui de dire : il garde cette version ? · le dessin reste à 1 € ou devient gratuit ? · je la mets dans l'outil de Gestion ? · un dessin aux traits trop fins passe tout seul en « forme pleine, détails gravés » ?
 
 ## 🧰 13/11/2026 SOIR — L'ATELIER DANS GESTION : CE QUI ATTEND SON AVIS
 - **Lettre de naissance, version simple pour les clientes** : maquette https://claude.ai/artifact/KGkiaB9gP3qSj1xHqtiDLo (v4 : rotation 360°, boîte qui s'ouvre, prénom posé sur la barre de la lettre, **54,90 € la lettre et sa boîte ensemble**, prix donné par lui le 13/11), rien en ligne. À valider : taille unique 16,5 cm, vraies couleurs, livraison (une boîte = colis). Questions posées : la même règle de placement du prénom dans l'outil d'atelier ? simplifier aussi les 7 autres créations et la boîte seule côté cliente ?

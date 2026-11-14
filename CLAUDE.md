@@ -1,5 +1,5 @@
 ## 🎄 DÉCORATION À SUSPENDRE : MOTIFS DÉCOUPÉS AVEC LE CADRE, EN GRAND — 13/11/2026 nuit (gérant, deux boules ajourées d'un autre atelier en exemple : « c'est bien collé avec le contour pour pas que ça se casse » → « le motif est découpé dans un seul morceau, et après le prénom, je peux coller au-dessus en superposé, ou le client choisit » → « c'est trop petit… il faut qu'il puisse sélectionner les tailles ») — NOUVELLE maquette à juger, RIEN en ligne, Gestion PAS régénéré
-- **Artifact NEUF** https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v3). L'ancienne maquette enregistrée (6Gs8LNkzpdvWMRDNZpE775, v16) n'est PAS touchée. Même générateur
+- **Artifact NEUF** https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v4). L'ancienne maquette enregistrée (6Gs8LNkzpdvWMRDNZpE775, v16) n'est PAS touchée. Même générateur
   `decoration-createur.py` (mêmes 6 arguments ; modèles refaits : `$S/soude/mod/modeles-maquette.json` par `decoration-modeles.cjs`), puis `ajouter-valider.py`.
 - **Règle** (Classique, tailles 9 et 11 cm) : un dessin en contreplaqué est DÉCOUPÉ AVEC LE CADRE, d'une seule pièce (`e.soude`, mis d'office ; `soudable` / `soudee`) ; il doit
   MORDRE sur le bois (`AIRE` = 6 mm² au moins, mesuré sur sa vraie silhouette : `alpha`, `cases`, `pose`, `mord`), ne pas dépasser de la forme, ne pas être à moitié caché dans le bois ;
@@ -9,18 +9,24 @@
   Sur ses exemples : flocons d'un quart à un tiers de la boule, renne presque la moitié. Placement `endroitSoude` ; `placerAuto(e, cible, fixe)` ne réduit jamais sous 0,62.
 - **Détails GRAVÉS (gérant, même nuit : « il faut que les détails soient gravés aussi »)** = artifact **v2** : mode `detail` (réglage de départ de tout dessin qui a des détails) :
   la FORME pleine du dessin est découpée (`d.sil`) et ses détails (les blancs enfermés dans la forme : yeux, traits, étoiles ; `d.det`, calculé par `epaisseurs()` avec OpenCV,
-  215 dessins sur 257) sont gravés, comme le renne de ses exemples. Dans la fiche : « Détails gravés » · « Ajouré » (tout découpé, les détails sont des trous) · « Sur une pièce ».
+  215 dessins sur 257) sont gravés, comme le renne de ses exemples. Dans la fiche : « Détails gravés » · « Ajouré » (tout découpé, les détails sont des trous).
   ⚠️ Un grand vide enfermé (centre d'une couronne, anse d'une tasse) est gravé plein lui aussi. Le générateur met environ 2 minutes (images des détails).
 - ⛔ **UN NOM EN ACRYLIQUE NE SE GRAVE PAS (gérant, 14/11, capture de la fiche du nom : « sur le nom avec acrylique on peut pas graver, y a que la découpe, y a que
   contreplaqué qu'on peut graver pour les noms »)** = artifact **v3** : le choix « Découpé / Gravé » n'est proposé que pour un nom en contreplaqué ; choisir un acrylique
   le remet en « Découpé » et affiche « En acrylique, le nom est découpé… Seul le contreplaqué se grave » (`ACRYL`), dans la fiche du nom ET dans le panneau d'ajout ;
   filet dans `dessiner()` (un nom en acrylique venu d'un modèle ou de la mémoire n'est jamais « gravé »). Essai `scratchpad/soude/ta.cjs` 30 sur 30. Corrigé au passage :
-  la fiche d'un dessin se refermait parfois toute seule juste après l'ajout (`recaserDessins` vidait `S.sel`). ⚠️ Les DESSINS en acrylique gardent « Détails gravés » :
-  question posée au gérant (même règle ?). Gestion (`editeur.js`) et l'ancienne maquette v16 ne sont PAS modifiés.
+  la fiche d'un dessin se refermait parfois toute seule juste après l'ajout (`recaserDessins` vidait `S.sel`). Gestion (`editeur.js`) et l'ancienne maquette v16 ne sont PAS modifiés.
+- ⛔ **UN DESSIN (DÉCO) N'EST JAMAIS EN ACRYLIQUE : SEUL LE NOM PEUT L'ÊTRE (gérant, 14/11, capture d'un renne en acrylique blanc à + 3 € : « y a que le nom avec
+  acrylique, tout ce qui est déco c'est en découpe direct, y a pas d'acrylique, c'est avec le bois contreplaqué » → plan montré → « oui, y a pas de prix en plus, ça se coupe
+  direct sur le bois, c'est juste pour le nom que tu mets en plus »)** = artifact **v4** : plus de cases de matière dans la fiche d'un dessin, `matEl` ne rend l'acrylique que
+  pour un texte, `prixEl` ne compte le + 2 € acrylique que pour un nom (un dessin = 1 €, toujours), choix « Sur une pièce » retiré (`MODESD` = Détails gravés · Ajouré),
+  filet dans `dessiner()` (un dessin venu d'un modèle ou de la mémoire repasse en contreplaqué et en « Détails gravés » / « Ajouré »). La planche d'acrylique de l'atelier ne
+  contient plus que des noms. Essais `scratchpad/soude/td.cjs` 46 sur 46, `ta.cjs` 30 sur 30, `t.cjs` 58 sur 58. ⚠️ MA lecture de « pas de prix en plus » = pas de
+  supplément acrylique sur un dessin ; le dessin reste à 1 € (son prix du 12/11) : question posée (dessin gratuit ?).
 - Aperçu : pièces soudées dans le calque `#gravS`, SOUS le bois du cadre (un seul contour, pas de couture) ; 3D : dans l'épaisseur du cadre. Atelier : dans le fichier, la pièce soudée est
   dessinée à sa place sur le cadre (`data-soude`, trait rouge seulement hors du bois), « surface qui tient chaque dessin », alerte « traits fins » (`ep` mesuré par OpenCV, `traitFin`) ;
   plan de collage : « ✓ découpé avec le cadre : rien à coller », numéros = pièces à coller seulement (`num`).
-- Essai `scratchpad/soude/t.cjs` : 56 sur 56 (390 et 1280 px). ⚠️ Pas essayé sur un vrai iPhone ni sur la machine. ⚠️ Beaucoup de dessins ont des traits de moins de 0,8 mm en « Petit ».
+- Essai `scratchpad/soude/t.cjs` : 58 sur 58 (390 et 1280 px). ⚠️ Pas essayé sur un vrai iPhone ni sur la machine. ⚠️ Beaucoup de dessins ont des traits de moins de 0,8 mm en « Petit ».
 - ⚠️ **Gestion** (`public/atelier-outils/atelier-decoration.html`) n'est PAS régénéré : à sa prochaine régénération (`retouche-site.py`, `atelier-unique.py`) il prendra cette règle ;
   vérifier alors `editeur.js` (son « Soudée au cadre » lit le même champ `e.soude`, sans la condition de taille) et `fabrique.js` (il replace lui-même les pièces soudées).
 - **Proposé par moi, à valider** : le seuil de 6 mm² · passer tout seul en « Gravé » (forme pleine, détails gravés, comme le renne de ses exemples) un dessin aux traits trop fins ·
