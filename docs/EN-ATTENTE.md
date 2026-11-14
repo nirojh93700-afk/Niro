@@ -833,3 +833,8 @@ En attente de SA décision :
 - Mail du 14/11 à 16 h 02 (par le site) : on lui demande le NOMBRE de verres et la TAILLE (36 ou 47 cl). Pas de devis, pas de prix.
 - À sa réponse, devis : compter **le logo** (montagnes, texte « 40 ans… », verres qui trinquent) **ET le prénom « Elodie »** (consigne du gérant) ; mail du devis SANS prix écrits. Clé de Gestion absente de la session : le gérant crée le devis, je mets le lien dans le mail.
 - ✅ Elle a répondu : 1 verre, 35 à 40 cl → **devis DEV-1550 créé (36 cl à l'unité 17,90 + visuel 0 + prénom « Elodie » 3 = 20,90 €, livraison au paiement)** et envoyé DANS le mail du 14/11 à 17 h 42 (par sa réponse à valider), pas de rebond. Reste : attendre son paiement.
+
+## Olivier Guerard (olivier.ogc@gmail.com, 06 17 47 95 44) — verre à vin « Daniela / Laboratoire d'Œno-Métrologie » (14/11/2026)
+- Demande par le formulaire (photo d'un verre déjà gravé). Consigne du gérant : le visuel compte comme UN TEXTE + le prénom = un nom (règle des verres : 1er texte offert, prénom +3 €, verres suivants +3 €).
+- Deux devis à nombre modifiable (1 à 12), il choisit la taille : **DEV-1552 (36 cl, 20,90 € le verre)** et **DEV-1553 (47 cl, 24,90 €)**, envoyés dans le même mail le 14/11 à 18 h 25, pas de rebond. DEV-1551 supprimé (jamais envoyé).
+- Le mail lui demande sa date et dit « si vous êtes pressé, nous pouvons essayer de la réaliser très rapidement » (phrase voulue par le gérant). Il proposait un appel : au gérant de décider.
