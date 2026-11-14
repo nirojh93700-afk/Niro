@@ -1,4 +1,7 @@
 # 📋 TOUT CE QUI EST EN ATTENTE — inventaire de reprise
+- **14/11 soir — Support de téléphone : le créateur est EN LIGNE à la place de la fiche** (`/produit/support-telephone-bois-grave`). Reste à faire PAR LUI : une petite commande d'essai
+  (ou la première vraie commande) pour voir les boutons « Corriger dans l'outil » et « Fichiers pour la machine » sur une commande payée, et un support d'essai découpé pour régler le jeu des fentes.
+  Non essayé : vrai iPhone, découpe. Les deux autres créateurs en vente « bientôt » (décoration à suspendre, maisonnette) attendent son mot (maquettes Noël enregistrées).
 - **13/11 soir — Déplacer les éléments côté cliente** : FAIT sur la lettre de naissance (v6, au doigt), l'arbre de vie (v10, flèches par prénom) et la décoration à prénom (v7, flèches, le prénom ne sort pas de la lettre). Déjà possible : support, décoration à suspendre, fleur. **Question posée : que veut-il déplacer dans la suspension à prénoms et la maisonnette ?** Pas essayé sur un vrai iPhone.
 - **13/11 soir — Languette pour ouvrir les boîtes** : faite et EN LIGNE dans Gestion (L'atelier → lettre et boîte seule), maquettes lettre d'atelier v12 et cliente v5. Reste : l'artifact de démonstration L'atelier (v11, sans la languette, à refaire seulement s'il le demande) ; essai sur sa machine ; lui redire que M, Q et W sont plus larges que la zone de 180 mm à 165 mm de haut.
 - **13/11 — Devis DEV-1544 (Coline Goossens, verre à whisky)** : le gérant a dit « Coline tu laisses tomber ». La correction de la fiche atelier gardée de côté depuis le 12/11 (« C'est chic ! » au fond seulement, rien sous la photo) est ABANDONNÉE, non envoyée. ⚠️ La fiche atelier en ligne de ce devis dit encore de graver « C'est chic ! » sous la photo : si la commande revient, relire sa demande avant de graver.
@@ -85,8 +88,8 @@
   garder ou non « Bois naturel » · réglages d'Atomm non proposés (bordure, taille du décor, largeur du nez, anneau, taille du prénom) · vue 3D (absente).
 
 ## ✎ BOUTON « CORRIGER » DES COMMANDES — CAS 2, POUR PLUS TARD (gérant, 12/11/2026 soir : « le 2 garde en mémoire, on verra plus tard »)
-- Le bouton « Corriger dans l'outil » existe pour le support de téléphone, l'arbre de vie et la décoration (construit le 12/11, pas poussé,
-  et visible seulement quand ces trois produits seront en vente). **Reste à faire sur sa demande** : le même bouton pour les produits déjà
+- Le bouton « Corriger dans l'outil » existe pour le support de téléphone (en vente depuis le 14/11 : il apparaît sur ses commandes), l'arbre de vie et la décoration
+  (visible quand ces deux produits seront en vente). **Reste à faire sur sa demande** : le même bouton pour les produits déjà
   en vente (verres, carafe, bijoux, cristal, gobelet, carnet, marque-pages) : ouvrir la gravure de la cliente, changer texte, écriture,
   place, taille, sortir le fichier machine. Un outil par famille ; conseil donné : commencer par les verres et la carafe.
 - En attente aussi : son « mets en ligne » pour l'écran Gestion › Tests › Retoucher et fabriquer ; un projet xTool (.xcs) d'exemple avec un

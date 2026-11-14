@@ -4134,12 +4134,16 @@ export const products = [
 <p>Chaque décoration est gravée à la commande.</p>`,
   },
   {
-    // ===== Support téléphone en bois gravé (mis en ligne le 20/08/2026 à la
-    // demande de la gérante). Même système que le verre à vin : modèles
-    // numérotés, alphabet fleuri, aperçu en direct sur la photo du support
-    // vierge. En plus : la gravure PHOTO. La cliente choisit UNE seule chose
-    // à graver (champ « gravure »), et le texte s'ajoute par-dessus.
+    // ===== Support téléphone en bois gravé — LE CRÉATEUR (14/11/2026, gérant : « OK pour remplacer et mettre en ligne »).
+    // La fiche est la maquette enregistrée « Créez votre support de téléphone » (artifact ARNf7BxbQxsTvkpJxgQKD7, v11) :
+    // src/components/createurs/SupportFiche.jsx + public/createurs/support/outil.js (fabriqués par
+    // tools/createurs/support-site.py). Même adresse, mêmes photos, mêmes avis qu'avant (mise en ligne du 20/08/2026).
+    // Prix (gérant, 12/11) : petit 12,90 € · standard + 3 € · grand + 6 € = les trois options ci-dessous ; chaque élément
+    // gravé + 3 €, motif ajouré + 3 € = src/lib/supportCreateur.js (le même calcul au paiement, /api/checkout).
+    // La création complète est gardée avec la commande (collection « creations ») : boutons « Corriger dans l'outil » et
+    // « Fichiers pour la machine » de Gestion.
     slug: "support-telephone-bois-grave",
+    createur: "support",
     badge: "Nouveau",
     name: "Support téléphone en bois gravé",
     weight: 180,          // deux pièces plates, très léger
@@ -4152,12 +4156,15 @@ export const products = [
     type: "Support téléphone personnalisé",
     tagline: "Le support de bureau qui garde votre photo gravée dans le bois.",
     personalizable: true,
-    personalizationLabel: "Photo, dessin ou lettre fleurie — et le texte de votre choix",
+    personalizationLabel: "Forme, taille, texte, dessin, photo, lettre fleurie ou motif ajouré : vous le créez vous-même",
     images: [
       "/produits/support-telephone-photo.jpg",
       "/produits/support-telephone-lettre.jpg",
       "/produits/support-telephone-vierge.jpg",
     ],
+    // ⚠️ Ce qui suit (photo vierge, cadre, dessins numérotés, anciens champs) ne sert PLUS à la fiche du site : c'est gardé
+    // pour que Gestion relise et redessine les commandes passées AVANT le 14/11/2026 (options « Texte seul », « Dessin au
+    // choix », « Lettre fleurie », « Photo gravée »). Aucun de ces champs ne s'affiche avec les options d'aujourd'hui.
     // Aperçu en direct : ce que la cliente choisit se pose sur le support VIERGE
     // (photo prise de face). Zone calée sur le panneau, réglée avec la gérante.
     engraveImage: "/produits/support-telephone-vierge.jpg",
@@ -4210,9 +4217,6 @@ export const products = [
       "41": "/produits/motif-plume.png",
       "42": "/produits/motif-zachary-amanda.png",
     },
-    // La cliente choisit UNE option en haut (« Choisissez votre option ») et
-    // c'est elle qui décide des champs affichés (variantContains). Pas de
-    // deuxième question : une seule décision, un seul prix.
     personalizationFields: [
       { key: "numstyle", type: "stylepicker", noPreview: true, optional: true, label: "Choisissez un modèle",
         variantContains: "Dessin", groups: [
@@ -4236,23 +4240,26 @@ export const products = [
       { key: "boisnote", type: "note", text: "Bois clair naturel : le veinage varie légèrement d'une pièce à l'autre — chaque support est unique." },
     ],
     variants: [
-      { id: "support-tel-texte", title: "Texte seul", price: 12.90 },
-      { id: "support-tel-dessin", title: "Dessin au choix", price: 14.90 },
-      { id: "support-tel-lettre", title: "Lettre fleurie", price: 14.90 },
-      { id: "support-tel-photo", title: "Photo gravée", price: 19.90 },
+      { id: "support-tel-petit", title: "Petit · 76 × 142 mm", price: 12.90 },
+      { id: "support-tel-standard", title: "Standard · 80 × 151 mm", price: 15.90 },
+      { id: "support-tel-grand", title: "Grand · 86 × 165 mm", price: 18.90 },
     ],
-    // Texte ajouté = option payante (+3 €) avec un dessin ou une photo (demande
-    // de la gérante). Texte seul et lettre fleurie : le texte fait partie de l'offre.
-    engravingPricing: { flatExtras: [{ key: "prenom", amount: 0, amountByVariant: { "support-tel-dessin": 3, "support-tel-photo": 3 } }] },
-    descriptionHtml: `<p><strong>Un support de téléphone en bois, gravé dans notre atelier.</strong> Posé sur un bureau ou une table de nuit, il tient le téléphone incliné, écran visible — et quand le téléphone n'y est pas, c'est votre photo, votre dessin ou votre initiale que l'on voit.</p>
+    descriptionHtml: `<p><strong>Un support de téléphone en bois que vous créez vous-même, découpé et gravé dans notre atelier.</strong> Posé sur un bureau ou une table de nuit, il tient le téléphone incliné, écran visible — et quand le téléphone n'y est pas, c'est votre photo, votre dessin ou votre prénom que l'on voit.</p>
+<h3>Vous choisissez tout</h3>
+<ul>
+<li><strong>La forme :</strong> rectangle arrondi, arche, tête de chat ou oreilles d'ours</li>
+<li><strong>La taille :</strong> petit 76 × 142 mm (12,90 €), standard 80 × 151 mm (15,90 €) ou grand 86 × 165 mm (18,90 €)</li>
+<li><strong>La gravure :</strong> un texte dans l'écriture de votre choix, un de nos dessins, votre photo ou une lettre fleurie avec un nom — chaque élément gravé + 3 €, et vous le placez où vous voulez sur le support</li>
+<li><strong>Un motif ajouré :</strong> cœurs, pattes, soleil, nid d'abeille, losanges, persienne, fenêtre ou étoiles, découpés dans le bois (+ 3 €) — avec ou sans gravure</li>
+<li><strong>Les réglages :</strong> l'inclinaison du téléphone et le passage du câble de recharge</li>
+</ul>
 <h3>Caractéristiques</h3>
 <ul>
-<li><strong>Matière :</strong> bois clair, découpé et gravé au laser</li>
+<li><strong>Matière :</strong> bois clair de 3 mm, découpé et gravé au laser</li>
 <li><strong>Montage :</strong> deux pièces qui s'emboîtent, sans colle ni vis</li>
-<li><strong>Passage du câble :</strong> une fente en bas laisse passer le chargeur — le téléphone peut rester branché</li>
-<li><strong>Gravure au choix :</strong> un modèle parmi 30 dessins, votre photo, ou une initiale fleurie — texte en supplément (+3 €) avec un dessin ou une photo</li>
+<li><strong>Passage du câble :</strong> une ouverture en bas laisse passer le chargeur — le téléphone peut rester branché</li>
 </ul>
-<p>Chaque support est gravé à la commande. Comptez 3 à 5 jours ouvrés de fabrication.</p>`,
+<p>Votre support se dessine sous vos yeux pendant que vous le composez, de face et en 3D. Chaque support est découpé et gravé à la commande. Comptez 3 à 5 jours ouvrés de fabrication.</p>`,
   },
   {
     // ===== Support téléphone en bois AJOURÉ (mis en ligne le 21/08/2026).

@@ -12,6 +12,7 @@
 // Pur (pas de JSX), utilisé par la fiche produit (capture), l'atelier et la fiche commande.
 // =============================================================================
 import { texteAvecDecor } from "@/lib/decorTexte";
+import { supPhotos } from "@/lib/supportCreateur";
 import { langueActive } from "@/lib/traductionGravure";
 import { getProductBySlug } from "@/lib/products";
 
@@ -84,6 +85,11 @@ export function contenuCote(item, side, product = getProductBySlug(item?.slug)) 
 export function photosEnvoyees(item, product = getProductBySlug(item?.slug)) {
   const out = [];
   const ajoute = (src, titre) => { if (estUrl(src) && !out.some((p) => p.src === src)) out.push({ src, titre }); };
+  // Support de téléphone créé par la cliente : chaque photo posée sur le support.
+  if (product?.createur === "support" && item?.fields?.sup) {
+    supPhotos(item.fields.sup).forEach((src, i, L) => ajoute(src, L.length > 1 ? `Photo envoyée ${i + 1}` : "Photo envoyée"));
+    return out;
+  }
   if (aEmplacement(product)) {
     if (emplacementDe(item) !== "deux") { ajoute(contenuCote(item, cotesDeLArticle(item)[0], product).photo, "Photo envoyée"); return out; }
     const face = contenuCote(item, "face", product).photo;

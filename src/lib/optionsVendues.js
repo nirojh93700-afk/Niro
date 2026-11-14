@@ -18,6 +18,7 @@
 import { texteAvecDecor } from "@/lib/decorTexte";
 import { mpFormat, MP_BOITES } from "@/lib/marquePages";
 import { CN_FACES, CN_GRAVURE, cnFaceGravee, cnLignes } from "@/lib/carnet";
+import { SUP_PRIX, supNomElement, supMotifTexte } from "@/lib/supportCreateur";
 import { getProductBySlug } from "@/lib/products";
 import { apparierSpec } from "@/lib/orderSpec";
 
@@ -70,6 +71,13 @@ export function optionsArticle(item) {
   // Carnet A5 (07/11/2026) : la gravure de chaque face, 7 € la face quel que soit le nombre d'emplacements.
   if (produit?.carnet && champs.cn && typeof champs.cn === "object") {
     for (const [s, nom] of CN_FACES) if (cnFaceGravee(champs.cn.v, s)) out.push({ libelle: `Gravure ${s === "face" ? "de la couverture" : "du dos"}`, detail: `${nom} : ${cnLignes(champs.cn.v, s).length} emplacement(s) gravé(s)`, montant: CN_GRAVURE, physique: false });
+    return out;
+  }
+  // Support de téléphone créé par la cliente (14/11/2026) : chaque élément gravé + 3 €, le motif ajouré + 3 €.
+  if (produit?.createur === "support" && champs.sup && typeof champs.sup === "object" && Array.isArray(champs.sup.els)) {
+    const sup = champs.sup;
+    if (sup.grave) sup.els.forEach((e, i) => out.push({ libelle: `Gravure ${i + 1}`, detail: supNomElement(e), montant: SUP_PRIX.element, physique: false }));
+    if (sup.ajoure) out.push({ libelle: "Motif ajouré (découpé)", detail: supMotifTexte(sup), montant: SUP_PRIX.ajoure, physique: false });
     return out;
   }
   // Marque-pages (27/10/2026) : la boîte cadeau du format + le nombre de pièces (une couleur chacune).

@@ -76,6 +76,7 @@ export function oubliesAtelier(item) {
     if (IGNORES.has(cle)) continue;
     if (cle === "cn" && produit?.carnet) continue; // carnet : rangé face par face par consignesGravure
     if (cle === "mp" && produit?.marquePages) continue; // marque-pages : rangés pièce par pièce par consignesGravure
+    if (cle === "sup" && produit?.createur === "support") continue; // support de téléphone créé : rangé par consignesGravure
     // Gobelet : chaque élément (1er compris + chaque ligne « en plus ») doit apparaître dans les blocs par côté.
     if (produit?.gobeletParcours && champs.mode && ["autour", "cote", "place", "dessin", "cadre", "lettre", "nom", "texte", "texteSousPhoto"].includes(cle)) {
       if (cle === "autour") {

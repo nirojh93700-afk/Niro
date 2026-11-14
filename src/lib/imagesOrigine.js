@@ -99,6 +99,12 @@ export function imagesOrigineArticle(item) {
     for (const [s, nom] of CN_FACES) for (const l of cnLignes(champs.cn.v, s)) {
       if (estSite(l.img)) out.push({ titre: `${nom} · ${l.libelle} : ${l.valeur.replace(/,.*$/, "")}`, src: l.img, nom: nomFichier(l.img, `carnet-${s}-${l.zone}`) });
     }
+  } else if (produit?.createur === "support" && champs.sup && typeof champs.sup === "object" && Array.isArray(champs.sup.els)) {
+    // Support de téléphone créé par la cliente : le dessin ou la lettre fleurie de chaque élément (fichiers du site).
+    if (champs.sup.grave) champs.sup.els.forEach((e, i) => {
+      if (e.type === "dessin" && estSite(e.src)) out.push({ titre: `Élément ${i + 1} · Dessin n° ${e.n}`, src: e.src, nom: nomFichier(e.src, `support-dessin-${e.n}`) });
+      if (e.type === "lettre" && estSite(e.src)) out.push({ titre: `Élément ${i + 1} · Lettre fleurie ${e.L}`, src: e.src, nom: nomFichier(e.src, `support-lettre-${e.L}`) });
+    });
   } else if (produit) {
     const verres = Array.isArray(item.perGlass) && item.perGlass.length > 1 ? item.perGlass : null;
     if (verres) verres.forEach((g, i) => { out.push(...depuisChamps(produit, g, `Verre ${i + 1}`)); });

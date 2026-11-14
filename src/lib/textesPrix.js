@@ -9,6 +9,7 @@
 // `npm run test-textes-prix`.
 // =============================================================================
 import { MP_PRIX, MP_BOITES } from "./marquePages";
+import { SUP_PRIX } from "./supportCreateur";
 import { engravingExtra } from "./engravingPrice.js";
 
 const TEXTE = new Set(["text", "textarea"]);
@@ -91,6 +92,8 @@ export function supplementsPayes(product) {
     if (product.marquePages.gravure) for (const x of [MP_PRIX.texte, MP_PRIX.dessin, MP_PRIX.photo, MP_PRIX.texteCadre]) out.add(x);
     for (const b of Object.values(MP_BOITES)) out.add(b.prix);
   }
+  // Support de téléphone à créer (14/11/2026) : chaque élément gravé et le motif ajouré, chiffrés par src/lib/supportCreateur.js.
+  if (product.createur === "support") { out.add(SUP_PRIX.element); out.add(SUP_PRIX.ajoure); }
   // Gobelet (05/11/2026) : chaque élément en plus du centre, chiffré par src/lib/gobeletParcours.js (même calcul au paiement).
   if (product.gobeletParcours) { out.add(arrondi(Number(product.gobeletParcours.extra) || 3)); out.add(arrondi(Number(product.gobeletParcours.extraPhoto) || 6)); }
   const vars = Array.isArray(product.variants) && product.variants.length ? product.variants : [{ id: null, title: "" }];

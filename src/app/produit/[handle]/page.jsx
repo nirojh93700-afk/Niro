@@ -4,6 +4,7 @@ import { imageAbsolue, couleurProduit, sexeProduit } from "@/lib/productGoogle";
 import ProductDetail from "@/components/ProductDetail";
 import MarquePagesFiche from "@/components/marquePages/MarquePagesFiche";
 import CarnetFiche from "@/components/carnet/CarnetFiche";
+import SupportFiche from "@/components/createurs/SupportFiche";
 import { realisationsVisibles } from "@/components/TrustSection";
 import { guidePourProduit } from "@/lib/guides";
 import ProductReviews from "@/components/ProductReviews";
@@ -209,7 +210,9 @@ export default async function ProductPage({ params, searchParams }) {
           Aperçu privé — ce produit n'est pas encore publié (invisible pour les clients).
         </div>
       )}
-      {product.carnet
+      {product.createur === "support"
+        ? <SupportFiche product={product} realisations={realisations} />
+        : product.carnet
         ? <CarnetFiche product={product} realisations={realisations} />
         : product.marquePages
         ? <MarquePagesFiche product={product} realisations={realisations} />

@@ -1618,11 +1618,11 @@ Un souci à la réception ?
   },
   "support-telephone-bois-grave": {
     material:
-      "Bois clair découpé et gravé au laser dans notre atelier.\nDeux pièces plates qui s'emboîtent : aucun outil, aucune colle.\nUne fente en bas du dossier laisse passer le câble de recharge.\nLe veinage varie légèrement d'une pièce à l'autre — chaque support est unique.",
+      "Bois clair de 3 mm, découpé et gravé au laser dans notre atelier.\nTrois tailles : petit 76 × 142 mm, standard 80 × 151 mm, grand 86 × 165 mm (largeur × hauteur du dossier).\nDeux pièces plates qui s'emboîtent : aucun outil, aucune colle.\nUne ouverture en bas du dossier laisse passer le câble de recharge (vous pouvez la retirer).\nLe veinage varie légèrement d'une pièce à l'autre — chaque support est unique.",
     usage:
-      "Choisissez ce que vous voulez faire graver : un dessin parmi nos 30 modèles (couples, occasions), votre photo, ou une initiale fleurie.\nVous pouvez ajouter un texte — prénom, date, petit mot — dans la police que vous préférez (+3 € avec un dessin ou une photo). Avec la lettre fleurie, ce texte se grave dans la bande, au milieu de la lettre.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
+      "Vous composez votre support vous-même : la forme, la taille, puis ce que vous voulez y graver — un texte dans l'écriture de votre choix, un de nos dessins, votre photo, ou une lettre fleurie avec un nom dans la bande. Chaque élément gravé : + 3 €. Vous placez chaque élément où vous voulez sur le support.\nVous pouvez aussi choisir un motif ajouré, découpé dans le bois (+ 3 €), avec ou sans gravure, ou garder le bois nu.\nUne photo nette et bien éclairée donne la meilleure gravure ; sur le bois, elle ressort en brun.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
     returns:
-      "Expédié à plat en lettre suivie : 6,50 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nFabrication 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
+      "Expédié à plat en lettre suivie : 6,50 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nFabrication 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : découpée et gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
   },
   "porte-stylo-coq-coupe-du-monde": WORLDCUP_PEN_INFO,
   "porte-stylo-portugal-coupe-du-monde": WORLDCUP_PEN_INFO,

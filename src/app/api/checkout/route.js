@@ -2,6 +2,8 @@ import { gobeletSupplement } from "@/lib/gobeletParcours";
 import { decouperStock } from "@/lib/stockMeta";
 import { manqueLangue } from "@/lib/traductionGravure";
 import { cnNormaliser, cnPrixGravure, cnResume } from "@/lib/carnet";
+import { supNormaliser, supSupplement, supResume, supVariantId, SUP_PRIX } from "@/lib/supportCreateur";
+import { randomBytes } from "crypto";
 import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
@@ -12,7 +14,7 @@ import { EXPRESS_START } from "@/lib/shipping";
 import { getPromos, getSettings, getPromoCodes, hasUsedCode, getCagnotte, getStockMap } from "@/lib/stock";
 import { readSession, SESSION_COOKIE } from "@/lib/customerAuth";
 import { cookies } from "next/headers";
-import { saveOrderSpec } from "@/lib/firebase";
+import { saveOrderSpec, creerCreation } from "@/lib/firebase";
 import { vacationActive, cadeauColisActif } from "@/lib/vacation";
 import { engravingExtra, prixPremiereGravure } from "@/lib/engravingPrice";
 import { prixGravureVerres, estRegleVerres, detailEnTexte } from "@/lib/prixVerres";
@@ -166,6 +168,7 @@ export async function POST(req) {
   // verres, seuils de livraison offerte… (sorti tel quel le 03/10/2026, parité testée).
   const etatPort = nouvelEtatPort();
   const boughtVariants = []; // pour décrémenter le stock après paiement
+  const creations = []; // supports de téléphone créés : { item, sup } (création gardée à part après la session)
   // Offre « gravure offerte » : prix de la PREMIÈRE gravure payante trouvée dans
   // le panier (ordre du panier). 0 = aucune gravure payante → le code ne déduit rien.
   let gravureOfferte = 0;
@@ -242,6 +245,34 @@ export async function POST(req) {
     const reglagesLigne = [item.fields || {}, ...(Array.isArray(item.perGlass) ? item.perGlass.slice(0, 60) : [])];
     if (reglagesLigne.some((fv) => fv && typeof fv === "object" && manqueLangue(fv))) {
       return Response.json({ error: "Un texte traduit de votre panier n'a pas été confirmé : ouvrez l'article, relisez la traduction et cochez « J'ai relu le texte traduit »." }, { status: 400 });
+    }
+
+    // Support de téléphone à créer (14/11/2026) : forme, taille, éléments gravés (+ 3 € chacun), motif ajouré (+ 3 €) —
+    // recalcul de confiance avec la même fonction que la fiche (src/lib/supportCreateur.js). La taille payée = l'option.
+    if (product.createur === "support") {
+      const sup = supNormaliser(item.fields?.sup);
+      if (!sup || supVariantId(sup.taille) !== variant.id) {
+        return Response.json({ error: "Un support de téléphone du panier n'est plus valable : retirez-le et composez-le à nouveau." }, { status: 400 });
+      }
+      const unit = Math.round((variant.price + supSupplement(sup)) * 100) / 100;
+      if (!gravureOfferte && sup.grave && sup.els.length) gravureOfferte = SUP_PRIX.element; // code « gravure offerte » : un élément
+      boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
+      ajouterLignePort(etatPort, { product, unitGrams: variant.weight || product.weight, unitPrice: unit, quantity });
+      lineItems.push({
+        quantity,
+        price_data: {
+          currency: "eur",
+          unit_amount: toCents(unit),
+          product_data: {
+            name: product.name,
+            description: `${variant.title} · ${supResume(sup)}`.slice(0, 900),
+            images: [absoluteImage(product.images[0])].filter(Boolean),
+            metadata: { slug: product.slug },
+          },
+        },
+      });
+      creations.push({ item, sup });
+      continue;
     }
 
     // Carnet A5 (07/11/2026) : couleur + gravure couverture / dos (+7 € par face gravée) — recalcul de confiance
@@ -665,7 +696,20 @@ export async function POST(req) {
     // Fiche atelier : on mémorise les réglages détaillés, liés à la session
     // (relus par le webhook pour les joindre à la commande). Sans risque si échec.
     try {
-      const specs = items.map((it) => { const s = sanitizeSpec(it.spec); return s ? { ...s, variantId: String(it.variantId || "").slice(0, 120) || undefined } : null; }).filter(Boolean);
+      // Créations (support de téléphone) : l'état complet, vérifié par le serveur, est gardé à part ; l'article de la
+      // commande n'en porte que la référence → boutons « Corriger dans l'outil » et « Fichiers pour la machine » de Gestion.
+      const refCreation = new Map();
+      for (const c of creations) {
+        const id = `sup-${Date.now().toString(36)}-${randomBytes(6).toString("hex")}`;
+        if (await creerCreation(id, "support", c.sup)) refCreation.set(c.item, id);
+      }
+      const specs = items.map((it) => {
+        const c = creations.find((x) => x.item === it);
+        const s = sanitizeSpec(it.spec) || (c ? { slug: "support-telephone-bois-grave", personalization: supResume(c.sup) } : null);
+        if (!s) return null;
+        if (c) { s.fields = { sup: c.sup }; if (refCreation.has(it)) s.creation = { outil: "support", id: refCreation.get(it) }; }
+        return { ...s, variantId: String(it.variantId || "").slice(0, 120) || undefined };
+      }).filter(Boolean);
       if (specs.length) await saveOrderSpec(session.id, specs);
     } catch { /* ignore */ }
 

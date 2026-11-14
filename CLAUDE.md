@@ -1,3 +1,23 @@
+## 📱 SUPPORT DE TÉLÉPHONE : LE CRÉATEUR REMPLACE LA FICHE — ✅ EN LIGNE LE 14/11/2026 SOIR (gérant : « Je veux dire OK pour remplacer et mettre en ligne »)
+- Même adresse `/produit/support-telephone-bois-grave`, mêmes photos, avis et référencement. La fiche = la maquette enregistrée v11 (artifact ARNf7BxbQxsTvkpJxgQKD7) :
+  `src/components/createurs/SupportFiche.jsx` (React : titre, favoris, total, bouton, réassurance, description, volets) + les deux morceaux de la maquette (aperçu, étapes)
+  animés par SON script `public/createurs/support/outil.js` (`window.NivSupport.monter({photos, prix})` → renvoie `demonter()`). TOUT est GÉNÉRÉ par
+  `python3 tools/createurs/support-site.py <maquette index.html> <three.min.js r128>` (maquette relue avec l'outil Artifact `read` + `path index.html` ; `npm pack three@0.128.0`) :
+  outil.js, 12 dessins + 26 lettres + planche + exemple (`public/createurs/support/`), les 8 écritures (`public/createurs/polices/`), three r128 (`public/createurs/vendor/`),
+  `src/lib/supportCreateurData.js`, `src/app/createur-support.css` (style de la maquette sous `.scf`). Ne pas les modifier à la main.
+- Produit : `createur: "support"`, 3 options = les tailles (`support-tel-petit` 12,90 · `-standard` 15,90 · `-grand` 18,90) ; chaque élément gravé + 3 €, motif ajouré + 3 €
+  (`src/lib/supportCreateur.js` : `supNormaliser`, `supSupplement`, `supResume`, `supConsignes`, `supPhotos` ; le MÊME calcul dans `/api/checkout`, taille trichée refusée).
+  Les anciens champs / dessins numérotés / cadre restent dans `products.js` SEULEMENT pour relire les commandes d'avant le 14/11 dans Gestion (anciennes options retirées).
+- Images : un élément posé garde l'ADRESSE de son image (`url`) et la porte en données (`src`) pour l'aperçu 3D ; au panier la photo de la cliente part par `/api/upload`,
+  l'aperçu exact (dessin + écritures) est photographié et gardé (`spec.previewImage`), une ligne de panier par création (`fields.sup`, `cleLigne`).
+- Commande ↔ création : au paiement le serveur garde l'état vérifié dans `creations/<id>` (`creerCreation`) et met `spec.creation = {outil:"support", id}` → boutons
+  « ✎ Corriger dans l'outil » et « ⬇ Fichiers pour la machine » de Gestion. `/gestion/retouche` charge les images par leur adresse avant de poser la création (`avecImages`) et
+  remet l'adresse avant de garder la version de l'atelier (`sansImages`). Atelier : `consignesGravure` (forme, taille, câble, motif, chaque élément avec son image), « Vendu en
+  plus », photos de la cliente, images d'origine. Code « gravure offerte » = un élément (3 €).
+- Essais : `npm run test-support` (35) · fiche 390 / 1280 `scratchpad/supsite/t.cjs` 46 sur 46 (formes, tailles, 5 éléments, motif, 3D, panier, aperçu, retour sur la page) ·
+  Gestion `tg.cjs` 10 sur 10 (création posée, fichier SVG fabriqué). ⚠️ Pas essayé : une vraie commande payée, un vrai iPhone, la découpe. Le support ajouré « feuilles et lierre » n'est pas touché.
+- ⛔ Le script de la maquette ne doit JAMAIS redevenir `var D=…, NS=…` coupé par une instruction (bug évité le 14/11) ; toute écoute sur `window` / `document` passe par `ECOUTE`.
+
 ## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCO DE NOËL » — 14/11/2026 soir (gérant, après la vidéo 57 : « fais-moi la maquette comment on va mettre que les maquettes Noël, et pour le téléphone tu le mets dans le téléphone ») — ✅ ENREGISTRÉES TELLES QUELLES LE 14/11/2026 SOIR (« Enregistre les maquettes, je te dirai pour mettre en ligne ») = page Noël VERSION 4 (GrGRNvh2GWaa6SrBKTfF49) + accueil réel VERSION 2 (PRFYptcqnjjP9uSaV5DJMP) : CE sont elles à reproduire à l'identique au « mets en ligne », ne plus les modifier sans sa demande. RIEN en ligne
 - https://claude.ai/artifact/GrGRNvh2GWaa6SrBKTfF49 · `python3 tools/maquettes/creez-noel.py <page de base> docs/maquettes/assets/creez-le-votre <sortie>` (base = sortie d'un autre créateur ;
   sortie = index.html + page.html, publier les deux). Seulement les 3 créations de Noël (décoration à suspendre, décoration à prénom, maisonnette). Quatre vues : la page (bandeau rouge et or,
@@ -15,7 +35,7 @@
 - 🗣️ Même soir, question du gérant sur le SUPPORT DE TÉLÉPHONE (« remplacer l'objet déjà en vente ou le mettre en plus dans la création ? ») : réponse donnée = le créateur REMPLACE la fiche
   « Support téléphone en bois gravé » (même adresse `/produit/support-telephone-bois-grave`, mêmes photos, avis et référencement gardés ; il fait déjà texte / dessin / photo / lettre fleurie,
   + formes, tailles, motif ajouré) ; le « Support ajouré feuilles et lierre » reste tel quel (motif absent du créateur) ; dans « Créez le vôtre », une carte renverrait vers cette même fiche.
-  Image téléphone : `docs/maquettes/assets/creez-noel/support-telephone-telephone.jpg`. En attente de SA décision, rien en ligne.
+  Image téléphone : `docs/maquettes/assets/creez-noel/support-telephone-telephone.jpg`. ✅ Tranché et mis en ligne le 14/11 soir (section au-dessus).
 
 ## 🥃 VERRE À WHISKY 20 cl — 14/11/2026 nuit (gérant, captures Metro « Tumbler Lario 20 cl, 12 pièces, réf. AAA0045442429, Ø 7 × H 8,35 cm » : « je me suis trompé, j'ai acheté ça, il faut que je mette en vente aussi ») — ✅ EN LIGNE LE 14/11/2026 (« t'as pas mis en ligne pour le verre qu'on a fait »), patch appliqué ; RESTE : coût Metro dans `productCosts.js` (prix du carton à lui demander), stock non suivi (illimité) tant qu'il ne saisit pas 12 dans Gestion
 - Ses choix : **option « 20 cl » sur la fiche « Verre à whisky portrait » (taille à droite, comme le vin 36 / 47 cl), 17,90 / 33,90 / 64,90 €** (le 30 cl reste 19,90 / 37,90 / 71,90 €).

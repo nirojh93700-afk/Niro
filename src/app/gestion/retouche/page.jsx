@@ -64,6 +64,30 @@ function Fichier({ f }) {
   );
 }
 
+// Créations venues de la fiche du site (support de téléphone, 14/11/2026) : leurs images sont gardées par ADRESSE
+// (/createurs/…, /api/img/…). L'outil et la fabrication des fichiers dessinent la création dans une image, qui ne lit
+// que des données : on charge donc chaque image avant de poser la création (l'adresse reste dans « url »), et on remet
+// l'adresse à la place des données avant de garder la version de l'atelier (une création pèse 700 Ko au plus).
+const enDonnees = (blob) => new Promise((ok, ko) => { const f = new FileReader(); f.onload = () => ok(f.result); f.onerror = ko; f.readAsDataURL(blob); });
+async function avecImages(etat) {
+  if (!etat || !Array.isArray(etat.els)) return etat;
+  const copie = JSON.parse(JSON.stringify(etat));
+  for (const e of copie.els) {
+    const u = typeof e.src === "string" && e.src.startsWith("/") ? e.src : null;
+    if (!u) continue;
+    const r = await fetch(u, { cache: "force-cache" });
+    if (!r.ok) throw new Error(`une image de la création n'a pas pu être chargée (${u})`);
+    e.url = u; e.src = await enDonnees(await r.blob());
+  }
+  return copie;
+}
+function sansImages(etat) {
+  if (!etat || !Array.isArray(etat.els)) return etat;
+  const copie = JSON.parse(JSON.stringify(etat));
+  for (const e of copie.els) if (typeof e.url === "string" && e.url.startsWith("/")) { e.src = e.url; delete e.url; }
+  return copie;
+}
+
 export default function RetouchePage() {
   const [ouvert, setOuvert] = useState(null);     // { outil, ex } : l'outil chargé dans le cadre (gardé même fermé, pour « Retoucher encore »)
   const [visible, setVisible] = useState(false);
@@ -98,7 +122,8 @@ export default function RetouchePage() {
           if (!r.ok) throw new Error(j.error || "Création introuvable.");
           const ou = OUTILS.find((x) => x.id === j.outil);
           if (!ou || !j.etat) throw new Error("Cette création ne peut pas être ouverte.");
-          setCmd({ id: j.id, ref: q.get("commande") || "", outil: ou.id, etat: j.etat, atelier: j.atelier || null, atelierAt: j.atelierAt || "", sansListe: !(Array.isArray(j.pieces) && j.pieces.length), charge: false, direct: q.get("fichiers") === "1" });
+          const etatC = await avecImages(j.etat), etatA = j.atelier ? await avecImages(j.atelier) : null;
+          setCmd({ id: j.id, ref: q.get("commande") || "", outil: ou.id, etat: etatC, atelier: etatA, atelierAt: j.atelierAt || "", sansListe: !(Array.isArray(j.pieces) && j.pieces.length), charge: false, direct: q.get("fichiers") === "1" });
           ouvrir(ou.id, ou.departs[0].ex);
         } catch (e) { setCmdMsg(`La création de cette commande n'a pas pu être ouverte : ${e.message}`); }
       })();
@@ -115,10 +140,11 @@ export default function RetouchePage() {
     } catch (e) { setErr(`La création n'a pas pu être chargée dans l'outil : ${e?.message || e}`); }
   }, [pret, cmd, ouvert]);
   const garder = async (etat, pieces) => {
-    const r = await fetch("/api/admin/creation", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": cle.current }, body: JSON.stringify({ id: cmd.id, atelier: etat, pieces: pieces || [] }) });
+    const r = await fetch("/api/admin/creation", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": cle.current }, body: JSON.stringify({ id: cmd.id, atelier: sansImages(etat), pieces: pieces || [] }) });
     const j = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(j.error || "Enregistrement impossible.");
-    setCmd((c) => (c ? { ...c, atelier: j.atelier || null, atelierAt: j.atelierAt || "" } : c));
+    const atelierC = j.atelier ? await avecImages(j.atelier).catch(() => etat) : null;
+    setCmd((c) => (c ? { ...c, atelier: atelierC, atelierAt: j.atelierAt || "" } : c));
   };
   // La création de la cliente vient d'être posée dans l'outil et sa liste de pièces n'a jamais été gardée : on la garde
   // maintenant (une seule fois), pour que la fiche de la commande l'affiche sans rouvrir l'outil.
