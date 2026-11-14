@@ -936,3 +936,19 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #decorationdenoel #cadeaupersonnalise #noel2026 #ideecadeau
+
+## Vidéo 58 — Créez votre support de téléphone (14/11/2026)
+- Demande : « une vidéo comme tout à l'heure pour le support téléphone ». Même style que la 57 (téléphone, étape écrite au-dessus, rond doré du doigt).
+- On voit la VRAIE fiche du site (créateur en vente depuis le 14/11) filmée en vue téléphone : arche puis tête de chat, taille standard, « Camille »
+  en Great Vibes, dessin n° 27, photo d'exemple (portrait de couple de la maquette, jamais une cliente), photo glissée au doigt, motif cœurs,
+  3D tournée au doigt, résumé 27,90 €, panier. Fin « Dès maintenant sur nivcreation.fr ». Prix visibles (ceux du gérant).
+- 38,9 s, sans son, 1080 × 1920 (2,7 Mo) et 720 × 1280 (1,0 Mo). Fichiers à supprimer le 16/11.
+- Refaire : `node tools/video/capture_support_58.cjs <adresse du site> <dossier> <photo.jpg>` puis
+  `python3 tools/video/support_creez_58.py <polices> <dossier> <sortie> [--apercu]`.
+
+**Vidéo 58 — Votre support de téléphone, créé par vous** (Support téléphone en bois gravé)
+> 📱 Votre support de téléphone, dessiné par vous : choisissez la forme et la taille, gravez un prénom, un dessin ou votre photo, ajoutez un motif découpé et regardez-le en 3D ✨
+> Nous le découpons et le gravons dans notre atelier 💛 Un cadeau qu'on garde sur son bureau 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #supporttelephone #gravurelaser #ideecadeau
