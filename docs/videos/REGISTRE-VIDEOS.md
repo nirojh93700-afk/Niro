@@ -954,3 +954,24 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #supporttelephone #gravurelaser #ideecadeau
+
+## Vidéo 59 — Nos coups de cœur, en pellicule (14/11/2026)
+- Demande : « refais une vidéo pour les produits que les gens aiment bien, le modèle que j'aimais bien » → ses choix : style « pellicule de
+  cinéma » (vidéo 55) et « ceux qui se vendent le plus » (75 commandes lues le 14/11 : verres à vin, tumbler, whisky, flûtes, cristal photo 3D,
+  bracelet empreinte, collier Enveloppe, bracelet cordon, carnet). Le bracelet homme chaîne acier, la plaque acier et le bracelet cœur n'ont
+  que des photos vierges : écartés.
+- 4 chapitres : Verres gravés (vin couple + vin « Camille & Paul 14.06.2026 » faits avec l'aperçu de la vraie fiche, repères masqués ;
+  tumbler « Camille & Paul » et photo « Léa & Paul », badge « EXEMPLE » effacé ; whisky « Meilleur papa » photo et « Meilleur papa du monde » ;
+  flûtes du mariage et « Jesus & Beatriz ») · Cristal photo 3D (famille, parents, couple, enfant et chat) · Bijoux (empreintes de bébé,
+  Enveloppe portée, cordon « A ⚓ P ») · Papeterie (carnet « Camille »). Intro « Nos coups de cœur ». Écartés : textes anglais (vin « Est. 2004 »,
+  « Geniet », « Happy Birthday », « Our first », « I love you »).
+- 34,6 s, sans son, aucun prix, 1080 × 1920 (11 Mo, recompressée crf 30) et 720 × 1280 (10,4 Mo). Fichiers à supprimer le 16/11.
+- Refaire : images du vin `tools/video/pellicule_59_prep/vin.cjs` (serveur local, écrit à côté de lui) + `prep.py`, puis
+  `python3 tools/video/pellicule_59.py <polices> <sortie> <dossier des photos préparées>`.
+
+**Vidéo 59 — Nos coups de cœur** (Verre à vin, Verre tumbler, Verre à whisky, Flûte à champagne, Cristal photo 3D, Bracelet empreinte de bébé, Collier Enveloppe, Bracelet cordon, Carnet A5)
+> 🎬 Vos coups de cœur, gravés dans notre atelier : verres à vos prénoms, cristal photo 3D, bijoux et carnets ✨
+> Les créations que vous préférez, personnalisées pour ceux que vous aimez 💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gravurelaser #verregrave #ideecadeau
