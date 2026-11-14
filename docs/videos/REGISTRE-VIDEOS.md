@@ -918,3 +918,21 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #creezlevotre #cadeaunaissance #ideecadeau
+
+## Vidéo 57 — Créez votre déco de Noël (14/11/2026)
+- Demande : « j'aime bien la vidéo que t'as faite, refais-la pareil mais juste pour les décos de Noël, pas la lettre ni la rose ».
+- Même style que la 56 (téléphone, étape écrite au-dessus, rond doré du doigt), seulement les créateurs de Noël : décoration à suspendre
+  (boule, « Jules », dessins au hasard, 3D) → décoration à prénom (bonnet puis renne, « Léo », forme dodue, peinte à la main, écriture
+  Lobster ; captures neuves, prix non validés masqués) → maisonnette (sapin, bonhomme de neige, découpes en cœurs, 3D). Lettre, arbre de vie
+  et fleur retirés. Intro « Votre déco de Noël », fin « Elle arrive prête à suspendre au sapin » + « Bientôt sur nivcreation.fr ».
+- ⚠️ Les créateurs ne sont PAS en vente : à publier le jour de la mise en vente. 41,2 s, sans son, 1080 × 1920 (3,2 Mo) et 720 × 1280 (1,2 Mo).
+  Fichiers à supprimer le 16/11.
+- Refaire : captures de la 56 (`deco`, `maison`) + `node tools/video/capture_nom_57.cjs` (à lancer depuis le dossier de capture de la 56,
+  à côté de `cap.cjs` / `net.cjs`), puis `python3 tools/video/noel_creez_57.py <polices> <captures> <sortie> [--apercu]`.
+
+**Vidéo 57 — Votre déco de Noël, créée par vous** (Décoration à suspendre, Décoration à prénom, Maisonnette en bois)
+> 🎄 Votre déco de Noël, dessinée par vous : choisissez la forme, écrivez le prénom, ajoutez vos dessins de Noël et regardez-la en 3D ✨
+> Nous la gravons, la découpons et l'assemblons dans notre atelier 💛 Prête à suspendre au sapin 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #decorationdenoel #cadeaupersonnalise #noel2026 #ideecadeau

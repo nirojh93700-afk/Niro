@@ -1,0 +1,20 @@
+const { ouvrir } = require('./cap.cjs');
+(async () => {
+  const a = await ouvrir('nom', 'nom/maq/index.html'); const p = a.p;
+  await p.addStyleTag({ content: '.price-sale,.price-old,.promo-badge{visibility:hidden!important}' });
+  await p.evaluate(() => { const net = (r) => { const w = document.createTreeWalker(r, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) { const t = n.nodeValue.replace(/\s*·\s*(\+\s?\d+(,\d+)?\s?€|compris)/g, ''); if (t !== n.nodeValue) n.nodeValue = t; } };
+    net(document.body); new MutationObserver(() => net(document.body)).observe(document.body, { childList: true, subtree: true, characterData: true }); });
+  await p.waitForTimeout(300);
+  await a.shot(1.0);
+  await a.voir('Le modèle', 10); await a.shot(0.5, null, { etape: 'modele' });
+  await a.toucher('button:has-text("Bonnet de Noël")', 1.0);
+  await a.toucher('button:has-text("Renne")', 1.0);
+  await a.voir('Le prénom', 10); await a.shot(0.4, null, { etape: 'prenom' });
+  const champ = await p.evaluate(() => { const i = [...document.querySelectorAll('input[type=text]')].find((x) => x.offsetParent && x.placeholder === 'Prénom'); i.id = i.id || 'vidNom'; return '#' + i.id; });
+  await a.taper(champ, 'Léo', 0.3); await a.shot(0.9);
+  await a.voir('La forme de la grande lettre', 10); await a.toucher('button:has-text("Dodue")', 1.0, { etape: 'forme' });
+  await a.voir('Les couleurs', 10); await a.toucher('button:has-text("Peinte à la main")', 1.2, { etape: 'couleurs' });
+  await a.voir("L'écriture du prénom", 10); await a.toucher('button:has-text("Lobster")', 1.2, { etape: 'ecriture' });
+  await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(500); await a.shot(1.8, null, { etape: 'fin' });
+  await a.fin();
+})();
