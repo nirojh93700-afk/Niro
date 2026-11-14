@@ -413,7 +413,7 @@
       "source": "pbakaus/impeccable",
       "sourceType": "github",
       "skillPath": ".agents/skills/impeccable/SKILL.md",
-      "computedHash": "ba37586a255fb74ad4b4f2073b3729c6a308c83e1987bef8e1b6d6b08ff67aec"
+      "computedHash": "20bb60ceec725033aa062ab280516922cf17ace30afd273706845757010c0dfa"
     },
     "industrial-brutalist-ui": {
       "source": "Leonxlnx/taste-skill",
@@ -677,7 +677,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/stripe-apps/SKILL.md",
-      "computedHash": "3cfbe332eb413548d07582f94adde253801864bc09b172ca18f76c11ffdff335"
+      "computedHash": "1adbbe7be9ae35de8a6714e6309a4862bc0ed4e81b0d27b4c76c82b7122deae3"
     },
     "stripe-best-practices": {
       "source": "stripe/ai",
@@ -689,7 +689,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/stripe-directory/SKILL.md",
-      "computedHash": "5bc120dce60e03dab06ed9ba41d11c4a5d812bb8b0e7b37315ec987877645b3a"
+      "computedHash": "4e0dd006d6a9ff61db11e466dbc43c327b2918283776adc81bc97c123b6a2ec4"
     },
     "stripe-docs": {
       "source": "stripe/ai",
@@ -707,7 +707,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/stripe-projects/SKILL.md",
-      "computedHash": "e1afae1bb8810c4e56419eb750b83da4f2a6405e3150dc2ecfabd6ae20dd7da3"
+      "computedHash": "7a70a9abeb9d9a433e8365a266d2d1282fc6e72b84cf2590be5f75e8a9cdbaa5"
     },
     "ui-styling": {
       "source": "nextlevelbuilder/ui-ux-pro-max-skill",

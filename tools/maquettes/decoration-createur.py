@@ -236,7 +236,7 @@ for m in MODELES:
         bb = io.BytesIO(); im.save(bb, "WEBP", quality=80); m["img"] = "data:image/webp;base64," + base64.b64encode(bb.getvalue()).decode()
 
 DONNEES = json.dumps({"modeles": MODELES, "contours": CONTOURS, "matieres": MATIERES, "mini": 30, "maxi": 150, "photos": PHOTOS, "dessins": [], "elements": ELEMENTS, "lettres": {}, "planche": "", "exemple": EXEMPLE, "logo": LOGO, "logoR": LOGO_R, "polices": POLICES,
-                      "prix": {"base": 9.9, "acrylique": 2, "element": 3, "dessin": 1}, "tailles": [["petite", "Petite", 70, 0], ["moyenne", "Moyenne", 90, 2], ["grande", "Grande", 110, 4]]},
+                      "prix": {"base": 9.9, "acrylique": 2, "element": 3, "dessin": 0}, "tailles": [["petite", "Petite", 70, 0], ["moyenne", "Moyenne", 90, 2], ["grande", "Grande", 110, 4]]},
                      ensure_ascii=False, separators=(",", ":"))
 
 CSS_MAQ = r"""
@@ -473,7 +473,7 @@ HTML_OUTIL = r"""
   <div class="sc-ajouts sc-ajouts3">
    <button type="button" class="sc-ajout" data-a="texte"><svg viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg>Un texte<small>prénom, nom, Joyeux Noël</small></button>
    <button type="button" class="sc-ajout" data-a="photo"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>Ma photo<small>gravée</small></button>
-   <button type="button" class="sc-ajout" data-a="dessin"><svg viewBox="0 0 24 24"><path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.4l-4.8 2.5.9-5.4L4.2 8.7l5.4-.8z"/></svg>Un dessin<small>flocon, renne, sapin… 1 €</small></button>
+   <button type="button" class="sc-ajout" data-a="dessin"><svg viewBox="0 0 24 24"><path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.4l-4.8 2.5.9-5.4L4.2 8.7l5.4-.8z"/></svg>Un dessin<small>flocon, renne, sapin… compris</small></button>
   </div>
   <div class="sc-panneau" id="panneau"></div>
   <div id="liste"></div>
@@ -510,7 +510,7 @@ HTML_ATELIER = r"""
   </div>
  </div>
  <div class="sc-avalider"><b>À valider avec vous avant de construire</b><ul>
-  <li>Prix proposés par moi : décoration 9,90 € (le cadre ou la plaque, en contreplaqué), + 3 € par texte ou photo, + 2 € pour un nom en acrylique. À vous de les fixer.</li>
+  <li>Prix proposés par moi : décoration 9,90 € (le cadre ou la plaque, en contreplaqué), + 3 € par texte ou photo, + 2 € pour un nom en acrylique. Les dessins sont compris (vous, le 14/11).</li>
   <li>Le ruban est-il fourni ? Quelle colle pour les pièces ? Une vraie photo par forme sera à prendre avant la mise en vente.</li>
   <li>Pas d'impression en couleur (votre machine grave et découpe, elle n'imprime pas) : l'option « Couleur » d'Atomm n'est donc pas reprise.</li>
  </ul></div>
@@ -856,9 +856,9 @@ function ranger(){var L=limites(),els=S.els.slice().sort(function(a,b){return a.
 /* ---- étape 3 : le style ---- */
 function majStyle(){[].forEach.call($('styles').querySelectorAll('.sc-style'),function(b){b.classList.toggle('on',b.getAttribute('data-v')===S.style)});
  var cl=S.style==='classique';
- $('legTextes').innerHTML=cl&&S.taille!=='petite'?'Les <b>dessins en bois sont découpés avec le cadre</b>, d\'une seule pièce : rien ne peut se décoller. Le <b>nom est collé par-dessus</b>, en relief, ou découpé avec le cadre lui aussi : vous choisissez dans sa fiche. Une photo, ou un nom en acrylique de couleur, est toujours collé. Seul le nom peut être en acrylique. <b>Vous placez tout où vous voulez</b> : touchez dans l\'aperçu et faites glisser, ou utilisez les flèches. Un dessin doit mordre sur le bois du cadre, un nom doit le toucher. Chaque texte ou photo : + 3 € ; chaque petit dessin : + 1 €.'
-  :cl?'À la taille de 7 cm, chaque texte, chaque dessin et chaque photo est une <b>pièce découpée à part</b>, que l\'on colle sur le cadre (à partir de 9 cm, les dessins en bois sont découpés avec le cadre, d\'une seule pièce). <b>Vous la placez où vous voulez</b> : touchez-la dans l\'aperçu et faites-la glisser, ou utilisez les flèches. Elle doit toucher le cadre (ou une autre pièce) : c\'est là qu\'elle est collée. Chaque texte ou photo : + 3 € ; chaque petit dessin : + 1 €.'
-  :'Les textes, les dessins et les photos sont <b>gravés directement</b> sur la plaque. <b>Vous les placez où vous voulez</b> : touchez-les dans l\'aperçu et faites-les glisser, ou utilisez les flèches. Chaque texte ou photo gravé : + 3 € ; chaque petit dessin : + 1 €.';
+ $('legTextes').innerHTML=cl&&S.taille!=='petite'?'Les <b>dessins en bois sont découpés avec le cadre</b>, d\'une seule pièce : rien ne peut se décoller. Le <b>nom est collé par-dessus</b>, en relief, ou découpé avec le cadre lui aussi : vous choisissez dans sa fiche. Une photo, ou un nom en acrylique de couleur, est toujours collé. Seul le nom peut être en acrylique. <b>Vous placez tout où vous voulez</b> : touchez dans l\'aperçu et faites glisser, ou utilisez les flèches. Un dessin doit mordre sur le bois du cadre, un nom doit le toucher. Les dessins sont compris ; seuls les textes et les photos se paient : + 3 € chacun.'
+  :cl?'À la taille de 7 cm, chaque texte, chaque dessin et chaque photo est une <b>pièce découpée à part</b>, que l\'on colle sur le cadre (à partir de 9 cm, les dessins en bois sont découpés avec le cadre, d\'une seule pièce). <b>Vous la placez où vous voulez</b> : touchez-la dans l\'aperçu et faites-la glisser, ou utilisez les flèches. Elle doit toucher le cadre (ou une autre pièce) : c\'est là qu\'elle est collée. Les dessins sont compris ; seuls les textes et les photos se paient : + 3 € chacun.'
+  :'Les textes, les dessins et les photos sont <b>gravés directement</b> sur la plaque. <b>Vous les placez où vous voulez</b> : touchez-les dans l\'aperçu et faites-les glisser, ou utilisez les flèches. Les dessins sont compris ; seuls les textes et les photos se paient : + 3 € chacun.';
  [].forEach.call(document.querySelectorAll('.sc-sicl'),function(x){x.hidden=!cl})}
 $('styles').addEventListener('click',function(ev){var b=ev.target.closest('.sc-style');if(!b)return;S.style=b.getAttribute('data-v');majStyle();voirCreation();panneau();dessiner();reposer()});
 
@@ -920,7 +920,7 @@ function panneau(){
    +'<div class="sc-hasard"><b>Au hasard</b><span class="sc-nb"><button type="button" class="sc-o" data-h="-" aria-label="Moins de décors">−</button><output>'+(S.nHasard||3)+'</output><button type="button" class="sc-o" data-h="+" aria-label="Plus de décors">+</button></span>'
    +(grand()?'<span class="sc-thz">Taille</span>'+seg('Taille des décors',TD.map(function(t){return [t[0],t[1]]}),S.tHasard||'m','th'):'')
    +'<button type="button" class="sc-btn" data-h="go">Tirer '+(S.nHasard||3)+' décor'+((S.nHasard||3)>1?'s':'')+' au hasard</button>'
-   +'<p class="prc-hint" id="msgHasard">Pris dans la famille « '+esc(fam)+' », posés'+(cl&&S.taille!=='petite'?' dans l\'ouverture, contre le cadre, et découpés avec lui':cl?' dans l\'ouverture, collés contre le cadre ou sur le nom':' sur la plaque')+' tout seuls. 1 € chacun.</p></div>'
+   +'<p class="prc-hint" id="msgHasard">Pris dans la famille « '+esc(fam)+' », posés'+(cl&&S.taille!=='petite'?' dans l\'ouverture, contre le cadre, et découpés avec lui':cl?' dans l\'ouverture, collés contre le cadre ou sur le nom':' sur la plaque')+' tout seuls. Compris dans le prix.</p></div>'
    +'<div class="sc-dessins">'+D.elements.elements.filter(function(d){return d.cats.indexOf(fam)>=0}).map(function(d){return '<button type="button" data-dessin="'+d.id+'" aria-label="Ajouter ce dessin"><img src="'+d.img+'" alt="" loading="lazy"></button>'}).join('')+'</div></div>'}
  P.innerHTML=h;var n=$('ntexte');if(n)n.focus()}
 function matsHtml(cour,data){return '<div class="sc-mats sc-mats5">'+MATIERES.map(function(m){return '<button type="button" class="sc-mat'+(m.id===cour?' on':'')+'" data-'+data+'="'+m.id+'"><i style="background:linear-gradient(135deg,'+m.c[0]+','+m.c[2]+')"></i>'+m.nom.replace('Acrylique ','Acrylique<br>')+'</button>'}).join('')+'</div>'}
@@ -956,6 +956,7 @@ function commentEl(e){
  if(e.type==='photo')return 'photo gravée'+(S.style==='classique'?' sur une pièce découpée':'')+' · '+(e.forme==='ovale'?'ovale':'rectangle');
  if(S.style!=='classique')return 'gravé · '+police(e.police)[1];
  return (e.mode==='grave'?'gravé sur une pièce découpée':'lettres découpées')+(e.creux?' · creuses':'')+' · '+matEl(e).nom.toLowerCase()+' · '+police(e.police)[1]}
+function prixTxt(e){var p=prixEl(e);return p?'+ '+eur(p):'compris'}
 function prixEl(e){return (e.type==='dessin'?D.prix.dessin:D.prix.element)+(e.type==='texte'&&S.style==='classique'&&matEl(e).acrylique?D.prix.acrylique:0)}
 function liste(){
  var L=$('liste'),act=document.activeElement,garde=act&&act.getAttribute&&act.getAttribute('data-edit');
@@ -966,7 +967,7 @@ function liste(){
  S.els.forEach(function(e,i){
   var vig=e.type==='texte'?'Aa':e.type==='dessin'?'<img class="sc-vd" src="'+(elem(e.did)||{}).img+'" alt="">':'<img src="'+e.src+'" alt="">';
   h+='<div class="sc-item'+(S.sel===e.id?' on':'')+'" data-id="'+e.id+'"><div class="sc-itete"><span class="sc-vig">'+vig+'</span>'
-   +'<span class="sc-inom"><b>'+esc(nomEl(e))+'</b><small>'+(cl&&num(e)?'Pièce '+num(e)+' · ':'')+commentEl(e)+' · + '+eur(prixEl(e))+'</small></span>'
+   +'<span class="sc-inom"><b>'+esc(nomEl(e))+'</b><small>'+(cl&&num(e)?'Pièce '+num(e)+' · ':'')+commentEl(e)+' · '+prixTxt(e)+'</small></span>'
    +'<button type="button" class="sc-x" data-act="x" aria-label="Retirer">✕</button></div>';
   if(e.flottant)h+='<p class="sc-warn">'+(e.so&&e.type==='dessin'?'Ce dessin ne mord pas assez sur le bois du cadre : il casserait. Faites-le glisser vers le cadre, ou touchez « Placer automatiquement ».':e.so?'Ce nom est découpé avec le cadre, mais il ne le touche pas. Faites-le glisser jusqu\'au cadre, ou touchez « Poser d\'un bord du cadre à l\'autre ».':'Cette pièce ne touche ni le cadre ni une autre pièce : elle tomberait. Faites-la glisser jusqu\'au cadre pour qu\'on puisse la coller.')+'</p>';
   else if(e.so&&e.type==='dessin'&&traitFin(e)!=null&&traitFin(e)<.8)h+='<p class="sc-warn">À cette taille, ce dessin a des traits très fins : il serait fragile. Choisissez une taille plus grande'+(e.mode==='decoupe'?', ou « Détails gravés »':'')+'.</p>';
@@ -1024,7 +1025,7 @@ function resume(){var cl=S.style==='classique';
   +'<div class="prc-sumrow"><span>Taille</span><b>'+String(S.W).replace('.',',')+' × '+String(S.H).replace('.',',')+' mm'+(prixTaille()?' — + '+eur(prixTaille()):'')+'</b></div>'
   +'<div class="prc-sumrow"><span>Style</span><b>'+(cl?(S.els.some(soudee)?'Cadre et dessins découpés d\'une seule pièce'+(S.els.some(function(e){return !soudee(e)})?', le reste collé par-dessus':''):'Cadre découpé, pièces collées'):'Plaque pleine, gravée')+'</b></div>'
   +'<div class="prc-sumrow"><span>Matière</span><b>Contreplaqué 3 mm</b></div>';
- S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(cl&&num(e)?'Pièce '+num(e):e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':'Photo')+'</span><b>'+esc(nomEl(e))+' · '+commentEl(e)+' — + '+eur(prixEl(e))+'</b></div>'});
+ S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(cl&&num(e)?'Pièce '+num(e):e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':'Photo')+'</span><b>'+esc(nomEl(e))+' · '+commentEl(e)+' — '+prixTxt(e)+'</b></div>'});
  h+='<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+eur(total())+'</b></div>';
  R.innerHTML=h;$('total').textContent=eur(total());$('prixtete').textContent=eur(total());
  $('n5').classList.toggle('done',S.els.length>0);

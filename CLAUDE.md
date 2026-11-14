@@ -1,5 +1,5 @@
 ## 🎄 DÉCORATION À SUSPENDRE : MOTIFS DÉCOUPÉS AVEC LE CADRE, EN GRAND — 13/11/2026 nuit (gérant, deux boules ajourées d'un autre atelier en exemple : « c'est bien collé avec le contour pour pas que ça se casse » → « le motif est découpé dans un seul morceau, et après le prénom, je peux coller au-dessus en superposé, ou le client choisit » → « c'est trop petit… il faut qu'il puisse sélectionner les tailles ») — NOUVELLE maquette à juger, RIEN en ligne, Gestion PAS régénéré
-- **Artifact NEUF** https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v4). L'ancienne maquette enregistrée (6Gs8LNkzpdvWMRDNZpE775, v16) n'est PAS touchée. Même générateur
+- **Artifact NEUF** https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v5). L'ancienne maquette enregistrée (6Gs8LNkzpdvWMRDNZpE775, v16) n'est PAS touchée. Même générateur
   `decoration-createur.py` (mêmes 6 arguments ; modèles refaits : `$S/soude/mod/modeles-maquette.json` par `decoration-modeles.cjs`), puis `ajouter-valider.py`.
 - **Règle** (Classique, tailles 9 et 11 cm) : un dessin en contreplaqué est DÉCOUPÉ AVEC LE CADRE, d'une seule pièce (`e.soude`, mis d'office ; `soudable` / `soudee`) ; il doit
   MORDRE sur le bois (`AIRE` = 6 mm² au moins, mesuré sur sa vraie silhouette : `alpha`, `cases`, `pose`, `mord`), ne pas dépasser de la forme, ne pas être à moitié caché dans le bois ;
@@ -19,10 +19,13 @@
 - ⛔ **UN DESSIN (DÉCO) N'EST JAMAIS EN ACRYLIQUE : SEUL LE NOM PEUT L'ÊTRE (gérant, 14/11, capture d'un renne en acrylique blanc à + 3 € : « y a que le nom avec
   acrylique, tout ce qui est déco c'est en découpe direct, y a pas d'acrylique, c'est avec le bois contreplaqué » → plan montré → « oui, y a pas de prix en plus, ça se coupe
   direct sur le bois, c'est juste pour le nom que tu mets en plus »)** = artifact **v4** : plus de cases de matière dans la fiche d'un dessin, `matEl` ne rend l'acrylique que
-  pour un texte, `prixEl` ne compte le + 2 € acrylique que pour un nom (un dessin = 1 €, toujours), choix « Sur une pièce » retiré (`MODESD` = Détails gravés · Ajouré),
+  pour un texte, `prixEl` ne compte le + 2 € acrylique que pour un nom (un dessin ne coûte RIEN, voir plus bas), choix « Sur une pièce » retiré (`MODESD` = Détails gravés · Ajouré),
   filet dans `dessiner()` (un dessin venu d'un modèle ou de la mémoire repasse en contreplaqué et en « Détails gravés » / « Ajouré »). La planche d'acrylique de l'atelier ne
-  contient plus que des noms. Essais `scratchpad/soude/td.cjs` 46 sur 46, `ta.cjs` 30 sur 30, `t.cjs` 58 sur 58. ⚠️ MA lecture de « pas de prix en plus » = pas de
-  supplément acrylique sur un dessin ; le dessin reste à 1 € (son prix du 12/11) : question posée (dessin gratuit ?).
+  contient plus que des noms. Essais `scratchpad/soude/td.cjs` 46 sur 46, `ta.cjs` 30 sur 30, `t.cjs` 58 sur 58. 
+- ✅ **TOUT DESSIN DÉCOUPÉ / GRAVÉ DANS LE BOIS EST COMPRIS, SEUL LE NOM SE PAIE (gérant, 14/11 : « tout ce qui est gravé directement sur le bois, c'est gratuit, même la
+  renne, y a que le nom qui est payant »)** = artifact **v5** : `D.prix.dessin = 0`, `prixTxt(e)` écrit « compris », bouton « Un dessin · compris », légendes « Les dessins sont
+  compris ; seuls les textes et les photos se paient : + 3 € chacun », modèles prêts recalculés (`decoration-modeles.cjs`). Nom + 3 € (acrylique + 2 €). ⚠️ La PHOTO reste à + 3 €
+  (non tranché : question posée). Essais `td.cjs` 50 sur 50, `t.cjs` 58 sur 58, `ta.cjs` 30 sur 30. Ancien prix (dessin 1 €) : `docs/prix-historique.md`.
 - Aperçu : pièces soudées dans le calque `#gravS`, SOUS le bois du cadre (un seul contour, pas de couture) ; 3D : dans l'épaisseur du cadre. Atelier : dans le fichier, la pièce soudée est
   dessinée à sa place sur le cadre (`data-soude`, trait rouge seulement hors du bois), « surface qui tient chaque dessin », alerte « traits fins » (`ep` mesuré par OpenCV, `traitFin`) ;
   plan de collage : « ✓ découpé avec le cadre : rien à coller », numéros = pièces à coller seulement (`num`).

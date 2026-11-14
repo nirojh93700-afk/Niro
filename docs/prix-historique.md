@@ -337,3 +337,9 @@ Après (même grille pour tous les pays) : lettre ≤100 g 8,90 · ≤250 g 15,9
 - Avant (proposés par moi) : la lettre décorée seule **34,90 €**, avec sa boîte **+ 15 €** (49,90 €), la cliente choisissait.
 - Maintenant : **54,90 €** la lettre et sa boîte, toujours ensemble (donné par lui).
 - Pour revenir en arrière : `PRIX` et l'étape 5 de `tools/maquettes/lettre-client.py` (commit `76c2996d` = la version avec le choix).
+
+## 14/11/2026 — Maquette « décoration à suspendre » (nouvelle, RFk8koRobSLSjN9BkdHXxh) : dessins compris (gérant : « tout ce qui est gravé directement sur le bois, c'est gratuit… y a que le nom qui est payant »)
+- Rien n'est en vente : c'est le prix écrit dans la maquette.
+- Avant : chaque dessin (flocon, renne, sapin…) **+ 1 €** (prix du 12/11).
+- Maintenant : les dessins sont **compris** ; le nom + 3 € (acrylique + 2 €), la photo + 3 €.
+- Pour revenir en arrière : `"dessin": 1` dans `D.prix` de `tools/maquettes/decoration-createur.py`, puis refaire les modèles (`decoration-modeles.cjs`).
