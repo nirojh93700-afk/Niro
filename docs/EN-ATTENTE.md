@@ -832,3 +832,4 @@ En attente de SA décision :
 ## Emilie Laffont (emilielaffont24@hotmail.fr) — verre à vin gravé, visuel « 40 ans, toujours au sommet… » + « Elodie » (14/11/2026)
 - Mail du 14/11 à 16 h 02 (par le site) : on lui demande le NOMBRE de verres et la TAILLE (36 ou 47 cl). Pas de devis, pas de prix.
 - À sa réponse, devis : compter **le logo** (montagnes, texte « 40 ans… », verres qui trinquent) **ET le prénom « Elodie »** (consigne du gérant) ; mail du devis SANS prix écrits. Clé de Gestion absente de la session : le gérant crée le devis, je mets le lien dans le mail.
+- ✅ Elle a répondu : 1 verre, 35 à 40 cl → **devis DEV-1550 créé (36 cl à l'unité 17,90 + visuel 0 + prénom « Elodie » 3 = 20,90 €, livraison au paiement)** et envoyé DANS le mail du 14/11 à 17 h 42 (par sa réponse à valider), pas de rebond. Reste : attendre son paiement.
