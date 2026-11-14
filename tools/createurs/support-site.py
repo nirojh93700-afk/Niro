@@ -72,6 +72,18 @@ code, n = re.subn(r"\bwindow\.addEventListener\(", "ECOUTE(window,", code)
 assert n == 5, n
 assert "document.addEventListener(" not in code
 code = rempl(code, "function fichier(){", "function fichier(){return;")
+# avec un motif ajouré, la gravure va dans la plus grande bande LIBRE entre les trous (14/11/2026, gérant : « je peux pas
+# descendre le nom, c'est bloqué ») : avant, la limite basse = le plus haut trou ; les motifs qui ont une rangée de trous
+# en haut (Soleil, Étoiles…) collaient alors la gravure tout en haut, sur ces trous, sans pouvoir la descendre.
+code = rempl(code,
+             "function limites(){var t=T(),f=base().fentes[0],bas=Math.min(f[1]-5,haut(trous())-4);return{x0:ox()+15,x1:ox()+3*(t.W-5),y0:oy()+3*zoneHaut(),y1:oy()+3*bas}}",
+             "var bandes={};\n"
+             "function bande(){var d=trous(),z=zoneHaut(),fin=base().fentes[0][1]-5;if(!d)return[z,fin];var k=S.taille+'|'+S.forme+'|'+S.cable+'|'+S.angle+'|'+d.length+'|'+d.slice(0,40);if(bandes[k])return bandes[k];\n"
+             " var iv=poly(d).map(function(c){var a=1e9,b=-1e9;c.forEach(function(p){if(p[1]<a)a=p[1];if(p[1]>b)b=p[1]});return[a-4,b+4]}).sort(function(p,q){return p[0]-q[0]});\n"
+             " var best=null,cur=z;iv.forEach(function(v){var h=Math.min(v[0],fin);if(h>cur&&(!best||h-cur>best[1]-best[0]))best=[cur,h];if(v[1]>cur)cur=v[1]});\n"
+             " if(fin>cur&&(!best||fin-cur>best[1]-best[0]))best=[cur,fin];\n"
+             " return bandes[k]=best||[z,Math.min(fin,haut(d)-4)]}\n"
+             "function limites(){var t=T(),B=bande();return{x0:ox()+15,x1:ox()+3*(t.W-5),y0:oy()+3*B[0],y1:oy()+3*B[1]}}")
 code = rempl(code, "window.scEtat=function(){", "window.scSite={S:S,dessiner:function(){dessiner()},total:total,pret:pret,voirCreation:voirCreation};\nwindow.scEtat=function(){")
 
 # le bouton « OK ✓ » des champs (téléphone)
