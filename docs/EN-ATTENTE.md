@@ -10,7 +10,7 @@
 
 
 ## 🎄 DÉCORATION À SUSPENDRE « MOTIFS DÉCOUPÉS AVEC LE CADRE » — 13/11/2026 nuit, EN ATTENTE DE SON AVIS
-- Nouvelle maquette https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v1) : motifs en bois découpés avec le cadre (9 et 11 cm), trois tailles de motif, prénom collé par-dessus ou
+- Nouvelle maquette https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v3 : un nom en acrylique ne se grave pas, découpe seule) : motifs en bois découpés avec le cadre (9 et 11 cm), trois tailles de motif, prénom collé par-dessus ou
   découpé avec le cadre au choix. L'ancienne maquette enregistrée n'est pas touchée. Rien en ligne, Gestion pas régénéré. Détail : CLAUDE.md, section du 13/11 nuit.
 - À lui de dire : il garde cette version ? · je la mets dans l'outil de Gestion ? · un dessin aux traits trop fins passe tout seul en « forme pleine, détails gravés » ?
 

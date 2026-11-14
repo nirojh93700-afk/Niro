@@ -1,5 +1,5 @@
 ## 🎄 DÉCORATION À SUSPENDRE : MOTIFS DÉCOUPÉS AVEC LE CADRE, EN GRAND — 13/11/2026 nuit (gérant, deux boules ajourées d'un autre atelier en exemple : « c'est bien collé avec le contour pour pas que ça se casse » → « le motif est découpé dans un seul morceau, et après le prénom, je peux coller au-dessus en superposé, ou le client choisit » → « c'est trop petit… il faut qu'il puisse sélectionner les tailles ») — NOUVELLE maquette à juger, RIEN en ligne, Gestion PAS régénéré
-- **Artifact NEUF** https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v2). L'ancienne maquette enregistrée (6Gs8LNkzpdvWMRDNZpE775, v16) n'est PAS touchée. Même générateur
+- **Artifact NEUF** https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v3). L'ancienne maquette enregistrée (6Gs8LNkzpdvWMRDNZpE775, v16) n'est PAS touchée. Même générateur
   `decoration-createur.py` (mêmes 6 arguments ; modèles refaits : `$S/soude/mod/modeles-maquette.json` par `decoration-modeles.cjs`), puis `ajouter-valider.py`.
 - **Règle** (Classique, tailles 9 et 11 cm) : un dessin en contreplaqué est DÉCOUPÉ AVEC LE CADRE, d'une seule pièce (`e.soude`, mis d'office ; `soudable` / `soudee`) ; il doit
   MORDRE sur le bois (`AIRE` = 6 mm² au moins, mesuré sur sa vraie silhouette : `alpha`, `cases`, `pose`, `mord`), ne pas dépasser de la forme, ne pas être à moitié caché dans le bois ;
@@ -11,6 +11,12 @@
   la FORME pleine du dessin est découpée (`d.sil`) et ses détails (les blancs enfermés dans la forme : yeux, traits, étoiles ; `d.det`, calculé par `epaisseurs()` avec OpenCV,
   215 dessins sur 257) sont gravés, comme le renne de ses exemples. Dans la fiche : « Détails gravés » · « Ajouré » (tout découpé, les détails sont des trous) · « Sur une pièce ».
   ⚠️ Un grand vide enfermé (centre d'une couronne, anse d'une tasse) est gravé plein lui aussi. Le générateur met environ 2 minutes (images des détails).
+- ⛔ **UN NOM EN ACRYLIQUE NE SE GRAVE PAS (gérant, 14/11, capture de la fiche du nom : « sur le nom avec acrylique on peut pas graver, y a que la découpe, y a que
+  contreplaqué qu'on peut graver pour les noms »)** = artifact **v3** : le choix « Découpé / Gravé » n'est proposé que pour un nom en contreplaqué ; choisir un acrylique
+  le remet en « Découpé » et affiche « En acrylique, le nom est découpé… Seul le contreplaqué se grave » (`ACRYL`), dans la fiche du nom ET dans le panneau d'ajout ;
+  filet dans `dessiner()` (un nom en acrylique venu d'un modèle ou de la mémoire n'est jamais « gravé »). Essai `scratchpad/soude/ta.cjs` 30 sur 30. Corrigé au passage :
+  la fiche d'un dessin se refermait parfois toute seule juste après l'ajout (`recaserDessins` vidait `S.sel`). ⚠️ Les DESSINS en acrylique gardent « Détails gravés » :
+  question posée au gérant (même règle ?). Gestion (`editeur.js`) et l'ancienne maquette v16 ne sont PAS modifiés.
 - Aperçu : pièces soudées dans le calque `#gravS`, SOUS le bois du cadre (un seul contour, pas de couture) ; 3D : dans l'épaisseur du cadre. Atelier : dans le fichier, la pièce soudée est
   dessinée à sa place sur le cadre (`data-soude`, trait rouge seulement hors du bois), « surface qui tient chaque dessin », alerte « traits fins » (`ep` mesuré par OpenCV, `traitFin`) ;
   plan de collage : « ✓ découpé avec le cadre : rien à coller », numéros = pièces à coller seulement (`num`).
