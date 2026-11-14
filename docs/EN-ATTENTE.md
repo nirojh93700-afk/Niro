@@ -838,3 +838,9 @@ En attente de SA décision :
 - Demande par le formulaire (photo d'un verre déjà gravé). Consigne du gérant : le visuel compte comme UN TEXTE + le prénom = un nom (règle des verres : 1er texte offert, prénom +3 €, verres suivants +3 €).
 - Deux devis à nombre modifiable (1 à 12), il choisit la taille : **DEV-1552 (36 cl, 20,90 € le verre)** et **DEV-1553 (47 cl, 24,90 €)**, envoyés dans le même mail le 14/11 à 18 h 25, pas de rebond. DEV-1551 supprimé (jamais envoyé).
 - Le mail lui demande sa date et dit « si vous êtes pressé, nous pouvons essayer de la réaliser très rapidement » (phrase voulue par le gérant). Il proposait un appel : au gérant de décider.
+
+## 🎄 « Créez votre déco de Noël » — maquettes ENREGISTRÉES le 14/11/2026 soir, à mettre en ligne sur son mot
+- Page : https://claude.ai/artifact/GrGRNvh2GWaa6SrBKTfF49 (v4) · accueil réel : https://claude.ai/artifact/PRFYptcqnjjP9uSaV5DJMP (v2).
+- Seulement la boule de Noël (décoration à suspendre) et la maisonnette ; entrée du menu après « Bébé & Enfant » ; bloc sur l'accueil après les verres et « Ce Noël ».
+- À trancher au moment de mettre en ligne : prix de la décoration à suspendre (dès 9,90 € proposé), date limite pour Noël, lien avec l'interrupteur Noël,
+  et rappel de sa consigne du 13/11 (masquage relié à Gestion, essais réels) avant de pousser.
