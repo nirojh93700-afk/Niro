@@ -1,3 +1,10 @@
+## 🎄 MAQUETTE « CRÉEZ VOTRE DÉCO DE NOËL » — 14/11/2026 soir (gérant, après la vidéo 57 : « fais-moi la maquette comment on va mettre que les maquettes Noël, et pour le téléphone tu le mets dans le téléphone ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- https://claude.ai/artifact/GrGRNvh2GWaa6SrBKTfF49 · `python3 tools/maquettes/creez-noel.py <page de base> docs/maquettes/assets/creez-le-votre <sortie>` (base = sortie d'un autre créateur ;
+  sortie = index.html + page.html, publier les deux). Seulement les 3 créations de Noël (décoration à suspendre, décoration à prénom, maisonnette). Quatre vues : la page (bandeau rouge et or,
+  3 créations, 8 modèles prêts, ligne « date limite pour Noël » à donner par lui) · la même page dans un téléphone (comme la vidéo 57) · le bloc sur l'accueil juste après « Ce Noël, offrez
+  un cadeau unique » · l'entrée rouge « 🎄 Créez votre déco de Noël » du menu, juste après « Boutique ». Tout relié à l'interrupteur Noël (proposé). Prix : maisonnette dès 24,90 € (lui),
+  décoration à suspendre dès 9,90 € et à prénom dès 12,90 € = mes propositions. La maquette « Créez le vôtre » (1UafcEcee7BUjU42SxZ3kN, enregistrée) n'est PAS touchée.
+
 ## 🥃 VERRE À WHISKY 20 cl — 14/11/2026 nuit (gérant, captures Metro « Tumbler Lario 20 cl, 12 pièces, réf. AAA0045442429, Ø 7 × H 8,35 cm » : « je me suis trompé, j'ai acheté ça, il faut que je mette en vente aussi ») — ✅ EN LIGNE LE 14/11/2026 (« t'as pas mis en ligne pour le verre qu'on a fait »), patch appliqué ; RESTE : coût Metro dans `productCosts.js` (prix du carton à lui demander), stock non suivi (illimité) tant qu'il ne saisit pas 12 dans Gestion
 - Ses choix : **option « 20 cl » sur la fiche « Verre à whisky portrait » (taille à droite, comme le vin 36 / 47 cl), 17,90 / 33,90 / 64,90 €** (le 30 cl reste 19,90 / 37,90 / 71,90 €).
 - Préparé : `docs/whisky-20cl.patch` (products.js : `WHISKY_20_APERCU`, `tailles` 30 / 20, variantes `verre-whisky-20-1/2/4` avec stockId ; productInfo.js) ; photo `public/produits/verre_whisky_20cl_vierge.jpg`
