@@ -1,0 +1,82 @@
+diff --git a/src/lib/productInfo.js b/src/lib/productInfo.js
+index ae2ec4ba..ae785ab8 100644
+--- a/src/lib/productInfo.js
++++ b/src/lib/productInfo.js
+@@ -824,7 +824,7 @@ Annulation
+   "verre-a-whisky-grave": {
+     material: `Verre à whisky à base épaisse
+ 
+-- Verre épais et lourd en main, contenance d'environ 300 ml, hauteur d'environ 9 cm.
++- Deux tailles : 30 cl (Ø 7,9 × H 9,3 cm) ou 20 cl (Ø 7 × H 8,35 cm), verre épais et lourd en main.
+ - Surface lisse idéale pour une gravure laser nette et précise.
+ - Va au lave-vaisselle (la gravure ne s'efface pas).`,
+     usage: `Personnalisation
+diff --git a/src/lib/products.js b/src/lib/products.js
+index 7461c844..47385c5e 100644
+--- a/src/lib/products.js
++++ b/src/lib/products.js
+@@ -87,6 +87,20 @@ export function getJewelTypeLabel(slug) {
+ // on fait PAREIL ici pour que « Texte ≈ X cm » soit cohérent d'une taille à
+ // l'autre (mesuré le 25/09 : 45 mm donnait 0,6 cm là où le 36 cl dit 1,5 cm).
+ // Une vraie correction du calcul concernerait tous les verres — pas ici.
++// Aperçu de gravure du PETIT VERRE À WHISKY 20 cl (Lario 20 cl, Ø 7 × H 8,35 cm ; photo
++// verre_whisky_20cl_vierge.jpg, 800 × 973, le verre remplit la photo). Même lecture en cm que le
++// 30 cl : texte et photo au plus ≈ 37 % de la largeur du verre (14/11/2026).
++const WHISKY_20_APERCU = {
++  engraveImage: "/produits/verre_whisky_20cl_vierge.jpg",
++  engrave: {
++    box: { top: 0.12, left: 0.12, width: 0.76, height: 0.58 },
++    widthMm: 57, heightMm: 57,
++    maxWidthFrac: 0.36, minWidthFrac: 0.1,
++    maxHeightFrac: 0.36, minHeightFrac: 0.1,
++    diameterMm: 70, glassHeightMm: 84,
++  },
++};
++
+ const VIN_47_APERCU = {
+   engraveImage: "/produits/verre_vin_47_vierge.jpg",
+   engrave: {
+@@ -2788,12 +2802,38 @@ export const products = [
+       "/produits/verre_a_whisky_fond_clair.jpg",
+     ],
+     engraveImage: "/produits/verre_a_whisky_grave_vide.jpg",
++    // Deux tailles (14/11/2026) : 30 cl ou 20 cl, choisies à droite comme le verre à vin 36 / 47 cl.
++    tailles: {
++      label: "Taille du verre",
++      options: [
++        { id: "30", title: "30 cl", sub: "Ø 7,9 × H 9,3 cm",
++          image: "/produits/verre_a_whisky_grave_vide.jpg",
++          gallery: [
++            "/produits/verre_a_whisky_grave_ambiance.jpg",
++            "/produits/verre_a_whisky_exemple_face.jpg",
++            "/produits/verre_a_whisky_exemple_fond.jpg",
++            "/produits/verre_a_whisky_grave_vide.jpg",
++            "/produits/verre_a_whisky_fond_clair.jpg",
++          ] },
++        { id: "20", title: "20 cl", sub: "Ø 7 × H 8,35 cm, plus petit",
++          image: "/produits/verre_whisky_20cl_vierge.jpg",
++          gallery: [
++            "/produits/verre_whisky_20cl_vierge.jpg",
++            "/produits/verre_a_whisky_exemple_face.jpg",
++            "/produits/verre_a_whisky_fond_clair.jpg",
++          ],
++          ...WHISKY_20_APERCU },
++      ],
++    },
+     variants: [
+-      { id: "verre-whisky-grave", title: "À l'unité", price: 19.90, weight: 600 },
+-      { id: "verre-whisky-grave-2", stockId: "verre-whisky-grave-2", title: "Lot de 2", price: 37.90, weight: 1100 },
+-      { id: "verre-whisky-grave-4", stockId: "verre-whisky-grave-4", title: "Lot de 4 — livraison offerte", price: 71.90, weight: 2000 },
+-    ],
+-    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Votre photo gravée sur un verre à whisky.</strong></p><p class="pd2-occ">Un portrait, une photo de famille, un souvenir. Idéal pour la Fête des pères, un anniversaire, un cadeau de couple ou d’entreprise.</p><h3>Le verre</h3><div class="pd2-sizes un"><div class="pd2-size"><b>30 cl</b><span>verre à whisky à base épaisse, hauteur ≈ 9 cm.</span></div></div><h3>Deux façons de le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Votre photo ou votre logo</b></p><span>transformé en gravure façon dessin, retravaillé à la main par notre atelier, avec un texte dessous si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Votre texte</b></p><span>un prénom, une date, un message, dans l’une de nos 8 écritures, avec un décor autour si vous le souhaitez.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4.</td></tr><tr><th>Emplacement</th><td>Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
++      { id: "verre-whisky-grave", taille: "30", title: "À l'unité", price: 19.90, weight: 600 },
++      { id: "verre-whisky-grave-2", stockId: "verre-whisky-grave-2", taille: "30", title: "Lot de 2", price: 37.90, weight: 1100 },
++      { id: "verre-whisky-grave-4", stockId: "verre-whisky-grave-4", taille: "30", title: "Lot de 4 — livraison offerte", price: 71.90, weight: 2000 },
++      { id: "verre-whisky-20-1", stockId: "verre-whisky-20-1", taille: "20", title: "À l'unité", price: 17.90, weight: 550, ...WHISKY_20_APERCU },
++      { id: "verre-whisky-20-2", stockId: "verre-whisky-20-2", taille: "20", title: "Lot de 2", price: 33.90, weight: 1000, ...WHISKY_20_APERCU },
++      { id: "verre-whisky-20-4", stockId: "verre-whisky-20-4", taille: "20", title: "Lot de 4 — livraison offerte", price: 64.90, weight: 1800, ...WHISKY_20_APERCU },
++    ],
++    descriptionHtml: `<div class="pd2"><p class="pd2-lead"><strong>Votre photo gravée sur un verre à whisky.</strong></p><p class="pd2-occ">Un portrait, une photo de famille, un souvenir. Idéal pour la Fête des pères, un anniversaire, un cadeau de couple ou d’entreprise.</p><h3>Le verre</h3><div class="pd2-sizes"><div class="pd2-size"><b>30 cl</b><span>verre à whisky à base épaisse, Ø 7,9 × H 9,3 cm.</span></div><div class="pd2-size"><b>20 cl</b><span>le même verre en plus petit, base épaisse, Ø 7 × H 8,35 cm.</span></div></div><h3>Deux façons de le graver</h3><div class="pd2-ways"><div class="pd2-way"><p class="pd2-wt"><i>1</i><b>Votre photo ou votre logo</b></p><span>transformé en gravure façon dessin, retravaillé à la main par notre atelier, avec un texte dessous si vous le souhaitez.</span></div><div class="pd2-way"><p class="pd2-wt"><i>2</i><b>Votre texte</b></p><span>un prénom, une date, un message, dans l’une de nos 8 écritures, avec un décor autour si vous le souhaitez.</span></div></div><h3>Bon à savoir</h3><table class="pd2-spec"><tbody><tr><th>Formats</th><td>À l’unité, par 2 ou par 4.</td></tr><tr><th>Emplacement</th><td>Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre.</td></tr><tr><th>Gravure</th><td>Gravure laser permanente : elle résiste au lave-vaisselle.</td></tr><tr><th>Aperçu</th><td>L’aperçu de votre gravure s’affiche sur le verre avant de commander.</td></tr><tr><th>Emballage</th><td>Emballage protégé, gravé en France dans notre atelier.</td></tr><tr><th>Livraison</th><td>Livraison offerte dès 60 € d’achat.</td></tr></tbody></table></div>`,
+     voletVerres: [["Gravure", "Votre photo, votre logo ou votre texte, dans la police de votre choix. L’atelier vérifie la qualité de la photo avant de graver."], ["Emplacement", "Sur la face avant ou au fond du verre (vu à travers le verre). Les deux : +7 € par verre."], ["Entretien", "Lavage à la main recommandé pour garder la brillance, lave-vaisselle possible. Évitez les chocs thermiques (pas du congélateur à l’eau chaude)."]],
+   },
+   {

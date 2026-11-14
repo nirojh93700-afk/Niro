@@ -1,8 +1,15 @@
+## 🥃 VERRE À WHISKY 20 cl — 14/11/2026 nuit (gérant, captures Metro « Tumbler Lario 20 cl, 12 pièces, réf. AAA0045442429, Ø 7 × H 8,35 cm » : « je me suis trompé, j'ai acheté ça, il faut que je mette en vente aussi ») — MAQUETTE, PAS EN LIGNE
+- Ses choix : **option « 20 cl » sur la fiche « Verre à whisky portrait » (taille à droite, comme le vin 36 / 47 cl), 17,90 / 33,90 / 64,90 €** (le 30 cl reste 19,90 / 37,90 / 71,90 €).
+- Préparé : `docs/whisky-20cl.patch` (products.js : `WHISKY_20_APERCU`, `tailles` 30 / 20, variantes `verre-whisky-20-1/2/4` avec stockId ; productInfo.js) ; photo `public/produits/verre_whisky_20cl_vierge.jpg`
+  (sa photo Metro, verre vierge) déjà dans le dépôt, NON utilisée tant que le patch n'est pas appliqué. Essayée en local 390 / 1280 : prix, galerie, texte posé sur le petit verre, 0 erreur.
+  Le fond du verre reprend la photo du fond du 30 cl. Au « applique » : appliquer le patch, coût d'achat dans `productCosts.js` (prix Metro à lui demander), stock 12 dans Gestion.
+
 ## 📥 FICHIER À GRAVER + « LE VERRE À PRENDRE » SUR CHAQUE ARTICLE DE GESTION — 14/11/2026 (gérant, capture d'un verre à whisky Fête des pères « Dad Est. / 2026 / Sibyle 22.05.2026 » : « je peux toujours pas télécharger le fichier pour graver… pour les nouvelles commandes à chaque fois y a pas… c'est marqué où quel verre utiliser, quels centilitres… je veux une case avec tout le détail ») — EN LIGNE
 - Avant : seul un texte traduit avait son fichier ; un modèle fait de TEXTES (« élu Papa de l'année ») n'avait rien à télécharger, et le vrai verre (Lario 30 cl…) n'était écrit nulle part.
 - **Fichier à graver** (`src/lib/fichierAtelier.js` + `FichierAGraver.jsx`, fiche commande ET page Atelier) : la gravure SEULE, en noir, à la taille RÉELLE, dessinée avec les règles de l'aperçu
   de la fiche (modèle = ModeleArt : classique, médaillon, empilé, design image ; verre face / fond = ApercuClient ; verre à message = photo + texte à leur place), base en mm = réglage
-  de taille × (`engrave.widthMm` / `maxWidthFrac`), 20 points / mm. SVG = contours tracés (traceur de `fabrique.js`, aucune police à installer), PNG avec sa taille écrite dedans (pHYs), PDF
+  de taille × la VRAIE largeur de la photo (`CADRE_REEL_MM` : diamètre du verre ÷ part de la photo qu'il occupe, mesuré : whisky 30 / 20 cl, cocktail 17 cl, tumbler 37 cl, flûte ;
+  vin 36 / 47 cl estimés ; sinon `widthMm / maxWidthFrac`), 20 points / mm. ⚠️ Les « ≈ X cm » affichés à la cliente sont gonflés (jusqu'à 2,2 fois) : le fichier suit le vrai verre. SVG = contours tracés (traceur de `fabrique.js`, aucune police à installer), PNG avec sa taille écrite dedans (pHYs), PDF
   à la taille exacte. Une photo reste une image en niveaux de gris. Autres articles (bijoux, bois, verre avec un modèle numéroté) : les textes de chaque face, dans l'écriture choisie,
   lettres de 6 mm à ajuster (vecteurs) ; les images du modèle restent dans « Images d'origine ». PAS encore : gobelet, marque-pages, carnet (leur aperçu à part), dossier zip du jour.
 - **« 🥃 Le verre à prendre »** (`src/lib/pieceAtelier.js` + `PieceAUtiliser.jsx`) en tête de chaque article : le vrai verre (Metro : Lario 30 cl, Lario 17 cl, long drink 33 cl, Montese 36 cl, 47 cl,

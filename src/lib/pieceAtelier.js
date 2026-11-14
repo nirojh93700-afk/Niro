@@ -13,7 +13,9 @@ const WHISKY = { nom: "Verre à whisky 30 cl", ref: "Tumbler Lario 30 cl (Metro)
 
 // slug → pièce ; une fonction quand la taille choisie change le verre.
 const PIECES = {
-  "verre-a-whisky-grave": () => WHISKY,
+  "verre-a-whisky-grave": (t) => (t === "20"
+    ? { nom: "Verre à whisky 20 cl", ref: "Tumbler Lario 20 cl (Metro, réf. AAA0045442429)", mesures: "Ø 7 × H 8,35 cm, fond épais" }
+    : WHISKY),
   "verre-a-whisky-fete-des-peres": () => WHISKY,
   "verre-a-cocktail-grave": (t) => (t === "33"
     ? { nom: "Verre à cocktail 33 cl", ref: "Grand verre long drink 33 cl (Metro)", mesures: "grand verre haut" }

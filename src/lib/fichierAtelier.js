@@ -24,8 +24,25 @@ export const R = 20; // points par millimètre
 const MAX_PX = 14e6; // une image plus grande que ça ne passe pas sur un iPhone
 const TAILLE_TEXTE_SEUL_MM = 6; // hauteur de départ d'un texte sans taille connue (à ajuster dans le logiciel)
 
-/** Millimètres représentés par toute la largeur de la photo du produit (mêmes règles que l'éditeur de la fiche). */
-export function mmParCadre(p, side = "face") {
+// Largeur RÉELLE (mm) de toute la photo vierge, mesurée sur la photo : diamètre du vrai verre ÷ la part de la
+// largeur qu'il occupe (14/11/2026). Les « ≈ X cm » affichés à la cliente sont volontairement plus grands
+// (widthMm / maxWidthFrac, voir VIN_47_APERCU dans products.js) : le fichier, lui, suit le vrai verre.
+export const CADRE_REEL_MM = {
+  "/produits/verre_a_whisky_grave_vide.jpg": 79 / 0.817, // Lario 30 cl, Ø 7,9 cm
+  "/produits/verre_whisky_20cl_vierge.jpg": 70 / 0.975, // Lario 20 cl, Ø 7 cm
+  "/produits/verre_a_whisky_fond_clair.jpg": 80, // vue de dessus : le bord du verre remplit la photo
+  "/produits/verre_a_cocktail_vierge.jpg": 52 / 0.37, // Lario 17 cl, Ø 5,2 cm
+  "/produits/verre_a_cocktail_fond_vierge.jpg": 52 / 0.89,
+  "/produits/verre_tumbler_37_vierge.jpg": 85 / 0.693, // Montese 37 cl, Ø 8,5 cm
+  "/produits/flute_vierge.jpg": 63 / 0.663, // Pinomaro 21 cl, Ø 6,3 cm
+  "/produits/verre_vin_vierge.jpg": 80 / 0.627, // Montese 36 cl, coupe ≈ 8 cm (estimée, voir VIN_47_APERCU)
+  "/produits/verre_vin_47_vierge.jpg": 187 / 1.7, // 47 cl : même rapport que le 36 cl (estimé)
+};
+
+/** Millimètres réels de toute la largeur de la photo du produit (sinon : règle de l'éditeur de la fiche). */
+export function mmParCadre(p, side = "face", photo = "") {
+  const cle = String(photo || (side === "fond" ? p?.fondImage : p?.engraveImage) || "").split("?")[0];
+  if (CADRE_REEL_MM[cle]) return CADRE_REEL_MM[cle];
   const cfg = side === "fond" ? p?.engraveFond : p?.engrave;
   if (!cfg) return null;
   const box = cfg.box || { width: 0.6 };
@@ -268,7 +285,7 @@ async function dessinerCote(item, side, verre) {
     ? { glass: (p?.variants || []).find((v) => v.id === item.variantId)?.engraveImage || p?.engraveImage, box: p?.engrave?.box, photo: item.photoSrc || null,
         photoLayout: item.layout?.photo || null, textLayout: item.layout?.text || null, lines: lignesVerre(item, p), fontKey: (item.fields || {}).police || "playfair" }
     : contenuCote(item, side, p);
-  const mmF = mmParCadre(p, verre ? "face" : side) || 100;
+  const mmF = mmParCadre(p, verre ? "face" : side, c.glass) || 100;
   const g = c.glass ? await charger(c.glass).catch(() => null) : null;
   const Fw = mmF * R, Fh = g ? Fw * (g.naturalHeight / g.naturalWidth) : Fw;
   const box = c.box || { left: 0.2, top: 0.2, width: 0.6, height: 0.6 };
@@ -435,7 +452,8 @@ export async function fabriquerFichier(item, f) {
   if (f.sorte === "modele") {
     const p = getProductBySlug(item.slug);
     const lay = item.layout?.modele || {};
-    const b = Math.max(4, (lay.scale ?? 0.08) * (mmParCadre(p, "face") || 130) * R);
+    const photo = (p?.variants || []).find((v) => v.id === item.variantId)?.engraveImage || p?.engraveImage;
+    const b = Math.max(4, (lay.scale ?? 0.08) * (mmParCadre(p, "face", photo) || 130) * R);
     brut = await dessinerModele(item, b);
   } else if (f.sorte === "cote") {
     const r = await dessinerCote(item, f.side, f.verre);
