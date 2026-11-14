@@ -28,6 +28,9 @@ import ApercuPapeterie, { aApercuPapeterie } from "@/components/admin/ApercuPape
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
 import { lienCorriger, creationDe } from "@/lib/creationOutil";
 import PiecesCreation from "@/components/admin/PiecesCreation";
+import PieceAUtiliser from "@/components/admin/PieceAUtiliser";
+import FichierAGraver from "@/components/admin/FichierAGraver";
+import { apparierSpec } from "@/lib/orderSpec";
 
 // Lignes de texte gravées (verres à message), reconstruites depuis les réglages.
 function textLinesOf(item, product) {
@@ -213,12 +216,15 @@ export function ReglagesItem({ item, titre = true, police = true }) {
 }
 
 // Visuel + réglages + photo d'UN article (ou d'UN verre d'un lot « chacun différent »).
-function SheetCorps({ item, titre = true }) {
+function SheetCorps({ item, titre = true, quantite = 1, refCommande = "" }) {
   const enLot = Boolean(item.verre);
   return (
     <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
       <GlassPreview item={item} />
       <div style={{ flex: 1, minWidth: 220 }}>
+        {/* La pièce à prendre et le fichier à graver, en tête (14/11/2026). */}
+        <PieceAUtiliser item={item} quantite={quantite} />
+        <FichierAGraver item={item} refCommande={refCommande} />
         <ReglagesItem item={item} titre={titre} />
         {/* Dans un lot, chaque verre a ses propres textes : on les met en clair
             (le « Résumé » seul ne suffit pas à lire quatre gravures différentes). */}
@@ -242,7 +248,7 @@ function SheetCorps({ item, titre = true }) {
   );
 }
 
-function ItemSheet({ item }) {
+function ItemSheet({ item, quantite = 1, refCommande = "" }) {
   if (!item) return null;
   // Lot « chacun différent » : un encart PAR VERRE, avec SA photo et SES textes
   // (incident #1LTYHZ6D : 4 photos différentes, une seule affichée).
@@ -259,7 +265,7 @@ function ItemSheet({ item }) {
         {verres.map((v) => (
           <div key={v.verre} style={{ border: "1px solid #e7d3a1", borderRadius: 10, padding: 10, margin: "8px 0", background: "#fffdf8" }}>
             <div style={{ fontWeight: 800, color: "var(--gold-dark, #a98935)", marginBottom: 6, fontSize: "1rem" }}>Verre {v.verre} / {v.verres}</div>
-            <SheetCorps item={v} titre={false} />
+            <SheetCorps item={v} titre={false} quantite={1} refCommande={refCommande} />
           </div>
         ))}
       </div>
@@ -267,7 +273,7 @@ function ItemSheet({ item }) {
   }
   return (
     <div style={{ padding: "12px 0", borderTop: "1px dashed #ddd" }}>
-      <SheetCorps item={item} />
+      <SheetCorps item={item} quantite={quantite} refCommande={refCommande} />
     </div>
   );
 }
@@ -299,6 +305,7 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
   if (!items.length) {
     return <p style={{ fontSize: "0.85rem", color: "#999", padding: "8px 0" }}>Aucun réglage détaillé enregistré pour cette commande (commande passée avant la mise en place de la fiche atelier).</p>;
   }
+  const paires = order ? apparierSpec(order.items, items) : [];
   return (
     <div style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: 10, padding: "8px 14px", marginTop: 8 }}>
       <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: 4 }}>🛠️ Fiche atelier — à graver à l'identique</div>
@@ -314,12 +321,15 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
       {/* Une image échangée APRÈS la commande (autre version envoyée par « Répondre », aperçu validé) prime sur celle du site (08/11/2026). */}
       <ImagesEchangees order={order} print={print} compact />
       {items.map((it, i) => {
+        // Combien d'options commandées pour ce réglage (une « Lot de 2 » × 2 = 4 verres).
+        const ligne = order ? (order.items || [])[paires.indexOf(it)] : null;
+        const quantite = Number(ligne?.quantity) || 1;
         // Produit créé avec un outil (support de téléphone, arbre de vie, décoration) : le bouton ouvre la création de la cliente
         // dans le même outil, pour la corriger et fabriquer les fichiers de la machine (12/11/2026). Jamais sur le papier.
         const corriger = print ? null : lienCorriger(it, order);
         return (
           <div key={i}>
-            <ItemSheet item={it} />
+            <ItemSheet item={it} quantite={quantite} refCommande={order?.ref || ""} />
             {creationDe(it) ? <PiecesCreation id={creationDe(it).id} papier={!!print} /> : null}
             {corriger ? (
               <div style={{ margin: "0 0 10px", padding: "10px 12px", border: "1.5px solid #c9a24b", borderRadius: 10, background: "#fffaf0", display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>

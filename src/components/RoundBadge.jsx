@@ -44,7 +44,7 @@ export default function RoundBadge({ size = 200, top, mid, bot, fontTop, fontMid
   }
 
   return (
-    <svg viewBox="0 0 300 300" width={size} height={size} aria-hidden="true">
+    <svg viewBox="0 0 300 300" width={size} height={size} style={{ width: size, height: size }} aria-hidden="true">
       {ring}
       {/* disque : plein ou simple contour */}
       <circle cx="150" cy="150" r="120" fill={filled ? ink : "none"} stroke={ink} strokeWidth="2.5" />

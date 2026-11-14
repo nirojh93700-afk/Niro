@@ -39,6 +39,8 @@ import { lienCorriger, creationDe } from "@/lib/creationOutil";
 import PiecesCreation from "@/components/admin/PiecesCreation";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
 import { nomAffiche } from "@/lib/nomLivraison";
+import PieceAUtiliser from "@/components/admin/PieceAUtiliser";
+import FichierAGraver from "@/components/admin/FichierAGraver";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -336,6 +338,9 @@ export default function AtelierPage() {
                     </div>
                   ) : null}
                   {/* Tableau professionnel « quel texte sur quelle face ». */}
+                  {/* Le verre à prendre et le fichier à graver à la taille réelle (14/11/2026). */}
+                  <PieceAUtiliser item={item} quantite={Number((o.items || []).find((x) => x.slug === item.slug)?.quantity) || 1} />
+                  <FichierAGraver item={item} refCommande={o.ref || o.id?.slice(-8)} />
                   <TableGravure item={item} titre={false} />
                   {/* Produit créé avec un outil (support, arbre, décoration) : ouvrir la création de la cliente pour la corriger (12/11/2026). */}
                   {creationDe(item) ? <PiecesCreation id={creationDe(item).id} /> : null}

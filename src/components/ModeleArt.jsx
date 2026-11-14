@@ -26,7 +26,7 @@ export default function ModeleArt({ template, value, color = "#fff", base = 28, 
 
   // Petit filet décoratif (volute).
   const Flourish = () => (
-    <svg width={base * 4} height={base * 0.4} viewBox="0 0 100 10" style={{ margin: `${base * 0.05}px 0`, display: "block" }} aria-hidden="true">
+    <svg width={base * 4} height={base * 0.4} viewBox="0 0 100 10" style={{ margin: `${base * 0.05}px 0`, display: "block", width: base * 4, height: base * 0.4 }} aria-hidden="true">
       <line x1="6" y1="5" x2="94" y2="5" stroke={color} strokeWidth="1.6" />
       <circle cx="6" cy="5" r="2.4" fill={color} /><circle cx="94" cy="5" r="2.4" fill={color} />
       <polygon points="50,1 53.5,5 50,9 46.5,5" fill={color} />

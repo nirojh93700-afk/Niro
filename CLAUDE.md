@@ -1,3 +1,16 @@
+## 📥 FICHIER À GRAVER + « LE VERRE À PRENDRE » SUR CHAQUE ARTICLE DE GESTION — 14/11/2026 (gérant, capture d'un verre à whisky Fête des pères « Dad Est. / 2026 / Sibyle 22.05.2026 » : « je peux toujours pas télécharger le fichier pour graver… pour les nouvelles commandes à chaque fois y a pas… c'est marqué où quel verre utiliser, quels centilitres… je veux une case avec tout le détail ») — EN LIGNE
+- Avant : seul un texte traduit avait son fichier ; un modèle fait de TEXTES (« élu Papa de l'année ») n'avait rien à télécharger, et le vrai verre (Lario 30 cl…) n'était écrit nulle part.
+- **Fichier à graver** (`src/lib/fichierAtelier.js` + `FichierAGraver.jsx`, fiche commande ET page Atelier) : la gravure SEULE, en noir, à la taille RÉELLE, dessinée avec les règles de l'aperçu
+  de la fiche (modèle = ModeleArt : classique, médaillon, empilé, design image ; verre face / fond = ApercuClient ; verre à message = photo + texte à leur place), base en mm = réglage
+  de taille × (`engrave.widthMm` / `maxWidthFrac`), 20 points / mm. SVG = contours tracés (traceur de `fabrique.js`, aucune police à installer), PNG avec sa taille écrite dedans (pHYs), PDF
+  à la taille exacte. Une photo reste une image en niveaux de gris. Autres articles (bijoux, bois, verre avec un modèle numéroté) : les textes de chaque face, dans l'écriture choisie,
+  lettres de 6 mm à ajuster (vecteurs) ; les images du modèle restent dans « Images d'origine ». PAS encore : gobelet, marque-pages, carnet (leur aperçu à part), dossier zip du jour.
+- **« 🥃 Le verre à prendre »** (`src/lib/pieceAtelier.js` + `PieceAUtiliser.jsx`) en tête de chaque article : le vrai verre (Metro : Lario 30 cl, Lario 17 cl, long drink 33 cl, Montese 36 cl, 47 cl,
+  Pinomaro 21 cl, Montese 37 / 39 cl, carafe), ses mesures, le produit et l'option, COMBIEN de pièces (lot × quantité), où graver. Références fournisseur = Gestion seulement.
+- Trouvé au passage : dans Gestion, `.fc svg{width:16px}` écrasait les filets et le médaillon de l'aperçu des modèles (traits courts) ; sur la fiche du site la cliente les voit en entier :
+  `ModeleArt` / `RoundBadge` portent maintenant leur taille en style (aucun changement sur le site). Essai `scratchpad/fg/t.cjs` 18 sur 18 (390 / 1280, SVG, PNG, PDF téléchargés), page Atelier 0 erreur.
+  ⚠️ Pas essayé dans xTool ni sur une vraie commande en ligne. Un cadre réglé dans « Réglage cristaux, verres & carafe » (zone admin) n'est pas lu : la taille suit le code.
+
 ## 🎄 DÉCORATION À SUSPENDRE : MOTIFS DÉCOUPÉS AVEC LE CADRE, EN GRAND — 13/11/2026 nuit (gérant, deux boules ajourées d'un autre atelier en exemple : « c'est bien collé avec le contour pour pas que ça se casse » → « le motif est découpé dans un seul morceau, et après le prénom, je peux coller au-dessus en superposé, ou le client choisit » → « c'est trop petit… il faut qu'il puisse sélectionner les tailles ») — NOUVELLE maquette à juger, RIEN en ligne, Gestion PAS régénéré
 - **Artifact NEUF** https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v5). L'ancienne maquette enregistrée (6Gs8LNkzpdvWMRDNZpE775, v16) n'est PAS touchée. Même générateur
   `decoration-createur.py` (mêmes 6 arguments ; modèles refaits : `$S/soude/mod/modeles-maquette.json` par `decoration-modeles.cjs`), puis `ajouter-valider.py`.
