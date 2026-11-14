@@ -29,11 +29,11 @@ a = h.find('<section class="mxnoel')
 assert a > h.find('<section class="sec verres'), "ordre de l'accueil changé"
 b = h.find("</section>", a) + len("</section>")
 TRIO = "".join('<a href="#cnx"><img src="%s" alt="%s"></a>' % (webp(n), t)
-               for n, t in [("deco-1", "Décoration à suspendre"), ("prenom-1", "Décoration à prénom"), ("maison", "Maisonnette en bois")])
+               for n, t in [("deco-1", "Décoration à suspendre"), ("deco-4", "Décoration à suspendre"), ("maison", "Maisonnette en bois")])
 BLOC = ('<div class="mq-fleche">▼ NOUVEAU BLOC, ajouté ici : après les verres et le bloc « Ce Noël, offrez un cadeau unique » ▼</div>'
         '<section class="cnx" id="cnx" aria-labelledby="t-cnx"><div class="cnx-in">'
         '<div class="cnx-copy"><small>Noël 2026 · à créer vous-même</small><h2 id="t-cnx">Créez votre <em>déco de Noël</em></h2>'
-        '<p>Une décoration au prénom de chacun, un renne, une petite maison ajourée : écrivez le prénom, elle se dessine sous vos yeux. '
+        '<p>Une boule au prénom de chacun, une petite maison ajourée : écrivez le prénom, elle se dessine sous vos yeux. '
         'Nous la découpons, la gravons et l\'assemblons dans notre atelier.</p>'
         '<a class="cnx-btn" href="#cnx">Créer la mienne</a></div>'
         '<div class="cnx-trio">' + TRIO + '</div></div></section>'

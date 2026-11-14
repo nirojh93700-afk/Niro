@@ -2,8 +2,8 @@
 """Maquette « Créez votre déco de Noël » (14/11/2026) — RIEN en ligne.
 
 Le gérant, après la vidéo 57 : « fais-moi la maquette comment on va mettre que les maquettes Noël, et pour le
-téléphone tu le mets dans le téléphone ». Seulement les trois créateurs de Noël : décoration à suspendre,
-décoration à prénom, maisonnette. Quatre vues : la page, la même page dans un téléphone (comme la vidéo 57),
+téléphone tu le mets dans le téléphone ». Seulement la décoration à suspendre (boule de Noël) et la maisonnette
+(décoration à prénom retirée le 14/11 soir). Quatre vues : la page, la même page dans un téléphone (comme la vidéo 57),
 le bloc sur l'accueil, le menu.
 
   python3 tools/maquettes/creez-noel.py <page de base> docs/maquettes/assets/creez-le-votre <sortie>
@@ -36,17 +36,15 @@ A = "https://claude.ai/artifact/"
 # [nom, phrase, prix, image, lien de la maquette]
 OUTILS = [
     ["Décoration à suspendre", "Boule, sapin, étoile, cœur… le prénom découpé, vos dessins de Noël autour.", "dès 9,90 €", "deco-1", A + "RFk8koRobSLSjN9BkdHXxh"],
-    ["Décoration à prénom", "Un renne ou un bonnet de Noël : sa première lettre devient la décoration.", "dès 12,90 €", "prenom-1", A + "XY51xPNECRwf4Eemtt9jga"],
     ["Maisonnette en bois", "Une petite maison ajourée, à suspendre au sapin ou à illuminer.", "dès 24,90 €", "maison", A + "BWVe3PyAdcb18PeKpZtxK4"],
 ]
+# 14/11 soir, gérant : « on va mettre que la maisonnette et la boule de Noël, l'autre on ne met pas » (décoration à prénom retirée)
 # [nom du modèle, création, ce qu'on change, image, lien]
 MODELES = [
     ["Flocons de neige", "Décoration à suspendre", "Changez le prénom", "deco-1", OUTILS[0][4]],
-    ["Le renne", "Décoration à prénom", "Changez le prénom", "prenom-1", OUTILS[1][4]],
     ["Notre premier Noël", "Décoration à suspendre", "Changez les prénoms", "deco-4", OUTILS[0][4]],
-    ["La maisonnette", "Maisonnette en bois", "Choisissez le dessin", "maison", OUTILS[2][4]],
+    ["La maisonnette", "Maisonnette en bois", "Choisissez le dessin", "maison", OUTILS[1][4]],
     ["Le sapin", "Décoration à suspendre", "Changez le prénom", "deco-2", OUTILS[0][4]],
-    ["Le bonnet de Noël", "Décoration à prénom", "Changez le prénom", "prenom-2", OUTILS[1][4]],
     ["Étoile d'hiver", "Décoration à suspendre", "Changez le prénom", "deco-3", OUTILS[0][4]],
     ["Pour Mamie", "Décoration à suspendre", "Changez le texte", "deco-5", OUTILS[0][4]],
 ]
@@ -75,7 +73,8 @@ CSS = r"""
 .cn h2{font-family:var(--font-display),'Playfair Display',serif;font-size:clamp(1.4rem,3.4vw,1.9rem);margin:38px 0 4px;text-wrap:balance}
 .cn .sous{color:var(--ink-soft);margin:0 0 16px;font-size:.95rem;line-height:1.5}
 .cn-rail{display:grid;grid-auto-flow:column;grid-auto-columns:calc(25% - 12px);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;scrollbar-width:thin}
-.cn-grille{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.cn-grille{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:820px;margin:0 auto}
+.cn-txt .cn-bouton{color:#fff;font-size:.82rem}
 .cn-carte{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 6px 20px rgba(60,40,20,.07);color:var(--ink);text-decoration:none;scroll-snap-align:start;min-width:0;position:relative}
 .cn-carte:hover{box-shadow:0 10px 28px rgba(60,40,20,.14)}
 .cn-vis{display:block;position:relative;aspect-ratio:1/1;overflow:hidden;background:linear-gradient(180deg,#f4efe6 0%,#efe8dc 60%,#e6d9c3 60.2%,#eadfcb 100%)}
@@ -153,11 +152,11 @@ PAGE = ("""<nav class="cn-fil" aria-label="Fil d'Ariane">Accueil <span style="ma
  <header class="cn-hero">
   <small>Noël 2026</small>
   <h1>Votre déco de Noël, <em>créée par vous</em></h1>
-  <p>Choisissez une décoration, écrivez le prénom, ajoutez vos dessins de Noël : elle se dessine sous vos yeux. Nous la découpons, la gravons et l'assemblons dans notre atelier.</p>
+  <p>Choisissez votre boule ou votre maisonnette, écrivez le prénom, ajoutez vos dessins de Noël : elle se dessine sous vos yeux. Nous la découpons, la gravons et l'assemblons dans notre atelier.</p>
   <ol class="cn-pas"><li><i>1</i>Choisissez votre décoration</li><li><i>2</i>Écrivez le prénom</li><li><i>3</i>Nous la fabriquons</li></ol>
  </header>
 
- <h2>Trois décorations à créer</h2>
+ <h2>Deux décorations à créer</h2>
  <p class="sous">À suspendre au sapin, à offrir ou à glisser sur un paquet.</p>
  <div class="cn-grille">""" + "".join(carte_outil(o) for o in OUTILS) + """</div>
 
@@ -175,10 +174,10 @@ PAGE = ("""<nav class="cn-fil" aria-label="Fil d'Ariane">Accueil <span style="ma
 MENU_TEL = "".join('<a href="#">%s</a>' % t for t in ["Bijoux", "Verres &amp; Carafes &amp; Gobelets", "Bébé &amp; Enfant"]) + ENTREE + "".join('<a href="#">%s</a>' % t for t in ["Mariage", "Maison &amp; Déco", "…"])
 
 VALIDER = """<div class="cn-valider"><b>À valider avec vous avant de construire</b><ul>
- <li>Seulement les trois créations de Noël : la lettre, la fleur, l'arbre et la suspension ne sont pas sur cette page.</li>
+ <li>Seulement deux créations : la boule de Noël (décoration à suspendre) et la maisonnette. La décoration à prénom, la lettre, la fleur, l'arbre et la suspension ne sont pas sur cette page.</li>
  <li>Le nom : « Créez votre déco de Noël ». Sa place : une entrée rouge dans le menu juste après « Bébé &amp; Enfant », et un bloc sur l'accueil après les verres et le bloc « Ce Noël, offrez un cadeau unique ».</li>
  <li>Tout est relié à l'interrupteur Noël de Gestion → Fêtes : quand vous éteignez Noël, l'entrée du menu, le bloc de l'accueil et la page disparaissent.</li>
- <li>Prix : la maisonnette dès 24,90 € (donné par vous) ; la décoration à suspendre (dès 9,90 €) et la décoration à prénom (dès 12,90 €) sont mes propositions.</li>
+ <li>Prix : la maisonnette dès 24,90 € (donné par vous) ; la décoration à suspendre dès 9,90 € est ma proposition.</li>
  <li>La date limite pour recevoir avant Noël est à donner par vous.</li>
  <li>Dans la maquette, toucher une carte ouvre la maquette de la création dans un nouvel onglet. Sur le site, un modèle prêt ouvrira la création déjà remplie.</li>
 </ul></div>"""
@@ -205,9 +204,9 @@ INDEX_MAIN = (VUES + """<main class="cn"><div class="container">
  <div class="cn-nouveau"><span>Nouveau · bloc ajouté</span>
   <div class="cn-acc">
    <div><h2>Créez votre déco de Noël</h2>
-    <p>Une décoration au prénom de chacun, un renne, une petite maison ajourée : écrivez le prénom, elle se dessine en direct.</p>
+    <p>Une boule au prénom de chacun, une petite maison ajourée : écrivez le prénom, elle se dessine en direct.</p>
     <a class="cn-bouton" href="#" data-vue="page">Créer la mienne</a></div>
-   <div class="trio"><a href="#" data-vue="page"><img src=\"""" + img("deco-1") + """\" alt="Décoration à suspendre"></a><a href="#" data-vue="page"><img src=\"""" + img("prenom-1") + """\" alt="Décoration à prénom"></a><a href="#" data-vue="page"><img src=\"""" + img("maison") + """\" alt="Maisonnette en bois"></a></div>
+   <div class="trio"><a href="#" data-vue="page"><img src=\"""" + img("deco-1") + """\" alt="Décoration à suspendre"></a><a href="#" data-vue="page"><img src=\"""" + img("deco-4") + """\" alt="Décoration à suspendre"></a><a href="#" data-vue="page"><img src=\"""" + img("maison") + """\" alt="Maisonnette en bois"></a></div>
   </div>
  </div>
  <div class="cn-voisin"><b>Les dernières sorties de l'atelier</b>bloc actuel de l'accueil, inchangé</div>

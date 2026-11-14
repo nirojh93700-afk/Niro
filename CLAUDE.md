@@ -8,6 +8,8 @@
   « Bébé & Enfant » · **accueil réel** https://claude.ai/artifact/PRFYptcqnjjP9uSaV5DJMP (`python3 tools/maquettes/accueil-creez-noel.py <curl https://nivcreation.fr/> docs/maquettes/assets/creez-le-votre <sortie>`) :
   la page d'accueil en ligne telle quelle, le bloc rouge « Créez votre déco de Noël » posé juste après « Ce Noël, offrez un cadeau unique » (lui-même après les verres), avant
   « Les dernières sorties », encadré de flèches rouges. ⛔ Le gérant : « tu mets rien en ligne, tu me montres avant ».
+- v4 (même soir, gérant : « on va mettre que la maisonnette et la boule de Noël, l'autre on ne met pas ») : ⛔ **la décoration à prénom (renne / bonnet) est RETIRÉE** des deux maquettes ;
+  seules la décoration à suspendre (boule de Noël) et la maisonnette restent (« Deux décorations à créer », 6 modèles prêts, trio de l'accueil = boule « Camille », cœur « Léa & Tom », maisonnette).
 
 ## 🥃 VERRE À WHISKY 20 cl — 14/11/2026 nuit (gérant, captures Metro « Tumbler Lario 20 cl, 12 pièces, réf. AAA0045442429, Ø 7 × H 8,35 cm » : « je me suis trompé, j'ai acheté ça, il faut que je mette en vente aussi ») — ✅ EN LIGNE LE 14/11/2026 (« t'as pas mis en ligne pour le verre qu'on a fait »), patch appliqué ; RESTE : coût Metro dans `productCosts.js` (prix du carton à lui demander), stock non suivi (illimité) tant qu'il ne saisit pas 12 dans Gestion
 - Ses choix : **option « 20 cl » sur la fiche « Verre à whisky portrait » (taille à droite, comme le vin 36 / 47 cl), 17,90 / 33,90 / 64,90 €** (le 30 cl reste 19,90 / 37,90 / 71,90 €).
