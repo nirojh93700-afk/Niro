@@ -895,3 +895,26 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #gravure #gravurelaser #ideecadeau
+
+## Vidéo 56 — Tutoriel « Créez le vôtre » pour les clientes (14/11/2026)
+- Demande : « Fais-moi une vidéo pour expliquer comment utiliser [l'outil] de création pour les clients » → ses choix : les outils
+  « Créez le vôtre », vertical, sans voix.
+- Ce qu'on voit : les VRAIES maquettes clientes filmées en vue téléphone (Playwright, 390 × 640, une photo par geste), posées dans un
+  téléphone, l'étape écrite au-dessus, un rond doré là où le doigt touche. Intro « Créez le vôtre » → « En 3 étapes » → lettre de naissance
+  (prénom « Léa », date / heure / taille / poids, couleur bleu ciel, lapin, prénom glissé au doigt, 3D, boîte qui s'ouvre, résumé et panier
+  54,90 €) → décoration à suspendre (boule, « Jules », 3 décors au hasard, 3D) → arbre de vie (Emma, Hugo, + Lina, 3D tournée au doigt)
+  → maisonnette (sapin, bonhomme de neige, découpes en cœurs, 3D) → fleur à prénom (« Rose », 3D) → fin « Nous gravons, découpons et
+  assemblons votre création à l'atelier » + « Créez le vôtre · Bientôt sur nivcreation.fr ».
+- Masqués pendant la capture : bandeau « Maquette », partie « De votre côté » (atelier), prix non validés (arbre 24,90, maisonnette,
+  fleur, décoration) ; seul le prix de la lettre (54,90 €, donné par lui) est visible. Jamais de nombre de pièces.
+- ⚠️ Les créateurs ne sont PAS en vente : la fin dit « Bientôt sur nivcreation.fr ». À publier le jour de la mise en vente (ou changer la fin).
+- ~65 s, 1080 × 1920 et 720 × 1280, sans son. Fichiers à supprimer le 16/11.
+- Refaire : captures `node c-lettre.cjs` / `node c-autres.cjs deco|arbre|maison|fleur` (scratchpad `vid56/`, maquettes servies par
+  `http://maq.local/` routé), puis `python3 tools/video/tuto_creez_56.py <polices> <captures> <sortie> [--apercu]`.
+
+**Vidéo 56 — Créez le vôtre, en quelques gestes** (Lettre de naissance, Décoration à suspendre, Arbre de vie, Maisonnette, Fleur à prénom)
+> ✨ Votre cadeau, dessiné par vous : écrivez le prénom, choisissez la couleur et le dessin, regardez-le en 3D 💛
+> Nous le gravons, le découpons et l'assemblons dans notre atelier 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #creezlevotre #cadeaunaissance #ideecadeau
