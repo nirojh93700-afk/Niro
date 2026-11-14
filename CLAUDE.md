@@ -2477,6 +2477,9 @@ n'est choisie**. Reproduire ensuite sur vin / flûte / whisky perso (même compo
   commande. (Le fil Aperçu/BAT reste disponible dans Gestion si LUI décide d'envoyer un aperçu,
   mais on ne le promet plus à la cliente.) ⚠️ Une promesse d'aperçu a DÉJÀ été faite à Rose
   Catarino (#1Z17IKQ8, les 14 et 15/09) — celle-là est au choix du gérant : la tenir ou graver.
+  ⚠️ **Exception décidée par le gérant le 14/11/2026** : Dorian Fagot (dorianfagot83220@gmail.com, commande **0HJ7N3LV**, cristal horizontal Moyen + socle) : réclamation, gravure à l'envers
+  (papa en haut, maman en bas). Mail du 14/11 à 15 h 55 (par la réponse « à valider ») : « problème d'indication… erreur de notre part », cristal REFAIT GRATUITEMENT avec une autre technique
+  (pas la 3D à 360°), **aperçu envoyé avant la gravure s'il le souhaite**. Ancien cristal (retour ou pas) : non tranché par le gérant. Il demandait un remboursement : ne pas en reparler sans le gérant.
   ⚠️ **Exception décidée par le gérant le 13/11/2026** : Mohammad Abu Jamous (m.abujamous94@hotmail.com, commande **06W69SNX**, cristal vertical Petit + socle, cadeau pour Dayana) : photo tirée d'une
   capture de vidéo, symboles du bas effacés par le gérant → aperçu envoyé le 13/11 à 19 h 08 « pour qu'il valide l'image pour graver ». Ne pas graver avant son accord.
   Envoyé SANS la clé de Gestion, par la réponse « à valider » restée ouverte (`POST /api/reply/<jeton>` `{action:"send", subject, text, image:"/api/img/<id>"}`, jeton lu dans l'alerte
