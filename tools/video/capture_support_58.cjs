@@ -17,6 +17,15 @@ const DPR = 2.2, VW = 390, VH = 640;
   await p.goto(SITE + '/produit/support-telephone-bois-grave', { waitUntil: 'networkidle' });
   await p.waitForFunction(() => window.scSite && document.querySelectorAll('#formes button').length === 4);
   await p.addStyleTag({ content: '.niv-ok,.flot-btn,.qw-btn,[class*="question"]{display:none!important} *{caret-color:transparent!important}' });
+  // Aucun prix dans la vidéo (gérant, 14/11 : « mets pas les prix ») : prix masqués, phrases de prix retirées, partout (panier compris).
+  await p.addStyleTag({ content: '.price-lead,.pd-totbox,.pd-nfois,.prc-sumtot,.sc-taille em,.sc-item small,.drawer-total,.cart-item-price,.ci-price,[class*="price"]{visibility:hidden!important}' });
+  await p.evaluate(() => {
+    const PH = [[/\s*:\s*chaque élément gravé coûte \+\s?3\s?€\./g, '.'], [/\s*·\s*\+\s?3\s?€ par élément/g, ''], [/\s*·\s*\+\s?3\s?€/g, ''],
+      [/\s*[—–-]\s*\+?\s?\d+(,\d+)?\s?€/g, ''], [/\s*\(dès \d+\s?€\)/g, ''], [/\+?\s?\d+(,\d+)?\s?€/g, '']];
+    const net = (r) => { const w = document.createTreeWalker(r, NodeFilter.SHOW_TEXT); let n;
+      while ((n = w.nextNode())) { let t = n.nodeValue; for (const [re, by] of PH) t = t.replace(re, by); if (t !== n.nodeValue) n.nodeValue = t; } };
+    net(document.body); new MutationObserver(() => net(document.body)).observe(document.body, { childList: true, subtree: true, characterData: true });
+  });
   await p.waitForTimeout(1500);
   const liste = []; let n = 0;
   const shot = async (dur = 1, tap = null, extra = {}) => { const f = String(n++).padStart(4, '0') + '.png'; await p.screenshot({ path: path.join(dir, f) }); liste.push({ f, dur, tap, ...extra }); };

@@ -197,21 +197,21 @@ SEQ = [
         "arrivee": "Le support de téléphone en bois",
         "forme": "Choisissez la forme",
         "taille": "Puis la taille de votre téléphone",
-        "gravure": "Gravez ce que vous voulez : chaque élément + 3 €",
+        "gravure": "Gravez ce que vous voulez",
         "texte": "Un prénom, dans l'écriture de votre choix",
         "dessin": "Un de nos dessins",
         "photo": "Votre photo, gravée en brun",
         "glisser": "Placez chaque élément du bout du doigt",
         "ajoure": "Et un motif découpé dans le bois",
         "3d": "Regardez-le en 3D",
-        "resume": "Tout est récapitulé, avec le prix",
+        "resume": "Tout est récapitulé",
         "panier": "Ajoutez-le au panier",
         "ajoute": "Votre création part à l'atelier",
     }),
 ]
 SOUS = {"nom": "Un renne ou un bonnet, à son prénom", "maison": "Votre dessin de Noël sur la façade"}
 CACHE = {}
-VITESSE = 0.72                  # les gestes défilent un peu plus vite que la capture
+VITESSE = 0.56                  # les gestes défilent un peu plus vite que la capture
 
 
 def image_ecran(dossier, f):
@@ -259,13 +259,13 @@ def carte(fn, duree):
 
 
 def tout():
-    yield from carte(carte_intro, 2.8)
-    yield from carte(carte_etapes, 4.2)
+    yield from carte(carte_intro, 2.2)
+    yield from carte(carte_etapes, 3.3)
     for k, (dossier, titre, legs) in enumerate(SEQ):
         if not os.path.exists(os.path.join(CAP, dossier, "liste.json")): continue
         if k > 0: yield from carte(lambda t, ti=titre, d=dossier: carte_titre(ti, SOUS.get(d, ""), t), 1.2)
         yield from sequence(dossier, titre, legs)
-    yield from carte(carte_fin, 4.0)
+    yield from carte(carte_fin, 3.3)
 
 
 def main():

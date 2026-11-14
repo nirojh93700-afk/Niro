@@ -941,8 +941,10 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 - Demande : « une vidéo comme tout à l'heure pour le support téléphone ». Même style que la 57 (téléphone, étape écrite au-dessus, rond doré du doigt).
 - On voit la VRAIE fiche du site (créateur en vente depuis le 14/11) filmée en vue téléphone : arche puis tête de chat, taille standard, « Camille »
   en Great Vibes, dessin n° 27, photo d'exemple (portrait de couple de la maquette, jamais une cliente), photo glissée au doigt, motif cœurs,
-  3D tournée au doigt, résumé 27,90 €, panier. Fin « Dès maintenant sur nivcreation.fr ». Prix visibles (ceux du gérant).
-- 38,9 s, sans son, 1080 × 1920 (2,7 Mo) et 720 × 1280 (1,0 Mo). Fichiers à supprimer le 16/11.
+  3D tournée au doigt, résumé, panier. Fin « Dès maintenant sur nivcreation.fr ».
+- ⛔ v2 du même soir (gérant : « refais la même vidéo, accélère un peu et mets pas les prix ») : AUCUN prix à l'écran (masqués pendant la capture :
+  fiche, tailles, liste des éléments, résumé, panier ; phrases « + 3 € » retirées), gestes plus rapides (VITESSE 0,56), cartes raccourcies.
+- 30,9 s, sans son, 1080 × 1920 (2,4 Mo) et 720 × 1280 (0,9 Mo). Fichiers à supprimer le 16/11.
 - Refaire : `node tools/video/capture_support_58.cjs <adresse du site> <dossier> <photo.jpg>` puis
   `python3 tools/video/support_creez_58.py <polices> <dossier> <sortie> [--apercu]`.
 
