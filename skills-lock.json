@@ -677,13 +677,13 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/stripe-apps/SKILL.md",
-      "computedHash": "fcd234080b9348a71d6fb82980df3950964c43dd9ec08ed8e57ba2dea80ae5b6"
+      "computedHash": "3cfbe332eb413548d07582f94adde253801864bc09b172ca18f76c11ffdff335"
     },
     "stripe-best-practices": {
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/stripe-best-practices/SKILL.md",
-      "computedHash": "580bf707bb9f7c75b9bc682c92196672eb3d2f8a75ebbb2ccbc66b652a6380a0"
+      "computedHash": "d0de758f5762cf6b7b697deb3bf5b11cd5b981167b73bcc5c3e73e895ec33dcc"
     },
     "stripe-directory": {
       "source": "stripe/ai",
@@ -725,7 +725,7 @@
       "source": "stripe/ai",
       "sourceType": "github",
       "skillPath": "skills/upgrade-stripe/SKILL.md",
-      "computedHash": "23ab60ec4b4a52cbcb63e9fb6e18a44e50fa73356cc37dff375d265c7abb691d"
+      "computedHash": "00ea66e4b873960eb7658d1000036e945e47541dc34ccbe6c550a37545d70f62"
     },
     "vercel-cli-with-tokens": {
       "source": "vercel-labs/agent-skills",
