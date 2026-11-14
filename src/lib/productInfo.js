@@ -824,7 +824,7 @@ Annulation
   "verre-a-whisky-grave": {
     material: `Verre à whisky à base épaisse
 
-- Verre épais et lourd en main, contenance d'environ 300 ml, hauteur d'environ 9 cm.
+- Deux tailles : 30 cl (Ø 7,9 × H 9,3 cm) ou 20 cl (Ø 7 × H 8,35 cm), verre épais et lourd en main.
 - Surface lisse idéale pour une gravure laser nette et précise.
 - Va au lave-vaisselle (la gravure ne s'efface pas).`,
     usage: `Personnalisation
