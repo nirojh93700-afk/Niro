@@ -828,3 +828,7 @@ En attente de SA décision :
 - Fait : bouton « OK ✓ » corrigé partout · liste des machines xTool dans L'atelier (en ligne dans Gestion) · impression 3D à l'essai dans l'outil « Lettre à incruster » : démonstration v15 ET Gestion (13/11 soir, avec une petite image de chaque pièce à côté de sa case).
 - En attente de lui : essayer le fichier 3MF dans le logiciel d'une imprimante dès qu'il en a une · dire s'il veut la 3D pour les décorations à couches et pour ses fichiers achetés ·
   le nom de l'imprimante le jour où il l'achète (taille du plateau, nombre de couleurs).
+
+## Emilie Laffont (emilielaffont24@hotmail.fr) — verre à vin gravé, visuel « 40 ans, toujours au sommet… » + « Elodie » (14/11/2026)
+- Mail du 14/11 à 16 h 02 (par le site) : on lui demande le NOMBRE de verres et la TAILLE (36 ou 47 cl). Pas de devis, pas de prix.
+- À sa réponse, devis : compter **le logo** (montagnes, texte « 40 ans… », verres qui trinquent) **ET le prénom « Elodie »** (consigne du gérant) ; mail du devis SANS prix écrits. Clé de Gestion absente de la session : le gérant crée le devis, je mets le lien dans le mail.
