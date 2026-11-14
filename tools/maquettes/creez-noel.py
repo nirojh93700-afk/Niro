@@ -22,8 +22,9 @@ tete, pied = s[:i_main], s[j_main + 7:]
 pied = pied[:pied.find("<script")]
 tete = re.sub(r"<title>.*?</title>", "<title>Déco de Noël à créer</title>", tete, count=1, flags=re.S)
 ENTREE = '<a class="cn-menu" href="#" data-vue="page">🎄 Créez votre déco de Noël</a>'
-assert '<a href="#">Boutique</a>' in tete
-tete = tete.replace('<a href="#">Boutique</a>', '<a href="#">Boutique</a>' + ENTREE, 1)
+BEBE = '<a href="#">Bébé &amp; Enfant</a>'
+assert BEBE in tete
+tete = tete.replace(BEBE, BEBE + ENTREE, 1)  # gérant, 14/11 : « dans le menu, après Bébé & Enfant »
 BANDEAU = r'(<div class="sc-bandeau">).*?(</div>)'
 
 
@@ -171,11 +172,11 @@ PAGE = ("""<nav class="cn-fil" aria-label="Fil d'Ariane">Accueil <span style="ma
   <div><b>Prête à suspendre</b><span>Elle arrive avec son fil, prête à accrocher au sapin.</span></div>
  </div>""")
 
-MENU_TEL = "".join('<a href="#">%s</a>' % t for t in ["Bijoux", "Verres &amp; Carafes &amp; Gobelets", "Bébé &amp; Enfant", "Mariage", "Maison &amp; Déco", "…"])
+MENU_TEL = "".join('<a href="#">%s</a>' % t for t in ["Bijoux", "Verres &amp; Carafes &amp; Gobelets", "Bébé &amp; Enfant"]) + ENTREE + "".join('<a href="#">%s</a>' % t for t in ["Mariage", "Maison &amp; Déco", "…"])
 
 VALIDER = """<div class="cn-valider"><b>À valider avec vous avant de construire</b><ul>
  <li>Seulement les trois créations de Noël : la lettre, la fleur, l'arbre et la suspension ne sont pas sur cette page.</li>
- <li>Le nom : « Créez votre déco de Noël ». Sa place : une entrée rouge dans le menu juste après « Boutique », et un bloc sur l'accueil juste après « Ce Noël, offrez un cadeau unique ».</li>
+ <li>Le nom : « Créez votre déco de Noël ». Sa place : une entrée rouge dans le menu juste après « Bébé &amp; Enfant », et un bloc sur l'accueil après les verres et le bloc « Ce Noël, offrez un cadeau unique ».</li>
  <li>Tout est relié à l'interrupteur Noël de Gestion → Fêtes : quand vous éteignez Noël, l'entrée du menu, le bloc de l'accueil et la page disparaissent.</li>
  <li>Prix : la maisonnette dès 24,90 € (donné par vous) ; la décoration à suspendre (dès 9,90 €) et la décoration à prénom (dès 12,90 €) sont mes propositions.</li>
  <li>La date limite pour recevoir avant Noël est à donner par vous.</li>
@@ -198,8 +199,9 @@ INDEX_MAIN = (VUES + """<main class="cn"><div class="container">
 </div>
 <div data-cn="accueil">
  <h2>Où irait le bloc sur l'accueil</h2>
- <p class="sous">Juste après le bloc rouge « Ce Noël, offrez un cadeau unique ». Le reste de l'accueil ne change pas. Il disparaît quand vous éteignez Noël.</p>
- <div class="cn-voisin"><b>Ce Noël, offrez un cadeau unique</b>bloc actuel de l'accueil, inchangé</div>
+ <p class="sous">Après les verres et le bloc rouge « Ce Noël, offrez un cadeau unique ». Le reste de l'accueil ne change pas. Il disparaît quand vous éteignez Noël. La vraie page d'accueil avec ce bloc est dans une maquette à part.</p>
+ <div class="cn-voisin"><b>Verres, carafes &amp; gobelets gravés</b>bloc actuel de l'accueil, inchangé</div>
+ <div class="cn-voisin" style="margin-top:10px"><b>Ce Noël, offrez un cadeau unique</b>bloc actuel de l'accueil, inchangé</div>
  <div class="cn-nouveau"><span>Nouveau · bloc ajouté</span>
   <div class="cn-acc">
    <div><h2>Créez votre déco de Noël</h2>
@@ -212,8 +214,8 @@ INDEX_MAIN = (VUES + """<main class="cn"><div class="container">
 </div>
 <div data-cn="menu">
  <h2>Le menu, sur téléphone</h2>
- <p class="sous">Une seule entrée en plus, en rouge de Noël, tout en haut. Sur ordinateur, elle est dans la barre du menu, juste après « Boutique » (regardez en haut de cette page).</p>
- <div class="cn-menutel"><div class="barre"><span>Menu</span><span aria-hidden="true">✕</span></div><a href="#">Boutique</a>""" + ENTREE + MENU_TEL + """</div>
+ <p class="sous">Une seule entrée en plus, en rouge de Noël, juste après « Bébé &amp; Enfant ». Sur ordinateur, elle est à la même place dans la barre du menu (regardez en haut de cette page).</p>
+ <div class="cn-menutel"><div class="barre"><span>Menu</span><span aria-hidden="true">✕</span></div><a href="#">Boutique</a>""" + MENU_TEL + """</div>
 </div>
 </div></main>""")
 

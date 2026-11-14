@@ -4,6 +4,10 @@
   3 créations, 8 modèles prêts, ligne « date limite pour Noël » à donner par lui) · la même page dans un téléphone (comme la vidéo 57) · le bloc sur l'accueil juste après « Ce Noël, offrez
   un cadeau unique » · l'entrée rouge « 🎄 Créez votre déco de Noël » du menu, juste après « Boutique ». Tout relié à l'interrupteur Noël (proposé). Prix : maisonnette dès 24,90 € (lui),
   décoration à suspendre dès 9,90 € et à prénom dès 12,90 € = mes propositions. La maquette « Créez le vôtre » (1UafcEcee7BUjU42SxZ3kN, enregistrée) n'est PAS touchée.
+- v3 (même soir, gérant : « dans le menu, après Bébé & Enfant ; sur l'accueil une vraie maquette avec la page actuelle, plus bas, après les verres ») : entrée du menu juste après
+  « Bébé & Enfant » · **accueil réel** https://claude.ai/artifact/PRFYptcqnjjP9uSaV5DJMP (`python3 tools/maquettes/accueil-creez-noel.py <curl https://nivcreation.fr/> docs/maquettes/assets/creez-le-votre <sortie>`) :
+  la page d'accueil en ligne telle quelle, le bloc rouge « Créez votre déco de Noël » posé juste après « Ce Noël, offrez un cadeau unique » (lui-même après les verres), avant
+  « Les dernières sorties », encadré de flèches rouges. ⛔ Le gérant : « tu mets rien en ligne, tu me montres avant ».
 
 ## 🥃 VERRE À WHISKY 20 cl — 14/11/2026 nuit (gérant, captures Metro « Tumbler Lario 20 cl, 12 pièces, réf. AAA0045442429, Ø 7 × H 8,35 cm » : « je me suis trompé, j'ai acheté ça, il faut que je mette en vente aussi ») — ✅ EN LIGNE LE 14/11/2026 (« t'as pas mis en ligne pour le verre qu'on a fait »), patch appliqué ; RESTE : coût Metro dans `productCosts.js` (prix du carton à lui demander), stock non suivi (illimité) tant qu'il ne saisit pas 12 dans Gestion
 - Ses choix : **option « 20 cl » sur la fiche « Verre à whisky portrait » (taille à droite, comme le vin 36 / 47 cl), 17,90 / 33,90 / 64,90 €** (le 30 cl reste 19,90 / 37,90 / 71,90 €).
