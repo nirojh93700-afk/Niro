@@ -10,6 +10,12 @@
   « Les dernières sorties », encadré de flèches rouges. ⛔ Le gérant : « tu mets rien en ligne, tu me montres avant ».
 - v4 (même soir, gérant : « on va mettre que la maisonnette et la boule de Noël, l'autre on ne met pas ») : ⛔ **la décoration à prénom (renne / bonnet) est RETIRÉE** des deux maquettes ;
   seules la décoration à suspendre (boule de Noël) et la maisonnette restent (« Deux décorations à créer », 6 modèles prêts, trio de l'accueil = boule « Camille », cœur « Léa & Tom », maisonnette).
+- ✅ Vue téléphone VALIDÉE et enregistrée le 14/11 soir (« ça c'est bon, tu peux enregistrer ») : `docs/maquettes/assets/creez-noel/deco-noel-telephone.jpg` (menu · accueil · page · boule et maisonnette).
+  Décision proposée : la page Noël s'AJOUTE (rien n'est remplacé) ; plus tard elle deviendra la partie « Noël » de « Créez le vôtre ».
+- 🗣️ Même soir, question du gérant sur le SUPPORT DE TÉLÉPHONE (« remplacer l'objet déjà en vente ou le mettre en plus dans la création ? ») : réponse donnée = le créateur REMPLACE la fiche
+  « Support téléphone en bois gravé » (même adresse `/produit/support-telephone-bois-grave`, mêmes photos, avis et référencement gardés ; il fait déjà texte / dessin / photo / lettre fleurie,
+  + formes, tailles, motif ajouré) ; le « Support ajouré feuilles et lierre » reste tel quel (motif absent du créateur) ; dans « Créez le vôtre », une carte renverrait vers cette même fiche.
+  Image téléphone : `docs/maquettes/assets/creez-noel/support-telephone-telephone.jpg`. En attente de SA décision, rien en ligne.
 
 ## 🥃 VERRE À WHISKY 20 cl — 14/11/2026 nuit (gérant, captures Metro « Tumbler Lario 20 cl, 12 pièces, réf. AAA0045442429, Ø 7 × H 8,35 cm » : « je me suis trompé, j'ai acheté ça, il faut que je mette en vente aussi ») — ✅ EN LIGNE LE 14/11/2026 (« t'as pas mis en ligne pour le verre qu'on a fait »), patch appliqué ; RESTE : coût Metro dans `productCosts.js` (prix du carton à lui demander), stock non suivi (illimité) tant qu'il ne saisit pas 12 dans Gestion
 - Ses choix : **option « 20 cl » sur la fiche « Verre à whisky portrait » (taille à droite, comme le vin 36 / 47 cl), 17,90 / 33,90 / 64,90 €** (le 30 cl reste 19,90 / 37,90 / 71,90 €).
