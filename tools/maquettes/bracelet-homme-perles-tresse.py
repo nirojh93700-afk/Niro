@@ -4,7 +4,7 @@
 Gérant : récap Nihao NH10469776 / NH34931293 « bracelet homme en cuir PU, le noir » (5 pièces, 1,16 €, 40 g) + photos.
 Trois rangs : perles noires mates, rang plat en simili cuir (jamais « cuir » : Nihao dit « faux cuir / cuir PU »), tresse noire
 et brune, fermoir aimanté noir. Gravure sur le rang plat (règle du gérant du 15/11 : « on peut graver sur le cuir »), offerte,
-20 caractères. Longueur inconnue : pas écrite. NON repris : « fait main ». Prix : 22,90 € net, comme les bracelets homme du jour.
+20 caractères. Longueur inconnue : pas écrite. NON repris : « fait main ». Prix : barré 22,90 € → payé 20,61 € (−10 %, gérant 15/11).
 
 Usage : python3 tools/maquettes/bracelet-homme-perles-tresse.py <capture /produit/bracelet-homme-perles-tresse.html>
 """
@@ -17,7 +17,7 @@ PUB = os.path.join(ROOT, "public")
 ASSETS = os.path.join(OUT, "assets", "bracelet-homme-perles-tresse")
 EMBA = os.path.join(OUT, "assets", "gourmette-doree-noire")
 SRC = sys.argv[1]
-PRIX = 22.90       # 15/11 : sans la remise −10 % ; comme les bracelets homme du jour (MON choix, à valider)
+PRIX = 20.61       # 15/11 : avec la remise −10 % (gérant), barré 22,90 € → payé 20,61 €
 
 
 def uri(path, w=900, q=80):
@@ -112,12 +112,9 @@ COULEURS = [{"id": "vert", "nom": "Vert sapin", "hex": "#1f5a3a", "photo": uri(o
 ETIQ = uri(os.path.join(NOEL_DIR, "6-etiquettes-I.jpg"), 120, 80)
 # 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre ») : les nouveaux bijoux n'ont PAS la remise
 # des bijoux : 19,90 € net, sans prix barré ni badge −10 %.
-MAIN, n = re.subn(r'<span class="price-old">22,90\s€</span> <span class="price-sale">20,61\s€</span> <span class="promo-badge"[^>]*>.*?</span>',
-                  '<span class="price-sale" style="color:var(--ink)">22,90 €</span>', MAIN, count=1, flags=re.S)
-assert n == 1
-MAIN = re.sub(r'<span class="vs-old">22,90\s€</span><span class="vs-now">20,61\s€</span>', '<span class="vs-now">22,90 €</span>', MAIN)
-MAIN = re.sub(r'<span class="val">20,61\s€</span>', '<span class="val">22,90 €</span>', MAIN, count=1)
-assert "20,61" not in MAIN[:MAIN.find("Vous aimerez aussi")]
+# 15/11/2026 (gérant : « là-dessus, tu peux mettre −10 % ») : EXCEPTION à la règle des nouveaux bijoux sans remise :
+# ce bracelet garde la remise des bijoux, comme le site l'affiche (barré 22,90 € → payé 20,61 €, badge −10 %).
+assert re.search(r'<span class="price-old">22,90\s€</span> <span class="price-sale">20,61\s€</span>', MAIN)
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 assert "pd-totbox" in MAIN
@@ -221,7 +218,7 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX)).replace("__NOEL__", json.dumps(NOEL)).replace("__COUL__", json.dumps(COULEURS)).replace("__ETIQ__", json.dumps(ETIQ))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Bracelet Homme Perles et Tresse » (nom proposé ; 22,90 € sans remise) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Bracelet Homme Perles et Tresse » (nom proposé ; 22,90 € barré, 20,61 € avec −10 %) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Bracelet Homme Perles et Tresse</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"

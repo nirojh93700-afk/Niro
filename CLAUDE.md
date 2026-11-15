@@ -2,7 +2,7 @@
 - https://claude.ai/artifact/JZPLmUWUnpCYVh2hVJPB6N · `python3 tools/maquettes/bracelet-homme-perles-tresse.py <capture>` (fiche ajoutée en local par `tools/maquettes/bracelet-homme-perles-tresse-ajout-local.py`, puis `git checkout -- src/lib` ; photos `docs/maquettes/assets/bracelet-homme-perles-tresse/`).
 - Trois rangs : perles noires mates, rang plat en **simili cuir** noir (Nihao : « cuir PU », « faux cuir »), tresse noire et brune, fermoir aimanté noir. **5 achetés à 1,16 €**, 40 g. Une couleur, **stock 5**. Longueur inconnue (pas de photo de mesures) : pas écrite. NON repris : « fait main ».
 - **Gravure sur le rang plat en simili cuir**, offerte, 20 caractères (règle du gérant du 15/11 : « on peut graver sur le cuir » ; photos analysées : le rang plat est large et lisse). Emballages bracelet long + Noël, tous.
-- **22,90 € net** (sans la remise −10 %), comme les autres bracelets homme du jour — MON choix, à valider. Nom proposé.
+- **AVEC la remise −10 % (gérant, 15/11 : « là-dessus, tu peux mettre −10 % ») : barré 22,90 € → payé 20,61 €**, badge −10 % = EXCEPTION à la règle des nouveaux bijoux sans remise (v2). Au « applique » : PAS de `sansRemise`, prix du code 25,90 (→ barré 22,90 par `applyBijouxSale`). Nom proposé.
 
 ## 🖤 MAQUETTE « BRACELET HOMME DEUX RANGS » — 15/11/2026 (gérant : récap Nihao NH11100873 / NH42826585 « bracelet homme style simple en faux cuir avec pendentif acier 304 » + 8 photos) — ✅ ENREGISTRÉE TELLE QUELLE LE 15/11/2026 (« enregistre ») = VERSION 2 de l'artifact (gravure sur le rang plat), CELLE à reproduire au « applique ». RIEN en ligne
 - https://claude.ai/artifact/LvBGWqpCsW2t19jokb7a5L · `python3 tools/maquettes/bracelet-homme-deux-rangs.py <capture>` (fiche ajoutée en local par `tools/maquettes/bracelet-homme-deux-rangs-ajout-local.py`, puis `git checkout -- src/lib` ; photos `docs/maquettes/assets/bracelet-homme-deux-rangs/`).
@@ -60,6 +60,7 @@
 
 ## 💶 NOUVEAUX BIJOUX SANS LA REMISE −10 % — RÈGLE DU 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre »)
 - Tout bijou ajouté à partir du 15/11/2026 est vendu à son prix NET : pas de prix barré, pas de badge « −10 % ». Le prix en ,90 est le prix payé.
+- ⚠️ Exception : Bracelet Homme Perles et Tresse GARDE le −10 % (gérant, 15/11 : barré 22,90 → 20,61 €).
 - Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €), Collier Nœud scintillant (19,90 €), Collier Envol de Papillons (19,90 €), Collier Papillon Ajouré (19,90 €), Ensemble Homme Plaque Noire (34,90 €) et tous les suivants.
 - ⛔⛔ Redit par le gérant le 15/11 soir : « c'est que les produits qu'on a mis aujourd'hui… tout ce qui est en ligne, tu laisses comme ça ».
 - ⛔ Les bijoux DÉJÀ en ligne GARDENT leur −10 % (`applyBijouxSale`) : 15/11 soir, « c'est tous les bijoux » voulait dire tous ceux faits CE JOUR-LÀ (Collier Papillon, Bracelet Plaque & Breloque, Collier Papillons scintillants), PAS ceux en ligne (gérant : « j'espère que t'as pas modifié les autres »). Un retrait sur tout le site avait été préparé en local, jamais appliqué ni poussé, puis supprimé.
