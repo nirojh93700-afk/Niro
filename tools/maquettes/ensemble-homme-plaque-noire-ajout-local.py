@@ -1,3 +1,4 @@
+# NB : pour la capture seulement, l'ensemble est rangé dans BRACELETS_LONG ; au « applique », emballages = sac + microfibre seulement (gérant, 15/11).
 P="src/lib/products.js";t=open(P,encoding="utf-8").read()
 I="/produits/zz-maquette-ehp-"
 prod='''  {

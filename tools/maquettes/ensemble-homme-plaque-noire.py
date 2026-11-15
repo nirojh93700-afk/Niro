@@ -93,8 +93,14 @@ emb = re.sub(r'<button type="button" class="xn-tog">.*?</button>', '<div id="mq-
 # bijoux ; rien de choisi = pas d'emballage, toucher l'emballage choisi une 2e fois le retire.
 emb, n = re.subn(r'<button type="button"[^>]*>(?:(?!</button>).)*?Sans emballage cadeau.*?</button>', "", emb, count=1, flags=re.S)
 assert n == 1 and "Sans emballage" not in emb
+# 15/11/2026 (gérant : « y a pas de boîte pour cadeau, j'ai pas de boîte cadeau ») : pour cet ensemble, ni boîte cadeau ni pack
+# (qui contient la boîte) ; restent le sac cadeau et la pochette microfibre. Côté Noël : pas de boîte non plus.
+for nom in ("Pack boîte cadeau", "Boîte cadeau"):
+    emb, n = re.subn(r'<button type="button"(?:(?!<button).)*?<strong[^>]*>' + nom + r'(?:(?!</button>).)*</button>', "", emb, count=1, flags=re.S)
+    assert n == 1, nom
+assert "Boîte cadeau" not in emb and "Pack" not in emb
 emb = emb.replace('Choisissez votre présentation cadeau.</p>', 'Choisissez votre présentation cadeau. Touchez à nouveau l\'emballage choisi pour le retirer.</p>', 1)
-assert 'id="mq-noel"' in emb and emb.count("data:image/jpeg") == 4
+assert 'id="mq-noel"' in emb and emb.count("data:image/jpeg") == 2
 i_emb = MAIN.find('<div style="margin:6px 0 18px"><div style="font-weight:700;font-size:0.95rem;margin-bottom:3px">Votre emballage')
 j_emb = MAIN.find('<div class="pd-totbox"', i_emb)
 assert i_emb > 0 and j_emb > i_emb
@@ -108,6 +114,7 @@ NOEL = [
   {"id": "rouge", "nom": "Boîte rouge au sapin doré", "d": "12 × 6 × 4 cm · ruban rouge et or", "prix": 3.9, "photo": "4-boite-rouge-G.jpg", "colis": True, "fit": ["seul"]},
   {"id": "pack", "nom": "Pack de Noël", "d": "Boîte à ruban (vert ou bleu nuit) + sac de Noël + étiquette", "prix": 7.9, "barre": 8.8, "photo": "2-sac-M.jpg", "colis": True, "couleurs": True, "meil": True, "fit": ["seul"]},
 ]
+NOEL = [o for o in NOEL if not o["colis"]]   # pas de boîte (gérant, 15/11)
 for o in NOEL:
     o["photo"] = uri(os.path.join(NOEL_DIR, o["photo"]), 160, 82)
 COULEURS = [{"id": "vert", "nom": "Vert sapin", "hex": "#1f5a3a", "photo": uri(os.path.join(NOEL_DIR, "3-5-boite-ruban-C-vert-recadree.jpg"), 520, 80)},
@@ -189,7 +196,7 @@ JS = r'''
   var titre=[].slice.call(document.querySelectorAll('div')).filter(function(d){return d.textContent.trim()==='Votre emballage'})[0];
   var embs=titre?[].slice.call(titre.parentNode.querySelectorAll('button[type=button]')):[];
   function prixDe(b){var t=b.lastElementChild.textContent.match(/\+\s*([\d,]+)/);return t?parseFloat(t[1].replace(',','.')):0}
-  var CATS=['sac','allongee','seul','pack'];
+  var CATS=['sac','seul'];
   embs.forEach(function(b,k){b.addEventListener('click',function(){var deja=b.style.background==='rgb(255, 250, 240)';embs.forEach(function(x,kx){x.style.border='1.5px solid var(--line)';x.style.boxShadow='none';x.style.background=kx===3?'linear-gradient(180deg,#fffaf0,#fff)':'var(--paper)';
       var s=x.querySelector('strong');[].forEach.call(s.childNodes,function(t){if(t.nodeType===3)t.textContent=t.textContent.replace(/^✓\s*/,'')})});
     if(deja){st.emb=0;st.cat='seul';maj();return}
