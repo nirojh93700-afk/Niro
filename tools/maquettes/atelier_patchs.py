@@ -12,6 +12,7 @@ servent à retouche-site.py (qui fabrique ces pages), editeur-demo.py et atelier
   ok(t)           le bouton « OK ✓ » au bout de chaque champ (valider-champ.js)
   support_180(t)  support : marges de 2 mm au lieu de 5, 3 mm entre le dossier et le pied
   marges(t)       fabrique.js : 2 mm de marge autour des pièces dans chaque fichier fabriqué (au lieu de 5)
+  support_bande(t) support : avec un motif ajouré, la gravure va dans la plus grande bande libre entre les trous
   pont(t)         le pont de messages : la page « L'atelier » demande les fichiers à l'outil ouvert dans son cadre
 """
 import os, sys
@@ -66,9 +67,25 @@ def pont(t):
     assert t.count("</body></html>") == 1, "pont"
     return t.replace("</body></html>", PONT + "</body></html>")
 
+# avec un motif ajouré, la gravure va dans la plus grande bande LIBRE entre les trous (14/11/2026 sur le site, 15/11 dans
+# Gestion, gérant : « oui, mais à jour ») : avant, la limite basse = le plus haut trou, et les motifs à rangée de trous en haut
+# (Soleil, Étoiles, Oreilles d'ours…) bloquaient le nom tout en haut. Même remplacement que tools/createurs/support-site.py.
+SUPPORT_BANDE = [
+    ("function limites(){var t=T(),f=base().fentes[0],bas=Math.min(f[1]-5,haut(trous())-4);return{x0:ox()+15,x1:ox()+3*(t.W-5),y0:oy()+3*zoneHaut(),y1:oy()+3*bas}}",
+     "var bandes={};\n"
+     "function bande(){var d=trous(),z=zoneHaut(),fin=base().fentes[0][1]-5;if(!d)return[z,fin];var k=S.taille+'|'+S.forme+'|'+S.cable+'|'+S.angle+'|'+d.length+'|'+d.slice(0,40);if(bandes[k])return bandes[k];\n"
+     " var iv=poly(d).map(function(c){var a=1e9,b=-1e9;c.forEach(function(p){if(p[1]<a)a=p[1];if(p[1]>b)b=p[1]});return[a-4,b+4]}).sort(function(p,q){return p[0]-q[0]});\n"
+     " var best=null,cur=z;iv.forEach(function(v){var h=Math.min(v[0],fin);if(h>cur&&(!best||h-cur>best[1]-best[0]))best=[cur,h];if(v[1]>cur)cur=v[1]});\n"
+     " if(fin>cur&&(!best||fin-cur>best[1]-best[0]))best=[cur,fin];\n"
+     " return bandes[k]=best||[z,Math.min(fin,haut(d)-4)]}\n"
+     "function limites(){var t=T(),B=bande();return{x0:ox()+15,x1:ox()+3*(t.W-5),y0:oy()+3*B[0],y1:oy()+3*B[1]}}"),
+]
+def support_bande(t):
+    return _remplacer(t, SUPPORT_BANDE, "support bande libre")
+
 def outil(t, nom):
     """Tout ce qu'un outil de l'atelier reçoit, dans l'ordre."""
-    if nom == "atelier-support.html": t = support_180(t)
+    if nom == "atelier-support.html": t = support_bande(support_180(t))
     return pont(ok(t))
 
 OUTILS = ("atelier-support.html", "atelier-arbre.html", "atelier-decoration.html")
