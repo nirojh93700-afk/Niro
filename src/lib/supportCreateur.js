@@ -14,8 +14,9 @@ export const SUP_TAILLES = {
 export const SUP_MOTIFS = { coeurs: "Cœurs", pattes: "Pattes", soleil: "Soleil", nid: "Nid d'abeille", losanges: "Losanges", persienne: "Persienne", fenetre: "Fenêtre", etoiles: "Étoiles" };
 export const SUP_DENSITES = { moins: "Moins", moyen: "Moyen", plus: "Plus" };
 export const SUP_ANGLES = [10, 13, 16, 20];
-// Prix donnés par le gérant le 12/11/2026 : chaque élément gravé + 3 €, motif ajouré + 3 € (le prix de la taille = l'option).
-export const SUP_PRIX = { element: 3, ajoure: 3 };
+// Prix du gérant (15/11/2026, après le relevé du marché) : petit 15,90 €, chaque élément gravé + 3 €, motif ajouré + 5 €,
+// et le moins cher de la création est compris (« tu offres que le moins cher »). Avant : 12,90 €, + 3 € / + 3 €, rien de compris.
+export const SUP_PRIX = { element: 3, ajoure: 5 };
 export const SUP_MAX_ELEMENTS = 12;
 const POLICES = new Set(FONTS.map((f) => f.key));
 const TYPES = { texte: "Texte", dessin: "Dessin", lettre: "Lettre fleurie", photo: "Photo" };
@@ -75,10 +76,20 @@ export function supNormaliser(etat) {
   };
 }
 
-/** Ce qui s'ajoute au prix de la taille : + 3 € par élément gravé, + 3 € le motif ajouré. */
+/** Ce qui est compris (le moins cher) : 0 = le 1er élément gravé, "aj" = le motif ajouré, null = rien (bois nu). Même règle que la fiche. */
+export function supOffert(sup) {
+  if (!sup) return null;
+  const g = sup.grave && sup.els.length;
+  if (g && (!sup.ajoure || SUP_PRIX.element <= SUP_PRIX.ajoure)) return 0;
+  return sup.ajoure ? "aj" : null;
+}
+
+/** Ce qui s'ajoute au prix de la taille : + 3 € par élément gravé, + 5 € le motif ajouré, moins le moins cher (compris). */
 export function supSupplement(sup) {
   if (!sup) return 0;
-  return (sup.grave ? sup.els.length * SUP_PRIX.element : 0) + (sup.ajoure ? SUP_PRIX.ajoure : 0);
+  const o = supOffert(sup);
+  const brut = (sup.grave ? sup.els.length * SUP_PRIX.element : 0) + (sup.ajoure ? SUP_PRIX.ajoure : 0);
+  return brut - (o === "aj" ? SUP_PRIX.ajoure : o === 0 ? SUP_PRIX.element : 0);
 }
 
 /** Pourquoi la création ne peut pas encore partir au panier (chaîne vide = prête). */
@@ -116,16 +127,17 @@ export function supResume(sup) {
 /** Pour la fiche atelier : les lignes générales, puis un bloc « gravure » élément par élément (avec son image). */
 export function supConsignes(sup) {
   const t = SUP_TAILLES[sup.taille];
+  const o = supOffert(sup);
   const general = [
     { k: "Forme", v: SUP_FORMES[sup.forme], fort: true },
     { k: "Taille", v: `${t.nom} · ${t.W} × ${t.H} mm`, fort: true },
     { k: "Inclinaison", v: `${sup.angle}°` },
     { k: "Câble", v: sup.cable ? "avec le passage du câble" : "SANS passage du câble", fort: !sup.cable },
-    { k: "Motif ajouré", v: sup.ajoure ? `${supMotifTexte(sup)} (+3 €)` : "aucun", fort: sup.ajoure },
+    { k: "Motif ajouré", v: sup.ajoure ? `${supMotifTexte(sup)} (${o === "aj" ? "compris" : `+${SUP_PRIX.ajoure} €`})` : "aucun", fort: sup.ajoure },
     { k: "Bois", v: "contreplaqué 3 mm, deux pièces qui s'emboîtent" },
   ];
   const lignes = sup.grave ? sup.els.map((e, i) => ({
-    k: `${i + 1}. ${TYPES[e.type]} (+3 €)`,
+    k: `${i + 1}. ${TYPES[e.type]} (${o === i ? "compris" : `+${SUP_PRIX.element} €`})`,
     v: `${supNomElement(e)}${e.type === "texte" || (e.type === "lettre" && e.nom) ? ` — écriture ${ecriture(e.police)}` : ""}`,
     texte: e.type === "texte" || (e.type === "lettre" && Boolean(e.nom)),
     img: e.type === "texte" ? null : e.src,

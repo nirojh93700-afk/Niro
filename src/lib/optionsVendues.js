@@ -18,7 +18,7 @@
 import { texteAvecDecor } from "@/lib/decorTexte";
 import { mpFormat, MP_BOITES } from "@/lib/marquePages";
 import { CN_FACES, CN_GRAVURE, cnFaceGravee, cnLignes } from "@/lib/carnet";
-import { SUP_PRIX, supNomElement, supMotifTexte } from "@/lib/supportCreateur";
+import { SUP_PRIX, supNomElement, supMotifTexte, supOffert } from "@/lib/supportCreateur";
 import { getProductBySlug } from "@/lib/products";
 import { apparierSpec } from "@/lib/orderSpec";
 
@@ -76,8 +76,10 @@ export function optionsArticle(item) {
   // Support de téléphone créé par la cliente (14/11/2026) : chaque élément gravé + 3 €, le motif ajouré + 3 €.
   if (produit?.createur === "support" && champs.sup && typeof champs.sup === "object" && Array.isArray(champs.sup.els)) {
     const sup = champs.sup;
-    if (sup.grave) sup.els.forEach((e, i) => out.push({ libelle: `Gravure ${i + 1}`, detail: supNomElement(e), montant: SUP_PRIX.element, physique: false }));
-    if (sup.ajoure) out.push({ libelle: "Motif ajouré (découpé)", detail: supMotifTexte(sup), montant: SUP_PRIX.ajoure, physique: false });
+    // Le moins cher de la création est compris (15/11/2026) : il est écrit, à 0 €.
+    const o = supOffert({ ...sup, els: sup.grave ? sup.els : [] });
+    if (sup.grave) sup.els.forEach((e, i) => out.push({ libelle: `Gravure ${i + 1}${o === i ? " (comprise)" : ""}`, detail: supNomElement(e), montant: o === i ? 0 : SUP_PRIX.element, physique: false }));
+    if (sup.ajoure) out.push({ libelle: `Motif ajouré (découpé)${o === "aj" ? " (compris)" : ""}`, detail: supMotifTexte(sup), montant: o === "aj" ? 0 : SUP_PRIX.ajoure, physique: false });
     return out;
   }
   // Marque-pages (27/10/2026) : la boîte cadeau du format + le nombre de pièces (une couleur chacune).

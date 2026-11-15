@@ -4138,8 +4138,8 @@ export const products = [
     // La fiche est la maquette enregistrée « Créez votre support de téléphone » (artifact ARNf7BxbQxsTvkpJxgQKD7, v11) :
     // src/components/createurs/SupportFiche.jsx + public/createurs/support/outil.js (fabriqués par
     // tools/createurs/support-site.py). Même adresse, mêmes photos, mêmes avis qu'avant (mise en ligne du 20/08/2026).
-    // Prix (gérant, 12/11) : petit 12,90 € · standard + 3 € · grand + 6 € = les trois options ci-dessous ; chaque élément
-    // gravé + 3 €, motif ajouré + 3 € = src/lib/supportCreateur.js (le même calcul au paiement, /api/checkout).
+    // Prix (gérant, 15/11/2026) : petit 15,90 € · standard 18,90 € · grand 21,90 € ; chaque élément gravé + 3 €, motif ajouré
+    // + 5 €, le moins cher de la création compris = src/lib/supportCreateur.js (le même calcul au paiement, /api/checkout).
     // La création complète est gardée avec la commande (collection « creations ») : boutons « Corriger dans l'outil » et
     // « Fichiers pour la machine » de Gestion.
     slug: "support-telephone-bois-grave",
@@ -4240,17 +4240,17 @@ export const products = [
       { key: "boisnote", type: "note", text: "Bois clair naturel : le veinage varie légèrement d'une pièce à l'autre — chaque support est unique." },
     ],
     variants: [
-      { id: "support-tel-petit", title: "Petit · 76 × 142 mm", price: 12.90 },
-      { id: "support-tel-standard", title: "Standard · 80 × 151 mm", price: 15.90 },
-      { id: "support-tel-grand", title: "Grand · 86 × 165 mm", price: 18.90 },
+      { id: "support-tel-petit", title: "Petit · 76 × 142 mm", price: 15.90 },
+      { id: "support-tel-standard", title: "Standard · 80 × 151 mm", price: 18.90 },
+      { id: "support-tel-grand", title: "Grand · 86 × 165 mm", price: 21.90 },
     ],
     descriptionHtml: `<p><strong>Un support de téléphone en bois que vous créez vous-même, découpé et gravé dans notre atelier.</strong> Posé sur un bureau ou une table de nuit, il tient le téléphone incliné, écran visible — et quand le téléphone n'y est pas, c'est votre photo, votre dessin ou votre prénom que l'on voit.</p>
 <h3>Vous choisissez tout</h3>
 <ul>
 <li><strong>La forme :</strong> rectangle arrondi, arche, tête de chat ou oreilles d'ours</li>
-<li><strong>La taille :</strong> petit 76 × 142 mm (12,90 €), standard 80 × 151 mm (15,90 €) ou grand 86 × 165 mm (18,90 €)</li>
-<li><strong>La gravure :</strong> un texte dans l'écriture de votre choix, un de nos dessins, votre photo ou une lettre fleurie avec un nom — chaque élément gravé + 3 €, et vous le placez où vous voulez sur le support</li>
-<li><strong>Un motif ajouré :</strong> cœurs, pattes, soleil, nid d'abeille, losanges, persienne, fenêtre ou étoiles, découpés dans le bois (+ 3 €) — avec ou sans gravure</li>
+<li><strong>La taille :</strong> petit 76 × 142 mm (15,90 €), standard 80 × 151 mm (18,90 €) ou grand 86 × 165 mm (21,90 €)</li>
+<li><strong>La gravure :</strong> un texte dans l'écriture de votre choix, un de nos dessins, votre photo ou une lettre fleurie avec un nom — chaque élément gravé + 3 €, et vous le placez où vous voulez sur le support. Le moins cher de votre création est compris</li>
+<li><strong>Un motif ajouré :</strong> cœurs, pattes, soleil, nid d'abeille, losanges, persienne, fenêtre ou étoiles, découpés dans le bois (+ 5 €) — avec ou sans gravure</li>
 <li><strong>Les réglages :</strong> l'inclinaison du téléphone et le passage du câble de recharge</li>
 </ul>
 <h3>Caractéristiques</h3>

@@ -16,7 +16,7 @@ import DelaiFabrication from "@/components/DelaiFabrication";
 import PayInfoModal from "@/components/PayInfo";
 import TrustSection from "@/components/TrustSection";
 import { SUP_GAUCHE, SUP_ETAPES, SUP_POLICES_FICHIERS } from "@/lib/supportCreateurData";
-import { supVariantId, supNormaliser, supSupplement, supManque, supResume, SUP_TAILLES } from "@/lib/supportCreateur";
+import { supVariantId, supNormaliser, supSupplement, supManque, supResume, SUP_TAILLES, SUP_PRIX } from "@/lib/supportCreateur";
 import "@/app/createur-support.css";
 
 const SCRIPT = "/createurs/support/outil.js";
@@ -105,7 +105,7 @@ export default function SupportFiche({ product, realisations = [] }) {
       if (!vivant || !window.NivSupport) return;
       demonter = window.NivSupport.monter({
         photos: product.images,
-        prix: { base, taille: { petit: 0, standard: Math.round(((prixDe("standard") ?? base + 3) - base) * 100) / 100, grand: Math.round(((prixDe("grand") ?? base + 6) - base) * 100) / 100 }, element: 3, ajoure: 3 },
+        prix: { base, taille: { petit: 0, standard: Math.round(((prixDe("standard") ?? base + 3) - base) * 100) / 100, grand: Math.round(((prixDe("grand") ?? base + 6) - base) * 100) / 100 }, element: SUP_PRIX.element, ajoure: SUP_PRIX.ajoure },
       });
       setPret(true);
     }).catch(() => { if (vivant) setPanne(true); });
