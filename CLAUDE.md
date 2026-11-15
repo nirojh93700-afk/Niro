@@ -1,14 +1,14 @@
 ## 💶 NOUVEAUX BIJOUX SANS LA REMISE −10 % — RÈGLE DU 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre »)
 - Tout bijou ajouté à partir du 15/11/2026 est vendu à son prix NET : pas de prix barré, pas de badge « −10 % ». Le prix en ,90 est le prix payé.
 - Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €) et tous les suivants.
-- Les bijoux DÉJÀ en ligne gardent leur −10 % (`applyBijouxSale`), sauf demande contraire.
+- 15/11 soir (« c'est tous les bijoux ») : la remise est retirée sur TOUS les bijoux, la cliente paie l'ancien prix barré (ex. Collier Cœur gravé 22,41 → 24,90 €). Fait dans `applyBijouxSale` (prix = l'ancien barré, plus de `compareAt`) : PRÉPARÉ et vérifié en local, gardé dans `docs/retrait-remise-bijoux.patch` (`git apply docs/retrait-remise-bijoux.patch`), NON appliqué : en attente de son « mets en ligne ».
 - Au « applique » : un drapeau produit (ex. `sansRemise: true`) que `applyBijouxSale` (catalog.js) laisse passer ; le prix du code = le prix payé.
 
 ## ✨ MAQUETTE « COLLIER PAPILLONS SCINTILLANTS » — 15/11/2026 (gérant : photos Nihao NH10461851 + « tu fais pour celui-là ? ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - https://claude.ai/artifact/93AcoiAV5C2W3xFxf82kgx · `python3 tools/maquettes/collier-papillons-scintillants.py <capture /produit/collier-papillons-scintillants>` (fiche ajoutée en local puis tout remis ; photos `docs/maquettes/assets/collier-papillons-scintillants/`).
 - Un seul modèle, doré : un grand papillon pavé de zircons et un petit papillon ajouré, sous une bélière sertie ; 1,16 € pièce. Chaîne acier inoxydable doré à maillons plats, pendentif cuivre doré + zircons, mousqueton, 7 g. NE SE GRAVE PAS. Longueur de chaîne inconnue : pas écrite. 3 photos : dans sa boîte + 2 portées (vérifiées : même pendentif). ⛔ Jamais « or », « plaqué or ».
-- v2 (15/11) : **19,90 € net, sans la remise −10 %** (règle des nouveaux bijoux).
-- **Proposé par moi, à valider** : nom, emballages colliers + Noël. Stock à demander.
+- v2 (15/11) : **19,90 € net, sans la remise −10 %** (règle des nouveaux bijoux). ✅ **Stock : 5** (gérant, 15/11).
+- **Proposé par moi, à valider** : nom, emballages colliers + Noël.
 
 ## 🔖 MAQUETTE « BRACELET PLAQUE & BRELOQUE » — 15/11/2026 (gérant : photos Nihao NHHF467983 + « c'est pour les filles » + « fais attention, il y a des doubles ») — ✅ ENREGISTRÉE TELLE QUELLE LE 15/11/2026 (« Enregistre la maquette ») = VERSION 2 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - https://claude.ai/artifact/YYT9Vat95PSuvuePPoLK3J · `python3 tools/maquettes/bracelet-plaque-breloque.py <capture /produit/bracelet-plaque-breloque>` (fiche ajoutée en local puis tout remis ; photos `docs/maquettes/assets/bracelet-plaque-breloque/`).
