@@ -1,4 +1,9 @@
-## 🦋 MAQUETTE « COLLIER ENVOL DE PAPILLONS » — 15/11/2026 (gérant : récap Nihao NH11864252 / NH51670029 « 8176 collier à pampilles papillon » + 3 photos) — EN ATTENTE DE SON AVIS, RIEN en ligne
+## 🦋 MAQUETTE « COLLIER PAPILLON AJOURÉ » — 15/11/2026 (gérant : récap Nihao NH10461851 / NH34814376 « pendentif cuivre, chaîne acier G301 » + 3 photos) — EN ATTENTE DE SON AVIS, RIEN en ligne
+- https://claude.ai/artifact/DGWUu49Nq5vsQKfHhP8u1n · `python3 tools/maquettes/collier-papillon-ajoure.py <capture /produit/collier-papillon-ajoure>` (fiche ajoutée en local puis tout remis ; photos `docs/maquettes/assets/collier-papillon-ajoure/`).
+- MÊME fiche Nihao (SPU NH10461851) que le Collier Papillons scintillants, mais un AUTRE modèle (G301) : papillon aux ailes du haut ajourées, ailes du bas pavées de zircons prolongées de deux queues. 5 achetés à 1,32 €, 7 g. Chaîne acier inoxydable, pendentif cuivre doré + zircons, mousqueton. Ne se grave pas. NON repris : « plaqué or », « placage sous vide », « maillons cubains ». Longueur inconnue.
+- **19,90 € net, sans la remise −10 %**, **stock 5**. Nom proposé, à valider (fiche à part, ou 2e modèle du Collier Papillons scintillants : à lui de dire).
+
+## 🦋 MAQUETTE « COLLIER ENVOL DE PAPILLONS » — 15/11/2026 (gérant : récap Nihao NH11864252 / NH51670029 « 8176 collier à pampilles papillon » + 3 photos) — ✅ ENREGISTRÉE TELLE QUELLE LE 15/11/2026 (« enregistre la maquette ») = VERSION 1 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - https://claude.ai/artifact/Y9wHGE2LVYDndxcHLciftB · `python3 tools/maquettes/collier-envol-papillons.py <capture /produit/collier-envol-papillons>` (fiche ajoutée en local puis tout remis ; photos `docs/maquettes/assets/collier-envol-papillons/`).
 - Un modèle doré : 2 petits papillons sertis de strass, grand papillon ajouré avec une pierre en navette, pampille (papillon + pierre ronde). 5 achetés à 1,44 €, 5 g. Chaîne acier inoxydable, papillons cuivre doré + strass. Ne se grave pas. NON repris : « plaqué or 18 carats », « étanche ». Longueur inconnue.
 - **19,90 € net, sans la remise −10 %**, **stock 5**. Nom proposé, à valider.
@@ -10,7 +15,7 @@
 
 ## 💶 NOUVEAUX BIJOUX SANS LA REMISE −10 % — RÈGLE DU 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre »)
 - Tout bijou ajouté à partir du 15/11/2026 est vendu à son prix NET : pas de prix barré, pas de badge « −10 % ». Le prix en ,90 est le prix payé.
-- Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €), Collier Nœud scintillant (19,90 €), Collier Envol de Papillons (19,90 €) et tous les suivants.
+- Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €), Collier Nœud scintillant (19,90 €), Collier Envol de Papillons (19,90 €), Collier Papillon Ajouré (19,90 €) et tous les suivants.
 - ⛔⛔ Redit par le gérant le 15/11 soir : « c'est que les produits qu'on a mis aujourd'hui… tout ce qui est en ligne, tu laisses comme ça ».
 - ⛔ Les bijoux DÉJÀ en ligne GARDENT leur −10 % (`applyBijouxSale`) : 15/11 soir, « c'est tous les bijoux » voulait dire tous ceux faits CE JOUR-LÀ (Collier Papillon, Bracelet Plaque & Breloque, Collier Papillons scintillants), PAS ceux en ligne (gérant : « j'espère que t'as pas modifié les autres »). Un retrait sur tout le site avait été préparé en local, jamais appliqué ni poussé, puis supprimé.
 - Au « applique » : un drapeau produit (ex. `sansRemise: true`) que `applyBijouxSale` (catalog.js) laisse passer ; le prix du code = le prix payé.
