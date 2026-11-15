@@ -26,7 +26,7 @@ PUB = os.path.join(ROOT, "public")
 ASSETS = os.path.join(OUT, "assets", "bracelet-plaque-breloque")
 EMBA = os.path.join(OUT, "assets", "barre-verticale")
 SRC = sys.argv[1]
-PRIX = 17.91       # prix payé (barré 19,90 − 10 %), proposé
+PRIX = 19.90       # 15/11 (gérant : « enlève les 10 % ») : prix net, sans prix barré ni badge −10 %
 
 
 def uri(path, w=900, q=80):
@@ -119,6 +119,17 @@ for o in NOEL:
 COULEURS = [{"id": "vert", "nom": "Vert sapin", "hex": "#1f5a3a", "photo": uri(os.path.join(NOEL_DIR, "3-5-boite-ruban-C-vert-recadree.jpg"), 520, 80)},
             {"id": "bleu", "nom": "Bleu nuit", "hex": "#1f3561", "photo": uri(os.path.join(NOEL_DIR, "3-5-boite-ruban-J-bleu-recadree.jpg"), 520, 80)}]
 ETIQ = uri(os.path.join(NOEL_DIR, "6-etiquettes-I.jpg"), 120, 80)
+# 15/11 (gérant, captures) : « enlève les deux photos » = le doré cœur sur fond noir et l'argenté cœur sur fond blanc.
+MAIN, n = re.subn(r'<button[^>]*><img src="/produits/zz-maquette-bpb-(?:dore-coeur-noir|argente-coeur-blanc)\.jpg"[^>]*/></button>', "", MAIN)
+assert n == 2, n
+# 15/11 (gérant : « enlève les 10 % ») : ce bijou n'a pas la remise des bijoux : 19,90 € net, sans prix barré ni badge.
+MAIN, n = re.subn(r'<span class="price-old">19,90\s€</span> <span class="price-sale">17,91\s€</span> <span class="promo-badge"[^>]*>.*?</span>',
+                  '<span class="price-sale" style="color:var(--ink)">19,90 €</span>', MAIN, count=1, flags=re.S)
+assert n == 1
+MAIN, n = re.subn(r'<span class="vs-old">19,90\s€</span><span class="vs-now">17,91\s€</span>', '<span class="vs-now">19,90 €</span>', MAIN)
+assert n == 5, n
+MAIN = re.sub(r'<span class="val">17,91\s€</span>', '<span class="val">19,90 €</span>', MAIN, count=1)
+assert "17,91" not in MAIN
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 assert "pd-totbox" in MAIN and MAIN.count('class="variant-swatch ') == 5
@@ -213,7 +224,7 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX)).replace("__NOEL__", json.dumps(NOEL)).replace("__COUL__", json.dumps(COULEURS)).replace("__ETIQ__", json.dumps(ETIQ))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Bracelet Plaque &amp; Breloque » (nom et prix proposés, à valider) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Bracelet Plaque &amp; Breloque » (nom proposé, à valider ; prix 19,90 € sans remise) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Bracelet Plaque &amp; Breloque</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"
