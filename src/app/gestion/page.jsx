@@ -25,6 +25,9 @@ import { modeEnvoi } from "@/lib/etiquettes";
 import PreparationCommande from "@/components/admin/PreparationCommande";
 import ImagesOrigine from "@/components/admin/ImagesOrigine";
 import { photosEnvoyees } from "@/lib/apercuCote";
+import EntreeFaceId from "@/components/admin/EntreeFaceId";
+import ProposerFaceId from "@/components/admin/ProposerFaceId";
+import { enApplication } from "@/lib/faceIdClient";
 
 // Écrans chargés seulement quand on les ouvre (02/10/2026) : l'accueil Gestion ne
 // télécharge plus d'un coup le code des 15 onglets.
@@ -61,6 +64,7 @@ const CONFIG_LABELS = {
 export default function GestionPage({ onglet = "" } = {}) {
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
+  const [voirMdp, setVoirMdp] = useState(true);
   const [rows, setRows] = useState([]);
   const [editable, setEditable] = useState([]);
   const [openOrders, setOpenOrders] = useState(() => new Set()); // fiches commandes dépliées (onglet Commandes)
@@ -195,13 +199,22 @@ export default function GestionPage({ onglet = "" } = {}) {
         setEditable(d.editable || []);
         setAuthed(true);
       });
-      if (prod.status === 401) { viderCache(); throw new Error("Mot de passe incorrect."); }
+      if (prod.status === 401) { viderCache(); if (adminKey.startsWith("nvs_")) { try { sessionStorage.removeItem("niv-admin-key"); } catch { /* */ } setKey(""); throw new Error("Session terminée : entrez de nouveau avec Face ID ou le mot de passe (incorrect ou appareil retiré)."); } throw new Error("Mot de passe incorrect."); }
       if (!prod.ok) {
         throw Object.assign(new Error(prod.reseau
           ? "Connexion au site impossible pour le moment. Vérifiez le réseau puis touchez « Réessayer »."
           : "Le site met du temps à répondre. Touchez « Réessayer »."), { reseau: true, garde: prod.data != null });
       }
       sessionStorage.setItem("niv-admin-key", adminKey);
+      // Appareils connectés (15/11/2026) : une entrée par mot de passe est notée, au plus une fois par ouverture.
+      if (!adminKey.startsWith("nvs_")) {
+        try {
+          if (!sessionStorage.getItem("niv-vu")) {
+            sessionStorage.setItem("niv-vu", "1");
+            fetch("/api/admin/appareils", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": adminKey }, body: JSON.stringify({ action: "vu", app: enApplication() }) }).catch(() => {});
+          }
+        } catch { /* stockage indisponible */ }
+      }
       loadMat(adminKey);
       // 2) Tout le reste EN MÊME TEMPS ; un appel qui rate n'efface rien d'autre.
       const res = await Promise.all(Object.entries(appliquer).map(([u, f]) => chargerAvecCache(u, adminKey, f)));
@@ -564,15 +577,19 @@ export default function GestionPage({ onglet = "" } = {}) {
     return (
       <div className="center-card">
         <h1>Espace gestion</h1>
+        <EntreeFaceId onCle={(k) => { setKey(k); load(k); }} onMotDePasse={setVoirMdp} />
+        {!voirMdp && error && <div className="notice">{error}</div>}
+        {voirMdp && (<>
         <p style={{ color: "var(--ink-soft)" }}>Réservé à Niv Création. Entrez votre mot de passe.</p>
         <div className="field" style={{ textAlign: "left", marginTop: 16 }}>
-          <input type="password" placeholder="Mot de passe" value={key}
+          <input type="password" placeholder="Mot de passe" value={key.startsWith("nvs_") ? "" : key}
             onChange={(e) => setKey(e.target.value)} onKeyDown={(e) => e.key === "Enter" && load(key)} />
         </div>
         {error && <div className="notice">{error}</div>}
         <button className="btn btn-gold" onClick={() => load(key)} disabled={loading}>
           {loading ? "Connexion…" : (error && key && !/incorrect/i.test(error) ? "Réessayer" : "Entrer")}
         </button>
+        </>)}
       </div>
     );
   }
@@ -843,6 +860,7 @@ export default function GestionPage({ onglet = "" } = {}) {
             />
 
             {/* 🔔 Alertes sur le téléphone (nouvelle commande, réponse de cliente). */}
+            <ProposerFaceId adminKey={key} onCle={setKey} />
             <AlertesTelephone adminKey={key} />
 
             {/* Accueil « version B » (maquette Gestion moderne v3, 30/10/2026) : vraies données, rien d'inventé. */}

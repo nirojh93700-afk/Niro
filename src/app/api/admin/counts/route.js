@@ -1,4 +1,5 @@
-import { isAdmin, getAdminCountsData } from "@/lib/stock";
+import { isAdmin, getAdminCountsData, getSettings } from "@/lib/stock";
+import { reglageTelephone } from "@/lib/notifTelephone";
 import { getSiteOrders } from "@/lib/firebase";
 import { calculReachat } from "@/lib/reachatServeur";
 
@@ -27,7 +28,9 @@ export async function GET(req) {
     getSiteOrders(300).catch(() => []),
   ]);
   const prep = (orders || []).filter((x) => !x.test && (!x.status || x.status === "a_preparer")).length;
-  const data = { prep, ...c, rachat: await nbRachat() };
+  let badge = "prep";
+  try { badge = reglageTelephone((await getSettings())?.notifications).badge; } catch { /* défaut */ }
+  const data = { prep, ...c, rachat: await nbRachat(), badge };
   memo = { at: Date.now(), data };
   return Response.json(data);
 }

@@ -9,6 +9,8 @@
 // action + menu « ··· ». Expédier se fait DANS la carte (n° de suivi, transporteur
 // reconnu, case « prévenir ») : plus jamais de fenêtre système.
 // =============================================================================
+import PhotosColis, { PastillePhotosColis } from "@/components/admin/PhotosColis";
+import { etatPhotosColis } from "@/lib/photosColis";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Ic from "@/components/admin/IconesGestion";
@@ -58,7 +60,28 @@ export function Pill({ tone = "grey", ic, children, title }) {
 // Chronopost…), case « prévenir la cliente » (e-mail avec le lien de suivi), ou remise en main propre.
 // 07/11/2026 : UN CHAMP PAR COLIS (« + Ajouter un autre colis ») quand la commande part en plusieurs
 // cartons ; les numéros sont rangés ensemble dans `tracking` (séparés par « , », voir joindreSuivis).
-export function FormExpedition({ o, onStatus, onClose, busy, titre = "Expédier" }) {
+// Rappel « il manque des photos du colis » au moment d'expédier (15/11/2026). Jamais bloquant ;
+// la case « Me rappeler » se règle sur l'appareil.
+function RappelPhotosColis({ o, onPhotos }) {
+  const [actif, setActif] = useState(true);
+  useEffect(() => { try { setActif(localStorage.getItem("niv-rappel-photos") !== "0"); } catch { /* */ } }, []);
+  if (statutDe(o) === "expediee") return null;
+  const e = etatPhotosColis(o);
+  if (!e.manquent.length) return null;
+  const changer = (v) => { setActif(v); try { localStorage.setItem("niv-rappel-photos", v ? "1" : "0"); } catch { /* */ } };
+  if (!actif) return null;
+  return (
+    <div className="pc-rappel">
+      <span>📷 {e.n} photo{e.n > 1 ? "s" : ""} du colis sur 3 · il manque : {e.manquent.map((m) => m.t.replace(/^\d · /, "").toLowerCase()).join(", ")}.</span>
+      <span className="r">
+        {onPhotos ? <button type="button" className="fq-btn sm" onClick={onPhotos}>Prendre les photos</button> : null}
+        <label><input type="checkbox" checked={actif} onChange={(ev) => changer(ev.target.checked)} /> Me rappeler les photos</label>
+      </span>
+    </div>
+  );
+}
+
+export function FormExpedition({ o, onStatus, onClose, busy, titre = "Expédier", onPhotos }) {
   const depart = numerosSuivi(o.tracking);
   const [nums, setNums] = useState(depart.length ? depart : [""]);
   const [notify, setNotify] = useState(Boolean(o.customerEmail));
@@ -128,6 +151,7 @@ export function FormExpedition({ o, onStatus, onClose, busy, titre = "Expédier"
       onClose();
     }}>
       <h3><Ic n="truck" /> {titre} #{refDe(o)}</h3>
+      <RappelPhotosColis o={o} onPhotos={onPhotos} />
       {nums.map((n, i) => {
         const sc = scan && scan.i === i ? scan.etat : null;
         const lecture = sc === "lecture";
@@ -197,6 +221,8 @@ export default function CarteCommande({ o, pos, inBoard = false, unread = false,
   const [confirmCancel, setConfirmCancel] = useState(false);
   const [cancelNotify, setCancelNotify] = useState(Boolean(o.customerEmail));
   const [rates, setRates] = useState(false);
+  const [colis, setColis] = useState(false);
+  const [pc, setPc] = useState(o.photosColis || []);
 
   const st = statutDe(o);
   const info = statutInfo(o);
@@ -287,9 +313,16 @@ export default function CarteCommande({ o, pos, inBoard = false, unread = false,
         </div>
       ) : null}
       {!finie ? <BlocConditionnement o={o} mat={mat} onOpen={() => onCond(o)} /> : null}
+      {active || st === "expediee" ? (
+        <div className="pc-ligne">
+          <PastillePhotosColis photos={pc} />
+          <button type="button" className="fq-btn sm ghost" onClick={() => setColis((v) => !v)} aria-expanded={colis}>📷 Photos du colis</button>
+        </div>
+      ) : null}
+      {colis ? <PhotosColis order={o} photos={pc} onChange={setPc} adminKey={adminKey} /> : null}
       {rates ? <RatesCommande o={o} mat={mat} adminKey={adminKey} onSaved={onMat} /> : null}
 
-      {ship ? <FormExpedition o={o} busy={busy} onStatus={onStatus} onClose={() => setShip(false)} titre={st === "expediee" ? "Modifier le suivi de" : "Expédier"} /> : null}
+      {ship ? <FormExpedition o={{ ...o, photosColis: pc }} busy={busy} onStatus={onStatus} onClose={() => setShip(false)} onPhotos={() => { setShip(false); setColis(true); }} titre={st === "expediee" ? "Modifier le suivi de" : "Expédier"} /> : null}
       {confirmCancel ? (
         <div className="fq-confirm">
           <Ic n="alert" />

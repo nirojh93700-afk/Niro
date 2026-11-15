@@ -6281,3 +6281,110 @@ html.flot-cache:not(.flot-garde) .flot-btn{transform:translateY(140%);opacity:0;
 .pv-mk-row select,.pv-mk-row input{font:inherit;font-size:13px;padding:7px 10px;border:1px solid var(--ash-line-2);border-radius:8px;background:#fff;min-width:0;box-sizing:border-box;flex:1 1 160px}
 .pv-how ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.6;color:var(--ash-ink)}
 .pv-copied{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ash-ink);color:#fff;padding:9px 16px;border-radius:99px;font-size:13px;z-index:99;max-width:90vw;text-align:center}
+
+/* Face ID de Gestion (15/11/2026, maquette Niv Admin) */
+.fid-entree{display:grid;gap:10px;justify-items:center;margin:14px 0 6px}
+.fid-big{padding:14px 22px;font-size:1.02rem}
+.fid-lien{background:none;border:0;color:var(--ink-soft);text-decoration:underline;font-size:.85rem;cursor:pointer;padding:6px}
+.ap-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:420px}
+.ap-table th{text-align:left;font-size:11.5px;color:var(--ash-muted);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--ash-line)}
+.ap-table td{padding:9px 8px;border-bottom:1px solid var(--ash-line);vertical-align:top}
+.ap-table td.n{text-align:right;white-space:nowrap}
+.ap-sub{display:block;font-size:12px;color:var(--ash-muted)}
+.ap-moi{margin-left:8px;font-size:11px;background:var(--ash-ok-bg,#e7f4ea);color:var(--ash-ok,#2f7a45);border-radius:99px;padding:2px 8px}
+.ap-conf{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:13px}
+/* 📷 Photos du colis (15/11/2026) */
+.pc-bloc{display:grid;gap:8px}
+.pc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.pc-slot{border:1.5px dashed var(--ash-line-2,#e6ddc9);border-radius:12px;padding:7px;display:grid;gap:4px;align-content:start;min-width:0}
+.pc-slot.pris{border-style:solid;border-color:var(--ash-ok,#2f7a45)}
+.pc-img{aspect-ratio:1;border-radius:9px;background:var(--ash-sunk,#f3ede1);display:grid;place-items:center;overflow:hidden;border:0;padding:0;cursor:pointer;font-size:26px}
+.pc-img img{width:100%;height:100%;object-fit:contain;background:#fff}
+.pc-slot b{font-size:12.5px}
+.pc-h{font-size:11px;color:var(--ash-muted,#7a6d58);overflow-wrap:anywhere}
+.pc-slot .fq-btn{width:100%;justify-content:center;white-space:normal;line-height:1.2}
+.pc-autres{display:flex;gap:6px;flex-wrap:wrap}
+.pc-mini{width:52px;height:52px;border-radius:8px;overflow:hidden;border:1px solid var(--ash-line,#eee4d2);padding:0;background:#fff}
+.pc-mini img{width:100%;height:100%;object-fit:cover}
+.pc-more{display:flex;gap:6px;flex-wrap:wrap}
+.pc-etat{font-size:13px;color:var(--ash-warn,#b07b12);font-weight:600}
+.pc-etat.ok{color:var(--ash-ok,#2f7a45)}
+.pc-err{font-size:13px;color:var(--ash-bad,#b3261e)}
+.pc-voir{position:fixed;inset:0;background:rgba(20,14,4,.7);z-index:90;display:grid;place-items:center;padding:16px}
+.pc-voir figure{margin:0;background:#fff;border-radius:14px;padding:12px;max-width:min(560px,100%);max-height:92vh;overflow:auto;display:grid;gap:8px}
+.pc-voir img{width:100%;max-height:62vh;object-fit:contain}
+.pc-voir figcaption{font-size:12.5px;color:#555;overflow-wrap:anywhere}
+.pc-voir-a{display:flex;gap:6px;flex-wrap:wrap}
+.fq-pill.ok{background:#e7f4ea;color:#2f7a45}.fq-pill.warn{background:#fff3e0;color:#9a5b00}
+.pc-ligne{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pc-rappel{display:grid;gap:6px;background:#fff7e6;border:1px solid #f1d8a6;border-radius:10px;padding:8px 10px;font-size:13px;color:#7a4b00}
+.pc-rappel .r{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pc-rappel label{display:flex;gap:6px;align-items:center;font-size:12.5px}
+.fc-colis{display:grid;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--ash-line,#eee4d2)}
+.tel-h{padding:5px 8px;border:1px solid var(--ash-line-2,#e6ddc9);border-radius:9px;font:inherit;font-size:13.5px}
+/* 🧾 Classeur des factures (15/11/2026) */
+.cf{background:var(--ash-surface,#fff);border:1px solid var(--ash-line,#eee4d2);border-radius:16px;padding:16px;margin:14px 0 22px;display:grid;gap:10px;min-width:0}
+.cf-h h2{margin:0;font-size:1.15rem}.cf-h span{font-size:13px;color:var(--ash-muted,#7a6d58)}
+.cf-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.cf-find{flex:1 1 240px;min-width:0;font:inherit;font-size:13.5px;padding:8px 12px;border:1px solid var(--ash-line-2,#e6ddc9);border-radius:10px;box-sizing:border-box}
+.cf-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.cf-kpis>div{background:var(--ash-sunk,#f6f1e6);border-radius:12px;padding:10px 12px;display:grid;gap:2px;min-width:0}
+.cf-kpis span{font-size:12px;color:var(--ash-muted,#7a6d58)}.cf-kpis b{font-size:1.15rem;font-variant-numeric:tabular-nums}.cf-kpis em{font-style:normal;font-size:12px;color:var(--ash-muted,#7a6d58)}
+.cf-kpis>div.bad b{color:var(--ash-bad,#b3261e)}
+.cf-err{color:var(--ash-bad,#b3261e);margin:0;font-size:13.5px}
+.cf-form{display:grid;gap:10px;border:1px solid var(--ash-gold,#c9a24b);border-radius:12px;padding:12px;background:#fffaf0;max-height:90vh;overflow:auto}
+.cf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.cf-grid label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--ash-muted,#7a6d58);min-width:0}
+.cf-grid .l2{grid-column:1/-1}
+.cf-grid input,.cf-grid select{font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--ash-line-2,#e6ddc9);border-radius:9px;box-sizing:border-box;min-width:0;width:100%;color:var(--ash-ink,#1a1206)}
+.cf-acts{display:flex;gap:8px;flex-wrap:wrap}
+.cf-note{font-size:12.5px;color:var(--ash-muted,#7a6d58);margin:0}
+.cf-tablewrap{overflow-x:auto;display:grid;gap:12px}
+.cf-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
+.cf-table caption{text-align:left;font-weight:700;padding:4px 0 6px}
+.cf-table th{text-align:left;font-size:11.5px;color:var(--ash-muted,#7a6d58);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--ash-line,#eee4d2)}
+.cf-table td{padding:9px 8px;border-bottom:1px solid var(--ash-line,#eee4d2);vertical-align:top}
+.cf-table .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.cf-table .nw{white-space:nowrap}
+.cf-sub{display:block;font-size:12px;color:var(--ash-muted,#7a6d58);overflow-wrap:anywhere}
+.cf-vide{text-align:center;color:var(--ash-muted,#7a6d58)}
+.cf-lnk{background:none;border:0;color:var(--ash-muted,#7a6d58);text-decoration:underline;font-size:12px;cursor:pointer;display:block;padding:4px 0 0}
+.fq-pill.bad{background:#fde8e6;color:#a32a1d}
+.cf-titre2{font-size:1.05rem;margin:18px 0 8px}
+/* 📒 Comptabilité (15/11/2026) */
+.cp-tabs{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;margin:12px 0 14px;padding-bottom:2px}
+.cp-tabs .fq-chip{white-space:nowrap}
+.cp-two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px}
+.cp-box{background:var(--ash-surface,#fff);border:1px solid var(--ash-line,#eee4d2);border-radius:14px;padding:14px;min-width:0;overflow-x:auto}
+.cp-box h3{margin:0 0 10px;font-size:15px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cp-jauge{margin-bottom:14px}.cp-j1{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px}
+.cp-bar{height:10px;background:var(--ash-sunk,#f3ede1);border-radius:99px;margin:6px 0 4px;overflow:hidden}
+.cp-bar span{display:block;height:100%;background:var(--ash-gold,#c9a24b);border-radius:99px}
+.cp-jauge.alerte .cp-bar span{background:var(--ash-bad,#b3261e)}
+.cp-sub{font-size:12.5px;color:var(--ash-muted,#7a6d58);margin:4px 0}
+.cp-sub2{display:block;font-size:12px;color:var(--ash-muted,#7a6d58)}
+.cp-ech{list-style:none;margin:0;padding:0;display:grid}
+.cp-ech li{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 6px;border-bottom:1px solid var(--ash-line,#eee4d2);font-size:13.5px}
+.cp-ech li:last-child{border-bottom:0}
+.cp-ech li.warn b{color:var(--ash-warn,#b07b12)}.cp-ech li.bad b{color:var(--ash-bad,#b3261e)}
+.cp-mois{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;height:160px;align-items:end;padding-bottom:22px}
+.cp-mois div{position:relative;display:flex;gap:4px;align-items:flex-end;justify-content:center;height:100%}
+.cp-mois span{width:38%;border-radius:4px 4px 0 0;display:block;min-height:2px}
+.cp-mois .r,.cp-leg.r{background:var(--ash-gold,#c9a24b)}.cp-mois .a,.cp-leg.a{background:#8b7d6b}
+.cp-mois em{position:absolute;bottom:-20px;font-style:normal;font-size:11.5px;color:var(--ash-muted,#7a6d58)}
+.cp-leg{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 10px;vertical-align:-1px}
+.cp-tablewrap{overflow-x:auto}
+.cp-table{width:100%;border-collapse:collapse;font-size:13.5px}
+.cp-table th{text-align:left;font-size:11.5px;color:var(--ash-muted,#7a6d58);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--ash-line,#eee4d2)}
+.cp-table td{padding:8px;border-bottom:1px solid var(--ash-line,#eee4d2);vertical-align:top}
+.cp-table .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.cp-table .nw{white-space:nowrap}
+.cp-table tr.neg td{color:var(--ash-bad,#b3261e)}
+.cp-table tfoot td{font-weight:700;border-bottom:0}
+.cp-vide{text-align:center;color:var(--ash-muted,#7a6d58)}
+.cp-acts{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 6px}
+.cp-taux{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px}
+.cp-taux label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--ash-muted,#7a6d58);min-width:0}
+.cp-taux input,.cp-taux select{font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--ash-line-2,#e6ddc9);border-radius:9px;box-sizing:border-box;min-width:0;width:100%}
+@media (max-width:760px){.cp-ech li{grid-template-columns:minmax(0,1fr)}}
+.ef-tl{display:grid;gap:10px;margin-top:12px}
+.ef-s{display:grid;gap:4px;background:var(--ash-surface,#fff);border:1px solid var(--ash-line,#eee4d2);border-left:4px solid var(--ash-line-2,#e6ddc9);border-radius:12px;padding:12px 14px}
+.ef-s.done{border-left-color:var(--ash-ok,#2f7a45)}.ef-s b{font-size:15px}.ef-s em{font-style:normal;font-size:12.5px;color:var(--ash-muted,#7a6d58)}

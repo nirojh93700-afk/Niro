@@ -1,6 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { isAdmin, getStockMap, adjustStockMany, getPurchases, addPurchase, setProductOverride, getSettings, setSettings, getMateriel, recevoirMateriel } from "@/lib/stock";
 import { getCatalogAdmin } from "@/lib/catalog";
+import { ajouterFacture } from "@/lib/stock";
+import { rangerFichierFacture } from "@/lib/facturesServeur";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -215,7 +217,22 @@ async function apply(body) {
     shipping, total, expenseId: expense?.id || "",
     lines: lines.map((l) => { const r = bySid.get(l.stockId); const a = applied.find((x) => x.stockId === l.stockId); return { ...l, product: r.product, variant: r.variant, before: a?.before ?? 0, after: a?.after ?? 0 }; }),
   });
-  return { ok: true, purchase: rec, applied, costs, expense };
+  // 5) Classeur des factures (15/11/2026) : le fichier d'origine lu est gardé avec l'achat, 10 ans.
+  let facture = null;
+  if (body.file?.data) {
+    try {
+      const fichier = await rangerFichierFacture(body.file);
+      if (fichier && !fichier.error) {
+        facture = await ajouterFacture({
+          fournisseur: String(body.supplier || "Fournisseur").slice(0, 80), libelle: lines.map((l) => `${l.label || bySid.get(l.stockId).product} × ${l.qty}`).join(", ").slice(0, 160),
+          numero: String(body.invoiceNumber || "").slice(0, 60), date: /^\d{4}-\d{2}-\d{2}/.test(String(body.date || "")) ? String(body.date).slice(0, 10) : new Date().toISOString().slice(0, 10),
+          montant: total, categorie: lines.every(estMat) ? "emballage" : "marchandises", fichier, achatId: rec.id,
+        });
+      }
+    } catch { /* l'achat est enregistré même si le fichier ne l'est pas : il apparaîtra « facture manquante » */ }
+  }
+
+  return { ok: true, purchase: rec, applied, costs, expense, facture };
 }
 
 export async function GET(req) {

@@ -28,6 +28,9 @@ import { BlocConditionnement } from "@/components/admin/Conditionnement";
 import { RatesCommande } from "@/components/admin/Rates";
 import { FormExpedition, Pill, LiensSuivi } from "@/components/admin/CarteCommande";
 import { RefaireDevis, CrediterCagnotte } from "@/components/admin/ActionsCommande";
+import PhotosColis, { PastillePhotosColis } from "@/components/admin/PhotosColis";
+import DossierPreuve from "@/components/admin/DossierPreuve";
+import EcranAllume from "@/components/admin/EcranAllume";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import { useAdminBack } from "@/components/admin/adminBack";
 import { imprimerFiche } from "@/lib/impression";
@@ -256,7 +259,7 @@ export default function FicheCommandePage() {
   const confirmBox = confirm === "grav" ? (
     <div className="fc-confirm">Passer <b>#{refDe(o)}</b> en fabrication ? La cliente ne pourra plus annuler. <button type="button" className="fc-btn sm pri" disabled={busy} onClick={() => setStatus(o, "en_gravure")}>Oui, je commence</button><button type="button" className="fc-btn sm" onClick={() => setConfirm("")}>Non</button></div>
   ) : confirm === "exp" ? (
-    <FormExpedition o={o} busy={busy} onStatus={setStatus} onClose={() => setConfirm("")} titre={st === "expediee" ? "Modifier le suivi de" : "Expédier"} />
+    <FormExpedition o={o} busy={busy} onStatus={setStatus} onClose={() => setConfirm("")} onPhotos={() => { setConfirm(""); document.getElementById("fc-colis")?.scrollIntoView({ behavior: "smooth", block: "center" }); }} titre={st === "expediee" ? "Modifier le suivi de" : "Expédier"} />
   ) : confirm === "liv" ? (
     <div className="fc-confirm">Marquer <b>#{refDe(o)}</b> livrée ? {o.customerEmail ? <label style={{ display: "flex", gap: 6, alignItems: "center" }}><input type="checkbox" checked={livNotify} onChange={(e) => setLivNotify(e.target.checked)} /> envoyer la demande d&apos;avis à {o.customerEmail}</label> : null}<button type="button" className="fc-btn sm pri" disabled={busy} onClick={() => setStatus(o, "livree", { notifyCustomer: livNotify && Boolean(o.customerEmail) })}>Oui, livrée</button><button type="button" className="fc-btn sm" onClick={() => setConfirm("")}>Non</button></div>
   ) : confirm === "cancel" ? (
@@ -267,6 +270,8 @@ export default function FicheCommandePage() {
     <div className="fc-confirm" style={{ background: "var(--ash-bad-bg)", borderColor: "#f0c4bd" }}>Supprimer définitivement <b>#{refDe(o)}</b> ? À réserver aux commandes de test. Irréversible. <button type="button" className="fc-btn sm danger" onClick={supprimer}>Oui, supprimer</button><button type="button" className="fc-btn sm" onClick={() => setConfirm("")}>Non</button></div>
   ) : confirm === "devis" ? (
     <RefaireDevis o={o} lignes={lignes} adminKey={key} onToast={montrer} onClose={() => setConfirm("")} />
+  ) : confirm === "preuve" ? (
+    <DossierPreuve o={o} adminKey={key} onClose={() => setConfirm("")} />
   ) : confirm === "cagnotte" && o.customerEmail ? (
     <CrediterCagnotte o={o} adminKey={key} onToast={montrer} onClose={() => setConfirm("")} />
   ) : null;
@@ -284,6 +289,7 @@ export default function FicheCommandePage() {
       {st === "livree" ? <button type="button" onClick={() => setStatus(o, "expediee")}><Ic n="truck" /> Remettre expédiée</button> : null}
       {active || st === "expediee" ? <button type="button" onClick={() => setStatus(o, "remise_main_propre")}><Ic n="user" /> Remise en main propre</button> : null}
       {(estPartie(o) || st === "livree") && o.customerEmail ? <button type="button" onClick={demanderAvis}><Ic n="mail" /> Demander un avis à la cliente</button> : null}
+      <button type="button" onClick={() => { setConfirm("preuve"); window.scrollTo({ top: 0, behavior: "smooth" }); }}><Ic n="print" /> Dossier de preuve (litige)…</button>
       <button type="button" onClick={() => setConfirm("devis")}><Ic n="copy" /> Refaire la même commande → devis…</button>
       {o.customerEmail ? <button type="button" onClick={() => setConfirm("cagnotte")}><Ic n="gift" /> Créditer la cagnotte (avoir)…</button> : null}
       {st === "annulee" ? <button type="button" onClick={() => setStatus(o, "a_preparer")}><Ic n="undo" /> Rétablir la commande</button> : null}
@@ -307,6 +313,7 @@ export default function FicheCommandePage() {
 
   return (
     <div className="fc">
+      <EcranAllume />
       <div className="fc-head">
         <div className="row1">
           <Link className="fc-back" href="/gestion/commandes"><Ic n="back" /> Commandes</Link>
@@ -409,6 +416,10 @@ export default function FicheCommandePage() {
               {o.relaisPoint ? <div className="fc-row"><Ic n="pin" /><b>Point relais choisi :</b> {o.relaisPoint}<Copier texte={o.relaisPoint} onToast={montrer} /></div> : null}
               {o.shippingAddress ? <div className="fc-row"><Ic n="home" /><span>{o.relaisPoint ? "Coordonnées : " : "Étiquette : "}{adresseLigne(o)}</span><Copier texte={adresseLigne(o)} label="copier l'adresse" onToast={montrer} /></div> : null}
               {!finie ? <BlocConditionnement o={o} mat={mat} onOpen={() => setCondOpen(true)} /> : null}
+              <div id="fc-colis" className="fc-colis">
+                <div className="fc-row"><b>📷 Photos du colis</b><PastillePhotosColis photos={o.photosColis} /><span className="faint">au moment d&apos;emballer : la preuve en cas de « colis vide » ou de litige</span></div>
+                <PhotosColis order={o} photos={o.photosColis || []} adminKey={key} onChange={(l) => setOrders((liste) => liste.map((x) => (x.id === o.id ? { ...x, photosColis: l } : x)))} />
+              </div>
               <div className="fc-row" style={{ marginTop: 12 }}>
                 {!finie ? <Link className="fc-btn" href={`/gestion/etiquettes?id=${encodeURIComponent(o.id)}`}><Ic n="tag" /> Étiquette d&apos;adresse La Poste (45 × 45)</Link> : null}
                 <button type="button" className="fc-btn ghost" onClick={() => setBoxtal((v) => !v)}><Ic n="copy" /> {boxtal ? "Fermer les champs Boxtal" : "Champs Boxtal, champ par champ (+ corriger l'adresse)"}</button>

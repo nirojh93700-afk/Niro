@@ -41,6 +41,7 @@ import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote"
 import { nomAffiche } from "@/lib/nomLivraison";
 import PieceAUtiliser from "@/components/admin/PieceAUtiliser";
 import FichierAGraver from "@/components/admin/FichierAGraver";
+import EcranAllume from "@/components/admin/EcranAllume";
 
 // Un article est un « verre gravé » si son produit est dans la catégorie verres
 // (ou, à défaut, si son identifiant commence par « verre »).
@@ -239,6 +240,7 @@ export default function AtelierPage() {
 
   return (
     <div className="container" style={{ padding: "30px 16px 80px" }}>
+      <EcranAllume />
       <PageHead eyebrow="Commandes" title="Atelier — fichiers à graver" subtitle="Pour chaque commande : le visuel exact, les réglages, et le fichier prêt à graver (PNG, SVG, PDF à l'échelle)."
         actions={<div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {/* Dossier de gravure du jour (08/11/2026) : un zip par jour, un dossier par commande + gravure-du-jour.csv. */}

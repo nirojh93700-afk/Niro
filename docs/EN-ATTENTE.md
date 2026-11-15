@@ -12,7 +12,7 @@
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
 
-## 📱 APPLICATION « NIV ADMIN » + PHOTOS DU COLIS + FACTURES + PAGE COMPTABILITÉ — PRÉPARÉ LE 15/11/2026, RIEN CONSTRUIT (gérant : « tout ça… une page vraiment comptabilité comme les vrais… tu fais rien encore, tu fais quand je te dirai »)
+## 📱 APPLICATION « NIV ADMIN » + PHOTOS DU COLIS + FACTURES + PAGE COMPTABILITÉ — ✅ CONSTRUIT ET MIS EN LIGNE LE 15/11/2026 (« Applique », détail dans CLAUDE.md) — RESTE CÔTÉ GÉRANT : cocher charge.dispute.created / updated / closed dans Stripe → Webhooks · activer Face ID sur l'iPhone (Réglages › Appareils connectés) · essayer sur le vrai téléphone ; ci-dessous la préparation d'origine (gérant : « tout ça… une page vraiment comptabilité comme les vrais… tu fais rien encore, tu fais quand je te dirai »)
 - Il a déjà l'icône « Niv Admin » sur son iPhone (plein écran, OK). Défaut : mot de passe redemandé à chaque ouverture (clé en sessionStorage).
 - À construire, SUR SON MOT, dans cet ordre conseillé :
   1. **Face ID** : clé de connexion (passkey / WebAuthn) liée au téléphone, bouton « Entrer avec Face ID » (un toucher requis), mot de passe en secours ; changer le mot de passe déconnecte les appareils.

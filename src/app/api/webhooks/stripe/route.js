@@ -6,7 +6,7 @@ import { liensFichierGravure } from "@/components/admin/FichierGravure";
 import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail, ensureReferralCode, setPromoCode, addScheduledEmail, hasAutoSent, markAutoSent, logComm } from "@/lib/stock";
 import { sendClientMail, brandedMessage, boutonRepondre } from "@/lib/clientMail";
 import { genCodeCadeau, texteEmailDestinataire, texteEmailAcheteur, CARTE_VALIDITE_JOURS } from "@/lib/carteCadeau";
-import { recordSiteOrder, claimSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec } from "@/lib/firebase";
+import { recordSiteOrder, claimSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec, findSiteOrderByPaymentIntent, updateSiteOrder } from "@/lib/firebase";
 import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif } from "@/lib/vacation";
 import { cadeauPromisPour } from "@/lib/cadeauPromis";
 import { eclaterParVerre } from "@/lib/orderSpec";
@@ -178,6 +178,41 @@ export async function POST(req) {
     } catch (e) {
       console.error("Relance panier abandonné:", e.message);
     }
+    return Response.json({ received: true });
+  }
+
+  // ⚠️ LITIGE (15/11/2026, maquette Niv Admin) : une contestation de paiement (carte ou PayPal via Stripe) ouverte,
+  // mise à jour ou close. Rangée sur la commande (order.litige), alerte sur le téléphone (même la nuit) et
+  // e-mail au gérant avec la date limite pour répondre. À cocher dans Stripe → Webhooks :
+  // charge.dispute.created, charge.dispute.updated, charge.dispute.closed.
+  if (/^charge\.dispute\./.test(event.type)) {
+    try {
+      const dp = event.data.object || {};
+      const pi = String(dp.payment_intent || "");
+      const order = pi ? await findSiteOrderByPaymentIntent(pi) : null;
+      const montant = ((dp.amount || 0) / 100).toLocaleString("fr-FR", { style: "currency", currency: (dp.currency || "eur").toUpperCase() });
+      const due = dp.evidence_details?.due_by ? new Date(dp.evidence_details.due_by * 1000) : null;
+      const dueTxt = due ? due.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "Europe/Paris" }) : "";
+      const ref = order?.ref || (pi ? pi.slice(-8).toUpperCase() : "");
+      const litige = { id: dp.id, statut: dp.status || "", motif: dp.reason || "", montant: (dp.amount || 0) / 100, avantLe: due ? due.toISOString() : null, maj: new Date().toISOString(), evenement: event.type };
+      if (order?.id) await updateSiteOrder(order.id, { litige });
+      const ferme = event.type === "charge.dispute.closed";
+      const titre = ferme ? `Litige clos (${dp.status === "won" ? "gagné" : dp.status === "lost" ? "perdu" : dp.status}) · #${ref}` : `⚠️ Litige ${event.type === "charge.dispute.created" ? "ouvert" : "mis à jour"} · #${ref}`;
+      await envoyerAlerteAdmin({ title: titre, body: `${order?.customerName || "Client"} · ${montant}${dueTxt && !ferme ? ` · répondre avant le ${dueTxt}` : ""} · motif : ${dp.reason || "?"}`, url: order?.ref ? `/gestion/commande/${encodeURIComponent(order.ref)}` : "/gestion/commandes", tag: `litige-${dp.id}`, type: "litige" });
+      if (event.type !== "charge.dispute.updated") {
+        await sendEmail({
+          to: BRAND.contact,
+          subject: `${titre} — ${montant}`,
+          html: emailLayout({
+            heading: ferme ? "Litige clos" : "Un litige vient d'être ouvert",
+            bodyHtml: `<p style="margin:0 0 10px;">Commande <strong>#${escapeHtml(ref)}</strong>${order?.customerName ? ` · ${escapeHtml(order.customerName)}` : ""} · <strong>${escapeHtml(montant)}</strong></p>
+              <p style="margin:0 0 10px;">Motif donné par la banque : <strong>${escapeHtml(dp.reason || "non précisé")}</strong> · statut : ${escapeHtml(dp.status || "")}</p>
+              ${dueTxt && !ferme ? `<p style="margin:0 0 10px;color:#a32a1d;"><strong>Répondre dans Stripe avant le ${escapeHtml(dueTxt)}.</strong></p>` : ""}
+              <p style="margin:0;">Dans Gestion, fiche de la commande → Plus d'actions → « Dossier de preuve (litige) » : le PDF à joindre (photos du colis, suivi, échanges).</p>`,
+          }),
+        });
+      }
+    } catch (e) { console.error("Litige Stripe:", e.message); }
     return Response.json({ received: true });
   }
 
@@ -860,6 +895,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
         body: `${customer.name || customer.email || "Cliente"} · ${((session.amount_total || 0) / 100).toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}${quote ? ` · devis ${quote.number || ""}` : ""}`,
         url: `/gestion/commandes?q=${encodeURIComponent(orderRef)}`,
         tag: `commande-${orderRef}`,
+        type: "commande",
       });
     } catch { /* l'alerte ne doit jamais gêner la commande */ }
 

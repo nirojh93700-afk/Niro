@@ -113,6 +113,11 @@ export function chipsDe(o, unread = false) {
   const nm = estActive(o) ? nomManquant(o) : { manquant: false };
   if (nm.manquant) c.push({ k: "nom", tone: "bad", lib: nm.propose ? `Nom manquant${nm.motif === "lieu" ? ` (« ${nm.ecrit} » est un lieu)` : ""} · proposé : ${nm.propose} (${nm.source})` : nm.motif === "lieu" ? `Nom manquant · « ${nm.ecrit} » est un lieu : demander le nom` : nm.motif === "vide" ? "Nom manquant · aucun nom saisi : demander le nom" : "Nom manquant · l'adresse est dans le champ nom : demander le nom" });
   if (o.alerteEmail || o.emailCorrigeDe) c.push({ k: "emailfix", tone: "warn", lib: o.alerteEmail || `E-mail corrigé (« ${o.emailCorrigeDe} »)` });
+  // Litige Stripe / PayPal (15/11/2026) : tant qu'il n'est pas clos.
+  if (o.litige && !["won", "lost", "warning_closed"].includes(o.litige.statut)) {
+    const av = o.litige.avantLe ? new Date(o.litige.avantLe).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", timeZone: "Europe/Paris" }) : "";
+    c.unshift({ k: "litige", tone: "bad", lib: `⚠️ Litige ouvert (${o.litige.motif || "motif ?"})${av ? ` · répondre avant le ${av}` : ""} · Plus d'actions → Dossier de preuve` });
+  }
   if (o.test) c.push({ k: "test", tone: "grey", lib: "Commande test (non comptée)" });
   return c;
 }

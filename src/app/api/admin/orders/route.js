@@ -1,6 +1,8 @@
 import { detaillerCommande } from "@/lib/detailProduit";
 import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder, getBatTousLesFils, deplacerCagnotte, getCommsAll } from "@/lib/stock";
-import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder, listQuotes } from "@/lib/firebase";
+import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder, listQuotes, storeCustomerUpload } from "@/lib/firebase";
+import nodeCrypto from "crypto";
+import { PHOTOS_COLIS } from "@/lib/photosColis";
 import { devisDeLaCommande, imagesDuFil } from "@/lib/historiqueDevis";
 import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
@@ -71,6 +73,34 @@ export async function POST(req) {
     if (!Object.keys(patch).length) return Response.json({ error: "Rien à enregistrer." }, { status: 400 });
     const ok = await updateSiteOrder(id, patch);
     return Response.json({ ok, patch });
+  }
+
+  // 📷 Photos du colis (15/11/2026, maquette Niv Admin) : contenu · boîte fermée · étiquette (+ autres).
+  // Chaque photo est rangée avec la commande, avec la date et l'heure du serveur et son empreinte (sha256 du fichier gardé).
+  if (id && body?.action === "photoColis") {
+    const order = await getSiteOrder(id);
+    if (!order) return Response.json({ ok: false, error: "Commande introuvable." }, { status: 404 });
+    const liste = Array.isArray(order.photosColis) ? [...order.photosColis] : [];
+    if (body.retirer) {
+      const reste = liste.filter((p) => p.ref !== body.retirer);
+      const ok = await updateSiteOrder(id, { photosColis: reste });
+      return Response.json({ ok, photosColis: reste });
+    }
+    const k = PHOTOS_COLIS.some((x) => x.k === body.k) ? body.k : "autre";
+    const dataUrl = String(body.dataUrl || "");
+    if (!/^data:image\/(jpeg|png|webp);base64,/.test(dataUrl)) return Response.json({ ok: false, error: "Photo invalide." }, { status: 400 });
+    if (dataUrl.length > 1_000_000) return Response.json({ ok: false, error: "Photo trop lourde, réessayez." }, { status: 400 });
+    const octets = Buffer.from(dataUrl.split(",")[1], "base64");
+    const sha = nodeCrypto.createHash("sha256").update(octets).digest("hex");
+    const ref = await storeCustomerUpload(dataUrl, { photoColis: k, orderId: id, sha256: sha });
+    if (!ref) return Response.json({ ok: false, error: "Enregistrement impossible." }, { status: 500 });
+    const at = new Date().toISOString();
+    const entree = { k, ref, at, sha, taille: octets.length, source: body.source === "galerie" ? "galerie" : "appareil" };
+    // Une seule photo par case guidée (la nouvelle remplace l'ancienne, gardée dans les envois) ; « autre » s'ajoute.
+    const next = k === "autre" ? [...liste, entree] : [...liste.filter((p) => p.k !== k), entree];
+    const ok = await updateSiteOrder(id, { photosColis: next.slice(-12) });
+    try { await journaliser({ type: "commande", cible: id, label: `Photo du colis « ${k} » · #${order.ref || id}`, avant: null, apres: ref }); } catch { /* jamais bloquant */ }
+    return Response.json({ ok, photosColis: next.slice(-12), photo: entree });
   }
 
   // Corriger l'e-mail d'une commande (16/10/2026, commande 10OPUHMO : la cliente avait tapé « gmail.comn »

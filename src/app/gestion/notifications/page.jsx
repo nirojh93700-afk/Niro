@@ -10,8 +10,12 @@ import { useCallback, useEffect, useState } from "react";
 import PageHead from "@/components/admin/PageHead";
 import { Ico } from "@/components/admin/AdminShell";
 import { toast } from "@/components/admin/AdminToast";
+import ReglagesTelephone from "@/components/admin/ReglagesTelephone";
 
 const JOURS = [["1", "Lun"], ["2", "Mar"], ["3", "Mer"], ["4", "Jeu"], ["5", "Ven"], ["6", "Sam"], ["0", "Dim"]];
+// « points » du résumé = liste [{ k, n, lib }] : on compte ceux qui ont quelque chose (15/11/2026 : la liste était
+// affichée telle quelle et faisait planter la page).
+const nbPoints = (p) => (Array.isArray(p) ? p.filter((x) => Number(x?.n) > 0).length : Number(p) || 0);
 const quand = (ts) => (ts ? new Date(ts).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" }) : "—");
 
 export default function NotificationsPage() {
@@ -58,7 +62,7 @@ export default function NotificationsPage() {
       const r = await fetch("/api/admin/notifications", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ action: "envoyer" }) });
       const j = await r.json().catch(() => ({}));
       if (!r.ok || !j.ok) throw new Error(j.error || "Envoi refusé.");
-      toast(`Résumé envoyé à l'atelier (${j.points ?? 0} point${j.points > 1 ? "s" : ""}).`, "ok");
+      toast(`Résumé envoyé à l'atelier (${nbPoints(j.points)} point${nbPoints(j.points) > 1 ? "s" : ""}).`, "ok");
       load(key);
     } catch (e) { toast("Échec : " + e.message, "err"); }
     setBusy("");
@@ -73,10 +77,12 @@ export default function NotificationsPage() {
         subtitle="Chaque matin, à l'heure choisie, un e-mail à l'atelier : commandes à préparer, à expédier aujourd'hui ou en retard, Express, réponses à valider, matériel à racheter, ce qui a changé hier et les chiffres. Rien ne part aux clientes."
         kpis={[
           { label: "Résumé du matin", value: saved ? (saved.resumeMatin ? "Allumé" : "Éteint") : "—", sub: saved?.resumeMatin ? `à ${saved.heure}` : "à activer ci-dessous", tone: saved?.resumeMatin ? "good" : undefined },
-          { label: "Dernier envoi", value: d ? quand(d.at) : "jamais", sub: d ? (d.ok ? `${d.points ?? 0} points${d.force ? " · à la main" : ""}` : "refusé") : "—", tone: d && d.ok === false ? "bad" : undefined },
-          { label: "Aujourd'hui", value: data ? data.points ?? 0 : "—", sub: "points dans l'aperçu" },
+          { label: "Dernier envoi", value: d ? quand(d.at) : "jamais", sub: d ? (d.ok ? `${nbPoints(d.points)} points${d.force ? " · à la main" : ""}` : "refusé") : "—", tone: d && d.ok === false ? "bad" : undefined },
+          { label: "Aujourd'hui", value: data ? nbPoints(data.points) : "—", sub: "points dans l'aperçu" },
         ]} />
       {err ? <p className="fq-empty" style={{ color: "var(--ash-bad)" }}>{err}</p> : null}
+
+      <ReglagesTelephone adminKey={key} telephone={data?.notifications?.telephone} onSaved={() => load(key)} />
 
       <div className="fq-card" style={{ marginTop: 12, gap: 12 }}>
         <label style={{ display: "flex", gap: 10, alignItems: "flex-start", cursor: "pointer" }}>

@@ -901,6 +901,8 @@ function correspond(auth, key) {
 export async function checkAdminKey(key) {
   const k = typeof key === "string" ? key : "";
   if (!k) return false;
+  // Clé ouverte par Face ID (15/11/2026) : jeton de session, jamais le mot de passe.
+  if (k.startsWith(JETON_PREFIXE)) return sessionAdminValide(k);
   let auth = await readAdminAuth(false);
   if (auth && correspond(auth, k)) return true;
   // Le mot de passe vient peut-être d'être changé sur un autre serveur : relecture fraîche (au plus toutes les 5 s).
@@ -924,7 +926,108 @@ export async function setAdminPassword(next) {
   data[ADMIN_AUTH_SECTION] = auth;
   await persistCatalog(data, [ADMIN_AUTH_SECTION]);
   adminAuthCache = { val: auth, at: Date.now() };
+  // Changer le mot de passe déconnecte tous les appareils entrés avec Face ID (maquette Niv Admin, 15/11/2026).
+  try { await modifierAdminDevices((d) => ({ ...d, devices: [], sessions: [], challenges: [] })); } catch { /* jamais bloquant */ }
   return auth.at;
+}
+
+// --- Face ID : appareils connectés (15/11/2026, maquette « Niv Admin ») ------------------------------
+// Section « adminDevices » : { devices:[{id, pk, counter, transports, nom, at, lastAt}], sessions:[{h, dev, exp}],
+// challenges:[{c, kind, exp}], vus:[{nom, at}] }. Un appareil = une clé d'accès (passkey) liée au téléphone ;
+// une ouverture par Face ID donne un jeton de session (nvs_…) gardé chiffré (sha256) côté serveur, 30 jours.
+// Le mot de passe reste valable en secours.
+const DEV_SECTION = "adminDevices";
+const JETON_PREFIXE = "nvs_";
+const JETON_JOURS = 30;
+let devCache = { val: undefined, at: 0 };
+let devFreshAt = 0;
+
+function devVide(v) {
+  const d = v && typeof v === "object" ? v : {};
+  return {
+    devices: Array.isArray(d.devices) ? d.devices : [],
+    sessions: Array.isArray(d.sessions) ? d.sessions : [],
+    challenges: Array.isArray(d.challenges) ? d.challenges : [],
+    vus: Array.isArray(d.vus) ? d.vus : [],
+  };
+}
+
+async function readDevices(fresh = false) {
+  if (!fresh && devCache.val !== undefined && Date.now() - devCache.at < FS_CACHE_TTL) return devCache.val;
+  let val = null;
+  try {
+    const db = useFirestore() ? getFirestoreDb() : null;
+    if (db) {
+      const snap = await db.collection(FS_COLLECTION).doc(FS_SECTION_PREFIX + DEV_SECTION).get();
+      if (snap.exists) val = JSON.parse(snap.data()?.json || "null");
+    } else {
+      val = (await getCatalogRaw(fresh))?.[DEV_SECTION] || null;
+    }
+  } catch {
+    if (devCache.val !== undefined) return devCache.val;
+  }
+  const d = devVide(val);
+  devCache = { val: d, at: Date.now() };
+  return d;
+}
+
+export function hacherJeton(t) {
+  return nodeCrypto.createHash("sha256").update(String(t)).digest("hex");
+}
+
+export async function getAdminDevices() {
+  return readDevices(true);
+}
+
+// Lecture FRAÎCHE + écriture de cette seule section ; les sessions, défis expirés et appareils retirés sont nettoyés.
+export async function modifierAdminDevices(fn) {
+  const data = await getCatalogRaw(true);
+  const cur = devVide(data[DEV_SECTION]);
+  const next = devVide(fn(cur) || cur);
+  const now = Date.now();
+  const ids = new Set(next.devices.map((x) => x.id));
+  next.sessions = next.sessions.filter((x) => x.exp > now && ids.has(x.dev)).slice(-60);
+  next.challenges = next.challenges.filter((x) => x.exp > now).slice(-20);
+  next.vus = next.vus.slice(-12);
+  next.devices = next.devices.slice(-12);
+  data[DEV_SECTION] = next;
+  await persistCatalog(data, [DEV_SECTION]);
+  devCache = { val: next, at: Date.now() };
+  return next;
+}
+
+// Crée un jeton de session pour un appareil ; renvoie le jeton en clair (une seule fois).
+export async function ouvrirSessionAdmin(devId) {
+  const jeton = JETON_PREFIXE + nodeCrypto.randomBytes(32).toString("hex");
+  const h = hacherJeton(jeton);
+  const at = new Date().toISOString();
+  await modifierAdminDevices((d) => ({
+    ...d,
+    sessions: [...d.sessions, { h, dev: devId, exp: Date.now() + JETON_JOURS * 86400000 }],
+    devices: d.devices.map((x) => (x.id === devId ? { ...x, lastAt: at } : x)),
+  }));
+  return jeton;
+}
+
+export async function sessionAdminValide(jeton) {
+  const h = hacherJeton(jeton);
+  const ok = (d) => {
+    const s = d.sessions.find((x) => x.h === h && x.exp > Date.now());
+    return Boolean(s && d.devices.some((x) => x.id === s.dev));
+  };
+  if (ok(await readDevices(false))) return true;
+  if (Date.now() - devFreshAt > 5000) {
+    devFreshAt = Date.now();
+    return ok(await readDevices(true));
+  }
+  return false;
+}
+
+// Appareil dont vient ce jeton (pour « cet appareil » dans la liste).
+export async function appareilDuJeton(jeton) {
+  if (!String(jeton || "").startsWith(JETON_PREFIXE)) return null;
+  const d = await readDevices(false);
+  return d.sessions.find((x) => x.h === hacherJeton(jeton))?.dev || null;
 }
 
 export async function adminPasswordInfo() {
@@ -3237,4 +3340,61 @@ export async function setTestLaser({ fichier, etat, note, matiere, decoupe, grav
   data.testsLaser = t;
   await persistCatalog(data, ["testsLaser"]);
   return t;
+}
+
+// --- 🧾 Classeur des factures (15/11/2026, maquette « Niv Admin ») ---------------------------------
+// Chaque facture d'achat est gardée dans son fichier d'ORIGINE (photo ou PDF) dans Firebase Storage
+// (« factures/<id> »), avec son empreinte sha256, pour 10 ans. La liste vit dans la section « factures ».
+// Une facture peut être reliée à un achat (Achats & factures) ou à une dépense (Bénéfices).
+export const FACTURE_CATEGORIES = { marchandises: "Achat de marchandises", emballage: "Emballage", envoi: "Frais d'envoi", materiel: "Matériel / outillage", frais: "Abonnements et frais", autre: "Autre" };
+
+export async function getFactures() {
+  const data = await getCatalogRaw(true);
+  return Array.isArray(data.factures) ? data.factures : [];
+}
+
+export async function ajouterFacture(rec) {
+  const data = await getCatalogRaw(true);
+  const list = Array.isArray(data.factures) ? data.factures : [];
+  const item = { id: "fac_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), at: Date.now(), ...rec };
+  data.factures = [item, ...list].slice(0, 3000);
+  await persistCatalog(data, ["factures"]);
+  return item;
+}
+
+export async function modifierFacture(id, patch) {
+  const data = await getCatalogRaw(true);
+  const list = Array.isArray(data.factures) ? data.factures : [];
+  let trouve = null;
+  data.factures = list.map((f) => (f.id === id ? (trouve = { ...f, ...patch, majAt: Date.now() }) : f));
+  if (!trouve) return null;
+  await persistCatalog(data, ["factures"]);
+  return trouve;
+}
+
+export async function saveFactureFile(buffer, contentType) {
+  const id = "f_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const bucket = getStorageBucketSafe();
+  if (!bucket) return null;
+  try {
+    await bucket.file("factures/" + id).save(Buffer.from(buffer), { contentType: contentType || "application/octet-stream", resumable: false });
+    return id;
+  } catch (e) {
+    console.error("Storage facture écriture:", e.message);
+    return null;
+  }
+}
+
+export async function getFactureFile(id) {
+  const bucket = getStorageBucketSafe();
+  if (!bucket || !/^f_[a-z0-9]+$/.test(String(id || ""))) return null;
+  try {
+    const file = bucket.file("factures/" + id);
+    const [meta] = await file.getMetadata().catch(() => [null]);
+    if (!meta) return null;
+    const [data] = await file.download();
+    return { data, contentType: meta.contentType || "application/octet-stream" };
+  } catch {
+    return null;
+  }
 }

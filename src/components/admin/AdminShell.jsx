@@ -106,6 +106,7 @@ const SECTIONS = [
     { id: "benefices", t: "Bénéfices", href: "/gestion/benefices" },
     { id: "stats", t: "Ventes", href: "/gestion/ventes" },
     { id: "visiteurs", t: "Visiteurs", href: "/gestion/statistiques" },
+    { id: "compta", t: "Comptabilité", href: "/gestion/comptabilite" },
     { id: "inventaire-compta", t: "Inventaire & compta", href: "/gestion/inventaire-compta" } ] },
   { id: "reglages", t: "Réglages", ic: "set", tabs: [
     { id: "reglages", t: "Boutique", href: "/gestion/parametres" },
@@ -116,7 +117,10 @@ const SECTIONS = [
     { id: "programmations", t: "Programmations", href: "/gestion/programmations" },
     { id: "notifications", t: "Notifications & résumés", href: "/gestion/notifications" },
     { id: "journal", t: "Journal d'activité", href: "/gestion/journal" },
-    { id: "etat", t: "État du système", href: "/gestion/etat" } ] },
+    { id: "etat", t: "État du système", href: "/gestion/etat" },
+    // 15/11/2026 (maquette « Niv Admin ») : Face ID et facture électronique.
+    { id: "appareils", t: "Appareils connectés", href: "/gestion/appareils" },
+    { id: "efacture", t: "Facture électronique", href: "/gestion/facture-electronique" } ] },
   // Logiciel de création (13/11/2026 soir, gérant : « pas dans ton test… c'est des réglages, logiciel de création, il faut que ça soit à part, une nouvelle catégorie ») :
   // L'atelier = un seul logiciel pour toutes les créations (public/atelier-outils/logiciel.html). Il n'est plus rangé dans Tests.
   { id: "logiciel", t: "Logiciel de création", ic: "star", tabs: [
@@ -214,6 +218,14 @@ export default function AdminShell({ children }) {
       if (!r.ok) return;
       const c = await r.json();
       setCounts({ prep: c.prep || 0, unread: c.unread || 0, replies: c.replies || 0, reviews: c.reviews || 0, pros: c.pros || 0, rachat: c.rachat || 0 });
+      // Chiffre sur l'icône « Niv Admin » (15/11/2026) : commandes à préparer, ou messages, selon Réglages › Notifications.
+      try {
+        if (navigator.setAppBadge) {
+          const mode = c.badge || "prep";
+          const n = mode === "rien" ? 0 : mode === "messages" ? (c.unread || 0) + (c.replies || 0) : (c.prep || 0);
+          if (n > 0) navigator.setAppBadge(n).catch(() => {}); else navigator.clearAppBadge?.().catch(() => {});
+        }
+      } catch { /* non pris en charge */ }
     } catch { /* réseau : on garde les derniers chiffres */ }
   }, []);
   // Une fois au chargement puis toutes les 2 min — plus à chaque changement d'écran.

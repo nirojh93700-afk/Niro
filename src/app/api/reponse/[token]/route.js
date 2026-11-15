@@ -130,6 +130,7 @@ export async function POST(req, { params }) {
       body: `${it.orderRef ? `#${it.orderRef} · ` : ""}${text.slice(0, 160)}`,
       url: it.orderRef ? `/gestion/commandes?q=${encodeURIComponent(it.orderRef)}` : (prospect ? "/gestion/restaurants" : "/gestion/messages"),
       tag: `reponse-${it.email}`,
+      type: "message",
     });
   } catch { /* jamais bloquant */ }
 

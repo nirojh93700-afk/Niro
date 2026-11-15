@@ -54,6 +54,7 @@ export async function sendDraftAlert(item, opts = {}) {
       body: String(item.message || item.subject || "Nouveau message").replace(/\s+/g, " ").slice(0, 160),
       url: item.token ? `/repondre/${item.token}` : "/gestion",
       tag: `message-${item.email}`,
+      type: "message",
     });
   } catch { /* ignore */ }
   return sendEmail({

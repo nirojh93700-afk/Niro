@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PageHead from "@/components/admin/PageHead";
 import ARacheter from "@/components/admin/ARacheter";
+import ClasseurFactures from "@/components/admin/ClasseurFactures";
 import { exportRows } from "@/lib/exportClients";
 
 // =============================================================================
@@ -107,7 +108,9 @@ export default function AchatsPage() {
     try {
       const r = await fetch("/api/admin/purchases", {
         method: "POST", headers: { "Content-Type": "application/json", ...H },
-        body: JSON.stringify({ action: "apply", ...proposal, fileName: file?.name || "", addExpense, updateCost }),
+        body: JSON.stringify({ action: "apply", ...proposal, fileName: file?.name || "", addExpense, updateCost,
+          // Classeur (15/11/2026) : la photo ou le PDF d'origine est gardé avec l'achat (10 ans).
+          file: file && /^(application\/pdf|image\/)/.test(file.type || "") ? { name: file.name, type: file.type, data: await readFileAsBase64(file) } : undefined }),
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(d.error || "Échec.");
@@ -132,14 +135,18 @@ export default function AchatsPage() {
       <div className="container">
         <PageHead
           eyebrow="Catalogue"
-          title="Achats & factures fournisseurs"
-          subtitle="Dépose une facture ou un devis : l'agent lit les lignes, retrouve tes produits et propose les quantités à mettre en stock. Tu corriges, tu valides — rien n'est écrit avant."
+          title="Achats & factures"
+          subtitle="Le classeur garde chaque facture d'origine 10 ans. Plus bas : déposez une facture ou un devis, l'agent lit les lignes et propose les quantités à mettre en stock ; vous corrigez, vous validez, rien n'est écrit avant (la facture est rangée dans le classeur en même temps)."
           kpis={[
             { label: "Achats enregistrés", value: history.length },
             { label: "Total acheté", value: euro(totalAchats) },
             { label: "Dernier achat", value: history[0] ? new Date(history[0].at).toLocaleDateString("fr-FR") : "—", sub: history[0]?.supplier || "" },
           ]}
         />
+
+        {key ? <ClasseurFactures adminKey={key} /> : null}
+
+        <h2 className="cf-titre2">Lire une facture et mettre le stock à jour</h2>
 
         <ARacheter />
 

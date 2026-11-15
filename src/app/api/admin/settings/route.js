@@ -433,8 +433,26 @@ export async function POST(req) {
   // 🔔 Notifications & résumés (08/11/2026) : résumé du matin (heure Paris) par e-mail au gérant.
   if (body.notifications && typeof body.notifications === "object") {
     const n = body.notifications;
-    const heure = /^([01]\d|2[0-3]):[0-5]\d$/.test(String(n.heure || "")) ? String(n.heure) : "07:30";
-    patch.notifications = { resumeMatin: n.resumeMatin === true, heure, joursOff: Array.isArray(n.joursOff) ? n.joursOff.map((d) => parseInt(d, 10)).filter((d) => d >= 0 && d <= 6).slice(0, 7) : [] };
+    // 15/11/2026 : fusion avec ce qui est déjà enregistré (le résumé du matin et le téléphone se règlent séparément).
+    const dejaNotif = (await getSettings(true).catch(() => null))?.notifications || {};
+    const heureOk = (v) => /^([01]\d|2[0-3]):[0-5]\d$/.test(String(v || ""));
+    const out = { ...dejaNotif };
+    if ("resumeMatin" in n || "heure" in n || "joursOff" in n) {
+      out.resumeMatin = n.resumeMatin === true;
+      out.heure = heureOk(n.heure) ? String(n.heure) : "07:30";
+      out.joursOff = Array.isArray(n.joursOff) ? n.joursOff.map((d) => parseInt(d, 10)).filter((d) => d >= 0 && d <= 6).slice(0, 7) : [];
+    }
+    // 📱 Notifications sur le téléphone (maquette Niv Admin, 15/11/2026).
+    if (n.telephone && typeof n.telephone === "object") {
+      const t = n.telephone;
+      out.telephone = {
+        commande: t.commande !== false, message: t.message !== false, litige: t.litige !== false,
+        materiel: t.materiel === true, resume: t.resume === true,
+        calme: t.calme === true, calmeDe: heureOk(t.calmeDe) ? String(t.calmeDe) : "22:00", calmeA: heureOk(t.calmeA) ? String(t.calmeA) : "07:30",
+        badge: ["prep", "messages", "rien"].includes(t.badge) ? t.badge : "prep",
+      };
+    }
+    patch.notifications = out;
   }
 
   // Journal d'activité (08/11/2026) : une ligne par réglage qui change, avec « Rétablir ».
