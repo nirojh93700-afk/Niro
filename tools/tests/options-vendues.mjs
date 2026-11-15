@@ -19,7 +19,7 @@ check("cristal petit + socle : objet à 14,90 €", (() => { const o = cv.find((
 
 // Bijou recto/verso : la face la moins chère comprise (15/11/2026), l'autre +3 €
 const bijou = optionsArticle({ slug: "collier-double-coeur", fields: { recto: "Léa", verso: "12.06.24" } });
-check("bijou recto + verso : 1 face comprise (0 €), l'autre +3 €", bijou.filter((o) => o.montant === 3).length === 1 && bijou.filter((o) => o.montant === 0 && /comprise/.test(o.libelle + o.detail)).length === 1 && has(bijou, /« Léa »/) && has(bijou, /12\.06\.24/));
+check("bijou recto + verso : 1 face comprise (0 €), l'autre +3 €", bijou.filter((o) => o.montant === 3).length === 1 && bijou.filter((o) => o.montant === 0 && /offerte/.test(o.libelle + o.detail)).length === 1 && has(bijou, /« Léa »/) && has(bijou, /12\.06\.24/));
 const bijouPhoto = optionsArticle({ slug: "collier-plaque-acier", fields: { photo: "/api/img/abcdef12", verso: "Léa" } });
 check("plaque acier photo + verso : le texte compris, la photo +8 €", bijouPhoto.some((o) => /Photo/.test(o.libelle) && o.montant === 8) && bijouPhoto.some((o) => o.montant === 0 && /« Léa »/.test(o.detail)));
 

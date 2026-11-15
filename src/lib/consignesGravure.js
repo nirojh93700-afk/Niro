@@ -200,7 +200,7 @@ function consignesGobelet(produit, champs) {
     const img = e.kind === "dessin" ? (cfg?.dessinUnite ? `${cfg.dessinUnite}${String(e.num).padStart(2, "0")}.webp` : plancheDuNumero(cfg, e.num))
       : e.kind === "cadre" ? plancheDuNumero(cfg, e.num) : e.kind === "lettre" ? cfg?.alphabet : e.kind === "photo" ? e.photo : null;
     f.lignes.push({
-      k: `${i + 1}. ${e.side === "atelier" ? "À placer au mieux" : (GOB_PLACES[e.zone] || "au milieu").replace(/^./, (x) => x.toUpperCase())} · ${e.compris ? "compris" : `+${String(prixElement(e, cfg)).replace(".", ",")} €`}`,
+      k: `${i + 1}. ${e.side === "atelier" ? "À placer au mieux" : (GOB_PLACES[e.zone] || "au milieu").replace(/^./, (x) => x.toUpperCase())} · ${e.compris ? "offert" : `+${String(prixElement(e, cfg)).replace(".", ",")} €`}`,
       v: `${quoiElement(e)}${ecr}`,
       texte: ["cadre", "lettre", "texte", "sous"].includes(e.kind),
       img,
@@ -210,7 +210,7 @@ function consignesGobelet(produit, champs) {
   // Le bloc « au choix de l'atelier » n'est pas un côté : absent s'il est vide.
   const blocs = faces.filter((f) => f.cle !== "atelier" || !f.vide).sort((a, b) => Number(a.vide) - Number(b.vide));
   const sup = gobeletSupplement(champs, cfg);
-  const general = [{ k: "Éléments", v: `${els.length} (1 compris${sup.enPlus ? ` + ${sup.enPlus} en plus = ${String(sup.montant.toFixed(2)).replace(".", ",")} €` : ""})`, fort: true }];
+  const general = [{ k: "Éléments", v: `${els.length} (1 offert${sup.enPlus ? ` + ${sup.enPlus} en plus = ${String(sup.montant.toFixed(2)).replace(".", ",")} €` : ""})`, fort: true }];
   const aPlacer = els.filter((e) => e.side === "atelier").length;
   if (aPlacer) general.push({ k: "⚠️ Aperçu", v: `${aPlacer} élément${aPlacer > 1 ? "s" : ""} à placer par l'atelier : envoyer un aperçu à la cliente et attendre sa réponse avant de graver`, fort: true });
   const autres = [];

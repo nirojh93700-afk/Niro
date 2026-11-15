@@ -29,16 +29,16 @@ function resumeGravure(p) {
     return "verre 1 : une image / un logo / un modèle offert, CHAQUE texte +3 € ; chaque autre verre (identique ou non) : image + texte +5 €, image seule ou texte seul +3 € ; face + fond +7 € par verre";
   }
   // « Le moins cher compris » (15/11/2026) : le gobelet, les marque-pages, le carnet et le support ont leur propre calcul.
-  if (p.gobeletParcours) return "l'élément le MOINS CHER de la gravure est compris ; chaque autre élément +3 €, une photo +6 €";
-  if (p.marquePages?.gravure) return "sur chaque marque-page, la gravure la MOINS CHÈRE est comprise ; chaque autre : texte +3 €, dessin / cadre / photo +4 €";
-  if (p.carnet) return "une face gravée (couverture ou dos) est comprise ; la 2e face +7 €";
-  if (p.createur === "support") return "taille selon l'option ; chaque élément gravé +3 €, motif ajouré +5 € ; le MOINS CHER de la création est compris";
+  if (p.gobeletParcours) return "l'élément le MOINS CHER de la gravure est offert ; chaque autre élément +3 €, une photo +6 €";
+  if (p.marquePages?.gravure) return "sur chaque marque-page, la gravure la MOINS CHÈRE est offerte ; chaque autre : texte +3 €, dessin / cadre / photo +4 €";
+  if (p.carnet) return "une face gravée (couverture ou dos) est offerte ; la 2e face +7 €";
+  if (p.createur === "support") return "taille selon l'option ; chaque élément gravé +3 €, motif ajouré +5 € ; le MOINS CHER de la création est offert";
   const g = p.engravingPricing;
   if (!g) return "";
   const out = [];
   if (g.moinsCherCompris) out.push(g.moinsCherCompris === true
-    ? "la gravure la MOINS CHÈRE est comprise, chaque autre au prix ci-après"
-    : "la gravure la MOINS CHÈRE est comprise s'il n'y a pas déjà une photo / un modèle compris, chaque autre au prix ci-après");
+    ? "la gravure la MOINS CHÈRE est offerte, chaque autre au prix ci-après"
+    : "la gravure la MOINS CHÈRE est offerte s'il n'y a pas déjà une photo / un modèle compris, chaque autre au prix ci-après");
   if (g.textExtra && (g.textKeys || []).length) out.push(`chaque texte +${g.textExtra} €`);
   if (g.photoSurcharge) out.push(`photo gravée +${g.photoSurcharge} €`);
   if (g.perExtraPage) out.push(`chaque page en plus +${g.perExtraPage} €`);

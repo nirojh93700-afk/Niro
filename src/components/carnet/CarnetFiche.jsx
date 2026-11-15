@@ -312,10 +312,10 @@ export default function CarnetFiche({ product, realisations = [] }) {
           </div>
 
           <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 8 }}>Personnalisation — gravure</p>
-          <p className="mq-edi">Quatre emplacements sur la couverture, quatre au dos, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un titre en haut, un dessin au milieu et votre prénom en bas à gauche. Une face gravée est comprise ; graver aussi la 2e face coûte {CN_GRAVURE} €, quel que soit le nombre d&apos;emplacements remplis.</p>
+          <p className="mq-edi">Quatre emplacements sur la couverture, quatre au dos, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un titre en haut, un dessin au milieu et votre prénom en bas à gauche. Une face gravée est offerte ; graver aussi la 2e face coûte {CN_GRAVURE} €, quel que soit le nombre d&apos;emplacements remplis.</p>
           {CN_FACES.map(([side]) => (
             <div key={side}>
-              <p className="mq-sub cn-sub">{side === "face" ? "Sur la couverture" : "Au dos"} <small>({!cnFaceComprise(v) ? "une face gravée est comprise" : cnFaceComprise(v) === side ? "comprise" : `+${CN_GRAVURE} €`}){cnFaceGravee(v, side) ? " · gravée ✓" : ""}</small></p>
+              <p className="mq-sub cn-sub">{side === "face" ? "Sur la couverture" : "Au dos"} <small>({!cnFaceComprise(v) ? "une face gravée est offerte" : cnFaceComprise(v) === side ? "offerte" : `+${CN_GRAVURE} €`}){cnFaceGravee(v, side) ? " · gravée ✓" : ""}</small></p>
               <Face side={side} v={v} onChange={setV} grille={grille} setGrille={setGrille} productSlug={product.slug} lg={lg} onFrappe={onFrappe} />
             </div>
           ))}

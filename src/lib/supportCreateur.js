@@ -142,11 +142,11 @@ export function supConsignes(sup) {
     { k: "Taille", v: `${t.nom} · ${t.W} × ${t.H} mm`, fort: true },
     { k: "Inclinaison", v: `${sup.angle}°` },
     { k: "Câble", v: sup.cable ? "avec le passage du câble" : "SANS passage du câble", fort: !sup.cable },
-    { k: "Motif ajouré", v: sup.ajoure ? `${supMotifTexte(sup)} (${o === "aj" ? "compris" : `+${SUP_PRIX.ajoure} €`})` : "aucun", fort: sup.ajoure },
+    { k: "Motif ajouré", v: sup.ajoure ? `${supMotifTexte(sup)} (${o === "aj" ? "offert" : `+${SUP_PRIX.ajoure} €`})` : "aucun", fort: sup.ajoure },
     { k: "Bois", v: "contreplaqué 3 mm, deux pièces qui s'emboîtent" },
   ];
   const lignes = sup.grave ? sup.els.map((e, i) => ({
-    k: `${i + 1}. ${TYPES[e.type]} (${o === i ? "compris" : `+${SUP_PRIX.element} €`})`,
+    k: `${i + 1}. ${TYPES[e.type]} (${o === i ? "offert" : `+${SUP_PRIX.element} €`})`,
     v: `${supNomElement(e)}${e.type === "texte" || (e.type === "lettre" && e.nom) ? ` — écriture ${ecriture(e.police)}` : ""}`,
     texte: e.type === "texte" || (e.type === "lettre" && Boolean(e.nom)),
     img: e.type === "texte" ? null : e.src,

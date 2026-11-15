@@ -318,7 +318,7 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
   const prixNouveau = ed.kind === "photo" ? (Number(cfg.extraPhoto) || 6) : (Number(cfg.extra) || 3);
   const minAvant = els.length ? Math.min(...els.map((e) => prixElement(e, cfg))) : null;
   const ajout = minAvant == null ? 0 : prixNouveau - (Math.min(minAvant, prixNouveau) - minAvant);
-  const prochain = ajout <= 0 ? "compris" : `+${prix(ajout)} €`;
+  const prochain = ajout <= 0 ? "offert" : `+${prix(ajout)} €`;
   const placesDispo = (i) => [...ORDRE_PLACES.filter(([c, z]) => !liste.some((e, k) => k !== i && e.side === c && e.zone === z)), ["atelier", ""]];
 
   // Le panneau s'ouvre JUSTE SOUS la carte touchée (gérant, 05/11 : « il faut que je clique pour que ça s'ouvre » :
@@ -391,7 +391,7 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
             {ouvert === "photo" && (
               <>
                 <div className="field"><label>Votre photo ou logo</label>
-                  <p className="prc-opt">JPG ou PNG. L&apos;atelier vérifie la qualité avant de graver. Vous pouvez en ajouter plusieurs, une par une : le moins cher de votre gravure est compris ; une photo qui n&apos;est pas la moins chère : +{extraPhoto} €.</p>
+                  <p className="prc-opt">JPG ou PNG. L&apos;atelier vérifie la qualité avant de graver. Vous pouvez en ajouter plusieurs, une par une : le moins cher de votre gravure est offert ; une photo qui n&apos;est pas la moins chère : +{extraPhoto} €.</p>
                   <PhotoUpload key={liste.length} value={ed.photo} onChange={(url) => maj({ photo: url })} productSlug={product.slug} guide={GUIDE_PHOTO_GRAVURE} /></div>
                 {liste.length === 0 && (
                   <div className="field"><label htmlFor="gbp-ptxt">Texte sous la photo <span className="prc-opt">(facultatif, +{extra} €)</span></label>
@@ -438,7 +438,7 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
 
   return (
     <div className="prc gbp" id="gobelet-parcours">
-      <div className="prc-head"><p className="prc-title">Personnalisez votre gobelet</p><p className="prc-sub">Choisissez tout ce que vous voulez : dessins, cadres avec un prénom, lettres, textes, photos. L&apos;élément le moins cher de votre gravure est compris ; chaque autre élément : +{extra} €, une photo : +{extraPhoto} €.</p></div>
+      <div className="prc-head"><p className="prc-title">Personnalisez votre gobelet</p><p className="prc-sub">Choisissez tout ce que vous voulez : dessins, cadres avec un prénom, lettres, textes, photos. L&apos;élément le moins cher de votre gravure est offert ; chaque autre élément : +{extra} €, une photo : +{extraPhoto} €.</p></div>
 
       <section className="prc-step">
         <div className="prc-sh"><span className={`prc-num${etat.ok ? " done" : ""}`}>1</span><h3>Que voulez-vous graver ?</h3></div>
@@ -473,9 +473,9 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
                     <img className="gbp-xvig" src={e.kind === "photo" ? e.photo : srcDessin(cfg, e.num)} alt="" />
                   ) : null}
                   <span>
-                    <b>{i + 1}.</b> {quoiVu(e)}{e.kind === "photo" && e.sous ? ` + « ${e.sous} » (${sousCompris ? "compris" : `+${extra} €`})` : ""}{["cadre", "lettre", "texte"].includes(e.kind) && e.police ? ` (écriture ${ecr(e.police)})` : ""}
+                    <b>{i + 1}.</b> {quoiVu(e)}{e.kind === "photo" && e.sous ? ` + « ${e.sous} » (${sousCompris ? "offert" : `+${extra} €`})` : ""}{["cadre", "lettre", "texte"].includes(e.kind) && e.police ? ` (écriture ${ecr(e.police)})` : ""}
                   </span>
-                  <b className="p">{elDeListe(i)?.compris ? "compris" : `+${prix(prixElement(e, cfg))} €`}</b>
+                  <b className="p">{elDeListe(i)?.compris ? "offert" : `+${prix(prixElement(e, cfg))} €`}</b>
                   <button type="button" aria-label="Retirer" onClick={() => retirer(i)}>×</button>
                   <select className="gbp-ou" aria-label="Où le graver" value={`${e.side}|${e.zone}`} onChange={(ev) => deplacer(i, ev.target.value)}>
                     {placesDispo(i).map(([c, z]) => <option key={`${c}|${z}`} value={`${c}|${z}`}>📍 {LIBELLE_PLACE(c, z)}</option>)}
@@ -487,7 +487,7 @@ export default function GobeletParcours({ product, fieldValues, setFieldValues, 
           {textesLangue.length > 0 && (
             <LangueGravure fv={gobeletAPlat(fieldValues)} setFieldValues={setChampsLangue} cles={textesLangue.map(({ key, label }) => ({ key, label }))} />
           )}
-          {liste.length > 0 && <p className="gbp-total-ligne">Gravure : {sup.enPlus ? `le moins cher compris + ${sup.enPlus} en plus${sup.photosEnPlus ? ` (dont ${sup.photosEnPlus} photo${sup.photosEnPlus > 1 ? "s" : ""} à ${extraPhoto} €)` : ""} = ${formatEuro(sup.montant)}` : "comprise"} · <b>Total {formatEuro(unitPrice)}</b> (hors livraison)</p>}
+          {liste.length > 0 && <p className="gbp-total-ligne">Gravure : {sup.enPlus ? `le moins cher offert + ${sup.enPlus} en plus${sup.photosEnPlus ? ` (dont ${sup.photosEnPlus} photo${sup.photosEnPlus > 1 ? "s" : ""} à ${extraPhoto} €)` : ""} = ${formatEuro(sup.montant)}` : "offerte"} · <b>Total {formatEuro(unitPrice)}</b> (hors livraison)</p>}
         </div>
       </section>
 

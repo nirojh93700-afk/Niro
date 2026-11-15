@@ -207,7 +207,7 @@ export function gobeletSupplement(fields, cfg = {}) {
 export function gobeletResume(fields, cfg = {}) {
   return gobeletElements(fields, cfg).map((e, i) => {
     const ecr = ["cadre", "lettre", "texte", "sous"].includes(e.kind) && e.police ? `, écriture ${ecritureCourte(e.police)}` : "";
-    return `${i + 1}. ${quoiElement(e)} — ${ouElement(e)}${ecr} (${e.compris ? "compris" : `+${String(prixElement(e, cfg)).replace(".", ",")} €`})`;
+    return `${i + 1}. ${quoiElement(e)} — ${ouElement(e)}${ecr} (${e.compris ? "offert" : `+${String(prixElement(e, cfg)).replace(".", ",")} €`})`;
   }).join(" · ") + (aTexteEnLangue(fields || {}) ? ` · Langue : ${resumeLangue(fields)}` : "");
 }
 

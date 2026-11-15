@@ -439,7 +439,7 @@ export default function ProductDetail({ product, realisations = [] }) {
       const e = etiquettePrixGravure(product, fieldValues, variant?.id, f.key);
       if (e) {
         const nu = String(f.label || "").replace(/\s*\(\+\s*[\d,.]+\s*€\)/, "").trim();
-        const txt = e.compris ? "(compris)" : `(+${String(e.prix).replace(".", ",")} €)`;
+        const txt = e.compris ? "(offert)" : `(+${String(e.prix).replace(".", ",")} €)`;
         return <>{nu} <span style={{ color: e.compris ? "#1c6b3a" : "#7c6120", fontWeight: 600 }}>{txt}</span></>;
       }
     }
@@ -1894,7 +1894,7 @@ export default function ProductDetail({ product, realisations = [] }) {
                   Personnalisation — gravure
                 </p>
               )}
-              {MCC && <p className="pg-hint">La gravure la moins chère de votre création est <strong>comprise</strong> ; chaque autre gravure se paie au prix écrit à côté de sa case.</p>}
+              {MCC && <p className="pg-hint">La gravure la moins chère de votre création est <strong>offerte</strong> ; chaque autre gravure se paie au prix écrit à côté de sa case.</p>}
               {RV && !perGlass && <p className="pg-hint">Verre 1 : votre logo, votre image, votre modèle — ou un texte — est <strong>offert</strong>. Chaque texte en plus : <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p>}
               {/* Lot de N verres : chaque verre identique ou personnalisé différemment */}
               {supportsPerGlass && (

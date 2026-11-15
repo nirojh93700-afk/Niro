@@ -72,7 +72,7 @@ export function optionsArticle(item) {
   // Carnet A5 (07/11/2026) : la gravure de chaque face, 7 € la face quel que soit le nombre d'emplacements.
   if (produit?.carnet && champs.cn && typeof champs.cn === "object") {
     const cnComp = cnFaceComprise(champs.cn.v);
-    for (const [s, nom] of CN_FACES) if (cnFaceGravee(champs.cn.v, s)) out.push({ libelle: `Gravure ${s === "face" ? "de la couverture" : "du dos"}${s === cnComp ? " (comprise)" : ""}`, detail: `${nom} : ${cnLignes(champs.cn.v, s).length} emplacement(s) gravé(s)`, montant: s === cnComp ? 0 : CN_GRAVURE, physique: false });
+    for (const [s, nom] of CN_FACES) if (cnFaceGravee(champs.cn.v, s)) out.push({ libelle: `Gravure ${s === "face" ? "de la couverture" : "du dos"}${s === cnComp ? " (offerte)" : ""}`, detail: `${nom} : ${cnLignes(champs.cn.v, s).length} emplacement(s) gravé(s)`, montant: s === cnComp ? 0 : CN_GRAVURE, physique: false });
     return out;
   }
   // Support de téléphone créé par la cliente (14/11/2026) : chaque élément gravé + 3 €, le motif ajouré + 3 €.
@@ -80,8 +80,8 @@ export function optionsArticle(item) {
     const sup = champs.sup;
     // Le moins cher de la création est compris (15/11/2026) : il est écrit, à 0 €.
     const o = supOffert({ ...sup, els: sup.grave ? sup.els : [] });
-    if (sup.grave) sup.els.forEach((e, i) => out.push({ libelle: `Gravure ${i + 1}${o === i ? " (comprise)" : ""}`, detail: supNomElement(e), montant: o === i ? 0 : SUP_PRIX.element, physique: false }));
-    if (sup.ajoure) out.push({ libelle: `Motif ajouré (découpé)${o === "aj" ? " (compris)" : ""}`, detail: supMotifTexte(sup), montant: o === "aj" ? 0 : SUP_PRIX.ajoure, physique: false });
+    if (sup.grave) sup.els.forEach((e, i) => out.push({ libelle: `Gravure ${i + 1}${o === i ? " (offerte)" : ""}`, detail: supNomElement(e), montant: o === i ? 0 : SUP_PRIX.element, physique: false }));
+    if (sup.ajoure) out.push({ libelle: `Motif ajouré (découpé)${o === "aj" ? " (offert)" : ""}`, detail: supMotifTexte(sup), montant: o === "aj" ? 0 : SUP_PRIX.ajoure, physique: false });
     return out;
   }
   // Marque-pages (27/10/2026) : la boîte cadeau du format + le nombre de pièces (une couleur chacune).
@@ -109,7 +109,7 @@ export function optionsArticle(item) {
     const libelle = f ? libelleChamp(f) : e.key;
     const detail = texteAvecDecor(e.key, f ? valeurChamp(f, v) : v, champs);
     const cp = !physique && estComprise(e.key);
-    out.push({ libelle: cp ? `${libelle} (comprise)` : libelle, detail: detail === "oui" ? "oui" : detail, montant: cp ? 0 : montant, physique });
+    out.push({ libelle: cp ? `${libelle} (offerte)` : libelle, detail: detail === "oui" ? "oui" : detail, montant: cp ? 0 : montant, physique });
   }
 
   // 3) Texte ajouté sous un modèle numéroté (verre fête des pères).
@@ -128,12 +128,12 @@ export function optionsArticle(item) {
     const f = def(k);
     const offerte = cfg.moinsCherCompris ? estComprise(k) : offertes > 0;
     if (offerte && !cfg.moinsCherCompris) offertes -= 1;
-    out.push({ libelle: f ? libelleChamp(f) : k, detail: `« ${texteAvecDecor(k, v, champs)} »${offerte ? (cfg.moinsCherCompris ? " (comprise)" : " (offerte)") : ""}`, montant: offerte ? 0 : cfg.textExtra || 0, physique: false });
+    out.push({ libelle: f ? libelleChamp(f) : k, detail: `« ${texteAvecDecor(k, v, champs)} »${offerte ? " (offerte)" : ""}`, montant: offerte ? 0 : cfg.textExtra || 0, physique: false });
   }
   const motifs = (cfg.motifKeys || []).filter((k) => rempli(k)).length;
   if (cfg.moinsCherCompris && motifs > 0 && (cfg.motifExtra || 0) > 0) {
     const un = (cfg.motifKeys || []).filter((k) => rempli(k)).some((k) => estComprise(k));
-    out.push({ libelle: "Motifs gravés", detail: `${motifs} motif(s)${un ? ", dont 1 compris" : ""}`, montant: (motifs - (un ? 1 : 0)) * cfg.motifExtra, physique: false });
+    out.push({ libelle: "Motifs gravés", detail: `${motifs} motif(s)${un ? ", dont 1 offert" : ""}`, montant: (motifs - (un ? 1 : 0)) * cfg.motifExtra, physique: false });
   } else if (motifs > 1 && (cfg.motifExtra || 0) > 0) {
     out.push({ libelle: "Motifs en plus", detail: `${motifs - 1} motif(s) au-delà du premier (offert)`, montant: (motifs - 1) * cfg.motifExtra, physique: false });
   }
@@ -164,7 +164,7 @@ export function optionsArticle(item) {
   // 7) Photo gravée en supplément (plaque acier, médaillon…).
   if (cfg.photoKey && rempli(cfg.photoKey) && (cfg.photoSurcharge || 0) > 0) {
     const cp = estComprise(cfg.photoKey);
-    out.push({ libelle: cp ? "Photo gravée (comprise)" : "Photo gravée", detail: "photo fournie par la cliente", montant: cp ? 0 : cfg.photoSurcharge, physique: false });
+    out.push({ libelle: cp ? "Photo gravée (offerte)" : "Photo gravée", detail: "photo fournie par la cliente", montant: cp ? 0 : cfg.photoSurcharge, physique: false });
   }
 
   // 8) Configurateur gobelet : motifs au-delà de ceux compris.
