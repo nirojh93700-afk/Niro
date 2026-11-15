@@ -117,6 +117,12 @@ for o in NOEL:
 COULEURS = [{"id": "vert", "nom": "Vert sapin", "hex": "#1f5a3a", "photo": uri(os.path.join(NOEL_DIR, "3-5-boite-ruban-C-vert-recadree.jpg"), 520, 80)},
             {"id": "bleu", "nom": "Bleu nuit", "hex": "#1f3561", "photo": uri(os.path.join(NOEL_DIR, "3-5-boite-ruban-J-bleu-recadree.jpg"), 520, 80)}]
 ETIQ = uri(os.path.join(NOEL_DIR, "6-etiquettes-I.jpg"), 120, 80)
+# 15/11 (gérant : « pour le trois, tu corriges ») : les photos PORTÉES montraient un papillon différent du vrai (corps long
+# et droit). Les recoller à la main donnait un montage visible, et la retouche par IA demande des crédits Higgsfield (0) :
+# elles sont RETIRÉES de la fiche ; restent les photos du vrai produit, une par couleur.
+MAIN, n = re.subn(r'<button[^>]*><img src="/produits/zz-maquette-papillon-porte-[a-z-]+\.jpg"[^>]*/></button>', "", MAIN)
+assert n == 4, n
+assert "papillon-porte" not in MAIN
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 assert "pd-totbox" in MAIN and MAIN.count('class="variant-swatch ') == 5
