@@ -43,6 +43,32 @@ def raw_uri(path):
 
 
 src = open(SRC, encoding="utf-8").read()
+# 15/11 (gérant, 2 photos du F408) : le modèle DORÉ n'est pas rose et turquoise : ailes TRANSPARENTES aux reflets irisés,
+# serties dans un contour doré (pendentif en cuivre doré), petits zircons au centre, chaîne dorée à maillons plats.
+# La capture porte l'ancienne fiche : textes corrigés ici. « Noir et cristal » → « Noir et transparent » (le mot cristal
+# ne se met pas sur de la résine).
+CORR = [
+  ("Doré · rose et turquoise", "Doré · transparent"),
+  ("Noir et cristal", "Noir et transparent"),
+  ("noir et cristal", "noir et transparent"),
+  ("Collier papillon en résine translucide, corps serti de zircons", "Collier papillon aux ailes translucides, corps serti de zircons"),
+  ("Des ailes de résine translucide, des paillettes dorées et un corps qui scintille, à offrir.", "Des ailes translucides et un corps serti de zircons qui scintille, à offrir."),
+  ("Un <strong>papillon aux ailes de résine translucide</strong>, parsemées de paillettes dorées, avec un <strong>corps serti de petits zircons</strong> qui scintille à la lumière. Chaque couleur a ses propres reflets : un bijou léger et lumineux, à offrir ou à s&#x27;offrir.",
+   "Un <strong>papillon aux ailes translucides</strong>, avec un <strong>corps serti de petits zircons</strong> qui scintille à la lumière : quatre modèles argentés aux ailes de résine colorée parsemée de paillettes dorées, et un modèle doré aux ailes transparentes serties d&#x27;un contour doré. Un bijou léger et lumineux, à offrir ou à s&#x27;offrir."),
+  ("<li><strong>Ailes :</strong> résine colorée translucide, paillettes dorées</li>", "<li><strong>Ailes des modèles argentés :</strong> résine colorée translucide, paillettes dorées</li>"),
+  ("<li><strong>Finition dorée :</strong> pendentif en cuivre doré, chaîne en acier inoxydable doré à maillons plats</li>",
+   "<li><strong>Modèle doré :</strong> ailes transparentes aux reflets irisés, serties dans un contour doré ; pendentif en cuivre doré, chaîne en acier inoxydable doré à maillons plats</li>"),
+  ("- Pendentif papillon : ailes en résine colorée translucide avec paillettes dorées, corps serti de petits zircons.",
+   "- Modèles argentés : ailes en résine colorée translucide avec paillettes dorées, corps serti de petits zircons."),
+  ("- Finition dorée (rose et turquoise) : pendentif en cuivre doré, chaîne en acier inoxydable doré à maillons plats.",
+   "- Modèle doré : ailes transparentes aux reflets irisés, serties dans un contour doré, petits zircons au centre ; pendentif en cuivre doré, chaîne en acier inoxydable doré à maillons plats."),
+  ("La résine craint les chocs", "Les ailes craignent les chocs"),
+]
+for avant, apres in CORR:
+    if avant not in src and avant.replace("&#x27;", "'") in src:
+        avant, apres = avant.replace("&#x27;", "'"), apres.replace("&#x27;", "'")
+    assert avant in src, avant[:60]
+    src = src.replace(avant, apres)
 src = re.sub(r"<script\b.*?</script>", "", src, flags=re.S)
 src = re.sub(r'<link[^>]+rel="(?:preload|modulepreload|preconnect|dns-prefetch)"[^>]*>', "", src)
 body_start = src.find(">", src.find("<body")) + 1
@@ -120,9 +146,9 @@ ETIQ = uri(os.path.join(NOEL_DIR, "6-etiquettes-I.jpg"), 120, 80)
 # 15/11 (gérant : « pour le trois, tu corriges ») : les photos PORTÉES montraient un papillon différent du vrai (corps long
 # et droit). Les recoller à la main donnait un montage visible, et la retouche par IA demande des crédits Higgsfield (0) :
 # elles sont RETIRÉES de la fiche ; restent les photos du vrai produit, une par couleur.
-MAIN, n = re.subn(r'<button[^>]*><img src="/produits/zz-maquette-papillon-porte-[a-z-]+\.jpg"[^>]*/></button>', "", MAIN)
-assert n == 4, n
-assert "papillon-porte" not in MAIN
+MAIN, n = re.subn(r'<button[^>]*><img src="/produits/zz-maquette-papillon-porte-(?:bleu|rouge|noir)\.jpg"[^>]*/></button>', "", MAIN)
+assert n == 3, n
+assert MAIN.count("papillon-porte-dore") == 1  # la vraie photo portée du doré (F408, envoyée le 15/11) est gardée
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 assert "pd-totbox" in MAIN and MAIN.count('class="variant-swatch ') == 5
