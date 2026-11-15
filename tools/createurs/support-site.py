@@ -84,6 +84,9 @@ code = rempl(code,
              " if(fin>cur&&(!best||fin-cur>best[1]-best[0]))best=[cur,fin];\n"
              " return bandes[k]=best||[z,Math.min(fin,haut(d)-4)]}\n"
              "function limites(){var t=T(),B=bande();return{x0:ox()+15,x1:ox()+3*(t.W-5),y0:oy()+3*B[0],y1:oy()+3*B[1]}}")
+# le total compte TOUJOURS la taille, le motif ajouré et les éléments déjà posés (15/11/2026, gérant : « j'ai choisi les
+# découpes, c'est toujours 12,90 € ») : avant, avec « Gravure » cochée et rien de posé, il restait affiché « dès 12,90 € ».
+code = rempl(code, "pret()?eur(total()):'dès '+eur(D.prix.base)", "eur(total())", 2)
 code = rempl(code, "window.scEtat=function(){", "window.scSite={S:S,dessiner:function(){dessiner()},total:total,pret:pret,voirCreation:voirCreation};\nwindow.scEtat=function(){")
 
 # le bouton « OK ✓ » des champs (téléphone)

@@ -277,9 +277,9 @@ function resume(){
    +(e.type==='texte'||(e.type==='lettre'&&e.nom)?' · '+police(e.police)[1]:'')+' — + '+eur(D.prix.element)+'</b></div>'})}
  if(!S.grave&&!S.ajoure)h+='<div class="prc-sumrow"><span>Décoration</span><b>aucune (bois nu)</b></div>';
  h+='<div class="prc-sumrow"><span>Réglages</span><b>'+S.angle+'° · '+(S.cable?'passage du câble':'sans passage du câble')+' · bois 3 mm</b></div>';
- h+='<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+(pret()?eur(total()):'dès '+eur(D.prix.base))+'</b></div>';
+ h+='<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+(eur(total()))+'</b></div>';
  R.innerHTML=h;
- var txt=pret()?eur(total()):'dès '+eur(D.prix.base);
+ var txt=eur(total());
  $('total').textContent=txt;$('prixtete').textContent=txt;
  $('n2').classList.toggle('done',pret());$('n4').classList.toggle('done',pret());
  $('ajouter').disabled=!pret();$('ajouter').style.opacity=pret()?1:.5;
