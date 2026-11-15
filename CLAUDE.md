@@ -1,6 +1,11 @@
+## 🎀 MAQUETTE « COLLIER NŒUD SCINTILLANT » — 15/11/2026 (gérant : récap Nihao NH10381128 / NH38532333 « 1388-3 # » + 3 photos) — EN ATTENTE DE SON AVIS, RIEN en ligne
+- https://claude.ai/artifact/GwSVVjeNp7LMoek4Z1PCgS · `python3 tools/maquettes/collier-noeud-scintillant.py <capture /produit/collier-noeud-scintillant>` (fiche ajoutée en local puis tout remis ; photos `docs/maquettes/assets/collier-noeud-scintillant/`).
+- Un modèle doré : nœud pavé de zircons, chaînette tombante terminée par un zircon rond, petit nœud sur la chaîne ; 5 achetés à 0,95 €, 8 g. Ne se grave pas. La fiche Nihao (commune à 100 styles : « forme de cœur, fleur », « fait main », « plaqué or ») n'est PAS reprise, sa photo du cœur (autre modèle) n'est pas utilisée. Longueur de chaîne inconnue : pas écrite.
+- **19,90 € net, sans la remise −10 %** (règle des nouveaux bijoux du 15/11), **stock 5**. Nom « Collier Nœud scintillant » proposé, à valider.
+
 ## 💶 NOUVEAUX BIJOUX SANS LA REMISE −10 % — RÈGLE DU 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre »)
 - Tout bijou ajouté à partir du 15/11/2026 est vendu à son prix NET : pas de prix barré, pas de badge « −10 % ». Le prix en ,90 est le prix payé.
-- Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €) et tous les suivants.
+- Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €), Collier Nœud scintillant (19,90 €) et tous les suivants.
 - ⛔⛔ Redit par le gérant le 15/11 soir : « c'est que les produits qu'on a mis aujourd'hui… tout ce qui est en ligne, tu laisses comme ça ».
 - ⛔ Les bijoux DÉJÀ en ligne GARDENT leur −10 % (`applyBijouxSale`) : 15/11 soir, « c'est tous les bijoux » voulait dire tous ceux faits CE JOUR-LÀ (Collier Papillon, Bracelet Plaque & Breloque, Collier Papillons scintillants), PAS ceux en ligne (gérant : « j'espère que t'as pas modifié les autres »). Un retrait sur tout le site avait été préparé en local, jamais appliqué ni poussé, puis supprimé.
 - Au « applique » : un drapeau produit (ex. `sansRemise: true`) que `applyBijouxSale` (catalog.js) laisse passer ; le prix du code = le prix payé.
