@@ -37,14 +37,14 @@ PORTES = [
   ("produits/cristal-h-amis.jpg", "Cristal", "Votre photo, gravée en 3D dans le cristal"),
   ("produits/collier-coeur-plaques-2.jpg", "Bijoux", "Leurs prénoms, sur un collier"),
   ("produits/verre_whisky_papa_monde_moustache.jpg", "Verres", "Pour le meilleur papa du monde"),
-  ("produits/puzzle-foret.jpg", "Bébé & enfant", "Un puzzle en bois pour les petits"),
+  ("produits/catalogue/il_fullxfull.8007460526_h2kk.jpg", "Bijoux", "Un médaillon cœur, gravé pour elle"),
   ("carnet/exemple-ex2.jpg", "Papeterie", "Un carnet de recettes à son nom"),
   ("produits/cristal-v-femme.jpg", "Cristal", "Le portrait de maman, dans le cristal"),
-  ("produits/collier-3coeurs-1.jpg", "Bijoux", "Un cœur pour chaque enfant"),
+  ("produits/verre_tumbler_37_ex_photo.jpg", "Verres", "Sa photo et son prénom sur un verre"),
   ("produits/gobelet/ex1-creme-papillon-camille.jpg", "Gobelets", "Un gobelet gravé à son prénom"),
-  ("produits/plaque-naissance-fille-1.jpg", "Bébé & enfant", "Sa plaque de naissance en bois"),
+  ("produits/collier-3coeurs-1.jpg", "Bijoux", "Un cœur pour chaque enfant"),
   ("marque-pages/m2/exemple-ex2.jpg", "Papeterie", "Un marque-page ajouré, gravé au dos"),
-  ("produits/etiquette_serviette_fleur_initiales_bleu.jpeg", "Mariage", "Les initiales des mariés à table"),
+  ("produits/bracelet-coeur-ot-dore.jpg", "Bijoux", "Un bracelet cœur, gravé pour elle"),
   ("produits/cristaux-graves/chat-sapin.jpg", "Cristal", "Un cristal déjà gravé, prêt pour Noël"),
 ]
 # numéros dans le désordre, comme un vrai calendrier (ligne par ligne)
@@ -55,8 +55,17 @@ POS = {}
 for r, ligne in enumerate(GRILLE):
     for c, n in enumerate(ligne): POS[n] = (X0 + c * (CW + GAP), Y0 + r * (CH + GAP))
 
+SANS_BADGE = {"produits/verre_tumbler_37_ex_photo.jpg"}   # étiquette « EXEMPLE » en haut à gauche, fond blanc
 def charger(chemin):
-    return Image.open(os.path.join("public", chemin)).convert("RGB")
+    im = Image.open(os.path.join("public", chemin)).convert("RGB")
+    if chemin in SANS_BADGE:
+        px = im.load(); fond_c = px[im.width // 2, 10]
+        ImageDraw.Draw(im).rectangle((14, 14, int(im.width * 0.205), int(im.height * 0.095)), fill=fond_c)
+        for y in range(10, int(im.height * 0.10)):
+            for x in range(int(im.width * 0.2), int(im.width * 0.235)):
+                r, g, b = px[x, y]
+                if max(r, g, b) - min(r, g, b) > 6 or (r + g + b) / 3 < 200: px[x, y] = fond_c
+    return im
 PHOTOS = [charger(p[0]) for p in PORTES]
 
 def vignette(img):

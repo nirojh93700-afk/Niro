@@ -982,16 +982,18 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
   (rouge baie, vert sapin, crème, or) qui tombent en place ; elles s'ouvrent dans l'ordre 1 → 12 avec une gerbe dorée, la photo sort de
   la case, grandit au centre dans un cadre blanc (photo entière) avec une étiquette kraft suspendue (univers + phrase), puis se range dans
   sa case. Fin : toutes les cases ouvertes, ruban rouge « Offrez un cadeau unique », bouton nivcreation.fr. Neige légère.
-- Photos (planche regardée, gravées, sans badge EXEMPLE, sans texte anglais, différentes des vidéos 55 à 59) : cristal amis, collier cœur
-  & plaques, whisky « Le meilleur papa du monde » (moustache), puzzle forêt, carnet « Mes recettes / Léa », cristal portrait de femme,
-  collier 3 Cœurs porté, gobelet crème « Camille », plaque de naissance fille, marque-page ajouré, étiquette de serviette « O & E »,
-  cristal déjà gravé chat & sapin. Écartés : veilleuse (refusée en 55), arbre de vie rond (retiré du site), carafe « Western » et
-  flûtes « Mr & Mrs » (anglais), décoration de Noël en cristal (badge EXEMPLE).
-- 35,8 s, sans son, aucun prix, 1080 × 1920 (16,5 Mo) et 720 × 1280 (4,8 Mo). Fichiers à supprimer le 17/11.
+- ⛔ v2 du même soir (gérant : « enlève les puzzles pour enfants, le mariage et la naissance, ça n'a rien à voir avec Noël, mets les bijoux,
+  les verres ») : puzzle forêt, plaque de naissance et étiquette de serviette remplacés par le médaillon cœur ouvrable, le verre tumbler
+  photo « Inès » (badge EXEMPLE effacé par le script) et le bracelet cœur doré. RÈGLE : une vidéo de Noël = des cadeaux à offrir
+  (bijoux, verres, cristal, gobelets, papeterie), pas de produits d'enfants, de naissance ni de mariage.
+- Photos (gravées, sans texte anglais) : cristal amis, collier cœur & plaques, whisky « Le meilleur papa du monde » (moustache), médaillon
+  cœur ouvrable, carnet « Mes recettes / Léa », cristal portrait de femme, tumbler photo « Inès », gobelet crème « Camille », collier
+  3 Cœurs porté, marque-page ajouré, bracelet cœur doré, cristal déjà gravé chat & sapin.
+- 35,8 s, sans son, aucun prix, 1080 × 1920 (15,3 Mo) et 720 × 1280 (4,5 Mo). Fichiers à supprimer le 17/11.
 - Script : `python3 tools/video/calendrier_60.py <polices> <sortie> [--apercu]` (depuis la racine ; PlayfairDisplay.ttf + Inter.ttf).
 
-**Vidéo 60 — Le calendrier des idées cadeaux** (Cristal photo 3D, Cristal déjà gravé, Collier cœur & plaques, Collier 3 Cœurs, Verre à whisky, Gobelet isotherme, Carnet A5, Marque-page ajouré, Puzzle en bois, Plaque de naissance, Étiquette de serviette)
-> 🎄 12 portes, 12 idées cadeaux gravées dans notre atelier : cristal, bijoux, verres, gobelets, papeterie, bébé et mariage ✨
+**Vidéo 60 — Le calendrier des idées cadeaux** (Cristal photo 3D, Cristal déjà gravé, Collier cœur & plaques, Médaillon cœur ouvrable, Collier 3 Cœurs, Bracelet cœur, Verre à whisky, Verre tumbler, Gobelet isotherme, Carnet A5, Marque-page ajouré)
+> 🎄 12 portes, 12 idées cadeaux gravées dans notre atelier : cristal, bijoux, verres, gobelets et papeterie ✨
 > Un prénom, une date, une photo… et Noël devient unique 💛🎁
 > 👉 nivcreation.fr
 
