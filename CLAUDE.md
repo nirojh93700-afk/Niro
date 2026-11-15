@@ -10,7 +10,7 @@
   `python3 tools/createurs/support-site.py <maquette index.html> <three.min.js r128>` (maquette relue avec l'outil Artifact `read` + `path index.html` ; `npm pack three@0.128.0`) :
   outil.js, 12 dessins + 26 lettres + planche + exemple (`public/createurs/support/`), les 8 écritures (`public/createurs/polices/`), three r128 (`public/createurs/vendor/`),
   `src/lib/supportCreateurData.js`, `src/app/createur-support.css` (style de la maquette sous `.scf`). Ne pas les modifier à la main.
-- Produit : `createur: "support"`, 3 options = les tailles (`support-tel-petit` 12,90 · `-standard` 15,90 · `-grand` 18,90) ; chaque élément gravé + 3 €, motif ajouré + 3 €
+- Produit : `createur: "support"`, 3 options = les tailles (`support-tel-petit` 15,90 · `-standard` 18,90 · `-grand` 21,90, depuis le 15/11/2026) ; chaque élément gravé + 3 €, motif ajouré + 5 €, **le moins cher de la création compris** (`supOffert`, gérant 15/11 : « tu offres que le moins cher »), le total affiché compte toujours taille + motif (avant il restait « dès 12,90 € » tant que rien n'était gravé)
   (`src/lib/supportCreateur.js` : `supNormaliser`, `supSupplement`, `supResume`, `supConsignes`, `supPhotos` ; le MÊME calcul dans `/api/checkout`, taille trichée refusée).
   Les anciens champs / dessins numérotés / cadre restent dans `products.js` SEULEMENT pour relire les commandes d'avant le 14/11 dans Gestion (anciennes options retirées).
 - Images : un élément posé garde l'ADRESSE de son image (`url`) et la porte en données (`src`) pour l'aperçu 3D ; au panier la photo de la cliente part par `/api/upload`,
