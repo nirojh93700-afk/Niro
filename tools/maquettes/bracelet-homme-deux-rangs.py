@@ -3,8 +3,8 @@
 
 Gérant : récap Nihao NH11100873 / NH42826585 (5 pièces, 3,23 €, 13 g, 21 cm) + photos + « enregistre, je te donne le nouvel
 article ». Simili cuir noir (Nihao : « faux cuir », « cuir microfibre » : jamais « cuir »), plaque acier 304 brossé 4,1 × 0,68 cm
-avec bandeau noir, fermoir à clip. Une seule couleur, stock 5. Ne se grave pas (règle du gérant du 15/11 : dans le doute, « on fait
-comme si on pouvait pas graver ») — à lui de dire. Prix : 22,90 € net (sans la remise −10 %), comme le tressé bicolore.
+avec bandeau noir, fermoir à clip. Une seule couleur, stock 5. Gravure sur le rang plat en simili cuir (gérant, 15/11 : « on peut graver sur le
+cuir »), offerte, 20 caractères. Prix : 22,90 € net (sans la remise −10 %), comme le tressé bicolore.
 Emballages bracelet long + Noël, tous. Mesures en français : tools/maquettes/mesures-bracelet-deux-rangs-fr.py.
 
 Usage : python3 tools/maquettes/bracelet-homme-deux-rangs.py <capture /produit/bracelet-homme-deux-rangs.html>
@@ -202,7 +202,7 @@ JS = r'''
   if(pv)pv.addEventListener('click',function(){montre(th[(idx()-1+th.length)%th.length])});
   [].forEach.call(document.querySelectorAll('img.logo-img,img.footer-logo'),function(l){function h(){if(!l.naturalWidth)l.style.visibility='hidden'}if(l.complete)h();else l.addEventListener('error',h)});
   // Gravure : pendentif et bague. La 1re gravure est offerte, la 2e +3 € (règle du moins cher compris).
-  var GR=[{id:'pf-texte',nom:'Plaque',max:15}];
+  var GR=[{id:'pf-texte',nom:'Rang plat',max:20}];
   GR.forEach(function(g){g.inp=document.getElementById(g.id);g.lab=document.querySelector('label[for="'+g.id+'"] span');g.cc=g.inp?g.inp.parentNode.querySelector('.char-count'):null});
   var pol=document.getElementById('pf-police'),plate=document.querySelector('.ep-plate');
   st.grav=0;st.txt='';
