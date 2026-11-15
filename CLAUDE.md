@@ -1,6 +1,7 @@
 ## 💶 NOUVEAUX BIJOUX SANS LA REMISE −10 % — RÈGLE DU 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre »)
 - Tout bijou ajouté à partir du 15/11/2026 est vendu à son prix NET : pas de prix barré, pas de badge « −10 % ». Le prix en ,90 est le prix payé.
 - Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €) et tous les suivants.
+- ⛔⛔ Redit par le gérant le 15/11 soir : « c'est que les produits qu'on a mis aujourd'hui… tout ce qui est en ligne, tu laisses comme ça ».
 - ⛔ Les bijoux DÉJÀ en ligne GARDENT leur −10 % (`applyBijouxSale`) : 15/11 soir, « c'est tous les bijoux » voulait dire tous ceux faits CE JOUR-LÀ (Collier Papillon, Bracelet Plaque & Breloque, Collier Papillons scintillants), PAS ceux en ligne (gérant : « j'espère que t'as pas modifié les autres »). Un retrait sur tout le site avait été préparé en local, jamais appliqué ni poussé, puis supprimé.
 - Au « applique » : un drapeau produit (ex. `sansRemise: true`) que `applyBijouxSale` (catalog.js) laisse passer ; le prix du code = le prix payé.
 
@@ -16,9 +17,10 @@
 - Fiche : sous-catégorie femme (« pour les filles »), plaque ≈ 3 cm, tour 12,5 cm + 4 cm de rallonge (fournisseur : poignet fin), acier inoxydable ; gravure de la plaque (un texte, offert : règle du moins cher compris), 15 caractères ; emballages bracelet fin (BRACELETS_CARRE) + Noël. ⛔ Jamais « or », « plaqué or 18K », « étanche », « ne ternit pas », « unisexe ».
 - PAS d'aperçu 3D : la barre 3D du site (plaque épaisse sur chaîne à perles, sans breloque) ne ressemble pas à ce bracelet ; aperçu témoin du texte (doré / argenté) seulement.
 - ✅ v2 (15/11, gérant, 2 captures : « enlève les deux photos… et aussi enlève les 10 % ») : photos doré cœur sur fond noir et argenté cœur sur fond blanc RETIRÉES ; **pas de remise −10 % sur ce bijou : 19,90 € net**, sans prix barré ni badge (au « applique » : exclure ce produit de `applyBijouxSale`, ex. `sansRemise: true`, prix du code 19,90).
-- **Proposé par moi, à valider** : nom « Bracelet Plaque & Breloque », stock 5 par modèle, gravure du dos non proposée.
+- ✅ **Stock : 5 par modèle** (gérant, 15/11). **Proposé par moi, à valider** : nom « Bracelet Plaque & Breloque », gravure du dos non proposée.
 
 ## 🦋 MAQUETTE « COLLIER PAPILLON » — 15/11/2026 (gérant : photos Nihao + « fais attention aux descriptions… j'ai des photos en double, j'ai que cinq modèles ») — ✅ ENREGISTRÉE TELLE QUELLE LE 15/11/2026 (« le prix c'est bon, le nom c'est bon, j'ai pas la taille, enregistre la maquette ») = VERSION 3 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
+- ✅ **Stock : 5 par modèle** (gérant, 15/11 soir : « les deux autres aussi c'est stock cinq » ; remplace les quantités achetées 12 / 10 / 12 / 12 / 12).
 - ✅ Validés par lui : nom « Collier Papillon ». Prix : **19,90 € net, sans la remise −10 %** (règle du 15/11 « enlève les 10 % pour tout ce qu'on va mettre », maquette republiée en VERSION 4 = celle à reproduire ; avant : barré 19,90 → payé 17,91). Taille du papillon et longueur de chaîne : il ne les a pas → la fiche n'en écrit aucune.
 - https://claude.ai/artifact/WxMF32gaPYVWmbbFTVqhWQ · `python3 tools/maquettes/collier-papillon.py <capture /produit/collier-papillon>` (fiche ajoutée en local puis tout remis ; photos `docs/maquettes/assets/collier-papillon/`).
 - 5 modèles achetés (récap Nihao) : Bleu TA207 3# (12, 0,85 €) · Rose et turquoise argenté TA207-2# (10, 0,87 €) · Rouge TA207-4# (12, 0,97 €) · Noir et transparent TA207-6# (12, 0,85 €) · Doré F408 (12, 1,15 € : pendentif en CUIVRE doré, chaîne acier). Violet foncé (photo en double) et vert : non achetés, écartés.
