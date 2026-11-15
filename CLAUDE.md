@@ -1,7 +1,14 @@
+## 💶 NOUVEAUX BIJOUX SANS LA REMISE −10 % — RÈGLE DU 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre »)
+- Tout bijou ajouté à partir du 15/11/2026 est vendu à son prix NET : pas de prix barré, pas de badge « −10 % ». Le prix en ,90 est le prix payé.
+- Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €) et tous les suivants.
+- Les bijoux DÉJÀ en ligne gardent leur −10 % (`applyBijouxSale`), sauf demande contraire.
+- Au « applique » : un drapeau produit (ex. `sansRemise: true`) que `applyBijouxSale` (catalog.js) laisse passer ; le prix du code = le prix payé.
+
 ## ✨ MAQUETTE « COLLIER PAPILLONS SCINTILLANTS » — 15/11/2026 (gérant : photos Nihao NH10461851 + « tu fais pour celui-là ? ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - https://claude.ai/artifact/93AcoiAV5C2W3xFxf82kgx · `python3 tools/maquettes/collier-papillons-scintillants.py <capture /produit/collier-papillons-scintillants>` (fiche ajoutée en local puis tout remis ; photos `docs/maquettes/assets/collier-papillons-scintillants/`).
 - Un seul modèle, doré : un grand papillon pavé de zircons et un petit papillon ajouré, sous une bélière sertie ; 1,16 € pièce. Chaîne acier inoxydable doré à maillons plats, pendentif cuivre doré + zircons, mousqueton, 7 g. NE SE GRAVE PAS. Longueur de chaîne inconnue : pas écrite. 3 photos : dans sa boîte + 2 portées (vérifiées : même pendentif). ⛔ Jamais « or », « plaqué or ».
-- **Proposé par moi, à valider** : nom, prix barré 19,90 → payé 17,91 € (code 21,90, comme le Collier Papillon), emballages colliers + Noël. Stock à demander.
+- v2 (15/11) : **19,90 € net, sans la remise −10 %** (règle des nouveaux bijoux).
+- **Proposé par moi, à valider** : nom, emballages colliers + Noël. Stock à demander.
 
 ## 🔖 MAQUETTE « BRACELET PLAQUE & BRELOQUE » — 15/11/2026 (gérant : photos Nihao NHHF467983 + « c'est pour les filles » + « fais attention, il y a des doubles ») — ✅ ENREGISTRÉE TELLE QUELLE LE 15/11/2026 (« Enregistre la maquette ») = VERSION 2 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - https://claude.ai/artifact/YYT9Vat95PSuvuePPoLK3J · `python3 tools/maquettes/bracelet-plaque-breloque.py <capture /produit/bracelet-plaque-breloque>` (fiche ajoutée en local puis tout remis ; photos `docs/maquettes/assets/bracelet-plaque-breloque/`).
@@ -12,7 +19,7 @@
 - **Proposé par moi, à valider** : nom « Bracelet Plaque & Breloque », stock 5 par modèle, gravure du dos non proposée.
 
 ## 🦋 MAQUETTE « COLLIER PAPILLON » — 15/11/2026 (gérant : photos Nihao + « fais attention aux descriptions… j'ai des photos en double, j'ai que cinq modèles ») — ✅ ENREGISTRÉE TELLE QUELLE LE 15/11/2026 (« le prix c'est bon, le nom c'est bon, j'ai pas la taille, enregistre la maquette ») = VERSION 3 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
-- ✅ Validés par lui : prix barré 19,90 → payé 17,91 € (code 21,90) pour les 5, nom « Collier Papillon ». Taille du papillon et longueur de chaîne : il ne les a pas → la fiche n'en écrit aucune.
+- ✅ Validés par lui : nom « Collier Papillon ». Prix : **19,90 € net, sans la remise −10 %** (règle du 15/11 « enlève les 10 % pour tout ce qu'on va mettre », maquette republiée en VERSION 4 = celle à reproduire ; avant : barré 19,90 → payé 17,91). Taille du papillon et longueur de chaîne : il ne les a pas → la fiche n'en écrit aucune.
 - https://claude.ai/artifact/WxMF32gaPYVWmbbFTVqhWQ · `python3 tools/maquettes/collier-papillon.py <capture /produit/collier-papillon>` (fiche ajoutée en local puis tout remis ; photos `docs/maquettes/assets/collier-papillon/`).
 - 5 modèles achetés (récap Nihao) : Bleu TA207 3# (12, 0,85 €) · Rose et turquoise argenté TA207-2# (10, 0,87 €) · Rouge TA207-4# (12, 0,97 €) · Noir et transparent TA207-6# (12, 0,85 €) · Doré F408 (12, 1,15 € : pendentif en CUIVRE doré, chaîne acier). Violet foncé (photo en double) et vert : non achetés, écartés.
 - ⛔ La fiche Nihao se trompe (« forme de cœur, fleur », « fait main », « plaqué or ») : rien repris ; jamais « or », « hypoallergénique », « sans nickel », « étanche ». Résine = NE SE GRAVE PAS (bijou prêt à offrir).
