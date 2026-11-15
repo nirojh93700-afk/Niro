@@ -5,8 +5,8 @@ Gérant : récap Nihao NH11144311 / NH43362594 « ensemble de bijoux homme, le n
 + 3 photos + fiche et mesures Nihao (collier 60 cm, bracelet 21 cm, bague 1,9 cm) + « y a la gravure du pendentif et la
 bague ». Trois pièces noires : collier à plaque (chaîne maille vénitienne), bracelet torsadé, bague lisse. Gravure : pendentif
 et bague, la 1re offerte, la 2e +3 € (règle du moins cher compris). NON repris : « acier au titane », « motif infini »,
-« chaîne de câble » (faux d'après les photos). Prix : 24,90 € net PROPOSÉ (sans la remise −10 %, règle des nouveaux bijoux
-du 15/11), à valider. Stock 5. Emballages bracelet long (boîte allongée, pack bracelet) + Noël.
+« chaîne de câble » (faux d'après les photos). Prix : 34,90 € net PROPOSÉ (sans la remise −10 %), au-dessus des pendentifs et bracelets homme déjà en
+ligne (gérant, 15/11 : « il faut pas que ça soit moins cher que les autres »), à valider. Stock 5. Emballages bracelet long (boîte allongée, pack bracelet) + Noël.
 
 Usage : python3 tools/maquettes/ensemble-homme-plaque-noire.py <capture /produit/ensemble-homme-plaque-noire.html>
 """
@@ -19,7 +19,8 @@ PUB = os.path.join(ROOT, "public")
 ASSETS = os.path.join(OUT, "assets", "ensemble-homme-plaque-noire")
 EMBA = os.path.join(OUT, "assets", "gourmette-doree-noire")
 SRC = sys.argv[1]
-PRIX = 24.90       # 15/11 : nouveaux bijoux sans la remise −10 % ; 24,90 € net proposé (3 pièces)
+PRIX = 34.90       # 15/11 : sans la remise −10 % ; 34,90 € net (gérant : jamais moins cher que les pendentifs déjà en ligne ;
+                   # Collier plaque acier jusqu'à 27,81 €, gourmette à plaque 27,81 € : un ensemble de 3 pièces passe au-dessus)
 
 
 def uri(path, w=900, q=80):
@@ -115,10 +116,10 @@ ETIQ = uri(os.path.join(NOEL_DIR, "6-etiquettes-I.jpg"), 120, 80)
 # 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre ») : les nouveaux bijoux n'ont PAS la remise
 # des bijoux : 19,90 € net, sans prix barré ni badge −10 %.
 MAIN, n = re.subn(r'<span class="price-old">24,90\s€</span> <span class="price-sale">22,41\s€</span> <span class="promo-badge"[^>]*>.*?</span>',
-                  '<span class="price-sale" style="color:var(--ink)">24,90 €</span>', MAIN, count=1, flags=re.S)
+                  '<span class="price-sale" style="color:var(--ink)">34,90 €</span>', MAIN, count=1, flags=re.S)
 assert n == 1
-MAIN = re.sub(r'<span class="vs-old">24,90\s€</span><span class="vs-now">22,41\s€</span>', '<span class="vs-now">24,90 €</span>', MAIN)
-MAIN = re.sub(r'<span class="val">22,41\s€</span>', '<span class="val">24,90 €</span>', MAIN, count=1)
+MAIN = re.sub(r'<span class="vs-old">24,90\s€</span><span class="vs-now">22,41\s€</span>', '<span class="vs-now">34,90 €</span>', MAIN)
+MAIN = re.sub(r'<span class="val">22,41\s€</span>', '<span class="val">34,90 €</span>', MAIN, count=1)
 assert "22,41" not in MAIN[:MAIN.find("Vous aimerez aussi")]
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
@@ -222,7 +223,7 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX)).replace("__NOEL__", json.dumps(NOEL)).replace("__COUL__", json.dumps(COULEURS)).replace("__ETIQ__", json.dumps(ETIQ))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Ensemble Homme Plaque Noire » (nom et prix de 24,90 € sans remise proposés, à valider) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Ensemble Homme Plaque Noire » (nom et prix de 34,90 € sans remise proposés, à valider) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Ensemble Homme Plaque Noire</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"

@@ -2,7 +2,8 @@
 - https://claude.ai/artifact/1W8xjodAzYCM8kC77X1pKe · `python3 tools/maquettes/ensemble-homme-plaque-noire.py <capture /produit/ensemble-homme-plaque-noire>` (fiche ajoutée en local par `tools/maquettes/ensemble-homme-plaque-noire-ajout-local.py`, capturée, puis `git checkout -- src/lib` ; photos `docs/maquettes/assets/ensemble-homme-plaque-noire/`).
 - 3 pièces noires : collier à plaque (chaîne maille vénitienne 60 cm), bracelet torsadé 21 cm (mousqueton), bague lisse 1,9 cm de diamètre, taille unique. 5 achetés à 1,48 €, 50 g. Acier inoxydable noir. NON repris : « acier au titane », « motif infini », « chaîne de câble ».
 - Gravure : pendentif + bague, la 1re offerte, la 2e +3 € (moins cher compris). Emballages bracelet long (boîte allongée 5,90 €, pack bracelet) + Noël. Sous-catégorie homme.
-- **Prix PROPOSÉ par moi : 24,90 € net, sans la remise −10 %** (3 pièces), **stock 5**. Nom et prix à valider.
+- **Prix : 34,90 € net, sans la remise −10 %** (v2 du 15/11, gérant : « les autres produits, il faut pas que ça soit moins cher que les autres pendentifs que j'ai mis » : Collier plaque acier jusqu'à 27,81 €, gourmette à plaque 27,81 €, donc l'ensemble de 3 pièces passe au-dessus), **stock 5**. Nom à valider. Photo des mesures gardée dans les assets (`mesures.jpg`, textes anglais), pas dans la galerie.
+- ⛔ **RÈGLE (gérant, 15/11) : un nouveau bijou n'est JAMAIS moins cher que les bijoux comparables déjà en ligne.** Avant de proposer un prix : relever les prix en ligne de la même famille (`node tools/prix-fiche.mjs`).
 
 ## 🦋 MAQUETTE « COLLIER PAPILLON AJOURÉ » — 15/11/2026 (gérant : récap Nihao NH10461851 / NH34814376 « pendentif cuivre, chaîne acier G301 » + 3 photos) — ✅ ENREGISTRÉE TELLE QUELLE LE 15/11/2026 (« enregistre celui-là ») = VERSION 1 de l'artifact, fiche À PART, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - https://claude.ai/artifact/DGWUu49Nq5vsQKfHhP8u1n · `python3 tools/maquettes/collier-papillon-ajoure.py <capture /produit/collier-papillon-ajoure>` (fiche ajoutée en local puis tout remis ; photos `docs/maquettes/assets/collier-papillon-ajoure/`).
@@ -21,7 +22,7 @@
 
 ## 💶 NOUVEAUX BIJOUX SANS LA REMISE −10 % — RÈGLE DU 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre »)
 - Tout bijou ajouté à partir du 15/11/2026 est vendu à son prix NET : pas de prix barré, pas de badge « −10 % ». Le prix en ,90 est le prix payé.
-- Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €), Collier Nœud scintillant (19,90 €), Collier Envol de Papillons (19,90 €), Collier Papillon Ajouré (19,90 €), Ensemble Homme Plaque Noire (24,90 € proposé) et tous les suivants.
+- Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €), Collier Nœud scintillant (19,90 €), Collier Envol de Papillons (19,90 €), Collier Papillon Ajouré (19,90 €), Ensemble Homme Plaque Noire (34,90 €) et tous les suivants.
 - ⛔⛔ Redit par le gérant le 15/11 soir : « c'est que les produits qu'on a mis aujourd'hui… tout ce qui est en ligne, tu laisses comme ça ».
 - ⛔ Les bijoux DÉJÀ en ligne GARDENT leur −10 % (`applyBijouxSale`) : 15/11 soir, « c'est tous les bijoux » voulait dire tous ceux faits CE JOUR-LÀ (Collier Papillon, Bracelet Plaque & Breloque, Collier Papillons scintillants), PAS ceux en ligne (gérant : « j'espère que t'as pas modifié les autres »). Un retrait sur tout le site avait été préparé en local, jamais appliqué ni poussé, puis supprimé.
 - Au « applique » : un drapeau produit (ex. `sansRemise: true`) que `applyBijouxSale` (catalog.js) laisse passer ; le prix du code = le prix payé.

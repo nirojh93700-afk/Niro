@@ -12,7 +12,7 @@ prod='''  {
     personalizationLabel: "Gravure du pendentif et de la bague",
     images: ["IIphoto-1.jpg", "IIphoto-2.jpg", "IIphoto-3.jpg"],
     variants: [
-      { id: "ensemble-homme-plaque-noire-noir", title: "Noir", price: 27.90, stockId: "ensemble-homme-plaque-noire-noir", image: "IIphoto-1.jpg" },
+      { id: "ensemble-homme-plaque-noire-noir", title: "Noir", price: 38.90, stockId: "ensemble-homme-plaque-noire-noir", image: "IIphoto-1.jpg" },
     ],
     engravingPricing: { moinsCherCompris: true, textKeys: ["pendentif", "bague"], textExtra: 3 },
     personalizationFields: [
