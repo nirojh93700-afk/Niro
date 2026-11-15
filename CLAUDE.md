@@ -1,7 +1,7 @@
 ## 💶 NOUVEAUX BIJOUX SANS LA REMISE −10 % — RÈGLE DU 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre »)
 - Tout bijou ajouté à partir du 15/11/2026 est vendu à son prix NET : pas de prix barré, pas de badge « −10 % ». Le prix en ,90 est le prix payé.
 - Concerne : Collier Papillon (maquette v4, 19,90 €), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €) et tous les suivants.
-- 15/11 soir (« c'est tous les bijoux ») : la remise est retirée sur TOUS les bijoux, la cliente paie l'ancien prix barré (ex. Collier Cœur gravé 22,41 → 24,90 €). Fait dans `applyBijouxSale` (prix = l'ancien barré, plus de `compareAt`) : PRÉPARÉ et vérifié en local, gardé dans `docs/retrait-remise-bijoux.patch` (`git apply docs/retrait-remise-bijoux.patch`), NON appliqué : en attente de son « mets en ligne ».
+- ⛔ Les bijoux DÉJÀ en ligne GARDENT leur −10 % (`applyBijouxSale`) : 15/11 soir, « c'est tous les bijoux » voulait dire tous ceux faits CE JOUR-LÀ (Collier Papillon, Bracelet Plaque & Breloque, Collier Papillons scintillants), PAS ceux en ligne (gérant : « j'espère que t'as pas modifié les autres »). Un retrait sur tout le site avait été préparé en local, jamais appliqué ni poussé, puis supprimé.
 - Au « applique » : un drapeau produit (ex. `sansRemise: true`) que `applyBijouxSale` (catalog.js) laisse passer ; le prix du code = le prix payé.
 
 ## ✨ MAQUETTE « COLLIER PAPILLONS SCINTILLANTS » — 15/11/2026 (gérant : photos Nihao NH10461851 + « tu fais pour celui-là ? ») — EN ATTENTE DE SON AVIS, RIEN en ligne
