@@ -2,7 +2,7 @@
 """Maquette « Bracelet Homme Trois Rangs » — 15/11/2026. RIEN n'est en ligne.
 
 Gérant : récap Nihao NH10938159 / NH40746968 « bracelet homme décontracté en faux cuir, noir + or » (5 pièces, 2,27 €, 37 g)
-+ photos (3 couleurs : seule la noir et or est achetée, photos argentées et noires écartées sauf la photo des mesures) + « là
++ photos (3 couleurs, TOUTES achetées : gérant « j'ai toutes les couleurs », 5 par couleur) + « là
 aussi tu remplaces l'anglais par français, tu peux mettre tous les paquets ». Simili cuir (jamais « cuir »), plaque et perles
 en acier inoxydable doré, 21 cm. Gravure de la plaque offerte. Prix : 27,90 € net (sans la remise −10 %), au-dessus de tous
 les bracelets homme en ligne (17,91 à 27,81 €, gérant : « il y a d'autres bracelets, fais attention »). Emballages bracelet
@@ -57,7 +57,7 @@ def font_face(m):
 css = re.sub(r"@font-face\{[^}]*\}", font_face, css)
 css += ":root{" + ";".join(re.findall(r"\.__variable_[0-9a-f]+\{([^}]*)\}", css)) + "}\n"
 
-PHOTOS = {"zz-maquette-bht-" + k + ".jpg": k + ".jpg" for k in ("dore", "mesures-fr")}
+PHOTOS = {"zz-maquette-bht-" + k + ".jpg": k + ".jpg" for k in ("trois-couleurs", "dore", "argente", "noir", "porte-argente", "argente-face", "argente-perles", "argente-fermoir", "mesures-fr")}
 def local_src(m):
     chemin = m.group(2)
     nom = chemin.rsplit("/", 1)[-1]
@@ -213,10 +213,11 @@ JS = r'''
       var off=pleins.length===0||(pleins[0]===g)||(pleins.length===1&&false);
       if(pleins.length===1&&pleins[0]!==g)off=false;
       if(g.lab){g.lab.textContent=off?'(offert)':'(+3 €)';g.lab.style.color=off?'#1c6b3a':'var(--ink)'}});
-    if(plate){plate.style.background='linear-gradient(135deg,#f3dc9a,#d7b25c)';
-      plate.innerHTML=pleins.length?pleins.map(function(g){return '<span class="ep-line fnt-'+pol.value+'" style="color:#5c4410"><small style="color:#7a5d1c">'+g.nom+'</small>'+g.inp.value.trim().replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span>'}).join(''):'<span class="ep-empty">Votre texte gravé apparaîtra ici…</span>'}
+    var c=/dor/i.test(st.coulBijou)?['#f3dc9a','#d7b25c','#5c4410','#7a5d1c']:/argent/i.test(st.coulBijou)?['#eceef0','#b9bdc2','#3d4044','#6b6f74']:['#2a2a2d','#141416','#d6d8db','#9a9ca0'];
+    if(plate){plate.style.background='linear-gradient(135deg,'+c[0]+','+c[1]+')';
+      plate.innerHTML=pleins.length?pleins.map(function(g){return '<span class="ep-line fnt-'+pol.value+'" style="color:'+c[2]+'"><small style="color:'+c[3]+'">'+g.nom+'</small>'+g.inp.value.trim().replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</span>'}).join(''):'<span class="ep-empty">Votre texte gravé apparaîtra ici…</span>'}
     maj()}
-  GR.forEach(function(g){if(g.inp)g.inp.addEventListener('input',grav)});if(pol)pol.addEventListener('change',grav);
+  GR.forEach(function(g){if(g.inp)g.inp.addEventListener('input',grav)});sw.forEach(function(b){b.addEventListener('click',grav)});if(pol)pol.addEventListener('change',grav);
   grav();
   maj();
 })();
