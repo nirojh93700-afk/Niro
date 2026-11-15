@@ -52,3 +52,10 @@ open(P,"w",encoding="utf-8").write(t.replace(a,'const BRACELETS_LONG = ["bracele
 P="src/lib/productDates.js";t=open(P,encoding="utf-8").read()
 a='  "collier-barre-verticale": "2026-11-02",'; assert a in t
 open(P,"w",encoding="utf-8").write(t.replace(a,a+'\n  "bracelet-homme-tresse-bicolore": "2026-11-15",',1))
+
+# 15/11/2026 (gérant : « le noir et blanc et le noir tu mets en épuisé ») : pour la capture, stock de départ local
+# noir 0, noir et blanc 0, doré 5, camel 5 (au « applique » : saisir ces stocks dans Gestion).
+P="src/lib/stock.js";t=open(P,encoding="utf-8").read()
+a='export const STOCK_DEPART = {\n'; assert a in t
+t=t.replace(a,a+'  "bracelet-homme-tresse-noir": 0,\n  "bracelet-homme-tresse-blanc": 0,\n  "bracelet-homme-tresse-dore": 5,\n  "bracelet-homme-tresse-camel": 5,\n',1)
+open(P,"w",encoding="utf-8").write(t)

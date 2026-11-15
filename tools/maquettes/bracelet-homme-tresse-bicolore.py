@@ -123,6 +123,21 @@ MAIN = re.sub(r'<span class="val">20,61\s€</span>', '<span class="val">22,90 �
 assert "20,61" not in MAIN[:MAIN.find("Vous aimerez aussi")]
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
+# 15/11/2026 (gérant : « le noir et blanc et le noir tu mets en épuisé ») : rendu du site pour une option à 0 en stock
+# (classe sold-out + pastille « Épuisé », ProductDetail.jsx) ; l'option choisie au départ devient « Noir et doré ».
+EPUISES = ("Noir", "Noir et blanc")
+def swatch(m):
+    bloc = m.group(0)
+    titre = re.search(r'<span class="vs-title">([^<]*)</span>', bloc).group(1)
+    bloc = bloc.replace(" active", "", 1).replace('aria-pressed="true"', 'aria-pressed="false"')
+    if titre == "Noir et doré":
+        bloc = bloc.replace('class="variant-swatch', 'class="variant-swatch active', 1).replace('aria-pressed="false"', 'aria-pressed="true"')
+    if titre in EPUISES:
+        bloc = bloc.replace('class="variant-swatch', 'class="variant-swatch sold-out', 1)
+        bloc = re.sub(r'(<button[^>]*>)', r'\1<span class="vs-out">Épuisé</span>', bloc, count=1)
+    return bloc
+MAIN, n = re.subn(r'<button[^>]*class="variant-swatch[^"]*"[^>]*>.*?</button>', swatch, MAIN, flags=re.S)
+assert n == 4 and MAIN.count('class="vs-out"') == 2
 assert "pd-totbox" in MAIN
 for mot in ("hypoallerg", "sans nickel", "étanche", "fait main", "plaqué or", "Plaqué Or", "18K", "en or ", "ternit", "nisexe"):
     assert mot not in re.sub(r'data:[^"\')]+', '', MAIN), mot
@@ -220,6 +235,14 @@ JS = r'''
     maj()}
   GR.forEach(function(g){if(g.inp)g.inp.addEventListener('input',grav)});sw.forEach(function(b){b.addEventListener('click',grav)});if(pol)pol.addEventListener('change',grav);
   grav();
+  var addBtn=document.querySelector('.qty-row .btn-gold'),totb=document.querySelector('.pd-totbox'),epu=document.createElement('div');
+  addBtn.parentNode.parentNode.insertBefore(epu,addBtn.parentNode.nextSibling);
+  epu.innerHTML='<p style="margin-top:8px;font-size:.85rem;color:#b4452f">Cette option est momentanément épuisée.</p><div style="margin-top:10px;background:#fdf6e8;border:1px solid #e7d3a1;border-radius:12px;padding:12px 14px"><div style="font-weight:700;color:#8a6d1f;font-size:.88rem;margin-bottom:8px">📩 Prévenez-moi dès son retour</div><div style="display:flex;gap:8px"><input type="email" placeholder="Votre e-mail" style="flex:1;border:1px solid #d8bd6e;border-radius:999px;padding:9px 12px;font-size:.85rem;background:#fff;min-width:0"><button type="button" style="background:#c9a24b;color:#fff;font-weight:700;border:none;border-radius:999px;padding:9px 14px;font-size:.85rem;white-space:nowrap">M\'avertir</button></div></div>';
+  function etatStock(){var a=document.querySelector('.variant-swatch.active'),out=a&&a.classList.contains('sold-out');
+    epu.style.display=out?'':'none';if(totb)totb.style.display=out?'none':'';addBtn.disabled=out;addBtn.textContent=out?'Épuisé':'Ajouter au panier'}
+  sw.forEach(function(b){b.addEventListener('click',etatStock)});
+  (function(){var a=document.querySelector('.variant-swatch.active');if(a){a.click()}})();
+  etatStock();
   maj();
 })();
 '''.replace("__PRIX__", json.dumps(PRIX)).replace("__NOEL__", json.dumps(NOEL)).replace("__COUL__", json.dumps(COULEURS)).replace("__ETIQ__", json.dumps(ETIQ))
