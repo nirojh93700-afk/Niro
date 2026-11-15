@@ -58,7 +58,7 @@ def font_face(m):
 css = re.sub(r"@font-face\{[^}]*\}", font_face, css)
 css += ":root{" + ";".join(re.findall(r"\.__variable_[0-9a-f]+\{([^}]*)\}", css)) + "}\n"
 
-PHOTOS = {"zz-maquette-ehp-" + k + ".jpg": k + ".jpg" for k in ("photo-1", "photo-2", "photo-3")}
+PHOTOS = {"zz-maquette-ehp-" + k + ".jpg": k + ".jpg" for k in ("photo-1", "photo-2", "photo-3", "mesures-fr")}
 def local_src(m):
     chemin = m.group(2)
     nom = chemin.rsplit("/", 1)[-1]
@@ -122,12 +122,12 @@ COULEURS = [{"id": "vert", "nom": "Vert sapin", "hex": "#1f5a3a", "photo": uri(o
 ETIQ = uri(os.path.join(NOEL_DIR, "6-etiquettes-I.jpg"), 120, 80)
 # 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre ») : les nouveaux bijoux n'ont PAS la remise
 # des bijoux : 19,90 € net, sans prix barré ni badge −10 %.
-MAIN, n = re.subn(r'<span class="price-old">24,90\s€</span> <span class="price-sale">22,41\s€</span> <span class="promo-badge"[^>]*>.*?</span>',
+MAIN, n = re.subn(r'<span class="price-old">34,90\s€</span> <span class="price-sale">31,41\s€</span> <span class="promo-badge"[^>]*>.*?</span>',
                   '<span class="price-sale" style="color:var(--ink)">34,90 €</span>', MAIN, count=1, flags=re.S)
 assert n == 1
-MAIN = re.sub(r'<span class="vs-old">24,90\s€</span><span class="vs-now">22,41\s€</span>', '<span class="vs-now">34,90 €</span>', MAIN)
-MAIN = re.sub(r'<span class="val">22,41\s€</span>', '<span class="val">34,90 €</span>', MAIN, count=1)
-assert "22,41" not in MAIN[:MAIN.find("Vous aimerez aussi")]
+MAIN = re.sub(r'<span class="vs-old">34,90\s€</span><span class="vs-now">31,41\s€</span>', '<span class="vs-now">34,90 €</span>', MAIN)
+MAIN = re.sub(r'<span class="val">31,41\s€</span>', '<span class="val">34,90 €</span>', MAIN, count=1)
+assert "31,41" not in MAIN[:MAIN.find("Vous aimerez aussi")]
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 assert "pd-totbox" in MAIN

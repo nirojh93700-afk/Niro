@@ -11,7 +11,7 @@ prod='''  {
     tagline: "Un collier à plaque, un bracelet torsadé et une bague, tout en noir, à graver à son nom.",
     personalizable: true,
     personalizationLabel: "Gravure du pendentif et de la bague",
-    images: ["IIphoto-1.jpg", "IIphoto-2.jpg", "IIphoto-3.jpg"],
+    images: ["IIphoto-1.jpg", "IIphoto-2.jpg", "IIphoto-3.jpg", "IImesures-fr.jpg"],
     variants: [
       { id: "ensemble-homme-plaque-noire-noir", title: "Noir", price: 38.90, stockId: "ensemble-homme-plaque-noire-noir", image: "IIphoto-1.jpg" },
     ],
