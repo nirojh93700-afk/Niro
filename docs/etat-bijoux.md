@@ -4,7 +4,7 @@
 > après toute modification de `src/lib/products.js`. Il sert à retrouver l'état réglé
 > d'un bijou depuis n'importe quelle conversation, sans relire le code.
 
-> Généré le 2026-10-18 · 32 bijoux dans le code, dont 27 gravables et 5 vendus tels quels (aucune gravure — ne rien leur ajouter).
+> Généré le 2026-11-15 · 34 bijoux dans le code, dont 29 gravables et 5 vendus tels quels (aucune gravure — ne rien leur ajouter).
 
 ⚠️ **Ce document reflète le CODE.** Les prix, options et champs de gravure peuvent être
 réécrits depuis **Gestion → Produits & stock** : l'admin **prime toujours** sur le code
@@ -20,38 +20,40 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Bijou | Rayon | Prix payé | Gravure | Ce qui est facturé |
 |---|---|---|---|---|
-| **Collier Enveloppe Message Secret** | femme | 22,41 € | **payante** | recto +3 € · verso +3 € |
-| **Collier Médaillon Cœur ouvrable** | femme | 26,01 € | **payante** | cover +3 € · page1 +3 € · page2 +3 € · page3 +3 € · backcover +3 € · photo +8 € |
-| **Bracelet Homme Identité (Gourmette)** | homme | 25,11 € | **payante** | texte +3 € |
-| **Bracelet Homme Acier & Silicone** | homme | 21,51 € | **payante** | texte +3 € |
+| **Collier Enveloppe Message Secret** | femme | 22,41 € | comprise dans le prix | recto +3 € · verso +3 € |
+| **Collier Médaillon Cœur ouvrable** | femme | 26,01 € | comprise dans le prix | cover +3 € · page1 +3 € · page2 +3 € · page3 +3 € · backcover +3 € · photo +8 € |
+| **Bracelet Homme Identité (Gourmette)** | homme | 25,11 € | comprise dans le prix | texte +3 € |
+| **Bracelet Gourmette à plaque gravée** | homme | 27,81 € | comprise dans le prix | texte +3 € |
+| **Bracelet Homme Acier & Silicone** | homme | 21,51 € | comprise dans le prix | texte +3 € |
 | **Bracelet Homme Tressé & Acier** | homme | 20,61 € – 23,31 € | **payante** | texte +3 € |
-| **Bracelet Homme Chaîne Acier** | homme | 22,41 € | **payante** | texte +3 € |
-| **Bracelet Femme Acier** | femme | 22,41 € | **payante** | texte +3 € |
-| **Bracelet Empreinte Pied de Bébé** | bebe | 16,11 € | **payante** | texte +3 € |
-| **Bracelet Femme Cœur** | femme | 21,51 € – 22,41 € | **payante** | texte +3 € |
-| **Bracelet Femme Papillon ajouré** | femme | 20,61 € – 24,21 € | **payante** | texte +3 € |
+| **Bracelet Homme Chaîne Acier** | homme | 22,41 € | comprise dans le prix | texte +3 € |
+| **Bracelet Femme Acier** | femme | 22,41 € | comprise dans le prix | texte +3 € |
+| **Bracelet Empreinte Pied de Bébé** | bebe | 16,11 € | comprise dans le prix | texte +3 € |
+| **Bracelet Femme Cœur** | femme | 21,51 € – 22,41 € | comprise dans le prix | texte +3 € |
+| **Bracelet Femme Papillon ajouré** | femme | 20,61 € – 24,21 € | comprise dans le prix | texte +3 € |
 | **Bracelet Cœur argenté** | femme | 15,21 € | _pas de gravure_ | — |
 | **Bracelet Maille Trombone doré** | femme | 17,91 € | _pas de gravure_ | — |
 | **Bracelet Ange** | femme | 15,21 € | _pas de gravure_ | — |
-| **Bracelet Cœur à graver** | femme | 22,41 € | **payante** | recto +3 € · verso +3 € |
-| **Collier Couple Cœur (lot de 2)** | couple | 22,41 € | **payante** | texte1 +3 € · texte2 +3 € |
-| **Collier Plaque Acier** | homme | 24,21 € – 27,81 € | **payante** | recto +3 € · verso +3 € · photo +8 € |
+| **Bracelet Cœur à graver** | femme | 22,41 € | comprise dans le prix | recto +3 € · verso +3 € |
+| **Collier Couple Cœur (lot de 2)** | couple | 22,41 € | comprise dans le prix | texte1 +3 € · texte2 +3 € |
+| **Collier Plaque Acier** | homme | 24,21 € – 27,81 € | comprise dans le prix | recto +3 € · verso +3 € · photo +8 € |
 | **Collier Cœur scintillant doré** | femme | 22,41 € | _pas de gravure_ | — |
 | **Collier Perle solitaire** | femme | 17,91 € | _pas de gravure_ | — |
-| **Collier Cœur & Zircon doré** | femme | 22,41 € | **payante** | texte +3 € |
-| **Collier Double Cœur à graver** | femme | 24,21 € | **payante** | recto +3 € · verso +3 € |
-| **Collier Cœur & 2 plaques à graver** | femme | 25,11 € | **payante** | coeur +3 € · plaque1 +3 € · plaque2 +3 € |
-| **Collier 3 Cœurs entrelacés à graver** | femme | 25,11 € | **payante** | coeur1 +3 € · coeur2 +3 € · coeur3 +3 € |
-| **Bracelet Cœur grosse chaîne à graver** | femme | 24,21 € | **payante** | recto +3 € · verso +3 € |
-| **Bracelet cordon à plaque gravée** | homme | 17,91 € | **payante** | texte +3 € |
-| **Collier Médaillon pivotant à graver** | femme | 24,21 € | **payante** | recto +3 € · verso +3 € |
-| **Bracelet homme cuir & plaque à graver** | homme | 19,71 € | **payante** | texte +3 € |
-| **Collier Pastille à graver recto-verso** | femme | 19,71 € | **payante** | recto +3 € · verso +3 € |
-| **Collier Cœur à graver recto-verso** | femme | 22,41 € | **payante** | recto +3 € · verso +3 € |
-| **Bracelet perles à pastille gravée** | femme | 22,41 € | **payante** | texte +3 € |
-| **Collier Médaillon Livre** | femme | 26,01 € | **payante** | couverture +3 € · page1 +3 € · page2 +3 € · page3 +3 € |
-| **Collier Couple Puzzle géométrique** | couple | 16,11 € – 18,81 € | **payante** | texte1 +3 € · texte2 +3 € |
-| **Collier Femme Pendentif géométrique** | femme | 21,51 € – 25,11 € | **payante** | face1 +3 € · face2 +3 € · face3 +3 € · face4 +3 € |
+| **Collier Cœur & Zircon doré** | femme | 22,41 € | comprise dans le prix | texte +3 € |
+| **Collier Double Cœur à graver** | femme | 24,21 € | comprise dans le prix | recto +3 € · verso +3 € |
+| **Collier Cœur & 2 plaques à graver** | femme | 25,11 € | comprise dans le prix | coeur +3 € · plaque1 +3 € · plaque2 +3 € |
+| **Collier 3 Cœurs entrelacés à graver** | femme | 25,11 € | comprise dans le prix | coeur1 +3 € · coeur2 +3 € · coeur3 +3 € |
+| **Bracelet Cœur grosse chaîne à graver** | femme | 24,21 € | comprise dans le prix | recto +3 € · verso +3 € |
+| **Bracelet cordon à plaque gravée** | homme | 17,91 € | comprise dans le prix | texte +3 € |
+| **Collier Médaillon pivotant à graver** | femme | 24,21 € | comprise dans le prix | recto +3 € · verso +3 € |
+| **Bracelet homme cuir & plaque à graver** | homme | 19,71 € | comprise dans le prix | texte +3 € |
+| **Collier Pastille à graver recto-verso** | femme | 19,71 € | comprise dans le prix | recto +3 € · verso +3 € |
+| **Collier Quatre Mots** | femme | 19,71 € | comprise dans le prix | face1 +3 € · face2 +3 € · face3 +3 € · face4 +3 € |
+| **Collier Cœur à graver recto-verso** | femme | 22,41 € | comprise dans le prix | recto +3 € · verso +3 € |
+| **Bracelet perles à pastille gravée** | femme | 22,41 € | comprise dans le prix | texte +3 € |
+| **Collier Médaillon Livre** | femme | 26,01 € | comprise dans le prix | couverture +3 € · page1 +3 € · page2 +3 € · page3 +3 € |
+| **Collier Couple Puzzle géométrique** | couple | 16,11 € – 18,81 € | comprise dans le prix | texte1 +3 € · texte2 +3 € |
+| **Collier Femme Pendentif géométrique** | femme | 21,51 € – 25,11 € | comprise dans le prix | face1 +3 € · face2 +3 € · face3 +3 € · face4 +3 € |
 
 ---
 
@@ -86,8 +88,8 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **22,41 €**
-- + recto : **25,41 €**
-- + verso : **28,41 €**
+- + recto : **22,41 €**
+- + verso : **25,41 €**
 
 ---
 
@@ -125,12 +127,12 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Argent »)
 
 - sans rien graver : **26,01 €**
-- + cover : **29,01 €**
-- + page1 : **32,01 €**
-- + page2 : **35,01 €**
-- + page3 : **38,01 €**
-- + backcover : **41,01 €**
-- + photo : **49,01 €**
+- + cover : **26,01 €**
+- + page1 : **29,01 €**
+- + page2 : **32,01 €**
+- + page3 : **35,01 €**
+- + backcover : **38,01 €**
+- + photo : **46,01 €**
 
 ---
 
@@ -160,7 +162,38 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Acier inoxydable »)
 
 - sans rien graver : **25,11 €**
-- + texte : **28,11 €**
+- + texte : **25,11 €**
+
+---
+
+### Bracelet Gourmette à plaque gravée
+
+`bracelet-gourmette-plaque` · /produit/bracelet-gourmette-plaque
+
+- **Rayon** : bijoux / homme · type « Bracelet personnalisé »
+- **Ajouté le** : 2026-11-02
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Doré | 33,90 € | 30,90 € | **27,81 €** | bracelet-gourmette-plaque-dore |
+| Noir | 33,90 € | 30,90 € | **27,81 €** | bracelet-gourmette-plaque-noir |
+
+**Personnalisation**
+
+| Champ | Type | Obligatoire | Supplément | Affiché |
+|---|---|---|---|---|
+| Texte à graver sur la plaque (+3 €) | texte (25 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Doré »)
+
+- sans rien graver : **27,81 €**
+- + texte : **27,81 €**
 
 ---
 
@@ -191,7 +224,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Plaque argentée »)
 
 - sans rien graver : **21,51 €**
-- + texte : **24,51 €**
+- + texte : **21,51 €**
 
 ---
 
@@ -226,7 +259,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Argenté / Sans texte »)
 
 - sans rien graver : **20,61 €**
-- + texte : **23,61 €**
+- + texte : **20,61 €**
 
 ---
 
@@ -256,7 +289,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Argenté »)
 
 - sans rien graver : **22,41 €**
-- + texte : **25,41 €**
+- + texte : **22,41 €**
 
 ---
 
@@ -286,7 +319,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **22,41 €**
-- + texte : **25,41 €**
+- + texte : **22,41 €**
 
 ---
 
@@ -317,7 +350,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Argenté »)
 
 - sans rien graver : **16,11 €**
-- + texte : **19,11 €**
+- + texte : **16,11 €**
 
 ---
 
@@ -350,7 +383,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **22,41 €**
-- + texte : **25,41 €**
+- + texte : **22,41 €**
 
 ---
 
@@ -383,7 +416,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Argenté »)
 
 - sans rien graver : **22,41 €**
-- + texte : **25,41 €**
+- + texte : **22,41 €**
 
 ---
 
@@ -474,8 +507,8 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **22,41 €**
-- + recto : **25,41 €**
-- + verso : **28,41 €**
+- + recto : **22,41 €**
+- + verso : **25,41 €**
 
 ---
 
@@ -506,8 +539,8 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Or Rose »)
 
 - sans rien graver : **22,41 €**
-- + texte1 : **25,41 €**
-- + texte2 : **28,41 €**
+- + texte1 : **22,41 €**
+- + texte2 : **25,41 €**
 
 ---
 
@@ -545,9 +578,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Acier Noir »)
 
 - sans rien graver : **26,91 €**
-- + recto : **29,91 €**
-- + verso : **32,91 €**
-- + photo : **40,91 €**
+- + recto : **26,91 €**
+- + verso : **29,91 €**
+- + photo : **37,91 €**
 
 ---
 
@@ -615,7 +648,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **22,41 €**
-- + texte : **25,41 €**
+- + texte : **22,41 €**
 
 ---
 
@@ -648,8 +681,8 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **24,21 €**
-- + recto : **27,21 €**
-- + verso : **30,21 €**
+- + recto : **24,21 €**
+- + verso : **27,21 €**
 
 ---
 
@@ -683,9 +716,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **25,11 €**
-- + coeur : **28,11 €**
-- + plaque1 : **31,11 €**
-- + plaque2 : **34,11 €**
+- + coeur : **25,11 €**
+- + plaque1 : **28,11 €**
+- + plaque2 : **31,11 €**
 
 ---
 
@@ -717,9 +750,9 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **25,11 €**
-- + coeur1 : **28,11 €**
-- + coeur2 : **31,11 €**
-- + coeur3 : **34,11 €**
+- + coeur1 : **25,11 €**
+- + coeur2 : **28,11 €**
+- + coeur3 : **31,11 €**
 
 ---
 
@@ -750,8 +783,8 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **24,21 €**
-- + recto : **27,21 €**
-- + verso : **30,21 €**
+- + recto : **24,21 €**
+- + verso : **27,21 €**
 
 ---
 
@@ -783,7 +816,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Noir / boucle noire »)
 
 - sans rien graver : **17,91 €**
-- + texte : **20,91 €**
+- + texte : **17,91 €**
 
 ---
 
@@ -816,8 +849,8 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **24,21 €**
-- + recto : **27,21 €**
-- + verso : **30,21 €**
+- + recto : **24,21 €**
+- + verso : **27,21 €**
 
 ---
 
@@ -849,7 +882,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Noir chiné »)
 
 - sans rien graver : **19,71 €**
-- + texte : **22,71 €**
+- + texte : **19,71 €**
 
 ---
 
@@ -882,8 +915,44 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **19,71 €**
-- + recto : **22,71 €**
-- + verso : **25,71 €**
+- + recto : **19,71 €**
+- + verso : **22,71 €**
+
+---
+
+### Collier Quatre Mots
+
+`collier-barre-verticale` · /produit/collier-barre-verticale
+
+- **Rayon** : bijoux / femme · type « Collier personnalisé »
+- **Ajouté le** : 2026-11-02
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Argenté | 23,90 € | 21,90 € | **19,71 €** | collier-barre-verticale-argente |
+
+**Personnalisation**
+
+| Champ | Type | Obligatoire | Supplément | Affiché |
+|---|---|---|---|---|
+| Face 1 — face avec la pierre | texte (15 car.) | non | +3 € | toujours |
+| Face 2 | texte (15 car.) | non | +3 € | toujours |
+| Face 3 | texte (15 car.) | non | +3 € | toujours |
+| Face 4 | texte (15 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Argenté »)
+
+- sans rien graver : **19,71 €**
+- + face1 : **19,71 €**
+- + face2 : **22,71 €**
+- + face3 : **25,71 €**
+- + face4 : **28,71 €**
 
 ---
 
@@ -916,8 +985,8 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **22,41 €**
-- + recto : **25,41 €**
-- + verso : **28,41 €**
+- + recto : **22,41 €**
+- + verso : **25,41 €**
 
 ---
 
@@ -948,7 +1017,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Doré »)
 
 - sans rien graver : **22,41 €**
-- + texte : **25,41 €**
+- + texte : **22,41 €**
 
 ---
 
@@ -991,10 +1060,10 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Argenté »)
 
 - sans rien graver : **26,01 €**
-- + couverture : **29,01 €**
-- + page1 : **32,01 €**
-- + page2 : **35,01 €**
-- + page3 : **38,01 €**
+- + couverture : **26,01 €**
+- + page1 : **29,01 €**
+- + page2 : **32,01 €**
+- + page3 : **35,01 €**
 
 ---
 
@@ -1026,8 +1095,8 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Argenté »)
 
 - sans rien graver : **16,11 €**
-- + texte1 : **19,11 €**
-- + texte2 : **22,11 €**
+- + texte1 : **16,11 €**
+- + texte2 : **19,11 €**
 
 ---
 
@@ -1073,10 +1142,10 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 **Ce que paie la cliente** (option « Argenté »)
 
 - sans rien graver : **21,51 €**
-- + face1 : **24,51 €**
-- + face2 : **27,51 €**
-- + face3 : **30,51 €**
-- + face4 : **33,51 €**
+- + face1 : **21,51 €**
+- + face2 : **24,51 €**
+- + face3 : **27,51 €**
+- + face4 : **30,51 €**
 
 ---
 

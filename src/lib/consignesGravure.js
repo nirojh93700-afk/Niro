@@ -188,7 +188,7 @@ function consignesCarnet(produit, cn, item) {
 function consignesGobelet(produit, champs) {
   const cfg = produit.gobeletParcours;
   const extra = String(Number(cfg?.extra) || 3).replace(".", ",");
-  const els = gobeletElements(champs);
+  const els = gobeletElements(champs, cfg);
   const NOMS = { face: "Face (devant)", atelier: `Endroit au choix de l'atelier (${GOB_ATELIER_APERCU})` };
   const faces = Object.keys(GOB_COTES).map((c) => ({ cle: c, nom: NOMS[c] || GOB_COTES[c], vide: true, lignes: [] }));
   els.forEach((e, i) => {

@@ -2,7 +2,7 @@
 // Fiche du carnet A5 gravé (mise en vente du 07/11/2026, gérant : « Papeterie avec le carnet »).
 // Reproduit la maquette enregistrée v9 (artifact QSD8HCrAzEqrSEYA7viFMh) : couleur, quatre emplacements sur la
 // couverture et quatre au dos (rien / un texte / un de nos dessins ou cadres / mon logo), écriture parmi les huit du
-// site, gravure posée en direct sur la grande photo (couverture ou dos de la couleur choisie), +7 € par face gravée.
+// site, gravure posée en direct sur la grande photo (couverture ou dos de la couleur choisie), une face gravée comprise, la 2e +7 € (15/11/2026).
 // Prix : src/lib/carnet.js (le même calcul au paiement). Planches, envoi de photo : repris de la fiche des marque-pages.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -19,7 +19,7 @@ import PayInfoModal from "@/components/PayInfo";
 import TrustSection from "@/components/TrustSection";
 import { MP_DATA } from "@/lib/marquePagesData";
 import { Planches, envoyerPhoto, ajuster } from "@/components/marquePages/MarquePagesFiche";
-import { CN_FACES, CN_ZONES, CN_ZONES_POS, CN_ENCRE, CN_GRAVURE, cnVide, cnPlein, cnFaceGravee, cnPrixGravure, cnNormaliser, cnResume, cnTextes } from "@/lib/carnet";
+import { CN_FACES, CN_ZONES, CN_ZONES_POS, CN_ENCRE, CN_GRAVURE, cnVide, cnPlein, cnFaceGravee, cnFaceComprise, cnPrixGravure, cnNormaliser, cnResume, cnTextes } from "@/lib/carnet";
 import LangueFiche from "@/components/LangueFiche";
 import { langueDe, langueActive, texteMontre, texteFrappe, champsLangueAPlat, manqueLangue, resumeLangue } from "@/lib/traductionGravure";
 import { classeLangue } from "@/lib/policeLangueClient";
@@ -312,10 +312,10 @@ export default function CarnetFiche({ product, realisations = [] }) {
           </div>
 
           <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 8 }}>Personnalisation — gravure</p>
-          <p className="mq-edi">Quatre emplacements sur la couverture, quatre au dos, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un titre en haut, un dessin au milieu et votre prénom en bas à gauche. La gravure de la couverture coûte {CN_GRAVURE} €, celle du dos {CN_GRAVURE} €, quel que soit le nombre d&apos;emplacements remplis.</p>
+          <p className="mq-edi">Quatre emplacements sur la couverture, quatre au dos, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un titre en haut, un dessin au milieu et votre prénom en bas à gauche. Une face gravée est comprise ; graver aussi la 2e face coûte {CN_GRAVURE} €, quel que soit le nombre d&apos;emplacements remplis.</p>
           {CN_FACES.map(([side]) => (
             <div key={side}>
-              <p className="mq-sub cn-sub">{side === "face" ? "Sur la couverture" : "Au dos"} <small>(+{CN_GRAVURE} €){cnFaceGravee(v, side) ? " · gravée ✓" : ""}</small></p>
+              <p className="mq-sub cn-sub">{side === "face" ? "Sur la couverture" : "Au dos"} <small>({!cnFaceComprise(v) ? "une face gravée est comprise" : cnFaceComprise(v) === side ? "comprise" : `+${CN_GRAVURE} €`}){cnFaceGravee(v, side) ? " · gravée ✓" : ""}</small></p>
               <Face side={side} v={v} onChange={setV} grille={grille} setGrille={setGrille} productSlug={product.slug} lg={lg} onFrappe={onFrappe} />
             </div>
           ))}

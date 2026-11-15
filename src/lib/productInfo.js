@@ -522,7 +522,7 @@ Un souci à la réception ?
 - Six couleurs au choix : caramel, blond clair, rouge, cuivré, gris anthracite, gris sable.
 - Dessin, photo et texte gravés au laser dans notre atelier en France.`,
     usage: `Personnalisation & Entretien
-- Quatre emplacements (face et dos, en haut et au milieu) : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), ou rien.
+- Quatre emplacements (face et dos, en haut et au milieu) : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), ou rien ; la gravure la moins chère est comprise.
 - Entretien : un coup de chiffon sec suffit. Ne pas immerger.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé. En boîte cadeau, il part en petit colis.
@@ -536,7 +536,7 @@ Un souci à la réception ?
 - Cordon brun avec deux perles de verre.`,
     usage: `Personnalisation & Entretien
 - Sur la face : un texte (+3 €) au-dessus de la fenêtre ou à côté, ou votre photo au-dessus de la fenêtre (+4 €).
-- Au verso : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), en haut et au milieu.
+- Au verso : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), en haut et au milieu.\n- La gravure la moins chère de votre marque-page est comprise.
 - Entretien : un coup de chiffon sec suffit. Ne pas immerger.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé. En boîte cadeau, il part en petit colis.
@@ -1140,7 +1140,7 @@ Un souci à la réception ?
 - Finitions : argenté, doré, noir, acier noir, argenté et noir.
 - Style épuré et contemporain.`,
     usage: `Personnalisation & Entretien
-- Gravure du texte : +3 € par face (recto ou verso) ; photo gravée (+8 €) en option.
+- Gravure : une face comprise, la 2e face +3 € ; photo gravée (+8 €) en option.
 - Pour une photo gravée : choisissez une image nette, bien éclairée et contrastée.
 - Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.
 - Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.`,
@@ -1396,7 +1396,7 @@ Un souci à la réception ?
   },
   "bracelet-gourmette-plaque": {
     material: "Acier inoxydable 304. Doré : finition dorée. Noir : finition noire.\nChaîne gourmette à mailles épaisses, plaque lisse gravable, fermoir mousqueton.\nPoids : environ 15 g.",
-    usage: "Gravure sur la plaque (25 caractères environ) : +3 €. Laissez le champ vide pour un bracelet sans gravure.\n\nMettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.\nEntretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
+    usage: "Gravure sur la plaque (25 caractères environ) : comprise. Laissez le champ vide pour un bracelet sans gravure.\n\nMettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.\nEntretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
     returns: "Bijou gravé à la commande dans notre atelier, puis envoyé en lettre suivie.\nPièce personnalisée : pas de droit de rétractation (art. L221-28 du Code de la consommation). Un défaut de fabrication ou une erreur de notre part est bien sûr pris en charge.",
   },
   "collier-pastille": {
@@ -1556,7 +1556,7 @@ Un souci à la réception ?
     material:
       "Gobelet isotherme 40 oz (1,1 L) en acier inoxydable double paroi.\nLivré avec son couvercle, sa paille réutilisable et un goupillon de nettoyage.\nAnse intégrée, base étudiée pour entrer dans un porte-gobelet de voiture.\nQuatre coloris : Crème, Blanc, Bleu marine, Rose.",
     usage:
-      "Gravure laser personnalisée : au centre, un de nos dessins numérotés, votre texte ou votre photo / logo (compris dans le prix) ; autour, si vous le souhaitez, un cadre avec un prénom, une lettre fleurie, un autre dessin ou un texte (+3 € par élément).\nLa gravure est creusée au laser : elle ne s'efface pas.\nGarde les boissons chaudes ou froides pendant des heures.\nLavez le gobelet à la main : ne le passez pas au lave-vaisselle et ne le mettez ni au micro-ondes ni au congélateur (double paroi isotherme).\nLe couvercle, la paille et le goupillon se lavent séparément.",
+      "Gravure laser personnalisée : au centre, un de nos dessins numérotés, votre texte ou votre photo / logo ; autour, si vous le souhaitez, un cadre avec un prénom, une lettre fleurie, un autre dessin ou un texte.\nPrix de la gravure : l'élément le moins cher est compris ; chaque autre élément +3 €, une photo +6 €.\nLa gravure est creusée au laser : elle ne s'efface pas.\nGarde les boissons chaudes ou froides pendant des heures.\nLavez le gobelet à la main : ne le passez pas au lave-vaisselle et ne le mettez ni au micro-ondes ni au congélateur (double paroi isotherme).\nLe couvercle, la paille et le goupillon se lavent séparément.",
     returns:
       "Expédié en colis suivi, à domicile ou en point relais.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
   },

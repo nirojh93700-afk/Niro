@@ -2,7 +2,76 @@
 // (incluse) ajoute un montant. Utilisé côté client (affichage) ET côté serveur
 // (recalcul de confiance au paiement), pour éviter toute triche.
 
+// =============================================================================
+// « LE MOINS CHER EST COMPRIS » (gérant, 15/11/2026 : « si la cliente prend plusieurs trucs, tu offres que le moins
+// cher, on va faire ça pour tout le site ») — `engravingPricing.moinsCherCompris` :
+//   true                         → parmi les gravures payantes choisies (textes, motifs, photo, suppléments à plat
+//                                  qui sont de la GRAVURE), la moins chère est comprise ; les autres se paient.
+//   { inclusSi: ["photo"] }      → idem, SAUF si le champ « photo » est rempli : la gravure comprise dans le prix
+//                                  existe déjà (ex. clé USB cristal : photo comprise, texte +5 €).
+//   { inclusSi: { mode: [...] } }→ idem, sauf si « mode » vaut l'une de ces valeurs (carafe : modèle, lettre, photo).
+// Un objet physique (socle, coffret : stock ou poids) n'est jamais une gravure, jamais offert.
+// =============================================================================
+const plein = (fields, k) => Boolean(k && (fields?.[k] || "").toString().trim());
+const r2 = (x) => Math.round((Number(x) || 0) * 100) / 100;
+
+/** Gravures payantes choisies, dans l'ordre de la fiche : [{ cle, prix }] (sans le moins-cher-compris). */
+export function articlesGravure(product, fields = {}, variantId = null) {
+  const cfg = product?.engravingPricing;
+  if (!cfg) return [];
+  const out = [];
+  for (const k of cfg.textKeys || []) if (plein(fields, k) && (cfg.textExtra || 0) > 0) out.push({ cle: k, prix: cfg.textExtra });
+  for (const k of cfg.motifKeys || []) if (plein(fields, k) && (cfg.motifExtra || 0) > 0) out.push({ cle: k, prix: cfg.motifExtra });
+  if (cfg.photoKey && plein(fields, cfg.photoKey) && (cfg.photoSurcharge || 0) > 0) out.push({ cle: cfg.photoKey, prix: cfg.photoSurcharge });
+  for (const e of cfg.flatExtras || []) {
+    if (e.stockId || e.stockIdByVariant || e.weight || e.weightByVariant) continue;
+    const v = (fields[e.key] || "").toString().trim();
+    if (!(e.value ? v === e.value : Boolean(v))) continue;
+    const prix = (e.amountByVariant && variantId && e.amountByVariant[variantId] != null) ? e.amountByVariant[variantId] : (e.amount || 0);
+    if (prix > 0) out.push({ cle: e.key, prix });
+  }
+  if (cfg.modeleSubExtra) {
+    const mv = fields[cfg.modeleSubExtra.key];
+    if (mv && typeof mv === "object" && mv.addText !== false && (cfg.modeleSubExtra.amount || 0) > 0) out.push({ cle: cfg.modeleSubExtra.key, prix: cfg.modeleSubExtra.amount });
+  }
+  return out;
+}
+
+/** Une gravure comprise dans le prix existe-t-elle déjà (photo du cristal, modèle de la carafe…) ? */
+function dejaInclus(cfg, fields) {
+  const r = cfg?.moinsCherCompris?.inclusSi;
+  if (!r) return false;
+  if (Array.isArray(r)) return r.some((k) => plein(fields, k));
+  return Object.entries(r).some(([k, vals]) => (vals || []).includes((fields?.[k] || "").toString().trim()));
+}
+
+/** La gravure offerte (la moins chère, la 1re en cas d'égalité) : { cle, prix } ou null. */
+export function gravureComprise(product, fields = {}, variantId = null) {
+  const cfg = product?.engravingPricing;
+  if (!cfg?.moinsCherCompris || dejaInclus(cfg, fields)) return null;
+  let best = null;
+  for (const a of articlesGravure(product, fields, variantId)) if (!best || a.prix < best.prix) best = a;
+  return best;
+}
+
+/** Ce que la fiche écrit à côté d'une case de gravure : « compris » ou le supplément, si on la remplissait. */
+export function etiquettePrixGravure(product, fields = {}, variantId = null, cle) {
+  const cfg = product?.engravingPricing;
+  if (!cfg?.moinsCherCompris || !cle) return null;
+  const essai = plein(fields, cle) ? fields : { ...fields, [cle]: "x" };
+  const a = articlesGravure(product, essai, variantId).find((x) => x.cle === cle);
+  if (!a) return null;
+  const off = gravureComprise(product, essai, variantId);
+  return off && off.cle === cle ? { compris: true, prix: 0 } : { compris: false, prix: a.prix };
+}
+
 export function engravingExtra(product, fields = {}, variantId = null) {
+  const r = extraBrut(product, fields, variantId);
+  const off = gravureComprise(product, fields, variantId);
+  return off ? { ...r, amount: r2(r.amount - off.prix), comprise: off } : r;
+}
+
+function extraBrut(product, fields = {}, variantId = null) {
   const cfg = product?.engravingPricing;
   if (!cfg) return { pages: 0, amount: 0, weight: 0, stockIds: [] };
 
@@ -61,10 +130,12 @@ export function engravingExtra(product, fields = {}, variantId = null) {
     let amount = 0, pages = 0;
     for (const k of cfg.textKeys || []) if (filled(k)) { amount += cfg.textExtra || 0; pages += 1; }
     // Textes offerts (Collier Quatre Mots, 02/11/2026) : la 1re face remplie est offerte, quelle qu'elle soit.
-    const offerts = Math.min(pages, Number(cfg.textesOfferts) || 0);
+    const offerts = cfg.moinsCherCompris ? 0 : Math.min(pages, Number(cfg.textesOfferts) || 0);
     amount -= offerts * (cfg.textExtra || 0);
     const motifs = (cfg.motifKeys || []).filter((k) => filled(k)).length;
-    if (motifs > 1) amount += (motifs - 1) * (cfg.motifExtra || 0); // 1er motif offert
+    // 1er motif offert (avant le 15/11/2026) ; avec « le moins cher compris », chaque motif se compte puis le moins cher est retiré.
+    const motifsPayes = cfg.moinsCherCompris ? motifs : Math.max(0, motifs - 1);
+    if (motifsPayes > 0) amount += motifsPayes * (cfg.motifExtra || 0);
     const photo = Boolean(cfg.photoKey && filled(cfg.photoKey));
     if (photo) amount += cfg.photoSurcharge || 0;
     return { pages, motifs, photo, amount: amount + flat, weight: flatWeight, stockIds };
@@ -109,6 +180,13 @@ export function engravingExtra(product, fields = {}, variantId = null) {
 export function prixPremiereGravure(product, fields = {}, variantId = null) {
   const cfg = product?.engravingPricing;
   if (!cfg) return 0;
+  // Fiche « le moins cher compris » : le code offre la gravure payante la moins chère qui RESTE après la comprise.
+  if (cfg.moinsCherCompris) {
+    const off = gravureComprise(product, fields, variantId);
+    let reste = articlesGravure(product, fields, variantId);
+    if (off) { const i = reste.findIndex((a) => a.cle === off.cle); if (i >= 0) reste = reste.filter((_, k) => k !== i); }
+    return reste.length ? Math.min(...reste.map((a) => a.prix)) : 0;
+  }
   const filled = (k) => k && (fields[k] || "").toString().trim();
 
   // 1) Zones de texte (recto/verso, cœur/plaques…) : une zone remplie = textExtra.

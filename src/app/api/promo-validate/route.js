@@ -1,7 +1,7 @@
 import { getPromoCodes, hasUsedCode, ensureWelcomeCode, ensureReferralCode } from "@/lib/stock";
 import { getCatalog } from "@/lib/catalog";
 import { prixPremiereGravure } from "@/lib/engravingPrice";
-import { SUP_PRIX } from "@/lib/supportCreateur";
+import { supNormaliser, supPremiereGravure } from "@/lib/supportCreateur";
 
 // Offre « gravure offerte » : le panier envoie ses articles (même forme qu'au
 // paiement) pour qu'on annonce la VRAIE remise — le prix de la première gravure
@@ -15,7 +15,8 @@ async function remiseGravure(items) {
     const m = index.get(it?.variantId);
     if (!m) continue;
     // Support de téléphone à créer : un élément gravé (même règle qu'au paiement).
-    if (m.product.createur === "support") { const sup = it.fields?.sup; if (sup && sup.grave && Array.isArray(sup.els) && sup.els.length) return SUP_PRIX.element; continue; }
+    // (15/11/2026 : la gravure la moins chère est déjà comprise ; le code n'offre qu'une gravure payante.)
+    if (m.product.createur === "support") { const p = supPremiereGravure(supNormaliser(it.fields?.sup)); if (p > 0) return p; continue; }
     const champs = (Array.isArray(it.perGlass) && it.perGlass.length > 0) ? (it.perGlass[0] || {}) : (it.fields || {});
     const prix = prixPremiereGravure(m.product, champs, m.variant.id) || 0;
     if (prix > 0) return prix;

@@ -1,8 +1,8 @@
 // Gobelet isotherme 40 oz — parcours guidé (maquette validée du 03/10/2026, exemples et retours du gérant du 05/11/2026).
 // Pur : utilisé par la fiche (GobeletParcours.jsx), le paiement (/api/checkout) ET l'atelier (consignesGravure), pour que
 // le prix affiché = le prix payé et que l'atelier lise exactement ce que la cliente a choisi.
-// Règle du gérant (03/10) : « le premier gravure c'est gratuit, après c'est payant, même un prénom » → 1 élément
-// compris, chaque élément en plus +3 €.
+// Règle du gérant (03/10) : 1 élément compris, chaque élément en plus +3 € (une photo +6 €). Depuis le 15/11/2026
+// (« le moins cher est offert, pour tout le site ») : l'élément compris est le MOINS CHER de la gravure.
 //
 // Une gravure = une LISTE D'ÉLÉMENTS. Chaque élément : quoi (dessin 1–74, cadre ou banderole 75–102 + nom, lettre
 // fleurie + nom, texte, photo), écriture si texte, et OÙ (face / côté gauche / côté droit / tout autour, puis au
@@ -149,16 +149,22 @@ export function manqueElement(e) {
   return "Choisissez ce que vous voulez graver.";
 }
 
-/** Tous les éléments, dans l'ordre : le 1er (compris), le texte sous la photo, puis les éléments en plus. */
-export function gobeletElements(fields) {
+/** Tous les éléments, dans l'ordre : le 1er, le texte sous la photo, puis les éléments en plus.
+ *  Règle du gérant (15/11/2026 : « le moins cher est offert… pour tout le site ») : l'élément COMPRIS est le MOINS CHER
+ *  de la gravure (le 1er en cas d'égalité) ; avant, c'était toujours le 1er (une photo seule reste comprise). */
+export function gobeletElements(fields, cfg = {}) {
   const out = [];
   const p = premierElement(fields);
   if (p) {
-    out.push({ ...p, compris: true });
+    out.push({ ...p, compris: false });
     // Un texte sous la photo en cours de traduction compte déjà (le prix ne bouge pas pendant la traduction).
     if (p.kind === "photo" && (p.sous || p.sousSource)) out.push({ kind: "sous", texte: p.sous, side: p.side, zone: p.zone, police: p.police, compris: false });
   }
   for (const l of lignesAutour(fields)) out.push({ ...lireLigne(l), compris: false });
+  const els = out.slice(0, GOB_ELEMENTS_MAX + 2);
+  let iMin = -1;
+  els.forEach((e, i) => { if (iMin < 0 || prixElement(e, cfg) < prixElement(els[iMin], cfg)) iMin = i; });
+  if (iMin >= 0) out[iMin].compris = true;
   return out;
 }
 
@@ -184,15 +190,14 @@ export function gobeletNbElements(fields) {
   return Math.min(n, GOB_ELEMENTS_MAX + 2);
 }
 
-/** Supplément de gravure : 1 élément compris, chaque élément en plus au prix `extra` (3 €). */
-/** Prix d'un élément EN PLUS : une photo +6 € (gérant, 05/11 : « gravure de photos c'est plus cher »), le reste +3 €. */
+/** Prix d'un élément quand il n'est pas le compris : une photo +6 € (gérant, 05/11 : « gravure de photos c'est plus cher »), le reste +3 €. */
 export function prixElement(e, cfg = {}) {
   return e && e.kind === "photo" ? (Number(cfg.extraPhoto) || 6) : (Number(cfg.extra) || 3);
 }
 
-/** Supplément de gravure : le 1er élément compris (photo comprise), chaque élément en plus à son prix. */
+/** Supplément de gravure : le MOINS CHER des éléments est compris, chaque autre élément à son prix (photo 6 €, le reste 3 €). */
 export function gobeletSupplement(fields, cfg = {}) {
-  const els = gobeletElements(fields).slice(0, GOB_ELEMENTS_MAX + 2);
+  const els = gobeletElements(fields, cfg).slice(0, GOB_ELEMENTS_MAX + 2);
   const enPlusEls = els.filter((e) => !e.compris);
   const montant = enPlusEls.reduce((t, e) => t + prixElement(e, cfg), 0);
   return { n: els.length, enPlus: enPlusEls.length, photosEnPlus: enPlusEls.filter((e) => e.kind === "photo").length, montant: Math.round(montant * 100) / 100 };
@@ -200,7 +205,7 @@ export function gobeletSupplement(fields, cfg = {}) {
 
 /** Résumé lisible (panier, paiement, e-mails) : « 1. Dessin n° 12 — Face, au milieu (compris) · 2. … (+3 €) ». */
 export function gobeletResume(fields, cfg = {}) {
-  return gobeletElements(fields).map((e, i) => {
+  return gobeletElements(fields, cfg).map((e, i) => {
     const ecr = ["cadre", "lettre", "texte", "sous"].includes(e.kind) && e.police ? `, écriture ${ecritureCourte(e.police)}` : "";
     return `${i + 1}. ${quoiElement(e)} — ${ouElement(e)}${ecr} (${e.compris ? "compris" : `+${String(prixElement(e, cfg)).replace(".", ",")} €`})`;
   }).join(" · ") + (aTexteEnLangue(fields || {}) ? ` · Langue : ${resumeLangue(fields)}` : "");

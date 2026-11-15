@@ -347,3 +347,14 @@ Après (même grille pour tous les pays) : lettre ≤100 g 8,90 · ≤250 g 15,9
 ## Support de téléphone en bois gravé (créateur) — avant le 15/11/2026
 - Petit 12,90 € · Standard 15,90 € · Grand 18,90 € ; chaque élément gravé + 3 € ; motif ajouré + 3 € ; rien de compris.
 - Après (gérant, 15/11/2026) : Petit 15,90 € · Standard 18,90 € · Grand 21,90 € ; élément gravé + 3 € ; motif ajouré + 5 € ; le moins cher de la création compris.
+
+## 15/11/2026 — « Le moins cher est compris » sur tout le site (gérant : « tu offres que le moins cher, on va faire ça pour tout le site »)
+Avant ce jour :
+- **Bijoux** (32 fiches) : chaque texte gravé +3 €, aucun offert (règle du 18/10/2026) ; photo +8 € ; motifs : le 1er offert, les suivants +3 € ; Collier Quatre Mots : 1re face offerte.
+  Ex. bracelet femme cœur gravé 25,41 € (aujourd'hui 22,41 €) ; double cœur recto + verso 30,21 € (aujourd'hui 27,21 €).
+- **Bougeoir Fleur de Lotus** : gravure +5 € (21,90 € gravé). **Support ajouré feuilles et lierre** : prénom +3 €. **Clé USB cristal** : texte +5 € même sans photo.
+- **Carafe** en « Mon propre texte » : le texte +3 € (57,90 €) ; avec un modèle, une lettre ou une photo : inchangé.
+- **Gobelet** : le 1er élément compris quel qu'il soit (photo comprise), chaque élément en plus +3 €, photo en plus +6 € (photo + texte = 3 €, aujourd'hui 6 €).
+- **Marque-pages** : chaque gravure payante (texte 3 €, dessin / cadre / photo 4 €), aucune comprise.
+- **Carnet A5** : couverture gravée +7 €, dos +7 € (aujourd'hui : une face comprise, la 2e +7 €).
+Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), et rétablir `gobeletElements` (1er compris), `mpPrixGravure`, `cnPrixGravure`.

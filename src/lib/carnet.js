@@ -3,7 +3,8 @@
 // Reproduit la maquette enregistrée v9 (artifact QSD8HCrAzEqrSEYA7viFMh) : 3 couleurs, 15,90 € (12,90 € jusqu'au 07/11/2026) ;
 // QUATRE emplacements sur la couverture et QUATRE au dos (en haut · au milieu · en bas à gauche ·
 // en bas à droite), chacun = rien / un texte (2 lignes) / un de nos dessins ou cadres (n°) / mon logo.
-// Couverture gravée +7 € quel que soit le nombre d'emplacements remplis, dos gravé +7 € pareil.
+// Couverture gravée +7 € quel que soit le nombre d'emplacements remplis, dos gravé +7 € pareil ; depuis le 15/11/2026,
+// une face gravée est COMPRISE (la moins chère), seule la 2e face se paie.
 // UN SEUL calcul pour la fiche ET le paiement (pur, sans dépendance serveur).
 // =============================================================================
 import { getFontLabel } from "./fonts";
@@ -36,8 +37,15 @@ export function cnPlein(e) {
 export function cnFaceGravee(v, side) {
   return Object.values(v?.[side] || {}).some(cnPlein);
 }
+/** Face gravée COMPRISE (gérant, 15/11/2026 : « le moins cher est offert, pour tout le site ») : la 1re face gravée
+ *  (couverture, sinon dos). Les deux faces coûtent pareil (7 €) : graver une face est compris, la 2e se paie. */
+export function cnFaceComprise(v) {
+  const f = CN_FACES.find(([s]) => cnFaceGravee(v, s));
+  return f ? f[0] : null;
+}
 export function cnPrixGravure(v) {
-  return CN_FACES.reduce((a, [s]) => a + (cnFaceGravee(v, s) ? CN_GRAVURE : 0), 0);
+  const n = CN_FACES.filter(([s]) => cnFaceGravee(v, s)).length;
+  return Math.max(0, n - 1) * CN_GRAVURE;
 }
 const photoSite = (s) => typeof s === "string" && /^\/api\/img\/[A-Za-z0-9_-]{6,64}$/.test(s);
 

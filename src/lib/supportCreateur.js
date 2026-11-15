@@ -92,6 +92,15 @@ export function supSupplement(sup) {
   return brut - (o === "aj" ? SUP_PRIX.ajoure : o === 0 ? SUP_PRIX.element : 0);
 }
 
+/** Code « gravure offerte » : la moins chère des gravures PAYANTES (après la comprise), 0 s'il n'y en a pas. */
+export function supPremiereGravure(sup) {
+  if (!sup) return 0;
+  const o = supOffert(sup);
+  const els = sup.grave ? sup.els.length - (o === 0 ? 1 : 0) : 0;
+  const aj = sup.ajoure && o !== "aj";
+  return els > 0 ? SUP_PRIX.element : aj ? SUP_PRIX.ajoure : 0;
+}
+
 /** Pourquoi la création ne peut pas encore partir au panier (chaîne vide = prête). */
 export function supManque(etat) {
   if (!etat) return "Le créateur se charge encore.";
