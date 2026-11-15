@@ -860,3 +860,6 @@ En attente de SA décision :
 - Seulement la boule de Noël (décoration à suspendre) et la maisonnette ; entrée du menu après « Bébé & Enfant » ; bloc sur l'accueil après les verres et « Ce Noël ».
 - À trancher au moment de mettre en ligne : prix de la décoration à suspendre (dès 9,90 € proposé), date limite pour Noël, lien avec l'interrupteur Noël,
   et rappel de sa consigne du 13/11 (masquage relié à Gestion, essais réels) avant de pousser.
+
+## 🦋 COLLIER PAPILLON — maquette enregistrée le 15/11/2026 (version 3, https://claude.ai/artifact/WxMF32gaPYVWmbbFTVqhWQ)
+- Prix 17,91 € (barré 19,90) et nom validés. En attente de son « applique ». Au « applique » : products.js (5 variantes avec photo et stockId, stock 12 / 10 / 12 / 12 / 12), productInfo.js, packagingSeed.js (COLLIERS), productDates.js, vraies photos dans public/produits/, coûts dans productCosts.js (0,85 / 0,87 / 0,97 / 0,85 / 1,15 € + port), paragraphe dans les guides « Idées & conseils ». Taille inconnue : rien d'écrit.
