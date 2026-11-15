@@ -343,3 +343,7 @@ Après (même grille pour tous les pays) : lettre ≤100 g 8,90 · ≤250 g 15,9
 - Avant : chaque dessin (flocon, renne, sapin…) **+ 1 €** (prix du 12/11).
 - Maintenant : les dessins sont **compris** ; le nom + 3 € (acrylique + 2 €), la photo + 3 €.
 - Pour revenir en arrière : `"dessin": 1` dans `D.prix` de `tools/maquettes/decoration-createur.py`, puis refaire les modèles (`decoration-modeles.cjs`).
+
+## Support de téléphone en bois gravé (créateur) — avant le 15/11/2026
+- Petit 12,90 € · Standard 15,90 € · Grand 18,90 € ; chaque élément gravé + 3 € ; motif ajouré + 3 € ; rien de compris.
+- Après (gérant, 15/11/2026) : Petit 15,90 € · Standard 18,90 € · Grand 21,90 € ; élément gravé + 3 € ; motif ajouré + 5 € ; le moins cher de la création compris.
