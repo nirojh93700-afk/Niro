@@ -12,6 +12,19 @@
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
 
+## 📱 APPLICATION « NIV ADMIN » + PHOTOS DU COLIS + FACTURES + PAGE COMPTABILITÉ — PRÉPARÉ LE 15/11/2026, RIEN CONSTRUIT (gérant : « tout ça… une page vraiment comptabilité comme les vrais… tu fais rien encore, tu fais quand je te dirai »)
+- Il a déjà l'icône « Niv Admin » sur son iPhone (plein écran, OK). Défaut : mot de passe redemandé à chaque ouverture (clé en sessionStorage).
+- À construire, SUR SON MOT, dans cet ordre conseillé :
+  1. **Face ID** : clé de connexion (passkey / WebAuthn) liée au téléphone, bouton « Entrer avec Face ID » (un toucher requis), mot de passe en secours ; changer le mot de passe déconnecte les appareils.
+  2. **📷 Photo du colis** dans chaque commande (file + fiche) : contenu / boîte fermée / étiquette, date et heure, empreinte (sha256), galerie ou appareil photo.
+  3. **Dossier de preuve** en un bouton (PDF : commande, photos du colis, suivi, échanges) pour litige PayPal / Stripe (Stripe : PDF/JPEG/PNG, 2 Mo par fichier, 4 Mo au total, pas de vidéo).
+  4. **Notifications** sur le téléphone (nouvelle commande, réponse cliente, litige) + chiffre sur l'icône (iOS 16.4+, application installée seulement).
+  5. **Écran qui reste allumé** pendant la préparation / la gravure.
+  6. **Classeur des factures** : photo / PDF d'origine gardé 10 ans avec empreinte, par mois et fournisseur, recherche ; relié à « Achats & factures » (vérifier d'abord si l'original y est gardé).
+  7. **Page « Comptabilité »** comme un vrai logiciel (Indy / Abby / Freebe) : livre des recettes (date, n° de facture, client, nature, mode de règlement, référence de la pièce), registre des achats (vente de marchandises = obligatoire), tableau de bord (CA du mois / trimestre / année, comparé aux seuils : franchise TVA ventes 91 900 € et services 36 800 € en 2026, plafond micro 203 100 € / 83 600 € — à vérifier sur impots.gouv), montant à déclarer à l'URSSAF + cotisations estimées, échéances, rapprochement Stripe / PayPal, exports (tableur, PDF, FEC si besoin), contrôle des pièces manquantes. Réutiliser « Inventaire & compta », « Ventes hors site URSSAF », Bénéfices, Achats.
+  8. **Facture électronique** : réception obligatoire depuis le 01/09/2026, émission au 01/09/2027 par une plateforme agréée → rappel + préparation des devis / factures.
+- Première étape au « fais » : maquette (règle habituelle), puis construction.
+
 ## 🎄 DÉCORATION À SUSPENDRE « MOTIFS DÉCOUPÉS AVEC LE CADRE » — 13/11/2026 nuit, EN ATTENTE DE SON AVIS
 - Nouvelle maquette https://claude.ai/artifact/RFk8koRobSLSjN9BkdHXxh (v5 : les dessins sont compris, seul le nom se paie ; un dessin est toujours en contreplaqué, seul le nom peut être en acrylique, et en acrylique il est seulement découpé) : motifs en bois découpés avec le cadre (9 et 11 cm), trois tailles de motif, prénom collé par-dessus ou
   découpé avec le cadre au choix. L'ancienne maquette enregistrée n'est pas touchée. Rien en ligne, Gestion pas régénéré. Détail : CLAUDE.md, section du 13/11 nuit.
