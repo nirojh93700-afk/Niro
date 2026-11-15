@@ -32,7 +32,7 @@ Coût rendu = prix payé × 1,1200 (+12 % : port net 29,82 € réparti au prora
 | Ensemble Homme Plaque Acier | Acier | NH12562827 / NH57449552 | 5 | 3,06 € | 3,43 € | 5 |
 | ⚠️ PAS DE MAQUETTE | Bracelet homme à plaque « Le Noir » | NH11089638 / NH42691986 | 6 | 1,39 € | 1,56 € | — |
 | ⚠️ PAS DE MAQUETTE | Bracelet homme à plaque « Blanche » (acier) | NH11089638 / NH42691987 | 6 | 1,22 € | 1,37 € | — |
-| ⚠️ PAS DE MAQUETTE | Collier papillon argenté à goutte (1391#-2) | NH10381128 / NH38532336 | 12 | 0,78 € | 0,87 € | — |
+| ⚠️ PAS DE MAQUETTE | Collier « larmes argentées de papillon » 1391#-2 (sur la vignette : un NŒUD argenté, version argentée du Collier Nœud scintillant ?) | NH10381128 / NH38532336 | 12 | 0,78 € | 0,87 € | — |
 
 ## Points relevés
 - **Collier Papillon** : 12 / 10 / 12 / 12 / 12 achetés, mais le gérant a fixé le stock à **5 par modèle** le 15/11 soir en connaissant ces quantités : le stock de la maquette n'est PAS changé.
