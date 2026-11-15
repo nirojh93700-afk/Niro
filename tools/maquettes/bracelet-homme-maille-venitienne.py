@@ -3,8 +3,8 @@
 
 Gérant : fiche Nihao NH10721732 « bracelet homme acier, chaîne de boîte, gravure laser » (0,89 € pièce, doré et argenté) +
 photos + « change l'anglais en français ». Acier inoxydable (fiche : 201), maille vénitienne 2 mm, 19 à 22 cm, 5 g, petite
-plaque à graver (offerte). Jamais « plaqué or » ni « 18 carats ». 2 couleurs (toutes ses photos), stock 5 chacune.
-Prix : 22,90 € net (sans la remise −10 %), au-dessus du Bracelet homme chaîne acier en ligne (22,41 €). Emballages bracelet
+plaque (15/11 : PAS de gravure, gérant). Jamais « plaqué or » ni « 18 carats ». 2 couleurs (toutes ses photos), stock 5 chacune.
+Prix : 12,90 € net (sans la remise −10 %, donné par le gérant). Emballages bracelet
 long + Noël, tous. Photo des mesures en français : tools/maquettes/mesures-bracelet-maille-venitienne-fr.py.
 
 Usage : python3 tools/maquettes/bracelet-homme-maille-venitienne.py <capture /produit/bracelet-homme-maille-venitienne.html>
@@ -18,7 +18,7 @@ PUB = os.path.join(ROOT, "public")
 ASSETS = os.path.join(OUT, "assets", "bracelet-homme-maille-venitienne")
 EMBA = os.path.join(OUT, "assets", "gourmette-doree-noire")
 SRC = sys.argv[1]
-PRIX = 22.90       # 15/11 : sans la remise −10 % ; au-dessus du bracelet homme chaîne acier en ligne (22,41 €)
+PRIX = 12.90       # 15/11 : prix donné par le gérant (« mais à 12,90 € »), sans gravure, sans la remise −10 %
 
 
 def uri(path, w=900, q=80):
@@ -113,12 +113,12 @@ COULEURS = [{"id": "vert", "nom": "Vert sapin", "hex": "#1f5a3a", "photo": uri(o
 ETIQ = uri(os.path.join(NOEL_DIR, "6-etiquettes-I.jpg"), 120, 80)
 # 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre ») : les nouveaux bijoux n'ont PAS la remise
 # des bijoux : 19,90 € net, sans prix barré ni badge −10 %.
-MAIN, n = re.subn(r'<span class="price-old">22,90\s€</span> <span class="price-sale">20,61\s€</span> <span class="promo-badge"[^>]*>.*?</span>',
-                  '<span class="price-sale" style="color:var(--ink)">22,90 €</span>', MAIN, count=1, flags=re.S)
+MAIN, n = re.subn(r'<span class="price-old">12,90\s€</span> <span class="price-sale">11,61\s€</span> <span class="promo-badge"[^>]*>.*?</span>',
+                  '<span class="price-sale" style="color:var(--ink)">12,90 €</span>', MAIN, count=1, flags=re.S)
 assert n == 1
-MAIN = re.sub(r'<span class="vs-old">22,90\s€</span><span class="vs-now">20,61\s€</span>', '<span class="vs-now">22,90 €</span>', MAIN)
-MAIN = re.sub(r'<span class="val">20,61\s€</span>', '<span class="val">22,90 €</span>', MAIN, count=1)
-assert "20,61" not in MAIN[:MAIN.find("Vous aimerez aussi")]
+MAIN = re.sub(r'<span class="vs-old">12,90\s€</span><span class="vs-now">11,61\s€</span>', '<span class="vs-now">12,90 €</span>', MAIN)
+MAIN = re.sub(r'<span class="val">11,61\s€</span>', '<span class="val">12,90 €</span>', MAIN, count=1)
+assert "11,61" not in MAIN[:MAIN.find("Vous aimerez aussi")]
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 assert "pd-totbox" in MAIN
@@ -222,7 +222,7 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX)).replace("__NOEL__", json.dumps(NOEL)).replace("__COUL__", json.dumps(COULEURS)).replace("__ETIQ__", json.dumps(ETIQ))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Bracelet Homme Maille Vénitienne » (nom proposé ; 22,90 € sans remise) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Bracelet Homme Maille Vénitienne » (nom proposé ; 12,90 € sans remise) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Bracelet Homme Maille Vénitienne</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"
