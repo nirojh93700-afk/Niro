@@ -1004,8 +1004,11 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 - Style NEUF « vitrine » : intro crème « Nouveaux bijoux », chapitre « Pour elle » (fond rose poudré) puis rideau « Et pour lui… »
   (fond pierre) ; chaque bijou entre en grande carte arrondie qui glisse de côté, étiquette kraft suspendue qui se balance avec son nom,
   pastille dorée « NOUVEAU » ; fin sombre en mosaïque des 16 photos + bouton nivcreation.fr.
+- ⛔ v2 du même jour (gérant : « tu mélanges, tu mets pas que pour femmes après pour [hommes]… les gens ils vont pas regarder jusqu'à la fin ») :
+  un bijou pour elle, un pour lui, en ALTERNANCE ; le fond passe du rose au gris pierre à chaque bijou ; intro raccourcie (1,5 s). RÈGLE : dans une vidéo
+  qui mêle femme et homme, alterner dès le début, jamais un bloc par public.
 - Photos du site (`public/produits/nihao/`), sans mesures ni texte. ⚠️ Ce sont des photos fournisseur, bijoux NON gravés (aucune photo gravée).
-- 44,7 s, sans son, aucun prix, 1080 × 1920 (9,8 Mo) et 720 × 1280 (2,1 Mo). Fichiers à supprimer le 18/11.
+- 39,7 s, sans son, aucun prix, 1080 × 1920 et 720 × 1280. Fichiers à supprimer le 18/11.
 - Script : `python3 tools/video/vitrine_61.py <polices> <sortie> [--apercu]` (depuis la racine ; PlayfairDisplay.ttf + Inter.ttf).
 
 **Vidéo 61 — Nos nouveaux bijoux** (Collier Papillon, Papillons scintillants, Envol de Papillons, Papillon Ajouré, Nœud scintillant, Bracelet prénom gravé à breloque, Bracelets homme trois rangs, plaque longue, deux rangs, tressé bicolore, maille vénitienne, perles et tresse, Ensembles plaque acier et plaque noire)

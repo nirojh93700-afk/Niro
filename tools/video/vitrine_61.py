@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # VIDÉO 61 (16/11/2026) — gérant : « tu mets en ligne et tu me fais une vidéo sur les produits… pas les prix sur les vidéos ».
-# Les 14 nouveaux bijoux (bon Nihao du 15/11). Style NEUF « vitrine » : deux chapitres (Pour elle, fond rose poudré ;
-# Pour lui, fond pierre), chaque bijou entre en grande carte arrondie qui glisse de côté, une étiquette kraft suspendue
-# porte son nom et se balance, petit « Nouveau » doré ; transition « rideau » entre Elle et Lui ; fin en mosaïque + bouton.
+# Les 14 nouveaux bijoux (bon Nihao du 15/11). Style NEUF « vitrine » : un bijou pour elle (fond rose poudré) puis un pour lui
+# (fond pierre), en ALTERNANCE (gérant : « tu mélanges »), chaque bijou entre en grande carte arrondie qui glisse de côté, une étiquette kraft suspendue
+# porte son nom et se balance, petit « Nouveau » doré ; fin en mosaïque + bouton.
 # Photos du site (public/produits/nihao), regardées en planche : sans texte, sans mesures. ⛔ Aucun prix, aucun nombre.
 # Usage : python3 tools/video/vitrine_61.py <polices> <sortie> [--apercu]   (depuis la racine du dépôt)
 import os, sys, math, subprocess
@@ -73,39 +73,36 @@ def pastille(im, x, y, a):
 def s_intro(im, t, d):
     im.paste(CREME + (255,), (0, 0, W, H))
     for i, (m, f, c) in enumerate([("Nouveaux", PLAY(150), ENCRE), ("bijoux", PLAY(150, 500), OR)]):
-        u = (t - .3 * i) / .55
+        u = (t - .2 * i) / .4
         if u > 0: texte(im, 640 + i * 190 + (1 - ease(u)) * 110, m, f, c, 255 * ease(u))
-    dd = ImageDraw.Draw(im); e = ease((t - .9) / .6); dd.rectangle((W / 2 - 220 * e, 1060, W / 2 + 220 * e, 1066), fill=OR)
-    texte(im, 1110, "Pour elle et pour lui", INTER(44, 500), ENCRE, 255 * ease((t - 1.2) / .5))
-    texte(im, 1180, "Gravés dans notre atelier, en France", INTER(34, 400), (110, 92, 70), 255 * ease((t - 1.5) / .5))
-PAS = 2.15; TITRE = 1.6
-def s_chapitre(i):
-    fond, accent, titre, sous, items = CH[i]
-    def f(im, t, d):
-        im.paste(fond + (255,), (0, 0, W, H))
-        if t < TITRE:
-            texte(im, 740, titre, PLAY(130), ENCRE, 255 * ease(t / .5))
-            texte(im, 960 + (1 - ease((t - .35) / .5)) * 40, sous, PLAY(46, 500), accent, 255 * ease((t - .35) / .5)); return
-        u = t - TITRE; k = min(len(items) - 1, int(u / PAS)); v = u - k * PAS
-        texte(im, 120, titre, PLAY(64), accent, 220)
-        nom = items[k][0]; c = CARTES[nom]; sens = -1 if k % 2 else 1
-        e = ease(v / .4); cx = W / 2 + sens * (1 - e) * 700; rot = sens * (1 - e) * 8
-        if v > PAS - .25: cx += -sens * ease((v - (PAS - .25)) / .25) * 1100
-        cy = 300 + c.height / 2 + 30
-        coller(im, c, cx, cy, s=1 + .015 * v, rot=rot)
-        if v > .35:
-            sw = math.sin((v - .35) * 6) * 9 * math.exp(-(v - .35) * 1.6)
-            et = ETQ[(nom, i)]; base = cy + c.height / 2 - 20
-            if v > PAS - .25: et_a = 1 - ease((v - (PAS - .25)) / .2)
-            else: et_a = ease((v - .35) / .25)
-            rr = et.rotate(sw, resample=Image.BICUBIC, expand=True, center=(et.width / 2, 0))
-            coller(im, rr, W / 2, base + rr.height / 2, a=et_a, ombre=False)
-        pastille(im, W / 2 + 270, 330, ease((v - .5) / .3) * (1 if v < PAS - .25 else 0))
-    return f
-def s_rideau(im, t, d):
-    e = ease(t / d); im.paste(CH[0][0] + (255,), (0, 0, W, H))
-    ImageDraw.Draw(im).rectangle((0, 0, W, int(H * e)), fill=CH[1][0])
-    texte(im, 880, "Et pour lui…", PLAY(96, 500), CH[1][1], 255 * ease((t - .2) / .4))
+    dd = ImageDraw.Draw(im); e = ease((t - .6) / .4); dd.rectangle((W / 2 - 220 * e, 1060, W / 2 + 220 * e, 1066), fill=OR)
+    texte(im, 1110, "Pour elle et pour lui", INTER(44, 500), ENCRE, 255 * ease((t - .7) / .4))
+    texte(im, 1180, "Gravés dans notre atelier, en France", INTER(34, 400), (110, 92, 70), 255 * ease((t - .9) / .4))
+PAS = 2.15
+# 16/11 (gérant : « tu mélanges… les gens ils vont pas regarder jusqu'à la fin ») : un bijou pour elle, un pour lui, en alternance.
+ITEMS = []
+for k in range(max(len(ELLE), len(LUI))):
+    if k < len(ELLE): ITEMS.append((0, ELLE[k]))
+    if k < len(LUI): ITEMS.append((1, LUI[k]))
+def melange(c1, c2, x): return tuple(int(a + (b - a) * x) for a, b in zip(c1, c2))
+def s_defile(im, t, d):
+    k = min(len(ITEMS) - 1, int(t / PAS)); v = t - k * PAS; i, (nom, _) = ITEMS[k]
+    fond = CH[i][0]
+    if k > 0 and v < .4: fond = melange(CH[ITEMS[k - 1][0]][0], fond, ease(v / .4))
+    im.paste(fond + (255,), (0, 0, W, H)); accent = CH[i][1]
+    texte(im, 120, CH[i][2], PLAY(64), accent, 255 * (ease(v / .3) if k == 0 or ITEMS[k - 1][0] != i else ease(v / .3)))
+    c = CARTES[nom]; sens = -1 if k % 2 else 1
+    e = ease(v / .4); cx = W / 2 + sens * (1 - e) * 700; rot = sens * (1 - e) * 8
+    if v > PAS - .25: cx += -sens * ease((v - (PAS - .25)) / .25) * 1100
+    cy = 300 + c.height / 2 + 30
+    coller(im, c, cx, cy, s=1 + .015 * v, rot=rot)
+    if v > .35:
+        sw = math.sin((v - .35) * 6) * 9 * math.exp(-(v - .35) * 1.6)
+        et = ETQ[(nom, i)]; base = cy + c.height / 2 - 20
+        et_a = 1 - ease((v - (PAS - .25)) / .2) if v > PAS - .25 else ease((v - .35) / .25)
+        rr = et.rotate(sw, resample=Image.BICUBIC, expand=True, center=(et.width / 2, 0))
+        coller(im, rr, W / 2, base + rr.height / 2, a=et_a, ombre=False)
+    pastille(im, W / 2 + 270, 330, ease((v - .5) / .3) * (1 if v < PAS - .25 else 0))
 MOS = []
 for ch in CH:
     for n, _ in ch[4]:
@@ -126,8 +123,7 @@ def s_fin(im, t, d):
         pd.rounded_rectangle((0, 0, w + 89, 115), 58, fill=(226, 196, 126, 255)); b = pd.textbbox((0, 0), "nivcreation.fr", font=f)
         pd.text((45 - b[0], (116 - (b[3] - b[1])) / 2 - b[1]), "nivcreation.fr", font=f, fill=ENCRE + (255,)); coller(im, p, W / 2, 1590, s=s, ombre=False)
     texte(im, 1730, "NiV CRÉATION · Gravé en France", INTER(32, 500), CREME, 230 * ease((t - 1.9) / .5))
-DCH = [TITRE + PAS * len(ch[4]) for ch in CH]
-SCENES = [(2.4, s_intro), (DCH[0], s_chapitre(0)), (.9, s_rideau), (DCH[1], s_chapitre(1)), (3.8, s_fin)]
+SCENES = [(1.5, s_intro), (PAS * len(ITEMS), s_defile), (3.8, s_fin)]
 def image(t):
     acc = 0
     for d, fn in SCENES:
@@ -149,6 +145,6 @@ if __name__ == "__main__":
         pl = Image.new("RGB", (cols * 216, rows * 384))
         for i, x in enumerate(ims): pl.paste(x, ((i % cols) * 216, (i // cols) * 384))
         pl.save(os.path.join(OUT, "apercu-planche.jpg"), quality=82)
-        for x in (1.9, 5.0, 8.0, 21.0, 25.0, 40.5): image(x).save(os.path.join(OUT, f"apercu-{x:04.1f}.jpg"), quality=85)
+        for x in (1.2, 3.0, 5.2, 7.4, 20.0, 37.0): image(x).save(os.path.join(OUT, f"apercu-{x:04.1f}.jpg"), quality=85)
         print("ok", f"{total:.1f} s")
     else: main()
