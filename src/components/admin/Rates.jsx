@@ -13,6 +13,7 @@ import { VARIANT_COSTS } from "@/lib/productCosts";
 import { etiquetteEstimee, perteRate } from "@/lib/etiquetteEnvoi";
 import VarBadge from "@/components/admin/VarBadge";
 import { apparierSpec } from "@/lib/orderSpec";
+import { ligneSansAchat, varianteDuLibelle } from "@/lib/coutLignes";
 
 const euro = (n) => (Math.round((Number(n) || 0) * 100) / 100).toFixed(2).replace(".", ",") + " €";
 const jour = (t) => { try { return new Date(t).toLocaleDateString("fr-FR", { day: "numeric", month: "short", timeZone: "Europe/Paris" }); } catch { return ""; } };
@@ -61,6 +62,29 @@ function piecesDe(ligne) {
 function produitDuStock(sid) {
   if (!sid) return "";
   return CATALOGUE.find((p) => (p.variants || []).some((v) => (v.stockId || v.id) === sid))?.slug || "";
+}
+const sansAcc = (x) => String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\([^)]*\)/g, " ").split(/[^a-z0-9]+/).filter(Boolean);
+// Ligne de devis : le produit du catalogue dont le nom commence pareil (3 mots au moins, un seul candidat).
+function produitDuNom(nom) {
+  const mots = sansAcc(nom);
+  let best = 0, slugs = [];
+  for (const p of CATALOGUE) {
+    const pm = sansAcc(p.name);
+    let k = 0; while (k < pm.length && k < mots.length && pm[k] === mots[k]) k++;
+    if (k < 3) continue;
+    if (k > best) { best = k; slugs = [p.slug]; } else if (k === best) slugs.push(p.slug);
+  }
+  return slugs.length === 1 ? slugs[0] : "";
+}
+// Commande sur devis (16/11/2026, gérant : « pourquoi à chaque raté je dois sélectionner dans la liste ? ») :
+// le produit et sa variante sont retrouvés dans le libellé de la ligne (« Lot de 4 verres à vin 36 cl… »),
+// sinon par le stock payé, sinon par le nom du produit ; la liste ne reste que si rien ne correspond.
+export function produitDeLigne(it, o) {
+  const v = varianteDuLibelle(it);
+  if (v) return { slug: produitDuStock(v), variantId: v };
+  const payes = stocksCommande(o);
+  if (payes.length === 1) { const s = produitDuStock(payes[0]); if (s) return { slug: s, variantId: "" }; }
+  return { slug: produitDuNom(it?.name), variantId: "" };
 }
 const CHOIX_PRODUITS = CATALOGUE.filter((p) => (p.variants || []).length)
   .map((p) => ({ slug: p.slug, name: p.name || p.slug })).sort((a, b) => a.name.localeCompare(b.name, "fr"));
@@ -236,7 +260,14 @@ export function RatesCommande({ o, mat, adminKey, onSaved }) {
   if (["annulee", "remboursee"].includes(o.status)) return null;
   const specParLigne = apparierSpec(o.items, o.spec);
   const lignes = (o.items || []).map((it, i) => ({ it, s: specParLigne[i] }))
-    .filter(({ it }) => !/livraison|point relais|retrait|exp[ée]dition/i.test(it.name || ""));
+    .filter(({ it }) => !/livraison|point relais|retrait|exp[ée]dition/i.test(it.name || ""))
+    // Ligne de devis qui n'est pas un objet (gravure, texte, prénom…) : rien à refaire, pas de bouton.
+    .filter(({ it }) => it.slug || !ligneSansAchat(it))
+    .map(({ it, s }) => {
+      if (it.slug) return { it, s };
+      const t = produitDeLigne(it, o);
+      return { it: { ...it, slug: t.slug }, s: { ...(s || {}), variantId: s?.variantId || t.variantId } };
+    });
   if (!lignes.length) return null;
   return (
     <div className="rt-items">

@@ -14,16 +14,24 @@ export function ligneSansAchat(it) {
   return /^\s*(livraison|lettre suivie|colis|point relais|retrait|texte|textes|prenom|prenoms|date|gravure|emballage|option|remise|reduction|frais|supplement)\b/.test(n(it?.name));
 }
 
+/** Variante « à l'unité » d'un verre nommé dans le libellé d'une ligne de devis (null si aucun verre). */
+export function varianteDuLibelle(it) {
+  const t = n(`${it?.name || ""} ${it?.details || ""}`);
+  if (/verres? a vin/.test(t)) return /47 ?cl|grand format/.test(t) ? "verre-vin-47-1" : "verre-vin-1";
+  if (/flute/.test(t)) return "flute-1";
+  if (/verres? a whisky/.test(t)) return "verre-whisky-grave";
+  if (/verres? a cocktail/.test(t)) return /33 ?cl/.test(t) ? "verre-cocktail-33" : "verre-cocktail-grave";
+  if (/tumbler/.test(t)) return /39 ?cl/.test(t) ? "verre-tumbler-39-1" : "verre-tumbler-1";
+  return null;
+}
+
 /** Coût unitaire d'une ligne de devis sans produit, lu dans son libellé (null si inconnu). */
 export function coutLibelle(it) {
   const t = n(`${it?.name || ""} ${it?.details || ""}`);
   const lot = Number((t.match(/lot de (\d+)/) || [])[1]) || 1;
   const c = (k) => (VARIANT_COSTS[k] != null ? VARIANT_COSTS[k] * lot : null);
-  if (/verres? a vin/.test(t)) return /47 ?cl|grand format/.test(t) ? c("verre-vin-47-1") : c("verre-vin-1");
-  if (/flute/.test(t)) return c("flute-1");
-  if (/verres? a whisky/.test(t)) return c("verre-whisky-grave");
-  if (/verres? a cocktail/.test(t)) return /33 ?cl/.test(t) ? c("verre-cocktail-33") : c("verre-cocktail-grave");
-  if (/tumbler/.test(t)) return c("verre-tumbler-1");
+  const v = varianteDuLibelle(it);
+  if (v) return c(v);
   if (/socle/.test(t)) {
     const unite = (Number(it?.total) || 0) / (Number(it?.quantity) || 1);
     return unite >= 17 || /rectangle|grand/.test(t) ? VARIANT_COSTS["socle-led-rectangle"] : VARIANT_COSTS["socle-led-carre"];
