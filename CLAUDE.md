@@ -1,3 +1,8 @@
+## 🚫 JAMAIS UN MOT SUR LA LIVRAISON DANS UN MAIL CLIENT AVEC UN PRIX OU UN DEVIS — 16/11/2026 (gérant, mail de Farouk / DEV-1555 : « je t'ai déjà dit, ne parle pas de livraison, tu laisses décider le client » → « enregistre quelque part »)
+- Dans un mail qui donne un prix ou envoie un devis : AUCUNE phrase sur la livraison. Pas de prix de port, pas de « livraison en plus », pas de « à choisir sur le site », pas de « choisir votre livraison », pas de « livraison offerte ». Le client choisit seul en payant.
+- Le total écrit = articles + gravure seulement (« soit 20,91 € au total. »), et « vous pouvez le régler directement depuis ce lien. » (rien après).
+- Avant de montrer un brouillon : chercher « livraison », « port », « envoi », « expédition » dans le texte et les retirer. Seule exception : la cliente pose elle-même une question sur la livraison.
+
 ## 💶 COÛT D'ACHAT DES LIGNES DE DEVIS + GAIN RECALCULÉ — 16/11/2026 (09NRJIZA, Coline Goossens : « comment je peux avoir un gain de 35,30 € », verre à whisky compté 0 €)
 - `src/lib/coutLignes.js` (`coutLigne`, `coutProduitsCommande`) : ligne sans produit (devis) = coût du verre / flûte / socle lu dans son libellé
   (lot compris) ; texte, prénom, gravure, livraison = 0 € (rien à acheter) ; sinon « prix d'achat inconnu » affiché (fiche commande, Conditionnement),
