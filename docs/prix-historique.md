@@ -385,3 +385,8 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 ## 16/11/2026 — Carnet A5 gravé : gravure au prix par élément
 - Avant (07/11 → 16/11) : +7 € par face gravée quel que soit le nombre d'emplacements ; du 15/11 au 16/11, une face entière offerte (la 2e +7 €).
 - Après : chaque texte +3 €, chaque dessin / cadre / logo / photo +4 €, l'élément le moins cher de tout le carnet offert. Carnet nu 15,90 € inchangé.
+
+## 16/11/2026 — Une seule gravure offerte (règle du 15/11 appliquée jusqu'au bout)
+- Plaque de naissance (garçon / fille) et plaque cœur : avant prénom ET date compris ; après prénom compris, date +3 €.
+- Numéro de table arche géométrique : avant numéro ET année compris ; après numéro compris, année +3 €.
+- Marque-pages en coffret : avant la gravure la moins chère offerte sur CHAQUE marque-page ; après une seule pour tout le coffret.

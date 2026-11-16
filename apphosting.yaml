@@ -9,7 +9,8 @@
 runConfig:
   # Économie maximale : 0 instance quand personne ne visite (aucun coût à vide).
   minInstances: 0
-  maxInstances: 2
+  # 16/11/2026 : 2 → 6 (photos refusées « 429 » quand une page en demande beaucoup d'un coup). 0 à vide : aucun coût en plus sans visiteurs.
+  maxInstances: 6
   concurrency: 80
   cpu: 1
   memoryMiB: 512

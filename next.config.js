@@ -31,6 +31,12 @@ const nextConfig = {
     ];
     return [
       { source: "/:path*", headers: securite },
+      // PHOTOS EN CACHE (16/11/2026, gérant : « j'ai plein de photos qui s'affichent pas ») : les photos partaient en
+      // « max-age=0, private » → chacune repassait par le serveur (2 machines au plus) → refus 429 quand une page
+      // demande 100 photos d'un coup. Les vignettes ont un nom unique (empreinte) : gardées un an ; les autres, un jour
+      // dans le navigateur et une semaine dans le cache de Google.
+      { source: "/vignettes/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }] },
+      ...["produits", "marque-pages", "materiel", "carnet", "motifs", "vectoriel", "createurs"].map((d) => ({ source: `/${d}/:path*`, headers: [{ key: "Cache-Control", value: "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400" }] })),
       { source: "/produits/:path*", headers: [{ key: "Access-Control-Allow-Origin", value: "*" }] },
       { source: "/motifs/:path*", headers: [{ key: "Access-Control-Allow-Origin", value: "*" }] },
       // Outils et fichiers de l'atelier (Gestion › Tests) : jamais dans Google.

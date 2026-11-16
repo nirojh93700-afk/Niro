@@ -21,7 +21,7 @@ import PayInfoModal from "@/components/PayInfo";
 import TrustSection from "@/components/TrustSection";
 import { MP_DATA } from "@/lib/marquePagesData";
 import {
-  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, mpCompteBoites, mpBoitesDepuisCompte, mpIdFormat, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure, mpTextes,
+  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, mpCompteBoites, mpBoitesDepuisCompte, mpIdFormat, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure, mpGravuresLot, mpArticles, mpTextes,
 } from "@/lib/marquePages";
 import LangueFiche from "@/components/LangueFiche";
 import { langueDe, langueActive, texteMontre, texteFrappe, champsLangueAPlat, manqueLangue, resumeLangue } from "@/lib/traductionGravure";
@@ -239,7 +239,7 @@ function Editeur({ modele, v, onChange, owner, grille, setGrille, productSlug, l
   const maj = (key, patch) => onChange((p) => ({ ...p, [key]: { ...p[key], ...patch } }));
   return (
     <div className="mq-ed">
-      <p className="mq-edi">Quatre emplacements, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un texte en haut et un dessin au milieu, ou l&apos;inverse, sur la face comme au dos. Un texte +3 €, un dessin, un cadre ou votre photo +4 € : sur chaque marque-page, la gravure la moins chère est offerte. Rien de coché = marque-page nu.</p>
+      <p className="mq-edi">Quatre emplacements, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un texte en haut et un dessin au milieu, ou l&apos;inverse, sur la face comme au dos. Un texte +3 €, un dessin, un cadre ou votre photo +4 € : la gravure la moins chère est offerte (une seule, même pour un coffret). Rien de coché = marque-page nu.</p>
       {MP_EMPLACEMENTS.map(([side, zone]) => {
         const key = `${side}|${zone}`;
         const ok = mpAutorise(modele, side, zone);
@@ -400,7 +400,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
     if (avecBoite) setCptBoites(mpCompteBoites(mpBoitesPour(n)));
     setSlots((ss) => {
       if (n <= 1) return [];
-      const base = ss.length ? ss : [{ c: ci, v: vPage, touched: mpPrixGravure(vPage) > 0 }];
+      const base = ss.length ? ss : [{ c: ci, v: vPage, touched: mpArticles(vPage).length > 0 }];
       return Array.from({ length: n }, (_, i) => base[i] || { c: defC(n, i), v: vide(), touched: false });
     });
   }
@@ -466,7 +466,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   }
 
   // Prix des marque-pages seuls (gravure comprise), puis la ou les boîtes pour ce nombre.
-  const prixPieces = nb > 1 ? slots.reduce((a, o) => a + V[o.c].price + mpPrixGravure(pleinV(o.v)), 0) : V[ci].price + mpPrixGravure(pleinV(vPage));
+  const prixPieces = nb > 1 ? (() => { const g = mpGravuresLot(slots.map((o) => pleinV(o.v))); return slots.reduce((a, o, i) => a + V[o.c].price + g[i], 0); })() : V[ci].price + mpPrixGravure(pleinV(vPage));
   const boitesNb = mpBoitesDepuisCompte(cptBoites);
   const placesNb = boitesNb.reduce((a, b) => a + b, 0);
   const prixBoitesNb = boitesNb.reduce((a, b) => a + MP_BOITES[b].prix, 0);
@@ -476,7 +476,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   const prixBoitesVues = boitesVues.reduce((a, b) => a + MP_BOITES[b].prix, 0);
   const coffret = fmt.n > 1;
   const quoi = avecBoite ? `Votre coffret de ${fmt.n} marque-pages` : `Vos ${fmt.n} marque-pages`;
-  const cust = slots.some((o) => o.touched || mpPrixGravure(o.v) > 0);
+  const cust = slots.some((o) => o.touched || mpArticles(o.v).length > 0);
   const rtxt = cust ? `${quoi} :`
     : modele === 1 ? `${quoi}, tous de couleur ${(V[slots[0]?.c]?.title || "").toLowerCase()}. Changez la couleur et la gravure de chacun si vous voulez :`
       : modele === 2 ? `${quoi}, de couleurs différentes. Changez la couleur et la gravure de chacun si vous voulez :`
@@ -680,7 +680,7 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
             <div className="mq-shb">
               <div className="mq-steps">
                 {slots.map((o, i) => (
-                  <button key={i} type="button" className={`mq-step${i === cur ? " on" : ""}${mpPrixGravure(o.v) > 0 ? " done" : ""}`} onClick={() => { setCur(i); setGrille(null); }}>
+                  <button key={i} type="button" className={`mq-step${i === cur ? " on" : ""}${mpArticles(o.v).length > 0 ? " done" : ""}`} onClick={() => { setCur(i); setGrille(null); }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={V[o.c].image} alt="" /><span>{i + 1}</span>
                   </button>
