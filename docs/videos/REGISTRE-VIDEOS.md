@@ -1017,3 +1017,40 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #nouveautes #bijouxpersonnalises #cadeaupersonnalise #ideecadeau
+
+## Vidéo 62 — Tous nos produits, style « boîte cadeau » (16/11/2026)
+- Demande : « fais-moi plusieurs vidéos, une avec les mélanges comme tu fais d'habitude ».
+- Style NEUF « boîte cadeau » : une boîte tombe et rebondit, le couvercle et son nœud s'envolent dans une gerbe dorée, la création
+  gravée sort de la boîte et grandit ; pastille dorée de l'univers en haut, phrase en bas ; le fond change de couleur à chaque produit.
+  Fin sombre : mosaïque des 12 créations, « Il ne reste plus qu'à l'offrir », bouton nivcreation.fr.
+- Photos gravées (sans texte anglais) : cristal couple, collier 3 Cœurs « Naomi », whisky « Meilleur papa », carnet de voyage « Camille »,
+  gobelet photo de couple, bracelet cordon « A ⚓ P », puzzle photo enfants, porte-clés cœur allumé, cristal « Toujours ensemble »,
+  bracelet empreintes de bébé, gobelet « Super Papy depuis 2026 », marque-page « Camille ». Écartés : verre « Est. 2004 », plaques
+  anglaises du Collier Enveloppe, médaillon livre (mesures en anglais), marque-page métal (non gravé).
+- Sans son, aucun prix, 1080 × 1920 et 720 × 1280. Fichiers à supprimer le 18/11.
+- Script : `python3 tools/video/cadeaux_62.py <polices> <sortie> [--apercu]` (racine ; PlayfairDisplay.ttf + Inter.ttf ; utilise porte_cles_63_prep.py).
+
+**Vidéo 62 — Un cadeau unique, gravé à son nom** (Cristal photo 3D, Collier 3 Cœurs, Verre à whisky, Carnet A5, Gobelet isotherme, Bracelet cordon, Puzzle photo, Porte-clés cristal LED, Bracelet empreinte de bébé, Marque-page)
+> 🎁 On ouvre la boîte… et c'est son prénom, sa photo, gravés rien que pour lui ✨
+> Cristal, bijoux, verres, gobelets, puzzles et papeterie : il ne reste plus qu'à l'offrir 💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #cadeaudenoel #gravurelaser #ideecadeau
+
+## Vidéo 63 — Les porte-clés en cristal gravé (16/11/2026)
+- Demande : « l'autre que avec les cristal porte-clés ».
+- Style NEUF « interrupteur » : le polaroïd de la photo vole dans le cristal, le porte-clés se balance en lumière du jour, puis la pièce
+  s'éteint et il s'allume (rose, bleu, violet, vert, blanc) avec « Il s'illumine d'une simple pression » (texte de la fiche).
+  Fin sombre : les 6 porte-clés allumés, « Le cœur ou le rectangle, avec la photo de votre choix », bouton nivcreation.fr.
+- ⚠️ Le site n'a que 2 photos gravées de ces porte-clés (cœur couple, rectangle chien) : les 6 de la vidéo sont les photos VIDES du site
+  avec un portrait posé dedans en rendu gravé (`tools/video/porte_cles_63_prep.py`), éclairage LED simulé. Portraits = ceux des
+  exemples du site (couple, enfant et chien, maman, enfant et chat, famille).
+- 31,2 s, sans son, aucun prix, 1080 × 1920 (3,7 Mo) et 720 × 1280 (1,3 Mo). Fichiers à supprimer le 18/11.
+- Script : `python3 tools/video/porte_cles_63.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 63 — Votre photo, toujours sur vous** (Porte-clés cristal LED cœur, Porte-clés cristal LED rectangle)
+> 💎 Votre photo gravée en 3D dans un porte-clés en cristal… et d'une simple pression, il s'illumine ✨
+> Le cœur ou le rectangle, avec le visage de ceux que vous aimez 💛🔑
+> 👉 nivcreation.fr
+
+#nivcreation #portecles #cadeaupersonnalise #cristal3d #ideecadeau
