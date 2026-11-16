@@ -5,7 +5,7 @@
 //   Mondial Relay point relais 3,14 € HT · Colissimo point retrait 5,26 € HT.
 // Le gérant paie la TVA (micro-entreprise) : on compte le prix TTC (HT × 1,2).
 // Lettre suivie La Poste ≤ 100 g : 4,45 € (pas de TVA ajoutée sur un affranchissement).
-// Colis à domicile et express : pas encore de prix relevé → estimation, à corriger à l'écran.
+// Express Chrono 18 : 8,99 € HT (Boxtal, 16/11/2026). Colis à domicile : estimation, à corriger à l'écran.
 
 const TTC = (ht) => Math.round(ht * 1.2 * 100) / 100;
 
@@ -13,6 +13,7 @@ export const PRIX_ETIQUETTE = {
   mondialRelay: TTC(3.14), // 3,77 €
   colissimoRelais: TTC(5.26), // 6,31 €
   lettre: 4.45,
+  express: TTC(8.99), // 10,79 € : Chrono 18, relevé sur Boxtal le 16/11/2026 (commande 06W69SNX)
   domicile: 6.12, // Mondial Relay domicile ≈ 5,10 € HT (estimation)
   autreRelais: 6.12, // Relais Colis, Chrono Shop2Shop, UPS : estimation
 };
@@ -30,6 +31,7 @@ function choisir(order, produitDe = () => null) {
   const methode = String(order?.shippingMethod || "");
   const relais = String(order?.relaisPoint || "");
   if (/main propre|retrait/i.test(methode) && !/point retrait|colissimo/i.test(methode)) return { prix: 0, libelle: "retrait en main propre" };
+  if (/express/i.test(methode) && !/relais|shop2shop/i.test(methode)) return { prix: PRIX_ETIQUETTE.express, libelle: "Express Chrono 18 (8,99 € HT)" };
   const tout = `${methode} ${relais}`;
   if (relais || /point relais|relais|point retrait/i.test(methode)) {
     if (/mondial/i.test(tout)) return { prix: PRIX_ETIQUETTE.mondialRelay, libelle: "Mondial Relay point relais (3,14 € HT)" };
