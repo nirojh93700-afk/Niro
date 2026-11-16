@@ -364,3 +364,7 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 
 ## 16/11/2026 — Bracelet Homme Trois Rangs (maquette, pas en ligne)
 - Avant : 27,90 € net (maquette v2 du 15/11). Maintenant : 21,90 € net (gérant : « 27,90 c'est trop », maquette v3). Repères en ligne : cuir & plaque 19,71 · acier & silicone 21,51 · chaîne acier 22,41.
+
+## 16/11/2026 — −10 % remis sur les 13 maquettes de bijoux du 15/11 (pas en ligne)
+- Avant (net, sans remise) : colliers femme et Plaque & Breloque 19,90 (Collier Papillon 17,90) · Trois Rangs 21,90 (27,90 le 15/11) · Plaque Longue 24,90 · Deux Rangs 22,90 · Tressé Bicolore 22,90 · Maille 12,90 · Ensembles 34,90.
+- Après : femme barré 19,90 → 17,91 · Trois Rangs / Plaque Longue 23,90 → 21,51 · Deux Rangs 22,90 → 20,61 · Tressé 21,90 → 19,71 · Maille 13,90 → 12,51 · Ensembles 38,90 → 35,01.

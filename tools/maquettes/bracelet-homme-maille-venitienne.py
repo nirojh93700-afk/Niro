@@ -18,7 +18,13 @@ PUB = os.path.join(ROOT, "public")
 ASSETS = os.path.join(OUT, "assets", "bracelet-homme-maille-venitienne")
 EMBA = os.path.join(OUT, "assets", "gourmette-doree-noire")
 SRC = sys.argv[1]
-PRIX = 12.90       # 15/11 : prix donné par le gérant (« mais à 12,90 € »), sans gravure, sans la remise −10 %
+PRIX = 12.51       # 16/11/2026 (gérant : « tu mets −10 % ») : barré 13.90 € → payé 12.51 € avec la remise −10 %
+BARRE = 13.90
+eu = lambda x: f"{x:.2f}".replace(".", ",") + " €"
+PAYE_T, BARRE_T = eu(PRIX), eu(BARRE)
+PXT = PAYE_T
+PRICEHTML = '<span class="price-old">' + BARRE_T + '</span> <span class="price-sale">' + PAYE_T + '</span> <span class="promo-badge" style="position:static">-10%</span>'
+VSHTML = '<span class="vs-old">' + BARRE_T + '</span><span class="vs-now">' + PAYE_T + '</span>'
 
 
 def uri(path, w=900, q=80):
@@ -114,11 +120,10 @@ ETIQ = uri(os.path.join(NOEL_DIR, "6-etiquettes-I.jpg"), 120, 80)
 # 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre ») : les nouveaux bijoux n'ont PAS la remise
 # des bijoux : 19,90 € net, sans prix barré ni badge −10 %.
 MAIN, n = re.subn(r'<span class="price-old">12,90\s€</span> <span class="price-sale">11,61\s€</span> <span class="promo-badge"[^>]*>.*?</span>',
-                  '<span class="price-sale" style="color:var(--ink)">12,90 €</span>', MAIN, count=1, flags=re.S)
+                  PRICEHTML, MAIN, count=1, flags=re.S)
 assert n == 1
-MAIN = re.sub(r'<span class="vs-old">12,90\s€</span><span class="vs-now">11,61\s€</span>', '<span class="vs-now">12,90 €</span>', MAIN)
-MAIN = re.sub(r'<span class="val">11,61\s€</span>', '<span class="val">12,90 €</span>', MAIN, count=1)
-assert "11,61" not in MAIN[:MAIN.find("Vous aimerez aussi")]
+MAIN = re.sub(r'<span class="vs-old">12,90\s€</span><span class="vs-now">11,61\s€</span>', VSHTML, MAIN)
+MAIN = re.sub(r'<span class="val">11,61\s€</span>', '<span class="val">' + PAYE_T + '</span>', MAIN, count=1)
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 assert "pd-totbox" in MAIN
@@ -222,7 +227,7 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX)).replace("__NOEL__", json.dumps(NOEL)).replace("__COUL__", json.dumps(COULEURS)).replace("__ETIQ__", json.dumps(ETIQ))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Bracelet Homme Maille Vénitienne » (nom proposé ; 12,90 € sans remise) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Bracelet Homme Maille Vénitienne » (barré ' + BARRE_T + ' → ' + PAYE_T + ' avec −10 %) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Bracelet Homme Maille Vénitienne</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"

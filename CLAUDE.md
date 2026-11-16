@@ -1,3 +1,10 @@
+## 💶 −10 % REMIS SUR LES 13 MAQUETTES DE BIJOUX DU 15/11 — 16/11/2026 (gérant : « on va mettre 10 %… tu remets comme avant et tu mets −10 % » ; pour l'homme : « vendu au prix que tu m'as dit, mais tu augmentes le prix et tu mets −10 % pour que ça retombe au prix proposé ») — REMPLACE la règle « nouveaux bijoux sans la remise » du 15/11. RIEN en ligne
+- Prix barré en ,90, payé = barré − 10 % (règle du 18/10), pastille « -10% » ; artifacts republiés le 16/11 (générateurs : `BARRE` / `PRIX` en tête, `PRICEHTML` / `VSHTML`).
+- **Femme** (barré 19,90 → payé 17,91, « comme avant ») : Collier Papillon (WxMF…, v6) · Papillons scintillants · Papillon Ajouré · Envol de Papillons · Nœud scintillant · Bracelet Plaque & Breloque.
+- **Homme** (payé ≈ prix proposé le 16/11 et validé « OK pour les prix ») : Trois Rangs barré 23,90 → 21,51 · Plaque Longue 23,90 → 21,51 · Deux Rangs 22,90 → 20,61 · Tressé Bicolore 21,90 → 19,71 · Maille Vénitienne 13,90 → 12,51 · les 2 Ensembles 38,90 → 35,01 · Perles et Tresse inchangé 22,90 → 20,61.
+- Au « applique » : PAS de `sansRemise` ; prix du code tel que `applyBijouxSale` retombe sur le barré (barré 19,90 → code 21,90 · 21,90 → 23,90 · 22,90 → 25,90 · 23,90 → 26,90 · 13,90 → 15,90 · 38,90 → 42,90).
+- Les prix « net, sans remise » écrits dans les sections de ces maquettes plus bas sont ANCIENS.
+
 ## 🧾 BON NIHAO NHFR610292420591 — RELEVÉ LE 15/11/2026 (gérant : « je te donne le bon d'achat… tu corriges les quantités stock, fais attention, analyse bien »)
 - 📦 Colis suivi NBT000041368SZ (« En transit », suivi lisible seulement dans l'appli Nihao › Détails logistiques) : le gérant l'attend sous 2 ou 3 jours (dit le 15/11) ; rappel programmé le 18/11 à 10 h. À la réception : compter chaque article contre le bon, puis photos gravées des nouveaux bijoux.
 - Tableau complet (182 articles, prix, coût rendu, stock) : **`docs/commande-fournisseur-NHFR610292420591.md`**. Payé 278,33 € (articles 248,51 + port 33,13 − remise 3,31) → **coût rendu = prix × 1,12**.
@@ -73,7 +80,7 @@
 - Un modèle doré : nœud pavé de zircons, chaînette tombante terminée par un zircon rond, petit nœud sur la chaîne ; 5 achetés à 0,95 €, 8 g. Ne se grave pas. La fiche Nihao (commune à 100 styles : « forme de cœur, fleur », « fait main », « plaqué or ») n'est PAS reprise, sa photo du cœur (autre modèle) n'est pas utilisée. Longueur de chaîne inconnue : pas écrite.
 - **19,90 € net, sans la remise −10 %** (règle des nouveaux bijoux du 15/11), **stock 5**. Nom « Collier Nœud scintillant » proposé, à valider.
 
-## 💶 NOUVEAUX BIJOUX SANS LA REMISE −10 % — RÈGLE DU 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre »)
+## 💶 (⛔ ANNULÉE LE 16/11 : −10 % remis, voir en tête) NOUVEAUX BIJOUX SANS LA REMISE −10 % — RÈGLE DU 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre »)
 - Tout bijou ajouté à partir du 15/11/2026 est vendu à son prix NET : pas de prix barré, pas de badge « −10 % ». Le prix en ,90 est le prix payé.
 - ⚠️ Exception : Bracelet Homme Perles et Tresse GARDE le −10 % (gérant, 15/11 : barré 22,90 → 20,61 €).
 - Concerne : Collier Papillon (maquette v5, 17,90 € depuis le 16/11), Bracelet Plaque & Breloque (19,90 €), Collier Papillons scintillants (v2, 19,90 €), Collier Nœud scintillant (19,90 €), Collier Envol de Papillons (19,90 €), Collier Papillon Ajouré (19,90 €), Ensemble Homme Plaque Noire (34,90 €) et tous les suivants.
