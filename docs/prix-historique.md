@@ -376,3 +376,6 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 - Même jour (« baisse encore… 15,90 € ») : AVANT barré 17,90 → 16,11 €. APRÈS barré 15,90 → payé 14,31 € (code 17,90 au « applique »).
 - Même jour, prix différenciés (« pas tous le même prix ») : Nœud scintillant 15,90 → 14,31 · Papillon Ajouré 16,90 → 15,21 · Papillons scintillants 17,90 → 16,11 · Envol de Papillons 18,90 → 17,01 · Bracelet Plaque & Breloque REMIS à 19,90 → 17,91 (avant : 15,90 → 14,31 pour les cinq).
 - Même jour : Bracelet Plaque & Breloque monté à barré 20,90 → payé 18,81 € (« plus cher encore » ; avant 19,90 → 17,91).
+
+## 16/11/2026 — Bracelet maille trombone → « Bracelet Maillons Dorés » (gérant : « baisse le prix… change le nom trombone, j'aime pas »)
+- AVANT : code 21,90 → barré 19,90 → payé 17,91 €. APRÈS : code 18,90 → barré 16,90 → payé 15,21 €. Adresse (slug) inchangée.

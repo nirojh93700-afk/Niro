@@ -1671,9 +1671,9 @@ export const products = [
   {
     slug: "bracelet-maille-trombone",
     badge: "Nouveau",
-    name: "Bracelet Maille Trombone doré",
+    name: "Bracelet Maillons Dorés",
     weight: 72, pickup: false, letter: true, subcategory: "femme",
-    title: "Bracelet maille trombone doré — gros maillons acier, tendance, cadeau femme",
+    title: "Bracelet maillons dorés — gros maillons acier, tendance, cadeau femme",
     category: "bijoux", type: "Bracelet",
     tagline: "Un bracelet à gros maillons dorés, tendance et lumineux — se porte au quotidien.",
     personalizable: false,
@@ -1684,13 +1684,13 @@ export const products = [
       "/produits/bracelet-maille-3.jpg",
     ],
     variants: [
-      { id: "bracelet-maille-trombone-dore", title: "Doré", price: 21.90, stockId: "bracelet-maille-trombone" },
+      { id: "bracelet-maille-trombone-dore", title: "Doré", price: 18.90, stockId: "bracelet-maille-trombone" },
     ],
-    descriptionHtml: `<p>Un bracelet <strong>à gros maillons</strong> (maille trombone) en acier inoxydable doré : une pièce tendance et lumineuse, qui habille le poignet aussi bien seule qu'accumulée.</p>
+    descriptionHtml: `<p>Un bracelet <strong>à gros maillons</strong> en acier inoxydable doré : une pièce tendance et lumineuse, qui habille le poignet aussi bien seule qu'accumulée.</p>
 <h3>Caractéristiques</h3>
 <ul>
 <li><strong>Matière :</strong> acier inoxydable 304, doré</li>
-<li><strong>Maille :</strong> gros maillons ovales texturés (trombone)</li>
+<li><strong>Maille :</strong> gros maillons ovales texturés</li>
 <li><strong>Fermoir :</strong> mousqueton avec chaîne d'extension réglable</li>
 </ul>`,
   },

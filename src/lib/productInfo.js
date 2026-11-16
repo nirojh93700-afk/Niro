@@ -1168,7 +1168,7 @@ Un souci à la réception ?
 
   "bracelet-maille-trombone": {
     material: `Taille & Matériaux
-- Bracelet à gros maillons ovales texturés (maille trombone), acier inoxydable 304 doré.
+- Bracelet à gros maillons ovales texturés, acier inoxydable 304 doré.
 - Poids ~15 g. Fermoir mousqueton avec chaîne d'extension réglable.
 - Acier inoxydable : supporte la transpiration au quotidien.`,
     usage: `Personnalisation & Entretien

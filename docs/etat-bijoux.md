@@ -4,7 +4,7 @@
 > après toute modification de `src/lib/products.js`. Il sert à retrouver l'état réglé
 > d'un bijou depuis n'importe quelle conversation, sans relire le code.
 
-> Généré le 2026-11-15 · 34 bijoux dans le code, dont 29 gravables et 5 vendus tels quels (aucune gravure — ne rien leur ajouter).
+> Généré le 2026-11-16 · 34 bijoux dans le code, dont 29 gravables et 5 vendus tels quels (aucune gravure — ne rien leur ajouter).
 
 ⚠️ **Ce document reflète le CODE.** Les prix, options et champs de gravure peuvent être
 réécrits depuis **Gestion → Produits & stock** : l'admin **prime toujours** sur le code
@@ -32,7 +32,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 | **Bracelet Femme Cœur** | femme | 21,51 € – 22,41 € | comprise dans le prix | texte +3 € |
 | **Bracelet Femme Papillon ajouré** | femme | 20,61 € – 24,21 € | comprise dans le prix | texte +3 € |
 | **Bracelet Cœur argenté** | femme | 15,21 € | _pas de gravure_ | — |
-| **Bracelet Maille Trombone doré** | femme | 17,91 € | _pas de gravure_ | — |
+| **Bracelet Maillons Dorés** | femme | 15,21 € | _pas de gravure_ | — |
 | **Bracelet Ange** | femme | 15,21 € | _pas de gravure_ | — |
 | **Bracelet Cœur à graver** | femme | 22,41 € | comprise dans le prix | recto +3 € · verso +3 € |
 | **Collier Couple Cœur (lot de 2)** | couple | 22,41 € | comprise dans le prix | texte1 +3 € · texte2 +3 € |
@@ -439,7 +439,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 ---
 
-### Bracelet Maille Trombone doré
+### Bracelet Maillons Dorés
 
 `bracelet-maille-trombone` · /produit/bracelet-maille-trombone
 
@@ -454,7 +454,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 | Option | Prix du code | Barré | Payé | Stock suivi |
 |---|---|---|---|---|
-| Doré | 21,90 € | 19,90 € | **17,91 €** | bracelet-maille-trombone |
+| Doré | 18,90 € | 16,90 € | **15,21 €** | bracelet-maille-trombone |
 
 ---
 
