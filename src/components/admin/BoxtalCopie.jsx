@@ -11,7 +11,8 @@
 // =============================================================================
 
 import { nomLivraison, nomLivraisonDifferent, nomManquant, texteNomManquant } from "@/lib/nomLivraison";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { RELAIS_CARRIERS } from "@/lib/shipping";
 import { getProductBySlug } from "@/lib/products";
 
 // Adresse de DÉPART (l'atelier) — telle que saisie sur boxtal.com.
@@ -184,6 +185,7 @@ export default function BoxtalCopie({ order: orderInitial }) {
       <Ligne label="E-mail" valeur={order.customerEmail} />
       <Ligne label="Mobile" valeur={order.customerPhone} />
       {order.relaisPoint ? <Ligne label="📍 Point relais choisi" valeur={order.relaisPoint} gras /> : null}
+      {order.relaisPoint ? <NumeroRelais relais={order.relaisPoint} /> : null}
       <CorrigerLivraison key={order.shippingName + (order.shippingCompany || "")} order={order} onSaved={(p) => setOrder((o) => ({ ...o, ...p }))} />
 
       <Titre>Détails de l&apos;envoi</Titre>
@@ -197,5 +199,44 @@ export default function BoxtalCopie({ order: orderInitial }) {
         Dimensions et poids = suggestions (selon les produits du colis) : ajuste sur Boxtal si ton carton diffère.
       </p>
     </div>
+  );
+}
+
+// N° du point relais chez le transporteur (16/11/2026, commande 05WMONLB : « j'arrive pas à trouver le point relais,
+// y a pas dans la liste »). Écrit dans la commande depuis le 16/11 ; pour une commande plus ancienne, il est
+// retrouvé dans la liste des points du transporteur (même recherche que le panier de la cliente).
+const sansAccent = (x) => String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().replace(/[^A-Z0-9]+/g, " ").trim();
+function NumeroRelais({ relais }) {
+  const ecrit = (String(relais).match(/n° ([A-Za-z0-9-]+)\s*$/) || [])[1] || "";
+  const [trouve, setTrouve] = useState({ etat: ecrit ? "ok" : "cherche", code: ecrit });
+  useEffect(() => {
+    if (ecrit) return;
+    const morceaux = String(relais).split(" — ").map((x) => x.trim());
+    const transporteur = RELAIS_CARRIERS.find((c) => sansAccent(c.name) === sansAccent(morceaux[0]));
+    const nom = sansAccent(morceaux[1]);
+    // « 17440 AYTRE » : Boxtal demande le code postal ET la ville.
+    const cpVille = morceaux.map((x) => x.match(/^(\d{5})\s+(.+)$/)).filter(Boolean).pop();
+    if (!transporteur || !nom || !cpVille) { setTrouve({ etat: "rien" }); return; }
+    let fini = false;
+    fetch(`/api/relais?zip=${cpVille[1]}&city=${encodeURIComponent(cpVille[2])}&country=FR&carrier=${transporteur.code}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (fini) return;
+        const pts = Array.isArray(d?.points) ? d.points : [];
+        const p = pts.find((x) => sansAccent(x.name) === nom) || pts.find((x) => sansAccent(x.name).includes(nom) || nom.includes(sansAccent(x.name)));
+        setTrouve(p?.code ? { etat: "retrouve", code: p.code } : { etat: "rien" });
+      })
+      .catch(() => { if (!fini) setTrouve({ etat: "rien" }); });
+    return () => { fini = true; };
+  }, [relais, ecrit]);
+  return (
+    <>
+      {trouve.code ? <Ligne label="N° du point relais" valeur={trouve.code} gras /> : null}
+      <p style={{ margin: "2px 0 8px", padding: "6px 10px", background: "#eef5ff", border: "1px solid #b9d0f0", borderRadius: 8, fontSize: "0.8rem", color: "#1d3d66" }}>
+        {trouve.etat === "cherche" ? "Recherche du n° du point relais…" : trouve.code
+          ? <>Sur Boxtal, choisis l&apos;offre du même transporteur, puis tape <strong>{trouve.code}</strong> (ou le code postal) dans la recherche du point relais : la liste n&apos;affiche que les points les plus proches. Les « LOCKER » sont des consignes automatiques, ils comptent comme des points relais.</>
+          : "N° du point relais non retrouvé : cherche sur Boxtal avec le code postal et le nom du point."}
+      </p>
+    </>
   );
 }

@@ -129,7 +129,10 @@ export async function POST(req) {
     ? [String(rp.name || "").slice(0, 45), String(rp.city || "").slice(0, 25)].filter(Boolean).join(", ")
     : "";
   const relaisFull = rp
-    ? [relaisCarrierName, rp.name, rp.street, [rp.zipCode, rp.city].filter(Boolean).join(" ")].filter(Boolean).join(" — ").slice(0, 240)
+    ? [relaisCarrierName, rp.name, rp.street, [rp.zipCode, rp.city].filter(Boolean).join(" "),
+       // N° du point chez le transporteur (16/11/2026, 05WMONLB : le gérant ne trouvait pas le locker dans la liste Boxtal ;
+       // avec le numéro, il se cherche directement).
+       /^[A-Za-z0-9-]{2,16}$/.test(String(rp.code || "")) ? `n° ${rp.code}` : ""].filter(Boolean).join(" — ").slice(0, 240)
     : "";
   const variantIndex = await buildVariantIndex();
   const promos = await stripBijouxPromos(await getPromos()); // bijoux : remise permanente uniquement
