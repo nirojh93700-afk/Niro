@@ -1,5 +1,5 @@
 import { detaillerCommande } from "@/lib/detailProduit";
-import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder, getBatTousLesFils, deplacerCagnotte, getCommsAll } from "@/lib/stock";
+import { isAdmin, getSettings, logOrderEmail, reverseCagnotteForOrder, getBatTousLesFils, deplacerCagnotte, getCommsAll, listPendingReplies } from "@/lib/stock";
 import { getSiteOrders, updateSiteOrder, deleteSiteOrder, getSiteOrder, listQuotes, storeCustomerUpload } from "@/lib/firebase";
 import nodeCrypto from "crypto";
 import { PHOTOS_COLIS } from "@/lib/photosColis";
@@ -24,10 +24,22 @@ export async function GET(req) {
   // Historique (02/11/2026) : devis / factures liés et images échangées dans le fil de la commande.
   // + le dossier du site de chaque cliente (08/11/2026) : l'image qu'elle a envoyée par le formulaire / « Répondre »
   // et l'aperçu que l'atelier lui a envoyé sont là dès l'instant, sans attendre le rangement du fil.
-  const [quotes, fils, comms] = await Promise.all([listQuotes(400).catch(() => null), getBatTousLesFils().catch(() => ({})), getCommsAll().catch(() => ({}))]);
+  const [quotes, fils, comms, attentes] = await Promise.all([listQuotes(400).catch(() => null), getBatTousLesFils().catch(() => ({})), getCommsAll().catch(() => ({})), listPendingReplies().catch(() => [])]);
+  // Secours (16/11/2026, commande 1OIRDYI2) : la photo jointe au formulaire / à « Une question ? » est AUSSI gardée
+  // avec la réponse préparée par l'agent (autre document de la base). Si le dossier de la cliente l'a perdue, elle
+  // revient d'ici. Doublons retirés par imagesDuFil.
+  const photosAttente = {};
+  for (const r of attentes || []) {
+    const e = String(r?.email || "").trim().toLowerCase();
+    if (!e || !Array.isArray(r.photos) || !r.photos.length) continue;
+    (photosAttente[e] = photosAttente[e] || []).push({ from: "cliente", at: r.at, photos: r.photos, subject: r.subject || "" });
+  }
   const enrichir = (o) => {
     const devisLies = devisDeLaCommande(o, quotes || []);
-    const images = imagesDuFil(fils?.[o.id], comms?.[String(o.customerEmail || "").trim().toLowerCase()]);
+    const mail = String(o.customerEmail || "").trim().toLowerCase();
+    const dossier = comms?.[mail];
+    const plus = photosAttente[mail] || [];
+    const images = imagesDuFil(fils?.[o.id], plus.length ? { ...(dossier || {}), messages: [...(dossier?.messages || []), ...plus] } : dossier);
     return { ...o, ...(devisLies.length ? { devisLies } : {}), ...(images.length ? { imagesEchangees: images } : {}) };
   };
   // Produit exact de chaque ligne (taille du verre à vin, etc.) pour tous les écrans de Gestion (13/10/2026).

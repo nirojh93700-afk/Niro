@@ -50,7 +50,8 @@
     "test-date-image": "node --import ./tools/alias-register.mjs tools/tests/date-image.test.mjs",
     "test-traduction": "node --import ./tools/alias-register.mjs tools/tests/traduction-gravure.mjs",
     "test-provenance": "node --import ./tools/alias-register.mjs tools/tests/provenance.mjs",
-    "test-niv-admin": "node --import ./tools/alias-register.mjs tools/tests/niv-admin.test.mjs"
+    "test-niv-admin": "node --import ./tools/alias-register.mjs tools/tests/niv-admin.test.mjs",
+    "test-taille-section": "node tools/tests/taille-section.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",

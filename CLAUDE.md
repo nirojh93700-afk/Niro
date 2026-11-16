@@ -1,3 +1,12 @@
+## 🖼️ PHOTO DU FORMULAIRE ABSENTE D'UNE COMMANDE SUR DEVIS — 16/11/2026 (commande 1OIRDYI2, Olivier Guérard, devis DEV-1552 ; gérant : « pourquoi j'ai pas la photo… il faut que tout soit prêt ») — PRÉPARÉ, À POUSSER SUR SON MOT
+- La photo (`/api/img/uz0EvfjuBILBqOyA2CLF`, formulaire du 14/11) existe ; Gestion la montre d'après le dossier `comms` de la cliente.
+- Cause probable (non mesurée, pas d'accès à la base d'ici) : `comms` (et `bat`) = UN document Firestore de 1 Mo ; le rangement des
+  mails le remplit chaque soir ; au-delà, `persistCatalog` échouait EN SILENCE (message + photo perdus, gardés seulement en mémoire).
+- Corrigé : `src/lib/tailleSection.js` (`reduireSection` : textes anciens raccourcis, puis moins de messages par dossier, JAMAIS ceux
+  qui ont une image ; dossiers les plus anciens retirés en dernier recours) appelé dans `persistCatalog` pour `comms` / `bat` ;
+  `/api/admin/orders` reprend aussi les photos gardées avec les réponses « à valider » (`listPendingReplies`, 30 jours).
+  `npm run test-taille-section` (9).
+
 ## ✅ LES 14 BIJOUX NIHAO DU 15/11 SONT EN LIGNE — 16/11/2026 (gérant : « tu mets en ligne… les vrais stocks [du bon] »)
 - Fiches tirées des captures des maquettes finales (`scratchpad/apply/apply.py` + `write.py`, jetables) : products.js (bloc daté 16/11 avant collier-coeur-scintillant), productInfo, packagingSeed (colliers, bracelets longs, breloque = carré, ensembles = sac + microfibre seulement), productDates 16/11 (« Nouveau »), coûts rendus ×1,12 dans productCosts, photos `public/produits/nihao/<slug>-<fichier>.jpg` (≤ 1200 px).
 - **Stocks = quantités du bon** (`STOCK_DEPART` de stock.js, valent tant qu'aucun stock n'est saisi dans Gestion) : Collier Papillon 12 / 10 / 12 / 12 / 12 · Plaque Longue 6 + 6 · Tressé noir et noir et blanc 0 (épuisés) · tout le reste 5.

@@ -13,6 +13,7 @@
 //   - nombre = 0  = "épuisé" (achat bloqué)
 // En local (sans aucun stockage), on retombe sur une mémoire temporaire.
 // =============================================================================
+import { reduireSection, octets, SECTIONS_REDUCTIBLES } from "./tailleSection";
 import nodeCrypto from "crypto";
 import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
 import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
@@ -2940,8 +2941,19 @@ async function persistCatalog(data, sections) {
           : Object.keys(data || {}).filter((k) => !avant || JSON.stringify(data[k]) !== JSON.stringify(avant[k]));
         if (!cles.length) return;
         for (const section of cles) {
+          // Garde de taille (16/11/2026) : un document Firestore = 1 Mo. Au-delà, l'écriture échouait EN
+          // SILENCE (photo du formulaire d'Olivier perdue). Les dossiers et fils sont réduits avant d'écrire.
+          if (SECTIONS_REDUCTIBLES.includes(section)) {
+            const r = reduireSection(data[section]);
+            if (r.reduit) {
+              data[section] = r.valeur;
+              console.warn(`Section ${section} réduite avant écriture : ${r.avant} → ${r.apres} octets`);
+            }
+          }
+          const json = JSON.stringify(data[section]);
+          if (octets(json) > 1_040_000) console.error(`Section ${section} trop grosse pour Firestore (${octets(json)} octets) : écriture refusée`);
           const ref = db.collection(FS_COLLECTION).doc(FS_SECTION_PREFIX + section);
-          batch.set(ref, { json: JSON.stringify(data[section]), updatedAt: at });
+          batch.set(ref, { json, updatedAt: at });
         }
         await batch.commit();
         // Cache : on n'y recopie QUE les sections écrites (les autres gardent leur valeur à jour).
