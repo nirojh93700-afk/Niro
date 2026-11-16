@@ -998,3 +998,19 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaudenoel #cadeaupersonnalise #noel2026 #ideecadeau
+
+## Vidéo 61 — Nos nouveaux bijoux, en vitrine (16/11/2026)
+- Demande : « tu mets en ligne et tu me fais une vidéo sur les produits » + « pas les prix sur les vidéos ».
+- Style NEUF « vitrine » : intro crème « Nouveaux bijoux », chapitre « Pour elle » (fond rose poudré) puis rideau « Et pour lui… »
+  (fond pierre) ; chaque bijou entre en grande carte arrondie qui glisse de côté, étiquette kraft suspendue qui se balance avec son nom,
+  pastille dorée « NOUVEAU » ; fin sombre en mosaïque des 16 photos + bouton nivcreation.fr.
+- Photos du site (`public/produits/nihao/`), sans mesures ni texte. ⚠️ Ce sont des photos fournisseur, bijoux NON gravés (aucune photo gravée).
+- 44,7 s, sans son, aucun prix, 1080 × 1920 (9,8 Mo) et 720 × 1280 (2,1 Mo). Fichiers à supprimer le 18/11.
+- Script : `python3 tools/video/vitrine_61.py <polices> <sortie> [--apercu]` (depuis la racine ; PlayfairDisplay.ttf + Inter.ttf).
+
+**Vidéo 61 — Nos nouveaux bijoux** (Collier Papillon, Papillons scintillants, Envol de Papillons, Papillon Ajouré, Nœud scintillant, Bracelet prénom gravé à breloque, Bracelets homme trois rangs, plaque longue, deux rangs, tressé bicolore, maille vénitienne, perles et tresse, Ensembles plaque acier et plaque noire)
+> ✨ Nos nouveaux bijoux sont arrivés ! Papillons qui scintillent pour elle 🦋, cuir tressé et acier pour lui 🖤
+> Un prénom, une date sur la plaque… et le cadeau est prêt 🎁💛
+> 👉 nivcreation.fr
+
+#nivcreation #nouveautes #bijouxpersonnalises #cadeaupersonnalise #ideecadeau
