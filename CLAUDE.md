@@ -1,3 +1,10 @@
+## 🛡️ MAQUETTE « GARDIEN DU SITE » + RAPPORT DES AGENTS SUR L'ACCUEIL DE GESTION — 16/11/2026 (gérant : « un autre agent qui contrôle pour pas que j'aie des problèmes comme avec les photos, connexion, paiement… une fenêtre tout est OK ou une fenêtre par agent, il doit me dire tout ce qu'ils font ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- https://claude.ai/artifact/NxPjJ5E2yt64asVpAsjBRD · `python3 tools/maquettes/surveillance-agents.py <css de /gestion> <sortie>` (coquille `gestion_coquille.py`).
+- Accueil : fenêtre verte « Tout est OK sur le site » ou rouge (problème + « Quoi faire »), puis « Tes agents » = une fenêtre par agent (Gardien, agent e-mail,
+  boîte mail, rangement du soir, santé du catalogue, envois programmés, offre gravure, résumé du matin) avec ce que chacun a fait ; variante « une seule fenêtre ».
+- Gardien (nouveau) : 9 contrôles toutes les 15 min (photos, connexion, paiement, pages, e-mails, livraison, stock et prix, tâches automatiques, mise en ligne),
+  historique, réglages d'alerte (accueil, téléphone, e-mail, nuit). Il ne corrige RIEN tout seul. Chiffres de la maquette = exemples.
+
 ## 🚫 JAMAIS UN MOT SUR LA LIVRAISON DANS UN MAIL CLIENT AVEC UN PRIX OU UN DEVIS — 16/11/2026 (gérant, mail de Farouk / DEV-1555 : « je t'ai déjà dit, ne parle pas de livraison, tu laisses décider le client » → « enregistre quelque part »)
 - Dans un mail qui donne un prix ou envoie un devis : AUCUNE phrase sur la livraison. Pas de prix de port, pas de « livraison en plus », pas de « à choisir sur le site », pas de « choisir votre livraison », pas de « livraison offerte ». Le client choisit seul en payant.
 - Le total écrit = articles + gravure seulement (« soit 20,91 € au total. »), et « vous pouvez le régler directement depuis ce lien. » (rien après).
