@@ -1,3 +1,9 @@
+## ✒️ MAQUETTE « TEXTE AU DOS SUR LE DEVIS D'UN BIJOU » — 16/11/2026 (gérant, collier plaque d'Alicia : « si on envoie un devis, elle peut ajouter un texte au verso ? » → « fais la maquette ») — EN ATTENTE DE SON AVIS, RIEN en ligne
+- https://claude.ai/artifact/Kmd7VSfhSzUygPaoFtAiiU · `python3 tools/maquettes/devis-texte-bijou.py <dossier capture> <sortie>` (capture = curl d'un devis de bijou `/document/<id>` + ses 3 CSS + photos des emballages + recto.jpg / verso.jpg).
+- Page du devis : bloc « Option de votre bijou » (même habillage `.dvo` que les options cristal) : case « Un texte gravé au dos de la plaque +8,00 € », texte 30 car., 8 écritures, aperçu recto (photo) / verso (texte) ; ligne ajoutée au tableau, total 24,21 → 32,21 €, emballage compté. 2e vue : la fiche atelier reçue (Vendu en plus, Recto photo, Verso texte + écriture).
+- +8 € = règle « le moins cher compris » de la fiche (photo 8 € + texte 3 € → le texte est offert, la photo payée). Au « applique » : étendre `optionsDisponibles` (devisOptions.js) aux bijoux dont la ligne principale a un `variantId` avec `textKeys`, prix calculé par `engravingExtra`, écrit dans le spec pour `consignesGravure`.
+- Aperçu d'Alicia (photo sur la plaque argentée, remontée : le bas de la plaque ne se grave pas) : scratchpad, mail prêt, PAS envoyé.
+
 ## 🛡️ GARDIEN DU SITE + « TES AGENTS » SUR L'ACCUEIL — APPLIQUÉ LE 16/11/2026 (« Une fenêtre par agent, applique »)
 - `src/lib/gardien.js` (`runGardien`) : 9 contrôles L'UN APRÈS L'AUTRE (25 s max chacun), lancés par le battement toutes les 15 min
   (`claimJob("gardien")`) ou « Vérifier maintenant » : photos (chaque fichier de `public/` des fiches en vente + échantillon servi en ligne,
