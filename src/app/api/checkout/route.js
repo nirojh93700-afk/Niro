@@ -172,6 +172,9 @@ export async function POST(req) {
   // Offre « gravure offerte » : prix de la PREMIÈRE gravure payante trouvée dans
   // le panier (ordre du panier). 0 = aucune gravure payante → le code ne déduit rien.
   let gravureOfferte = 0;
+  // Bijoux (16/11/2026, gérant : « une seule gravure offerte pour toute la commande ») : la gravure la moins chère n'est
+  // offerte que sur UN bijou de la commande ; les autres bijoux (et les exemplaires en plus) paient toutes leurs gravures.
+  let gravureBijouDejaOfferte = false;
   // Devis payé avec le panier (02/11/2026) : un seul par commande (le webhook le marque « payé »).
   let devisMeta = null;
 
@@ -384,10 +387,17 @@ export async function POST(req) {
     // part en UNE seule ligne Stripe (quantité 1, vraie quantité dans metadata.qte) : le montant
     // payé est exactement celui affiché sur la fiche.
     let ligneUnique = false;
-    if (gravV && gravV.total > 0) {
-      const cents = Math.round(gravV.total * 100);
+    let surplusLigne = gravV && gravV.total > 0 ? gravV.total : 0;
+    let gravuresBijouxEnPlus = 0;
+    if (!gravV && product.category === "bijoux" && extra.comprise?.prix > 0) {
+      const sansOffre = gravureBijouDejaOfferte ? quantity : quantity - 1;
+      gravureBijouDejaOfferte = true;
+      if (sansOffre > 0) { gravuresBijouxEnPlus = sansOffre; surplusLigne = Math.round(extra.comprise.prix * sansOffre * 100) / 100; }
+    } else if (!gravV && product.category === "bijoux" && extra.comprise) gravureBijouDejaOfferte = true;
+    if (surplusLigne > 0) {
+      const cents = Math.round(surplusLigne * 100);
       if (quantity > 1 && cents % quantity !== 0) ligneUnique = true;
-      unitPrice = unitPrice + gravV.total / quantity;
+      unitPrice = unitPrice + surplusLigne / quantity;
     }
 
     boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
@@ -413,6 +423,9 @@ export async function POST(req) {
     if (extra.amount > 0) {
       descriptionParts.push(`${extra.pages} gravure(s) en plus (+${extra.amount.toFixed(2)} €)`);
     }
+    if (gravuresBijouxEnPlus > 0) {
+      descriptionParts.push(`Une seule gravure offerte par commande : ${gravuresBijouxEnPlus} gravure(s) payée(s) en plus (+${surplusLigne.toFixed(2)} €)`);
+    }
     if (motifExtra > 0) {
       descriptionParts.push(`${motifExtraCount} ${product.gobeletParcours ? "élément(s) de gravure" : "motif(s)"} en plus (+${motifExtra.toFixed(2)} €)`);
     }
@@ -430,7 +443,7 @@ export async function POST(req) {
       price_data: {
         currency: "eur",
         // prix de confiance (promo appliquée si définie) ; ligne unique = toute la ligne
-        unit_amount: ligneUnique ? Math.round((basePrice + pkg.amount + pkgN.amount + motifExtra) * 100) * quantity + Math.round(gravV.total * 100) : toCents(unitPrice),
+        unit_amount: ligneUnique ? Math.round((basePrice + extra.amount + pkg.amount + pkgN.amount + motifExtra) * 100) * quantity + Math.round(surplusLigne * 100) : toCents(unitPrice),
         product_data: {
           name: ligneUnique ? `${product.name} × ${quantity}` : product.name,
           description: descriptionParts.join(" — "),

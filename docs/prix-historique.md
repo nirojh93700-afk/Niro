@@ -390,3 +390,4 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 - Plaque de naissance (garçon / fille) et plaque cœur : avant prénom ET date compris ; après prénom compris, date +3 €.
 - Numéro de table arche géométrique : avant numéro ET année compris ; après numéro compris, année +3 €.
 - Marque-pages en coffret : avant la gravure la moins chère offerte sur CHAQUE marque-page ; après une seule pour tout le coffret.
+- Bijoux : avant, chaque exemplaire et chaque bijou gravé avait sa gravure la moins chère offerte ; après (16/11/2026), une seule gravure offerte pour toute la commande.

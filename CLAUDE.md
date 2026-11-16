@@ -4,7 +4,11 @@
   vectoriel / créateurs : 1 jour navigateur, 7 jours cache), `src/middleware.js` ne passe plus sur les fichiers, `apphosting.yaml` maxInstances 2 → 6.
 - Une seule gravure offerte : plaque de naissance (prénom offert, date +3 €), plaque de naissance cœur (idem), numéro de table arche géométrique
   (numéro offert, année +3 €) — `moinsCherCompris` ; marque-pages en coffret : UNE gravure offerte pour tout le coffret (`mpGravuresLot`).
-- Restent à trancher par lui : bijoux pris à plusieurs (une gravure offerte par pièce aujourd'hui) ; déco de Noël en cristal (texte compris en plus de l'image, sa décision du 09/11).
+- ✅ Bijoux (16/11, « une seule gravure offerte pour toute la commande ») : la gravure offerte ne vaut que pour le 1er exemplaire du 1er bijou
+  gravé du panier ; les autres paient tout. Fiche (total + phrase quand quantité > 1), panier (ligne « Gravures des autres bijoux », `gravOfferte`
+  sur chaque article, `gravuresEnPlus` de CartContext), paiement (`gravureBijouDejaOfferte` / `surplusLigne` dans /api/checkout, ligne Stripe
+  unique « × N » si le montant ne se partage pas). Ex. collier cœur gravé « Léa » × 2 = 22,41 × 2 + 3 = 47,82 €.
+- Reste à trancher : déco de Noël en cristal (texte compris en plus de l'image, sa décision du 09/11).
 
 ## 📓 CARNET : PRIX PAR ÉLÉMENT GRAVÉ — 16/11/2026 (commande 1IQXA36I : titre + photo + prénom sur la couverture, 2 textes au dos, facturée 7 € ; gérant : « je t'ai jamais dit la couverture c'est gratuit… 3 € le texte, 4 € la photo, corrige… je t'ai déjà dit qu'il y a UN truc qui est gratuit, là je suis perdant »)
 - ⛔ « Le moins cher compris » = UNE SEULE gravure offerte (un élément), jamais une face entière. Le 15/11 j'avais offert toute la couverture.
