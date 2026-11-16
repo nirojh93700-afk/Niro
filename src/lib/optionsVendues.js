@@ -17,7 +17,7 @@
 // =============================================================================
 import { texteAvecDecor } from "@/lib/decorTexte";
 import { mpFormat, MP_BOITES } from "@/lib/marquePages";
-import { CN_FACES, CN_GRAVURE, cnFaceGravee, cnFaceComprise, cnLignes } from "@/lib/carnet";
+import { CN_FACES, CN_ZONES, cnElements, cnLignes } from "@/lib/carnet";
 import { SUP_PRIX, supNomElement, supMotifTexte, supOffert } from "@/lib/supportCreateur";
 import { getProductBySlug } from "@/lib/products";
 import { gravureComprise } from "@/lib/engravingPrice";
@@ -69,10 +69,13 @@ export function optionsArticle(item) {
   if (item.packaging) out.push({ libelle: "Emballage", detail: String(item.packaging), montant: 0, physique: true });
   // 🎄 Emballage de Noël : un objet à mettre dans le colis, + l'étiquette « Merry Christmas » mise d'office.
   if (item.packagingNoel) out.push({ libelle: "🎄 Emballage de Noël", detail: `${String(item.packagingNoel)} — mettre l'étiquette « Merry Christmas » avec sa ficelle`, montant: 0, physique: true, noel: String(item.packagingNoel) });
-  // Carnet A5 (07/11/2026) : la gravure de chaque face, 7 € la face quel que soit le nombre d'emplacements.
+  // Carnet A5 (16/11/2026) : une ligne par élément gravé, texte 3 €, dessin / logo 4 €, le moins cher offert.
   if (produit?.carnet && champs.cn && typeof champs.cn === "object") {
-    const cnComp = cnFaceComprise(champs.cn.v);
-    for (const [s, nom] of CN_FACES) if (cnFaceGravee(champs.cn.v, s)) out.push({ libelle: `Gravure ${s === "face" ? "de la couverture" : "du dos"}${s === cnComp ? " (offerte)" : ""}`, detail: `${nom} : ${cnLignes(champs.cn.v, s).length} emplacement(s) gravé(s)`, montant: s === cnComp ? 0 : CN_GRAVURE, physique: false });
+    const noms = Object.fromEntries(CN_FACES), zones = Object.fromEntries(CN_ZONES.map(([z, l]) => [z, l.toLowerCase()]));
+    for (const x of cnElements(champs.cn.v)) {
+      const quoi = x.kind === "texte" ? (x.cle.endsWith(".cadre") ? "texte dans le cadre" : "texte") : "dessin / logo";
+      out.push({ libelle: `Gravure ${quoi}${x.offert ? " (offerte)" : ""}`, detail: `${noms[x.side]} · ${zones[x.zone]}`, montant: x.offert ? 0 : x.prix, physique: false });
+    }
     return out;
   }
   // Support de téléphone créé par la cliente (14/11/2026) : chaque élément gravé + 3 €, le motif ajouré + 3 €.

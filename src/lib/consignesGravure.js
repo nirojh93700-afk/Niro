@@ -24,7 +24,7 @@ import { getFontLabel } from "@/lib/fonts";
 import { aEmplacement, emplacementDe, photosEnvoyees } from "@/lib/apercuCote";
 import { MODELES, layoutLabel, imageDesign } from "@/lib/modeles";
 import { mpFormat, mpBoitesTexte, mpLignes, mpLibelleCle } from "@/lib/marquePages";
-import { CN_FACES, cnLignes, cnLibelleCle } from "@/lib/carnet";
+import { CN_FACES, cnLignes, cnLibelleCle, cnPrixZone } from "@/lib/carnet";
 import { supConsignes } from "@/lib/supportCreateur";
 import { NOEL_IMAGES } from "@/lib/fetes";
 import { gobeletElements, gobeletSupplement, prixElement, quoiElement, plancheDuNumero, gobeletLibelleCle, GOB_COTES, GOB_PLACES, GOB_ATELIER_APERCU } from "@/lib/gobeletParcours";
@@ -173,8 +173,8 @@ function consignesCarnet(produit, cn, item) {
   if (v) general.push({ k: "Couleur du carnet", v: v.title, fort: true });
   let aDuTexte = false;
   const faces = CN_FACES.map(([s, nom]) => {
-    const lignes = cnLignes(cn.v, s).map((l) => { if (l.texte) aDuTexte = true; return { k: l.libelle, v: l.valeur, texte: l.texte, img: l.img }; });
-    return { nom: `${nom} (+7 €)`, lignes, vide: !lignes.length };
+    const lignes = cnLignes(cn.v, s).map((l) => { if (l.texte) aDuTexte = true; return { k: `${l.libelle} · ${cnPrixZone(cn.v, s, l.zone)}`, v: l.valeur, texte: l.texte, img: l.img }; });
+    return { nom, lignes, vide: !lignes.length };
   });
   if (aDuTexte) general.push({ k: "Police", v: getFontLabel(cn.police) || cn.police });
   const autres = [];

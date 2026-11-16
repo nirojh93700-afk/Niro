@@ -381,3 +381,7 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 - AVANT : code 21,90 → barré 19,90 → payé 17,91 €. APRÈS : code 18,90 → barré 16,90 → payé 15,21 €. Adresse (slug) inchangée.
 - Même jour : nom « Bracelet Chaîne Dorée à Gros Maillons » (titre « Bracelet chaîne dorée femme à gros maillons — acier inoxydable, idée cadeau »). Prix inchangé 16,90 → 15,21.
 - Même jour, maquette Bracelet Plaque & Breloque : barré 24,90 → payé 22,41 € (« encore moins cher, tu le mets à 24,90 € » ; avant 20,90 → 18,81).
+
+## 16/11/2026 — Carnet A5 gravé : gravure au prix par élément
+- Avant (07/11 → 16/11) : +7 € par face gravée quel que soit le nombre d'emplacements ; du 15/11 au 16/11, une face entière offerte (la 2e +7 €).
+- Après : chaque texte +3 €, chaque dessin / cadre / logo / photo +4 €, l'élément le moins cher de tout le carnet offert. Carnet nu 15,90 € inchangé.

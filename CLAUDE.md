@@ -1,3 +1,10 @@
+## 📓 CARNET : PRIX PAR ÉLÉMENT GRAVÉ — 16/11/2026 (commande 1IQXA36I : titre + photo + prénom sur la couverture, 2 textes au dos, facturée 7 € ; gérant : « je t'ai jamais dit la couverture c'est gratuit… 3 € le texte, 4 € la photo, corrige… je t'ai déjà dit qu'il y a UN truc qui est gratuit, là je suis perdant »)
+- ⛔ « Le moins cher compris » = UNE SEULE gravure offerte (un élément), jamais une face entière. Le 15/11 j'avais offert toute la couverture.
+- `src/lib/carnet.js` : `cnElements` (chaque texte +3 €, chaque dessin / cadre / logo / photo +4 €, le texte écrit dans un cadre = un texte de plus),
+  `cnPrixGravure` = tout sauf le moins cher, `cnPremiereGravure` (code gravure offerte), `cnPrixZone` / `cnPrixFace` (étiquettes de la fiche).
+  Fiche (prix dans chaque menu et à côté de chaque emplacement), paiement, résumé Stripe, « Vendu en plus » (une ligne par élément), atelier, agent e-mail.
+  1IQXA36I avec la nouvelle règle : 15,90 + 13 € = 28,90 € (elle a payé 22,90 avant −10 % : rien à lui réclamer).
+
 ## 🖼️ PHOTO DU FORMULAIRE ABSENTE D'UNE COMMANDE SUR DEVIS — 16/11/2026 (commande 1OIRDYI2, Olivier Guérard, devis DEV-1552 ; gérant : « pourquoi j'ai pas la photo… il faut que tout soit prêt ») — PRÉPARÉ, À POUSSER SUR SON MOT
 - La photo (`/api/img/uz0EvfjuBILBqOyA2CLF`, formulaire du 14/11) existe ; Gestion la montre d'après le dossier `comms` de la cliente.
 - Cause probable (non mesurée, pas d'accès à la base d'ici) : `comms` (et `bat`) = UN document Firestore de 1 Mo ; le rangement des

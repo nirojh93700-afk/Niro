@@ -1,7 +1,7 @@
 import { gobeletSupplement } from "@/lib/gobeletParcours";
 import { decouperStock } from "@/lib/stockMeta";
 import { manqueLangue } from "@/lib/traductionGravure";
-import { cnNormaliser, cnPrixGravure, cnResume } from "@/lib/carnet";
+import { cnNormaliser, cnPrixGravure, cnPremiereGravure, cnResume } from "@/lib/carnet";
 import { supNormaliser, supSupplement, supResume, supVariantId, supPremiereGravure } from "@/lib/supportCreateur";
 import { randomBytes } from "crypto";
 import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
@@ -275,13 +275,13 @@ export async function POST(req) {
       continue;
     }
 
-    // Carnet A5 (07/11/2026) : couleur + gravure couverture / dos (+7 € par face gravée) — recalcul de confiance
+    // Carnet A5 (07/11/2026) : couleur + gravure couverture / dos (+3 € le texte, +4 € le dessin / logo, le moins cher offert, 16/11/2026) — recalcul de confiance
     // avec la même fonction que la fiche (src/lib/carnet.js).
     if (product.carnet) {
       const cn = cnNormaliser(product, item.fields?.cn);
       if (!cn) return Response.json({ error: "Un carnet du panier n'est plus valable : retirez-le et composez-le à nouveau." }, { status: 400 });
       const unit = variant.price + cnPrixGravure(cn.v);
-      if (!gravureOfferte && cnPrixGravure(cn.v)) gravureOfferte = 7; // code « gravure offerte » : une face
+      if (!gravureOfferte && cnPremiereGravure(cn.v)) gravureOfferte = cnPremiereGravure(cn.v); // code « gravure offerte » : la gravure payante la moins chère
       boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
       ajouterLignePort(etatPort, { product, unitGrams: variant.weight || product.weight, unitPrice: unit, quantity });
       lineItems.push({

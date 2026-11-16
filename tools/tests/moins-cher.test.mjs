@@ -41,9 +41,13 @@ t("gobelet : 2 dessins = 3 €", sup({ mode: "dessin", dessin: "12", autour: "De
 
 const v = cnVide();
 v.face.haut = { ...v.face.haut, k: "texte", t: "Carnet" };
-t("carnet : couverture seule comprise", cnPrixGravure(v) === 0);
+t("carnet : un seul texte offert", cnPrixGravure(v) === 0);
 v.dos.haut = { ...v.dos.haut, k: "texte", t: "Léa" };
-t("carnet : couverture + dos = 7 €", cnPrixGravure(v) === 7);
+t("carnet : 2 textes = 3 €", cnPrixGravure(v) === 3);
+v.face.milieu = { ...v.face.milieu, k: "logo", src: "/api/img/abcdefgh" };
+v.face.basg = { ...v.face.basg, k: "texte", t: "Heloise" };
+v.dos.basd = { ...v.dos.basd, k: "texte", t: "Liam", t2: "2026" };
+t("carnet 1IQXA36I : 4 textes + 1 photo = 13 € (un texte offert)", cnPrixGravure(v) === 13);
 
 console.log(`\n${ok} vérifications au vert, ${ko} en échec`);
 if (ko) process.exit(1);

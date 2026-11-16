@@ -3,14 +3,18 @@
 // Reproduit la maquette enregistrée v9 (artifact QSD8HCrAzEqrSEYA7viFMh) : 3 couleurs, 15,90 € (12,90 € jusqu'au 07/11/2026) ;
 // QUATRE emplacements sur la couverture et QUATRE au dos (en haut · au milieu · en bas à gauche ·
 // en bas à droite), chacun = rien / un texte (2 lignes) / un de nos dessins ou cadres (n°) / mon logo.
-// Couverture gravée +7 € quel que soit le nombre d'emplacements remplis, dos gravé +7 € pareil ; depuis le 15/11/2026,
-// une face gravée est COMPRISE (la moins chère), seule la 2e face se paie.
+// PRIX PAR ÉLÉMENT GRAVÉ (16/11/2026, gérant : « 3 € le texte, 4 € la photo… je t'ai déjà dit qu'il y a UN truc qui est
+// gratuit ») : chaque texte +3 €, chaque dessin / cadre / logo / photo +4 € (le texte écrit dans un cadre = un texte
+// de plus), et SEUL l'élément le moins cher de tout le carnet est offert. Avant (07/11 → 16/11) : +7 € par face, et du
+// 15/11 au 16/11 une face entière offerte — erreur : toute la couverture était gratuite (commande 1IQXA36I).
 // UN SEUL calcul pour la fiche ET le paiement (pur, sans dépendance serveur).
 // =============================================================================
 import { getFontLabel } from "./fonts";
 import { MP_NUMS_OK } from "./marquePages";
 
-export const CN_GRAVURE = 7;
+export const CN_TEXTE = 3; // un texte (une ou deux lignes au même emplacement)
+export const CN_IMAGE = 4; // un de nos dessins ou cadres, un logo ou une photo
+export const CN_GRAVURE = CN_TEXTE; // compat : prix d'une gravure de base
 export const CN_FACES = [["face", "Couverture"], ["dos", "Dos"]];
 export const CN_ZONES = [
   ["haut", "En haut", "titre, sur une ligne"],
@@ -37,15 +41,51 @@ export function cnPlein(e) {
 export function cnFaceGravee(v, side) {
   return Object.values(v?.[side] || {}).some(cnPlein);
 }
-/** Face gravée COMPRISE (gérant, 15/11/2026 : « le moins cher est offert, pour tout le site ») : la 1re face gravée
- *  (couverture, sinon dos). Les deux faces coûtent pareil (7 €) : graver une face est compris, la 2e se paie. */
-export function cnFaceComprise(v) {
-  const f = CN_FACES.find(([s]) => cnFaceGravee(v, s));
-  return f ? f[0] : null;
+/** Les éléments gravés du carnet, dans l'ordre de la fiche (couverture puis dos, haut → bas droite) :
+ *  [{ side, zone, kind: "texte"|"image", prix, cle, offert }]. Le texte au milieu d'un cadre compte comme un texte.
+ *  Offert = le MOINS CHER (le premier rencontré à prix égal). */
+export function cnElements(v) {
+  const out = [];
+  for (const [s] of CN_FACES) for (const [z] of CN_ZONES) {
+    const e = v?.[s]?.[z];
+    if (!cnPlein(e)) continue;
+    if (e.k === "texte") out.push({ side: s, zone: z, kind: "texte", prix: CN_TEXTE, cle: `${s}.${z}` });
+    else {
+      out.push({ side: s, zone: z, kind: "image", prix: CN_IMAGE, cle: `${s}.${z}` });
+      if (e.k === "dessin" && e.n >= 75 && String(e.t || e.ts || "").trim()) out.push({ side: s, zone: z, kind: "texte", prix: CN_TEXTE, cle: `${s}.${z}.cadre` });
+    }
+  }
+  if (out.length) {
+    const min = Math.min(...out.map((x) => x.prix));
+    out.find((x) => x.prix === min).offert = true;
+  }
+  return out;
 }
+/** Supplément de gravure : tout, sauf l'élément le moins cher. */
 export function cnPrixGravure(v) {
-  const n = CN_FACES.filter(([s]) => cnFaceGravee(v, s)).length;
-  return Math.max(0, n - 1) * CN_GRAVURE;
+  return cnElements(v).reduce((t, x) => t + (x.offert ? 0 : x.prix), 0);
+}
+/** Code « gravure offerte » : la gravure PAYANTE la moins chère (0 s'il n'y en a pas). */
+export function cnPremiereGravure(v) {
+  const payes = cnElements(v).filter((x) => !x.offert).map((x) => x.prix);
+  return payes.length ? Math.min(...payes) : 0;
+}
+/** Supplément d'une face (ce qui y est payé). */
+export function cnPrixFace(v, side) {
+  return cnElements(v).filter((x) => x.side === side && !x.offert).reduce((t, x) => t + x.prix, 0);
+}
+/** Étiquette d'un emplacement : « offert », « +3 € », « +4 € », « +7 € » (cadre + texte), ou "" s'il est vide. */
+export function cnPrixZone(v, side, zone) {
+  const els = cnElements(v).filter((x) => x.side === side && x.zone === zone);
+  if (!els.length) return "";
+  const paye = els.filter((x) => !x.offert).reduce((t, x) => t + x.prix, 0);
+  if (!paye) return "offert";
+  return els.some((x) => x.offert) ? `+${paye} € (une partie offerte)` : `+${paye} €`;
+}
+/** Compat (anciens appels) : la face qui contient l'élément offert. */
+export function cnFaceComprise(v) {
+  const o = cnElements(v).find((x) => x.offert);
+  return o ? o.side : null;
 }
 const photoSite = (s) => typeof s === "string" && /^\/api\/img\/[A-Za-z0-9_-]{6,64}$/.test(s);
 
@@ -96,7 +136,7 @@ export function cnResume(product, cn, couleur) {
   for (const [s, nom] of CN_FACES) {
     const l = cnLignes(cn.v, s);
     if (l.some((x) => x.texte)) texte = true;
-    morceaux.push(l.length ? `${nom} (+7 €) — ${l.map((x) => `${COURT[x.zone]} : ${x.valeur}`).join(" ; ")}` : `${nom} : sans gravure`);
+    morceaux.push(l.length ? `${nom} — ${l.map((x) => `${COURT[x.zone]} (${cnPrixZone(cn.v, s, x.zone)}) : ${x.valeur}`).join(" ; ")}` : `${nom} : sans gravure`);
   }
   if (texte) morceaux.push(`Écriture : ${getFontLabel(cn.police) || cn.police}`);
   return morceaux.filter(Boolean).join(" · ");

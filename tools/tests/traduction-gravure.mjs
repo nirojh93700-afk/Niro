@@ -80,9 +80,9 @@ t("prix verre : texte tapé seul ne grave rien", verreGrave({ rectoSource: "Mama
   const carnet = getProductBySlug("carnet-a5-grave");
   const v = cnVide();
   v.face.haut = { ...v.face.haut, k: "texte", t: "", ts: "Carnet de voyage", t2: "2026", ts2: "" };
-  // 15/11/2026 : une face gravée est comprise ; la traduction en cours compte déjà (la face est gravée, le dos ajouté se paie 7 €).
+  // 15/11/2026 : une face gravée est comprise ; la traduction en cours compte déjà (16/11 : le texte du dos se paie 3 €).
   const vd = { ...v, dos: { ...v.dos, haut: { ...v.dos.haut, k: "texte", t: "Léa" } } };
-  t("carnet : texte en cours de traduction compte déjà (prix stable)", cnPlein(v.face.haut) && cnPrixGravure(v) === 0 && cnPrixGravure(vd) === 7);
+  t("carnet : texte en cours de traduction compte déjà (prix stable)", cnPlein(v.face.haut) && cnPrixGravure(v) === 0 && cnPrixGravure(vd) === 3);
   t("carnet : clés des textes", cnTextes(v).map((x) => x.key).join(",") === "cnFaceHaut,cnFaceHaut2" && cnCleTexte("dos", "basg", true) === "cnDosBasg2" && /Couverture · en haut/.test(cnLibelleCle("cnFaceHaut")));
   t("carnet : traduction en cours = bloqué", /arrive/.test(manqueLangue(champsLangueAPlat(TA, cnTextes(v)))));
   const longue = "பயண நாட்குறிப்பு — ஒரு மிக நீண்ட மொழிபெயர்ப்பு";

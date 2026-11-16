@@ -2,7 +2,7 @@
 // Fiche du carnet A5 gravé (mise en vente du 07/11/2026, gérant : « Papeterie avec le carnet »).
 // Reproduit la maquette enregistrée v9 (artifact QSD8HCrAzEqrSEYA7viFMh) : couleur, quatre emplacements sur la
 // couverture et quatre au dos (rien / un texte / un de nos dessins ou cadres / mon logo), écriture parmi les huit du
-// site, gravure posée en direct sur la grande photo (couverture ou dos de la couleur choisie), une face gravée comprise, la 2e +7 € (15/11/2026).
+// site, gravure posée en direct sur la grande photo (couverture ou dos de la couleur choisie), chaque texte +3 €, chaque dessin / logo +4 €, le moins cher offert (16/11/2026).
 // Prix : src/lib/carnet.js (le même calcul au paiement). Planches, envoi de photo : repris de la fiche des marque-pages.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -19,7 +19,7 @@ import PayInfoModal from "@/components/PayInfo";
 import TrustSection from "@/components/TrustSection";
 import { MP_DATA } from "@/lib/marquePagesData";
 import { Planches, envoyerPhoto, ajuster } from "@/components/marquePages/MarquePagesFiche";
-import { CN_FACES, CN_ZONES, CN_ZONES_POS, CN_ENCRE, CN_GRAVURE, cnVide, cnPlein, cnFaceGravee, cnFaceComprise, cnPrixGravure, cnNormaliser, cnResume, cnTextes } from "@/lib/carnet";
+import { CN_FACES, CN_ZONES, CN_ZONES_POS, CN_ENCRE, CN_TEXTE, CN_IMAGE, cnVide, cnPlein, cnFaceGravee, cnPrixFace, cnPrixZone, cnPrixGravure, cnNormaliser, cnResume, cnTextes } from "@/lib/carnet";
 import LangueFiche from "@/components/LangueFiche";
 import { langueDe, langueActive, texteMontre, texteFrappe, champsLangueAPlat, manqueLangue, resumeLangue } from "@/lib/traductionGravure";
 import { classeLangue } from "@/lib/policeLangueClient";
@@ -110,7 +110,7 @@ function Face({ side, v, onChange, grille, setGrille, productSlug, lg, onFrappe 
         return (
           <div key={z} className={`mq-emp${e.k ? " on" : ""}`}>
             <div className="mq-emph">
-              <span className="mq-empl"><b>{lab}</b><small>{sub}</small></span>
+              <span className="mq-empl"><b>{lab}{cnPrixZone(v, side, z) ? <em className="cn-prixz"> ({cnPrixZone(v, side, z)})</em> : null}</b><small>{sub}</small></span>
               <select className="mq-empk" value={e.k} aria-label={`${side === "face" ? "Couverture" : "Dos"} · ${lab}`}
                 onChange={(ev) => {
                   const k = ev.target.value;
@@ -118,9 +118,9 @@ function Face({ side, v, onChange, grille, setGrille, productSlug, lg, onFrappe 
                   setGrille(k === "dessin" && !e.n ? gk : (ouverte ? null : grille));
                 }}>
                 <option value="">Rien</option>
-                <option value="texte">Un texte</option>
-                <option value="dessin">Un de nos dessins ou cadres (n°)</option>
-                <option value="logo">Mon logo ou mon propre dessin</option>
+                <option value="texte">Un texte (+{CN_TEXTE} €)</option>
+                <option value="dessin">Un de nos dessins ou cadres, n° (+{CN_IMAGE} €)</option>
+                <option value="logo">Mon logo, ma photo ou mon dessin (+{CN_IMAGE} €)</option>
               </select>
             </div>
             {e.k ? (
@@ -137,7 +137,7 @@ function Face({ side, v, onChange, grille, setGrille, productSlug, lg, onFrappe 
                     {!ouverte && <button type="button" className="prc-change mq-empgo" onClick={() => setGrille(gk)}>{e.n ? "Changer de dessin" : "Choisir dans les planches"}</button>}
                     {ouverte && <Planches valeur={e.n} onChoix={(n) => maj(z, { n, t: n >= 75 ? e.t : "", ts: n >= 75 ? e.ts || "" : "" })} onFermer={() => setGrille(null)} />}
                     {e.n >= 75 && (
-                      <label className="mq-empcl">Votre texte au milieu du cadre, facultatif
+                      <label className="mq-empcl">Votre texte au milieu du cadre, facultatif (+{CN_TEXTE} €)
                         <input type="text" className="mq-empct" maxLength={24} placeholder="Ex : Camille" value={texteMontre(lg, e.t, e.ts)} onChange={(ev) => { maj(z, texteFrappe(lg, ev.target.value)); onFrappe(); }} />
                       </label>
                     )}
@@ -312,10 +312,10 @@ export default function CarnetFiche({ product, realisations = [] }) {
           </div>
 
           <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 8 }}>Personnalisation — gravure</p>
-          <p className="mq-edi">Quatre emplacements sur la couverture, quatre au dos, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un titre en haut, un dessin au milieu et votre prénom en bas à gauche. Une face gravée est offerte ; graver aussi la 2e face coûte {CN_GRAVURE} €, quel que soit le nombre d&apos;emplacements remplis.</p>
+          <p className="mq-edi">Quatre emplacements sur la couverture, quatre au dos, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un titre en haut, un dessin au milieu et votre prénom en bas à gauche. Chaque texte gravé coûte {CN_TEXTE} €, chaque dessin, cadre, logo ou photo {CN_IMAGE} € ; la gravure la moins chère de votre carnet est offerte.</p>
           {CN_FACES.map(([side]) => (
             <div key={side}>
-              <p className="mq-sub cn-sub">{side === "face" ? "Sur la couverture" : "Au dos"} <small>({!cnFaceComprise(v) ? "une face gravée est offerte" : cnFaceComprise(v) === side ? "offerte" : `+${CN_GRAVURE} €`}){cnFaceGravee(v, side) ? " · gravée ✓" : ""}</small></p>
+              <p className="mq-sub cn-sub">{side === "face" ? "Sur la couverture" : "Au dos"} <small>{cnFaceGravee(v, side) ? `(${cnPrixFace(v, side) ? `+${cnPrixFace(v, side)} €` : "offert"} · gravée ✓)` : ""}</small></p>
               <Face side={side} v={v} onChange={setV} grille={grille} setGrille={setGrille} productSlug={product.slug} lg={lg} onFrappe={onFrappe} />
             </div>
           ))}

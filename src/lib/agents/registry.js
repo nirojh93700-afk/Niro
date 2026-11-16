@@ -31,7 +31,7 @@ function resumeGravure(p) {
   // « Le moins cher compris » (15/11/2026) : le gobelet, les marque-pages, le carnet et le support ont leur propre calcul.
   if (p.gobeletParcours) return "l'élément le MOINS CHER de la gravure est offert ; chaque autre élément +3 €, une photo +6 €";
   if (p.marquePages?.gravure) return "sur chaque marque-page, la gravure la MOINS CHÈRE est offerte ; chaque autre : texte +3 €, dessin / cadre / photo +4 €";
-  if (p.carnet) return "une face gravée (couverture ou dos) est offerte ; la 2e face +7 €";
+  if (p.carnet) return "chaque texte gravé +3 €, chaque dessin, logo ou photo +4 € ; la gravure la moins chère du carnet est offerte";
   if (p.createur === "support") return "taille selon l'option ; chaque élément gravé +3 €, motif ajouré +5 € ; le MOINS CHER de la création est offert";
   const g = p.engravingPricing;
   if (!g) return "";
