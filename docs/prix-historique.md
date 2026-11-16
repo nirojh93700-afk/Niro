@@ -368,3 +368,8 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 ## 16/11/2026 — −10 % remis sur les 13 maquettes de bijoux du 15/11 (pas en ligne)
 - Avant (net, sans remise) : colliers femme et Plaque & Breloque 19,90 (Collier Papillon 17,90) · Trois Rangs 21,90 (27,90 le 15/11) · Plaque Longue 24,90 · Deux Rangs 22,90 · Tressé Bicolore 22,90 · Maille 12,90 · Ensembles 34,90.
 - Après : femme barré 19,90 → 17,91 · Trois Rangs / Plaque Longue 23,90 → 21,51 · Deux Rangs 22,90 → 20,61 · Tressé 21,90 → 19,71 · Maille 13,90 → 12,51 · Ensembles 38,90 → 35,01.
+
+## 16/11/2026 — 5 bijoux femme des maquettes du 15/11 : barré 19,90 → 17,90 € (gérant)
+- Collier Papillons scintillants, Collier Papillon Ajouré, Collier Envol de Papillons, Collier Nœud scintillant, Bracelet Plaque & Breloque.
+- AVANT : barré 19,90 € → payé 17,91 €. APRÈS : barré 17,90 € → payé 16,11 € (code 19,90 au « applique »).
+- Collier Papillon (5 couleurs) inchangé : barré 19,90 → 17,91 €.
