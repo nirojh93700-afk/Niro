@@ -21,12 +21,12 @@ async function chiffreIcone(regl) {
   } catch { return undefined; }
 }
 
-export async function envoyerAlerteAdmin({ title, body = "", url = "/gestion", tag = "", type = "" }) {
+export async function envoyerAlerteAdmin({ title, body = "", url = "/gestion", tag = "", type = "", urgent = false }) {
   try {
     let regl = reglageTelephone(null);
     try { regl = reglageTelephone((await getSettings())?.notifications); } catch { /* réglages par défaut */ }
     if (type && regl[type] === false) return { envoyees: 0, coupe: "type" };
-    if (type !== "litige" && dansHeuresCalmes(regl, new Date())) return { envoyees: 0, coupe: "calme" };
+    if (type !== "litige" && !urgent && dansHeuresCalmes(regl, new Date())) return { envoyees: 0, coupe: "calme" };
     const subs = await listPushSubs();
     if (!subs.length) return { envoyees: 0 };
     const keys = await getPushKeys(false);

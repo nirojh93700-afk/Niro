@@ -2,6 +2,7 @@ import { maybeRunJobs } from "@/lib/heartbeat";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export const maxDuration = 120;
 
 // Déclencheur automatique des tâches (messages programmés, règles auto, rappels
 // de cagnotte, anniversaires). Appelé discrètement par le site à la visite.

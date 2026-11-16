@@ -118,6 +118,7 @@ const SECTIONS = [
     { id: "notifications", t: "Notifications & résumés", href: "/gestion/notifications" },
     { id: "journal", t: "Journal d'activité", href: "/gestion/journal" },
     { id: "etat", t: "État du système", href: "/gestion/etat" },
+    { id: "gardien", t: "Gardien du site", href: "/gestion/gardien" },
     // 15/11/2026 (maquette « Niv Admin ») : Face ID et facture électronique.
     { id: "appareils", t: "Appareils connectés", href: "/gestion/appareils" },
     { id: "efacture", t: "Facture électronique", href: "/gestion/facture-electronique" } ] },

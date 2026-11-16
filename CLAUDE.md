@@ -1,3 +1,17 @@
+## 🛡️ GARDIEN DU SITE + « TES AGENTS » SUR L'ACCUEIL — APPLIQUÉ LE 16/11/2026 (« Une fenêtre par agent, applique »)
+- `src/lib/gardien.js` (`runGardien`) : 9 contrôles L'UN APRÈS L'AUTRE (25 s max chacun), lancés par le battement toutes les 15 min
+  (`claimJob("gardien")`) ou « Vérifier maintenant » : photos (chaque fichier de `public/` des fiches en vente + échantillon servi en ligne,
+  photo hébergée ailleurs), connexion (base, espace client), paiement (clés Stripe + chaque paiement payé des 48 h a sa commande `sessionId`,
+  cartes cadeaux exclues), pages (8, deux à la fois), e-mails (jeton Gmail, rebonds `from:mailer-daemon` 24 h), livraison (`/api/shipping-config`,
+  `/api/relais`), stock et prix (`auditCatalog` + stock négatif), tâches (battement, envois programmés en retard / en erreur), mise en ligne
+  (check-run « App Hosting » de GitHub). Rapport `jobNotes.gardien`, historique `jobNotes.gardienHist` (96 lignes). LECTURE SEULE, ne corrige rien.
+- Alerte : un problème NOUVEAU est revérifié 10 s plus tard, puis notification téléphone (`envoyerAlerteAdmin`, `urgent` = passe les heures
+  calmes si « la nuit » est coché) + e-mail à l'atelier, UNE fois par problème. Réglages `settings.gardien` {accueil, telephone, email, nuit}.
+- Accueil (`AgentsAccueil.jsx`, après « Bonjour ») : fenêtre verte / orange / rouge + « Tes agents » = une fenêtre par agent lue dans
+  `src/lib/rapportAgents.js` (Gardien, agent e-mail, boîte mail, rangement du soir, envois programmés, offre gravure, résumé du matin ; vraies traces,
+  aucun chiffre inventé). Page Réglages › Gardien du site (`/gestion/gardien`), API `/api/admin/gardien`. CSS `.ag-*`.
+- ⚠️ Essayé en local sans base ni Stripe (ces contrôles sortent « problème » ici, normal) ; affichage vérifié 390 / 1280 avec des données simulées.
+
 ## 🛡️ MAQUETTE « GARDIEN DU SITE » + RAPPORT DES AGENTS SUR L'ACCUEIL DE GESTION — 16/11/2026 (gérant : « un autre agent qui contrôle pour pas que j'aie des problèmes comme avec les photos, connexion, paiement… une fenêtre tout est OK ou une fenêtre par agent, il doit me dire tout ce qu'ils font ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - https://claude.ai/artifact/NxPjJ5E2yt64asVpAsjBRD · `python3 tools/maquettes/surveillance-agents.py <css de /gestion> <sortie>` (coquille `gestion_coquille.py`).
 - Accueil : fenêtre verte « Tout est OK sur le site » ou rouge (problème + « Quoi faire »), puis « Tes agents » = une fenêtre par agent (Gardien, agent e-mail,

@@ -454,6 +454,11 @@ export async function POST(req) {
     }
     patch.notifications = out;
   }
+  // 🛡️ Gardien du site (16/11/2026) : où il prévient d'un problème. Seules ces 4 cases, rien d'autre.
+  if (body.gardien && typeof body.gardien === "object") {
+    const g = body.gardien;
+    patch.gardien = { accueil: g.accueil !== false, telephone: g.telephone !== false, email: g.email !== false, nuit: g.nuit === true };
+  }
 
   // Journal d'activité (08/11/2026) : une ligne par réglage qui change, avec « Rétablir ».
   const avant = await getSettings(true).catch(() => null);

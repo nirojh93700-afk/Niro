@@ -7,6 +7,7 @@ import { delaiCommande, jourFr } from "@/lib/delaiCommande";
 import { livraisonCommande } from "@/lib/optionsVendues";
 import { Ico } from "@/components/admin/AdminShell";
 import { nomAffiche } from "@/lib/nomLivraison";
+import AgentsAccueil from "@/components/admin/AgentsAccueil";
 
 // =============================================================================
 // ACCUEIL DE GESTION — « version B », téléphone d'abord (maquette Gestion moderne
@@ -294,6 +295,7 @@ export default function AccueilB({
         </div>
       ) : null}
 
+      <AgentsAccueil />
       <div className="hb-strip">
         <div className="hb-kpi"><span className="l">Chiffre d&apos;affaires · ce mois</span><span className="v">{formatEuro(c.cur.ca)}</span><Tr t={c.trCa} /><Spark pts={serieCa} /></div>
         <div className="hb-kpi"><span className="l">Commandes · ce mois</span><span className="v">{c.cur.n}</span><Tr t={c.trN} /><Spark pts={serieN} /></div>

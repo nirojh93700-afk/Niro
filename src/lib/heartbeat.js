@@ -13,6 +13,7 @@ import { runRangementMails, heureDuRangement } from "@/lib/rangementMails";
 import { runEnvoisApresLivraison } from "@/lib/envoisApresLivraison";
 import { runProgrammations } from "@/lib/programmations";
 import { runResumeMatin } from "@/lib/resumeMatin";
+import { runGardien } from "@/lib/gardien";
 
 const MIN = 60000;
 
@@ -100,5 +101,10 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("resumeMatin", 15 * MIN)) out.resumeMatin = await runResumeMatin();
   } catch (e) { out.resumeMatinError = e.message; }
+  // 🛡️ Gardien du site (16/11/2026) : 9 contrôles toutes les 15 min (photos, connexion, paiement, pages, e-mails,
+  // livraison, stock, tâches, mise en ligne). Lecture seule ; prévient le gérant d'un problème NOUVEAU.
+  try {
+    if (await claimJob("gardien", 15 * MIN)) { const r = await runGardien(); out.gardien = r.checks.filter((x) => x.etat !== "ok").map((x) => x.id); }
+  } catch (e) { out.gardienError = e.message; }
   return out;
 }
