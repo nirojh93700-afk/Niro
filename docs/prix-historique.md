@@ -373,3 +373,4 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 - Collier Papillons scintillants, Collier Papillon Ajouré, Collier Envol de Papillons, Collier Nœud scintillant, Bracelet Plaque & Breloque.
 - AVANT : barré 19,90 € → payé 17,91 €. APRÈS : barré 17,90 € → payé 16,11 € (code 19,90 au « applique »).
 - Collier Papillon (5 couleurs) inchangé : barré 19,90 → 17,91 €.
+- Même jour (« baisse encore… 15,90 € ») : AVANT barré 17,90 → 16,11 €. APRÈS barré 15,90 → payé 14,31 € (code 17,90 au « applique »).
