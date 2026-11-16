@@ -1,3 +1,9 @@
+## ⛔ PRIX DE GRAVURE DANS UN MAIL CLIENT : « LA MOINS CHÈRE EST OFFERTE », JAMAIS « COMPRIS » — 16/11/2026 (gérant, mail d'Alicia, collier plaque + photo : « recommence plus, note quelque part ces règles »)
+- Règle du site (`moinsCherCompris`) : parmi les gravures choisies, la MOINS CHÈRE est OFFERTE, les autres se paient. Photo seule = photo offerte ; photo + texte = le TEXTE (3 €) est offert et la PHOTO se paie (8 €).
+- Dans un mail ou un devis : écrire « la gravure la moins chère est offerte » puis dire laquelle l'est DANS CE CAS. Ne jamais écrire « la photo est offerte » tout court si un texte peut s'ajouter, ni « texte +8 € » (c'est la photo qui passe à 8 €).
+- Mot interdit : « compris » / « comprise » (règle du 15/11 : toujours « offert »). Avant de montrer un brouillon : chercher « compris » et le remplacer.
+- Toujours calculer le total avec `engravingExtra` (ou `node tools/prix-fiche.mjs`) pour CHAQUE combinaison citée, et écrire le total.
+
 ## ✒️ MAQUETTE « TEXTE AU DOS SUR LE DEVIS D'UN BIJOU » — 16/11/2026 (gérant, collier plaque d'Alicia : « si on envoie un devis, elle peut ajouter un texte au verso ? » → « fais la maquette ») — EN ATTENTE DE SON AVIS, RIEN en ligne
 - https://claude.ai/artifact/Kmd7VSfhSzUygPaoFtAiiU · `python3 tools/maquettes/devis-texte-bijou.py <dossier capture> <sortie>` (capture = curl d'un devis de bijou `/document/<id>` + ses 3 CSS + photos des emballages + recto.jpg / verso.jpg).
 - Page du devis : bloc « Option de votre bijou » (même habillage `.dvo` que les options cristal) : case « Un texte gravé au dos de la plaque +8,00 € », texte 30 car., 8 écritures, aperçu recto (photo) / verso (texte) ; ligne ajoutée au tableau, total 24,21 → 32,21 €, emballage compté. 2e vue : la fiche atelier reçue (Vendu en plus, Recto photo, Verso texte + écriture).
