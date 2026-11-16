@@ -1027,7 +1027,7 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
   gobelet photo de couple, bracelet cordon « A ⚓ P », puzzle photo enfants, porte-clés cœur allumé, cristal « Toujours ensemble »,
   bracelet empreintes de bébé, gobelet « Super Papy depuis 2026 », marque-page « Camille ». Écartés : verre « Est. 2004 », plaques
   anglaises du Collier Enveloppe, médaillon livre (mesures en anglais), marque-page métal (non gravé).
-- Sans son, aucun prix, 1080 × 1920 et 720 × 1280. Fichiers à supprimer le 18/11.
+- 40,4 s, sans son, aucun prix, 1080 × 1920 (4,4 Mo) et 720 × 1280 (1,6 Mo). Fichiers à supprimer le 18/11.
 - Script : `python3 tools/video/cadeaux_62.py <polices> <sortie> [--apercu]` (racine ; PlayfairDisplay.ttf + Inter.ttf ; utilise porte_cles_63_prep.py).
 
 **Vidéo 62 — Un cadeau unique, gravé à son nom** (Cristal photo 3D, Collier 3 Cœurs, Verre à whisky, Carnet A5, Gobelet isotherme, Bracelet cordon, Puzzle photo, Porte-clés cristal LED, Bracelet empreinte de bébé, Marque-page)
