@@ -6,7 +6,7 @@
 import { useEffect } from "react";
 import { FONTS } from "@/lib/fonts";
 import { setDevisChoix, useDevisChoix } from "@/lib/devisChoixStore";
-import { POLICES_DEVIS } from "@/lib/devisOptions";
+import { POLICES_DEVIS, libelleTexte } from "@/lib/devisOptions";
 
 const euro = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(n || 0);
 const r2 = (n) => Math.round(n * 100) / 100;
@@ -40,7 +40,9 @@ export default function DevisOptions({ opts }) {
           <label className="dvo-opt">
             <input type="checkbox" id="dvo-texte" checked={c.texteOn} onChange={(e) => setDevisChoix({ texteOn: e.target.checked })} />
             <span className="dvo-ic">Aa</span>
-            <span className="dvo-txt"><b>{dos ? "Un texte gravé au dos de la plaque" : "Un texte gravé en plus"}</b><small>{dos ? "Un prénom, une date, un petit mot. Votre gravure du devis reste au recto." : "Un prénom, une date, un petit mot, gravé dans le cristal."}</small></span>
+            <span className="dvo-txt"><b>{dos ? "Un texte gravé au dos de la plaque" : "Un texte gravé en plus"}</b><small>{dos ? (opts.texte.photoPrix
+              ? `Un prénom, une date, un petit mot. La gravure la moins chère est offerte : avec un texte, c'est le texte qui est offert et la photo passe à ${euro(opts.texte.photoPrix)}.`
+              : "Un prénom, une date, un petit mot. Votre gravure du devis reste au recto.") : "Un prénom, une date, un petit mot, gravé dans le cristal."}</small></span>
             <span className="dvo-px">+{euro(opts.texte.price)}</span>
           </label>
           {c.texteOn ? (
@@ -73,7 +75,7 @@ export function DevisLignesOptions({ opts }) {
   if (!opts) return null;
   const lignes = [];
   if (c.socle && opts.socle) lignes.push([`Option : socle lumineux LED (${opts.socle.nom})`, opts.socle.price]);
-  if (c.texteOn && c.texte.trim() && opts.texte) lignes.push([`Option : texte gravé ${opts.texte.dos ? "au dos" : "en plus"} « ${c.texte.trim()} » (écriture ${POLICES_DEVIS[c.police]})`, opts.texte.price]);
+  if (c.texteOn && c.texte.trim() && opts.texte) lignes.push([libelleTexte(opts, c.texte.trim(), c.police), opts.texte.price]);
   return lignes.map(([d, p], i) => (
     <tr key={i} style={{ borderBottom: "1px solid var(--line)", background: "#fffaf0" }}>
       <td style={{ padding: "8px 6px" }}>{d}</td>

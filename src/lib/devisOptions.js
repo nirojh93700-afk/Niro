@@ -61,7 +61,18 @@ function texteAuDos(items, index) {
   const deja = avecPhoto ? { [ep.photoKey]: "photo" } : (ep.textKeys.includes("recto") ? { recto: "texte" } : {});
   const prix = r2(engravingExtra(product, { ...deja, verso: "texte" }, vid).amount - engravingExtra(product, deja, vid).amount);
   if (!(prix > 0)) return null;
-  return { texte: { price: prix, dos: true, max: Number(champ.maxLength) || 30 } };
+  // Avec une photo déjà prévue, le texte ajouté devient la gravure offerte et la photo se paie :
+  // on l'écrit tel quel (gérant, 16/11 : « c'est le moins cher qui est pris en compte »).
+  const photoPrix = avecPhoto ? r2(ep.photoSurcharge || 0) : 0;
+  const echange = avecPhoto && photoPrix === prix;
+  return { texte: { price: prix, dos: true, max: Number(champ.maxLength) || 30, ...(echange ? { photoPrix } : {}) } };
+}
+
+/** Libellé de la ligne « texte » ajoutée au devis (page, paiement, commande, atelier). */
+export function libelleTexte(opts, texte, police) {
+  const t = opts?.texte || {};
+  const base = `Option : texte gravé ${t.dos ? "au dos" : "en plus"} « ${texte} » (écriture ${POLICES_DEVIS[police] || POLICES_DEVIS.playfair})`;
+  return t.photoPrix ? `${base} : le texte est offert, la gravure de la photo passe à ${String(t.photoPrix.toFixed(2)).replace(".", ",")} €` : base;
 }
 
 export const POLICES_DEVIS = {
@@ -86,7 +97,7 @@ export function lignesOptions(opts, choix) {
       ...(opts.socle.stockId ? { stockId: opts.socle.stockId } : {}), option: "socle" });
   }
   if (c.texte && opts.texte) {
-    out.push({ desc: `Option : texte gravé ${opts.texte.dos ? "au dos" : "en plus"} « ${c.texte} » (écriture ${POLICES_DEVIS[c.police]})`, qty: 1, price: opts.texte.price, weight: 1, option: "texte" });
+    out.push({ desc: libelleTexte(opts, c.texte, c.police), qty: 1, price: opts.texte.price, weight: 1, option: "texte" });
   }
   return out;
 }
