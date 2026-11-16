@@ -6438,3 +6438,23 @@ html.flot-cache:not(.flot-garde) .flot-btn{transform:translateY(140%);opacity:0;
 .dvo-dos small{font-size:.78rem;color:var(--ink-soft)}
 .dvo-plaque{display:grid;place-items:center;width:150px;aspect-ratio:19.7/33.5;max-width:100%;border-radius:18px;padding:14px;box-sizing:border-box;background:linear-gradient(160deg,#d9dade,#9fa1a6 55%,#c4c6ca);box-shadow:inset 0 0 0 2px rgba(255,255,255,.45),0 6px 14px rgba(0,0,0,.18);text-align:center}
 .dvo-plaque span{color:#2a2a2c;font-size:1.05rem;line-height:1.25;overflow-wrap:anywhere;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+
+/* Récap « À graver dans cette commande » en haut de la fiche commande (16/11/2026). */
+.ag-rec{margin:12px 0;padding:14px 16px;border:1px solid #e2c67e;border-left:4px solid #c9a24b;border-radius:12px;background:#fffaf0}
+.ag-rec-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;margin-bottom:8px}
+.ag-rec-t{font-weight:700;font-size:1rem;color:#1a1206}
+.ag-rec-n{font-weight:700;font-size:1.05rem;color:#7c6120;font-variant-numeric:tabular-nums}
+.ag-rec-l{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ag-rec-l li{padding:8px 0;border-top:1px solid #f0e4c6;min-width:0}
+.ag-rec-l li:first-child{border-top:0}
+.ag-rec-l li.vide{opacity:.6}
+.ag-rec-p{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;min-width:0}
+.ag-rec-p b{font-size:.92rem;overflow-wrap:anywhere}
+.ag-rec-d{font-size:.82rem;color:#6b5e4a}
+.ag-rec-x{font-size:.8rem;font-weight:600;color:#1a1206;background:#f3e8d3;border-radius:999px;padding:1px 8px}
+.ag-rec-c{margin-left:auto;font-size:.82rem;font-weight:700;color:#fff;background:#c9a24b;border-radius:999px;padding:2px 10px;white-space:nowrap}
+.ag-rec-c.z{background:#d8d2c4;color:#4a4236}
+.ag-rec-e{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.ag-rec-chip{font-size:.78rem;background:#fff;border:1px solid #ecdcb4;border-radius:8px;padding:2px 8px;overflow-wrap:anywhere;max-width:100%}
+.ag-rec-chip i{font-style:normal;color:#7c6120;font-weight:600}
+.ag-rec-lien{display:inline-block;margin-top:8px;font-size:.82rem;color:#7c6120;text-decoration:underline}

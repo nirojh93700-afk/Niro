@@ -15,6 +15,7 @@
 // imprimerFiche) et /gestion/fiches restent telles quelles.
 // =============================================================================
 import BarriereErreur from "@/components/admin/BarriereErreur";
+import ResumeAGraver from "@/components/admin/ResumeAGraver";
 import { imageDesign } from "@/lib/modeles";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -344,6 +345,8 @@ export default function FicheCommandePage() {
       {error ? <div className="notice" style={{ marginTop: 10 }}>{error}</div> : null}
 
       {alertes.length ? <div className="fc-alerts">{alertes.map((a) => <div key={a.k} className={`fc-alert ${a.tone}`}><Ic n={a.ic} /><span>{a.txt}</span>{a.jump ? <button type="button" className="fc-btn sm act" onClick={() => document.getElementById(a.jump)?.scrollIntoView({ behavior: "smooth" })}>Voir</button> : null}</div>)}</div> : null}
+
+      <BarriereErreur origine="recap-gravure"><ResumeAGraver lignes={lignes} /></BarriereErreur>
 
       <div className="fc-steps">
         <Carte ic="clock" titre="Où en est la commande" droite={<span className="faint">Payée → Livrée</span>}>
