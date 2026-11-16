@@ -104,7 +104,7 @@ export function ajuster(t, maxW, maxH) {
 }
 
 export function Signet({ modele, side, items, H, couleur, onZoom }) {
-  const A = MP_DATA.modeles[modele];
+  const A = MP_DATA.modeles[modele] || MP_DATA.modeles[1];
   const ref = useRef(null);
   const W = Math.round(H * A.ratio);
   const PH = A.couleurs[couleur] || A.photos;

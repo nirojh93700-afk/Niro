@@ -65,6 +65,16 @@ function MarquePages({ item, p, H }) {
     <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
       {norme.slots.map((s, i) => {
         const v = (p.variants || []).find((x) => x.id === s.c);
+        // Modèle sans gravure (métal) : pas de tracé de gravure, la photo du tableau choisi suffit.
+        if (!p.marquePages.gravure) {
+          return (
+            <div key={i}>
+              <div style={legende}>{norme.slots.length > 1 ? `Marque-page ${i + 1} · ` : ""}{v?.title || ""}</div>
+              {v?.image ? <img src={v.image} alt={v.title || ""} style={{ height: H, width: "auto", borderRadius: 6, display: "block" }} /> : null}
+              <div style={note}>Sans gravure.</div>
+            </div>
+          );
+        }
         const items = itemsDe(s.v, norme.police, langue);
         return (
           <div key={i}>
