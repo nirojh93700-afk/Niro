@@ -20,10 +20,12 @@ export default function DevisOptions({ opts }) {
   useEffect(() => { setDevisChoix({ extra: extraOptions(opts, c) }); }, [opts, c.socle, c.texteOn, c.texte]); // eslint-disable-line react-hooks/exhaustive-deps
   if (!opts) return null;
   const font = FONTS.find((f) => f.key === c.police) || FONTS[0];
+  const dos = Boolean(opts.texte?.dos); // bijou : texte gravé au dos (16/11/2026)
+  const max = opts.texte?.max || 40;
   return (
     <section className="dvo no-print" aria-labelledby="dvo-titre">
-      <h3 id="dvo-titre">Options de votre cristal <span>facultatif</span></h3>
-      <p className="dvo-lead">Cochez ce que vous voulez ajouter : le total se met à jour, et vous payez tout en une fois.</p>
+      <h3 id="dvo-titre">{dos ? "Option de votre bijou" : "Options de votre cristal"} <span>facultatif</span></h3>
+      <p className="dvo-lead">{dos ? "Cochez si vous voulez ajouter un texte : le total se met à jour, et vous payez tout en une fois." : "Cochez ce que vous voulez ajouter : le total se met à jour, et vous payez tout en une fois."}</p>
       {opts.socle ? (
         <label className="dvo-opt">
           <input type="checkbox" id="dvo-socle" checked={c.socle} onChange={(e) => setDevisChoix({ socle: e.target.checked })} />
@@ -38,13 +40,13 @@ export default function DevisOptions({ opts }) {
           <label className="dvo-opt">
             <input type="checkbox" id="dvo-texte" checked={c.texteOn} onChange={(e) => setDevisChoix({ texteOn: e.target.checked })} />
             <span className="dvo-ic">Aa</span>
-            <span className="dvo-txt"><b>Un texte gravé en plus</b><small>Un prénom, une date, un petit mot, gravé dans le cristal.</small></span>
+            <span className="dvo-txt"><b>{dos ? "Un texte gravé au dos de la plaque" : "Un texte gravé en plus"}</b><small>{dos ? "Un prénom, une date, un petit mot. Votre gravure du devis reste au recto." : "Un prénom, une date, un petit mot, gravé dans le cristal."}</small></span>
             <span className="dvo-px">+{euro(opts.texte.price)}</span>
           </label>
           {c.texteOn ? (
             <div className="dvo-champs">
-              <label className="dvo-l" htmlFor="dvo-saisie">Votre texte <span>{c.texte.length} / 40</span></label>
-              <input type="text" id="dvo-saisie" maxLength={40} value={c.texte} placeholder="Ex : Alissia · 12.11.2026"
+              <label className="dvo-l" htmlFor="dvo-saisie">Votre texte <span>{c.texte.length} / {max}</span></label>
+              <input type="text" id="dvo-saisie" maxLength={max} value={c.texte} placeholder={dos ? "Ex : Papa · 16.11.2026" : "Ex : Alissia · 12.11.2026"}
                 onChange={(e) => setDevisChoix({ texte: e.target.value })} />
               <span className="dvo-l">Écriture</span>
               <div className="dvo-fonts">
@@ -53,7 +55,9 @@ export default function DevisOptions({ opts }) {
                     aria-pressed={c.police === f.key} onClick={() => setDevisChoix({ police: f.key })}>{POLICES_DEVIS[f.key]}</button>
                 ))}
               </div>
-              <div className={`dvo-apercu ${font.cls}`}>{c.texte.trim() || "Votre texte"}</div>
+              {dos ? (
+                <div className="dvo-dos"><span className="dvo-plaque"><span className={font.cls}>{c.texte.trim() || "Votre texte"}</span></span><small>Aperçu du dos de la plaque</small></div>
+              ) : <div className={`dvo-apercu ${font.cls}`}>{c.texte.trim() || "Votre texte"}</div>}
               {!c.texte.trim() ? <p className="dvo-manque">Écrivez votre texte, ou décochez l&apos;option.</p> : null}
             </div>
           ) : null}
@@ -69,7 +73,7 @@ export function DevisLignesOptions({ opts }) {
   if (!opts) return null;
   const lignes = [];
   if (c.socle && opts.socle) lignes.push([`Option : socle lumineux LED (${opts.socle.nom})`, opts.socle.price]);
-  if (c.texteOn && c.texte.trim() && opts.texte) lignes.push([`Option : texte gravé en plus « ${c.texte.trim()} » (écriture ${POLICES_DEVIS[c.police]})`, opts.texte.price]);
+  if (c.texteOn && c.texte.trim() && opts.texte) lignes.push([`Option : texte gravé ${opts.texte.dos ? "au dos" : "en plus"} « ${c.texte.trim()} » (écriture ${POLICES_DEVIS[c.police]})`, opts.texte.price]);
   return lignes.map(([d, p], i) => (
     <tr key={i} style={{ borderBottom: "1px solid var(--line)", background: "#fffaf0" }}>
       <td style={{ padding: "8px 6px" }}>{d}</td>

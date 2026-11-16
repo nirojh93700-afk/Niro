@@ -6432,3 +6432,9 @@ html.flot-cache:not(.flot-garde) .flot-btn{transform:translateY(140%);opacity:0;
 .ag-set{display:grid;gap:10px;background:#fff;border:1px solid #ece3d2;border-radius:14px;padding:14px;font-size:.92rem;margin-bottom:18px}.ag-set label{display:flex;gap:9px;align-items:center}
 .ag-err{color:#b3261e}.ag-msg{color:#2f7d4f}
 @media (max-width:640px){.ag-win{flex-wrap:wrap}.ag-wact{flex-direction:row;flex-wrap:wrap;width:100%}.ag-wact .ag-btn{flex:1}.ag-grid{grid-template-columns:1fr}}
+
+/* Texte au dos d'un bijou sur la page du devis (16/11/2026) */
+.dvo-dos{margin-top:12px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.dvo-dos small{font-size:.78rem;color:var(--ink-soft)}
+.dvo-plaque{display:grid;place-items:center;width:150px;aspect-ratio:19.7/33.5;max-width:100%;border-radius:18px;padding:14px;box-sizing:border-box;background:linear-gradient(160deg,#d9dade,#9fa1a6 55%,#c4c6ca);box-shadow:inset 0 0 0 2px rgba(255,255,255,.45),0 6px 14px rgba(0,0,0,.18);text-align:center}
+.dvo-plaque span{color:#2a2a2c;font-size:1.05rem;line-height:1.25;overflow-wrap:anywhere;text-shadow:0 1px 0 rgba(255,255,255,.35)}
