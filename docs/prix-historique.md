@@ -361,3 +361,6 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 
 ## 16/11/2026 — Collier Papillon (maquette, pas en ligne)
 - Avant : 19,90 € net (maquette v4 du 15/11). Maintenant : 17,90 € net (gérant : « collier papillon mettre 17,90 € », maquette v5).
+
+## 16/11/2026 — Bracelet Homme Trois Rangs (maquette, pas en ligne)
+- Avant : 27,90 € net (maquette v2 du 15/11). Maintenant : 21,90 € net (gérant : « 27,90 c'est trop », maquette v3). Repères en ligne : cuir & plaque 19,71 · acier & silicone 21,51 · chaîne acier 22,41.
