@@ -3083,8 +3083,29 @@ function rendreAuStock(items, lines) {
   }
 }
 
+// Recalcule produit + gain des commandes déjà conditionnées (couts = { [orderId]: { produit, manquants } }).
+export async function recalculerGains(couts) {
+  const data = await getCatalogRaw(true);
+  const usage = data.materielUsage && typeof data.materielUsage === "object" ? { ...data.materielUsage } : {};
+  const r2 = (v) => Math.round((Number(v) || 0) * 100) / 100;
+  const changes = [];
+  for (const [id, rec] of Object.entries(usage)) {
+    const c = couts[id];
+    if (!c) continue;
+    const avant = rec.gain;
+    const n = { ...rec, produit: r2(c.produit) };
+    if (c.manquants?.length) n.coutsManquants = c.manquants.slice(0, 12).map((x) => String(x).slice(0, 120)); else delete n.coutsManquants;
+    n.gain = r2(n.encaisse - n.produit - n.matCost - n.etiquette - n.stripe);
+    usage[id] = n;
+    if (n.gain !== avant || (c.manquants?.length || 0) !== (rec.coutsManquants?.length || 0)) changes.push({ ref: rec.ref, avant, apres: n.gain, manquants: c.manquants });
+  }
+  data.materielUsage = usage;
+  await persistCatalog(data, ["materielUsage"]);
+  return { changes };
+}
+
 // Valide (ou corrige) le matériel d'une commande. lines : { [idArticle]: quantité }.
-export async function validerMateriel({ orderId, ref, lines, etiquette, stripe, produit, encaisse }) {
+export async function validerMateriel({ orderId, ref, lines, etiquette, stripe, produit, encaisse, manquants = [] }) {
   if (!orderId) return null;
   const data = await getCatalogRaw(true);
   const items = materielListe(data);
@@ -3104,6 +3125,7 @@ export async function validerMateriel({ orderId, ref, lines, etiquette, stripe, 
   const rec = {
     at: Date.now(), ref: String(ref || ""), lines: propres, matCost: r2(matCost),
     etiquette: r2(etiquette), stripe: r2(stripe), produit: r2(produit), encaisse: r2(encaisse),
+    ...(manquants.length ? { coutsManquants: manquants.slice(0, 12).map((x) => String(x).slice(0, 120)) } : {}),
   };
   rec.gain = r2(rec.encaisse - rec.produit - rec.matCost - rec.etiquette - rec.stripe);
   usage[orderId] = rec;

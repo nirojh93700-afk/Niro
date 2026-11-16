@@ -186,7 +186,7 @@ export default function FenetreConditionnement({ o, adminKey, mat, onClose, onSa
           {err ? <div className="notice" style={{ marginBottom: 8 }}>{err}</div> : null}
           <div className={`mp-calc${calc ? " open" : ""}`}>
             <div><span>Encaissé (avec le port)</span><span>{euro(est.encaisse)}</span></div>
-            <div><span>− Le produit (coût d&apos;achat){est.produitIncomplet ? " ⚠️ incomplet" : ""}</span><span>{euro(est.produit)}</span></div>
+            <div><span>− Le produit (coût d&apos;achat){est.produitIncomplet ? ` ⚠️ prix d'achat inconnu : ${(est.coutsManquants || []).join(" · ")}` : ""}</span><span>{euro(est.produit)}</span></div>
             <div><span>− Matériel coché</span><span>{euro(mCost)}</span></div>
             <div><span>− Étiquette d&apos;envoi</span><span>{euro(et)}</span></div>
             <div><span>− Frais Stripe (1,5 % + 0,25 €)</span><span>{euro(est.stripe)}</span></div>

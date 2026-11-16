@@ -1,7 +1,7 @@
-import { isAdmin, getMateriel, saveMaterielItem, recevoirMateriel, validerMateriel, annulerMateriel, getRates, ajouterRate, annulerRate, corrigerRate, getStockMap } from "@/lib/stock";
+import { isAdmin, getMateriel, saveMaterielItem, recevoirMateriel, validerMateriel, annulerMateriel, getRates, ajouterRate, annulerRate, corrigerRate, getStockMap, recalculerGains } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
 import { getCatalogAdmin } from "@/lib/catalog";
-import { unitCostForItem } from "@/lib/productCosts";
+import { coutProduitsCommande } from "@/lib/coutLignes";
 import { MATERIEL_CATS, MATERIEL_KITS } from "@/lib/materielSeed";
 import { etiquetteEstimee as etiquetteBase, origineEtiquette } from "@/lib/etiquetteEnvoi";
 
@@ -46,15 +46,9 @@ export async function GET(req) {
     const order = (orders || []).find((o) => o.id === orderId);
     if (order) {
       const bySlug = {}; for (const p of Array.isArray(catalog) ? catalog : []) bySlug[p.slug] = p;
-      let produit = 0, manque = false;
-      for (const it of order.items || []) {
-        if (/livraison|point relais|retrait/i.test(it.name || "")) continue;
-        const c = unitCostForItem(it, bySlug[it.slug], order.stock);
-        if (c == null) { if (it.slug) manque = true; continue; }
-        produit += c * (Number(it.quantity) || 1);
-      }
+      const { produit, manquants } = coutProduitsCommande(order, bySlug);
       const encaisse = Number(order.total) || 0;
-      out.estimation = { ref: order.ref || "", encaisse: r2(encaisse), produit: r2(produit), produitIncomplet: manque, etiquette: etiquetteEstimee(order, bySlug), etiquetteOrigine: origineEtiquette(order, (slug) => bySlug[slug]), stripe: stripe(encaisse) };
+      out.estimation = { ref: order.ref || "", encaisse: r2(encaisse), produit: r2(produit), produitIncomplet: manquants.length > 0, coutsManquants: manquants, etiquette: etiquetteEstimee(order, bySlug), etiquetteOrigine: origineEtiquette(order, (slug) => bySlug[slug]), stripe: stripe(encaisse) };
     }
   }
   return Response.json(out);
@@ -73,16 +67,21 @@ export async function POST(req) {
     if (!order) return Response.json({ error: "Commande introuvable." }, { status: 404 });
     const catalog = await getCatalogAdmin();
     const bySlug = {}; for (const p of Array.isArray(catalog) ? catalog : []) bySlug[p.slug] = p;
-    let produit = 0;
-    for (const it of order.items || []) {
-      if (/livraison|point relais|retrait/i.test(it.name || "")) continue;
-      const c = unitCostForItem(it, bySlug[it.slug], order.stock);
-      if (c != null) produit += c * (Number(it.quantity) || 1);
-    }
+    const { produit, manquants } = coutProduitsCommande(order, bySlug);
     const encaisse = Number(order.total) || 0;
     const etiquette = b.etiquette === undefined || b.etiquette === "" ? etiquetteEstimee(order, bySlug) : Math.max(0, Number(b.etiquette) || 0);
-    const r = await validerMateriel({ orderId, ref: order.ref || "", lines: b.lines || {}, etiquette, stripe: stripe(encaisse), produit, encaisse });
+    const r = await validerMateriel({ orderId, ref: order.ref || "", lines: b.lines || {}, etiquette, stripe: stripe(encaisse), produit, encaisse, manquants });
     return Response.json({ ok: true, usage: r.usage, items: r.items });
+  }
+  // Recalcule le coût des produits et le gain de TOUTES les commandes déjà conditionnées (16/11/2026 : les lignes de
+  // devis comptaient 0 €). Rien d'autre ne change (matériel, étiquette, stock).
+  if (action === "recalculer") {
+    const [orders, catalog] = await Promise.all([getSiteOrders(500), getCatalogAdmin()]);
+    const bySlug = {}; for (const p of Array.isArray(catalog) ? catalog : []) bySlug[p.slug] = p;
+    const couts = {};
+    for (const o of orders || []) couts[o.id] = coutProduitsCommande(o, bySlug);
+    const r = await recalculerGains(couts);
+    return Response.json({ ok: true, ...r });
   }
   if (action === "annuler") {
     const r = await annulerMateriel(String(b.orderId || ""));

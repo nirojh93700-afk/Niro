@@ -1,7 +1,7 @@
 import { isAdmin, getUrssafDeclared, setUrssafDeclared, getMateriel, getRates, getSettings } from "@/lib/stock";
 import { getSiteOrders } from "@/lib/firebase";
 import { getCatalogAdmin } from "@/lib/catalog";
-import { unitCostForItem } from "@/lib/productCosts";
+import { coutLigne } from "@/lib/coutLignes";
 import { etiquetteEstimee, perteRate } from "@/lib/etiquetteEnvoi";
 import { coutCommande, coutHoraire, reglageActif } from "@/lib/coutGravure";
 
@@ -92,7 +92,7 @@ export async function GET(req) {
       const qty = Number(it.quantity) || 1;
       const rev = Number(it.total) || 0;
       const slug = it.slug || "";
-      const unitCost = unitCostForItem(it, bySlug[slug], o.stock);
+      const unitCost = coutLigne(it, bySlug[slug], o.stock);
       const hasCost = unitCost != null;
       const cost = hasCost ? unitCost * qty : 0;
       if (!hasCost) { missing.add(it.name || slug || "?"); missingUnits += qty; }

@@ -1,3 +1,18 @@
+## 💶 COÛT D'ACHAT DES LIGNES DE DEVIS + GAIN RECALCULÉ — 16/11/2026 (09NRJIZA, Coline Goossens : « comment je peux avoir un gain de 35,30 € », verre à whisky compté 0 €)
+- `src/lib/coutLignes.js` (`coutLigne`, `coutProduitsCommande`) : ligne sans produit (devis) = coût du verre / flûte / socle lu dans son libellé
+  (lot compris) ; texte, prénom, gravure, livraison = 0 € (rien à acheter) ; sinon « prix d'achat inconnu » affiché (fiche commande, Conditionnement),
+  jamais 0 en silence. Utilisé par Conditionnement, Bénéfices et l'action `recalculer` de `/api/admin/materiel` (gains déjà enregistrés).
+- Ajoutés à `VARIANT_COSTS` : carnet 3,55 € (Alibaba 23/10), bracelet ange 0,57 / 0,70 € (Nihao NHFR607182266419).
+- ⚠️ TOUJOURS SANS PRIX D'ACHAT (le gérant doit les donner, rien dans le dépôt) : bracelet homme chaîne acier, bracelet empreinte, collier
+  enveloppe, collier plaque acier, bracelet femme cœur, bracelet cordon à plaque, médaillons (pivotant, cœur ouvrable), collier cœur gravé,
+  pendentif géométrique, gourmette identité, collier couple puzzle, carafe, support téléphone, pièce laiton, coffret en bois.
+
+## 📍 N° DU POINT RELAIS DANS CHAQUE COMMANDE — 16/11/2026 (05WMONLB, Cynthia Belkacem : point introuvable dans la liste Boxtal)
+- Locker 24/7 U Express Aytré = Mondial Relay n° 19964 (absent de la liste de Boxtal, raison inconnue). Mail envoyé à Cynthia le 16/11 à 16 h 07 :
+  point le plus proche proposé (Locker Literie Gamblin Aytré) ; à sa réponse, mettre à jour le point de la commande.
+- `/api/checkout` écrit « — n° <code> » à la fin de `relaisPoint` ; Gestion (`BoxtalCopie` › `NumeroRelais`) affiche le n° (anciennes commandes :
+  retrouvé par `/api/relais?zip=&city=&carrier=`, la ville est OBLIGATOIRE).
+
 ## 🧾 FICHE COMMANDE : TOUT CE QU'IL FAUT GRAVER + PHOTO PRODUIT PLUS PETITE SUR ORDINATEUR — 16/11/2026 (gérant, carnet 1IQXA36I : « ils sont où les textes que je dois graver… je vois rien » ; fiche Collier Enveloppe : « la photo est trop grande, il faut qu'il voie les autres photos en bas »)
 - `/gestion/commande/<réf>` : sous chaque article, le tableau `TableGravure` (chaque face, chaque emplacement, chaque texte en clair, images avec « ⬇ Télécharger l'image »).
   Avant, seul l'ancien écran et la page Atelier l'avaient ; la nouvelle fiche ne montrait que le résumé. Les photos cassées de cette fiche venaient des refus 429 (corrigés le même jour).

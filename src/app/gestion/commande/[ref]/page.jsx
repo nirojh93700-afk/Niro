@@ -486,6 +486,7 @@ export default function FicheCommandePage() {
               </tbody></table>
               {remise > 0 ? <div className="fc-sub">Cette remise vous a coûté {formatEuro(remise)}.</div> : null}
               {usage ? <div className="fc-gain"><span>Gain de la commande<small>après produits, matériel, étiquette, Stripe, ratés</small></span><b>{euro(usage.gain)}</b></div> : <div className="fc-sub">Gain calculé à « Valider » dans Conditionnement.</div>}
+              {usage?.coutsManquants?.length ? <div className="fc-sub" style={{ color: "#b32b2b", fontWeight: 700 }}>⚠️ Prix d&apos;achat inconnu, compté 0 € : {usage.coutsManquants.join(" · ")}. Le vrai gain est plus bas.</div> : null}
               <div className={`fc-sub fc-pay`} style={{ color: remb.tone === "bad" ? "var(--ash-bad)" : remb.tone === "ok" ? "var(--ash-ok)" : remb.tone === "warn" ? "var(--ash-warn)" : undefined, fontWeight: 600 }}>{remb.txt} · dans « Plus d&apos;actions ».</div>
             </div>
           </Carte>

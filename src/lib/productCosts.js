@@ -89,6 +89,13 @@ export const VARIANT_COSTS = {
   "verre-tumbler-1": 3.30,
   "verre-tumbler-2": 6.60,
   "verre-tumbler-4": 13.20,
+  // Carnet A5 gravé : reçu Alibaba du 23/10/2026, 60 carnets, 0,89 € + port 153,94 € + frais → 3,55 € rendu (les 3 couleurs).
+  "carnet-marron": 3.55,
+  "carnet-noir": 3.55,
+  "carnet-gris": 3.55,
+  // Bracelet Ange : commande Nihao NHFR607182266419 (XLY228 argent 0,48 € · XLJ228 or 0,59 €), port compris ×1,188.
+  "bracelet-ange-argente": 0.57,
+  "bracelet-ange-dore": 0.70,
 };
 
 // Trouve le coût d'achat unitaire d'un article de commande, en retrouvant la
