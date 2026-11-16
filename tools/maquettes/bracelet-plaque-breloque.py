@@ -136,6 +136,10 @@ MAIN, n = re.subn(r'<span class="vs-old">19,90\s€</span><span class="vs-now">1
 assert n == 5, n
 MAIN = re.sub(r'<span class="val">17,91\s€</span>', '<span class="val">' + PAYE_T + '</span>', MAIN, count=1)
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
+# 16/11/2026 (gérant : « change le nom pour ce bracelet aussi », pour que les gens le trouvent en cherchant) :
+NOM, TITRE = "Bracelet Prénom Gravé à Breloque", "Bracelet prénom gravé femme — plaque personnalisée, breloque cœur, étoile ou papillon"
+MAIN = MAIN.replace("Bracelet fin à plaque gravée et breloque cœur, étoile ou papillon — acier inoxydable", TITRE)
+MAIN = MAIN.replace("Bracelet Plaque &amp; Breloque", NOM.replace("&", "&amp;")).replace("Bracelet Plaque & Breloque", NOM)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
 assert "pd-totbox" in MAIN and MAIN.count('class="variant-swatch ') == 5
 for mot in ("hypoallerg", "sans nickel", "étanche", "fait main", "plaqué or", "Plaqué Or", "18K", "en or ", "ternit", "nisexe"):
@@ -229,8 +233,8 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX)).replace("__NOEL__", json.dumps(NOEL)).replace("__COUL__", json.dumps(COULEURS)).replace("__ETIQ__", json.dumps(ETIQ))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Bracelet Plaque &amp; Breloque » (barré ' + BARRE_T + ' → ' + PAYE_T + ' avec −10 %) · <b>rien n\'est en ligne</b></div>'
-TITLE = "<title>Bracelet Plaque &amp; Breloque</title>"
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Bracelet Prénom Gravé à Breloque » (barré ' + BARRE_T + ' → ' + PAYE_T + ' avec −10 %) · <b>rien n\'est en ligne</b></div>'
+TITLE = "<title>Bracelet Prénom Gravé à Breloque</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"
 full = ('<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
