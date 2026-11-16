@@ -24,7 +24,8 @@ PUB = os.path.join(ROOT, "public")
 ASSETS = os.path.join(OUT, "assets", "collier-papillon")
 EMBA = os.path.join(OUT, "assets", "barre-verticale")
 SRC = sys.argv[1]
-PRIX = 19.90       # 15/11 : nouveaux bijoux sans la remise −10 %, 19,90 € net
+PRIX = 17.90       # 16/11 (gérant : « collier papillon mettre 17,90 € ») ; avant 19,90 € net
+PXT = f"{PRIX:.2f}".replace(".", ",") + " €"
 
 
 def uri(path, w=900, q=80):
@@ -152,10 +153,10 @@ assert MAIN.count("papillon-porte-dore") == 1  # la vraie photo portée du doré
 # 15/11/2026 (gérant : « enlève les 10 % maintenant pour tout ce qu'on va mettre ») : les nouveaux bijoux n'ont PAS la remise
 # des bijoux : 19,90 € net, sans prix barré ni badge −10 %.
 MAIN, n = re.subn(r'<span class="price-old">19,90\s€</span> <span class="price-sale">17,91\s€</span> <span class="promo-badge"[^>]*>.*?</span>',
-                  '<span class="price-sale" style="color:var(--ink)">19,90 €</span>', MAIN, count=1, flags=re.S)
+                  '<span class="price-sale" style="color:var(--ink)">' + PXT + '</span>', MAIN, count=1, flags=re.S)
 assert n == 1
-MAIN = re.sub(r'<span class="vs-old">19,90\s€</span><span class="vs-now">17,91\s€</span>', '<span class="vs-now">19,90 €</span>', MAIN)
-MAIN = re.sub(r'<span class="val">17,91\s€</span>', '<span class="val">19,90 €</span>', MAIN, count=1)
+MAIN = re.sub(r'<span class="vs-old">19,90\s€</span><span class="vs-now">17,91\s€</span>', '<span class="vs-now">' + PXT + '</span>', MAIN)
+MAIN = re.sub(r'<span class="val">17,91\s€</span>', '<span class="val">' + PXT + '</span>', MAIN, count=1)
 assert "17,91" not in MAIN
 HEADER, FOOTER, MAIN = nettoie(HEADER), nettoie(FOOTER), nettoie(MAIN)
 MAIN = MAIN.replace('class="gallery-bg"', 'class="gallery-bg" id="galmain"', 1)
@@ -243,7 +244,7 @@ JS = r'''
 })();
 '''.replace("__PRIX__", json.dumps(PRIX)).replace("__NOEL__", json.dumps(NOEL)).replace("__COUL__", json.dumps(COULEURS)).replace("__ETIQ__", json.dumps(ETIQ))
 
-BANNER = '<div class="mq-banner">MAQUETTE — fiche « Collier Papillon » (19,90 € sans remise) · <b>rien n\'est en ligne</b></div>'
+BANNER = '<div class="mq-banner">MAQUETTE — fiche « Collier Papillon » (' + PXT + ' sans remise) · <b>rien n\'est en ligne</b></div>'
 TITLE = "<title>Collier Papillon</title>"
 STYLE = f"<style>{css}\n{CSS}</style>"
 BODY = f'<div class="{HTML_CLASS}">' + BANNER + HEADER + MAIN + FOOTER + "</div>"

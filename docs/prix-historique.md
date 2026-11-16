@@ -358,3 +358,6 @@ Avant ce jour :
 - **Marque-pages** : chaque gravure payante (texte 3 €, dessin / cadre / photo 4 €), aucune comprise.
 - **Carnet A5** : couverture gravée +7 €, dos +7 € (aujourd'hui : une face comprise, la 2e +7 €).
 Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), et rétablir `gobeletElements` (1er compris), `mpPrixGravure`, `cnPrixGravure`.
+
+## 16/11/2026 — Collier Papillon (maquette, pas en ligne)
+- Avant : 19,90 € net (maquette v4 du 15/11). Maintenant : 17,90 € net (gérant : « collier papillon mettre 17,90 € », maquette v5).
