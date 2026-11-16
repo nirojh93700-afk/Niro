@@ -379,3 +379,5 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 
 ## 16/11/2026 — Bracelet maille trombone → « Bracelet Maillons Dorés » (gérant : « baisse le prix… change le nom trombone, j'aime pas »)
 - AVANT : code 21,90 → barré 19,90 → payé 17,91 €. APRÈS : code 18,90 → barré 16,90 → payé 15,21 €. Adresse (slug) inchangée.
+- Même jour : nom « Bracelet Chaîne Dorée à Gros Maillons » (titre « Bracelet chaîne dorée femme à gros maillons — acier inoxydable, idée cadeau »). Prix inchangé 16,90 → 15,21.
+- Même jour, maquette Bracelet Plaque & Breloque : barré 24,90 → payé 22,41 € (« encore moins cher, tu le mets à 24,90 € » ; avant 20,90 → 18,81).

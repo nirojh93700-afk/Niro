@@ -18,7 +18,7 @@ export const TITRES_GOOGLE = {
   "bracelet-homme-acier-silicone": { de: "Bracelet Homme — Acier inoxydable & silicone gravé au laser", vers: "Bracelet homme acier et silicone gravé" },
   "bracelet-homme-identite-gourmette": { de: "Bracelet Homme Identité — Gourmette acier inoxydable gravée", vers: "Bracelet homme gourmette acier gravée" },
   "bracelet-homme-plaque-cuir": { de: "Bracelet homme en cuir à plaque acier gravée — fermoir clip, noir, marine ou marron", vers: "Bracelet homme cuir à plaque acier gravée" },
-  "bracelet-maille-trombone": { de: "Bracelet maillons dorés — gros maillons acier, tendance, cadeau femme", vers: "Bracelet maillons dorés en acier" },
+  "bracelet-maille-trombone": { de: "Bracelet chaîne dorée femme à gros maillons — acier inoxydable, idée cadeau", vers: "Bracelet chaîne dorée femme, gros maillons" },
   "bracelet-perles-pastille": { de: "Bracelet perles acier à pastille gravée — taille réglable 16 à 23 cm, doré ou argenté", vers: "Bracelet perles acier à pastille gravée" },
   "carafe-a-whisky-gravee": { de: "Carafe à whisky gravée personnalisée — édition limitée, cadeau d'exception", vers: "Carafe à whisky gravée personnalisée" },
   "cartes-etapes-bebe-animaux": { de: "Cartes étapes bébé têtes d'animaux en bois — lot de 12 (1 à 12 mois)", vers: "Cartes étapes bébé en bois, têtes d'animaux" },

@@ -1671,11 +1671,11 @@ export const products = [
   {
     slug: "bracelet-maille-trombone",
     badge: "Nouveau",
-    name: "Bracelet Maillons Dorés",
+    name: "Bracelet Chaîne Dorée à Gros Maillons",
     weight: 72, pickup: false, letter: true, subcategory: "femme",
-    title: "Bracelet maillons dorés — gros maillons acier, tendance, cadeau femme",
+    title: "Bracelet chaîne dorée femme à gros maillons — acier inoxydable, idée cadeau",
     category: "bijoux", type: "Bracelet",
-    tagline: "Un bracelet à gros maillons dorés, tendance et lumineux — se porte au quotidien.",
+    tagline: "Une chaîne dorée à gros maillons, tendance et lumineuse — se porte au quotidien.",
     personalizable: false,
     images: [
       "/produits/bracelet-maille-0.jpg",

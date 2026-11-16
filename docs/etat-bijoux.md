@@ -32,7 +32,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 | **Bracelet Femme Cœur** | femme | 21,51 € – 22,41 € | comprise dans le prix | texte +3 € |
 | **Bracelet Femme Papillon ajouré** | femme | 20,61 € – 24,21 € | comprise dans le prix | texte +3 € |
 | **Bracelet Cœur argenté** | femme | 15,21 € | _pas de gravure_ | — |
-| **Bracelet Maillons Dorés** | femme | 15,21 € | _pas de gravure_ | — |
+| **Bracelet Chaîne Dorée à Gros Maillons** | femme | 15,21 € | _pas de gravure_ | — |
 | **Bracelet Ange** | femme | 15,21 € | _pas de gravure_ | — |
 | **Bracelet Cœur à graver** | femme | 22,41 € | comprise dans le prix | recto +3 € · verso +3 € |
 | **Collier Couple Cœur (lot de 2)** | couple | 22,41 € | comprise dans le prix | texte1 +3 € · texte2 +3 € |
@@ -439,7 +439,7 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 
 ---
 
-### Bracelet Maillons Dorés
+### Bracelet Chaîne Dorée à Gros Maillons
 
 `bracelet-maille-trombone` · /produit/bracelet-maille-trombone
 
