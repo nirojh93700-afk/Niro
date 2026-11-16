@@ -17,9 +17,9 @@ export const DEFAULT_PACKAGING = [
   { id: "pack-bracelet", name: "Pack Bracelet", desc: "Sac + boîte cadeau + microfibre", buy: 2.95, sell: 7.5, weight: 123, photo: "" },
 ];
 
-const COLLIERS = ["collier-enveloppe-message-secret", "collier-medaillon-coeur-ouvrable", "collier-couple-coeur-lot2", "collier-plaque-acier", "collier-medaillon-livre", "collier-couple-puzzle", "collier-femme-pendentif-geometrique", "collier-coeur-zircon", "collier-perle-solitaire", "collier-coeur-scintillant", "collier-double-coeur", "collier-coeur-plaques", "collier-3coeurs", "collier-medaillon-pivotant", "collier-pastille", "collier-coeur-grave", "collier-barre-verticale"];
-const BRACELETS_LONG = ["bracelet-homme-identite-gourmette", "bracelet-homme-acier-silicone", "bracelet-homme-cuir-tresse-acier", "bracelet-homme-chaine-acier", "bracelet-empreinte-pied-bebe", "bracelet-cordon-plaque", "bracelet-homme-plaque-cuir", "bracelet-gourmette-plaque"];
-const BRACELETS_CARRE = ["bracelet-femme-acier", "bracelet-femme-coeur", "bracelet-femme-papillon", "bracelet-coeur-acier", "bracelet-coeur-a-graver-ot", "bracelet-ange", "bracelet-maille-trombone", "bracelet-coeur-chaine", "bracelet-perles-pastille"];
+const COLLIERS = ["collier-papillon", "collier-papillons-scintillants", "collier-papillon-ajoure", "collier-envol-papillons", "collier-noeud-scintillant", "collier-enveloppe-message-secret", "collier-medaillon-coeur-ouvrable", "collier-couple-coeur-lot2", "collier-plaque-acier", "collier-medaillon-livre", "collier-couple-puzzle", "collier-femme-pendentif-geometrique", "collier-coeur-zircon", "collier-perle-solitaire", "collier-coeur-scintillant", "collier-double-coeur", "collier-coeur-plaques", "collier-3coeurs", "collier-medaillon-pivotant", "collier-pastille", "collier-coeur-grave", "collier-barre-verticale"];
+const BRACELETS_LONG = ["bracelet-homme-trois-rangs", "bracelet-homme-plaque-longue", "bracelet-homme-deux-rangs", "bracelet-homme-tresse-bicolore", "bracelet-homme-maille-venitienne", "bracelet-homme-perles-tresse", "bracelet-homme-identite-gourmette", "bracelet-homme-acier-silicone", "bracelet-homme-cuir-tresse-acier", "bracelet-homme-chaine-acier", "bracelet-empreinte-pied-bebe", "bracelet-cordon-plaque", "bracelet-homme-plaque-cuir", "bracelet-gourmette-plaque"];
+const BRACELETS_CARRE = ["bracelet-plaque-breloque", "bracelet-femme-acier", "bracelet-femme-coeur", "bracelet-femme-papillon", "bracelet-coeur-acier", "bracelet-coeur-a-graver-ot", "bracelet-ange", "bracelet-maille-trombone", "bracelet-coeur-chaine", "bracelet-perles-pastille"];
 
 // Attribution par produit : { slug: { on, ids, free } }.
 export const DEFAULT_PRODUCT_PACKAGING = (() => {
@@ -27,5 +27,7 @@ export const DEFAULT_PRODUCT_PACKAGING = (() => {
   for (const s of COLLIERS) out[s] = { on: true, ids: ["sac", "boite-carree", "microfibre", "pack-collier"], free: [] };
   for (const s of BRACELETS_LONG) out[s] = { on: true, ids: ["sac", "boite-allongee", "microfibre", "pack-bracelet"], free: [] };
   for (const s of BRACELETS_CARRE) out[s] = { on: true, ids: ["sac", "boite-carree", "microfibre", "pack-collier"], free: [] };
+  // Ensembles homme (gérant, 15/11 : « j'ai pas de boîte cadeau… tu peux laisser le sac et la pochette microfibre ») : sac + microfibre seulement.
+  for (const s of ["ensemble-homme-plaque-noire", "ensemble-homme-plaque-acier"]) out[s] = { on: true, ids: ["sac", "microfibre"], free: [] };
   return out;
 })();

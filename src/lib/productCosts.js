@@ -6,6 +6,34 @@
 // N'affecte PAS la boutique : sert seulement au calcul du bénéfice.
 // =============================================================================
 export const VARIANT_COSTS = {
+  // Bon Nihao NHFR610292420591 (15/11/2026) : prix × 1,12 (port net réparti), voir docs/commande-fournisseur-NHFR610292420591.md.
+  "collier-papillon-bleu": 0.95,
+  "collier-papillon-rose": 0.97,
+  "collier-papillon-rouge": 1.09,
+  "collier-papillon-noir": 0.95,
+  "collier-papillon-dore": 1.29,
+  "collier-papillons-scintillants-dore": 1.86,
+  "collier-papillon-ajoure-dore": 1.48,
+  "collier-envol-papillons-dore": 1.61,
+  "collier-noeud-scintillant-dore": 1.06,
+  "bracelet-plaque-breloque-dore-coeur": 2.18,
+  "bracelet-plaque-breloque-dore-etoile": 2.18,
+  "bracelet-plaque-breloque-argente-coeur": 1.39,
+  "bracelet-plaque-breloque-argente-etoile": 1.39,
+  "bracelet-plaque-breloque-argente-papillon": 1.39,
+  "bracelet-homme-trois-rangs-noir-dore": 2.54,
+  "bracelet-homme-trois-rangs-noir-argente": 2.54,
+  "bracelet-homme-trois-rangs-tout-noir": 2.54,
+  "bracelet-homme-plaque-longue-acier": 1.37,
+  "bracelet-homme-plaque-longue-noir": 1.56,
+  "bracelet-homme-deux-rangs": 3.62,
+  "bracelet-homme-tresse-dore": 1.39,
+  "bracelet-homme-tresse-camel": 1.39,
+  "bracelet-homme-maille-venitienne-dore": 1.76,
+  "bracelet-homme-maille-venitienne-argente": 1.06,
+  "bracelet-homme-perles-tresse": 1.3,
+  "ensemble-homme-plaque-noire-noir": 1.66,
+  "ensemble-homme-plaque-acier-argente": 3.43,
   // Marque-pages — reçu Alibaba n° 33852424501043880 (23/10/2026) : prix × 1,574 (logistique + frais de paiement
   // répartis au prorata), voir docs/marque-pages-commande-alibaba-2026-10-12.md.
   "mp1-caramel": 1.15, "mp1-blond": 1.15, "mp1-rouge": 1.15, "mp1-cuivre": 1.15, "mp1-anthracite": 1.15, "mp1-sable": 1.15,

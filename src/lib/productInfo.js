@@ -1102,6 +1102,76 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
+  "collier-papillon": {
+    material: "Taille & Matériaux\n- Modèles argentés : ailes en résine colorée translucide avec paillettes dorées, corps serti de petits zircons.\n- Finition argentée (bleu, rose et turquoise, rouge, noir et transparent) : pendentif et chaîne fine en acier inoxydable.\n- Modèle doré : ailes transparentes aux reflets irisés, serties dans un contour doré, petits zircons au centre ; pendentif en cuivre doré, chaîne en acier inoxydable doré à maillons plats.\n- Fermoir mousqueton.",
+    usage: "Personnalisation & Entretien\n- Bijou cadeau prêt à offrir : il ne se grave pas.\n- Les ailes craignent les chocs et les rayures : rangez-le à part, dans sa pochette.\n- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport.\n- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien.",
+    returns: "Expédition & Retour\n- Expédié en lettre suivie, soigneusement protégé.\n- Bijou non personnalisé : échange possible sous 14 jours, article non porté.\n- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouve toujours une solution ensemble.",
+  },
+  "collier-papillons-scintillants": {
+    material: "Taille & Matériaux\n- Collier à deux papillons : un grand papillon pavé de petits zircons et un petit papillon ajouré, sous une bélière sertie de zircons.\n- Chaîne en acier inoxydable doré à maillons plats ; pendentif en cuivre doré serti de zircons.\n- Fermoir mousqueton. Poids : environ 7 g.",
+    usage: "Personnalisation & Entretien\n- Ce collier se vend tel quel : il ne se grave pas.\n- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.\n- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
+    returns: "Expédition & Retour\n- Expédié en lettre suivie, soigneusement protégé.\n- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "collier-papillon-ajoure": {
+    material: "Taille & Matériaux\n- Pendentif papillon : ailes du haut ajourées, ailes du bas pavées de zircons et prolongées de deux fines queues.\n- Chaîne en acier inoxydable doré, fermoir mousqueton ; pendentif en cuivre doré serti de zircons.\n- Poids : environ 7 g.",
+    usage: "Personnalisation & Entretien\n- Ce collier se vend tel quel : il ne se grave pas.\n- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.\n- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
+    returns: "Expédition & Retour\n- Expédié en lettre suivie, soigneusement protégé.\n- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "collier-envol-papillons": {
+    material: "Taille & Matériaux\n- Collier à papillons : deux petits papillons sertis de strass, un grand papillon ajouré orné d'une pierre en navette, une pampille avec un papillon et une pierre ronde.\n- Chaîne en acier inoxydable doré ; papillons en cuivre doré sertis de strass.\n- Poids : environ 5 g.",
+    usage: "Personnalisation & Entretien\n- Ce collier se vend tel quel : il ne se grave pas.\n- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.\n- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
+    returns: "Expédition & Retour\n- Expédié en lettre suivie, soigneusement protégé.\n- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "collier-noeud-scintillant": {
+    material: "Taille & Matériaux\n- Collier à nœud pavé de petits zircons, chaînette tombante terminée par un zircon rond serti, petit nœud doré sur le côté de la chaîne.\n- Chaîne en acier inoxydable doré ; nœud en métal doré serti de zircons.\n- Poids : environ 8 g.",
+    usage: "Personnalisation & Entretien\n- Ce collier se vend tel quel : il ne se grave pas.\n- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.\n- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
+    returns: "Expédition & Retour\n- Expédié en lettre suivie, soigneusement protégé.\n- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "bracelet-plaque-breloque": {
+    material: "Taille & Matériaux\n- Bracelet à chaîne fine, petite plaque à graver et breloque (cœur, étoile ajourée ou papillon).\n- Chaîne et plaque en acier inoxydable ; breloque en acier inoxydable.\n- Finitions : doré (cœur ou étoile) ou argenté (cœur, étoile ou papillon).\n- Plaque d'environ 3 cm de long.\n- Tour de poignet : 12,5 cm + chaînette de rallonge de 4 cm. Fermoir mousqueton.",
+    usage: "Personnalisation & Entretien\n- Gravez un prénom, des initiales ou une date sur la plaque (une quinzaine de caractères).\n- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.\n- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
+    returns: "Expédition & Retour\n- Expédié en lettre suivie, soigneusement protégé.\n- Personnalisé par gravure = non remboursable une fois la gravure lancée (article L221-28).\n- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "bracelet-homme-trois-rangs": {
+    material: "Taille & Matériaux\n- Bracelet trois rangs : un rang plat et deux rangs tressés en simili cuir noir.\n- Plaque et perles ciselées en acier inoxydable doré, argenté ou noir, fermoir en métal.\n- Longueur : 21 cm. Poids : environ 35 g.",
+    usage: "Personnalisation & Entretien\n- Gravure de la plaque : un prénom, une date ou un message, offerte.\n- Évitez l'eau : retirez-le pour la douche, la baignade et le sport. S'il a été mouillé, laissez-le sécher à l'air libre, loin d'un radiateur.\n- Entretien : essuyez-le avec un chiffon doux et sec. Rangez-le à part pour que la plaque ne se raye pas.",
+    returns: "Expédition & Retour\n- Expédié soigneusement protégé.\n- Article personnalisé : il ne peut être ni repris ni échangé, sauf défaut ou erreur de notre part (art. L221-28 du Code de la consommation).\n- Un souci à la réception ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "bracelet-homme-plaque-longue": {
+    material: "Taille & Matériaux\n- Bracelet trois rangs : deux rangs plats et un rang tressé en simili cuir noir.\n- Plaque, perles et fermoir en acier inoxydable argenté ou noir.\n- Longueur : 21 cm. Poids : environ 28 g.",
+    usage: "Personnalisation & Entretien\n- Gravure de la plaque : un prénom, une date ou un message, offerte.\n- Évitez l'eau : retirez-le pour la douche, la baignade et le sport. S'il a été mouillé, laissez-le sécher à l'air libre, loin d'un radiateur.\n- Entretien : essuyez-le avec un chiffon doux et sec. Rangez-le à part pour que la plaque ne se raye pas.",
+    returns: "Expédition & Retour\n- Expédié soigneusement protégé.\n- Article personnalisé : il ne peut être ni repris ni échangé, sauf défaut ou erreur de notre part (art. L221-28 du Code de la consommation).\n- Un souci à la réception ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "bracelet-homme-deux-rangs": {
+    material: "Taille & Matériaux\n- Bracelet à deux rangs : un rang plat et un rang tressé en simili cuir noir.\n- Plaque en acier inoxydable brossé (4,1 × 0,68 cm) avec un bandeau noir, fermoir à clip en acier.\n- Longueur : 21 cm. Poids : environ 12 g.",
+    usage: "Personnalisation & Entretien\n- Gravure sur le rang plat en simili cuir, à côté de la plaque : un prénom, une date ou un message, offerte.\n- Évitez l'eau : retirez-le pour la douche, la baignade et le sport. S'il a été mouillé, laissez-le sécher à l'air libre, loin d'un radiateur.\n- Entretien : essuyez-le avec un chiffon doux et sec. Rangez-le à part pour que la plaque ne se raye pas.",
+    returns: "Expédition & Retour\n- Expédié soigneusement protégé.\n- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "bracelet-homme-tresse-bicolore": {
+    material: "Taille & Matériaux\n- Bracelet à trois liens : un lien plat et un lien tressé en simili cuir noir, une tresse de couleur (noire, blanche, dorée ou camel).\n- Perle ciselée et anneaux en acier inoxydable, fermoir en métal.\n- Poids : environ 25 g.",
+    usage: "Personnalisation & Entretien\n- Ce bracelet se vend tel quel : il ne se grave pas.\n- Évitez l'eau : retirez-le pour la douche, la baignade et le sport. S'il a été mouillé, laissez-le sécher à l'air libre, loin d'un radiateur.\n- Entretien : essuyez-le avec un chiffon doux et sec.",
+    returns: "Expédition & Retour\n- Expédié soigneusement protégé.\n- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "bracelet-homme-maille-venitienne": {
+    material: "Taille & Matériaux\n- Maille vénitienne de 2 mm en acier inoxydable, finition dorée ou argentée.\n- Petite plaque rectangulaire au bout de la chaînette de réglage, fermoir mousqueton.\n- Longueur : 19 à 22 cm, réglable. Poids : environ 5 g.",
+    usage: "Personnalisation & Entretien\n- Ce bracelet se vend tel quel : il ne se grave pas.\n- Mettez parfum, crème et laque avant votre bijou. Retirez-le pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment surtout les finitions dorées.\n- Entretien : essuyez-le avec un chiffon doux et sec après l'avoir porté ; s'il a été mouillé, séchez-le bien. Rangez-le à part, dans sa pochette, pour qu'il ne se raye pas.",
+    returns: "Expédition & Retour\n- Expédié soigneusement protégé.\n- Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "bracelet-homme-perles-tresse": {
+    material: "Taille & Matériaux\n- Bracelet à trois rangs : perles noires mates, rang plat en simili cuir noir, tresse en simili cuir noir et brun.\n- Fermoir aimanté noir.\n- Poids : environ 40 g.",
+    usage: "Personnalisation & Entretien\n- Gravure sur le rang plat en simili cuir : un prénom, une date ou un message, offerte.\n- Évitez l'eau : retirez-le pour la douche, la baignade et le sport. S'il a été mouillé, laissez-le sécher à l'air libre, loin d'un radiateur.\n- Entretien : essuyez-le avec un chiffon doux et sec. Gardez-le loin des cartes bancaires et du téléphone (fermoir aimanté).",
+    returns: "Expédition & Retour\n- Expédié soigneusement protégé.\n- Article personnalisé : il ne peut être ni repris ni échangé, sauf défaut ou erreur de notre part (art. L221-28 du Code de la consommation).\n- Un souci à la réception ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "ensemble-homme-plaque-noire": {
+    material: "Taille & Matériaux\n- Ensemble de trois pièces en acier inoxydable noir.\n- Collier : chaîne maille vénitienne de 60 cm, pendentif plaque.\n- Bracelet torsadé : 21 cm, fermoir mousqueton.\n- Bague lisse : 1,9 cm de diamètre, taille unique.\n- Poids : environ 50 g pour l'ensemble.",
+    usage: "Personnalisation & Entretien\n- Gravure du pendentif et de la bague : la première gravure est offerte, la deuxième coûte 3 €.\n- Mettez parfum, crème et laque avant vos bijoux. Retirez-les pour la douche, la piscine, la mer et le sport : le chlore, le sel et le savon abîment la finition noire.\n- Entretien : essuyez-les avec un chiffon doux et sec après les avoir portés ; s'ils ont été mouillés, séchez-les bien. Rangez-les à part pour qu'ils ne se rayent pas.",
+    returns: "Expédition & Retour\n- Expédié soigneusement protégé.\n- Article personnalisé : il ne peut être ni repris ni échangé, sauf défaut ou erreur de notre part (art. L221-28 du Code de la consommation).\n- Un souci à la réception ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
+  "ensemble-homme-plaque-acier": {
+    material: "Taille & Matériaux\n- Ensemble de trois pièces en acier inoxydable, finitions polie et brossée.\n- Collier : chaîne maille vénitienne de 60 cm, plaque rectangulaire de 4 × 1 cm.\n- Jonc : 6 cm de diamètre, s'ouvre pour l'enfiler.\n- Bague : 8 mm de large.",
+    usage: "Personnalisation & Entretien\n- Gravure du pendentif et de la bague : la première gravure est offerte, la deuxième coûte 3 €.\n- Mettez parfum, crème et laque avant vos bijoux. Retirez-les pour la douche, la piscine, la mer et le sport.\n- Entretien : essuyez-les avec un chiffon doux et sec après les avoir portés ; s'ils ont été mouillés, séchez-les bien. Rangez-les à part pour qu'ils ne se rayent pas.",
+    returns: "Expédition & Retour\n- Expédié soigneusement protégé.\n- Article personnalisé : il ne peut être ni repris ni échangé, sauf défaut ou erreur de notre part (art. L221-28 du Code de la consommation).\n- Un souci à la réception ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.",
+  },
   "bracelet-femme-papillon": {
     material: `Taille & Matériaux
 - Bracelet femme orné d'un papillon ajouré en acier inoxydable.

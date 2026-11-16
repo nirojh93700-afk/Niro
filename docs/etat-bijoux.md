@@ -4,7 +4,7 @@
 > après toute modification de `src/lib/products.js`. Il sert à retrouver l'état réglé
 > d'un bijou depuis n'importe quelle conversation, sans relire le code.
 
-> Généré le 2026-11-16 · 34 bijoux dans le code, dont 29 gravables et 5 vendus tels quels (aucune gravure — ne rien leur ajouter).
+> Généré le 2026-11-16 · 48 bijoux dans le code, dont 36 gravables et 12 vendus tels quels (aucune gravure — ne rien leur ajouter).
 
 ⚠️ **Ce document reflète le CODE.** Les prix, options et champs de gravure peuvent être
 réécrits depuis **Gestion → Produits & stock** : l'admin **prime toujours** sur le code
@@ -37,6 +37,20 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 | **Bracelet Cœur à graver** | femme | 22,41 € | comprise dans le prix | recto +3 € · verso +3 € |
 | **Collier Couple Cœur (lot de 2)** | couple | 22,41 € | comprise dans le prix | texte1 +3 € · texte2 +3 € |
 | **Collier Plaque Acier** | homme | 24,21 € – 27,81 € | comprise dans le prix | recto +3 € · verso +3 € · photo +8 € |
+| **Collier Papillon** | femme | 17,91 € | _pas de gravure_ | — |
+| **Collier Papillons scintillants** | femme | 16,11 € | _pas de gravure_ | — |
+| **Collier Papillon Ajouré** | femme | 15,21 € | _pas de gravure_ | — |
+| **Collier Envol de Papillons** | femme | 17,01 € | _pas de gravure_ | — |
+| **Collier Nœud scintillant** | femme | 14,31 € | _pas de gravure_ | — |
+| **Bracelet Prénom Gravé à Breloque** | femme | 22,41 € | comprise dans le prix | texte +3 € |
+| **Bracelet Homme Trois Rangs** | homme | 21,51 € | comprise dans le prix | texte +3 € |
+| **Bracelet Homme Plaque Longue** | homme | 21,51 € | comprise dans le prix | texte +3 € |
+| **Bracelet Homme Deux Rangs** | homme | 20,61 € | comprise dans le prix | texte +3 € |
+| **Bracelet Homme Tressé Bicolore** | homme | 19,71 € | _pas de gravure_ | — |
+| **Bracelet Homme Maille Vénitienne** | homme | 12,51 € | _pas de gravure_ | — |
+| **Bracelet Homme Perles et Tresse** | homme | 20,61 € | comprise dans le prix | texte +3 € |
+| **Ensemble Homme Plaque Noire** | homme | 35,01 € | comprise dans le prix | pendentif +3 € · bague +3 € |
+| **Ensemble Homme Plaque Acier** | homme | 35,01 € | comprise dans le prix | pendentif +3 € · bague +3 € |
 | **Collier Cœur scintillant doré** | femme | 22,41 € | _pas de gravure_ | — |
 | **Collier Perle solitaire** | femme | 17,91 € | _pas de gravure_ | — |
 | **Collier Cœur & Zircon doré** | femme | 22,41 € | comprise dans le prix | texte +3 € |
@@ -581,6 +595,368 @@ permanente). **Les suppléments de gravure ne sont PAS remisés** : +3 € = 3 �
 - + recto : **26,91 €**
 - + verso : **29,91 €**
 - + photo : **37,91 €**
+
+---
+
+### Collier Papillon
+
+`collier-papillon` · /produit/collier-papillon
+
+- **Rayon** : bijoux / femme · type « Collier »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+- **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Bleu | 21,90 € | 19,90 € | **17,91 €** | collier-papillon-bleu |
+| Rose et turquoise | 21,90 € | 19,90 € | **17,91 €** | collier-papillon-rose |
+| Rouge | 21,90 € | 19,90 € | **17,91 €** | collier-papillon-rouge |
+| Noir et transparent | 21,90 € | 19,90 € | **17,91 €** | collier-papillon-noir |
+| Doré · transparent | 21,90 € | 19,90 € | **17,91 €** | collier-papillon-dore |
+
+---
+
+### Collier Papillons scintillants
+
+`collier-papillons-scintillants` · /produit/collier-papillons-scintillants
+
+- **Rayon** : bijoux / femme · type « Collier »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+- **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Doré | 19,90 € | 17,90 € | **16,11 €** | collier-papillons-scintillants-dore |
+
+---
+
+### Collier Papillon Ajouré
+
+`collier-papillon-ajoure` · /produit/collier-papillon-ajoure
+
+- **Rayon** : bijoux / femme · type « Collier »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+- **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Doré | 18,90 € | 16,90 € | **15,21 €** | collier-papillon-ajoure-dore |
+
+---
+
+### Collier Envol de Papillons
+
+`collier-envol-papillons` · /produit/collier-envol-papillons
+
+- **Rayon** : bijoux / femme · type « Collier »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+- **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Doré | 20,90 € | 18,90 € | **17,01 €** | collier-envol-papillons-dore |
+
+---
+
+### Collier Nœud scintillant
+
+`collier-noeud-scintillant` · /produit/collier-noeud-scintillant
+
+- **Rayon** : bijoux / femme · type « Collier »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+- **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Doré | 17,90 € | 15,90 € | **14,31 €** | collier-noeud-scintillant-dore |
+
+---
+
+### Bracelet Prénom Gravé à Breloque
+
+`bracelet-plaque-breloque` · /produit/bracelet-plaque-breloque
+
+- **Rayon** : bijoux / femme · type « Bracelet personnalisé »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Collier
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Doré · cœur | 27,90 € | 24,90 € | **22,41 €** | bracelet-plaque-breloque-dore-coeur |
+| Doré · étoile | 27,90 € | 24,90 € | **22,41 €** | bracelet-plaque-breloque-dore-etoile |
+| Argenté · cœur | 27,90 € | 24,90 € | **22,41 €** | bracelet-plaque-breloque-argente-coeur |
+| Argenté · étoile | 27,90 € | 24,90 € | **22,41 €** | bracelet-plaque-breloque-argente-etoile |
+| Argenté · papillon | 27,90 € | 24,90 € | **22,41 €** | bracelet-plaque-breloque-argente-papillon |
+
+**Personnalisation**
+
+| Champ | Type | Obligatoire | Supplément | Affiché |
+|---|---|---|---|---|
+| Texte à graver sur la plaque (+3 €) | texte (15 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Doré · cœur »)
+
+- sans rien graver : **22,41 €**
+- + texte : **22,41 €**
+
+---
+
+### Bracelet Homme Trois Rangs
+
+`bracelet-homme-trois-rangs` · /produit/bracelet-homme-trois-rangs
+
+- **Rayon** : bijoux / homme · type « Bracelet personnalisé »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Noir et doré | 26,90 € | 23,90 € | **21,51 €** | bracelet-homme-trois-rangs-noir-dore |
+| Noir et argenté | 26,90 € | 23,90 € | **21,51 €** | bracelet-homme-trois-rangs-noir-argente |
+| Tout noir | 26,90 € | 23,90 € | **21,51 €** | bracelet-homme-trois-rangs-tout-noir |
+
+**Personnalisation**
+
+| Champ | Type | Obligatoire | Supplément | Affiché |
+|---|---|---|---|---|
+| Texte gravé sur la plaque (+3 €) | texte (20 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Noir et doré »)
+
+- sans rien graver : **21,51 €**
+- + texte : **21,51 €**
+
+---
+
+### Bracelet Homme Plaque Longue
+
+`bracelet-homme-plaque-longue` · /produit/bracelet-homme-plaque-longue
+
+- **Rayon** : bijoux / homme · type « Bracelet personnalisé »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Noir et acier | 26,90 € | 23,90 € | **21,51 €** | bracelet-homme-plaque-longue-acier |
+| Tout noir | 26,90 € | 23,90 € | **21,51 €** | bracelet-homme-plaque-longue-noir |
+
+**Personnalisation**
+
+| Champ | Type | Obligatoire | Supplément | Affiché |
+|---|---|---|---|---|
+| Texte gravé sur la plaque (+3 €) | texte (20 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Noir et acier »)
+
+- sans rien graver : **21,51 €**
+- + texte : **21,51 €**
+
+---
+
+### Bracelet Homme Deux Rangs
+
+`bracelet-homme-deux-rangs` · /produit/bracelet-homme-deux-rangs
+
+- **Rayon** : bijoux / homme · type « Bracelet personnalisé »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Noir et acier | 25,90 € | 22,90 € | **20,61 €** | bracelet-homme-deux-rangs |
+
+**Personnalisation**
+
+| Champ | Type | Obligatoire | Supplément | Affiché |
+|---|---|---|---|---|
+| Texte gravé sur le rang plat en simili cuir (+3 €) | texte (20 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Noir et acier »)
+
+- sans rien graver : **20,61 €**
+- + texte : **20,61 €**
+
+---
+
+### Bracelet Homme Tressé Bicolore
+
+`bracelet-homme-tresse-bicolore` · /produit/bracelet-homme-tresse-bicolore
+
+- **Rayon** : bijoux / homme · type « Bracelet »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+- **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Noir | 23,90 € | 21,90 € | **19,71 €** | bracelet-homme-tresse-noir |
+| Noir et blanc | 23,90 € | 21,90 € | **19,71 €** | bracelet-homme-tresse-blanc |
+| Noir et doré | 23,90 € | 21,90 € | **19,71 €** | bracelet-homme-tresse-dore |
+| Noir et camel | 23,90 € | 21,90 € | **19,71 €** | bracelet-homme-tresse-camel |
+
+---
+
+### Bracelet Homme Maille Vénitienne
+
+`bracelet-homme-maille-venitienne` · /produit/bracelet-homme-maille-venitienne
+
+- **Rayon** : bijoux / homme · type « Bracelet personnalisé »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+- **Gravure : AUCUNE** — ce bijou se vend tel quel. ⛔ Ne rien ajouter ici.
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Doré | 15,90 € | 13,90 € | **12,51 €** | bracelet-homme-maille-venitienne-dore |
+| Argenté | 15,90 € | 13,90 € | **12,51 €** | bracelet-homme-maille-venitienne-argente |
+
+---
+
+### Bracelet Homme Perles et Tresse
+
+`bracelet-homme-perles-tresse` · /produit/bracelet-homme-perles-tresse
+
+- **Rayon** : bijoux / homme · type « Bracelet personnalisé »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Boîte cadeau, Pochette microfibre, Pack Bracelet
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Noir | 25,90 € | 22,90 € | **20,61 €** | bracelet-homme-perles-tresse |
+
+**Personnalisation**
+
+| Champ | Type | Obligatoire | Supplément | Affiché |
+|---|---|---|---|---|
+| Texte gravé sur le rang plat en simili cuir (+3 €) | texte (20 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Noir »)
+
+- sans rien graver : **20,61 €**
+- + texte : **20,61 €**
+
+---
+
+### Ensemble Homme Plaque Noire
+
+`ensemble-homme-plaque-noire` · /produit/ensemble-homme-plaque-noire
+
+- **Rayon** : bijoux / homme · type « Ensemble »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Pochette microfibre
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Noir | 42,90 € | 38,90 € | **35,01 €** | ensemble-homme-plaque-noire-noir |
+
+**Personnalisation**
+
+| Champ | Type | Obligatoire | Supplément | Affiché |
+|---|---|---|---|---|
+| Texte gravé sur le pendentif (+3 €) | texte (30 car.) | non | +3 € | toujours |
+| Texte gravé sur la bague (+3 €) | texte (15 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Noir »)
+
+- sans rien graver : **35,01 €**
+- + pendentif : **35,01 €**
+- + bague : **38,01 €**
+
+---
+
+### Ensemble Homme Plaque Acier
+
+`ensemble-homme-plaque-acier` · /produit/ensemble-homme-plaque-acier
+
+- **Rayon** : bijoux / homme · type « Ensemble »
+- **Ajouté le** : 2026-11-16
+- **Livraison** : 72 g emballé · lettre suivie possible
+- **Emballages proposés** : Sac cadeau, Pochette microfibre
+- **Fiche détaillée** (Taille & Matériaux…) : oui
+
+**Options / prix**
+
+| Option | Prix du code | Barré | Payé | Stock suivi |
+|---|---|---|---|---|
+| Acier | 42,90 € | 38,90 € | **35,01 €** | ensemble-homme-plaque-acier-argente |
+
+**Personnalisation**
+
+| Champ | Type | Obligatoire | Supplément | Affiché |
+|---|---|---|---|---|
+| Texte gravé sur le pendentif (+3 €) | texte (20 car.) | non | +3 € | toujours |
+| Texte gravé sur la bague (+3 €) | texte (15 car.) | non | +3 € | toujours |
+| Police de gravure | font | non | — | toujours |
+
+**Ce que paie la cliente** (option « Acier »)
+
+- sans rien graver : **35,01 €**
+- + pendentif : **35,01 €**
+- + bague : **38,01 €**
 
 ---
 

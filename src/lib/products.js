@@ -1836,6 +1836,774 @@ export const products = [
     descriptionHtml: `<p>Collier à <strong>plaque rectangulaire</strong> en acier inoxydable, surface lisse gravable des deux côtés. Style épuré et contemporain.</p>
 <p>Faites graver le <strong>recto</strong>, le <strong>verso</strong> ou les deux (une face offerte, la 2e +3 €), et même une <strong>photo gravée</strong> (+8 €, offerte si c'est la seule gravure).</p>`,
   },
+  // 16/11/2026 — 14 bijoux du bon Nihao NHFR610292420591 (maquettes du 15/11, gérant : « tu mets en ligne »).
+  {
+    "slug": "collier-papillon",
+    "badge": "Nouveau",
+    "name": "Collier Papillon",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "femme",
+    "title": "Collier papillon aux ailes translucides, corps serti de zircons",
+    "category": "bijoux",
+    "type": "Collier",
+    "tagline": "Des ailes translucides et un corps serti de zircons qui scintille, à offrir.",
+    "personalizable": false,
+    "images": [
+      "/produits/nihao/collier-papillon-bleu.jpg",
+      "/produits/nihao/collier-papillon-rose-turquoise.jpg",
+      "/produits/nihao/collier-papillon-rouge.jpg",
+      "/produits/nihao/collier-papillon-noir.jpg",
+      "/produits/nihao/collier-papillon-dore.jpg",
+      "/produits/nihao/collier-papillon-porte-dore.jpg"
+    ],
+    "variants": [
+      {
+        "id": "collier-papillon-bleu",
+        "title": "Bleu",
+        "price": 21.9,
+        "stockId": "collier-papillon-bleu",
+        "image": "/produits/nihao/collier-papillon-bleu.jpg"
+      },
+      {
+        "id": "collier-papillon-rose",
+        "title": "Rose et turquoise",
+        "price": 21.9,
+        "stockId": "collier-papillon-rose",
+        "image": "/produits/nihao/collier-papillon-rose-turquoise.jpg"
+      },
+      {
+        "id": "collier-papillon-rouge",
+        "title": "Rouge",
+        "price": 21.9,
+        "stockId": "collier-papillon-rouge",
+        "image": "/produits/nihao/collier-papillon-rouge.jpg"
+      },
+      {
+        "id": "collier-papillon-noir",
+        "title": "Noir et transparent",
+        "price": 21.9,
+        "stockId": "collier-papillon-noir",
+        "image": "/produits/nihao/collier-papillon-noir.jpg"
+      },
+      {
+        "id": "collier-papillon-dore",
+        "title": "Doré · transparent",
+        "price": 21.9,
+        "stockId": "collier-papillon-dore",
+        "image": "/produits/nihao/collier-papillon-dore.jpg"
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>papillon aux ailes translucides</strong>, avec un <strong>corps serti de petits zircons</strong> qui scintille à la lumière : quatre modèles argentés aux ailes de résine colorée parsemée de paillettes dorées, et un modèle doré aux ailes transparentes serties d'un contour doré. Un bijou léger et lumineux, à offrir ou à s'offrir.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Ailes des modèles argentés :</strong> résine colorée translucide, paillettes dorées</li>\n<li><strong>Corps :</strong> petits zircons</li>\n<li><strong>Finition argentée (bleu, rose et turquoise, rouge, noir et transparent) :</strong> pendentif et chaîne fine en acier inoxydable</li>\n<li><strong>Modèle doré :</strong> ailes transparentes aux reflets irisés, serties dans un contour doré ; pendentif en cuivre doré, chaîne en acier inoxydable doré à maillons plats</li>\n<li><strong>Fermoir :</strong> mousqueton</li>\n</ul>\n<p>Bijou prêt à offrir : il ne se grave pas.</p>"
+  },
+  {
+    "slug": "collier-papillons-scintillants",
+    "badge": "Nouveau",
+    "name": "Collier Papillons scintillants",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "femme",
+    "title": "Collier deux papillons sertis de zircons, chaîne fine dorée — acier inoxydable",
+    "category": "bijoux",
+    "type": "Collier",
+    "tagline": "Un grand papillon pavé de zircons et un petit papillon ajouré qui s'envolent sur une chaîne fine.",
+    "personalizable": false,
+    "images": [
+      "/produits/nihao/collier-papillons-scintillants-boite.jpg",
+      "/produits/nihao/collier-papillons-scintillants-porte-1.jpg",
+      "/produits/nihao/collier-papillons-scintillants-porte-2.jpg"
+    ],
+    "variants": [
+      {
+        "id": "collier-papillons-scintillants-dore",
+        "title": "Doré",
+        "price": 19.9,
+        "stockId": "collier-papillons-scintillants-dore",
+        "image": "/produits/nihao/collier-papillons-scintillants-boite.jpg"
+      }
+    ],
+    "descriptionHtml": "<p>Deux papillons sur une <strong>chaîne fine dorée</strong> : un <strong>grand papillon pavé de petits zircons</strong> qui scintille à la lumière et un <strong>petit papillon ajouré</strong>, suspendus chacun à sa chaînette sous une bélière sertie de zircons. Un bijou délicat, à offrir ou à s'offrir.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Chaîne :</strong> acier inoxydable doré, maillons plats qui accrochent la lumière</li>\n<li><strong>Pendentif :</strong> cuivre doré serti de petits zircons</li>\n<li><strong>Fermoir :</strong> mousqueton</li>\n<li><strong>Poids :</strong> environ 7 g</li>\n</ul>\n<p>Ce collier se vend tel quel, prêt à offrir : il ne se grave pas.</p>"
+  },
+  {
+    "slug": "collier-papillon-ajoure",
+    "badge": "Nouveau",
+    "name": "Collier Papillon Ajouré",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "femme",
+    "title": "Collier papillon ajouré serti de zircons, chaîne fine dorée",
+    "category": "bijoux",
+    "type": "Collier",
+    "tagline": "Un papillon doré aux ailes ajourées, pavé de zircons, qui semble prendre son envol.",
+    "personalizable": false,
+    "images": [
+      "/produits/nihao/collier-papillon-ajoure-boite.jpg",
+      "/produits/nihao/collier-papillon-ajoure-porte-2.jpg",
+      "/produits/nihao/collier-papillon-ajoure-porte-1.jpg"
+    ],
+    "variants": [
+      {
+        "id": "collier-papillon-ajoure-dore",
+        "title": "Doré",
+        "price": 18.9,
+        "stockId": "collier-papillon-ajoure-dore",
+        "image": "/produits/nihao/collier-papillon-ajoure-boite.jpg"
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>papillon doré</strong> tout en légèreté : ses ailes du haut sont <strong>ajourées</strong> de fines lignes, celles du bas sont <strong>pavées de zircons</strong> et se prolongent en deux fines queues. Suspendu à une chaîne fine dorée, il se porte seul au quotidien ou en superposition.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Chaîne :</strong> acier inoxydable doré, fermoir mousqueton</li>\n<li><strong>Pendentif :</strong> cuivre doré serti de zircons</li>\n<li><strong>Poids :</strong> environ 7 g</li>\n</ul>\n<p>Ce collier se vend tel quel, prêt à offrir : il ne se grave pas.</p>"
+  },
+  {
+    "slug": "collier-envol-papillons",
+    "badge": "Nouveau",
+    "name": "Collier Envol de Papillons",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "femme",
+    "title": "Collier papillons à pampille, sertis de strass, chaîne fine dorée",
+    "category": "bijoux",
+    "type": "Collier",
+    "tagline": "Une volée de papillons dorés qui descend en pampille jusqu'à une petite pierre brillante.",
+    "personalizable": false,
+    "images": [
+      "/produits/nihao/collier-envol-papillons-boite.jpg",
+      "/produits/nihao/collier-envol-papillons-porte-1.jpg",
+      "/produits/nihao/collier-envol-papillons-porte-2.jpg"
+    ],
+    "variants": [
+      {
+        "id": "collier-envol-papillons-dore",
+        "title": "Doré",
+        "price": 20.9,
+        "stockId": "collier-envol-papillons-dore",
+        "image": "/produits/nihao/collier-envol-papillons-boite.jpg"
+      }
+    ],
+    "descriptionHtml": "<p>Une <strong>volée de papillons dorés</strong> sur une chaîne fine : deux petits papillons sertis de strass, un <strong>grand papillon ajouré</strong> orné d'une pierre en forme de navette, puis une <strong>pampille</strong> qui descend avec un dernier papillon et une <strong>pierre ronde brillante</strong>. Un bijou délicat, à offrir ou à s'offrir.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Chaîne :</strong> acier inoxydable doré, maille fine</li>\n<li><strong>Papillons :</strong> cuivre doré serti de strass</li>\n<li><strong>Poids :</strong> environ 5 g</li>\n</ul>\n<p>Ce collier se vend tel quel, prêt à offrir : il ne se grave pas.</p>"
+  },
+  {
+    "slug": "collier-noeud-scintillant",
+    "badge": "Nouveau",
+    "name": "Collier Nœud scintillant",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "femme",
+    "title": "Collier nœud serti de zircons et goutte scintillante, chaîne fine dorée",
+    "category": "bijoux",
+    "type": "Collier",
+    "tagline": "Un nœud pavé de zircons, une goutte qui tombe et un petit nœud sur la chaîne : délicat et lumineux.",
+    "personalizable": false,
+    "images": [
+      "/produits/nihao/collier-noeud-scintillant-plateau.jpg",
+      "/produits/nihao/collier-noeud-scintillant-porte-1.jpg",
+      "/produits/nihao/collier-noeud-scintillant-porte-2.jpg"
+    ],
+    "variants": [
+      {
+        "id": "collier-noeud-scintillant-dore",
+        "title": "Doré",
+        "price": 17.9,
+        "stockId": "collier-noeud-scintillant-dore",
+        "image": "/produits/nihao/collier-noeud-scintillant-plateau.jpg"
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>nœud pavé de petits zircons</strong> au centre d'une <strong>chaîne fine dorée</strong>, d'où tombe une fine chaînette terminée par un <strong>zircon rond serti</strong>. Un <strong>petit nœud doré</strong> est posé sur le côté de la chaîne. Un bijou délicat, à offrir ou à s'offrir.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Chaîne :</strong> acier inoxydable doré, maille fine</li>\n<li><strong>Nœud :</strong> métal doré serti de petits zircons</li>\n<li><strong>Poids :</strong> environ 8 g</li>\n</ul>\n<p>Ce collier se vend tel quel, prêt à offrir : il ne se grave pas.</p>"
+  },
+  {
+    "slug": "bracelet-plaque-breloque",
+    "badge": "Nouveau",
+    "name": "Bracelet Prénom Gravé à Breloque",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "femme",
+    "title": "Bracelet prénom gravé femme — plaque personnalisée, breloque cœur, étoile ou papillon",
+    "category": "bijoux",
+    "type": "Bracelet personnalisé",
+    "tagline": "Une petite plaque à graver et une breloque qui se balance : un bracelet tout en finesse, pour elle.",
+    "personalizable": true,
+    "personalizationLabel": "Gravure de la plaque (offerte)",
+    "engravingPricing": {
+      "moinsCherCompris": true,
+      "textKeys": [
+        "texte"
+      ],
+      "textExtra": 3
+    },
+    "personalizationFields": [
+      {
+        "key": "note",
+        "type": "note",
+        "text": "La petite plaque se grave : un prénom, des initiales ou une date. Comptez une quinzaine de caractères pour que la gravure reste bien lisible. La gravure est offerte ; laissez le champ vide pour un bracelet sans gravure."
+      },
+      {
+        "key": "texte",
+        "label": "Texte à graver sur la plaque (+3 €)",
+        "placeholder": "Prénom, initiales, date…",
+        "maxLength": 15,
+        "optional": true
+      },
+      {
+        "key": "police",
+        "type": "font",
+        "label": "Police de gravure",
+        "optional": true
+      }
+    ],
+    "images": [
+      "/produits/nihao/bracelet-plaque-breloque-dore-coeur.jpg",
+      "/produits/nihao/bracelet-plaque-breloque-dore-etoile.jpg",
+      "/produits/nihao/bracelet-plaque-breloque-argente-coeur.jpg",
+      "/produits/nihao/bracelet-plaque-breloque-argente-etoile.jpg",
+      "/produits/nihao/bracelet-plaque-breloque-argente-papillon.jpg",
+      "/produits/nihao/bracelet-plaque-breloque-porte-dore-1.jpg",
+      "/produits/nihao/bracelet-plaque-breloque-porte-dore-2.jpg",
+      "/produits/nihao/bracelet-plaque-breloque-porte-argente.jpg"
+    ],
+    "variants": [
+      {
+        "id": "bracelet-plaque-breloque-dore-coeur",
+        "title": "Doré · cœur",
+        "price": 27.9,
+        "stockId": "bracelet-plaque-breloque-dore-coeur",
+        "image": "/produits/nihao/bracelet-plaque-breloque-dore-coeur.jpg"
+      },
+      {
+        "id": "bracelet-plaque-breloque-dore-etoile",
+        "title": "Doré · étoile",
+        "price": 27.9,
+        "stockId": "bracelet-plaque-breloque-dore-etoile",
+        "image": "/produits/nihao/bracelet-plaque-breloque-dore-etoile.jpg"
+      },
+      {
+        "id": "bracelet-plaque-breloque-argente-coeur",
+        "title": "Argenté · cœur",
+        "price": 27.9,
+        "stockId": "bracelet-plaque-breloque-argente-coeur",
+        "image": "/produits/nihao/bracelet-plaque-breloque-argente-coeur.jpg"
+      },
+      {
+        "id": "bracelet-plaque-breloque-argente-etoile",
+        "title": "Argenté · étoile",
+        "price": 27.9,
+        "stockId": "bracelet-plaque-breloque-argente-etoile",
+        "image": "/produits/nihao/bracelet-plaque-breloque-argente-etoile.jpg"
+      },
+      {
+        "id": "bracelet-plaque-breloque-argente-papillon",
+        "title": "Argenté · papillon",
+        "price": 27.9,
+        "stockId": "bracelet-plaque-breloque-argente-papillon",
+        "image": "/produits/nihao/bracelet-plaque-breloque-argente-papillon.jpg"
+      }
+    ],
+    "descriptionHtml": "<p>Un bracelet <strong>tout en finesse</strong> : une chaîne fine, une <strong>petite plaque à graver</strong> au prénom de votre choix et une <strong>breloque</strong> qui se balance à côté, en forme de cœur, d'étoile ajourée ou de papillon.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Matière :</strong> acier inoxydable (chaîne et plaque), breloque en acier inoxydable</li>\n<li><strong>Cinq modèles :</strong> doré avec un cœur ou une étoile, argenté avec un cœur, une étoile ou un papillon</li>\n<li><strong>Plaque :</strong> environ 3 cm de long</li>\n<li><strong>Tour de poignet :</strong> 12,5 cm, avec une chaînette de rallonge de 4 cm — pour un poignet fin</li>\n<li><strong>Fermoir :</strong> mousqueton</li>\n<li><strong>Gravure offerte :</strong> un prénom, des initiales ou une date sur la plaque</li>\n</ul>\n<p>Léger et discret, il se porte tous les jours. Un joli cadeau pour une jeune fille, une adolescente ou une femme au poignet menu.</p>"
+  },
+  {
+    "slug": "bracelet-homme-trois-rangs",
+    "badge": "Nouveau",
+    "name": "Bracelet Homme Trois Rangs",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "homme",
+    "title": "Bracelet homme trois rangs à plaque gravée, simili cuir noir et acier",
+    "category": "bijoux",
+    "type": "Bracelet personnalisé",
+    "tagline": "Trois rangs de simili cuir noir, une plaque à graver et deux perles d'acier ciselées : doré, argenté ou tout noir.",
+    "personalizable": true,
+    "personalizationLabel": "Gravure de la plaque",
+    "images": [
+      "/produits/nihao/bracelet-homme-trois-rangs-trois-couleurs.jpg",
+      "/produits/nihao/bracelet-homme-trois-rangs-dore.jpg",
+      "/produits/nihao/bracelet-homme-trois-rangs-argente.jpg",
+      "/produits/nihao/bracelet-homme-trois-rangs-noir.jpg",
+      "/produits/nihao/bracelet-homme-trois-rangs-porte-argente.jpg",
+      "/produits/nihao/bracelet-homme-trois-rangs-argente-face.jpg",
+      "/produits/nihao/bracelet-homme-trois-rangs-argente-perles.jpg",
+      "/produits/nihao/bracelet-homme-trois-rangs-argente-fermoir.jpg",
+      "/produits/nihao/bracelet-homme-trois-rangs-mesures-fr.jpg"
+    ],
+    "variants": [
+      {
+        "id": "bracelet-homme-trois-rangs-noir-dore",
+        "title": "Noir et doré",
+        "price": 26.9,
+        "stockId": "bracelet-homme-trois-rangs-noir-dore",
+        "image": "/produits/nihao/bracelet-homme-trois-rangs-dore.jpg"
+      },
+      {
+        "id": "bracelet-homme-trois-rangs-noir-argente",
+        "title": "Noir et argenté",
+        "price": 26.9,
+        "stockId": "bracelet-homme-trois-rangs-noir-argente",
+        "image": "/produits/nihao/bracelet-homme-trois-rangs-argente.jpg"
+      },
+      {
+        "id": "bracelet-homme-trois-rangs-tout-noir",
+        "title": "Tout noir",
+        "price": 26.9,
+        "stockId": "bracelet-homme-trois-rangs-tout-noir",
+        "image": "/produits/nihao/bracelet-homme-trois-rangs-noir.jpg"
+      }
+    ],
+    "engravingPricing": {
+      "moinsCherCompris": true,
+      "textKeys": [
+        "texte"
+      ],
+      "textExtra": 3
+    },
+    "personalizationFields": [
+      {
+        "key": "texte",
+        "label": "Texte gravé sur la plaque (+3 €)",
+        "placeholder": "Prénom, date, message…",
+        "maxLength": 20,
+        "optional": true
+      },
+      {
+        "key": "police",
+        "type": "font",
+        "label": "Police de gravure",
+        "optional": true
+      },
+      {
+        "key": "note",
+        "type": "note",
+        "text": "La gravure de la plaque est offerte. Laissez vide pour un bracelet sans gravure."
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>bracelet homme à trois rangs</strong> : un rang plat et deux rangs tressés en <strong>simili cuir noir</strong>, une <strong>plaque</strong> à graver et deux <strong>perles d'acier ciselées</strong>, en doré, en argenté ou tout en noir. Un prénom, une date ou un message sur la plaque, et le cadeau est prêt.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Matière :</strong> simili cuir noir, plaque et perles en acier inoxydable (doré, argenté ou noir), fermoir en métal</li>\n<li><strong>Couleurs :</strong> noir et doré, noir et argenté, tout noir</li>\n<li><strong>Longueur :</strong> 21 cm</li>\n<li><strong>Poids :</strong> environ 35 g</li>\n</ul>"
+  },
+  {
+    "slug": "bracelet-homme-plaque-longue",
+    "badge": "Nouveau",
+    "name": "Bracelet Homme Plaque Longue",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "homme",
+    "title": "Bracelet homme à plaque longue gravée, simili cuir noir tressé et acier",
+    "category": "bijoux",
+    "type": "Bracelet personnalisé",
+    "tagline": "Trois rangs de simili cuir noir, une longue plaque d'acier à graver et un fermoir en acier : argenté ou tout noir.",
+    "personalizable": true,
+    "personalizationLabel": "Gravure de la plaque",
+    "images": [
+      "/produits/nihao/bracelet-homme-plaque-longue-deux-couleurs.jpg",
+      "/produits/nihao/bracelet-homme-plaque-longue-argente.jpg",
+      "/produits/nihao/bracelet-homme-plaque-longue-noir.jpg",
+      "/produits/nihao/bracelet-homme-plaque-longue-argente-face.jpg",
+      "/produits/nihao/bracelet-homme-plaque-longue-mesures-fr.jpg"
+    ],
+    "variants": [
+      {
+        "id": "bracelet-homme-plaque-longue-acier",
+        "title": "Noir et acier",
+        "price": 26.9,
+        "stockId": "bracelet-homme-plaque-longue-acier",
+        "image": "/produits/nihao/bracelet-homme-plaque-longue-argente.jpg"
+      },
+      {
+        "id": "bracelet-homme-plaque-longue-noir",
+        "title": "Tout noir",
+        "price": 26.9,
+        "stockId": "bracelet-homme-plaque-longue-noir",
+        "image": "/produits/nihao/bracelet-homme-plaque-longue-noir.jpg"
+      }
+    ],
+    "engravingPricing": {
+      "moinsCherCompris": true,
+      "textKeys": [
+        "texte"
+      ],
+      "textExtra": 3
+    },
+    "personalizationFields": [
+      {
+        "key": "texte",
+        "label": "Texte gravé sur la plaque (+3 €)",
+        "placeholder": "Prénom, date, message…",
+        "maxLength": 20,
+        "optional": true
+      },
+      {
+        "key": "police",
+        "type": "font",
+        "label": "Police de gravure",
+        "optional": true
+      },
+      {
+        "key": "note",
+        "type": "note",
+        "text": "La gravure de la plaque est offerte. Laissez vide pour un bracelet sans gravure."
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>bracelet homme à trois rangs</strong> : deux rangs plats et un rang tressé en <strong>simili cuir noir</strong>, une <strong>longue plaque d'acier</strong> à graver, des perles d'acier sur le rang tressé et un fermoir en acier. En argenté sur noir ou tout en noir. Un prénom, une date ou un message sur la plaque, et le cadeau est prêt.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Matière :</strong> simili cuir noir, plaque, perles et fermoir en acier inoxydable (argenté ou noir)</li>\n<li><strong>Couleurs :</strong> noir et acier, tout noir</li>\n<li><strong>Longueur :</strong> 21 cm</li>\n<li><strong>Poids :</strong> environ 28 g</li>\n</ul>"
+  },
+  {
+    "slug": "bracelet-homme-deux-rangs",
+    "badge": "Nouveau",
+    "name": "Bracelet Homme Deux Rangs",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "homme",
+    "title": "Bracelet homme deux rangs gravé, simili cuir noir et plaque en acier",
+    "category": "bijoux",
+    "type": "Bracelet personnalisé",
+    "tagline": "Un rang plat et un rang tressé en simili cuir noir, une plaque en acier brossé au bandeau noir.",
+    "personalizable": true,
+    "personalizationLabel": "Gravure du rang plat",
+    "images": [
+      "/produits/nihao/bracelet-homme-deux-rangs-blanc.jpg",
+      "/produits/nihao/bracelet-homme-deux-rangs-pierre-devant.jpg",
+      "/produits/nihao/bracelet-homme-deux-rangs-pierre.jpg",
+      "/produits/nihao/bracelet-homme-deux-rangs-pierre-face.jpg",
+      "/produits/nihao/bracelet-homme-deux-rangs-fermoir.jpg",
+      "/produits/nihao/bracelet-homme-deux-rangs-porte.jpg",
+      "/produits/nihao/bracelet-homme-deux-rangs-porte-motif.jpg",
+      "/produits/nihao/bracelet-homme-deux-rangs-mesures-fr.jpg"
+    ],
+    "variants": [
+      {
+        "id": "bracelet-homme-deux-rangs",
+        "title": "Noir et acier",
+        "price": 25.9,
+        "stockId": "bracelet-homme-deux-rangs",
+        "image": "/produits/nihao/bracelet-homme-deux-rangs-blanc.jpg"
+      }
+    ],
+    "engravingPricing": {
+      "moinsCherCompris": true,
+      "textKeys": [
+        "texte"
+      ],
+      "textExtra": 3
+    },
+    "personalizationFields": [
+      {
+        "key": "texte",
+        "label": "Texte gravé sur le rang plat en simili cuir (+3 €)",
+        "placeholder": "Prénom, date, message…",
+        "maxLength": 20,
+        "optional": true
+      },
+      {
+        "key": "police",
+        "type": "font",
+        "label": "Police de gravure",
+        "optional": true
+      },
+      {
+        "key": "note",
+        "type": "note",
+        "text": "La gravure est offerte : elle se fait sur le rang plat en simili cuir, à côté de la plaque. Laissez vide pour un bracelet sans gravure."
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>bracelet homme à deux rangs</strong> : un rang plat et un rang tressé en <strong>simili cuir noir</strong>, réunis par une <strong>plaque en acier brossé</strong> ornée d'un bandeau noir. Il se ferme par un fermoir à clip en acier. Un prénom, une date ou un message gravé sur le rang plat, et le cadeau est prêt.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Matière :</strong> simili cuir noir, plaque et fermoir en acier inoxydable</li>\n<li><strong>Plaque :</strong> 4,1 × 0,68 cm</li>\n<li><strong>Longueur :</strong> 21 cm</li>\n<li><strong>Poids :</strong> environ 12 g</li>\n</ul>\n"
+  },
+  {
+    "slug": "bracelet-homme-tresse-bicolore",
+    "badge": "Nouveau",
+    "name": "Bracelet Homme Tressé Bicolore",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "homme",
+    "title": "Bracelet homme tressé trois liens, simili cuir noir et couleur, fermoir acier",
+    "category": "bijoux",
+    "type": "Bracelet",
+    "tagline": "Trois liens de simili cuir, dont une tresse de couleur, et une perle d'acier ciselée.",
+    "personalizable": false,
+    "images": [
+      "/produits/nihao/bracelet-homme-tresse-bicolore-quatre-couleurs.jpg",
+      "/produits/nihao/bracelet-homme-tresse-bicolore-dore.jpg",
+      "/produits/nihao/bracelet-homme-tresse-bicolore-camel.jpg",
+      "/produits/nihao/bracelet-homme-tresse-bicolore-porte-blanc.jpg"
+    ],
+    "variants": [
+      {
+        "id": "bracelet-homme-tresse-noir",
+        "title": "Noir",
+        "price": 23.9,
+        "stockId": "bracelet-homme-tresse-noir",
+        "image": "/produits/nihao/bracelet-homme-tresse-bicolore-quatre-couleurs.jpg"
+      },
+      {
+        "id": "bracelet-homme-tresse-blanc",
+        "title": "Noir et blanc",
+        "price": 23.9,
+        "stockId": "bracelet-homme-tresse-blanc",
+        "image": "/produits/nihao/bracelet-homme-tresse-bicolore-porte-blanc.jpg"
+      },
+      {
+        "id": "bracelet-homme-tresse-dore",
+        "title": "Noir et doré",
+        "price": 23.9,
+        "stockId": "bracelet-homme-tresse-dore",
+        "image": "/produits/nihao/bracelet-homme-tresse-bicolore-dore.jpg"
+      },
+      {
+        "id": "bracelet-homme-tresse-camel",
+        "title": "Noir et camel",
+        "price": 23.9,
+        "stockId": "bracelet-homme-tresse-camel",
+        "image": "/produits/nihao/bracelet-homme-tresse-bicolore-camel.jpg"
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>bracelet homme à trois liens</strong> : un lien plat et un lien tressé en <strong>simili cuir noir</strong>, une <strong>tresse de couleur</strong> (noire, blanche, dorée ou camel) et une <strong>perle d'acier ciselée</strong> entre deux anneaux. Il se ferme par un fermoir en métal.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Matière :</strong> simili cuir, perle et anneaux en acier inoxydable, fermoir en métal</li>\n<li><strong>Couleurs :</strong> noir, noir et blanc, noir et doré, noir et camel</li>\n<li><strong>Poids :</strong> environ 25 g</li>\n</ul>\n<p>Ce bracelet se vend tel quel, prêt à offrir : il ne se grave pas.</p>"
+  },
+  {
+    "slug": "bracelet-homme-maille-venitienne",
+    "badge": "Nouveau",
+    "name": "Bracelet Homme Maille Vénitienne",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "homme",
+    "title": "Bracelet homme maille vénitienne à plaque, acier inoxydable",
+    "category": "bijoux",
+    "type": "Bracelet personnalisé",
+    "tagline": "Une fine maille vénitienne en acier et sa petite plaque, en doré ou en argenté. Prêt à offrir.",
+    "personalizable": false,
+    "images": [
+      "/produits/nihao/bracelet-homme-maille-venitienne-deux-couleurs.jpg",
+      "/produits/nihao/bracelet-homme-maille-venitienne-dore.jpg",
+      "/produits/nihao/bracelet-homme-maille-venitienne-argente-blanc.jpg",
+      "/produits/nihao/bracelet-homme-maille-venitienne-argente.jpg",
+      "/produits/nihao/bracelet-homme-maille-venitienne-argente-porte.jpg",
+      "/produits/nihao/bracelet-homme-maille-venitienne-dore-porte.jpg",
+      "/produits/nihao/bracelet-homme-maille-venitienne-dore-poing.jpg",
+      "/produits/nihao/bracelet-homme-maille-venitienne-deux-fermoirs.jpg",
+      "/produits/nihao/bracelet-homme-maille-venitienne-deux-maillons.jpg",
+      "/produits/nihao/bracelet-homme-maille-venitienne-argente-ambiance.jpg",
+      "/produits/nihao/bracelet-homme-maille-venitienne-mesures-fr.jpg"
+    ],
+    "variants": [
+      {
+        "id": "bracelet-homme-maille-venitienne-dore",
+        "title": "Doré",
+        "price": 15.9,
+        "stockId": "bracelet-homme-maille-venitienne-dore",
+        "image": "/produits/nihao/bracelet-homme-maille-venitienne-dore.jpg"
+      },
+      {
+        "id": "bracelet-homme-maille-venitienne-argente",
+        "title": "Argenté",
+        "price": 15.9,
+        "stockId": "bracelet-homme-maille-venitienne-argente",
+        "image": "/produits/nihao/bracelet-homme-maille-venitienne-argente-blanc.jpg"
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>bracelet homme</strong> sobre : une fine <strong>maille vénitienne</strong> de 2 mm en acier inoxydable, une chaînette de réglage et une petite <strong>plaque</strong> au bout, en doré ou en argenté. Un bijou discret, prêt à offrir.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Matière :</strong> acier inoxydable, finition dorée ou argentée, fermoir mousqueton</li>\n<li><strong>Couleurs :</strong> doré, argenté</li>\n<li><strong>Longueur :</strong> 19 à 22 cm, réglable avec la chaînette</li>\n<li><strong>Maille :</strong> 2 mm</li>\n<li><strong>Poids :</strong> environ 5 g</li>\n</ul>"
+  },
+  {
+    "slug": "bracelet-homme-perles-tresse",
+    "badge": "Nouveau",
+    "name": "Bracelet Homme Perles et Tresse",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "homme",
+    "title": "Bracelet homme gravé trois rangs : perles noires, simili cuir et tresse",
+    "category": "bijoux",
+    "type": "Bracelet personnalisé",
+    "tagline": "Un rang de perles noires mates, un rang plat en simili cuir à graver et une tresse noire et brune, fermoir aimanté noir.",
+    "personalizable": true,
+    "personalizationLabel": "Gravure du rang plat",
+    "images": [
+      "/produits/nihao/bracelet-homme-perles-tresse-blanc.jpg",
+      "/produits/nihao/bracelet-homme-perles-tresse-bois-face.jpg",
+      "/produits/nihao/bracelet-homme-perles-tresse-sombre.jpg",
+      "/produits/nihao/bracelet-homme-perles-tresse-debout.jpg",
+      "/produits/nihao/bracelet-homme-perles-tresse-bois-angle.jpg"
+    ],
+    "variants": [
+      {
+        "id": "bracelet-homme-perles-tresse",
+        "title": "Noir",
+        "price": 25.9,
+        "stockId": "bracelet-homme-perles-tresse",
+        "image": "/produits/nihao/bracelet-homme-perles-tresse-blanc.jpg"
+      }
+    ],
+    "engravingPricing": {
+      "moinsCherCompris": true,
+      "textKeys": [
+        "texte"
+      ],
+      "textExtra": 3
+    },
+    "personalizationFields": [
+      {
+        "key": "texte",
+        "label": "Texte gravé sur le rang plat en simili cuir (+3 €)",
+        "placeholder": "Prénom, date, message…",
+        "maxLength": 20,
+        "optional": true
+      },
+      {
+        "key": "police",
+        "type": "font",
+        "label": "Police de gravure",
+        "optional": true
+      },
+      {
+        "key": "note",
+        "type": "note",
+        "text": "La gravure est offerte : elle se fait sur le rang plat en simili cuir. Laissez vide pour un bracelet sans gravure."
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>bracelet homme à trois rangs</strong> : un rang de <strong>perles noires mates</strong>, un <strong>rang plat en simili cuir noir</strong> et une <strong>tresse noire et brune</strong>, réunis par un fermoir aimanté noir. Un prénom, une date ou un message gravé sur le rang plat, et le cadeau est prêt.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Matière :</strong> simili cuir noir et brun, perles noires mates, fermoir aimanté noir</li>\n<li><strong>Couleur :</strong> noir, tresse noire et brune</li>\n<li><strong>Poids :</strong> environ 40 g</li>\n</ul>"
+  },
+  {
+    "slug": "ensemble-homme-plaque-noire",
+    "badge": "Nouveau",
+    "name": "Ensemble Homme Plaque Noire",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "homme",
+    "title": "Ensemble homme noir à graver : collier plaque, bracelet torsadé et bague",
+    "category": "bijoux",
+    "type": "Ensemble",
+    "tagline": "Un collier à plaque, un bracelet torsadé et une bague, tout en noir, à graver à son nom.",
+    "personalizable": true,
+    "personalizationLabel": "Gravure du pendentif et de la bague",
+    "images": [
+      "/produits/nihao/ensemble-homme-plaque-noire-photo-1.jpg",
+      "/produits/nihao/ensemble-homme-plaque-noire-photo-2.jpg",
+      "/produits/nihao/ensemble-homme-plaque-noire-photo-3.jpg",
+      "/produits/nihao/ensemble-homme-plaque-noire-mesures-fr.jpg"
+    ],
+    "variants": [
+      {
+        "id": "ensemble-homme-plaque-noire-noir",
+        "title": "Noir",
+        "price": 42.9,
+        "stockId": "ensemble-homme-plaque-noire-noir",
+        "image": "/produits/nihao/ensemble-homme-plaque-noire-photo-1.jpg"
+      }
+    ],
+    "engravingPricing": {
+      "moinsCherCompris": true,
+      "textKeys": [
+        "pendentif",
+        "bague"
+      ],
+      "textExtra": 3
+    },
+    "personalizationFields": [
+      {
+        "key": "note",
+        "type": "note",
+        "text": "Le pendentif et la bague se gravent. La première gravure est offerte, la deuxième coûte 3 €. Laissez vide pour un ensemble sans gravure."
+      },
+      {
+        "key": "pendentif",
+        "label": "Texte gravé sur le pendentif (+3 €)",
+        "placeholder": "Prénom, date, message…",
+        "maxLength": 30,
+        "optional": true
+      },
+      {
+        "key": "bague",
+        "label": "Texte gravé sur la bague (+3 €)",
+        "placeholder": "Initiales, date…",
+        "maxLength": 15,
+        "optional": true
+      },
+      {
+        "key": "police",
+        "type": "font",
+        "label": "Police de gravure",
+        "optional": true
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>ensemble homme tout en noir</strong> : un <strong>collier à plaque</strong> sur une chaîne maille vénitienne, un <strong>bracelet torsadé</strong> et une <strong>bague</strong> lisse. La plaque et la bague se <strong>gravent</strong> : un prénom, une date, un message.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Matière :</strong> acier inoxydable noir</li>\n<li><strong>Collier :</strong> chaîne de 60 cm, pendentif plaque</li>\n<li><strong>Bracelet :</strong> torsadé, 21 cm, fermoir mousqueton</li>\n<li><strong>Bague :</strong> 1,9 cm de diamètre, taille unique</li>\n<li><strong>Poids :</strong> environ 50 g pour l'ensemble</li>\n</ul>",
+    "noelExclus": [
+      "ruban",
+      "rouge",
+      "pack"
+    ]
+  },
+  {
+    "slug": "ensemble-homme-plaque-acier",
+    "badge": "Nouveau",
+    "name": "Ensemble Homme Plaque Acier",
+    "weight": 72,
+    "pickup": false,
+    "letter": true,
+    "subcategory": "homme",
+    "title": "Ensemble homme acier à graver : collier plaque, jonc et bague",
+    "category": "bijoux",
+    "type": "Ensemble",
+    "tagline": "Un collier à plaque, un jonc et une bague en acier, à graver à son nom.",
+    "personalizable": true,
+    "personalizationLabel": "Gravure du pendentif et de la bague",
+    "images": [
+      "/produits/nihao/ensemble-homme-plaque-acier-photo-1.jpg",
+      "/produits/nihao/ensemble-homme-plaque-acier-photo-2.jpg",
+      "/produits/nihao/ensemble-homme-plaque-acier-photo-3.jpg",
+      "/produits/nihao/ensemble-homme-plaque-acier-photo-4.jpg"
+    ],
+    "variants": [
+      {
+        "id": "ensemble-homme-plaque-acier-argente",
+        "title": "Acier",
+        "price": 42.9,
+        "stockId": "ensemble-homme-plaque-acier-argente",
+        "image": "/produits/nihao/ensemble-homme-plaque-acier-photo-1.jpg"
+      }
+    ],
+    "engravingPricing": {
+      "moinsCherCompris": true,
+      "textKeys": [
+        "pendentif",
+        "bague"
+      ],
+      "textExtra": 3
+    },
+    "personalizationFields": [
+      {
+        "key": "note",
+        "type": "note",
+        "text": "Le pendentif et la bague se gravent. La première gravure est offerte, la deuxième coûte 3 €. Laissez vide pour un ensemble sans gravure."
+      },
+      {
+        "key": "pendentif",
+        "label": "Texte gravé sur le pendentif (+3 €)",
+        "placeholder": "Prénom, date, message…",
+        "maxLength": 20,
+        "optional": true
+      },
+      {
+        "key": "bague",
+        "label": "Texte gravé sur la bague (+3 €)",
+        "placeholder": "Initiales, date…",
+        "maxLength": 15,
+        "optional": true
+      },
+      {
+        "key": "police",
+        "type": "font",
+        "label": "Police de gravure",
+        "optional": true
+      }
+    ],
+    "descriptionHtml": "<p>Un <strong>ensemble homme en acier</strong>, sobre et élégant : un <strong>collier à plaque rectangulaire</strong> sur une chaîne maille vénitienne, un <strong>jonc</strong> poli et une <strong>bague</strong> brossée. La plaque et la bague se <strong>gravent</strong> : un prénom, une date, un message.</p>\n<h3>Caractéristiques</h3>\n<ul>\n<li><strong>Matière :</strong> acier inoxydable, finitions polie et brossée</li>\n<li><strong>Collier :</strong> chaîne maille vénitienne de 60 cm, plaque de 4 × 1 cm</li>\n<li><strong>Jonc :</strong> 6 cm de diamètre, s'ouvre pour l'enfiler</li>\n<li><strong>Bague :</strong> 8 mm de large</li>\n</ul>",
+    "noelExclus": [
+      "ruban",
+      "rouge",
+      "pack"
+    ]
+  },
   {
     slug: "collier-coeur-scintillant",
     badge: "Nouveau",

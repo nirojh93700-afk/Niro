@@ -172,7 +172,8 @@ export function noelPourCristaux(cfg) {
 /** Emballages de Noël proposés sur un bijou (null si Noël éteint ou pas un bijou). */
 export function emballagesNoelPourProduit(product, cfg) {
   if (!cfg?.on || product?.category !== "bijoux" || product?.marquePages) return null;
-  const options = cfg.emballages.filter((e) => !e.masque).map(({ id, nom, d, prix, barre, poids, photo, colis, couleurs, meil, fit, stock }) => ({ id, nom, d, prix, barre, poids, photo, colis: Boolean(colis), couleurs: Boolean(couleurs), meil: Boolean(meil), fit, stock }));
+  const exclus = Array.isArray(product?.noelExclus) ? product.noelExclus : []; // ex. ensembles homme : pas de boîte (gérant, 15/11)
+  const options = cfg.emballages.filter((e) => !e.masque && !exclus.includes(e.id)).map(({ id, nom, d, prix, barre, poids, photo, colis, couleurs, meil, fit, stock }) => ({ id, nom, d, prix, barre, poids, photo, colis: Boolean(colis), couleurs: Boolean(couleurs), meil: Boolean(meil), fit, stock }));
   return options.length ? { options, couleurs: NOEL_COULEURS, etiquette: { nom: NOEL_ETIQUETTE.nom, photo: NOEL_ETIQUETTE.photo, stock: NOEL_ETIQUETTE.stock } } : null;
 }
 
