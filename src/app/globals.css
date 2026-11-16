@@ -6388,3 +6388,10 @@ html.flot-cache:not(.flot-garde) .flot-btn{transform:translateY(140%);opacity:0;
 .ef-tl{display:grid;gap:10px;margin-top:12px}
 .ef-s{display:grid;gap:4px;background:var(--ash-surface,#fff);border:1px solid var(--ash-line,#eee4d2);border-left:4px solid var(--ash-line-2,#e6ddc9);border-radius:12px;padding:12px 14px}
 .ef-s.done{border-left-color:var(--ash-ok,#2f7a45)}.ef-s b{font-size:15px}.ef-s em{font-style:normal;font-size:12.5px;color:var(--ash-muted,#7a6d58)}
+
+/* Fiche produit sur ordinateur (16/11/2026, gérant : « la photo est trop grande, il faut qu'il voie les autres photos en bas ») :
+   la grande photo carrée ne dépasse plus la hauteur de l'écran ; les vignettes restent visibles dessous. */
+@media (min-width: 901px) {
+  .product-layout .gallery-main { max-width: min(100%, max(400px, calc(100vh - 400px))); margin-inline: auto; }
+  .product-layout .gallery-thumbs { max-width: min(100%, max(400px, calc(100vh - 400px))); margin-inline: auto; }
+}

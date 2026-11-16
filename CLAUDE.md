@@ -1,3 +1,8 @@
+## 🧾 FICHE COMMANDE : TOUT CE QU'IL FAUT GRAVER + PHOTO PRODUIT PLUS PETITE SUR ORDINATEUR — 16/11/2026 (gérant, carnet 1IQXA36I : « ils sont où les textes que je dois graver… je vois rien » ; fiche Collier Enveloppe : « la photo est trop grande, il faut qu'il voie les autres photos en bas »)
+- `/gestion/commande/<réf>` : sous chaque article, le tableau `TableGravure` (chaque face, chaque emplacement, chaque texte en clair, images avec « ⬇ Télécharger l'image »).
+  Avant, seul l'ancien écran et la page Atelier l'avaient ; la nouvelle fiche ne montrait que le résumé. Les photos cassées de cette fiche venaient des refus 429 (corrigés le même jour).
+- Fiches produit sur ordinateur (≥ 901 px) : grande photo limitée à la hauteur de l'écran (`max(400px, 100vh − 400px)`), vignettes visibles dessous (1440 × 900 : photo 500 px, vignettes à 871 px). Téléphone inchangé.
+
 ## 📷 PHOTOS QUI NE S'AFFICHAIENT PAS (429) + UNE SEULE GRAVURE OFFERTE SUR 4 PRODUITS DE PLUS — 16/11/2026 (gérant : « plein de photos qui s'affichent pas » ; « corrige les quatre et mets en ligne »)
 - Photos : servies en `max-age=0, private` (le middleware passait sur chaque fichier) → aucun cache, chaque photo au serveur limité à 2 machines →
   refus 429 sur une page de 100 photos. Corrigé : `next.config.js` (vignettes 1 an `immutable`, produits / marque-pages / matériel / carnet / motifs /

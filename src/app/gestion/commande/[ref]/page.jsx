@@ -21,6 +21,7 @@ import dynamic from "next/dynamic";
 import { useParams, useRouter } from "next/navigation";
 import Ic from "@/components/admin/IconesGestion";
 import VarBadge from "@/components/admin/VarBadge";
+import { TableGravure } from "@/lib/engravingSheet";
 import DelaiCommande from "@/components/admin/DelaiCommande";
 import HistoriqueCommande from "@/components/admin/HistoriqueCommande";
 import ProvenanceCommande from "@/components/admin/ProvenanceCommande";
@@ -398,6 +399,9 @@ export default function FicheCommandePage() {
                     <div className="nm"><span className="q">{it.quantity}×</span>{it.name}{(s?.variantDetail || it.variantDetail) ? <VarBadge texte={s?.variantDetail || it.variantDetail} /> : null}</div>
                     {it.details ? <div className="fc-sub">{it.details}</div> : null}
                     {it.personalization && !s ? <div className="fc-sub"><Ic n="pen" /> {it.personalization}</div> : null}
+                    {/* Tout ce qu'il faut graver, face par face, avec les images à télécharger (16/11/2026, carnet 1IQXA36I :
+                        « ils sont où les textes que je dois graver… je vois rien »). */}
+                    {s ? <div className="fc-tg" style={{ marginTop: 8, padding: "8px 10px", background: "#fdfaf3", border: "1px solid #ece0c4", borderRadius: 8 }}><TableGravure item={s} titre={false} /></div> : null}
                   </div>
                   <div className="price">{formatEuro(it.total)}</div>
                 </div>
