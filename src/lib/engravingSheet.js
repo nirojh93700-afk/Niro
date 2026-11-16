@@ -141,7 +141,7 @@ function Consignes({ item, avecPlacement = true }) {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={l.img} alt="" style={{ width: 120, height: 120, objectFit: "contain", border: "1px solid #ddd", borderRadius: 6, background: "#fff" }} />
                       </a>
-                      <a className="tg-dl" href={l.img} download style={{ fontSize: "0.8rem", fontWeight: 700, color: "#8a6d1f" }}>⬇ Télécharger l&apos;image</a>
+                      <a className="tg-dl" href={/^\/api\/img\//.test(l.img) ? `${l.img}?dl=${encodeURIComponent(`${item?.slug || "gravure"}-${f.nom}-${i + 1}`)}` : l.img} download style={{ fontSize: "0.8rem", fontWeight: 700, color: "#8a6d1f" }}>⬇ Télécharger l&apos;image</a>
                     </div>
                   ) : null}
                 </div>
