@@ -14,6 +14,7 @@
 // Mêmes API qu'avant ; jamais de prompt / confirm ; la fiche papier (FichePapier +
 // imprimerFiche) et /gestion/fiches restent telles quelles.
 // =============================================================================
+import BarriereErreur from "@/components/admin/BarriereErreur";
 import { imageDesign } from "@/lib/modeles";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -401,7 +402,7 @@ export default function FicheCommandePage() {
                     {it.personalization && !s ? <div className="fc-sub"><Ic n="pen" /> {it.personalization}</div> : null}
                     {/* Tout ce qu'il faut graver, face par face, avec les images à télécharger (16/11/2026, carnet 1IQXA36I :
                         « ils sont où les textes que je dois graver… je vois rien »). */}
-                    {s ? <div className="fc-tg" style={{ marginTop: 8, padding: "8px 10px", background: "#fdfaf3", border: "1px solid #ece0c4", borderRadius: 8 }}><TableGravure item={s} titre={false} /></div> : null}
+                    {s ? <div className="fc-tg" style={{ marginTop: 8, padding: "8px 10px", background: "#fdfaf3", border: "1px solid #ece0c4", borderRadius: 8 }}><BarriereErreur origine="table-gravure" message="Le détail de la gravure ne s’affiche pas pour cet article."><TableGravure item={s} titre={false} /></BarriereErreur></div> : null}
                   </div>
                   <div className="price">{formatEuro(it.total)}</div>
                 </div>
@@ -409,8 +410,8 @@ export default function FicheCommandePage() {
             })}
             <div className="cb" style={{ borderTop: "1px solid var(--ash-line)" }}>
               {o.demande ? <div className="fc-draft"><b>📋 Sur mesure{o.quoteNumber ? ` — devis ${o.quoteNumber}` : ""} · ce que la cliente a demandé</b><span style={{ whiteSpace: "pre-line" }}>{o.demande}</span></div> : null}
-              <FicheAtelier spec={o.spec} order={o} adminKey={key} />
-              <RatesCommande o={o} mat={mat} adminKey={key} onSaved={() => loadMat(key)} />
+              <BarriereErreur origine="fiche-atelier" message="La fiche atelier ne s’affiche pas (le reste de la commande est juste)."><FicheAtelier spec={o.spec} order={o} adminKey={key} /></BarriereErreur>
+              <BarriereErreur origine="rates"><RatesCommande o={o} mat={mat} adminKey={key} onSaved={() => loadMat(key)} /></BarriereErreur>
             </div>
           </Carte>
 
@@ -419,7 +420,7 @@ export default function FicheCommandePage() {
               {blocMode}
               {o.relaisPoint ? <div className="fc-row"><Ic n="pin" /><b>Point relais choisi :</b> {o.relaisPoint}<Copier texte={o.relaisPoint} onToast={montrer} /></div> : null}
               {o.shippingAddress ? <div className="fc-row"><Ic n="home" /><span>{o.relaisPoint ? "Coordonnées : " : "Étiquette : "}{adresseLigne(o)}</span><Copier texte={adresseLigne(o)} label="copier l'adresse" onToast={montrer} /></div> : null}
-              {!finie ? <BlocConditionnement o={o} mat={mat} onOpen={() => setCondOpen(true)} /> : null}
+              {!finie ? <BarriereErreur origine="conditionnement"><BlocConditionnement o={o} mat={mat} onOpen={() => setCondOpen(true)} /></BarriereErreur> : null}
               <div id="fc-colis" className="fc-colis">
                 <div className="fc-row"><b>📷 Photos du colis</b><PastillePhotosColis photos={o.photosColis} /><span className="faint">au moment d&apos;emballer : la preuve en cas de « colis vide » ou de litige</span></div>
                 <PhotosColis order={o} photos={o.photosColis || []} adminKey={key} onChange={(l) => setOrders((liste) => liste.map((x) => (x.id === o.id ? { ...x, photosColis: l } : x)))} />
@@ -429,13 +430,13 @@ export default function FicheCommandePage() {
                 <button type="button" className="fc-btn ghost" onClick={() => setBoxtal((v) => !v)}><Ic n="copy" /> {boxtal ? "Fermer les champs Boxtal" : "Champs Boxtal, champ par champ (+ corriger l'adresse)"}</button>
                 {!estPartie(o) && !finie ? <button type="button" className="fc-btn ghost" onClick={() => { setConfirm("exp"); window.scrollTo({ top: 0, behavior: "smooth" }); }}><Ic n="truck" /> Expédier…</button> : null}
               </div>
-              {boxtal ? <div style={{ marginTop: 10 }}><BoxtalCopie order={o} /></div> : null}
+              {boxtal ? <div style={{ marginTop: 10 }}><BarriereErreur origine="boxtal"><BoxtalCopie order={o} /></BarriereErreur></div> : null}
               {suivi ? <div className="fc-row" style={{ marginTop: 12, flexWrap: "wrap" }}><Ic n="truck" /><b>Suivi</b><span><LiensSuivi o={o} sep={<br />} /></span><button type="button" className="fc-lnk" onClick={() => { setConfirm("exp"); window.scrollTo({ top: 0, behavior: "smooth" }); }}>modifier</button>{o.shippedAt ? <span className="faint">expédiée le {dateFr(o.shippedAt)}</span> : null}</div> : null}
             </div>
           </Carte>
 
           <Carte id="fc-messages" ic="mail" titre={`Messages avec ${(nomAffiche(o) || "la cliente").split(" ")[0]}`} droite={unreadIci ? <Pill tone="info"><Ic n="mail" /> Nouvelle réponse</Pill> : <span className="faint">e-mails, bouton « Répondre », aperçus (BAT)</span>}>
-            <div className="cb"><BatThread order={o} adminKey={key} /></div>
+            <div className="cb"><BarriereErreur origine="messages"><BatThread order={o} adminKey={key} /></BarriereErreur></div>
           </Carte>
 
           <Carte id="fc-histo" ic="clock" titre="Historique" droite={<span className="faint">devis, images, étapes</span>}>
@@ -450,7 +451,7 @@ export default function FicheCommandePage() {
                 {o.livraisonCorrigeeDe ? <li className="gold">Adresse de livraison corrigée dans Gestion<small>avant : {[o.livraisonCorrigeeDe.shippingName, o.livraisonCorrigeeDe.line1].filter(Boolean).join(", ")}</small></li> : null}
                 {o.emailCorrigeDe ? <li className="gold">E-mail corrigé<small>avant : {o.emailCorrigeDe}</small></li> : null}
               </ul>
-              <HistoriqueCommande order={o} />
+              <BarriereErreur origine="historique"><HistoriqueCommande order={o} /></BarriereErreur>
             </div>
           </Carte>
         </div>

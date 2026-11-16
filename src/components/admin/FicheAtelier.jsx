@@ -24,6 +24,7 @@ import { positionTexteCristal, LIBELLE_POSITION } from "@/lib/cristalTexte";
 import VarBadge from "@/components/admin/VarBadge";
 import ApercuClient from "@/components/admin/ApercuClient";
 import Apercu3DCommande, { a3D } from "@/components/admin/Apercu3DCommande";
+import BarriereErreur from "@/components/admin/BarriereErreur";
 import ApercuPapeterie, { aApercuPapeterie } from "@/components/admin/ApercuPapeterie";
 import { aEmplacement, cotesDeLArticle, photosEnvoyees } from "@/lib/apercuCote";
 import { lienCorriger, creationDe } from "@/lib/creationOutil";
@@ -76,7 +77,11 @@ function CristalPreview({ item, p }) {
   );
 }
 
-export function GlassPreview({ item, papier = false }) {
+export function GlassPreview(props) {
+  return <BarriereErreur origine="apercu"><GlassPreviewSeul {...props} /></BarriereErreur>;
+}
+
+function GlassPreviewSeul({ item, papier = false }) {
   const p = getProductBySlug(item.slug);
   // Carnet, marque-pages, gobelet : la gravure redessinée comme sur leur fiche (09/11/2026).
   if (aApercuPapeterie(p)) return <ApercuPapeterie item={item} p={p} papier={papier} />;
