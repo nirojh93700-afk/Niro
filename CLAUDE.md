@@ -1,3 +1,8 @@
+## 🖼️ TOUT MAIL AVEC UN APERÇU DIT QUE C'EST UN APERÇU, ET QUE LA GRAVURE RÉELLE REND MIEUX — 17/11/2026 (gérant, après l'aperçu du cristal 0RPVCMNW : « il faut toujours dire que c'est un aperçu, en vrai après la gravure c'est mieux »)
+- Chaque fois qu'on envoie un aperçu / visuel à valider à une cliente (cristal, verre, bijou…), ajouter une phrase du type :
+  « Il s'agit d'un aperçu à l'écran : une fois gravé, le rendu réel est plus fin et plus lumineux. »
+- Ne jamais présenter l'aperçu comme le résultat exact.
+
 ## ⛔ PRIX DE GRAVURE DANS UN MAIL CLIENT : « LA MOINS CHÈRE EST OFFERTE », JAMAIS « COMPRIS » — 16/11/2026 (gérant, mail d'Alicia, collier plaque + photo : « recommence plus, note quelque part ces règles »)
 - Règle du site (`moinsCherCompris`) : parmi les gravures choisies, la MOINS CHÈRE est OFFERTE, les autres se paient. Photo seule = photo offerte ; photo + texte = le TEXTE (3 €) est offert et la PHOTO se paie (8 €).
 - Dans un mail ou un devis : écrire « la gravure la moins chère est offerte » puis dire laquelle l'est DANS CE CAS. Ne jamais écrire « la photo est offerte » tout court si un texte peut s'ajouter, ni « texte +8 € » (c'est la photo qui passe à 8 €).
