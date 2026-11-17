@@ -1054,3 +1054,38 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #portecles #cadeaupersonnalise #cristal3d #ideecadeau
+
+## Vidéo 64 — Nos verres gravés, style « comptoir » (17/11/2026)
+- Demande : « fais-moi des vidéos ».
+- Style NEUF « comptoir » : chaque verre glisse sur un comptoir en bois sous les lumières d'un bar, avec son reflet ; un trait laser
+  doré le balaie de haut en bas, puis une plaque en laiton vissée donne son nom et une phrase. Fin : mosaïque des 11 verres,
+  « Gravés à votre nom, dans notre atelier », bouton nivcreation.fr.
+- Photos gravées en français seulement (écartés : textes anglais « Mr & Mrs », « Bourbon », « Est. », bars anglais, verre à vin
+  « Geniet » néerlandais, carafes « Western / Whiskey »). Pastilles « EXEMPLE » effacées (`sans_badge`, videos_commun.py).
+- 37,8 s, sans son, aucun prix, 1080 × 1920 (2,5 Mo) et 720 × 1280 (1,0 Mo). Fichiers à supprimer le 19/11.
+- Script : `python3 tools/video/verres_comptoir_64.py <polices> <sortie> [--apercu]` (racine ; PlayfairDisplay.ttf + Inter.ttf).
+
+**Vidéo 64 — Nos verres gravés** (Flûte à champagne, Verre à whisky, Verre tumbler, Verre à cocktail)
+> 🥂 Un prénom, une photo, une date… gravés dans le verre ✨
+> Flûtes, verres à whisky, tumblers et verres à cocktail : pour trinquer avec ceux qu'on aime 💛
+> 👉 nivcreation.fr
+
+#nivcreation #verregrave #cadeaupersonnalise #cadeaupapa #ideecadeau
+
+## Vidéo 65 — Idées cadeaux de Noël, style « boules de Noël » (17/11/2026)
+- Demande : « fais-moi des vidéos ».
+- Style NEUF « boules de Noël » : chaque création descend au bout d'un ruban dans une boule dorée qui se balance (balancement
+  amorti), sous la neige ; fond rouge, sapin ou nuit selon la création ; pastille dorée de l'univers + phrase. Fin : guirlande de
+  12 boules, « Joyeux Noël à ceux que vous aimez », bouton nivcreation.fr. Photos ENTIÈRES dans la boule (sur fond flou).
+- Produits : déco de Noël en cristal « Camille » et « Famille Martin », cristal amis, cristal déjà gravé chat et sapin, gobelets
+  « Léa » et « Maman », collier cœur & plaques, carnet « Mes recettes », couverts enfant, plaque de naissance « Juline »,
+  bracelet gravé porté, marque-page ajouré « Camille ».
+- 39,8 s, sans son, aucun prix, 1080 × 1920 (9,2 Mo) et 720 × 1280 (3,7 Mo). Fichiers à supprimer le 19/11.
+- Script : `python3 tools/video/boules_noel_65.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 65 — Idées cadeaux de Noël** (Décoration de Noël en cristal, Cristal photo 3D, Cristal déjà gravé, Gobelet isotherme, Collier cœur & plaques, Carnet A5, Couverts enfant, Plaque de naissance, Bracelet gravé, Marque-page)
+> 🎄 Cette année, offrez un cadeau qui porte son prénom ✨
+> Cristal, bijoux, gobelets, carnets et souvenirs de naissance, gravés dans notre atelier 🎁💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaudenoel #cadeaupersonnalise #noel2026 #ideecadeau
