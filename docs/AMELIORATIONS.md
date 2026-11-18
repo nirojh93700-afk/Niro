@@ -357,3 +357,11 @@
 8. **Geste en avoir plutôt qu'en remboursement** (Shopify avoir boutique) : depuis la fiche commande, créditer la cagnotte de la cliente
    (son choix à LUI, jamais proposé de ma part).
 Parmi les 20 idées du 30/10 encore NON construites, les plus utiles : résumé du matin · état du système · journal d'activité + « Annuler ».
+
+## 💡 IDÉE GARDÉE POUR PLUS TARD — « NIV ATELIER PRO » (vendre nos outils en abonnement), 18/11/2026
+- Gérant : « enregistre ça, tu me donneras plus tard, par exemple si j'ai une grosse machine ». RIEN à construire avant qu'il en reparle.
+- Idée : vendre à d'autres graveurs L'atelier (fichiers de découpe / gravure), Gestion (commandes, stock, étiquettes) et les créateurs, par abonnement mensuel.
+  Maquette : https://claude.ai/artifact/NtK3ztbVT8XBxwUA6QYYwc (formules proposées 19 / 39 / 69 € par mois, essai 14 jours, sans commission — tout à valider).
+- Ce qu'il faudrait construire : comptes séparés par graveur, abonnement Stripe (Billing), créateurs détachés de Niv Création, retirer les données Niv, mentions légales, support.
+- Lien avec une grosse machine : la machine augmente SA production (plus grandes pièces, plus de commandes) ; elle ne rend pas le SaaS plus utile. L'atelier sait déjà
+  suivre une plus grande zone (« Ma machine »). Le SaaS reste une 2ᵉ activité, à envisager quand la boutique tourne bien et qu'il a du temps pour le support.
