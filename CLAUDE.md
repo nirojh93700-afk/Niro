@@ -1,3 +1,11 @@
+## 📮 COLIS LA POSTE SANS ADRESSE DE RETOUR — 18/11/2026 (0FUPET23, Halid Ibouroi, Collier Enveloppe ; gérant : « je mets pas mon adresse pour le retour »)
+- Le gérant n'écrit PAS d'expéditeur sur ses lettres suivies. Une lettre non distribuable sans expéditeur part au centre La Poste de Libourne (gardée 3 mois) :
+  il faut une réclamation au 3631 (pro 3634) avec le n° de suivi pour la récupérer. ⛔ Ne plus écrire à une cliente que son colis « revient à l'atelier »
+  sans l'avoir vérifié (écrit par erreur le 17/11 dans les mails de 0FUPET23).
+- 0FUPET23 : lettre suivie 87001511362839S, adresse « Rue des Cédrats, 13014 Marseille » sans numéro. Le gérant doit appeler le 3631. Nouvel envoi proposé à la
+  cliente : point relais Locker CC Le Merlan, 4,90 € (devis https://nivcreation.fr/document/cHoZSbQzr6biC7uGTShz). Si le collier n'est pas retrouvé : le regraver.
+- Conseillé (pas décidé) : l'adresse de domiciliation 6 rue d'Armaillé 75017 Paris comme expéditeur (option déjà dans la page Étiquettes).
+
 ## 🍷 VERRES : UNE SEULE GRAVURE OFFERTE PAR COMMANDE, LA MOINS CHÈRE — 18/11/2026 (gérant, flûtes de Miguel / MaryLuz : « change partout… le moins cher offert », logo = 3 €) — ✅ EN LIGNE LE 18/11/2026 (« Pousse », 2eba74a4)
 - Remplace le forfait du 19/10 (2e verre +5 € logo et texte / +3 € logo ou texte seul). Six verres `regleVerres` (vin 36 / 47 cl, flûte, whisky, cocktail, tumbler, Fête des pères).
 - `prixGravureVerres` (`src/lib/prixVerres.js`) : UNE gravure offerte (l'image / le logo / le modèle du verre 1, sinon son 1er texte) ; tout le reste à l'élément : logo / image / modèle `PRIX_LOGO_VERRE` = 3 €, chaque texte +3 €, face + fond +7 € par verre. Renvoie `offert`.
