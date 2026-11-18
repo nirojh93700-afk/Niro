@@ -1134,3 +1134,19 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #bois #decoupelaser #cadeaupersonnalise #ideecadeau
+
+## Vidéo 69 — Les bijoux dans leurs vrais emballages, style « déballage » (18/11/2026)
+- Demande : « quatrième vidéo, tu peux utiliser mes boîtes bijoux pour faire la vidéo pour les bijoux ».
+- Photos des emballages = celles du gérant dans Gestion › Emballages (sac, boîte carrée, boîte allongée, pochette microfibre,
+  pack collier, pack bracelet), copiées dans `tools/video/assets-69/`, posées ENTIÈRES. Style NEUF « déballage » : l'emballage
+  arrive, le bijou gravé en sort et se pose au-dessus. Titre « Votre bijou gravé, prêt à offrir » (jamais « offert » : les
+  emballages sont payants). Fin : les 4 emballages en mosaïque, « À choisir avec votre bijou gravé ».
+- 31,2 s, sans son, aucun prix, 1080 × 1920 et 720 × 1280. À supprimer le 20/11.
+- Script : `python3 tools/video/emballages_69.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 69 — Prêt à offrir** (Collier 3 Cœurs, Bracelet cordon à plaque, Collier cœur & plaques, Médaillon cœur ouvrable, Bracelet gravé, Collier double cœur)
+> 🎁 Votre bijou gravé arrive prêt à offrir : boîte cadeau, pochette douce ou sac Niv Création ✨
+> Il ne reste plus qu'à le glisser sous le sapin 💛
+> 👉 nivcreation.fr
+
+#nivcreation #bijouxpersonnalises #emballagecadeau #cadeaupersonnalise #ideecadeau
