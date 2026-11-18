@@ -1089,3 +1089,48 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaudenoel #cadeaupersonnalise #noel2026 #ideecadeau
+
+## Vidéo 66 — Les créations les plus commandées, style « carrousel » (18/11/2026)
+- Demande : « les produits qui sont le plus vendus mais dis pas que c'est les produits les plus vendus » (+ « tu mets pas best-seller »).
+- Produits choisis d'après les vraies commandes du site (relevé du 18/11 : tumbler, verre à vin, flûte, cristal horizontal et vertical,
+  verre à whisky, carnet). Bracelet homme chaîne et bracelet empreinte de bébé, très vendus, ÉCARTÉS : aucune photo gravée sur le site.
+  Verre à vin : sa photo vierge du site + le modèle n° 15 posé dans le cadre de gravure de la fiche (aucune photo gravée en français).
+- Style NEUF « carrousel » : les cartes tournent sur un plateau clair avec reflet, la carte du centre avance, nom + phrase dessous.
+  Rien ne dit « best-seller » ni « les plus vendus ». 37,4 s, sans son, aucun prix, 1080 × 1920 et 720 × 1280. À supprimer le 20/11.
+- Script : `python3 tools/video/carrousel_66.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 66 — Idées cadeaux gravées** (Verre tumbler, Verre à vin, Flûte à champagne, Cristal photo 3D, Verre à whisky, Carnet gravé)
+> 🎁 Un prénom, une photo, une date… gravés pour toujours ✨
+> Verres, flûtes, cristaux et carnets : des cadeaux uniques, faits pour ceux qu'on aime 💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #verregrave #cristal3d #ideecadeau
+
+## Vidéo 67 — Les bijoux gravés, style « écrin » (18/11/2026)
+- Demande : « une autre que avec les bijoux ».
+- Style NEUF « écrin » : sur un velours bordeaux, un écrin s'ouvre (le couvercle bascule), le bijou gravé apparaît sur le satin avec
+  des éclats de lumière, puis son nom et une phrase. Aucun logo dessiné sur l'écrin (losange doré seulement).
+- Photos GRAVÉES seulement, sans texte anglais (écartées : enveloppes « Love You », bracelet « Hello Angela », cœur « Love all »).
+- 36,2 s, sans son, aucun prix, 1080 × 1920 et 720 × 1280. À supprimer le 20/11.
+- Script : `python3 tools/video/ecrin_bijoux_67.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 67 — Nos bijoux gravés** (Collier 3 Cœurs, Collier cœur & plaques, Collier double cœur, Bracelet cordon à plaque, Médaillon cœur ouvrable, Collier cœur gravé, Collier Enveloppe, Bracelet gravé)
+> 💍 Un prénom dans un cœur, une date au revers, un mot doux caché… ✨
+> Des bijoux gravés dans notre atelier, rien que pour elle, rien que pour lui 💛
+> 👉 nivcreation.fr
+
+#nivcreation #bijouxpersonnalises #bijougrave #cadeaupersonnalise #ideecadeau
+
+## Vidéo 68 — Les créations en bois, style « découpe laser » (18/11/2026)
+- Demande : « une autre avec les créations » (lu comme : les créations découpées et gravées en bois).
+- Style NEUF « découpe laser » : sur une planche de contreplaqué, un point laser rougeoyant trace le contour, la pièce se détache et se
+  soulève, puis son nom s'inscrit comme gravé dans le bois. Écartés : porte-stylos Coupe du monde et lampe PSG (logos de marques).
+- 41,0 s, sans son, aucun prix, 1080 × 1920 et 720 × 1280. À supprimer le 20/11.
+- Script : `python3 tools/video/decoupe_bois_68.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 68 — Nos créations en bois** (Plaque de naissance, Plaque de porte enfant, Numéro de table, Puzzle en bois, Menu de mariage, Support de téléphone, Ronds de serviette, Puzzle photo, Marque-page, Cartes étapes de bébé, Photophore fée)
+> 🪵 Découpées et gravées au laser dans notre atelier, à votre nom ✨
+> Naissance, mariage, chambre d'enfant ou petit cadeau : chaque pièce est unique 💛
+> 👉 nivcreation.fr
+
+#nivcreation #bois #decoupelaser #cadeaupersonnalise #ideecadeau
