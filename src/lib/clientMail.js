@@ -4,7 +4,7 @@
 // le CRM, les messages programmés et les règles automatiques.
 // =============================================================================
 import { getGmailCreds, addReplyLink } from "@/lib/stock";
-import { gmailAccessToken, gmailSendHtml } from "@/lib/gmail";
+import { gmailAccessToken, gmailSendHtml, gmailForgetToken } from "@/lib/gmail";
 import { sendEmail, emailLayout, escapeHtml, BRAND } from "@/lib/email";
 
 // Bouton « ✉️ Répondre à ce message » (règle du gérant, 17/09/2026 : TOUT e-mail
@@ -74,9 +74,18 @@ export async function sendClientMail({ to, subject, html, bcc = BRAND.contact, t
       try {
         sent = await envoi(await gmailAccessToken(creds));
       } catch (e1) {
-        // Jeton refusé par Google → on en redemande un et on réessaie UNE fois.
+        // Jeton refusé par Google → on en redemande un et on réessaie, deux fois au plus,
+        // en laissant à Google le temps de reprendre (incident du 18/11/2026 à 10 h :
+        // 7 e-mails programmés refusés deux fois de suite, alors qu'un envoi passait une minute plus tard).
         if (!/authentication credentials|invalid credentials|401/i.test(String(e1?.message || ""))) throw e1;
-        sent = await envoi(await gmailAccessToken(creds, { fresh: true }));
+        let derniere = e1;
+        for (const pause of [1500, 5000]) {
+          gmailForgetToken();
+          await new Promise((r) => setTimeout(r, pause));
+          try { sent = await envoi(await gmailAccessToken(creds, { fresh: true })); derniere = null; break; }
+          catch (e2) { derniere = e2; if (!/authentication credentials|invalid credentials|401/i.test(String(e2?.message || ""))) break; }
+        }
+        if (derniere) throw derniere;
       }
       // threadId : sert à reconnaître une réponse venue d'une autre boîte (prospection).
       return { ok: true, via: "gmail", threadId: sent?.threadId || "" };
