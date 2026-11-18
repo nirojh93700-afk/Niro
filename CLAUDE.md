@@ -1,3 +1,9 @@
+## 🍷 VERRES : UNE SEULE GRAVURE OFFERTE PAR COMMANDE, LA MOINS CHÈRE — 18/11/2026 (gérant, flûtes de Miguel / MaryLuz : « change partout… le moins cher offert », logo = 3 €) — PRÉPARÉ, À POUSSER SUR SON MOT
+- Remplace le forfait du 19/10 (2e verre +5 € logo et texte / +3 € logo ou texte seul). Six verres `regleVerres` (vin 36 / 47 cl, flûte, whisky, cocktail, tumbler, Fête des pères).
+- `prixGravureVerres` (`src/lib/prixVerres.js`) : UNE gravure offerte (l'image / le logo / le modèle du verre 1, sinon son 1er texte) ; tout le reste à l'élément : logo / image / modèle `PRIX_LOGO_VERRE` = 3 €, chaque texte +3 €, face + fond +7 € par verre. Renvoie `offert`.
+- Une seule par COMMANDE sur les verres : `opts.offre:false` pour les lignes suivantes (`/api/checkout`, `gravureVerreDejaOfferte`) ; panier : `gravOffVerre` sur l'article, ajouté une fois par ligne suivante (`CartContext`, ligne « Gravures des autres articles »). Carafe et gobelet : inchangés.
+- Ex. flûtes lot de 2, 2 logos + 4 textes = 33,90 + 15 = 48,90 €. Grille (`GrillePrixVerres`), phrases de la fiche, agent e-mail réécrits. Tests : prix-verres 48, date-image, fêtes (le test carafe de date-image échouait déjà avant).
+
 ## 🖼️ TOUT MAIL AVEC UN APERÇU DIT QUE C'EST UN APERÇU, ET QUE LA GRAVURE RÉELLE REND MIEUX — 17/11/2026 (gérant, après l'aperçu du cristal 0RPVCMNW : « il faut toujours dire que c'est un aperçu, en vrai après la gravure c'est mieux »)
 - Chaque fois qu'on envoie un aperçu / visuel à valider à une cliente (cristal, verre, bijou…), ajouter une phrase du type :
   « Il s'agit d'un aperçu à l'écran : une fois gravé, le rendu réel est plus fin et plus lumineux. »

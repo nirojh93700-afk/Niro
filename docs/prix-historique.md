@@ -391,3 +391,8 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 - Numéro de table arche géométrique : avant numéro ET année compris ; après numéro compris, année +3 €.
 - Marque-pages en coffret : avant la gravure la moins chère offerte sur CHAQUE marque-page ; après une seule pour tout le coffret.
 - Bijoux : avant, chaque exemplaire et chaque bijou gravé avait sa gravure la moins chère offerte ; après (16/11/2026), une seule gravure offerte pour toute la commande.
+
+
+## Verres — gravure (changé le 18/11/2026)
+Avant : verre 1 image ou 1er texte offert, chaque texte +3 € ; chaque AUTRE verre : logo + texte +5 €, logo seul ou texte seul +3 € (règle du 19/10/2026).
+Après : une seule gravure offerte par commande (la moins chère), chaque logo / image / modèle +3 €, chaque texte +3 €, sur chaque verre.

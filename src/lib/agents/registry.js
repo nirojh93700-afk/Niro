@@ -26,7 +26,7 @@ const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
 // il donnait des prix sans savoir ce que coûte chaque texte).
 function resumeGravure(p) {
   if (p.regleVerres) {
-    return "verre 1 : une image / un logo / un modèle offert, CHAQUE texte +3 € ; chaque autre verre (identique ou non) : image + texte +5 €, image seule ou texte seul +3 € ; face + fond +7 € par verre";
+    return "UNE SEULE gravure offerte par commande, la moins chère (l'image / le logo / le modèle du verre 1, sinon son premier texte) ; tout le reste se paie à l'élément : chaque logo / image / modèle +3 €, chaque texte (prénom, date, phrase) +3 €, sur chaque verre ; face + fond +7 € par verre";
   }
   // « Le moins cher compris » (15/11/2026) : le gobelet, les marque-pages, le carnet et le support ont leur propre calcul.
   if (p.gobeletParcours) return "l'élément le MOINS CHER de la gravure est offert ; chaque autre élément +3 €, une photo +6 €";
