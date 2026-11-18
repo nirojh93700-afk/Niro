@@ -1,4 +1,4 @@
-## 🍷 VERRES : UNE SEULE GRAVURE OFFERTE PAR COMMANDE, LA MOINS CHÈRE — 18/11/2026 (gérant, flûtes de Miguel / MaryLuz : « change partout… le moins cher offert », logo = 3 €) — PRÉPARÉ, À POUSSER SUR SON MOT
+## 🍷 VERRES : UNE SEULE GRAVURE OFFERTE PAR COMMANDE, LA MOINS CHÈRE — 18/11/2026 (gérant, flûtes de Miguel / MaryLuz : « change partout… le moins cher offert », logo = 3 €) — ✅ EN LIGNE LE 18/11/2026 (« Pousse », 2eba74a4)
 - Remplace le forfait du 19/10 (2e verre +5 € logo et texte / +3 € logo ou texte seul). Six verres `regleVerres` (vin 36 / 47 cl, flûte, whisky, cocktail, tumbler, Fête des pères).
 - `prixGravureVerres` (`src/lib/prixVerres.js`) : UNE gravure offerte (l'image / le logo / le modèle du verre 1, sinon son 1er texte) ; tout le reste à l'élément : logo / image / modèle `PRIX_LOGO_VERRE` = 3 €, chaque texte +3 €, face + fond +7 € par verre. Renvoie `offert`.
 - Une seule par COMMANDE sur les verres : `opts.offre:false` pour les lignes suivantes (`/api/checkout`, `gravureVerreDejaOfferte`) ; panier : `gravOffVerre` sur l'article, ajouté une fois par ligne suivante (`CartContext`, ligne « Gravures des autres articles »). Carafe et gobelet : inchangés.
@@ -86,7 +86,7 @@
   Fiche (prix dans chaque menu et à côté de chaque emplacement), paiement, résumé Stripe, « Vendu en plus » (une ligne par élément), atelier, agent e-mail.
   1IQXA36I avec la nouvelle règle : 15,90 + 13 € = 28,90 € (elle a payé 22,90 avant −10 % : rien à lui réclamer).
 
-## 🖼️ PHOTO DU FORMULAIRE ABSENTE D'UNE COMMANDE SUR DEVIS — 16/11/2026 (commande 1OIRDYI2, Olivier Guérard, devis DEV-1552 ; gérant : « pourquoi j'ai pas la photo… il faut que tout soit prêt ») — PRÉPARÉ, À POUSSER SUR SON MOT
+## 🖼️ PHOTO DU FORMULAIRE ABSENTE D'UNE COMMANDE SUR DEVIS — 16/11/2026 (commande 1OIRDYI2, Olivier Guérard, devis DEV-1552 ; gérant : « pourquoi j'ai pas la photo… il faut que tout soit prêt ») — ✅ EN LIGNE LE 18/11/2026 (« Pousse », 2eba74a4)
 - La photo (`/api/img/uz0EvfjuBILBqOyA2CLF`, formulaire du 14/11) existe ; Gestion la montre d'après le dossier `comms` de la cliente.
 - Cause probable (non mesurée, pas d'accès à la base d'ici) : `comms` (et `bat`) = UN document Firestore de 1 Mo ; le rangement des
   mails le remplit chaque soir ; au-delà, `persistCatalog` échouait EN SILENCE (message + photo perdus, gardés seulement en mémoire).
@@ -1153,7 +1153,7 @@
   n'affichent pas le texte dans la vue de départ, gobelet sans aperçu du texte sur la photo · les 8 écritures n'ont pas le tamoul → 9ᵉ écriture
   « Tamoul » (Noto Serif Tamil) pour fiche, atelier et fichier de gravure · « Joyeux Noël » et « meilleur papa / maman » composés par moi, à relire.
 
-## 🖼️ APERÇU DE LA COMMANDE TEL QUE LA CLIENTE L'A VU, POUR TOUS LES PRODUITS — 09/11/2026 (gérant : « sur le carnet je sais pas comment la cliente a choisi… je veux l'aperçu de la commande pour toutes les commandes ») — PRÉPARÉ, À POUSSER SUR SON MOT
+## 🖼️ APERÇU DE LA COMMANDE TEL QUE LA CLIENTE L'A VU, POUR TOUS LES PRODUITS — 09/11/2026 (gérant : « sur le carnet je sais pas comment la cliente a choisi… je veux l'aperçu de la commande pour toutes les commandes ») — ✅ EN LIGNE LE 18/11/2026 (« Pousse », 2eba74a4)
 - `ApercuPapeterie.jsx` (admin) REDESSINE la gravure avec le MÊME code que la fiche : carnet (`Gravure` exporté de CarnetFiche, couverture + dos de la
   couleur commandée), marque-pages (`Signet` + `itemsDe` exportés de MarquePagesFiche, face + dos de chaque pièce du coffret), gobelet (`GobeletPreview`
   avec `spec.composition`, sinon recalculé depuis les champs). Anciennes commandes comprises. Branché dans `GlassPreview` (FicheAtelier → fiche commande,
@@ -1415,7 +1415,7 @@
   jamais sur un verre, une carafe, un cristal, un marque-page ni aucun autre produit, ni sur leur fiche, ni sur un devis, ni dans un mail.
   Un devis de verres ou de cristal = aucun emballage de Noël proposé. (Les DESSINS de Noël à graver sont une autre chose : verres, carafe, cristal.)
 
-## ♥ CE QUE LA CLIENTE CHOISIT SE LIT PARTOUT DANS GESTION, TEL QU'ELLE L'A VU — 05/11/2026 (commande 1K8QTJYM, gérant : « je veux plus d'erreur comme ça… il faut que ça soit marqué dans toute l'admin pour tous les produits ») — PRÉPARÉ, À POUSSER SUR SON MOT
+## ♥ CE QUE LA CLIENTE CHOISIT SE LIT PARTOUT DANS GESTION, TEL QU'ELLE L'A VU — 05/11/2026 (commande 1K8QTJYM, gérant : « je veux plus d'erreur comme ça… il faut que ça soit marqué dans toute l'admin pour tous les produits ») — ✅ EN LIGNE LE 18/11/2026 (« Pousse », 2eba74a4)
 - La cliente avait choisi « Cœurs » autour du texte du verre à whisky : l'aperçu montrait « ♥ Super Papy d'Eloann ♥ », mais « Vendu en plus »
   et le tableau « À graver » écrivaient le texte SANS les cœurs (le décor était sur une ligne à part). Maintenant `texteAvecDecor` (`src/lib/decorTexte.js`)
   écrit le texte AVEC son décor partout : « Vendu en plus » (`optionsVendues`), « À graver » (`consignesGravure`), fiche papier (`lignesGravure`),
@@ -1432,14 +1432,14 @@
   la cliente 1KC9OWWQ avait payé 8,90 €). Avant : 9,90 € (03/11). Relais, Express, porte-clés et clé USB cristal : inchangés.
   Au-delà de 5 kg la grille par poids (22,90 €…) reste. XL : à lui de dire s'il le veut plus cher (question posée le 05/11).
 
-## 🖼️ LE VISUEL EXACT DE LA CLIENTE DANS GESTION, POUR LES BIJOUX EN 3D — 05/11/2026 (commande 0BHBVOXK, gérant : « il me faut exactement le visuel ») — PRÉPARÉ, À POUSSER SUR SON MOT
+## 🖼️ LE VISUEL EXACT DE LA CLIENTE DANS GESTION, POUR LES BIJOUX EN 3D — 05/11/2026 (commande 0BHBVOXK, gérant : « il me faut exactement le visuel ») — ✅ EN LIGNE LE 18/11/2026 (« Pousse », 2eba74a4)
 - Avant : verres, carafe, cocktail, support téléphone gardaient l'image de l'aperçu (`previewImage`) ; les bijoux en 3D rien (la fiche montrait la photo du
   bijou avec le texte posé dessus, sur la mauvaise face). Maintenant : à l'ajout au panier, l'aperçu 3D affiché est photographié (`canvas[data-apercu3d]`,
   `preserveDrawingBuffer`) et envoyé (`spec.apercu3dImage`) ; Gestion (fiche atelier écran, fiche commande, liste) montre cette image + le même aperçu 3D
   redessiné à faire tourner (`Apercu3DCommande.jsx`) ; l'e-mail 🛎️ la joint. Anciennes commandes : aperçu 3D redessiné. Fiche papier : inchangée.
 - Restent sans visuel enregistré : cristaux photo (Gestion les redessine, `CristalPreview`) et bijoux sans aperçu 3D (la cliente ne voit que le texte).
 
-## 📐 DISPOSITION DE L'APERÇU 3D ENREGISTRÉE AVEC LA COMMANDE — 03/11/2026 (commande 0QEIXDI5, Vanessa Gorgol : l'aperçu montrait « AXANDRE / MAXIM » sur deux lignes, l'atelier l'a lu côte à côte ; gérant : « il faut que ce soit comme le client veut, regarde les photos qu'il a envoyées ») — PRÉPARÉ, À POUSSER SUR SON MOT
+## 📐 DISPOSITION DE L'APERÇU 3D ENREGISTRÉE AVEC LA COMMANDE — 03/11/2026 (commande 0QEIXDI5, Vanessa Gorgol : l'aperçu montrait « AXANDRE / MAXIM » sur deux lignes, l'atelier l'a lu côte à côte ; gérant : « il faut que ce soit comme le client veut, regarde les photos qu'il a envoyées ») — ✅ EN LIGNE LE 18/11/2026 (« Pousse », 2eba74a4)
 - Chaque aperçu 3D (plaque, enveloppe, médaillons livre / cœur, gourmette) note les lignes qu'il dessine (`noterLignes`, `src/lib/apercuLignes.js`) ;
   à l'ajout au panier la fiche range `spec.apercuLignes = { recto: ["Axandre","Maxim"], … }`. Atelier : bloc « 📐 Disposition vue par la cliente
   sur l'aperçu » dans `TableGravure` (`DispositionApercu.jsx` : fiche commande, page Atelier, fiche papier) ; ancienne commande = recalcul avec le
@@ -1452,7 +1452,7 @@
   Monaco = tarif France (pays dit, sans alerte). ⛔ Quand je parle d'une commande au gérant : TOUJOURS dire le pays si ce n'est pas la France.
 - Aperçu de la fiche (`GlassPreview`) : le texte est réduit pour tenir dans l'image (il débordait du bracelet).
 
-## 🗂️ HISTORIQUE D'UNE COMMANDE DANS GESTION — 02/11/2026 (commande 04AT1IG4 : « l'historique de devis… les images qu'on a envoyées, l'image qu'elle a sélectionnée, y a rien ») — PRÉPARÉ, À POUSSER SUR SON MOT
+## 🗂️ HISTORIQUE D'UNE COMMANDE DANS GESTION — 02/11/2026 (commande 04AT1IG4 : « l'historique de devis… les images qu'on a envoyées, l'image qu'elle a sélectionnée, y a rien ») — ✅ EN LIGNE LE 18/11/2026 (« Pousse », 2eba74a4)
 - Fiche commande (`/gestion`) et cartes devis de l'Atelier : bloc « 🗂️ Historique de la commande » (`HistoriqueCommande.jsx`) = note de l'atelier
   (choix de la cliente), devis et factures liés (`devisDeLaCommande` de `src/lib/historiqueDevis.js` : n° de devis de la commande, toute pièce
   qui cite la réf. ou ce devis, autres devis de la même adresse), vignettes des images envoyées / reçues (`imagesDuFil`). Calculé par `GET /api/admin/orders`.
