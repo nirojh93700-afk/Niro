@@ -214,6 +214,12 @@ export function LiensSuivi({ o, sep = " · " }) {
 
 export default function CarteCommande({ o, pos, inBoard = false, unread = false, selected = false, onSelect, onStatus, onAnnotate, mat, onCond, adminKey, onMat, busy = false, onToast, focus = false }) {
   const [menu, setMenu] = useState(false);
+  const [lier, setLier] = useState(null); // « Rattacher à une commande… » (18/11/2026) : réf. saisie
+  async function rattacher() {
+    const r = await fetch("/api/admin/orders", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": adminKey }, body: JSON.stringify({ id: o.id, action: "rattacher", ref: lier }) }).then((x) => x.json()).catch(() => ({ ok: false }));
+    if (r.ok) { onToast?.(`Rattachée à #${r.parent?.ref || lier} : elle part avec cette commande`); setLier(null); setTimeout(() => window.location.reload(), 600); }
+    else onToast?.(r.error || "Rattachement impossible");
+  }
   const [ship, setShip] = useState(false);
   const [noteEdit, setNoteEdit] = useState(false);
   const [note, setNote] = useState(o.adminNote || "");
@@ -290,6 +296,20 @@ export default function CarteCommande({ o, pos, inBoard = false, unread = false,
           );
         })}
       </ul>
+      {(o.complements || []).length ? (
+        <div className="fq-demande" style={{ borderColor: "var(--ash-gold, #c9a24b)" }}>
+          <b>🔗 Complément payé, part avec cette commande :</b>
+          {o.complements.map((c) => <div key={c.id}>#{c.ref}{c.quoteNumber ? ` · devis ${c.quoteNumber}` : ""} · {euro(c.total)}{c.shippingMethod ? ` · ${c.shippingMethod}` : ""}{c.items?.length ? ` · ${c.items.map((it) => `${it.quantity}× ${it.name}`).join(", ")}` : ""}</div>)}
+        </div>
+      ) : null}
+      {lier !== null ? (
+        <div className="fq-demande" style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+          <span>Rattacher à la commande n°</span>
+          <input value={lier} onChange={(e) => setLier(e.target.value.toUpperCase())} placeholder="0FUPET23" maxLength={14} style={{ width: 120, padding: 6, border: "1px solid var(--line)", borderRadius: 8 }} />
+          <button type="button" className="fq-btn" onClick={rattacher} disabled={!lier.trim()}>Rattacher</button>
+          <button type="button" className="fq-btn ghost" onClick={() => setLier(null)}>Annuler</button>
+        </div>
+      ) : null}
       {o.demande ? <div className="fq-demande"><b>Sur mesure{o.quoteNumber ? ` · devis ${o.quoteNumber}` : ""} :</b> {o.demande}</div> : null}
 
       {!finie || st === "livree" ? <DelaiCommande order={o} style={{ margin: 0 }} /> : null}
@@ -348,6 +368,7 @@ export default function CarteCommande({ o, pos, inBoard = false, unread = false,
             <button type="button" onClick={() => setFlagPick(true)}><Ic n="flag" /> Étiqueter (urgente, cadeau…)</button>
             <button type="button" onClick={() => setNoteEdit(true)}><Ic n="pen" /> Note interne</button>
             <Link href={`${fiche}#messages`}><Ic n="mail" /> Communications &amp; aperçu</Link>
+            {!(o.complements || []).length ? <button type="button" onClick={() => setLier("")}><Ic n="next" /> Rattacher à une commande… (complément)</button> : null}
             {o.customerEmail ? <button type="button" onClick={copierEmail}><Ic n="copy" /> Copier l&apos;e-mail de la cliente</button> : null}
             <hr />
             <div className="g">Statut</div>

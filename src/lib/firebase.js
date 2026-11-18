@@ -656,6 +656,21 @@ export async function updateQuotePanier(id, off) {
   }
 }
 
+// « Complète la commande n° … » d'un devis (18/11/2026). Vide = retiré.
+export async function updateQuoteLien(id, ref) {
+  const a = getApp();
+  if (!a || !id) return false;
+  try {
+    const r = admin.firestore().collection("siteQuotes").doc(id);
+    if (!(await r.get()).exists) return false;
+    await r.update({ commandeLiee: ref || admin.firestore.FieldValue.delete() });
+    return true;
+  } catch (e) {
+    console.error("updateQuoteLien:", e.message);
+    return false;
+  }
+}
+
 export async function updateQuoteQuantite(id, qte, lignes) {
   const a = getApp();
   if (!a) return false;

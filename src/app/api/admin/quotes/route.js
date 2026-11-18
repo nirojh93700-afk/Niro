@@ -1,7 +1,8 @@
 import { isAdmin } from "@/lib/stock";
-import { createQuote, listQuotes, updateQuoteStatus, getQuote, deleteQuote, setQuoteCounter, updateQuoteQuantite, updateQuotePanier } from "@/lib/firebase";
+import { createQuote, listQuotes, updateQuoteStatus, getQuote, deleteQuote, setQuoteCounter, updateQuoteQuantite, updateQuotePanier, updateQuoteLien } from "@/lib/firebase";
 import { quoteEmail } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
+import { nettoyerRef } from "@/lib/commandeLiee";
 
 export const dynamic = "force-dynamic";
 
@@ -65,6 +66,12 @@ export async function POST(req) {
     return Response.json({ ok });
   }
 
+  // Régler « Complète la commande n° … » sur un devis existant (vide = retiré).
+  if (body.action === "lien") {
+    const ok = await updateQuoteLien(body.id, nettoyerRef(body.commandeLiee));
+    return Response.json({ ok, commandeLiee: nettoyerRef(body.commandeLiee) });
+  }
+
   if (body.action === "delete") {
     if (!body.id) return Response.json({ error: "Identifiant manquant." }, { status: 400 });
     const ok = await deleteQuote(body.id);
@@ -115,6 +122,8 @@ export async function POST(req) {
     items,
     total,
     note: String(body.note || "").slice(0, 500),
+    // « Complète la commande n° … » (18/11/2026) : une fois payé, ce devis se range sous cette commande.
+    ...(nettoyerRef(body.commandeLiee) ? { commandeLiee: nettoyerRef(body.commandeLiee) } : {}),
     ...(nettoyerQte(body.qte) && items.some((it) => it.suit) ? { qte: nettoyerQte(body.qte) } : {}),
   };
   const created = await createQuote(data);

@@ -64,7 +64,7 @@ const valeur = (v) => {
  */
 export function construireResume({ orders = [], settings = {}, pending = [], journal = [], materiel = [], now = Date.now() } = {}) {
   const site = BRAND.siteUrl || "https://nivcreation.fr";
-  const cmds = (Array.isArray(orders) ? orders : []).filter((o) => o && !o.test);
+  const cmds = (Array.isArray(orders) ? orders : []).filter((o) => o && !o.test && !o.rattacheA?.id); // complément = part avec sa commande
   const parDate = (a, b) => Date.parse(a.createdAt || 0) - Date.parse(b.createdAt || 0);
 
   // Commandes

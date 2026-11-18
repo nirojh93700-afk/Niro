@@ -32,7 +32,7 @@ export async function GET(req) {
   const monthOrders = real.filter((o) => dayKey(o.createdAt).slice(3) === monthStr && active(o));
   const sum = (arr) => arr.reduce((s, o) => s + (Number(o.total) || 0), 0);
 
-  const aPreparer = real.filter((o) => active(o) && (!o.status || o.status === "a_preparer")).length;
+  const aPreparer = real.filter((o) => active(o) && !o.rattacheA?.id && (!o.status || o.status === "a_preparer")).length;
   const enGravure = real.filter((o) => o.status === "en_gravure").length;
   let newMessages = 0;
   let messages = [];

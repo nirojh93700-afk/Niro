@@ -1,0 +1,14 @@
+import { nettoyerRef, estComplement, regrouperComplements, totalComplements } from "../../src/lib/commandeLiee.js";
+let n = 0, ko = 0; const ok = (c, m) => { n++; if (!c) { ko++; console.log("✗", m); } };
+ok(nettoyerRef(" #0fupet23 ") === "0FUPET23", "réf nettoyée");
+const P = { id: "p", ref: "0FUPET23", status: "a_preparer", total: 27.9 };
+const E = { id: "e", ref: "0BXF7CYC", status: "a_preparer", total: 4.9, rattacheA: { id: "p", ref: "0FUPET23" }, items: [{ name: "Nouvel envoi", quantity: 1 }] };
+const X = { id: "x", ref: "AAA", rattacheA: { id: "absent", ref: "ZZZ" } };
+ok(estComplement(E) && !estComplement(P), "estComplement");
+const r = regrouperComplements([E, P, X]);
+ok(r.length === 2, "le complément sort de la liste");
+ok(r.find((o) => o.id === "p").complements[0].ref === "0BXF7CYC", "rangé sous la commande d'origine");
+ok(r.some((o) => o.id === "x"), "parent absent : reste visible");
+ok(totalComplements(r.find((o) => o.id === "p")) === 4.9, "total des compléments");
+ok(regrouperComplements(null).length === 0, "liste vide");
+console.log(ko ? `${ko}/${n} en échec` : `✓ ${n} vérifications`); process.exit(ko ? 1 : 0);

@@ -61,6 +61,7 @@ export default function QuotesAdmin({ adminKey }) {
   const [client, setClient] = useState({ name: "", email: "", address: "" });
   const [items, setItems] = useState([{ desc: "", qty: 1, price: "" }]);
   const [note, setNote] = useState("");
+  const [commandeLiee, setCommandeLiee] = useState(""); // « Complète la commande n° … » (18/11/2026)
   const [qte, setQte] = useState({ modifiable: false, min: 1, max: 12 });
   const [edQte, setEdQte] = useState(null); // { id, qte, lignes } : réglage d'un devis existant
 
@@ -108,12 +109,22 @@ export default function QuotesAdmin({ adminKey }) {
 
   const total = items.reduce((s, it) => s + (parseInt(it.qty, 10) || 0) * (parseFloat(it.price) || 0), 0);
 
+  // « Complète la commande n° … » sur un devis existant (18/11/2026). Saisie en ligne, pas de fenêtre système.
+  const [lienEd, setLienEd] = useState(null); // { id, ref }
+  function lierCommande(q) { setLienEd(lienEd?.id === q.id ? null : { id: q.id, ref: q.commandeLiee || "" }); }
+  async function enregistrerLien() {
+    const res = await fetch("/api/admin/quotes", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": adminKey }, body: JSON.stringify({ action: "lien", id: lienEd.id, commandeLiee: lienEd.ref }) });
+    const d = await res.json().catch(() => ({}));
+    if (d.ok) { setQuotes((prev) => prev.map((x) => (x.id === lienEd.id ? { ...x, commandeLiee: d.commandeLiee || "" } : x))); setLienEd(null); }
+    else setMsg(d.error || "Échec.");
+  }
+
   async function create() {
     setMsg("");
     const res = await fetch("/api/admin/quotes", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
-      body: JSON.stringify({ type, client, items, note, qte }),
+      body: JSON.stringify({ type, client, items, note, qte, commandeLiee }),
     });
     const d = await res.json();
     if (d.ok) {
@@ -121,6 +132,7 @@ export default function QuotesAdmin({ adminKey }) {
       setClient({ name: "", email: "", address: "" });
       setItems([{ desc: "", qty: 1, price: "" }]);
       setNote("");
+      setCommandeLiee("");
       setQte({ modifiable: false, min: 1, max: 12 });
       setShowForm(false);
       load();
@@ -215,6 +227,13 @@ export default function QuotesAdmin({ adminKey }) {
             <textarea value={note} onChange={(e) => setNote(e.target.value)} style={{ minHeight: 70 }} placeholder="Ex. : gravure logo + date, sur les 2 faces, livraison avant le 12… (s'affichera automatiquement dans la commande une fois payée)" />
           </label>
 
+          {type !== "facture" && (
+            <label className="admin-field">Complète la commande n° (facultatif)
+              <input value={commandeLiee} onChange={(e) => setCommandeLiee(e.target.value.toUpperCase())} placeholder="Ex. : 0FUPET23 (nouvel envoi, supplément…)" maxLength={14} />
+              <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>Une fois payé, ce devis se range sous cette commande : pas de deuxième carte dans la file, il part avec elle.</span>
+            </label>
+          )}
+
           <div style={{ textAlign: "right", fontWeight: 700, color: "var(--gold-dark)" }}>Total : {formatEuro(total)}</div>
           <button className="btn btn-gold" onClick={create}>Créer le document</button>
         </div>
@@ -255,11 +274,26 @@ export default function QuotesAdmin({ adminKey }) {
                 Emballage et autres articles
               </label>
             )}
+            {q.type !== "facture" && (
+              <button className="btn btn-outline" style={{ padding: "4px 12px", fontSize: "0.85rem" }}
+                title="Une fois payé, le devis se range sous cette commande (pas de deuxième carte)"
+                onClick={() => lierCommande(q)}>
+                🔗 {q.commandeLiee ? `Complète #${q.commandeLiee}` : "Complète une commande…"}
+              </button>
+            )}
             <button className="btn btn-outline" onClick={() => removeQuote(q)}
               style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f" }}>
               Supprimer
             </button>
           </div>
+          {lienEd?.id === q.id && (
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center", marginTop: 8 }}>
+              <span style={{ fontSize: "0.85rem" }}>Complète la commande n°</span>
+              <input value={lienEd.ref} onChange={(e) => setLienEd({ ...lienEd, ref: e.target.value.toUpperCase() })} placeholder="0FUPET23" maxLength={14} style={{ width: 130, padding: 6, border: "1px solid var(--line)", borderRadius: 8 }} />
+              <button className="btn btn-gold" style={{ padding: "4px 12px", fontSize: "0.85rem" }} onClick={enregistrerLien}>Enregistrer</button>
+              <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>Vide = plus de lien.</span>
+            </div>
+          )}
           {edQte?.id === q.id && (
             <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
               <BlocQuantite qte={edQte.qte} setQte={(v) => setEdQte({ ...edQte, qte: v })} lignes={edQte.lignes}

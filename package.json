@@ -28,6 +28,7 @@
     "test-stock-meta": "node tools/tests/stock-meta.mjs",
     "test-reachat": "node tools/tests/reachat.mjs",
     "test-materiel": "node --import ./tools/alias-register.mjs tools/tests/materiel.test.mjs",
+    "test-commande-liee": "node tools/tests/commande-liee.mjs",
     "audit-photos": "node --import ./tools/alias-register.mjs tools/audit-photos.mjs",
     "audit-complet": "node tools/audit-complet.mjs",
     "vignettes": "node --import ./tools/alias-register.mjs tools/vignettes.mjs",

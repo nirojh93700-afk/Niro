@@ -17,7 +17,7 @@ async function chiffreIcone(regl) {
     }
     const { getSiteOrders } = await import("@/lib/firebase");
     const orders = await getSiteOrders(300);
-    return (orders || []).filter((x) => !x.test && (!x.status || x.status === "a_preparer")).length;
+    return (orders || []).filter((x) => !x.test && !x.rattacheA?.id && (!x.status || x.status === "a_preparer")).length;
   } catch { return undefined; }
 }
 

@@ -129,7 +129,13 @@ export default function FicheCommandePage() {
     try { autoPrint.current = new URLSearchParams(window.location.search).get("imprimer") === "1"; } catch { /* ignore */ }
   }, [load]);
 
-  const o = useMemo(() => orders.find((x) => String(x.ref || "").toUpperCase() === refParam.toUpperCase() || x.id === refParam) || null, [orders, refParam]);
+  const o = useMemo(() => {
+    const R = refParam.toUpperCase();
+    return orders.find((x) => String(x.ref || "").toUpperCase() === R || x.id === refParam)
+      // Un complément rattaché (18/11/2026) n'a plus sa propre carte : on ouvre sa commande d'origine.
+      || orders.find((x) => (x.complements || []).some((c) => String(c.ref || "").toUpperCase() === R || c.id === refParam))
+      || null;
+  }, [orders, refParam]);
   useEffect(() => { if (o) { setNote(o.adminNote || ""); setGeste(o.alerteInterne || ""); document.title = `#${refDe(o)} · ${nomAffiche(o)} — Gestion`; } }, [o?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (o && autoPrint.current) { autoPrint.current = false; setPapier(true); setTimeout(() => imprimerFiche(), 600); } }, [o]);
   useAdminBack(true, "File de production", useCallback(() => router.push("/gestion/commandes"), [router]));
@@ -412,6 +418,7 @@ export default function FicheCommandePage() {
               );
             })}
             <div className="cb" style={{ borderTop: "1px solid var(--ash-line)" }}>
+              {(o.complements || []).length ? <div className="fc-draft"><b>🔗 Complément payé · part avec cette commande</b>{o.complements.map((c) => <span key={c.id} style={{ display: "block" }}>#{c.ref}{c.quoteNumber ? ` · devis ${c.quoteNumber}` : ""} · {Number(c.total || 0).toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}{c.shippingMethod ? ` · ${c.shippingMethod}` : ""}{c.relaisPoint ? ` · ${c.relaisPoint}` : ""}</span>)}</div> : null}
               {o.demande ? <div className="fc-draft"><b>📋 Sur mesure{o.quoteNumber ? ` — devis ${o.quoteNumber}` : ""} · ce que la cliente a demandé</b><span style={{ whiteSpace: "pre-line" }}>{o.demande}</span></div> : null}
               <BarriereErreur origine="fiche-atelier" message="La fiche atelier ne s’affiche pas (le reste de la commande est juste)."><FicheAtelier spec={o.spec} order={o} adminKey={key} /></BarriereErreur>
               <BarriereErreur origine="rates"><RatesCommande o={o} mat={mat} adminKey={key} onSaved={() => loadMat(key)} /></BarriereErreur>

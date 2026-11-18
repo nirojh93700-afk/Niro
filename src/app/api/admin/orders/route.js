@@ -9,6 +9,8 @@ import { sendClientMail } from "@/lib/clientMail";
 import { sansAncienHebergeur } from "@/lib/photosLocales";
 import { joindreSuivis } from "@/lib/suiviColis";
 import { journaliser } from "@/lib/journal";
+import { regrouperComplements } from "@/lib/commandeLiee";
+import { rattacherCommande, detacherCommande, suivreCommandeOrigine } from "@/lib/commandeLieeServeur";
 
 export const dynamic = "force-dynamic";
 
@@ -43,7 +45,8 @@ export async function GET(req) {
     return { ...o, ...(devisLies.length ? { devisLies } : {}), ...(images.length ? { imagesEchangees: images } : {}) };
   };
   // Produit exact de chaque ligne (taille du verre à vin, etc.) pour tous les écrans de Gestion (13/10/2026).
-  return Response.json({ orders: sansAncienHebergeur(orders.map((o) => { try { return enrichir(detaillerCommande(o)); } catch { return o; } })), firebase: true });
+  // Compléments payés par devis (18/11/2026) : rangés sous leur commande d'origine, plus de deuxième carte.
+  return Response.json({ orders: regrouperComplements(sansAncienHebergeur(orders.map((o) => { try { return enrichir(detaillerCommande(o)); } catch { return o; } }))), firebase: true });
 }
 
 // Met à jour le statut d'une commande (à préparer / expédiée).
@@ -63,6 +66,13 @@ export async function POST(req) {
   if (id && typeof body?.test === "boolean") {
     const ok = await updateSiteOrder(id, { test: body.test });
     return Response.json({ ok });
+  }
+
+  // Rattacher une commande (complément payé par devis) à sa commande d'origine, ou la détacher (18/11/2026).
+  if (id && body?.action === "rattacher") {
+    const r = body.detacher ? await detacherCommande(id) : await rattacherCommande(id, body.ref);
+    if (r.ok) journaliser({ type: "commande", cible: id, label: body.detacher ? "Complément détaché" : `Complément rattaché à #${r.parent?.ref || body.ref}`, avant: null, apres: body.detacher ? "" : (r.parent?.ref || "") }).catch(() => {});
+    return Response.json({ ok: r.ok, error: r.error, parent: r.parent ? { id: r.parent.id, ref: r.parent.ref } : undefined }, { status: r.ok ? 200 : 400 });
   }
 
   // Annoter une commande depuis la file de production : note interne + étiquettes
@@ -271,6 +281,8 @@ export async function POST(req) {
   // On horodate remisAt ET deliveredAt (elle est "reçue") pour les règles auto.
   if (status === "remise_main_propre") { patch.remisAt = nowIso; patch.deliveredAt = nowIso; }
   const ok = await updateSiteOrder(id, patch);
+  // Les compléments rattachés suivent la commande d'origine (statut, suivi), sans e-mail à la cliente.
+  if (ok) { try { await suivreCommandeOrigine(id, patch); } catch { /* jamais bloquant */ } }
   if (ok && avantStatut && avantStatut.status !== status) {
     journaliser({ type: "statut", cible: avantStatut.ref || id, label: `Commande #${avantStatut.ref || id}`, avant: avantStatut.status || "", apres: status, source: "commandes",
       retablir: { kind: "statut", orderId: id, valeur: avantStatut.status || "a_preparer" } }).catch(() => {});

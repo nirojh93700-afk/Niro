@@ -27,7 +27,7 @@ export async function GET(req) {
     getAdminCountsData().catch(() => ({ replies: 0, unread: 0, reviews: 0, pros: 0 })),
     getSiteOrders(300).catch(() => []),
   ]);
-  const prep = (orders || []).filter((x) => !x.test && (!x.status || x.status === "a_preparer")).length;
+  const prep = (orders || []).filter((x) => !x.test && !x.rattacheA?.id && (!x.status || x.status === "a_preparer")).length;
   let badge = "prep";
   try { badge = reglageTelephone((await getSettings())?.notifications).badge; } catch { /* défaut */ }
   const data = { prep, ...c, rachat: await nbRachat(), badge };

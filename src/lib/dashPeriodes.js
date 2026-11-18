@@ -46,7 +46,7 @@ function agrege(orders, [a, b]) {
   for (const o of orders) {
     const t = o?.createdAt ? new Date(o.createdAt).getTime() : NaN;
     if (!Number.isFinite(t) || t < a || t >= b) continue;
-    ca += Number(o.total) || 0;
+    ca += (Number(o.total) || 0) + (o.complements || []).reduce((s, c) => s + (Number(c.total) || 0), 0); // compléments payés par devis
     n += 1;
   }
   return { ca: Math.round(ca * 100) / 100, n, panier: n ? Math.round((ca / n) * 100) / 100 : 0 };

@@ -6,6 +6,7 @@ import { liensFichierGravure } from "@/components/admin/FichierGravure";
 import { decrementMany, recordCodeUsage, recordCommission, getSettings, creditCagnotte, debitCagnotte, getPromoCodes, logOrderEmail, ensureReferralCode, setPromoCode, addScheduledEmail, hasAutoSent, markAutoSent, logComm } from "@/lib/stock";
 import { sendClientMail, brandedMessage, boutonRepondre } from "@/lib/clientMail";
 import { genCodeCadeau, texteEmailDestinataire, texteEmailAcheteur, CARTE_VALIDITE_JOURS } from "@/lib/carteCadeau";
+import { rattacherCommande } from "@/lib/commandeLieeServeur";
 import { recordSiteOrder, claimSiteOrder, updateQuoteStatus, getQuote, getOrderSpec, deleteOrderSpec, findSiteOrderByPaymentIntent, updateSiteOrder } from "@/lib/firebase";
 import { vacationActive, vacationMessage, vacationGiftMessage, cadeauColisActif } from "@/lib/vacation";
 import { cadeauPromisPour } from "@/lib/cadeauPromis";
@@ -898,6 +899,12 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
         type: "commande",
       });
     } catch { /* l'alerte ne doit jamais gêner la commande */ }
+
+    // Devis « complète la commande n° … » (18/11/2026) : le paiement se range sous la commande d'origine,
+    // plus de deuxième carte dans la file. Jamais bloquant.
+    if (quote?.commandeLiee && newOrderId && typeof newOrderId === "string") {
+      try { await rattacherCommande(newOrderId, quote.commandeLiee); } catch (e) { console.error("Rattachement devis:", e.message); }
+    }
 
     // Journalise l'e-mail de confirmation dans le fil de la commande (suivi admin,
     // invisible au client). Uniquement si l'e-mail est bien parti et la commande créée.

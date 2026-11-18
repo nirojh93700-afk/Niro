@@ -1,3 +1,11 @@
+## 🔗 DEVIS QUI COMPLÈTE UNE COMMANDE = PLUS DE DEUXIÈME CARTE — 18/11/2026 (gérant : « pourquoi t'as mis deux fois la même commande ? », 0BXF7CYC → 0FUPET23 ; « OK fais tout ça et pousse »)
+- Gestion → Devis : champ « Complète la commande n° » (création) + bouton « 🔗 Complète une commande… » (action `lien`, champ `commandeLiee`).
+  Au paiement, le webhook rattache la nouvelle commande (`rattacheA = {id, ref}`, `src/lib/commandeLieeServeur.js`) : elle prend le statut et le suivi de l'origine.
+- `/api/admin/orders` GET range les compléments sous leur commande (`regrouperComplements`, `src/lib/commandeLiee.js`) → plus de 2ᵉ carte, bloc « 🔗 Complément payé » sur la carte
+  et la fiche ; compteurs « à préparer » (counts, widget, push, résumé du matin) les ignorent ; le CA du tableau de bord les compte ; Bénéfices / Comptabilité inchangés (lisent tout).
+- Changer le statut / le suivi de l'origine = recopié sur ses compléments, SANS e-mail. Ancien cas : menu « ··· » → « Rattacher à une commande… » (action `rattacher`, `detacher:true` pour défaire).
+  Ouvrir la fiche d'un complément ouvre sa commande d'origine. `npm run test-commande-liee`.
+
 ## 📮 COLIS LA POSTE SANS ADRESSE DE RETOUR — 18/11/2026 (0FUPET23, Halid Ibouroi, Collier Enveloppe ; gérant : « je mets pas mon adresse pour le retour »)
 - Le gérant n'écrit PAS d'expéditeur sur ses lettres suivies. Une lettre non distribuable sans expéditeur part au centre La Poste de Libourne (gardée 3 mois) :
   il faut une réclamation au 3631 (pro 3634) avec le n° de suivi pour la récupérer. ⛔ Ne plus écrire à une cliente que son colis « revient à l'atelier »
