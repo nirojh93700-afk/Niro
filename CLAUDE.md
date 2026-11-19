@@ -1,3 +1,13 @@
+## ⏪ GRAVURE : RETOUR AUX PRIX D'AVANT LE 15/11, SAUF LE CARNET — 19/11/2026 (gérant : « je veux que tu reviennes juste comme avant, pour les bijoux et pour les autres, comme avant le 15 ») — PRÉPARÉ, À POUSSER SUR SON « POUSSE »
+- Annulé : « la moins chère est offerte » (15/11, 083f2a6a + c0855cb6), « une seule gravure offerte » bijoux (16/11, 8bf137e4), plaques de naissance /
+  numéro de table / coffrets de marque-pages (16/11, be4762ca, le cache des photos est GARDÉ), verres (18/11, 2eba74a4), « offert » du support (15/11).
+- Donc : **bijoux** chaque texte +3 €, rien d'offert (règle du 18/10 ; Collier Quatre Mots garde sa 1re face offerte du 02/11) · **verres** règle du 19/10 + 21/10
+  (verre 1 : logo OU 1er texte offert ; autres verres +5 € logo + texte / +3 € l'un des deux) · **gobelet** 1er élément compris · **marque-pages** dessin / photo +4 €,
+  texte +3 €, rien d'offert · **support** chaque élément +3 €, motif +5 € (prix des tailles du 15/11 GARDÉS) · **plaques de naissance / numéro de table** comme avant ·
+  **carafe** chaque texte +3 €. ⛔ **CARNET GARDÉ** (16/11 : texte 3 €, dessin 4 €, le moins cher offert : `carnet.js` non touché).
+- Les 14 bijoux Nihao du 16/11 : drapeau retiré, notes « Gravure +3 € ». Test `test-moins-cher` supprimé. Tous les tests au vert, build OK.
+- Dans un mail client : donner le prix de la fiche (`node tools/prix-fiche.mjs`) ; plus de phrase « la moins chère est offerte », sauf pour le carnet.
+
 ## 🔗 DEVIS QUI COMPLÈTE UNE COMMANDE = PLUS DE DEUXIÈME CARTE — 18/11/2026 (gérant : « pourquoi t'as mis deux fois la même commande ? », 0BXF7CYC → 0FUPET23 ; « OK fais tout ça et pousse »)
 - Gestion → Devis : champ « Complète la commande n° » (création) + bouton « 🔗 Complète une commande… » (action `lien`, champ `commandeLiee`).
   Au paiement, le webhook rattache la nouvelle commande (`rattacheA = {id, ref}`, `src/lib/commandeLieeServeur.js`) : elle prend le statut et le suivi de l'origine.
@@ -25,7 +35,7 @@
   « Il s'agit d'un aperçu à l'écran : une fois gravé, le rendu réel est plus fin et plus lumineux. »
 - Ne jamais présenter l'aperçu comme le résultat exact.
 
-## ⛔ PRIX DE GRAVURE DANS UN MAIL CLIENT : « LA MOINS CHÈRE EST OFFERTE », JAMAIS « COMPRIS » — 16/11/2026 (gérant, mail d'Alicia, collier plaque + photo : « recommence plus, note quelque part ces règles »)
+## ⛔ PRIX DE GRAVURE DANS UN MAIL CLIENT : « LA MOINS CHÈRE EST OFFERTE », JAMAIS « COMPRIS » — 16/11/2026 (⚠️ ANNULÉE le 19/11 : retour aux prix d'avant le 15/11, voir en tête ; seul le carnet garde « le moins cher offert » ; le mot « compris » reste interdit dans les mails) (gérant, mail d'Alicia, collier plaque + photo : « recommence plus, note quelque part ces règles »)
 - Règle du site (`moinsCherCompris`) : parmi les gravures choisies, la MOINS CHÈRE est OFFERTE, les autres se paient. Photo seule = photo offerte ; photo + texte = le TEXTE (3 €) est offert et la PHOTO se paie (8 €).
 - Dans un mail ou un devis : écrire « la gravure la moins chère est offerte » puis dire laquelle l'est DANS CE CAS. Ne jamais écrire « la photo est offerte » tout court si un texte peut s'ajouter, ni « texte +8 € » (c'est la photo qui passe à 8 €).
 - Mot interdit : « compris » / « comprise » (règle du 15/11 : toujours « offert »). Avant de montrer un brouillon : chercher « compris » et le remplacer.

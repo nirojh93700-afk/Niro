@@ -10,6 +10,13 @@
 
 ## 1. Les changements, du plus récent au plus ancien
 
+### 19/11/2026 — Gravure : retour aux règles d'AVANT le 15/11 (sauf le carnet)
+- Annulés : « la moins chère offerte » (15/11), « une seule gravure offerte par commande » (bijoux 16/11, verres 18/11), une seule offerte (plaques de
+  naissance, numéro de table, coffrets de marque-pages, 16/11), « le moins cher compris » du support (15/11). Carnet : inchangé (16/11).
+- Exemples : collier double cœur 1 face 0 € → 3 €, 2 faces 3 € → 6 € · bracelet à une face 0 € → 3 € · marque-page texte seul 9,90 → 12,90 € ·
+  support petit + 1 texte 15,90 → 18,90 € · plaque acier photo + texte 8 € → 11 €.
+- Pour revenir à « la moins chère » : réappliquer 083f2a6a, c0855cb6, 8bf137e4, be4762ca (partie gravure), 2eba74a4.
+
 ### 18/10/2026 (après-midi) — 5 bijoux de plus : nouveaux prix donnés par le gérant (barré en ,90)
 | Bijou | **AVANT (code → barré → payé)** | Après (code → barré → payé) |
 |---|---|---|
