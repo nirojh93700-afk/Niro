@@ -136,17 +136,8 @@ export function mpArticles(v) {
 /** Prix de la gravure d'un marque-page : la gravure la MOINS CHÈRE est comprise (gérant, 15/11/2026 : « le moins cher
  *  est offert, pour tout le site »), chaque autre gravure se paie (texte 3 €, dessin / cadre / photo 4 €). */
 export function mpPrixGravure(v) {
-  return mpGravuresLot([v])[0];
-}
-/** Coffret (16/11/2026, gérant : « une seule offerte pour tout le coffret ») : UNE seule gravure offerte pour tous les
- *  marque-pages de la ligne, la moins chère ; renvoie le prix de la gravure de chaque marque-page (dans l'ordre). */
-export function mpGravuresLot(vs) {
-  const arts = (vs || []).map((v) => mpArticles(v));
-  const tous = arts.flat();
-  if (!tous.length) return arts.map(() => 0);
-  const min = Math.min(...tous);
-  const ou = arts.findIndex((a) => a.includes(min));
-  return arts.map((a, i) => Math.round((a.reduce((x, y) => x + y, 0) - (i === ou ? min : 0)) * 100) / 100);
+  const a = mpArticles(v);
+  return a.length ? Math.round((a.reduce((x, y) => x + y, 0) - Math.min(...a)) * 100) / 100 : 0;
 }
 
 /**
@@ -179,12 +170,11 @@ export function mpCalcul(product, mp, promos = {}) {
   const lesBoites = fmt.boites.map((b) => MP_BOITES[b]);
   const boite = lesBoites[0] || null;
   const vById = new Map((product.variants || []).map((x) => [x.id, x]));
-  const gravs = mpGravuresLot(mp.slots.map((s) => s.v));
-  const pieces = mp.slots.map((s, i) => {
+  const pieces = mp.slots.map((s) => {
     const variant = vById.get(s.c);
     const promo = promos[variant.id];
     const base = typeof promo === "number" && promo < variant.price ? promo : variant.price;
-    const grav = gravs[i];
+    const grav = mpPrixGravure(s.v);
     return { variant, base, grav, prix: r2(base + grav) };
   });
   const prixBoites = lesBoites.reduce((a, b) => a + b.prix, 0);
@@ -228,9 +218,12 @@ export function mpResume(product, mp) {
 
 /** Coût d'une gravure « offerte » (code gravure) : la moins chère des gravures PAYANTES (la comprise de chaque marque-page retirée). */
 export function mpPremiereGravure(mp) {
-  // La gravure PAYANTE la moins chère du coffret (une seule est offerte pour tout le coffret).
-  const a = (mp.slots || []).flatMap((s) => mpArticles(s.v)).sort((x, y) => x - y).slice(1);
-  return a.length ? a[0] : 0;
+  let best = 0;
+  for (const s of mp.slots || []) {
+    const a = mpArticles(s.v).sort((x, y) => x - y).slice(1);
+    if (a.length && (!best || a[0] < best)) best = a[0];
+  }
+  return best;
 }
 
 // ── Langue de la gravure (09/11/2026) : UNE langue pour la ligne du panier (tous les marque-pages), appliquée à

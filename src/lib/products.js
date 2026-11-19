@@ -562,10 +562,9 @@ export const products = [
     tagline: "Une arche ajourée au chiffre en relief, avec l'année de votre mariage.",
     personalizable: true,
     personalizationLabel: "Numéro de table + année + police",
-    engravingPricing: { textKeys: ["numero", "annee"], textExtra: 3, moinsCherCompris: true }, // 16/11/2026 : le numéro offert, l'année +3 €
     personalizationFields: [
       { key: "numero", label: "Numéro ou nom de la table", placeholder: "Ex : 1, 2… ou « Mariés »", maxLength: 24 },
-      { key: "annee", label: "Année à graver (+3 €)", placeholder: "Ex : 2026", maxLength: 8, optional: true },
+      { key: "annee", label: "Année à graver", placeholder: "Ex : 2026", maxLength: 8, optional: true },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
@@ -5480,10 +5479,10 @@ export const products = [
     personalizable: true,
     personalizationLabel: "Prénom + date, poids, heure, taille (+ photo en option)",
     // Prénom et date inclus (obligatoires) ; chaque mesure en plus +3 €, la photo +8 €.
-    engravingPricing: { textKeys: ["prenom", "date", "poids", "heure", "taille"], textExtra: 3, photoKey: "photo", photoSurcharge: 8, moinsCherCompris: true }, // 16/11/2026 : une seule gravure offerte (le prénom), la date +3 €
+    engravingPricing: { textKeys: ["poids", "heure", "taille"], textExtra: 3, photoKey: "photo", photoSurcharge: 8 },
     personalizationFields: [
       { key: "prenom", label: "Prénom du bébé", placeholder: "Ex : Marius", maxLength: 14 },
-      { key: "date", label: "Date de naissance (+3 €)", placeholder: "Ex : 12 mars 2026", maxLength: 22 },
+      { key: "date", label: "Date de naissance", placeholder: "Ex : 12 mars 2026", maxLength: 22 },
       { key: "poids", label: "Poids (+3 €)", placeholder: "Ex : 3 kg 400", maxLength: 12, optional: true },
       { key: "heure", label: "Heure de naissance (+3 €)", placeholder: "Ex : 8 h 43", maxLength: 10, optional: true },
       { key: "taille", label: "Taille (+3 €)", placeholder: "Ex : 52 cm", maxLength: 10, optional: true },
@@ -5553,14 +5552,13 @@ export const products = [
     tagline: "Une plaque ronde « mains en cœur », gravée au prénom et à la date de bébé — avec un emplacement pour glisser son bracelet de naissance de la maternité.",
     personalizable: true,
     personalizationLabel: "Prénom + date de naissance",
-    engravingPricing: { textKeys: ["prenom", "date"], textExtra: 3, moinsCherCompris: true }, // 16/11/2026 : le prénom offert, la date +3 €
     personalizationFields: [
       { key: "prenom", label: "Prénom du bébé", placeholder: "Ex : Juline", maxLength: 14 },
       { key: "genre", type: "select", label: "Bébé est…", optional: true, options: [
         { value: "nee", label: "Une fille (Née le…)" },
         { value: "ne", label: "Un garçon (Né le…)" },
       ] },
-      { key: "date", label: "Date de naissance (+3 €)", placeholder: "Ex : 15 mai 2026", maxLength: 22 },
+      { key: "date", label: "Date de naissance", placeholder: "Ex : 15 mai 2026", maxLength: 22 },
       { key: "police", type: "font", label: "Style d'écriture du prénom", optional: true },
       { key: "note-grav", type: "note", text: "Le dessin « mains en cœur » est déjà gravé. Nous ajoutons le prénom en haut et « Né(e) le … » en bas. Fabriquée à la commande, gravée au laser en France, livrée avec son chevalet." },
     ],

@@ -15,10 +15,9 @@ const tot = (p, mp) => mpCalcul(p, mpNormaliser(p, mp)).total;
 // Modèle 1 seul + dessin 12 + « Léa » + cadre 92 « Paul » : 4 + 3 + 4 + 3 = 14 €, le moins cher (3 €) compris → 20,90 € (15/11/2026)
 const a = { format: "seul", slots: [{ c: "mp1-caramel", v: E({ "face|bas": { k: "dessin", n: 12 }, "dos|haut": { k: "texte", t: "Léa" }, "dos|bas": { k: "dessin", n: 92, t: "Paul" } }) }] };
 ok(tot(m1, a) === 20.9, "modèle 1 : 20,90 €");
-// Coffret de 2 : « Paul » sur l'un, dessin 7 sur l'autre : UNE seule gravure offerte pour tout le coffret (16/11/2026),
-// « Paul » (3 €) offert, le dessin 7 +4 € → 29,70 €
+// Coffret de 2 : « Paul » sur l'un, dessin 7 sur l'autre : chaque gravure est la seule de son marque-page → comprise = 25,70 €
 const b = { format: "coffret2", slots: [{ c: "mp1-rouge", v: E({ "face|haut": { k: "texte", t: "Paul" } }) }, { c: "mp1-sable", v: E({ "face|bas": { k: "dessin", n: 7 } }) }] };
-ok(tot(m1, b) === 29.7, "coffret de 2 : 29,70 €");
+ok(tot(m1, b) === 25.7, "coffret de 2 : 25,70 €");
 // Stock : une pièce par couleur + la boîte de 2
 const cb = mpCalcul(m1, mpNormaliser(m1, b));
 ok(JSON.stringify(cb.stock) === JSON.stringify([["mp1-rouge", 1], ["mp1-sable", 1], ["mp-boite-2", 1]]), "stock décompté");
@@ -57,5 +56,5 @@ ok(/2 boîtes de 2 places \+ boîte de 1 place/.test(mpResume(m1, mpNormaliser(m
 ok(mpNormaliser(m1, { format: "n9", slots: [] }) === null && mpNormaliser(m1, { format: "n2b", slots: [{ c: "mp1-rouge" }] }) === null, "nombre hors limite ou pièces manquantes = refusé");
 ok(optionsArticle({ slug: m1.slug, fields: { mp: mpNormaliser(m1, { format: "n5b1-2-0", slots: ["mp1-rouge", "mp1-sable", "mp1-blond", "mp1-rouge", "mp1-rouge"].map((c) => ({ c })) }) } }).filter((o) => /Boîte/.test(o.libelle)).length === 3, "vendu en plus : les 3 boîtes");
 import { mpPremiereGravure } from "../../src/lib/marquePages.js";
-ok(mpPremiereGravure(mpNormaliser(m1, a)) === 3 && mpPremiereGravure(mpNormaliser(m1, b)) === 4, "code gravure offerte : la moins chère des gravures payantes (coffret : une seule offerte)");
+ok(mpPremiereGravure(mpNormaliser(m1, a)) === 3 && mpPremiereGravure(mpNormaliser(m1, b)) === 0, "code gravure offerte : la moins chère des gravures payantes");
 console.log(`✓ marque-pages : ${n} vérifications`);
