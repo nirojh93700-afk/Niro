@@ -25,7 +25,7 @@ function mail(date) {
       <div style="color:#9a9087;font-size:11px;margin-top:10px;">*Une gravure offerte par commande, sur une création qui se grave. Le code ne s'ajoute pas à une gravure déjà offerte. Les gravures supplémentaires restent au tarif habituel.</div>
     </div>
     <p style="margin:0 0 8px;">Un prénom sur un bracelet, une date au dos d'un collier, un petit mot dans le cristal : avec votre code, cette gravure est pour nous.</p>
-    <p style="margin:0 0 16px;">Et sur certaines créations, la première gravure est <b>déjà offerte</b>, même sans code : le premier verre de vos verres et flûtes gravés, les marque-pages en bois et le support de téléphone. Votre code sert pour toutes les autres.</p>
+    <p style="margin:0 0 16px;">Et sur certaines créations, la première gravure est <b>déjà offerte</b>, même sans code : sur les verres et flûtes gravés (le premier verre), sur les marque-pages en bois et sur le support de téléphone. Votre code sert pour toutes les autres.</p>
     ${cartes}
     <p style="margin:0 0 16px;">Pour les bijoux, nos emballages de Noël sont là : sachet rouge, boîte à ruban « Merry Christmas », sac de Noël, et le Pack de Noël.</p>
     <p style="margin:0 0 6px;color:#7a7268;font-size:13px;">Votre code est personnel : il fonctionne avec l'adresse à laquelle nous vous écrivons, une seule fois. Entrez-le dans votre panier, la gravure est déduite au paiement.</p>
