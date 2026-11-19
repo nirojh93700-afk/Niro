@@ -16,6 +16,7 @@ import { sendClientMail, brandedMessage, boutonsAvis, boutonRepondre, imageEnTet
 import { cashbackReminderEmail, emailLayout, BRAND } from "@/lib/email";
 import { offreActive, offreGravureEmail, joursDepuis, OFFRE_GRAVURE_JOURS } from "@/lib/offreGravure";
 import { cadeauColisActif } from "@/lib/vacation";
+import { mailNoelInscrites } from "@/lib/mailNoelInscrites";
 
 const DAY = 86400000;
 
@@ -196,9 +197,11 @@ export async function runBirthdayJobs() {
 // `dryRun` : compte seulement, n'envoie rien (sert à l'écran d'admin).
 // `testTo` : mode test de l'admin — UN seul envoi à cette adresse, rien n'est
 // mémorisé (sert à voir l'e-mail réel et l'erreur exacte s'il y en a une).
-export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
+// `noel` (19/11/2026) : mail de Noël aux mêmes inscrites, même si l'offre est éteinte, code de 31 jours sans date
+// écrite ; `limite` : nombre d'envois par appel (l'admin rappelle jusqu'à 0 restante).
+export async function runOffreGravureJob({ dryRun = false, testTo = "", noel = false, limite = 0 } = {}) {
   const s = await getSettings();
-  const o = offreActive(s?.gravureOfferte);
+  const o = noel ? { minJours: 3, ...(s?.gravureOfferte || {}), enabled: true, code: "GRAVURE" } : offreActive(s?.gravureOfferte);
   if (!o) return { actif: false, eligibles: 0, envoyes: 0, attente: 0, deja: 0 };
 
   const minJours = Number(o.minJours) || 0;
@@ -250,6 +253,8 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
   }
 
   if (dryRun) return { actif: true, eligibles: cibles.length, envoyes: 0, attente, deja };
+  const totalCibles = cibles.length;
+  if (limite > 0 && cibles.length > limite) cibles.length = limite;
 
   const test = String(testTo || "").trim().toLowerCase();
   if (test) { cibles.length = 0; cibles.push({ email: test, date: "" }); }
@@ -347,7 +352,7 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
         kind: "gravure",  // au paiement : prix RÉEL de la 1re gravure du panier
         reusable: false,  // une seule utilisation
         email: c.email,   // réservé à cette adresse
-        days: jours + 1,  // +1 : le code vit toute la journée écrite dans l'e-mail
+        days: noel ? 31 : jours + 1,  // +1 : le code vit toute la journée écrite dans l'e-mail
       });
       // Ses favoris (si elle s'est connectée un jour), sinon les idées.
       let pieces = [], favoris = false;
@@ -361,12 +366,13 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
       // vraiment offert aujourd'hui (mode délai allongé OU interrupteur cadeau) :
       // jamais de promesse que le panier ne tiendrait pas.
       const args = { date: c.date, code, fin: finPerso, cadeau: o.cadeau !== false && Boolean(cadeauColisActif(s)), pieces, favoris };
-      let mail = offreGravureEmail(args);
+      const fabrique = (x) => (noel ? mailNoelInscrites(x) : offreGravureEmail(x));
+      let mail = fabrique(args);
       // Bouton « ✉️ Répondre à ce message » (règle du 17/09) — jamais bloquant :
       // si le jeton échoue, l'e-mail part sans bouton.
       try {
         const btn = await boutonRepondre({ email: c.email, name: "", subject: mail.subject, excerpt: `Offre gravure offerte — code ${code}` });
-        if (btn) mail = offreGravureEmail({ ...args, bouton: btn });
+        if (btn) mail = fabrique({ ...args, bouton: btn });
       } catch { /* ignore */ }
       const r = await sendClientMail({ to: c.email, subject: mail.subject, html: mail.html });
       if (r?.ok) {
@@ -378,8 +384,8 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "" } = {}) {
     } catch (e) { noter(c.email, e?.message || e); /* on continue avec les suivantes */ }
   }
   // Compte rendu visible dans l'écran de l'offre (GET /api/admin/offre-gravure).
-  try { await setJobNote("offreGravure", { at: Date.now(), test, eligibles: cibles.length, envoyes, echecs, erreurs }); } catch { /* ignore */ }
-  return { actif: true, eligibles: cibles.length, envoyes, echecs, erreurs, attente, deja, purges };
+  try { await setJobNote(noel ? "mailNoel" : "offreGravure", { at: Date.now(), test, eligibles: cibles.length, envoyes, echecs, erreurs }); } catch { /* ignore */ }
+  return { actif: true, eligibles: cibles.length, envoyes, echecs, erreurs, attente, deja, purges, restantes: Math.max(0, (typeof totalCibles === "number" ? totalCibles : cibles.length) - envoyes - echecs) };
 }
 
 // --- 6) « Prévenez-moi si le prix baisse » (favoris) ------------------------

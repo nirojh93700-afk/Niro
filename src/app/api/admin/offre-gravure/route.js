@@ -102,6 +102,14 @@ export async function POST(req) {
     const r = await runOffreGravureJob({ testTo: to });
     return Response.json({ ok: true, ...r });
   }
+  // Mail de Noël aux inscrites sans commande (19/11/2026) : { action:"noel", dryRun?, test?, limite? }.
+  // Mêmes exclusions que l'offre (commande, devis, vrai échange, déjà servie, inscrite depuis moins de 3 jours).
+  if (body?.action === "noel") {
+    const to = String(body?.test || "").trim();
+    if (to && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return Response.json({ error: "Adresse invalide." }, { status: 400 });
+    const r = await runOffreGravureJob({ noel: true, dryRun: body?.dryRun === true, testTo: to, limite: Math.min(25, Math.max(1, parseInt(body?.limite, 10) || 10)) });
+    return Response.json({ ok: true, ...r });
+  }
   if (body?.action !== "send") return Response.json({ error: "Action inconnue." }, { status: 400 });
   const s = await getSettings();
   if (!offreActive(s.gravureOfferte)) {

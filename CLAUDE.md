@@ -12,6 +12,10 @@
 - ✉️ **Mail de Noël aux inscrites sans commande** (99, sans l'offre de septembre) : ENREGISTRÉ le 19/11 (« enregistre ce mail »), pas envoyé.
   Générateur `tools/mails/noel-inscrites.mjs <dossier>`, image `docs/maquettes/mail-noel-inscrites.jpg`. Code personnel, SANS date de fin (il ne veut ni date ni « c'est permanent »),
   liste des créations déjà offertes (verres 1er verre, marque-pages, support ; carnet RETIRÉ), photos bijoux / cristal / verres / marque-pages.
+- ✉️ **Envoi du mail de Noël** (gérant 19/11 : « envoie », « les deux, pousse d'abord ») : `POST /api/admin/offre-gravure {action:"noel", dryRun?, test?, limite?}`
+  → `runOffreGravureJob({noel:true})` + `src/lib/mailNoelInscrites.js` : mêmes exclusions que l'offre gravure (commande même annulée, devis, vrai échange,
+  déjà servie, inscrite < 3 jours), code nominatif `GRAVURE-XXXXX` 31 jours créé AVANT l'envoi, mémorisé dans `offreGravure` (jamais deux fois).
+- ⛔ **Mail cagnotte NON envoyé le 19/11** : 33 des 34 l'avaient déjà reçu le 31/10 (gérant : « pour la cagnotte, on l'a pas envoyé aujourd'hui »).
 - ✉️ **Mail « Votre cagnotte vous attend » pour Noël** : préparé le 19/11, pas envoyé. 85 cagnottes non utilisées (179,46 €), mais ⛔ gérant : « pas aux gens qui ont encore un délai pour demander le remboursement » → retirées : commande en cours (à préparer, en gravure, expédiée), livrée depuis moins de 14 jours, annulée / remboursée → **34 clientes, 64,41 €** au 19/11 (liste à refaire le jour de l'envoi).
   `tools/mails/cagnotte-noel.mjs <dossier>` (lit `cag-cible.json` = /api/admin/cagnottes + commandes), image `docs/maquettes/mail-cagnotte-noel.jpg`. « Bonjour, » sans prénom
   (noms parfois inversés ou adresses), montant, mode d'emploi (se connecter avec cette adresse, cocher « Utiliser ma cagnotte fidélité », jusqu'à 50 % du panier), pas de date.
