@@ -26,7 +26,7 @@ const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
 // il donnait des prix sans savoir ce que coûte chaque texte).
 function resumeGravure(p) {
   if (p.regleVerres) {
-    return "verre 1 : une image / un logo / un modèle offert, CHAQUE texte +3 € ; chaque autre verre (identique ou non) : image + texte +5 €, image seule ou texte seul +3 € ; face + fond +7 € par verre";
+    return "verre 1 : une image / un logo / un modèle offert, CHAQUE texte +3 € ; chaque autre verre (identique ou non) : compté en éléments (image / logo / modèle = 1, chaque texte ou date = 1) : 1 élément +3 €, 2 éléments ou plus +5 € ; face + fond +7 € par verre";
   }
   if (p.carnet) return "chaque texte gravé +3 €, chaque dessin, logo ou photo +4 € ; la PREMIÈRE gravure du carnet est offerte (une seule)";
   if (p.createur === "support") return "taille selon l'option ; chaque élément gravé +3 €, le 1er élément gravé est OFFERT ; motif ajouré +5 € (jamais offert)";

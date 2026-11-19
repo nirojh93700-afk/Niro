@@ -41,7 +41,7 @@ t("étiquette : avec une photo → rien d'offert côté texte", texteOffertVerre
 t("prix et étiquette d'accord (date seule = 0)", prixGravureVerres(PF, U, 1, { mode: "texte", date: "2024" }).total === 0);
 t("verre vierge = pas grave", verreGrave({ police: "playfair" }) === false);
 const r = prixGravureVerres(P, U, 2, {}, [photoTexte, logo]);
-t("le détail liste les lignes", r.lignes.some((l) => /logo et texte/.test(l.libelle)) && r.lignes.some((l) => l.montant === 0));
+t("le détail liste les lignes", r.lignes.some((l) => /deux éléments/.test(l.libelle)) && r.lignes.some((l) => l.montant === 0));
 // Langue de la gravure (09/11/2026) : choisir une autre langue ne fait pas perdre le texte offert du verre 1
 const tradES = { mode: "texte", texte: "Feliz cumpleaños", texteSource: "Joyeux anniversaire", langue: "es", tradOk: "oui", decorPlace: "texte" };
 t("1 verre texte traduit = 0 (texte offert)", prixGravureVerres(P, U, 1, tradES).total === 0);
@@ -53,5 +53,8 @@ for (const m of ["photo", "modele", "lettre", "noel"]) {
   t(`mode ${m} + texte = 3`, prixGravureVerres(P, U, 1, { mode: m, texte: "Léa" }).total === 3);
 }
 t("mode texte : texte toujours offert", texteOffertVerre1(PF, { mode: "texte", texte: "Léa" }) === "texte");
+// 19/11/2026 (gérant) : autres verres comptés en éléments, 1 élément +3 €, 2 éléments +5 €
+t("whisky 2e verre texte + date (2 éléments) = 3 + 5", prixGravureVerres(W, U, 2, {}, [{ texte: "Papa", texte2: "2024" }, { texte: "Papy", texte2: "2025" }]).total === 8);
+t("whisky 2e verre texte seul (1 élément) = 0 + 3", prixGravureVerres(W, U, 2, {}, [{ texte: "Papa" }, { texte: "Papy" }]).total === 3);
 console.log(`${ok} vérifications au vert, ${ko} en échec`);
 if (ko) process.exit(1);

@@ -2,7 +2,7 @@
 - Annulé : « la moins chère est offerte » (15/11, 083f2a6a + c0855cb6), « une seule gravure offerte » bijoux (16/11, 8bf137e4), plaques de naissance /
   numéro de table / coffrets de marque-pages (16/11, be4762ca, le cache des photos est GARDÉ), verres (18/11, 2eba74a4), « offert » du support (15/11).
 - Donc : **bijoux** chaque texte +3 €, rien d'offert (règle du 18/10 ; Collier Quatre Mots garde sa 1re face offerte du 02/11) · **verres** règle du 19/10 + 21/10
-  (verre 1 : logo OU 1er texte offert ; autres verres +5 € logo + texte / +3 € l'un des deux) · **gobelet** 1er élément compris · **marque-pages** dessin / photo +4 €,
+  (verre 1 : un élément offert — logo OU 1er texte —, chaque texte en plus +3 € ; chaque autre verre compté en ÉLÉMENTS, gérant 19/11 : « un élément gravé trois euros, deux éléments cinq euros » → logo seul ou texte seul +3 €, logo + texte ou texte + date +5 € ; face + fond +7 €) · **gobelet** 1er élément compris · **marque-pages** dessin / photo +4 €,
   texte +3 €, **la 1re gravure offerte, une seule par ligne, coffret compris** (gérant, 19/11 : « marque-pages, le premier offert », `mpGravureOfferte`) · **support** le 1er élément gravé OFFERT puis +3 € chacun, motif ajouré toujours +5 € (gérant, 19/11 : « une gravure offerte, après facturer » ; prix des tailles du 15/11 GARDÉS) · **plaques de naissance / numéro de table** comme avant ·
   **carafe** chaque texte +3 €. **carnet** texte 3 €, dessin / photo 4 €, la 1re gravure offerte, une seule (gérant, 19/11 : « carnet, pareil, juste une gravure offerte », `cnElements`).
 - Les 14 bijoux Nihao du 16/11 : drapeau retiré, notes « Gravure +3 € ». Test `test-moins-cher` supprimé. Tous les tests au vert, build OK.
