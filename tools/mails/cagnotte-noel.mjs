@@ -14,18 +14,30 @@ const prenom = (n) => {
   if (!p || /\d/.test(p) || /^(résidence|residence|la|le|les)$/i.test(p)) return "";
   return p[0].toUpperCase() + p.slice(1).toLowerCase();
 };
+// Ce qu'elle a commandé, d'après TOUTES ses commandes (vérifié une par une le 19/11) ; jamais le texte gravé.
 function rappel(items) {
-  const t = (items || []).join(" ").toLowerCase();
-  if (/cristal|socle/.test(t)) return "votre cristal photo 3D";
-  if (/flûte/.test(t)) return "vos flûtes gravées";
-  if (/tumbler|whisky/.test(t)) return "votre verre à whisky gravé";
-  if (/carafe/.test(t)) return "votre carafe gravée";
-  if (/vin|cocktail/.test(t)) return "votre verre gravé";
-  if (/carnet/.test(t)) return "votre carnet gravé";
-  if (/marque-page/.test(t)) return "votre marque-page";
-  if (/support/.test(t)) return "votre support de téléphone";
-  if (/collier|bracelet|médaillon|gourmette|pièce/.test(t)) return "votre bijou gravé";
-  return "votre commande";
+  const L = (items || []).map((x) => String(x || "").toLowerCase()).filter((x) => !/^socle/.test(x));
+  const n = (re) => L.filter((x) => re.test(x)).length;
+  const sorte = [];
+  if (n(/cristal/)) sorte.push(n(/cristal/) > 1 ? "vos cristaux photo 3D" : "votre cristal photo 3D");
+  if (n(/carafe/)) sorte.push("votre carafe gravée");
+  if (n(/flûte/)) sorte.push("vos flûtes gravées");
+  const wh = L.filter((x) => /whisky|tumbler/.test(x) && !/carafe/.test(x)).length;
+  if (wh) sorte.push(wh > 1 ? "vos verres à whisky gravés" : "votre verre à whisky gravé");
+  if (n(/verre à vin/)) sorte.push(n(/verre à vin/) > 1 ? "vos verres à vin gravés" : "votre verre à vin gravé");
+  if (n(/cocktail/)) sorte.push("votre verre à cocktail gravé");
+  if (n(/carnet/)) sorte.push("votre carnet gravé");
+  if (n(/marque-page/)) sorte.push("votre marque-page");
+  if (n(/support/)) sorte.push("votre support de téléphone gravé");
+  if (n(/pièce ronde|laiton/)) sorte.push("votre pièce en laiton gravée");
+  const emp = n(/empreinte/);
+  const bij = L.filter((x) => /collier|médaillon|pendentif/.test(x)).length, brac = L.filter((x) => /bracelet|gourmette/.test(x) && !/empreinte/.test(x)).length;
+  if (bij) sorte.push(bij > 1 ? "vos colliers gravés" : "votre collier gravé");
+  if (emp && brac) sorte.push("vos bracelets");
+  else if (emp) sorte.push(emp > 1 ? "vos bracelets empreinte" : "votre bracelet empreinte");
+  else if (brac) sorte.push(brac > 1 ? "vos bracelets" : "votre bracelet");
+  if (!sorte.length) return "votre commande";
+  return sorte.length === 1 ? sorte[0] : sorte.slice(0, -1).join(", ") + " et " + sorte[sorte.length - 1];
 }
 const IDEES = [
   ["/produits/collier-coeur-grave-1.jpg", "Bijoux gravés", "/boutique/bijoux"],
@@ -41,7 +53,7 @@ export function mailCagnotte(c) {
   const quoi = rappel(c.items);
   const bodyHtml = `
     <p style="margin:0 0 12px;">Bonjour,</p>
-    <p style="margin:0 0 12px;">Merci encore de nous avoir confié ${quoi}. À chaque commande, une partie de vos achats est mise de côté pour vous, dans votre cagnotte fidélité.</p>
+    <p style="margin:0 0 12px;">Merci encore d'avoir choisi notre atelier pour ${quoi}. À chaque commande, une partie de vos achats est mise de côté pour vous, dans votre cagnotte fidélité.</p>
     <div style="text-align:center;background:${BRAND.cream};border:1px solid #ece3d2;border-radius:14px;padding:20px;margin:0 0 16px;">
       <div style="font-family:Georgia,serif;font-size:20px;color:${gold};">🎄 Votre cagnotte fidélité</div>
       <div style="font-size:30px;font-weight:bold;color:${gold};margin-top:10px;">${euro(c.solde)}</div>
