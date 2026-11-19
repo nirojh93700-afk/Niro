@@ -1,3 +1,15 @@
+## 🔐 DEUX MOTS DE PASSE DANS GESTION : GÉRANT / ASSISTANT — 19/11/2026 (gérant : « tu sépares en deux… toi un mot de passe pour envoyer les mails, faire des réglages ; moi tout ce qui est important, rembourser, il n'y a que moi ») — CONSTRUIT, PAS ENCORE EN LIGNE (attend son « pousse »)
+- Règles PURES dans `src/lib/droitsAssistant.js` (`decisionAssistant(chemin, méthode, corps)` → ok / gerant / valider). Ses choix du 19/11 : les PRIX → l'assistant peut ;
+  ENVOIS À PLUSIEURS clientes et CODES PROMO → l'assistant prépare, il faut son FEU VERT. Réservé au gérant : rembourser, annuler une commande, créditer / déplacer une cagnotte,
+  toute suppression, export, import, mots de passe, appareils Face ID, clés Boxtal / Instagram / Gmail / accès au site, régler l'accès de l'assistant.
+- `stock.js` : `roleAdminKey(key)` (« gerant » / « assistant » / null), `checkGerantKey`, `isAdmin(req)` lit le corps (`req.clone()`) et applique les règles ; section `adminAssistant`
+  (mot de passe chiffré scrypt, `coupeAt`) et `demandesAssistant` ({demandes, refus, faits}). Feu vert = jeton `nvr_` à usage unique, 2 min, pour CETTE route : la demande est rejouée
+  côté serveur (`/api/admin/acces-assistant` action `accepter` / `accepterTout`). Journal d'activité : « par : assistant » (AsyncLocalStorage `acteurActuel`). Notification téléphone à chaque demande.
+- Écran Gestion → Réglages → **Accès de l'assistant** (`/gestion/acces-assistant`) : créer / changer / couper le mot de passe, À valider (Accepter / Refuser / Tout accepter), ce que l'assistant a fait, refus.
+- Le mot de passe de l'assistant ne s'écrit JAMAIS dans la conversation : formulaire sécurisé (`request_credential`, hôte nivcreation.fr, en-tête `X-Admin-Key`).
+  ⛔ Une fois en place, je n'utilise plus le mot de passe du gérant. Le changer, lui, ne touche pas celui de l'assistant (« Couper » pour l'arrêter).
+- ⛔ Toute nouvelle route d'administration qui touche à l'argent ou écrit à plusieurs personnes : l'ajouter dans `droitsAssistant.js`. Tests : `npm run test-acces-assistant` (25).
+
 ## ⏪ GRAVURE : RETOUR AUX PRIX D'AVANT LE 15/11 + 1re GRAVURE OFFERTE SUR MARQUE-PAGES, SUPPORT, CARNET — 19/11/2026 (gérant : « je veux que tu reviennes juste comme avant, pour les bijoux et pour les autres, comme avant le 15 ») — PRÉPARÉ, À POUSSER SUR SON « POUSSE »
 - Annulé : « la moins chère est offerte » (15/11, 083f2a6a + c0855cb6), « une seule gravure offerte » bijoux (16/11, 8bf137e4), plaques de naissance /
   numéro de table / coffrets de marque-pages (16/11, be4762ca, le cache des photos est GARDÉ), verres (18/11, 2eba74a4), « offert » du support (15/11).

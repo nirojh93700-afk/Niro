@@ -52,7 +52,8 @@
     "test-provenance": "node --import ./tools/alias-register.mjs tools/tests/provenance.mjs",
     "test-niv-admin": "node --import ./tools/alias-register.mjs tools/tests/niv-admin.test.mjs",
     "test-taille-section": "node tools/tests/taille-section.test.mjs",
-    "test-gravure-offerte": "node --import ./tools/alias-register.mjs tools/tests/gravure-deja-offerte.test.mjs"
+    "test-gravure-offerte": "node --import ./tools/alias-register.mjs tools/tests/gravure-deja-offerte.test.mjs",
+    "test-acces-assistant": "node --import ./tools/alias-register.mjs tools/tests/acces-assistant.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",

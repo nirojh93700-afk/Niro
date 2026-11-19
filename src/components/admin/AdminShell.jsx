@@ -121,6 +121,8 @@ const SECTIONS = [
     { id: "gardien", t: "Gardien du site", href: "/gestion/gardien" },
     // 15/11/2026 (maquette « Niv Admin ») : Face ID et facture électronique.
     { id: "appareils", t: "Appareils connectés", href: "/gestion/appareils" },
+    // 19/11/2026 : mot de passe de l'assistant (droits limités) + feu vert du gérant.
+    { id: "acces-assistant", t: "Accès de l'assistant", href: "/gestion/acces-assistant" },
     { id: "efacture", t: "Facture électronique", href: "/gestion/facture-electronique" } ] },
   // Logiciel de création (13/11/2026 soir, gérant : « pas dans ton test… c'est des réglages, logiciel de création, il faut que ça soit à part, une nouvelle catégorie ») :
   // L'atelier = un seul logiciel pour toutes les créations (public/atelier-outils/logiciel.html). Il n'est plus rangé dans Tests.

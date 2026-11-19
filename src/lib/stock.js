@@ -15,6 +15,8 @@
 // =============================================================================
 import { reduireSection, octets, SECTIONS_REDUCTIBLES } from "./tailleSection";
 import nodeCrypto from "crypto";
+import { AsyncLocalStorage } from "node:async_hooks";
+import { decisionAssistant } from "./droitsAssistant";
 import { getFirestoreDb, getStorageBucketSafe } from "./firebase";
 import { DEFAULT_PACKAGING, DEFAULT_PRODUCT_PACKAGING } from "./packagingSeed";
 import { MESSAGE_TEMPLATES_SEED, AUTO_RULES_SEED } from "./messageTemplatesSeed";
@@ -929,9 +931,8 @@ function correspond(auth, key) {
   try { return egalSur(hashAdminPassword(key, auth.salt), auth.hash); } catch { return false; }
 }
 
-export async function checkAdminKey(key) {
-  const k = typeof key === "string" ? key : "";
-  if (!k) return false;
+// Mot de passe du GÉRANT seulement (son mot de passe, ou une session Face ID).
+async function estCleGerant(k) {
   // Clé ouverte par Face ID (15/11/2026) : jeton de session, jamais le mot de passe.
   if (k.startsWith(JETON_PREFIXE)) return sessionAdminValide(k);
   let auth = await readAdminAuth(false);
@@ -946,8 +947,227 @@ export async function checkAdminKey(key) {
   return Boolean(process.env.ADMIN_PASSWORD) && egalSur(k, process.env.ADMIN_PASSWORD);
 }
 
+/** Qui entre avec cette clé : "gerant", "assistant" ou null. */
+export async function roleAdminKey(key) {
+  const k = typeof key === "string" ? key : "";
+  if (!k) return null;
+  if (k.startsWith(REJEU_PREFIXE)) return null; // un jeton de feu vert ne vaut que dans isAdmin, pour SA demande
+  if (await estCleGerant(k)) return "gerant";
+  if (await estCleAssistant(k)) return "assistant";
+  return null;
+}
+
+/** Vrai pour les DEUX mots de passe (lecture des écrans). Pour une action, passer par isAdmin(req). */
+export async function checkAdminKey(key) {
+  return Boolean(await roleAdminKey(key));
+}
+
+/** Vrai seulement pour le mot de passe du gérant (ou Face ID). */
+export async function checkGerantKey(key) {
+  return (await roleAdminKey(key)) === "gerant";
+}
+
+// Qui fait l'action en cours (lu par le Journal d'activité : « fait par : assistant »).
+const acteurCourant = new AsyncLocalStorage();
+export function acteurActuel() {
+  return acteurCourant.getStore()?.par || "";
+}
+
 export async function isAdmin(req) {
-  return checkAdminKey(req.headers.get("x-admin-key"));
+  const key = req.headers.get("x-admin-key") || "";
+  const url = new URL(req.url, "http://local");
+  const methode = String(req.method || "GET").toUpperCase();
+  // Feu vert donné par le gérant sur une demande de l'assistant : valable une fois, pour cette demande seulement.
+  if (key.startsWith(REJEU_PREFIXE)) {
+    const okRejeu = await consommerJetonRejeu(key, url.pathname, methode);
+    if (okRejeu) acteurCourant.enterWith({ par: "assistant (feu vert du gérant)" });
+    return okRejeu;
+  }
+  const role = await roleAdminKey(key);
+  if (role === "gerant") return true;
+  if (role !== "assistant") return false;
+  let corps = null;
+  if (methode !== "GET" && methode !== "HEAD") {
+    try { corps = await req.clone().json(); } catch { corps = null; }
+  }
+  const { verdict, motif } = decisionAssistant(url.pathname, methode, corps);
+  if (verdict === "ok") {
+    acteurCourant.enterWith({ par: "assistant" });
+    if (methode !== "GET" && methode !== "HEAD") {
+      noterFaitAssistant({ chemin: url.pathname, methode, action: typeof corps?.action === "string" ? corps.action : "" }).catch(() => {});
+    }
+    return true;
+  }
+  if (verdict === "valider") {
+    await ajouterDemandeAssistant({ chemin: url.pathname + url.search, methode, corps, motif }).catch(() => {});
+  } else {
+    await noterRefusAssistant({ chemin: url.pathname, methode, motif }).catch(() => {});
+  }
+  return false;
+}
+
+// --- Mot de passe de l'ASSISTANT (19/11/2026) -----------------------------------------------------------------
+// Section « adminAssistant » : { hash, salt, at, coupeAt } (jamais en clair). Droits : src/lib/droitsAssistant.js.
+// Section « demandesAssistant » : { demandes:[{id, at, chemin, methode, corps, motif, statut, decideAt, resultat, rejeu}],
+// refus:[{at, chemin, methode, motif}] }. Le gérant donne son feu vert dans Réglages › Accès de l'assistant.
+const ASSISTANT_SECTION = "adminAssistant";
+const DEMANDES_SECTION = "demandesAssistant";
+const REJEU_PREFIXE = "nvr_";
+let assistantCache = { val: undefined, at: 0 };
+let assistantFreshAt = 0;
+
+async function lireSectionFraiche(nom, fresh) {
+  try {
+    const db = useFirestore() ? getFirestoreDb() : null;
+    if (db) {
+      const snap = await db.collection(FS_COLLECTION).doc(FS_SECTION_PREFIX + nom).get();
+      return snap.exists ? JSON.parse(snap.data()?.json || "null") : null;
+    }
+    return (await getCatalogRaw(fresh))?.[nom] || null;
+  } catch { return undefined; }
+}
+
+async function readAssistant(fresh = false) {
+  if (!fresh && assistantCache.val !== undefined && Date.now() - assistantCache.at < FS_CACHE_TTL) return assistantCache.val;
+  let val = await lireSectionFraiche(ASSISTANT_SECTION, fresh);
+  if (val === undefined) return assistantCache.val ?? null; // lecture impossible : jamais d'ouverture par défaut
+  val = val && val.hash && val.salt && !val.coupeAt ? val : null;
+  assistantCache = { val, at: Date.now() };
+  return val;
+}
+
+async function estCleAssistant(k) {
+  let a = await readAssistant(false);
+  if (a && correspond(a, k)) return true;
+  if (Date.now() - assistantFreshAt > 5000) {
+    assistantFreshAt = Date.now();
+    a = await readAssistant(true);
+    if (a && correspond(a, k)) return true;
+  }
+  return false;
+}
+
+export async function assistantInfo() {
+  const raw = await lireSectionFraiche(ASSISTANT_SECTION, true);
+  return { actif: Boolean(raw && raw.hash && !raw.coupeAt), at: raw?.at || null, coupeAt: raw?.coupeAt || null };
+}
+
+export async function setAssistantPassword(next) {
+  const salt = nodeCrypto.randomBytes(16).toString("hex");
+  const val = { hash: hashAdminPassword(next, salt), salt, at: new Date().toISOString(), coupeAt: null };
+  const data = await getCatalogRaw(true);
+  data[ASSISTANT_SECTION] = val;
+  await persistCatalog(data, [ASSISTANT_SECTION]);
+  assistantCache = { val, at: Date.now() };
+  return val.at;
+}
+
+export async function couperAssistant() {
+  const data = await getCatalogRaw(true);
+  const cur = data[ASSISTANT_SECTION] && typeof data[ASSISTANT_SECTION] === "object" ? data[ASSISTANT_SECTION] : {};
+  data[ASSISTANT_SECTION] = { ...cur, coupeAt: new Date().toISOString() };
+  await persistCatalog(data, [ASSISTANT_SECTION]);
+  assistantCache = { val: null, at: Date.now() };
+  return true;
+}
+
+function demandesVides(v) {
+  const d = v && typeof v === "object" ? v : {};
+  return { demandes: Array.isArray(d.demandes) ? d.demandes : [], refus: Array.isArray(d.refus) ? d.refus : [], faits: Array.isArray(d.faits) ? d.faits : [] };
+}
+
+async function modifierDemandes(fn) {
+  const data = await getCatalogRaw(true);
+  const cur = demandesVides(data[DEMANDES_SECTION]);
+  const next = demandesVides(fn(cur) || cur);
+  next.demandes = next.demandes.slice(-80);
+  next.refus = next.refus.slice(-60);
+  next.faits = next.faits.slice(-150);
+  data[DEMANDES_SECTION] = next;
+  await persistCatalog(data, [DEMANDES_SECTION]);
+  return next;
+}
+
+export async function getDemandesAssistant() {
+  return demandesVides(await lireSectionFraiche(DEMANDES_SECTION, true));
+}
+
+async function ajouterDemandeAssistant({ chemin, methode, corps, motif }) {
+  const brut = JSON.stringify(corps ?? null);
+  const trop = brut.length > 150000;
+  const d = {
+    id: "da_" + nodeCrypto.randomBytes(6).toString("hex"),
+    at: Date.now(), chemin: String(chemin).slice(0, 300), methode, motif: String(motif || "").slice(0, 120),
+    corps: trop ? null : corps ?? null, tropGros: trop, statut: "attente",
+  };
+  // Une même demande envoyée deux fois de suite ne crée qu'une ligne.
+  let nouvelle = false;
+  await modifierDemandes((x) => {
+    const deja = x.demandes.find((e) => e.statut === "attente" && e.chemin === d.chemin && JSON.stringify(e.corps) === brut);
+    if (deja) return x;
+    nouvelle = true;
+    return { ...x, demandes: [...x.demandes, d] };
+  });
+  // Notification sur le téléphone du gérant (une par demande ; jamais bloquant).
+  if (nouvelle) {
+    import("./pushAdmin").then((m) => m.envoyerAlerteAdmin({ title: "Feu vert demandé par l'assistant", body: d.motif, url: "/gestion/acces-assistant", tag: "assistant-" + d.motif, type: "message" })).catch(() => {});
+  }
+  return d.id;
+}
+
+async function noterFaitAssistant({ chemin, methode, action }) {
+  await modifierDemandes((x) => ({ ...x, faits: [...(x.faits || []), { at: Date.now(), chemin: String(chemin).slice(0, 200), methode, action: String(action || "").slice(0, 40) }] }));
+}
+
+async function noterRefusAssistant({ chemin, methode, motif }) {
+  await modifierDemandes((x) => ({ ...x, refus: [...x.refus, { at: Date.now(), chemin: String(chemin).slice(0, 200), methode, motif }] }));
+}
+
+/** Le gérant accepte : un jeton à usage unique, valable 2 minutes, pour rejouer CETTE demande. */
+export async function accepterDemandeAssistant(id) {
+  const jeton = REJEU_PREFIXE + nodeCrypto.randomBytes(24).toString("hex");
+  let trouvee = null;
+  await modifierDemandes((x) => ({
+    ...x,
+    demandes: x.demandes.map((e) => {
+      if (e.id !== id || e.statut !== "attente" || e.tropGros) return e;
+      trouvee = e;
+      return { ...e, statut: "en_cours", decideAt: Date.now(), rejeu: { h: hacherJeton(jeton), exp: Date.now() + 120000, utilise: false } };
+    }),
+  }));
+  return trouvee ? { demande: trouvee, jeton } : null;
+}
+
+export async function finirDemandeAssistant(id, resultat) {
+  await modifierDemandes((x) => ({
+    ...x,
+    demandes: x.demandes.map((e) => (e.id === id ? { ...e, statut: resultat?.ok ? "acceptee" : "echec", resultat: String(resultat?.texte || "").slice(0, 300), rejeu: null } : e)),
+  }));
+}
+
+export async function refuserDemandeAssistant(id) {
+  await modifierDemandes((x) => ({
+    ...x,
+    demandes: x.demandes.map((e) => (e.id === id && e.statut === "attente" ? { ...e, statut: "refusee", decideAt: Date.now() } : e)),
+  }));
+}
+
+async function consommerJetonRejeu(jeton, chemin, methode) {
+  const h = hacherJeton(jeton);
+  let ok = false;
+  try {
+    await modifierDemandes((x) => ({
+      ...x,
+      demandes: x.demandes.map((e) => {
+        const r = e.rejeu;
+        if (!r || r.h !== h || r.utilise || r.exp < Date.now()) return e;
+        if (String(e.chemin).split("?")[0] !== chemin || e.methode !== methode) return e;
+        ok = true;
+        return { ...e, rejeu: { ...r, utilise: true } };
+      }),
+    }));
+  } catch { return false; }
+  return ok;
 }
 
 export async function setAdminPassword(next) {
@@ -3337,7 +3557,7 @@ export async function ajouterJournal(entree) {
       label: String(entree?.label || "").slice(0, 200),
       avant: entree?.avant === undefined ? null : entree.avant,
       apres: entree?.apres === undefined ? null : entree.apres,
-      par: String(entree?.par || "gérant").slice(0, 40),
+      par: String((acteurActuel() && (!entree?.par || entree.par === "gérant")) ? acteurActuel() : (entree?.par || "gérant")).slice(0, 40),
       source: String(entree?.source || "").slice(0, 60),
       ...(entree?.retablir && typeof entree.retablir === "object" ? { retablir: entree.retablir } : {}),
     };

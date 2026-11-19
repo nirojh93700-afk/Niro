@@ -1,4 +1,4 @@
-import { isAdmin, checkAdminKey, setAdminPassword, adminPasswordInfo } from "@/lib/stock";
+import { isAdmin, checkGerantKey, roleAdminKey, setAdminPassword, adminPasswordInfo } from "@/lib/stock";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -16,10 +16,11 @@ export async function POST(req) {
   try { body = await req.json(); } catch { /* corps vide */ }
   const actuel = typeof body.actuel === "string" ? body.actuel : "";
   const nouveau = typeof body.nouveau === "string" ? body.nouveau : "";
-  if (!(await checkAdminKey(actuel))) return Response.json({ error: "Le mot de passe actuel n'est pas le bon." }, { status: 400 });
+  if (!(await checkGerantKey(actuel))) return Response.json({ error: "Le mot de passe actuel n'est pas le bon." }, { status: 400 });
   if (nouveau.length < 10) return Response.json({ error: "Le nouveau mot de passe doit faire au moins 10 caractères." }, { status: 400 });
   if (nouveau.length > 200) return Response.json({ error: "Le nouveau mot de passe est trop long." }, { status: 400 });
   if (nouveau === actuel) return Response.json({ error: "Le nouveau mot de passe est le même que l'actuel." }, { status: 400 });
+  if ((await roleAdminKey(nouveau)) === "assistant") return Response.json({ error: "Ce mot de passe est celui de l'assistant : choisissez-en un autre." }, { status: 400 });
   const at = await setAdminPassword(nouveau);
   return Response.json({ ok: true, at });
 }
