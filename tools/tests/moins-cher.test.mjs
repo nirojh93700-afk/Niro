@@ -35,8 +35,8 @@ const cfg = getProductBySlug("gobelet-isotherme-40oz").gobeletParcours;
 const sup = (f) => gobeletSupplement(f, cfg).montant;
 t("gobelet : un dessin seul compris", sup({ mode: "dessin", dessin: "12" }) === 0);
 t("gobelet : une photo seule comprise", sup({ mode: "photo", photo: "/api/img/abcdef12" }) === 0);
-t("gobelet : photo + dessin = 3 € (la photo, 1re, est offerte)", sup({ mode: "photo", photo: "/api/img/abcdef12", autour: "Dessin n° 12 — Face, en haut" }) === 3);
-t("gobelet : photo + texte dessous = 3 €", sup({ mode: "photo", photo: "/api/img/abcdef12", texteSousPhoto: "Maman" }) === 3);
+t("gobelet : photo + dessin = 6 € (le dessin est compris)", sup({ mode: "photo", photo: "/api/img/abcdef12", autour: "Dessin n° 12 — Face, en haut" }) === 6);
+t("gobelet : photo + texte dessous = 6 €", sup({ mode: "photo", photo: "/api/img/abcdef12", texteSousPhoto: "Maman" }) === 6);
 t("gobelet : 2 dessins = 3 €", sup({ mode: "dessin", dessin: "12", autour: "Dessin n° 3 — Face, en haut" }) === 3);
 
 const v = cnVide();

@@ -522,7 +522,7 @@ Un souci à la réception ?
 - Six couleurs au choix : caramel, blond clair, rouge, cuivré, gris anthracite, gris sable.
 - Dessin, photo et texte gravés au laser dans notre atelier en France.`,
     usage: `Personnalisation & Entretien
-- Quatre emplacements (face et dos, en haut et au milieu) : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), ou rien ; la première gravure est offerte.
+- Quatre emplacements (face et dos, en haut et au milieu) : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), ou rien ; la gravure la moins chère est offerte.
 - Entretien : un coup de chiffon sec suffit. Ne pas immerger.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé. En boîte cadeau, il part en petit colis.
@@ -536,7 +536,7 @@ Un souci à la réception ?
 - Cordon brun avec deux perles de verre.`,
     usage: `Personnalisation & Entretien
 - Sur la face : un texte (+3 €) au-dessus de la fenêtre ou à côté, ou votre photo au-dessus de la fenêtre (+4 €).
-- Au verso : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), en haut et au milieu.\n- La première gravure de votre marque-page est offerte.
+- Au verso : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), en haut et au milieu.\n- La gravure la moins chère de votre marque-page est offerte.
 - Entretien : un coup de chiffon sec suffit. Ne pas immerger.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé. En boîte cadeau, il part en petit colis.
@@ -1626,7 +1626,7 @@ Un souci à la réception ?
     material:
       "Gobelet isotherme 40 oz (1,1 L) en acier inoxydable double paroi.\nLivré avec son couvercle, sa paille réutilisable et un goupillon de nettoyage.\nAnse intégrée, base étudiée pour entrer dans un porte-gobelet de voiture.\nQuatre coloris : Crème, Blanc, Bleu marine, Rose.",
     usage:
-      "Gravure laser personnalisée : au centre, un de nos dessins numérotés, votre texte ou votre photo / logo ; autour, si vous le souhaitez, un cadre avec un prénom, une lettre fleurie, un autre dessin ou un texte.\nPrix de la gravure : le premier élément est offert ; chaque autre élément +3 €, une photo +6 €.\nLa gravure est creusée au laser : elle ne s'efface pas.\nGarde les boissons chaudes ou froides pendant des heures.\nLavez le gobelet à la main : ne le passez pas au lave-vaisselle et ne le mettez ni au micro-ondes ni au congélateur (double paroi isotherme).\nLe couvercle, la paille et le goupillon se lavent séparément.",
+      "Gravure laser personnalisée : au centre, un de nos dessins numérotés, votre texte ou votre photo / logo ; autour, si vous le souhaitez, un cadre avec un prénom, une lettre fleurie, un autre dessin ou un texte.\nPrix de la gravure : l'élément le moins cher est offert ; chaque autre élément +3 €, une photo +6 €.\nLa gravure est creusée au laser : elle ne s'efface pas.\nGarde les boissons chaudes ou froides pendant des heures.\nLavez le gobelet à la main : ne le passez pas au lave-vaisselle et ne le mettez ni au micro-ondes ni au congélateur (double paroi isotherme).\nLe couvercle, la paille et le goupillon se lavent séparément.",
     returns:
       "Expédié en colis suivi, à domicile ou en point relais.\nGravure 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
   },
@@ -1690,7 +1690,7 @@ Un souci à la réception ?
     material:
       "Bois clair de 3 mm, découpé et gravé au laser dans notre atelier.\nTrois tailles : petit 76 × 142 mm, standard 80 × 151 mm, grand 86 × 165 mm (largeur × hauteur du dossier).\nDeux pièces plates qui s'emboîtent : aucun outil, aucune colle.\nUne ouverture en bas du dossier laisse passer le câble de recharge (vous pouvez la retirer).\nLe veinage varie légèrement d'une pièce à l'autre — chaque support est unique.",
     usage:
-      "Vous composez votre support vous-même : la forme, la taille, puis ce que vous voulez y graver — un texte dans l'écriture de votre choix, un de nos dessins, votre photo, ou une lettre fleurie avec un nom dans la bande. Chaque élément gravé : + 3 €. Vous placez chaque élément où vous voulez sur le support.\nVous pouvez aussi choisir un motif ajouré, découpé dans le bois (+ 5 €), avec ou sans gravure, ou garder le bois nu. La première gravure est offerte.\nUne photo nette et bien éclairée donne la meilleure gravure ; sur le bois, elle ressort en brun.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
+      "Vous composez votre support vous-même : la forme, la taille, puis ce que vous voulez y graver — un texte dans l'écriture de votre choix, un de nos dessins, votre photo, ou une lettre fleurie avec un nom dans la bande. Chaque élément gravé : + 3 €. Vous placez chaque élément où vous voulez sur le support.\nVous pouvez aussi choisir un motif ajouré, découpé dans le bois (+ 5 €), avec ou sans gravure, ou garder le bois nu. Le moins cher de votre création est offert.\nUne photo nette et bien éclairée donne la meilleure gravure ; sur le bois, elle ressort en brun.\nUn chiffon doux suffit pour l'entretien. Évitez de le laisser dans un endroit humide.",
     returns:
       "Expédié à plat en lettre suivie : 6,50 € à domicile, 4,90 € en point relais, offert dès 45 € d'achat.\nFabrication 3 à 5 jours ouvrés, puis expédition suivie.\nPièce personnalisée : découpée et gravée à la commande, elle ne peut être ni reprise ni remboursée (article L221-28 du Code de la consommation). Relisez bien votre texte avant de valider.",
   },

@@ -69,7 +69,7 @@ export function optionsArticle(item) {
   if (item.packaging) out.push({ libelle: "Emballage", detail: String(item.packaging), montant: 0, physique: true });
   // 🎄 Emballage de Noël : un objet à mettre dans le colis, + l'étiquette « Merry Christmas » mise d'office.
   if (item.packagingNoel) out.push({ libelle: "🎄 Emballage de Noël", detail: `${String(item.packagingNoel)} — mettre l'étiquette « Merry Christmas » avec sa ficelle`, montant: 0, physique: true, noel: String(item.packagingNoel) });
-  // Carnet A5 (16/11/2026) : une ligne par élément gravé, texte 3 €, dessin / logo 4 €, le 1er offert (19/11/2026).
+  // Carnet A5 (16/11/2026) : une ligne par élément gravé, texte 3 €, dessin / logo 4 €, le moins cher offert.
   if (produit?.carnet && champs.cn && typeof champs.cn === "object") {
     const noms = Object.fromEntries(CN_FACES), zones = Object.fromEntries(CN_ZONES.map(([z, l]) => [z, l.toLowerCase()]));
     for (const x of cnElements(champs.cn.v)) {
@@ -81,7 +81,7 @@ export function optionsArticle(item) {
   // Support de téléphone créé par la cliente (14/11/2026) : chaque élément gravé + 3 €, le motif ajouré + 3 €.
   if (produit?.createur === "support" && champs.sup && typeof champs.sup === "object" && Array.isArray(champs.sup.els)) {
     const sup = champs.sup;
-    // La 1re gravure de la création est offerte (19/11/2026) : il est écrit, à 0 €.
+    // Le moins cher de la création est compris (15/11/2026) : il est écrit, à 0 €.
     const o = supOffert({ ...sup, els: sup.grave ? sup.els : [] });
     if (sup.grave) sup.els.forEach((e, i) => out.push({ libelle: `Gravure ${i + 1}${o === i ? " (offerte)" : ""}`, detail: supNomElement(e), montant: o === i ? 0 : SUP_PRIX.element, physique: false }));
     if (sup.ajoure) out.push({ libelle: `Motif ajouré (découpé)${o === "aj" ? " (offert)" : ""}`, detail: supMotifTexte(sup), montant: o === "aj" ? 0 : SUP_PRIX.ajoure, physique: false });
@@ -96,7 +96,7 @@ export function optionsArticle(item) {
     return out;
   }
 
-  // « 1re gravure offerte » (19/11/2026) : la gravure offerte est écrite, à 0 €, une seule fois.
+  // « Le moins cher compris » (15/11/2026) : la gravure comprise est écrite, à 0 €, une seule fois.
   const comp = cfg.moinsCherCompris ? gravureComprise(produit, champs, item.variantId) : null;
   let compPris = false;
   const estComprise = (cle) => { if (comp && !compPris && comp.cle === cle) { compPris = true; return true; } return false; };

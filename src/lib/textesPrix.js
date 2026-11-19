@@ -63,7 +63,7 @@ export function controleTextesPrix(product) {
       if (!f || !TEXTE.has(f.type || "text")) continue;
       if (cfg && CLES_PARCOURS.has(f.key)) continue; // dessinées par le parcours guidé (point 2)
       if (!visibleDans(f, v)) continue;
-      // « 1re gravure offerte » (19/11/2026) : la fiche CALCULE l'étiquette de la case (« compris » / « +3 € »)
+      // « Le moins cher compris » (15/11/2026) : la fiche CALCULE l'étiquette de la case (« compris » / « +3 € »)
       // avec la même fonction que le prix (etiquettePrixGravure) → elle ne peut pas diverger du paiement.
       if (product.engravingPricing?.moinsCherCompris && etiquettePrixGravure(product, {}, v.id, f.key)) continue;
       noter(f.key, f.label || f.key, v, supplement(product, v, contexteDu(f), f.key), prixDans(f.label));
@@ -115,7 +115,7 @@ export function supplementsPayes(product) {
     // Faces offertes (textesOfferts) : seule chaque face AU-DELÀ des offertes se paie.
     const ep = product.engravingPricing || {};
     if ((Number(ep.textesOfferts) || 0) > 0 && (ep.textExtra || 0) > 0) out.add(arrondi(ep.textExtra));
-    // « 1re gravure offerte » : chaque gravure AU-DELÀ de la comprise se paie à son prix.
+    // « Le moins cher compris » : chaque gravure AU-DELÀ de la comprise se paie à son prix.
     if (ep.moinsCherCompris) {
       for (const x of [ep.textExtra, ep.motifExtra, ep.photoSurcharge]) if ((x || 0) > 0) out.add(arrondi(x));
       for (const e of ep.flatExtras || []) if ((e.amount || 0) > 0) out.add(arrondi(e.amount));

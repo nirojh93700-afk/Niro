@@ -65,7 +65,7 @@ const arrondi = (x) => Math.round(x * 100) / 100;
 
 // RÈGLE DU 18/11/2026 (gérant : « le moins cher offert… change partout ») — remplace le forfait du 19/10
 // (2e verre +5 € logo et texte / +3 € logo ou texte seul) :
-//   · UNE seule gravure offerte par COMMANDE, la première : sur le verre 1 de la 1re ligne de verres,
+//   · UNE seule gravure offerte par COMMANDE, la moins chère : sur le verre 1 de la 1re ligne de verres,
 //     l'image / le logo / le modèle, ou, s'il n'y en a pas, le premier texte ;
 //   · TOUT le reste se paie à l'élément : chaque logo / image / modèle +3 € (PRIX_LOGO_VERRE),
 //     chaque texte au prix de la fiche (+3 €), gravure face + fond +7 € par verre ;
@@ -101,7 +101,7 @@ export function prixGravureVerres(product, variant, quantite, fields = {}, perGl
 
   const grave1 = verreGrave(v1);
   const image1 = grave1 && aImage(v1);
-  // La gravure offerte (la 1re, 19/11/2026) : l'image du verre 1, sinon son premier texte.
+  // La gravure offerte (la moins chère : logo ou texte, tous deux à 3 €) : l'image du verre 1, sinon son premier texte.
   const kOffert = avecOffre && grave1 && !image1 ? texteOffertVerre1(product, v1, variantId) : null;
   const offert = !avecOffre || !grave1 ? 0
     : image1 ? PRIX_LOGO_VERRE

@@ -1,13 +1,3 @@
-## 🥇 LA PREMIÈRE GRAVURE EST OFFERTE (PLUS « LA MOINS CHÈRE ») — 19/11/2026 (gérant : « tu peux mettre comme avant le premier gravure offert », calcul du prix, tout le site) — PRÉPARÉ, À POUSSER SUR SON « POUSSE »
-- Remplace « la moins chère est offerte » du 15/11. « Première » = la 1re gravure payante remplie DANS L'ORDRE DE LA FICHE (`personalizationFields`) :
-  `gravureComprise` (`engravingPrice.js`, clé `moinsCherCompris` gardée) · gobelet : le 1er élément (`gobeletElements`) · marque-pages : la 1re gravure du coffret
-  (`mpGravuresLot`) · carnet : le 1er élément (`cnElements`) · support : le 1er élément gravé, sinon le motif (`supOffert`) · verres : inchangé (image du verre 1, sinon son 1er texte).
-- Mêmes calculs fiche / panier / paiement / atelier ; étiquettes « (offert) » / « (+3 €) » calculées. Textes réécrits (« la première gravure est offerte ») : notes, descriptions,
-  fiches détaillées, gobelet, carnet, marque-pages, devis, grille des verres, agent e-mail, guides régénérés.
-- Ce qui change en vrai : gobelet photo + dessin 6 € → 3 € · marque-page dessin (4 €) puis texte : +3 € au lieu de +4 € · carnet image puis texte idem. Bijoux tout à 3 € :
-  aucun changement. Plaque acier / médaillon cœur : la photo est APRÈS les textes sur la fiche → texte offert, photo +8 € (comme avant le 15/11).
-- Dans un mail ou un devis : écrire « la première gravure est offerte » puis laquelle (règle du 16/11, mot « compris » toujours interdit).
-
 ## 🔗 DEVIS QUI COMPLÈTE UNE COMMANDE = PLUS DE DEUXIÈME CARTE — 18/11/2026 (gérant : « pourquoi t'as mis deux fois la même commande ? », 0BXF7CYC → 0FUPET23 ; « OK fais tout ça et pousse »)
 - Gestion → Devis : champ « Complète la commande n° » (création) + bouton « 🔗 Complète une commande… » (action `lien`, champ `commandeLiee`).
   Au paiement, le webhook rattache la nouvelle commande (`rattacheA = {id, ref}`, `src/lib/commandeLieeServeur.js`) : elle prend le statut et le suivi de l'origine.
@@ -35,7 +25,7 @@
   « Il s'agit d'un aperçu à l'écran : une fois gravé, le rendu réel est plus fin et plus lumineux. »
 - Ne jamais présenter l'aperçu comme le résultat exact.
 
-## ⛔ PRIX DE GRAVURE DANS UN MAIL CLIENT : « LA MOINS CHÈRE EST OFFERTE », JAMAIS « COMPRIS » — 16/11/2026 (⚠️ depuis le 19/11 : « LA PREMIÈRE GRAVURE EST OFFERTE », voir en tête ; le reste de la règle tient) (gérant, mail d'Alicia, collier plaque + photo : « recommence plus, note quelque part ces règles »)
+## ⛔ PRIX DE GRAVURE DANS UN MAIL CLIENT : « LA MOINS CHÈRE EST OFFERTE », JAMAIS « COMPRIS » — 16/11/2026 (gérant, mail d'Alicia, collier plaque + photo : « recommence plus, note quelque part ces règles »)
 - Règle du site (`moinsCherCompris`) : parmi les gravures choisies, la MOINS CHÈRE est OFFERTE, les autres se paient. Photo seule = photo offerte ; photo + texte = le TEXTE (3 €) est offert et la PHOTO se paie (8 €).
 - Dans un mail ou un devis : écrire « la gravure la moins chère est offerte » puis dire laquelle l'est DANS CE CAS. Ne jamais écrire « la photo est offerte » tout court si un texte peut s'ajouter, ni « texte +8 € » (c'est la photo qui passe à 8 €).
 - Mot interdit : « compris » / « comprise » (règle du 15/11 : toujours « offert »). Avant de montrer un brouillon : chercher « compris » et le remplacer.

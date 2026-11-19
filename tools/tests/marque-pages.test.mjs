@@ -12,9 +12,9 @@ ok(m1 && m2 && m3, "les trois fiches existent");
 const E = (o) => ({ "face|haut": { k: "" }, "face|bas": { k: "" }, "dos|haut": { k: "" }, "dos|bas": { k: "" }, ...o });
 const tot = (p, mp) => mpCalcul(p, mpNormaliser(p, mp)).total;
 
-// Modèle 1 seul + dessin 12 + « Léa » + cadre 92 « Paul » : 4 + 3 + 4 + 3 = 14 €, la 1re gravure (dessin 12, 4 €) offerte → 19,90 € (19/11/2026)
+// Modèle 1 seul + dessin 12 + « Léa » + cadre 92 « Paul » : 4 + 3 + 4 + 3 = 14 €, le moins cher (3 €) compris → 20,90 € (15/11/2026)
 const a = { format: "seul", slots: [{ c: "mp1-caramel", v: E({ "face|bas": { k: "dessin", n: 12 }, "dos|haut": { k: "texte", t: "Léa" }, "dos|bas": { k: "dessin", n: 92, t: "Paul" } }) }] };
-ok(tot(m1, a) === 19.9, "modèle 1 : 19,90 €");
+ok(tot(m1, a) === 20.9, "modèle 1 : 20,90 €");
 // Coffret de 2 : « Paul » sur l'un, dessin 7 sur l'autre : UNE seule gravure offerte pour tout le coffret (16/11/2026),
 // « Paul » (3 €) offert, le dessin 7 +4 € → 29,70 €
 const b = { format: "coffret2", slots: [{ c: "mp1-rouge", v: E({ "face|haut": { k: "texte", t: "Paul" } }) }, { c: "mp1-sable", v: E({ "face|bas": { k: "dessin", n: 7 } }) }] };
