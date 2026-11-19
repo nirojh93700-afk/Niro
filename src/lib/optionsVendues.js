@@ -77,12 +77,12 @@ export function optionsArticle(item) {
     }
     return out;
   }
-  // Support de téléphone créé par la cliente (14/11/2026) : chaque élément gravé + 3 €, le motif ajouré + 3 €.
+  // Support de téléphone créé par la cliente (14/11/2026) : chaque élément gravé + 3 €, le motif ajouré + 5 €.
   if (produit?.createur === "support" && champs.sup && typeof champs.sup === "object" && Array.isArray(champs.sup.els)) {
     const sup = champs.sup;
-    // Support : rien d'offert depuis le 19/11/2026 (supOffert renvoie null).
+    // Support (19/11/2026) : le 1er élément gravé est offert (écrit à 0 €), le motif ajouré se paie toujours.
     const o = supOffert({ ...sup, els: sup.grave ? sup.els : [] });
-    if (sup.grave) sup.els.forEach((e, i) => out.push({ libelle: `Gravure ${i + 1}${o === i ? " (comprise)" : ""}`, detail: supNomElement(e), montant: o === i ? 0 : SUP_PRIX.element, physique: false }));
+    if (sup.grave) sup.els.forEach((e, i) => out.push({ libelle: `Gravure ${i + 1}${o === i ? " (offerte)" : ""}`, detail: supNomElement(e), montant: o === i ? 0 : SUP_PRIX.element, physique: false }));
     if (sup.ajoure) out.push({ libelle: `Motif ajouré (découpé)${o === "aj" ? " (compris)" : ""}`, detail: supMotifTexte(sup), montant: o === "aj" ? 0 : SUP_PRIX.ajoure, physique: false });
     return out;
   }

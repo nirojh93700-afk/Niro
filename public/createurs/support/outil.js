@@ -228,7 +228,7 @@ $('panneau').addEventListener('change',function(ev){if(ev.target.id!=='fphoto')r
 
 /* ---- la liste des éléments posés ---- */
 function nomEl(e){return e.type==='texte'?'« '+(e.texte||'')+' »':e.type==='dessin'?'Dessin n° '+e.n:e.type==='lettre'?'Lettre '+e.L+(e.nom?' · « '+e.nom+' »':''):'Ma photo'}
-function prixEl(i){return offert()===i?'compris':'+ '+eur(D.prix.element)}
+function prixEl(i){return offert()===i?'offert':'+ '+eur(D.prix.element)}
 function principal(){ /* l'élément qui fixe le prix de départ : la photo, sinon le dessin, sinon le texte */
  var o=['photo','dessin','lettre','texte'];for(var k=0;k<o.length;k++)for(var i=0;i<S.els.length;i++)if(S.els[i].type===o[k])return i;return -1}
 function liste(){
@@ -266,16 +266,16 @@ $('liste').addEventListener('input',function(ev){var id=ev.target.getAttribute('
 
 /* ---- étape 4 : résumé et prix ---- */
 function pret(){return !(S.grave&&!S.els.length)}
-function offert(){return null}
+function offert(){return S.grave&&S.els.length?0:null}
 function total(){var t=D.prix.base+D.prix.taille[S.taille]+(S.grave?S.els.length*D.prix.element:0)+(S.ajoure?D.prix.ajoure:0),o=offert();if(o==='aj')t-=D.prix.ajoure;else if(o===0)t-=D.prix.element;return Math.round(t*100)/100}
 function resume(){
  var R=$('resume'),p=principal(),h='<div class="prc-sumrow"><span>Forme</span><b>'+nomDe(FORMES,S.forme)+' — '+eur(D.prix.base)+'</b></div>'
   +'<div class="prc-sumrow"><span>Taille</span><b>'+nomDe(TAILLES,S.taille)+' · '+T().W+' × '+T().H+' mm'+(D.prix.taille[S.taille]?' — + '+eur(D.prix.taille[S.taille]):'')+'</b></div>';
- if(S.ajoure){h+='<div class="prc-sumrow"><span>Ajouré</span><b>'+nomDe(MOTIFS,S.motif)+' · '+nomDe(DENSITES,S.densite).toLowerCase()+(piedSeul()?' · découpé sur le pied':S.piedMotif?' · aussi sur le pied':'')+(offert()==='aj'?' — compris':' — + '+eur(D.prix.ajoure))+'</b></div>'}
+ if(S.ajoure){h+='<div class="prc-sumrow"><span>Ajouré</span><b>'+nomDe(MOTIFS,S.motif)+' · '+nomDe(DENSITES,S.densite).toLowerCase()+(piedSeul()?' · découpé sur le pied':S.piedMotif?' · aussi sur le pied':'')+(offert()==='aj'?' — offert':' — + '+eur(D.prix.ajoure))+'</b></div>'}
  if(S.grave){
   if(!S.els.length)h+='<div class="prc-sumrow"><span>Gravure</span><b class="prc-miss">à choisir</b></div>';
   S.els.forEach(function(e,i){h+='<div class="prc-sumrow"><span>'+(e.type==='texte'?'Texte':e.type==='dessin'?'Dessin':e.type==='lettre'?'Lettre fleurie':'Photo')+'</span><b>'+esc(nomEl(e))
-   +(e.type==='texte'||(e.type==='lettre'&&e.nom)?' · '+police(e.police)[1]:'')+(offert()===i?' — compris':' — + '+eur(D.prix.element))+'</b></div>'})}
+   +(e.type==='texte'||(e.type==='lettre'&&e.nom)?' · '+police(e.police)[1]:'')+(offert()===i?' — offert':' — + '+eur(D.prix.element))+'</b></div>'})}
  if(!S.grave&&!S.ajoure)h+='<div class="prc-sumrow"><span>Décoration</span><b>aucune (bois nu)</b></div>';
  h+='<div class="prc-sumrow"><span>Réglages</span><b>'+S.angle+'° · '+(S.cable?'passage du câble':'sans passage du câble')+' · bois 3 mm</b></div>';
  h+='<div class="prc-sumrow prc-sumtot" style="border-bottom:0"><span>Total</span><b>'+(eur(total()))+'</b></div>';

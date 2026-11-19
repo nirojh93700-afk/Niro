@@ -5010,7 +5010,7 @@ export const products = [
 <ul>
 <li><strong>La forme :</strong> rectangle arrondi, arche, tête de chat ou oreilles d'ours</li>
 <li><strong>La taille :</strong> petit 76 × 142 mm (15,90 €), standard 80 × 151 mm (18,90 €) ou grand 86 × 165 mm (21,90 €)</li>
-<li><strong>La gravure :</strong> un texte dans l'écriture de votre choix, un de nos dessins, votre photo ou une lettre fleurie avec un nom — chaque élément gravé + 3 €, et vous le placez où vous voulez sur le support. Le moins cher de votre création est compris</li>
+<li><strong>La gravure :</strong> un texte dans l'écriture de votre choix, un de nos dessins, votre photo ou une lettre fleurie avec un nom — chaque élément gravé + 3 €, et vous le placez où vous voulez sur le support. La première gravure est offerte</li>
 <li><strong>Un motif ajouré :</strong> cœurs, pattes, soleil, nid d'abeille, losanges, persienne, fenêtre ou étoiles, découpés dans le bois (+ 5 €) — avec ou sans gravure</li>
 <li><strong>Les réglages :</strong> l'inclinaison du téléphone et le passage du câble de recharge</li>
 </ul>

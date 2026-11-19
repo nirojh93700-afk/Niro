@@ -38,15 +38,15 @@ v("sans gravure : les éléments ne sont pas gardés", nu.els.length === 0 && nu
 v("réglages hors liste remis aux valeurs sûres", (() => { const x = supNormaliser({ ...base, angle: 45, motif: "zèbre", densite: "trop", els: [texte] }); return x.angle === 13 && x.motif === "coeurs" && x.densite === "moyen"; })());
 v("place bornée", (() => { const x = supNormaliser({ ...base, els: [{ ...texte, x: 99999, y: -5, s: 50 }] }).els[0]; return x.x === 400 && x.y === 0 && x.s === 2.2; })());
 
-// --- prix (gérant, 15/11 : petit 15,90 €, élément + 3 €, motif + 5 € ; 19/11 : rien d'offert, retour d'avant le 15/11) ---
+// --- prix (gérant, 15/11 : petit 15,90 €, élément + 3 €, motif + 5 € ; 19/11 : 1re gravure offerte, motif toujours payé) ---
 const p = getProductBySlug("support-telephone-bois-grave");
 const prix = (sup) => Math.round((p.variants.find((x) => x.id === supVariantId(sup.taille)).price + supSupplement(sup)) * 100) / 100;
 v("la fiche est le créateur", p.createur === "support" && p.variants.length === 3);
 v("petit sans rien = 15,90 €", prix(supNormaliser({ ...base, taille: "petit", grave: false, els: [] })) === 15.9);
-v("petit + un texte = 18,90 €", prix(supNormaliser({ ...base, taille: "petit", els: [texte] })) === 18.9);
-v("petit + texte + motif = 23,90 €", prix(supNormaliser({ ...base, taille: "petit", ajoure: true, els: [texte] })) === 23.9);
-v("standard + cœurs + texte + dessin = 29,90 €", prix(supNormaliser({ ...base, ajoure: true, els: [texte, { type: "dessin", n: 1 }] })) === 29.9);
-v("grand + motif + texte + dessin = 32,90 €", prix(supNormaliser({ ...base, taille: "grand", ajoure: true, els: [texte, { type: "dessin", n: 1 }] })) === 32.9);
+v("petit + un texte = 15,90 € (offert)", prix(supNormaliser({ ...base, taille: "petit", els: [texte] })) === 15.9);
+v("petit + texte + motif = 20,90 €", prix(supNormaliser({ ...base, taille: "petit", ajoure: true, els: [texte] })) === 20.9);
+v("standard + cœurs + texte + dessin = 26,90 €", prix(supNormaliser({ ...base, ajoure: true, els: [texte, { type: "dessin", n: 1 }] })) === 26.9);
+v("grand + motif + texte + dessin = 29,90 €", prix(supNormaliser({ ...base, taille: "grand", ajoure: true, els: [texte, { type: "dessin", n: 1 }] })) === 29.9);
 v("motif seul sur le petit = 20,90 €", prix(supNormaliser({ ...base, taille: "petit", grave: false, ajoure: true })) === 20.9);
 v("taille ↔ option", supTailleDeVariante("support-tel-grand") === "grand" && supTailleDeVariante("support-tel-photo") === null);
 v("suppléments écrits = suppléments payés", supplementsPayes(p).has(3) && controlePrixEcrits(p).length === 0, JSON.stringify(controlePrixEcrits(p)));
@@ -66,7 +66,7 @@ v("consignes : écriture du texte", /Allura/.test(tout));
 v("résumé en une ligne", /Arche/.test(supResume(sup)) && /Motif ajouré/.test(supResume(sup)) && /sans passage du câble/.test(supResume(sup)));
 v("photos de la cliente", supPhotos(sup).length === 1 && photosEnvoyees(item).length === 1);
 const opts = optionsArticle(item);
-v("vendu en plus : 4 gravures + le motif, rien d'offert", opts.length === 5 && opts[0].montant === 3 && opts.slice(1, 4).every((o) => o.montant === 3) && opts[4].montant === 5, JSON.stringify(opts));
+v("vendu en plus : 4 gravures + le motif, la 1re offerte", opts.length === 5 && opts[0].montant === 0 && opts.slice(1, 4).every((o) => o.montant === 3) && opts[4].montant === 5, JSON.stringify(opts));
 v("aucun choix caché à l'atelier", oubliesAtelier(item).length === 0, JSON.stringify(oubliesAtelier(item)));
 v("bois nu : dit à l'atelier", /aucun/.test(JSON.stringify(supConsignes(supNormaliser({ ...base, grave: false, els: [] })))));
 

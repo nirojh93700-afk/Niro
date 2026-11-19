@@ -15,7 +15,7 @@ export const SUP_MOTIFS = { coeurs: "Cœurs", pattes: "Pattes", soleil: "Soleil"
 export const SUP_DENSITES = { moins: "Moins", moyen: "Moyen", plus: "Plus" };
 export const SUP_ANGLES = [10, 13, 16, 20];
 // Prix du gérant (15/11/2026, après le relevé du marché) : petit 15,90 €, chaque élément gravé + 3 €, motif ajouré + 5 €,
-// rien d'offert (le « moins cher compris » du 15/11 a été retiré le 19/11/2026, retour d'avant le 15/11).
+// la 1re gravure offerte (19/11/2026), le motif toujours payé.
 export const SUP_PRIX = { element: 3, ajoure: 5 };
 export const SUP_MAX_ELEMENTS = 12;
 const POLICES = new Set(FONTS.map((f) => f.key));
@@ -76,13 +76,14 @@ export function supNormaliser(etat) {
   };
 }
 
-/** Ce qui est offert : rien depuis le 19/11/2026 (retour d'avant le 15/11). Même règle que la fiche. */
+/** Ce qui est offert : 0 = le 1er élément gravé, null = rien (bois nu ou motif seul). Même règle que la fiche (outil.js). */
 export function supOffert(sup) {
-  // 19/11/2026 (gérant : « comme avant le 15 ») : rien n'est offert, chaque élément gravé + 3 €, le motif + 5 €.
-  return null;
+  // 19/11/2026 (gérant : « support téléphone, une gravure offerte, après facturer ») : le 1er élément gravé est offert,
+  // chaque autre élément + 3 € ; le motif ajouré (une découpe, pas une gravure) se paie toujours + 5 €.
+  return sup && sup.grave && sup.els.length ? 0 : null;
 }
 
-/** Ce qui s'ajoute au prix de la taille : + 3 € par élément gravé, + 5 € le motif ajouré, rien d'offert. */
+/** Ce qui s'ajoute au prix de la taille : + 3 € par élément gravé, + 5 € le motif ajouré, moins la 1re gravure (offerte). */
 export function supSupplement(sup) {
   if (!sup) return 0;
   const o = supOffert(sup);
