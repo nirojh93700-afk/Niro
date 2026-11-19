@@ -208,7 +208,7 @@ export const products = [
     // Chaque face de texte gravée : +3 € (couverture comprise, 18/10/2026), photo +8 €.
     engravingPricing: { moinsCherCompris: true, textKeys: ["cover", "page1", "page2", "page3", "backcover"], textExtra: 3, photoKey: "photo", photoSurcharge: 8 },
     personalizationFields: [
-      { key: "note", type: "note", text: "Médaillon qui s'ouvre comme un livre : 5 faces à graver (la couverture, 3 pages intérieures et le dos). La gravure la moins chère est offerte ; chaque autre face de texte coûte 3 €. Remplissez seulement les faces souhaitées, les autres restent vierges." },
+      { key: "note", type: "note", text: "Médaillon qui s'ouvre comme un livre : 5 faces à graver (la couverture, 3 pages intérieures et le dos). La première gravure est offerte ; chaque autre face de texte coûte 3 €. Remplissez seulement les faces souhaitées, les autres restent vierges." },
       { key: "cover", label: "Gravure — Couverture (+3 €)", placeholder: "Prénom, mot court…", maxLength: 15, optional: true },
       { key: "page1", label: "Gravure — Page 1 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
       { key: "page2", label: "Gravure — Page 2 (+3 €)", placeholder: "15 caractères max", maxLength: 15, optional: true },
@@ -713,7 +713,7 @@ export const products = [
 <h3>Offrez-le en boîte cadeau</h3>
 <p>Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.</p>
 <h3>La gravure</h3>
-<p>Le marque-page seul est à 9,90 €. Pour le personnaliser, choisissez un dessin ou une photo (+4 €), un texte (+3 €), ou les deux, sur la face comme au dos : la gravure la moins chère est offerte. Vous choisissez l'écriture parmi les huit du site.</p>`,
+<p>Le marque-page seul est à 9,90 €. Pour le personnaliser, choisissez un dessin ou une photo (+4 €), un texte (+3 €), ou les deux, sur la face comme au dos ; la première gravure est offerte. Vous choisissez l'écriture parmi les huit du site.</p>`,
   },
   {
     slug: "marque-page-bois-oiseau",
@@ -742,7 +742,7 @@ export const products = [
 <h3>Offrez-le en boîte cadeau</h3>
 <p>Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.</p>
 <h3>Gravé sur la face et au verso</h3>
-<p>Sur la face, deux emplacements dans le bois : au-dessus de la fenêtre ajourée et à gauche de la branche. Faites-y graver un prénom ou un mot (+3 €), en haut sur une ligne ou en bas, écrit à la verticale ; au-dessus de la fenêtre, vous pouvez aussi faire graver votre photo, en noir et blanc (+4 €), comme un portrait. Le dessin de l'oiseau est déjà là : aucun autre dessin ne s'y ajoute. Au verso, le bois est nu, avec deux emplacements aussi (en haut, au milieu) : chacun reçoit un texte (+3 €) dans l'écriture de votre choix parmi les huit du site, un dessin numéroté, un cadre autour de votre texte ou votre photo gravée en noir et blanc (+4 €). Gravez un seul emplacement ou plusieurs, c'est vous qui choisissez : la gravure la moins chère est offerte.</p>`,
+<p>Sur la face, deux emplacements dans le bois : au-dessus de la fenêtre ajourée et à gauche de la branche. Faites-y graver un prénom ou un mot (+3 €), en haut sur une ligne ou en bas, écrit à la verticale ; au-dessus de la fenêtre, vous pouvez aussi faire graver votre photo, en noir et blanc (+4 €), comme un portrait. Le dessin de l'oiseau est déjà là : aucun autre dessin ne s'y ajoute. Au verso, le bois est nu, avec deux emplacements aussi (en haut, au milieu) : chacun reçoit un texte (+3 €) dans l'écriture de votre choix parmi les huit du site, un dessin numéroté, un cadre autour de votre texte ou votre photo gravée en noir et blanc (+4 €). Gravez un seul emplacement ou plusieurs, c'est vous qui choisissez : la première gravure est offerte.</p>`,
   },
   {
     slug: "marque-page-metal-peinture",
@@ -777,7 +777,7 @@ export const products = [
   // ----------------------------- CARNET A5 ------------------------------
   // Mis en vente le 07/11/2026 (gérant : « Papeterie avec le carnet »). Fiche dédiée (src/components/carnet/CarnetFiche.jsx)
   // = la maquette enregistrée v9 (artifact QSD8HCrAzEqrSEYA7viFMh) : 3 couleurs, quatre emplacements sur la couverture et
-  // quatre au dos, texte +3 €, dessin / logo +4 €, le moins cher offert (16/11/2026, src/lib/carnet.js, le même calcul au paiement). Poids estimé 380 g
+  // quatre au dos, texte +3 €, dessin / logo +4 €, le 1er élément offert (19/11/2026, src/lib/carnet.js, le même calcul au paiement). Poids estimé 380 g
   // (à peser). Photos : couvertures DESSINÉES de la maquette + exemples (vraies photos gravées à faire).
   {
     slug: "carnet-a5-grave",
@@ -3201,7 +3201,7 @@ export const products = [
     tagline: "Un médaillon qui s'ouvre comme un petit livre, à graver.",
     personalizable: true, personalizationLabel: "Couverture + 3 pages : texte, motif et police",
     personalizationFields: [
-      { key: "note", type: "note", text: "La gravure la moins chère est offerte ; chaque autre texte (couverture ou page intérieure) ou motif : +3 €. Pour chaque face, vous pouvez ajouter un motif et choisir où le placer (haut/bas, gauche/droite)." },
+      { key: "note", type: "note", text: "La première gravure est offerte ; chaque autre texte (couverture ou page intérieure) ou motif : +3 €. Pour chaque face, vous pouvez ajouter un motif et choisir où le placer (haut/bas, gauche/droite)." },
       { key: "couverture", label: "Gravure — couverture (+3 €)", maxLength: 30, optional: true },
       { key: "motif1", type: "motif", label: "Motif — couverture", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos1", type: "select", label: "Couverture — position du motif", optional: true, requiresField: "motif1",
@@ -3272,7 +3272,7 @@ export const products = [
     // le 17/10/2026, une 2e clé en double effaçait la 1re et les motifs n'étaient jamais payés.
     engravingPricing: { moinsCherCompris: true, textKeys: ["face1", "face2", "face3", "face4"], textExtra: 3, motifKeys: ["motif1", "motif2", "motif3", "motif4"], motifExtra: 3 },
     personalizationFields: [
-      { key: "note", type: "note", text: "La gravure la moins chère est offerte ; chaque autre face gravée ou motif : +3 €." },
+      { key: "note", type: "note", text: "La première gravure est offerte ; chaque autre face gravée ou motif : +3 €." },
       { key: "face1", label: "Face avant — texte (+3 €)", placeholder: "Ex. un prénom", maxLength: 23, optional: true },
       { key: "motif1", type: "motif", label: "Face avant — motif", optional: true, options: MOTIF_OPTIONS },
       { key: "motifPos1", type: "select", label: "Face avant — motif placé", optional: true, options: [{ value: "above", label: "Au-dessus du nom" }, { value: "below", label: "En dessous du nom" }] },
@@ -4907,7 +4907,7 @@ export const products = [
     // src/components/createurs/SupportFiche.jsx + public/createurs/support/outil.js (fabriqués par
     // tools/createurs/support-site.py). Même adresse, mêmes photos, mêmes avis qu'avant (mise en ligne du 20/08/2026).
     // Prix (gérant, 15/11/2026) : petit 15,90 € · standard 18,90 € · grand 21,90 € ; chaque élément gravé + 3 €, motif ajouré
-    // + 5 €, le moins cher de la création compris = src/lib/supportCreateur.js (le même calcul au paiement, /api/checkout).
+    // + 5 €, la 1re gravure offerte = src/lib/supportCreateur.js (le même calcul au paiement, /api/checkout).
     // La création complète est gardée avec la commande (collection « creations ») : boutons « Corriger dans l'outil » et
     // « Fichiers pour la machine » de Gestion.
     slug: "support-telephone-bois-grave",
@@ -5017,7 +5017,7 @@ export const products = [
 <ul>
 <li><strong>La forme :</strong> rectangle arrondi, arche, tête de chat ou oreilles d'ours</li>
 <li><strong>La taille :</strong> petit 76 × 142 mm (15,90 €), standard 80 × 151 mm (18,90 €) ou grand 86 × 165 mm (21,90 €)</li>
-<li><strong>La gravure :</strong> un texte dans l'écriture de votre choix, un de nos dessins, votre photo ou une lettre fleurie avec un nom — chaque élément gravé + 3 €, et vous le placez où vous voulez sur le support. Le moins cher de votre création est offert</li>
+<li><strong>La gravure :</strong> un texte dans l'écriture de votre choix, un de nos dessins, votre photo ou une lettre fleurie avec un nom — chaque élément gravé + 3 €, et vous le placez où vous voulez sur le support. La première gravure est offerte</li>
 <li><strong>Un motif ajouré :</strong> cœurs, pattes, soleil, nid d'abeille, losanges, persienne, fenêtre ou étoiles, découpés dans le bois (+ 5 €) — avec ou sans gravure</li>
 <li><strong>Les réglages :</strong> l'inclinaison du téléphone et le passage du câble de recharge</li>
 </ul>
@@ -5378,7 +5378,7 @@ export const products = [
 <ul>
 <li><strong>Au centre</strong> : un de nos 74 dessins numérotés, votre propre texte, ou votre photo / votre logo</li>
 <li><strong>Autour</strong>, si vous voulez : un cadre ou une banderole avec un prénom, une lettre fleurie, un 2ᵉ dessin, une date…</li>
-<li><strong>Prix de la gravure</strong> : l'élément le moins cher de votre gravure est offert ; chaque autre élément <strong>+3 €</strong>, une photo <strong>+6 €</strong></li>
+<li><strong>Prix de la gravure</strong> : le premier élément de votre gravure est offert ; chaque autre élément <strong>+3 €</strong>, une photo <strong>+6 €</strong></li>
 <li>La gravure prend la couleur de la bande du haut : <strong>dorée</strong> sur le crème et le rose, <strong>irisée</strong> sur le bleu marine et le blanc</li>
 <li>Plusieurs images, photos ou logos ? Nous préparons la mise en page et vous envoyons un aperçu à valider avant la gravure</li>
 </ul>

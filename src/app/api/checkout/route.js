@@ -283,7 +283,7 @@ export async function POST(req) {
       continue;
     }
 
-    // Carnet A5 (07/11/2026) : couleur + gravure couverture / dos (+3 € le texte, +4 € le dessin / logo, le moins cher offert, 16/11/2026) — recalcul de confiance
+    // Carnet A5 (07/11/2026) : couleur + gravure couverture / dos (+3 € le texte, +4 € le dessin / logo, le 1er élément offert, 19/11/2026) — recalcul de confiance
     // avec la même fonction que la fiche (src/lib/carnet.js).
     if (product.carnet) {
       const cn = cnNormaliser(product, item.fields?.cn);

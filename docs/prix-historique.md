@@ -10,6 +10,12 @@
 
 ## 1. Les changements, du plus récent au plus ancien
 
+### 19/11/2026 — Gravure : la PREMIÈRE est offerte (avant : la moins chère, du 15/11 au 19/11)
+- Calcul : parmi les gravures payantes choisies, la 1re dans l'ordre de la fiche est offerte (avant : la moins chère).
+- Exemples avant → après : gobelet photo + dessin 6 € → 3 € · marque-page dessin (4 €) puis texte : 13,90 € → 12,90 € · carnet image puis texte : +4 € → +3 €.
+- Inchangé : bijoux à 3 € la face, verres (image du verre 1 sinon 1er texte), plaque acier / médaillon (photo après les textes : photo +8 €).
+- Pour revenir : `gravureComprise` (engravingPrice.js) = la moins chère ; gobeletElements / mpGravuresLot / cnElements idem.
+
 ### 18/10/2026 (après-midi) — 5 bijoux de plus : nouveaux prix donnés par le gérant (barré en ,90)
 | Bijou | **AVANT (code → barré → payé)** | Après (code → barré → payé) |
 |---|---|---|

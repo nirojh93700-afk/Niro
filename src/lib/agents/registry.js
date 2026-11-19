@@ -26,19 +26,19 @@ const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
 // il donnait des prix sans savoir ce que coûte chaque texte).
 function resumeGravure(p) {
   if (p.regleVerres) {
-    return "UNE SEULE gravure offerte par commande, la moins chère (l'image / le logo / le modèle du verre 1, sinon son premier texte) ; tout le reste se paie à l'élément : chaque logo / image / modèle +3 €, chaque texte (prénom, date, phrase) +3 €, sur chaque verre ; face + fond +7 € par verre";
+    return "UNE SEULE gravure offerte par commande, la première (l'image / le logo / le modèle du verre 1, sinon son premier texte) ; tout le reste se paie à l'élément : chaque logo / image / modèle +3 €, chaque texte (prénom, date, phrase) +3 €, sur chaque verre ; face + fond +7 € par verre";
   }
-  // « Le moins cher compris » (15/11/2026) : le gobelet, les marque-pages, le carnet et le support ont leur propre calcul.
-  if (p.gobeletParcours) return "l'élément le MOINS CHER de la gravure est offert ; chaque autre élément +3 €, une photo +6 €";
-  if (p.marquePages?.gravure) return "UNE seule gravure offerte (la moins chère), même pour un coffret ; chaque autre : texte +3 €, dessin / cadre / photo +4 €";
-  if (p.carnet) return "chaque texte gravé +3 €, chaque dessin, logo ou photo +4 € ; la gravure la moins chère du carnet est offerte";
-  if (p.createur === "support") return "taille selon l'option ; chaque élément gravé +3 €, motif ajouré +5 € ; le MOINS CHER de la création est offert";
+  // « La 1re gravure offerte » (19/11/2026) : le gobelet, les marque-pages, le carnet et le support ont leur propre calcul.
+  if (p.gobeletParcours) return "le PREMIER élément de la gravure est offert ; chaque autre élément +3 €, une photo +6 €";
+  if (p.marquePages?.gravure) return "UNE seule gravure offerte (la première), même pour un coffret ; chaque autre : texte +3 €, dessin / cadre / photo +4 €";
+  if (p.carnet) return "chaque texte gravé +3 €, chaque dessin, logo ou photo +4 € ; la première gravure du carnet est offerte";
+  if (p.createur === "support") return "taille selon l'option ; chaque élément gravé +3 €, motif ajouré +5 € ; la PREMIÈRE gravure de la création est offerte";
   const g = p.engravingPricing;
   if (!g) return "";
   const out = [];
   if (g.moinsCherCompris) out.push(g.moinsCherCompris === true
-    ? "la gravure la MOINS CHÈRE est offerte, chaque autre au prix ci-après"
-    : "la gravure la MOINS CHÈRE est offerte s'il n'y a pas déjà une photo / un modèle compris, chaque autre au prix ci-après");
+    ? "la PREMIÈRE gravure choisie (dans l'ordre de la fiche) est offerte, chaque autre au prix ci-après"
+    : "la PREMIÈRE gravure choisie est offerte s'il n'y a pas déjà une photo / un modèle compris, chaque autre au prix ci-après");
   if (g.textExtra && (g.textKeys || []).length) out.push(`chaque texte +${g.textExtra} €`);
   if (g.photoSurcharge) out.push(`photo gravée +${g.photoSurcharge} €`);
   if (g.perExtraPage) out.push(`chaque page en plus +${g.perExtraPage} €`);

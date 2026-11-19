@@ -41,7 +41,7 @@ export default function DevisOptions({ opts }) {
             <input type="checkbox" id="dvo-texte" checked={c.texteOn} onChange={(e) => setDevisChoix({ texteOn: e.target.checked })} />
             <span className="dvo-ic">Aa</span>
             <span className="dvo-txt"><b>{dos ? "Un texte gravé au dos de la plaque" : "Un texte gravé en plus"}</b><small>{dos ? (opts.texte.photoPrix
-              ? `Un prénom, une date, un petit mot. La gravure la moins chère est offerte : avec un texte, c'est le texte qui est offert et la photo passe à ${euro(opts.texte.photoPrix)}.`
+              ? `Un prénom, une date, un petit mot. La première gravure est offerte : avec un texte, c'est le texte qui est offert et la photo passe à ${euro(opts.texte.photoPrix)}.`
               : "Un prénom, une date, un petit mot. Votre gravure du devis reste au recto.") : "Un prénom, une date, un petit mot, gravé dans le cristal."}</small></span>
             <span className="dvo-px">+{euro(opts.texte.price)}</span>
           </label>

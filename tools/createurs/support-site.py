@@ -181,8 +181,8 @@ etapes = etapes[len('<div class="prc" id="prc">'):-len("</div>")].strip()
 assert etapes.count('id="resume"') == 1 and "data:" not in etapes
 
 etapes = etapes.replace("Gravure · + 3 € par élément", "Gravure · + 3 € par élément").replace("Motif ajouré · + 3 €", "Motif ajouré · + 5 €")
-etapes = etapes.replace("chaque élément gravé coûte + 3 €.", "chaque élément gravé coûte + 3 €, le motif ajouré + 5 € ; le moins cher de votre création est offert.")
-assert "Motif ajouré · + 5 €" in etapes and "le moins cher de votre création est offert" in etapes
+etapes = etapes.replace("chaque élément gravé coûte + 3 €.", "chaque élément gravé coûte + 3 €, le motif ajouré + 5 € ; le premier élément gravé est offert.")
+assert "Motif ajouré · + 5 €" in etapes and "le premier élément gravé est offert" in etapes
 donnees = ("// GÉNÉRÉ par tools/createurs/support-site.py à partir de la maquette enregistrée : ne pas modifier à la main.\n"
            "// Les deux morceaux de page que le script du créateur anime (aperçu à gauche, étapes à droite) et la table des images.\n"
            "export const SUP_GAUCHE = " + json.dumps(gauche, ensure_ascii=False) + ";\n"

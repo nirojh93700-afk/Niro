@@ -3,10 +3,10 @@
 // (recalcul de confiance au paiement), pour éviter toute triche.
 
 // =============================================================================
-// « LE MOINS CHER EST COMPRIS » (gérant, 15/11/2026 : « si la cliente prend plusieurs trucs, tu offres que le moins
-// cher, on va faire ça pour tout le site ») — `engravingPricing.moinsCherCompris` :
+// « LA PREMIÈRE GRAVURE EST OFFERTE » (gérant, 19/11/2026 : « tu peux mettre comme avant le premier gravure offert »,
+// remplace « le moins cher est compris » du 15/11/2026) — `engravingPricing.moinsCherCompris` (nom de clé gardé) :
 //   true                         → parmi les gravures payantes choisies (textes, motifs, photo, suppléments à plat
-//                                  qui sont de la GRAVURE), la moins chère est comprise ; les autres se paient.
+//                                  qui sont de la GRAVURE), la PREMIÈRE dans l'ordre de la fiche est offerte ; les autres se paient.
 //   { inclusSi: ["photo"] }      → idem, SAUF si le champ « photo » est rempli : la gravure comprise dans le prix
 //                                  existe déjà (ex. clé USB cristal : photo comprise, texte +5 €).
 //   { inclusSi: { mode: [...] } }→ idem, sauf si « mode » vaut l'une de ces valeurs (carafe : modèle, lettre, photo).
@@ -45,13 +45,22 @@ function dejaInclus(cfg, fields) {
   return Object.entries(r).some(([k, vals]) => (vals || []).includes((fields?.[k] || "").toString().trim()));
 }
 
-/** La gravure offerte (la moins chère, la 1re en cas d'égalité) : { cle, prix } ou null. */
+/** Place de chaque champ sur la fiche (ordre de `personalizationFields`). */
+function rangsFiche(product) {
+  const r = new Map();
+  (product?.personalizationFields || []).forEach((f, i) => { if (f?.key && !r.has(f.key)) r.set(f.key, i); });
+  return r;
+}
+
+/** La gravure offerte : la PREMIÈRE gravure payante choisie, dans l'ordre de la fiche (gérant, 19/11/2026 :
+ *  « tu peux mettre comme avant le premier gravure offert », remplace « la moins chère » du 15/11). { cle, prix } ou null. */
 export function gravureComprise(product, fields = {}, variantId = null) {
   const cfg = product?.engravingPricing;
   if (!cfg?.moinsCherCompris || dejaInclus(cfg, fields)) return null;
-  let best = null;
-  for (const a of articlesGravure(product, fields, variantId)) if (!best || a.prix < best.prix) best = a;
-  return best;
+  const rangs = rangsFiche(product);
+  const liste = articlesGravure(product, fields, variantId).map((a, i) => ({ a, r: rangs.has(a.cle) ? rangs.get(a.cle) : 1e6 + i }));
+  liste.sort((x, y) => x.r - y.r);
+  return liste.length ? liste[0].a : null;
 }
 
 /** Ce que la fiche écrit à côté d'une case de gravure : « compris » ou le supplément, si on la remplissait. */
@@ -180,7 +189,7 @@ function extraBrut(product, fields = {}, variantId = null) {
 export function prixPremiereGravure(product, fields = {}, variantId = null) {
   const cfg = product?.engravingPricing;
   if (!cfg) return 0;
-  // Fiche « le moins cher compris » : le code offre la gravure payante la moins chère qui RESTE après la comprise.
+  // Fiche « 1re gravure offerte » (moinsCherCompris, nom gardé) : le code offre la gravure payante la moins chère qui RESTE après l'offerte.
   if (cfg.moinsCherCompris) {
     const off = gravureComprise(product, fields, variantId);
     let reste = articlesGravure(product, fields, variantId);

@@ -5,7 +5,7 @@
 // en bas à droite), chacun = rien / un texte (2 lignes) / un de nos dessins ou cadres (n°) / mon logo.
 // PRIX PAR ÉLÉMENT GRAVÉ (16/11/2026, gérant : « 3 € le texte, 4 € la photo… je t'ai déjà dit qu'il y a UN truc qui est
 // gratuit ») : chaque texte +3 €, chaque dessin / cadre / logo / photo +4 € (le texte écrit dans un cadre = un texte
-// de plus), et SEUL l'élément le moins cher de tout le carnet est offert. Avant (07/11 → 16/11) : +7 € par face, et du
+// de plus), et SEUL le 1er élément gravé du carnet est offert (19/11/2026 ; du 16/11 au 19/11 : le moins cher). Avant (07/11 → 16/11) : +7 € par face, et du
 // 15/11 au 16/11 une face entière offerte — erreur : toute la couverture était gratuite (commande 1IQXA36I).
 // UN SEUL calcul pour la fiche ET le paiement (pur, sans dépendance serveur).
 // =============================================================================
@@ -43,7 +43,7 @@ export function cnFaceGravee(v, side) {
 }
 /** Les éléments gravés du carnet, dans l'ordre de la fiche (couverture puis dos, haut → bas droite) :
  *  [{ side, zone, kind: "texte"|"image", prix, cle, offert }]. Le texte au milieu d'un cadre compte comme un texte.
- *  Offert = le MOINS CHER (le premier rencontré à prix égal). */
+ *  Offert = le PREMIER (gérant, 19/11/2026 : « comme avant, le premier gravure offert » ; du 16/11 au 19/11 : le moins cher). */
 export function cnElements(v) {
   const out = [];
   for (const [s] of CN_FACES) for (const [z] of CN_ZONES) {
@@ -55,13 +55,10 @@ export function cnElements(v) {
       if (e.k === "dessin" && e.n >= 75 && String(e.t || e.ts || "").trim()) out.push({ side: s, zone: z, kind: "texte", prix: CN_TEXTE, cle: `${s}.${z}.cadre` });
     }
   }
-  if (out.length) {
-    const min = Math.min(...out.map((x) => x.prix));
-    out.find((x) => x.prix === min).offert = true;
-  }
+  if (out.length) out[0].offert = true; // 19/11/2026 : le 1er élément gravé (ordre de la fiche) est offert
   return out;
 }
-/** Supplément de gravure : tout, sauf l'élément le moins cher. */
+/** Supplément de gravure : tout, sauf le 1er élément gravé (offert). */
 export function cnPrixGravure(v) {
   return cnElements(v).reduce((t, x) => t + (x.offert ? 0 : x.prix), 0);
 }

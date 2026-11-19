@@ -46,7 +46,7 @@ export function optionsDisponibles(q, index) {
 // collier plaque d'Alicia, gérant : « elle peut choisir et graver dans le devis »). Proposé quand la
 // ligne principale est un bijou dont la fiche grave un verso, et que le devis ne parle pas déjà du dos.
 // Prix = celui de la fiche : ce qu'ajoute un texte au verso à la gravure déjà prévue au devis (photo ou
-// texte au recto), avec la règle « le moins cher compris » (photo seule offerte + texte = +8 €).
+// texte au recto), avec la règle de la fiche (1re gravure offerte depuis le 19/11/2026).
 const contientDos = (items) => items.some((it) => /verso|au dos|derri[eè]re/i.test(String(it?.desc || "")));
 function texteAuDos(items, index) {
   let vid = "", product = null;
@@ -62,7 +62,7 @@ function texteAuDos(items, index) {
   const prix = r2(engravingExtra(product, { ...deja, verso: "texte" }, vid).amount - engravingExtra(product, deja, vid).amount);
   if (!(prix > 0)) return null;
   // Avec une photo déjà prévue, le texte ajouté devient la gravure offerte et la photo se paie :
-  // on l'écrit tel quel (gérant, 16/11 : « c'est le moins cher qui est pris en compte »).
+  // on l'écrit tel quel (cas où le texte vient AVANT la photo sur la fiche).
   const photoPrix = avecPhoto ? r2(ep.photoSurcharge || 0) : 0;
   const echange = avecPhoto && photoPrix === prix;
   return { texte: { price: prix, dos: true, max: Number(champ.maxLength) || 30, ...(echange ? { photoPrix } : {}) } };

@@ -239,7 +239,7 @@ function Editeur({ modele, v, onChange, owner, grille, setGrille, productSlug, l
   const maj = (key, patch) => onChange((p) => ({ ...p, [key]: { ...p[key], ...patch } }));
   return (
     <div className="mq-ed">
-      <p className="mq-edi">Quatre emplacements, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un texte en haut et un dessin au milieu, ou l&apos;inverse, sur la face comme au dos. Un texte +3 €, un dessin, un cadre ou votre photo +4 € : la gravure la moins chère est offerte (une seule, même pour un coffret). Rien de coché = marque-page nu.</p>
+      <p className="mq-edi">Quatre emplacements, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un texte en haut et un dessin au milieu, ou l&apos;inverse, sur la face comme au dos. Un texte +3 €, un dessin, un cadre ou votre photo +4 € : la première gravure est offerte (une seule, même pour un coffret). Rien de coché = marque-page nu.</p>
       {MP_EMPLACEMENTS.map(([side, zone]) => {
         const key = `${side}|${zone}`;
         const ok = mpAutorise(modele, side, zone);
