@@ -29,7 +29,7 @@ const COUNTRIES = [
 ];
 
 export default function CartPage() {
-  const { items, total, gravuresEnPlus, updateQuantity, removeItem, hydrated } = useCart();
+  const { items, total, updateQuantity, removeItem, hydrated } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [postalCode, setPostalCode] = useState("");
@@ -268,12 +268,6 @@ export default function CartPage() {
           {/* Mode délai allongé : encadré cadeau (délai + choix de préférence).
               N'affiche RIEN quand le mode est éteint → panier comme avant. */}
           <CadeauChoix value={cadeau} onChange={setCadeau} value2={cadeau2} onChange2={setCadeau2} />
-          {gravuresEnPlus > 0 && (
-            <div className="summary-row">
-              <span>Gravures des autres bijoux <small style={{ display: "block", color: "var(--ink-soft)", fontWeight: 400 }}>une seule gravure offerte par commande</small></span>
-              <span>+{formatEuro(gravuresEnPlus)}</span>
-            </div>
-          )}
           <div className="summary-row">
             <span>Sous-total</span>
             <span>{formatEuro(total)}</span>

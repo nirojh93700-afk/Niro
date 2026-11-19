@@ -364,7 +364,6 @@ export default function ProductDetail({ product, realisations = [] }) {
     && Math.round((1 - salePrice / variant.price) * 100) >= 1;
   // Supplément de gravure (pages de texte en plus de la couverture).
   const engrave = engravingExtra(product, fieldValues, variant.id);
-  const gravOffBijou = product.category === "bijoux" ? (Number(engrave.comprise?.prix) || 0) : 0;
   // Supplément d'emballage (écrin / pochette choisis) — le sachet offert est inclus d'office.
   const pkg = packagingExtra(product, pkgSel);
   // 🎄 Emballage de Noël : seulement s'il rentre avec l'emballage habituel choisi (sinon il ne compte pas).
@@ -1297,8 +1296,6 @@ export default function ProductDetail({ product, realisations = [] }) {
       name: product.name,
       variantTitle: variant.title,
       price: unitPrice,
-      // Bijoux : valeur de la gravure offerte (une seule par commande, 16/11/2026) → panier et paiement.
-      gravOfferte: gravOffBijou || undefined,
       // Vignette panier = le visuel composé ; sinon l'image/design choisi ; sinon photo produit.
       image: previewImage || photoSrc || artworkImage || images[0] || null,
       // Côté cliente : récap court (les détails techniques restent pour l'atelier).
@@ -2377,13 +2374,10 @@ export default function ProductDetail({ product, realisations = [] }) {
           )}
           {/* Total « tout compris » (option + gravure + emballage) dans un encadré doré. */}
           {!soldOut && (
-            <>
             <div className="pd-totbox">
               <span className="lab">Total tout compris</span>
-              <span className="val">{formatEuro(unitPrice * quantity + gravOffBijou * Math.max(0, quantity - 1))}</span>
+              <span className="val">{formatEuro(unitPrice * quantity)}</span>
             </div>
-            {gravOffBijou > 0 && quantity > 1 ? <p className="field-note" style={{ marginTop: -6 }}>Une seule gravure est offerte par commande : la gravure des {quantity - 1} autre(s) exemplaire(s) se paie (+{formatEuro(gravOffBijou * (quantity - 1))}).</p> : null}
-            </>
           )}
           {/* Paiement en plusieurs fois — juste après le total, avant le bouton */}
           <p className="pd-nfois">

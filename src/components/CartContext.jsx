@@ -88,17 +88,7 @@ export function CartProvider({ children }) {
   const clearCart = useCallback(() => setItems([]), []);
 
   const count = items.reduce((sum, i) => sum + i.quantity, 0);
-  // Bijoux (16/11/2026) : UNE seule gravure offerte pour toute la commande. Chaque bijou porte la valeur de sa
-  // gravure offerte (gravOfferte) : le 1er exemplaire du 1er bijou la garde, les autres la paient (même calcul au paiement).
-  let gravuresEnPlus = 0, offreUtilisee = false;
-  for (const i of items) {
-    const g = Number(i.gravOfferte) || 0;
-    if (g <= 0) continue;
-    gravuresEnPlus += g * (offreUtilisee ? i.quantity : i.quantity - 1);
-    offreUtilisee = true;
-  }
-  gravuresEnPlus = Math.round(gravuresEnPlus * 100) / 100;
-  const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0) + gravuresEnPlus;
+  const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
     <CartContext.Provider
@@ -106,7 +96,6 @@ export function CartProvider({ children }) {
         items,
         count,
         total,
-        gravuresEnPlus,
         hydrated,
         drawerOpen,
         setDrawerOpen,
