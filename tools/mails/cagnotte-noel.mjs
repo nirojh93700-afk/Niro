@@ -1,9 +1,11 @@
 // Mail « votre cagnotte vous attend » (19/11/2026, gérant : « prépare aussi pour les gens qui n'ont pas utilisé les cagnottes »).
-// Usage : node --import ./tools/alias-register.mjs tools/mails/cagnotte-noel.mjs <dossier> (lit <dossier>/cag-cible.json, écrit l'aperçu).
+// Usage : node --import ./tools/alias-register.mjs tools/mails/cagnotte-noel.mjs <dossier> (lit <dossier>/cag-cible-ok.json, écrit l'aperçu).
+// ⛔ Gérant (19/11) : jamais aux clientes qui peuvent encore demander un remboursement : commande en cours (à préparer, en gravure,
+// expédiée), livrée depuis moins de 14 jours, annulée ou remboursée. Liste filtrée = cag-cible-ok.json (34 clientes, 64,41 € au 19/11).
 import fs from "fs";
 import { emailLayout, BRAND } from "@/lib/email";
 const S = process.argv[2];
-const cible = JSON.parse(fs.readFileSync(`${S}/cag-cible.json`, "utf8"));
+const cible = JSON.parse(fs.readFileSync(`${S}/cag-cible-ok.json`, "utf8"));
 const gold = BRAND.gold;
 const euro = (n) => n.toFixed(2).replace(".", ",") + " €";
 // Pas de prénom dans le mail : le nom est parfois écrit nom puis prénom (« Cerisel Eric »), ou c'est une adresse.
