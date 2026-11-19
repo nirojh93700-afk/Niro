@@ -122,22 +122,16 @@ export function mpGravureNette(modele, v) {
   return out;
 }
 
-/** Gravures payantes d'un marque-page, dans l'ordre des emplacements : [prix…] (le texte d'un cadre compte à part). */
-export function mpArticles(v) {
-  const out = [];
+/** Prix de la gravure d'un marque-page (emplacements remplis seulement). */
+export function mpPrixGravure(v) {
+  let p = 0;
   for (const key of Object.keys(v || {})) {
     const e = v[key] || {};
-    if (e.k === "texte" && String(e.t || "").trim()) out.push(MP_PRIX.texte);
-    else if (e.k === "dessin" && e.n) { out.push(MP_PRIX.dessin); if (e.n >= 75 && String(e.t || "").trim()) out.push(MP_PRIX.texteCadre); }
-    else if (e.k === "photo") out.push(MP_PRIX.photo);
+    if (e.k === "texte" && String(e.t || "").trim()) p += MP_PRIX.texte;
+    else if (e.k === "dessin" && e.n) { p += MP_PRIX.dessin; if (e.n >= 75 && String(e.t || "").trim()) p += MP_PRIX.texteCadre; }
+    else if (e.k === "photo") p += MP_PRIX.photo;
   }
-  return out;
-}
-/** Prix de la gravure d'un marque-page : la gravure la MOINS CHÈRE est comprise (gérant, 15/11/2026 : « le moins cher
- *  est offert, pour tout le site »), chaque autre gravure se paie (texte 3 €, dessin / cadre / photo 4 €). */
-export function mpPrixGravure(v) {
-  const a = mpArticles(v);
-  return a.length ? Math.round((a.reduce((x, y) => x + y, 0) - Math.min(...a)) * 100) / 100 : 0;
+  return p;
 }
 
 /**
@@ -216,14 +210,16 @@ export function mpResume(product, mp) {
   return morceaux.join(" · ");
 }
 
-/** Coût d'une gravure « offerte » (code gravure) : la moins chère des gravures PAYANTES (la comprise de chaque marque-page retirée). */
+/** Coût d'une gravure « offerte » (code gravure) : la première gravure payante trouvée. */
 export function mpPremiereGravure(mp) {
-  let best = 0;
   for (const s of mp.slots || []) {
-    const a = mpArticles(s.v).sort((x, y) => x - y).slice(1);
-    if (a.length && (!best || a[0] < best)) best = a[0];
+    for (const key of Object.keys(s.v || {})) {
+      const e = s.v[key];
+      if (e.k === "texte" && String(e.t || "").trim()) return MP_PRIX.texte;
+      if ((e.k === "dessin" && e.n) || e.k === "photo") return MP_PRIX.dessin;
+    }
   }
-  return best;
+  return 0;
 }
 
 // ── Langue de la gravure (09/11/2026) : UNE langue pour la ligne du panier (tous les marque-pages), appliquée à

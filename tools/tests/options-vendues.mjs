@@ -17,11 +17,9 @@ check("carafe sans rien : aucune option", optionsArticle({ slug: "carafe-a-whisk
 const cv = optionsArticle({ slug: "cristal-photo-3d-vertical", variantId: "cristal-v-petit", fields: { socle: "oui", photo: "/api/img/x" } });
 check("cristal petit + socle : objet à 14,90 €", (() => { const o = cv.find((x) => /socle/i.test(x.libelle)); return o && o.physique && Math.abs(o.montant - 14.9) < 0.01; })());
 
-// Bijou recto/verso : la face la moins chère comprise (15/11/2026), l'autre +3 €
+// Bijou recto/verso (+3 € la face)
 const bijou = optionsArticle({ slug: "collier-double-coeur", fields: { recto: "Léa", verso: "12.06.24" } });
-check("bijou recto + verso : 1 face comprise (0 €), l'autre +3 €", bijou.filter((o) => o.montant === 3).length === 1 && bijou.filter((o) => o.montant === 0 && /offerte/.test(o.libelle + o.detail)).length === 1 && has(bijou, /« Léa »/) && has(bijou, /12\.06\.24/));
-const bijouPhoto = optionsArticle({ slug: "collier-plaque-acier", fields: { photo: "/api/img/abcdef12", verso: "Léa" } });
-check("plaque acier photo + verso : le texte compris, la photo +8 €", bijouPhoto.some((o) => /Photo/.test(o.libelle) && o.montant === 8) && bijouPhoto.some((o) => o.montant === 0 && /« Léa »/.test(o.detail)));
+check("bijou recto + verso : 2 lignes à +3 €", bijou.filter((o) => o.montant === 3).length === 2 && has(bijou, /« Léa »/) && has(bijou, /12\.06\.24/));
 
 // Verre à whisky : gravure face + fond (+7 €)
 const whisky = optionsArticle({ slug: "verre-a-whisky-grave", fields: { emplacement: "deux", texte: "Papa" } });

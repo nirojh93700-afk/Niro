@@ -15,7 +15,7 @@ import CrystalSizeGuide from "@/components/CrystalSizeGuide";
 import VacationNotice from "@/components/VacationNotice";
 import DelaiFabrication from "@/components/DelaiFabrication";
 import RestockAlerte from "@/components/RestockAlerte";
-import { engravingExtra, facesOffertes, etiquettePrixGravure } from "@/lib/engravingPrice";
+import { engravingExtra, facesOffertes } from "@/lib/engravingPrice";
 import { aEmplacement, lignesDuCote } from "@/lib/apercuCote";
 import { prixGravureVerres, estRegleVerres, detailEnTexte, texteOffertVerre1 } from "@/lib/prixVerres";
 import GrillePrixVerres from "./GrillePrixVerres";
@@ -431,18 +431,7 @@ export default function ProductDetail({ product, realisations = [] }) {
     ? texteOffertVerre1(product, fieldValues, variant?.id, visibleFields.map((f) => f.key)) : null;
   // Faces offertes (Collier Quatre Mots, 02/11/2026) : la 1re face remplie « (offerte) », les autres « (+3 €) ».
   const faceOff = product.engravingPricing?.textesOfferts ? facesOffertes(product, fieldValues) : null;
-  // « Le moins cher compris » (15/11/2026) : à côté de chaque case de gravure, « compris » ou son supplément,
-  // calculé avec la MÊME fonction que le prix (etiquettePrixGravure → engravingExtra).
-  const MCC = Boolean(product.engravingPricing?.moinsCherCompris);
   const etiquetteChamp = (f) => {
-    if (MCC) {
-      const e = etiquettePrixGravure(product, fieldValues, variant?.id, f.key);
-      if (e) {
-        const nu = String(f.label || "").replace(/\s*\(\+\s*[\d,.]+\s*€\)/, "").trim();
-        const txt = e.compris ? "(offert)" : `(+${String(e.prix).replace(".", ",")} €)`;
-        return <>{nu} <span style={{ color: e.compris ? "#1c6b3a" : "#7c6120", fontWeight: 600 }}>{txt}</span></>;
-      }
-    }
     if (faceOff && (product.engravingPricing.textKeys || []).includes(f.key)) {
       const prix = String(product.engravingPricing.textExtra || 0).replace(".", ",");
       const txt = faceOff.cles.includes(f.key) ? (faceOff.aucune ? "(1re face remplie offerte)" : "(offerte)") : `(+${prix} €)`;
@@ -1894,7 +1883,6 @@ export default function ProductDetail({ product, realisations = [] }) {
                   Personnalisation — gravure
                 </p>
               )}
-              {MCC && <p className="pg-hint">La gravure la moins chère de votre création est <strong>offerte</strong> ; chaque autre gravure se paie au prix écrit à côté de sa case.</p>}
               {RV && !perGlass && <p className="pg-hint">Verre 1 : votre logo, votre image, votre modèle — ou un texte — est <strong>offert</strong>. Chaque texte en plus : <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p>}
               {/* Lot de N verres : chaque verre identique ou personnalisé différemment */}
               {supportsPerGlass && (

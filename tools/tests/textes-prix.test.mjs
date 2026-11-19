@@ -15,10 +15,9 @@ verif(anomalies.length === 0, `catalogue : aucune case de texte payée sans prix
 
 // 2. Une case payée dont le libellé perd son « +3 € » est attrapée.
 // (Le verre à cocktail est passé au parcours guidé le 28/10/2026 : ses prix sont calculés, on teste un bijou.)
-// (Depuis le 15/11/2026 les bijoux calculent leur étiquette « compris / +3 € » : on teste la pièce en laiton.)
-let p = fiche("piece-ronde-laiton");
-p.personalizationFields.find((f) => f.key === "verso").label = "Texte à graver — verso";
-verif(controleTextesPrix(p).some((a) => a.cle === "verso" && a.paye === 3 && !a.affiche), "pièce laiton : verso payé 3 € sans prix écrit → signalé");
+let p = fiche("collier-double-coeur");
+p.personalizationFields.find((f) => f.key === "recto").label = "Texte au recto";
+verif(controleTextesPrix(p).some((a) => a.cle === "recto" && a.paye === 3 && !a.affiche), "collier double cœur : recto payé 3 € sans prix écrit → signalé");
 
 // 3. Un prix écrit qui n'est plus payé est attrapé.
 p = fiche("bracelet-femme-coeur");
@@ -35,8 +34,7 @@ const carafe = fiche("carafe-a-whisky-gravee");
 const px = (fv) => engravingExtra(carafe, fv).amount;
 verif(px({ mode: "modele", numstyle: "18", prenom: "Paul" }) === 3, "carafe : prénom sur un modèle = +3 €");
 verif(px({ mode: "modele", initiale: "PB", prenom: "Paul", role: "Papa", date: "1989" }) === 12, "carafe : initiales + prénom + rôle + date = +12 €");
-// 15/11/2026 « le moins cher compris » : en mode texte, la gravure la moins chère est comprise.
-verif(px({ mode: "texte", texte: "Pour Papa" }) === 0 && px({ mode: "texte", texte: "Pour Papa", date: "2026" }) === 3 && px({ mode: "lettre", lettreFleurie: "B" }) === 0, "carafe : texte seul compris, texte + date = +3 €, lettre fleurie sans prénom = rien");
+verif(px({ mode: "texte", texte: "Pour Papa" }) === 3 && px({ mode: "lettre", lettreFleurie: "B" }) === 0, "carafe : texte seul +3 €, lettre fleurie sans prénom = rien");
 verif(px({ mode: "modele", numstyle: "29", coffret: "2verres" }) === 35.8, "carafe : modèle sans texte + coffret 2 verres = 35,80 € (aucun supplément de texte)");
 
 // 6. Option par option : le support téléphone fait payer le texte seulement avec un dessin ou une photo.

@@ -91,12 +91,12 @@ code = rempl(code, "pret()?eur(total()):'dès '+eur(D.prix.base)", "eur(total())
 # on va faire ça pour tout le site ») : le petit passe à 15,90 €, motif ajouré + 5 €, chaque élément gravé + 3 €, et
 # l'élément le moins cher de la création est compris. offert() dit lequel : 'aj' (le motif) ou l'indice d'un élément gravé.
 code = rempl(code, "function total(){return D.prix.base+D.prix.taille[S.taille]+(S.grave?S.els.length*D.prix.element:0)+(S.ajoure?D.prix.ajoure:0)}",
-             "function offert(){var g=S.grave&&S.els.length;if(g&&(!S.ajoure||D.prix.element<=D.prix.ajoure))return 0;if(S.ajoure)return 'aj';return null}\n"
+             "function offert(){return null}\n"
              "function total(){var t=D.prix.base+D.prix.taille[S.taille]+(S.grave?S.els.length*D.prix.element:0)+(S.ajoure?D.prix.ajoure:0),o=offert();"
              "if(o==='aj')t-=D.prix.ajoure;else if(o===0)t-=D.prix.element;return Math.round(t*100)/100}")
-code = rempl(code, "function prixEl(i){return '+ '+eur(D.prix.element)}", "function prixEl(i){return offert()===i?'offert':'+ '+eur(D.prix.element)}")
-code = rempl(code, "' — + '+eur(D.prix.ajoure)+'</b></div>'}", "(offert()==='aj'?' — offert':' — + '+eur(D.prix.ajoure))+'</b></div>'}")
-code = rempl(code, "' — + '+eur(D.prix.element)+'</b></div>'})}", "(offert()===i?' — offert':' — + '+eur(D.prix.element))+'</b></div>'})}")
+code = rempl(code, "function prixEl(i){return '+ '+eur(D.prix.element)}", "function prixEl(i){return offert()===i?'compris':'+ '+eur(D.prix.element)}")
+code = rempl(code, "' — + '+eur(D.prix.ajoure)+'</b></div>'}", "(offert()==='aj'?' — compris':' — + '+eur(D.prix.ajoure))+'</b></div>'}")
+code = rempl(code, "' — + '+eur(D.prix.element)+'</b></div>'})}", "(offert()===i?' — compris':' — + '+eur(D.prix.element))+'</b></div>'})}")
 code = rempl(code, "window.scEtat=function(){", "window.scSite={S:S,dessiner:function(){dessiner()},total:total,pret:pret,voirCreation:voirCreation};\nwindow.scEtat=function(){")
 
 # le bouton « OK ✓ » des champs (téléphone)
@@ -181,8 +181,8 @@ etapes = etapes[len('<div class="prc" id="prc">'):-len("</div>")].strip()
 assert etapes.count('id="resume"') == 1 and "data:" not in etapes
 
 etapes = etapes.replace("Gravure · + 3 € par élément", "Gravure · + 3 € par élément").replace("Motif ajouré · + 3 €", "Motif ajouré · + 5 €")
-etapes = etapes.replace("chaque élément gravé coûte + 3 €.", "chaque élément gravé coûte + 3 €, le motif ajouré + 5 € ; le moins cher de votre création est offert.")
-assert "Motif ajouré · + 5 €" in etapes and "le moins cher de votre création est offert" in etapes
+etapes = etapes.replace("chaque élément gravé coûte + 3 €.", "chaque élément gravé coûte + 3 €, le motif ajouré + 5 €.")
+assert "Motif ajouré · + 5 €" in etapes and "le motif ajouré + 5 €." in etapes
 donnees = ("// GÉNÉRÉ par tools/createurs/support-site.py à partir de la maquette enregistrée : ne pas modifier à la main.\n"
            "// Les deux morceaux de page que le script du créateur anime (aperçu à gauche, étapes à droite) et la table des images.\n"
            "export const SUP_GAUCHE = " + json.dumps(gauche, ensure_ascii=False) + ";\n"

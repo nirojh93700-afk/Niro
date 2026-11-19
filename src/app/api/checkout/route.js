@@ -2,7 +2,7 @@ import { gobeletSupplement } from "@/lib/gobeletParcours";
 import { decouperStock } from "@/lib/stockMeta";
 import { manqueLangue } from "@/lib/traductionGravure";
 import { cnNormaliser, cnPrixGravure, cnPremiereGravure, cnResume } from "@/lib/carnet";
-import { supNormaliser, supSupplement, supResume, supVariantId, supPremiereGravure } from "@/lib/supportCreateur";
+import { supNormaliser, supSupplement, supResume, supVariantId, SUP_PRIX } from "@/lib/supportCreateur";
 import { randomBytes } from "crypto";
 import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
 import Stripe from "stripe";
@@ -258,7 +258,7 @@ export async function POST(req) {
         return Response.json({ error: "Un support de téléphone du panier n'est plus valable : retirez-le et composez-le à nouveau." }, { status: 400 });
       }
       const unit = Math.round((variant.price + supSupplement(sup)) * 100) / 100;
-      if (!gravureOfferte) gravureOfferte = supPremiereGravure(sup); // code « gravure offerte » : une gravure PAYANTE (la comprise est déjà retirée)
+      if (!gravureOfferte && sup.grave && sup.els.length) gravureOfferte = SUP_PRIX.element; // code « gravure offerte » : un élément
       boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
       ajouterLignePort(etatPort, { product, unitGrams: variant.weight || product.weight, unitPrice: unit, quantity });
       lineItems.push({

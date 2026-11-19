@@ -12,25 +12,25 @@ ok(m1 && m2 && m3, "les trois fiches existent");
 const E = (o) => ({ "face|haut": { k: "" }, "face|bas": { k: "" }, "dos|haut": { k: "" }, "dos|bas": { k: "" }, ...o });
 const tot = (p, mp) => mpCalcul(p, mpNormaliser(p, mp)).total;
 
-// Modèle 1 seul + dessin 12 + « Léa » + cadre 92 « Paul » : 4 + 3 + 4 + 3 = 14 €, le moins cher (3 €) compris → 20,90 € (15/11/2026)
+// Modèle 1 seul + dessin 12 face milieu + « Léa » dos haut + cadre 92 « Paul » dos milieu = 23,90 € (maquette v12)
 const a = { format: "seul", slots: [{ c: "mp1-caramel", v: E({ "face|bas": { k: "dessin", n: 12 }, "dos|haut": { k: "texte", t: "Léa" }, "dos|bas": { k: "dessin", n: 92, t: "Paul" } }) }] };
-ok(tot(m1, a) === 20.9, "modèle 1 : 20,90 €");
-// Coffret de 2 : « Paul » sur l'un, dessin 7 sur l'autre : chaque gravure est la seule de son marque-page → comprise = 25,70 €
+ok(tot(m1, a) === 23.9, "modèle 1 : 23,90 €");
+// Coffret de 2 + « Paul » + dessin 7 = 32,70 €
 const b = { format: "coffret2", slots: [{ c: "mp1-rouge", v: E({ "face|haut": { k: "texte", t: "Paul" } }) }, { c: "mp1-sable", v: E({ "face|bas": { k: "dessin", n: 7 } }) }] };
-ok(tot(m1, b) === 25.7, "coffret de 2 : 25,70 €");
+ok(tot(m1, b) === 32.7, "coffret de 2 : 32,70 €");
 // Stock : une pièce par couleur + la boîte de 2
 const cb = mpCalcul(m1, mpNormaliser(m1, b));
 ok(JSON.stringify(cb.stock) === JSON.stringify([["mp1-rouge", 1], ["mp1-sable", 1], ["mp-boite-2", 1]]), "stock décompté");
 ok(cb.enBoite, "coffret = colis");
-// « Léa » en haut (compris) + dessin 33 (+4 €) = 13,90 €
-ok(tot(m1, { format: "seul", slots: [{ c: "mp1-blond", v: E({ "face|haut": { k: "texte", t: "Léa" }, "face|bas": { k: "dessin", n: 33 } }) }] }) === 13.9, "13,90 €");
+// « Léa » en haut + dessin 33 au milieu sur la face = 16,90 € (v13)
+ok(tot(m1, { format: "seul", slots: [{ c: "mp1-blond", v: E({ "face|haut": { k: "texte", t: "Léa" }, "face|bas": { k: "dessin", n: 33 } }) }] }) === 16.9, "16,90 €");
 // Modèle 2 : face en haut = texte ou photo (17,90 €), face à côté = texte seul (un dessin y est refusé)
-ok(tot(m2, { format: "seul", slots: [{ c: "mp2-blond", v: E({ "face|haut": { k: "photo", src: "/api/img/abcdef12" } }) }] }) === 13.9, "modèle 2 photo seule face haut : comprise, 13,90 €");
+ok(tot(m2, { format: "seul", slots: [{ c: "mp2-blond", v: E({ "face|haut": { k: "photo", src: "/api/img/abcdef12" } }) }] }) === 17.9, "modèle 2 photo face haut 17,90 €");
 ok(tot(m2, { format: "seul", slots: [{ c: "mp2-blond", v: E({ "face|bas": { k: "dessin", n: 12 } }) }] }) === 13.9, "modèle 2 : dessin refusé à côté de la fenêtre");
 ok(mpAutorise(2, "face", "bas").join() === "texte", "modèle 2 face bas = texte");
 // Numéros refusés (97, 99, 103) et photo venant d'ailleurs ignorée
 ok(tot(m1, { format: "seul", slots: [{ c: "mp1-blond", v: E({ "face|bas": { k: "dessin", n: 97 } }) }] }) === 9.9, "n° 97 refusé");
-ok(tot(m1, { format: "seul", slots: [{ c: "mp1-blond", v: E({ "face|bas": { k: "photo", src: "data:image/png;base64,AAAA" } }) }] }) === 9.9, "photo non envoyée : comptée (comprise), lien ignoré");
+ok(tot(m1, { format: "seul", slots: [{ c: "mp1-blond", v: E({ "face|bas": { k: "photo", src: "data:image/png;base64,AAAA" } }) }] }) === 13.9, "photo non envoyée : comptée, mais lien ignoré");
 // Métal : pas de gravure, Papillon 19,90 €, coffret de 4 = 4 tableaux + boîte 7,90
 ok(tot(m3, { format: "seul", slots: [{ c: "mp3-papillon", v: E({ "face|haut": { k: "texte", t: "x" } }) }] }) === 19.9, "métal : texte ignoré");
 ok(tot(m3, { format: "coffret4", slots: ["mp3-amandier", "mp3-iris", "mp3-nympheas", "mp3-roses"].map((c) => ({ c })) }) === 71.5, "métal coffret de 4 : 71,50 €");
@@ -55,6 +55,4 @@ ok(c5.total === 66.2 && c5.stock.some(([s, q]) => s === "mp-boite-2" && q === 2)
 ok(/2 boîtes de 2 places \+ boîte de 1 place/.test(mpResume(m1, mpNormaliser(m1, { format: "n5b1-2-0", slots: ["mp1-rouge", "mp1-sable", "mp1-blond", "mp1-rouge", "mp1-rouge"].map((c) => ({ c })) }))), "résumé : les boîtes choisies");
 ok(mpNormaliser(m1, { format: "n9", slots: [] }) === null && mpNormaliser(m1, { format: "n2b", slots: [{ c: "mp1-rouge" }] }) === null, "nombre hors limite ou pièces manquantes = refusé");
 ok(optionsArticle({ slug: m1.slug, fields: { mp: mpNormaliser(m1, { format: "n5b1-2-0", slots: ["mp1-rouge", "mp1-sable", "mp1-blond", "mp1-rouge", "mp1-rouge"].map((c) => ({ c })) }) } }).filter((o) => /Boîte/.test(o.libelle)).length === 3, "vendu en plus : les 3 boîtes");
-import { mpPremiereGravure } from "../../src/lib/marquePages.js";
-ok(mpPremiereGravure(mpNormaliser(m1, a)) === 3 && mpPremiereGravure(mpNormaliser(m1, b)) === 0, "code gravure offerte : la moins chère des gravures payantes");
 console.log(`✓ marque-pages : ${n} vérifications`);

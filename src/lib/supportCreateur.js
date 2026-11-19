@@ -15,7 +15,7 @@ export const SUP_MOTIFS = { coeurs: "Cœurs", pattes: "Pattes", soleil: "Soleil"
 export const SUP_DENSITES = { moins: "Moins", moyen: "Moyen", plus: "Plus" };
 export const SUP_ANGLES = [10, 13, 16, 20];
 // Prix du gérant (15/11/2026, après le relevé du marché) : petit 15,90 €, chaque élément gravé + 3 €, motif ajouré + 5 €,
-// et le moins cher de la création est compris (« tu offres que le moins cher »). Avant : 12,90 €, + 3 € / + 3 €, rien de compris.
+// rien d'offert (le « moins cher compris » du 15/11 a été retiré le 19/11/2026, retour d'avant le 15/11).
 export const SUP_PRIX = { element: 3, ajoure: 5 };
 export const SUP_MAX_ELEMENTS = 12;
 const POLICES = new Set(FONTS.map((f) => f.key));
@@ -76,29 +76,18 @@ export function supNormaliser(etat) {
   };
 }
 
-/** Ce qui est compris (le moins cher) : 0 = le 1er élément gravé, "aj" = le motif ajouré, null = rien (bois nu). Même règle que la fiche. */
+/** Ce qui est offert : rien depuis le 19/11/2026 (retour d'avant le 15/11). Même règle que la fiche. */
 export function supOffert(sup) {
-  if (!sup) return null;
-  const g = sup.grave && sup.els.length;
-  if (g && (!sup.ajoure || SUP_PRIX.element <= SUP_PRIX.ajoure)) return 0;
-  return sup.ajoure ? "aj" : null;
+  // 19/11/2026 (gérant : « comme avant le 15 ») : rien n'est offert, chaque élément gravé + 3 €, le motif + 5 €.
+  return null;
 }
 
-/** Ce qui s'ajoute au prix de la taille : + 3 € par élément gravé, + 5 € le motif ajouré, moins le moins cher (compris). */
+/** Ce qui s'ajoute au prix de la taille : + 3 € par élément gravé, + 5 € le motif ajouré, rien d'offert. */
 export function supSupplement(sup) {
   if (!sup) return 0;
   const o = supOffert(sup);
   const brut = (sup.grave ? sup.els.length * SUP_PRIX.element : 0) + (sup.ajoure ? SUP_PRIX.ajoure : 0);
   return brut - (o === "aj" ? SUP_PRIX.ajoure : o === 0 ? SUP_PRIX.element : 0);
-}
-
-/** Code « gravure offerte » : la moins chère des gravures PAYANTES (après la comprise), 0 s'il n'y en a pas. */
-export function supPremiereGravure(sup) {
-  if (!sup) return 0;
-  const o = supOffert(sup);
-  const els = sup.grave ? sup.els.length - (o === 0 ? 1 : 0) : 0;
-  const aj = sup.ajoure && o !== "aj";
-  return els > 0 ? SUP_PRIX.element : aj ? SUP_PRIX.ajoure : 0;
 }
 
 /** Pourquoi la création ne peut pas encore partir au panier (chaîne vide = prête). */
@@ -142,11 +131,11 @@ export function supConsignes(sup) {
     { k: "Taille", v: `${t.nom} · ${t.W} × ${t.H} mm`, fort: true },
     { k: "Inclinaison", v: `${sup.angle}°` },
     { k: "Câble", v: sup.cable ? "avec le passage du câble" : "SANS passage du câble", fort: !sup.cable },
-    { k: "Motif ajouré", v: sup.ajoure ? `${supMotifTexte(sup)} (${o === "aj" ? "offert" : `+${SUP_PRIX.ajoure} €`})` : "aucun", fort: sup.ajoure },
+    { k: "Motif ajouré", v: sup.ajoure ? `${supMotifTexte(sup)} (${o === "aj" ? "compris" : `+${SUP_PRIX.ajoure} €`})` : "aucun", fort: sup.ajoure },
     { k: "Bois", v: "contreplaqué 3 mm, deux pièces qui s'emboîtent" },
   ];
   const lignes = sup.grave ? sup.els.map((e, i) => ({
-    k: `${i + 1}. ${TYPES[e.type]} (${o === i ? "offert" : `+${SUP_PRIX.element} €`})`,
+    k: `${i + 1}. ${TYPES[e.type]} (${o === i ? "compris" : `+${SUP_PRIX.element} €`})`,
     v: `${supNomElement(e)}${e.type === "texte" || (e.type === "lettre" && e.nom) ? ` — écriture ${ecriture(e.police)}` : ""}`,
     texte: e.type === "texte" || (e.type === "lettre" && Boolean(e.nom)),
     img: e.type === "texte" ? null : e.src,

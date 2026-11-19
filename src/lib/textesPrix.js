@@ -10,7 +10,7 @@
 // =============================================================================
 import { MP_PRIX, MP_BOITES } from "./marquePages";
 import { SUP_PRIX } from "./supportCreateur";
-import { engravingExtra, etiquettePrixGravure } from "./engravingPrice.js";
+import { engravingExtra } from "./engravingPrice.js";
 
 const TEXTE = new Set(["text", "textarea"]);
 // Cases de texte que le parcours guidé dessine lui-même (son propre libellé, pas celui du champ).
@@ -63,9 +63,6 @@ export function controleTextesPrix(product) {
       if (!f || !TEXTE.has(f.type || "text")) continue;
       if (cfg && CLES_PARCOURS.has(f.key)) continue; // dessinées par le parcours guidé (point 2)
       if (!visibleDans(f, v)) continue;
-      // « Le moins cher compris » (15/11/2026) : la fiche CALCULE l'étiquette de la case (« compris » / « +3 € »)
-      // avec la même fonction que le prix (etiquettePrixGravure) → elle ne peut pas diverger du paiement.
-      if (product.engravingPricing?.moinsCherCompris && etiquettePrixGravure(product, {}, v.id, f.key)) continue;
       noter(f.key, f.label || f.key, v, supplement(product, v, contexteDu(f), f.key), prixDans(f.label));
     }
     // 2. Parcours guidé : ses libellés (« +3 € ») sont CALCULÉS par ParcoursGuide.jsx avec engravingExtra
@@ -115,11 +112,6 @@ export function supplementsPayes(product) {
     // Faces offertes (textesOfferts) : seule chaque face AU-DELÀ des offertes se paie.
     const ep = product.engravingPricing || {};
     if ((Number(ep.textesOfferts) || 0) > 0 && (ep.textExtra || 0) > 0) out.add(arrondi(ep.textExtra));
-    // « Le moins cher compris » : chaque gravure AU-DELÀ de la comprise se paie à son prix.
-    if (ep.moinsCherCompris) {
-      for (const x of [ep.textExtra, ep.motifExtra, ep.photoSurcharge]) if ((x || 0) > 0) out.add(arrondi(x));
-      for (const e of ep.flatExtras || []) if ((e.amount || 0) > 0) out.add(arrondi(e.amount));
-    }
     // Motifs : le 1er peut être offert, les suivants payants → on regarde chaque motif ajouté.
     const motifs = champs.filter((f) => f && f.type === "motif");
     let ctx = {}, avant = base(ctx);
