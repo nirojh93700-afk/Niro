@@ -21,7 +21,7 @@ import PayInfoModal from "@/components/PayInfo";
 import TrustSection from "@/components/TrustSection";
 import { MP_DATA } from "@/lib/marquePagesData";
 import {
-  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, mpCompteBoites, mpBoitesDepuisCompte, mpIdFormat, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure, mpTextes,
+  MP_MAX, mpFormat, mpBoitesPour, mpBoitesTexte, mpCompteBoites, mpBoitesDepuisCompte, mpIdFormat, MP_BOITES, MP_EMPLACEMENTS, MP_NUMS_OK, mpAutorise, mpCalcul, mpNormaliser, mpResume, mpPrixGravure, mpGravureOfferte, mpTextes,
 } from "@/lib/marquePages";
 import LangueFiche from "@/components/LangueFiche";
 import { langueDe, langueActive, texteMontre, texteFrappe, champsLangueAPlat, manqueLangue, resumeLangue } from "@/lib/traductionGravure";
@@ -239,7 +239,7 @@ function Editeur({ modele, v, onChange, owner, grille, setGrille, productSlug, l
   const maj = (key, patch) => onChange((p) => ({ ...p, [key]: { ...p[key], ...patch } }));
   return (
     <div className="mq-ed">
-      <p className="mq-edi">Quatre emplacements, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un texte en haut et un dessin au milieu, ou l&apos;inverse, sur la face comme au dos. Un texte +3 €, un dessin, un cadre ou votre photo +4 €. Rien de coché = marque-page nu.</p>
+      <p className="mq-edi">Quatre emplacements, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un texte en haut et un dessin au milieu, ou l&apos;inverse, sur la face comme au dos. Un texte +3 €, un dessin, un cadre ou votre photo +4 € : la première gravure est offerte (une seule, même pour un coffret). Rien de coché = marque-page nu.</p>
       {MP_EMPLACEMENTS.map(([side, zone]) => {
         const key = `${side}|${zone}`;
         const ok = mpAutorise(modele, side, zone);
@@ -466,7 +466,8 @@ export default function MarquePagesFiche({ product, realisations = [] }) {
   }
 
   // Prix des marque-pages seuls (gravure comprise), puis la ou les boîtes pour ce nombre.
-  const prixPieces = nb > 1 ? slots.reduce((a, o) => a + V[o.c].price + mpPrixGravure(pleinV(o.v)), 0) : V[ci].price + mpPrixGravure(pleinV(vPage));
+  const prixPieces = (nb > 1 ? slots.reduce((a, o) => a + V[o.c].price + mpPrixGravure(pleinV(o.v)), 0) : V[ci].price + mpPrixGravure(pleinV(vPage)))
+    - mpGravureOfferte(nb > 1 ? slots.map((o) => pleinV(o.v)) : [pleinV(vPage)]); // 1re gravure offerte (19/11/2026)
   const boitesNb = mpBoitesDepuisCompte(cptBoites);
   const placesNb = boitesNb.reduce((a, b) => a + b, 0);
   const prixBoitesNb = boitesNb.reduce((a, b) => a + MP_BOITES[b].prix, 0);

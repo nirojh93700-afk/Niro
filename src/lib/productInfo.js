@@ -522,7 +522,7 @@ Un souci à la réception ?
 - Six couleurs au choix : caramel, blond clair, rouge, cuivré, gris anthracite, gris sable.
 - Dessin, photo et texte gravés au laser dans notre atelier en France.`,
     usage: `Personnalisation & Entretien
-- Quatre emplacements (face et dos, en haut et au milieu) : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), ou rien.
+- Quatre emplacements (face et dos, en haut et au milieu) : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), ou rien ; la première gravure est offerte.
 - Entretien : un coup de chiffon sec suffit. Ne pas immerger.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé. En boîte cadeau, il part en petit colis.
@@ -537,6 +537,7 @@ Un souci à la réception ?
     usage: `Personnalisation & Entretien
 - Sur la face : un texte (+3 €) au-dessus de la fenêtre ou à côté, ou votre photo au-dessus de la fenêtre (+4 €).
 - Au verso : un texte (+3 €), un dessin, un cadre ou votre photo (+4 €), en haut et au milieu.
+- La première gravure de votre marque-page est offerte.
 - Entretien : un coup de chiffon sec suffit. Ne pas immerger.`,
     returns: `Expédition & Retour
 - Expédié en lettre suivie, bien protégé. En boîte cadeau, il part en petit colis.

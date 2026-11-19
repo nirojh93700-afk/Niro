@@ -712,7 +712,7 @@ export const products = [
 <h3>Offrez-le en boîte cadeau</h3>
 <p>Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.</p>
 <h3>La gravure</h3>
-<p>Le marque-page seul est à 9,90 €. Pour le personnaliser, choisissez un dessin ou une photo (+4 €), un texte (+3 €), ou les deux, sur la face comme au dos. Vous choisissez l'écriture parmi les huit du site.</p>`,
+<p>Le marque-page seul est à 9,90 €. Pour le personnaliser, choisissez un dessin ou une photo (+4 €), un texte (+3 €), ou les deux, sur la face comme au dos : la première gravure est offerte. Vous choisissez l'écriture parmi les huit du site.</p>`,
   },
   {
     slug: "marque-page-bois-oiseau",
@@ -741,7 +741,7 @@ export const products = [
 <h3>Offrez-le en boîte cadeau</h3>
 <p>Une boîte cadeau bleu nuit pour un, deux ou quatre marque-pages : chaque marque-page tient dans son élastique. La boîte coûte 4,90 € pour un, 5,90 € pour deux, 7,90 € pour quatre.</p>
 <h3>Gravé sur la face et au verso</h3>
-<p>Sur la face, deux emplacements dans le bois : au-dessus de la fenêtre ajourée et à gauche de la branche. Faites-y graver un prénom ou un mot (+3 €), en haut sur une ligne ou en bas, écrit à la verticale ; au-dessus de la fenêtre, vous pouvez aussi faire graver votre photo, en noir et blanc (+4 €), comme un portrait. Le dessin de l'oiseau est déjà là : aucun autre dessin ne s'y ajoute. Au verso, le bois est nu, avec deux emplacements aussi (en haut, au milieu) : chacun reçoit un texte (+3 €) dans l'écriture de votre choix parmi les huit du site, un dessin numéroté, un cadre autour de votre texte ou votre photo gravée en noir et blanc (+4 €). Gravez un seul emplacement ou plusieurs, c'est vous qui choisissez.</p>`,
+<p>Sur la face, deux emplacements dans le bois : au-dessus de la fenêtre ajourée et à gauche de la branche. Faites-y graver un prénom ou un mot (+3 €), en haut sur une ligne ou en bas, écrit à la verticale ; au-dessus de la fenêtre, vous pouvez aussi faire graver votre photo, en noir et blanc (+4 €), comme un portrait. Le dessin de l'oiseau est déjà là : aucun autre dessin ne s'y ajoute. Au verso, le bois est nu, avec deux emplacements aussi (en haut, au milieu) : chacun reçoit un texte (+3 €) dans l'écriture de votre choix parmi les huit du site, un dessin numéroté, un cadre autour de votre texte ou votre photo gravée en noir et blanc (+4 €). Gravez un seul emplacement ou plusieurs, c'est vous qui choisissez : la première gravure est offerte.</p>`,
   },
   {
     slug: "marque-page-metal-peinture",

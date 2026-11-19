@@ -122,7 +122,24 @@ export function mpGravureNette(modele, v) {
   return out;
 }
 
-/** Prix de la gravure d'un marque-page (emplacements remplis seulement). */
+/** Gravures payantes d'un marque-page, dans l'ordre des emplacements : [prix…]. */
+export function mpArticles(v) {
+  const out = [];
+  for (const key of Object.keys(v || {})) {
+    const e = v[key] || {};
+    if (e.k === "texte" && String(e.t || "").trim()) out.push(MP_PRIX.texte);
+    else if (e.k === "dessin" && e.n) { out.push(MP_PRIX.dessin); if (e.n >= 75 && String(e.t || "").trim()) out.push(MP_PRIX.texteCadre); }
+    else if (e.k === "photo") out.push(MP_PRIX.photo);
+  }
+  return out;
+}
+/** La gravure offerte (gérant, 19/11/2026 : « marque-pages, le premier offert ») : la 1re gravure du 1er marque-page gravé,
+ *  UNE seule pour toute la ligne (coffret compris). Renvoie son prix (0 s'il n'y a aucune gravure). */
+export function mpGravureOfferte(vs) {
+  for (const v of vs || []) { const a = mpArticles(v); if (a.length) return a[0]; }
+  return 0;
+}
+/** Prix BRUT de la gravure d'un marque-page (emplacements remplis seulement, sans retirer l'offerte). */
 export function mpPrixGravure(v) {
   let p = 0;
   for (const key of Object.keys(v || {})) {
@@ -164,11 +181,14 @@ export function mpCalcul(product, mp, promos = {}) {
   const lesBoites = fmt.boites.map((b) => MP_BOITES[b]);
   const boite = lesBoites[0] || null;
   const vById = new Map((product.variants || []).map((x) => [x.id, x]));
-  const pieces = mp.slots.map((s) => {
+  // 1re gravure offerte, une seule pour la ligne : retirée du 1er marque-page gravé.
+  const offerte = mpGravureOfferte(mp.slots.map((s) => s.v));
+  const iOff = mp.slots.findIndex((s) => mpArticles(s.v).length > 0);
+  const pieces = mp.slots.map((s, i) => {
     const variant = vById.get(s.c);
     const promo = promos[variant.id];
     const base = typeof promo === "number" && promo < variant.price ? promo : variant.price;
-    const grav = mpPrixGravure(s.v);
+    const grav = r2(mpPrixGravure(s.v) - (i === iOff ? offerte : 0));
     return { variant, base, grav, prix: r2(base + grav) };
   });
   const prixBoites = lesBoites.reduce((a, b) => a + b.prix, 0);
@@ -210,18 +230,11 @@ export function mpResume(product, mp) {
   return morceaux.join(" · ");
 }
 
-/** Coût d'une gravure « offerte » (code gravure) : la première gravure payante trouvée. */
+/** Coût d'une gravure « offerte » (code gravure) : la 1re gravure PAYANTE (celle d'après la gravure déjà offerte). */
 export function mpPremiereGravure(mp) {
-  for (const s of mp.slots || []) {
-    for (const key of Object.keys(s.v || {})) {
-      const e = s.v[key];
-      if (e.k === "texte" && String(e.t || "").trim()) return MP_PRIX.texte;
-      if ((e.k === "dessin" && e.n) || e.k === "photo") return MP_PRIX.dessin;
-    }
-  }
-  return 0;
+  const a = (mp.slots || []).flatMap((s) => mpArticles(s.v)).slice(1);
+  return a.length ? a[0] : 0;
 }
-
 // ── Langue de la gravure (09/11/2026) : UNE langue pour la ligne du panier (tous les marque-pages), appliquée à
 // chacun de ses textes. Sur la fiche, chaque emplacement garde t (texte gravé) et ts (français tapé) ; au panier,
 // les textes en autre langue sont recopiés à plat (clés « mp1FaceHaut », « mp2DosBas »…).

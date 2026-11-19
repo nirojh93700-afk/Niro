@@ -3,7 +3,7 @@
   numéro de table / coffrets de marque-pages (16/11, be4762ca, le cache des photos est GARDÉ), verres (18/11, 2eba74a4), « offert » du support (15/11).
 - Donc : **bijoux** chaque texte +3 €, rien d'offert (règle du 18/10 ; Collier Quatre Mots garde sa 1re face offerte du 02/11) · **verres** règle du 19/10 + 21/10
   (verre 1 : logo OU 1er texte offert ; autres verres +5 € logo + texte / +3 € l'un des deux) · **gobelet** 1er élément compris · **marque-pages** dessin / photo +4 €,
-  texte +3 €, rien d'offert · **support** chaque élément +3 €, motif +5 € (prix des tailles du 15/11 GARDÉS) · **plaques de naissance / numéro de table** comme avant ·
+  texte +3 €, **la 1re gravure offerte, une seule par ligne, coffret compris** (gérant, 19/11 : « marque-pages, le premier offert », `mpGravureOfferte`) · **support** chaque élément +3 €, motif +5 € (prix des tailles du 15/11 GARDÉS) · **plaques de naissance / numéro de table** comme avant ·
   **carafe** chaque texte +3 €. ⛔ **CARNET GARDÉ** (16/11 : texte 3 €, dessin 4 €, le moins cher offert : `carnet.js` non touché).
 - Les 14 bijoux Nihao du 16/11 : drapeau retiré, notes « Gravure +3 € ». Test `test-moins-cher` supprimé. Tous les tests au vert, build OK.
 - Dans un mail client : donner le prix de la fiche (`node tools/prix-fiche.mjs`) ; plus de phrase « la moins chère est offerte », sauf pour le carnet.

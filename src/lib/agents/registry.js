@@ -29,6 +29,7 @@ function resumeGravure(p) {
     return "verre 1 : une image / un logo / un modèle offert, CHAQUE texte +3 € ; chaque autre verre (identique ou non) : image + texte +5 €, image seule ou texte seul +3 € ; face + fond +7 € par verre";
   }
   if (p.carnet) return "chaque texte gravé +3 €, chaque dessin, logo ou photo +4 € ; la gravure la moins chère du carnet est offerte";
+  if (p.marquePages?.gravure) return "texte +3 €, dessin / cadre / photo +4 € ; la PREMIÈRE gravure est offerte, une seule par ligne (coffret compris)";
   const g = p.engravingPricing;
   if (!g) return "";
   const out = [];
