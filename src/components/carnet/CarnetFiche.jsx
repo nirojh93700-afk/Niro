@@ -2,7 +2,7 @@
 // Fiche du carnet A5 gravé (mise en vente du 07/11/2026, gérant : « Papeterie avec le carnet »).
 // Reproduit la maquette enregistrée v9 (artifact QSD8HCrAzEqrSEYA7viFMh) : couleur, quatre emplacements sur la
 // couverture et quatre au dos (rien / un texte / un de nos dessins ou cadres / mon logo), écriture parmi les huit du
-// site, gravure posée en direct sur la grande photo (couverture ou dos de la couleur choisie), chaque texte +3 €, chaque dessin / logo +4 €, le moins cher offert (16/11/2026).
+// site, gravure posée en direct sur la grande photo (couverture ou dos de la couleur choisie), chaque texte +3 €, chaque dessin / logo +4 €, la 1re gravure offerte (19/11/2026).
 // Prix : src/lib/carnet.js (le même calcul au paiement). Planches, envoi de photo : repris de la fiche des marque-pages.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
@@ -312,7 +312,7 @@ export default function CarnetFiche({ product, realisations = [] }) {
           </div>
 
           <p style={{ fontSize: "0.85rem", fontWeight: 600, marginBottom: 8 }}>Personnalisation — gravure</p>
-          <p className="mq-edi">Quatre emplacements sur la couverture, quatre au dos, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un titre en haut, un dessin au milieu et votre prénom en bas à gauche. Chaque texte gravé coûte {CN_TEXTE} €, chaque dessin, cadre, logo ou photo {CN_IMAGE} € ; la gravure la moins chère de votre carnet est offerte.</p>
+          <p className="mq-edi">Quatre emplacements sur la couverture, quatre au dos, chacun avec son menu : gravez-en un seul ou plusieurs. Par exemple un titre en haut, un dessin au milieu et votre prénom en bas à gauche. Chaque texte gravé coûte {CN_TEXTE} €, chaque dessin, cadre, logo ou photo {CN_IMAGE} € ; la première gravure de votre carnet est offerte.</p>
           {CN_FACES.map(([side]) => (
             <div key={side}>
               <p className="mq-sub cn-sub">{side === "face" ? "Sur la couverture" : "Au dos"} <small>{cnFaceGravee(v, side) ? `(${cnPrixFace(v, side) ? `+${cnPrixFace(v, side)} €` : "offert"} · gravée ✓)` : ""}</small></p>

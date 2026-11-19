@@ -776,7 +776,7 @@ export const products = [
   // ----------------------------- CARNET A5 ------------------------------
   // Mis en vente le 07/11/2026 (gérant : « Papeterie avec le carnet »). Fiche dédiée (src/components/carnet/CarnetFiche.jsx)
   // = la maquette enregistrée v9 (artifact QSD8HCrAzEqrSEYA7viFMh) : 3 couleurs, quatre emplacements sur la couverture et
-  // quatre au dos, texte +3 €, dessin / logo +4 €, le moins cher offert (16/11/2026, src/lib/carnet.js, le même calcul au paiement). Poids estimé 380 g
+  // quatre au dos, texte +3 €, dessin / logo +4 €, la 1re gravure offerte (19/11/2026, src/lib/carnet.js, le même calcul au paiement). Poids estimé 380 g
   // (à peser). Photos : couvertures DESSINÉES de la maquette + exemples (vraies photos gravées à faire).
   {
     slug: "carnet-a5-grave",

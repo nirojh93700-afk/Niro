@@ -1,10 +1,10 @@
-## ⏪ GRAVURE : RETOUR AUX PRIX D'AVANT LE 15/11, SAUF LE CARNET — 19/11/2026 (gérant : « je veux que tu reviennes juste comme avant, pour les bijoux et pour les autres, comme avant le 15 ») — PRÉPARÉ, À POUSSER SUR SON « POUSSE »
+## ⏪ GRAVURE : RETOUR AUX PRIX D'AVANT LE 15/11 + 1re GRAVURE OFFERTE SUR MARQUE-PAGES, SUPPORT, CARNET — 19/11/2026 (gérant : « je veux que tu reviennes juste comme avant, pour les bijoux et pour les autres, comme avant le 15 ») — PRÉPARÉ, À POUSSER SUR SON « POUSSE »
 - Annulé : « la moins chère est offerte » (15/11, 083f2a6a + c0855cb6), « une seule gravure offerte » bijoux (16/11, 8bf137e4), plaques de naissance /
   numéro de table / coffrets de marque-pages (16/11, be4762ca, le cache des photos est GARDÉ), verres (18/11, 2eba74a4), « offert » du support (15/11).
 - Donc : **bijoux** chaque texte +3 €, rien d'offert (règle du 18/10 ; Collier Quatre Mots garde sa 1re face offerte du 02/11) · **verres** règle du 19/10 + 21/10
   (verre 1 : logo OU 1er texte offert ; autres verres +5 € logo + texte / +3 € l'un des deux) · **gobelet** 1er élément compris · **marque-pages** dessin / photo +4 €,
   texte +3 €, **la 1re gravure offerte, une seule par ligne, coffret compris** (gérant, 19/11 : « marque-pages, le premier offert », `mpGravureOfferte`) · **support** le 1er élément gravé OFFERT puis +3 € chacun, motif ajouré toujours +5 € (gérant, 19/11 : « une gravure offerte, après facturer » ; prix des tailles du 15/11 GARDÉS) · **plaques de naissance / numéro de table** comme avant ·
-  **carafe** chaque texte +3 €. ⛔ **CARNET GARDÉ** (16/11 : texte 3 €, dessin 4 €, le moins cher offert : `carnet.js` non touché).
+  **carafe** chaque texte +3 €. **carnet** texte 3 €, dessin / photo 4 €, la 1re gravure offerte, une seule (gérant, 19/11 : « carnet, pareil, juste une gravure offerte », `cnElements`).
 - Les 14 bijoux Nihao du 16/11 : drapeau retiré, notes « Gravure +3 € ». Test `test-moins-cher` supprimé. Tous les tests au vert, build OK.
 - Dans un mail client : donner le prix de la fiche (`node tools/prix-fiche.mjs`) ; plus de phrase « la moins chère est offerte », sauf pour le carnet.
 

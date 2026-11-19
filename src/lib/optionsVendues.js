@@ -68,7 +68,7 @@ export function optionsArticle(item) {
   if (item.packaging) out.push({ libelle: "Emballage", detail: String(item.packaging), montant: 0, physique: true });
   // 🎄 Emballage de Noël : un objet à mettre dans le colis, + l'étiquette « Merry Christmas » mise d'office.
   if (item.packagingNoel) out.push({ libelle: "🎄 Emballage de Noël", detail: `${String(item.packagingNoel)} — mettre l'étiquette « Merry Christmas » avec sa ficelle`, montant: 0, physique: true, noel: String(item.packagingNoel) });
-  // Carnet A5 (16/11/2026) : une ligne par élément gravé, texte 3 €, dessin / logo 4 €, le moins cher offert.
+  // Carnet A5 (16/11/2026) : une ligne par élément gravé, texte 3 €, dessin / logo 4 €, la 1re gravure offerte (19/11/2026).
   if (produit?.carnet && champs.cn && typeof champs.cn === "object") {
     const noms = Object.fromEntries(CN_FACES), zones = Object.fromEntries(CN_ZONES.map(([z, l]) => [z, l.toLowerCase()]));
     for (const x of cnElements(champs.cn.v)) {

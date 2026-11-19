@@ -17,6 +17,7 @@
   support petit + 1 texte 15,90 → 18,90 € · plaque acier photo + texte 8 € → 11 €.
 - Marque-pages (même jour, « le premier offert ») : la 1re gravure est offerte, une seule par ligne (coffret compris) ; marque-page texte seul 9,90 € (inchangé par rapport à aujourd'hui).
 - Support (même jour, « une gravure offerte, après facturer ») : 1er élément gravé offert, motif ajouré toujours +5 € (petit + 1 texte 15,90 € ; motif seul 20,90 €).
+- Carnet (même jour, « pareil, juste une gravure offerte ») : la 1re gravure offerte (avant : la moins chère). Ex. photo (4 €) puis texte : +3 € au lieu de +4 €.
 - Pour revenir à « la moins chère » : réappliquer 083f2a6a, c0855cb6, 8bf137e4, be4762ca (partie gravure), 2eba74a4.
 
 ### 18/10/2026 (après-midi) — 5 bijoux de plus : nouveaux prix donnés par le gérant (barré en ,90)
