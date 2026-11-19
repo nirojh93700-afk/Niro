@@ -14,7 +14,7 @@
   liste des créations déjà offertes (verres 1er verre, marque-pages, support ; carnet RETIRÉ), photos bijoux / cristal / verres / marque-pages.
 - ✉️ **Mail « Votre cagnotte vous attend » pour Noël** : préparé le 19/11, pas envoyé. 85 cagnottes non utilisées (179,46 €), mais ⛔ gérant : « pas aux gens qui ont encore un délai pour demander le remboursement » → retirées : commande en cours (à préparer, en gravure, expédiée), livrée depuis moins de 14 jours, annulée / remboursée → **34 clientes, 64,41 €** au 19/11 (liste à refaire le jour de l'envoi).
   `tools/mails/cagnotte-noel.mjs <dossier>` (lit `cag-cible.json` = /api/admin/cagnottes + commandes), image `docs/maquettes/mail-cagnotte-noel.jpg`. « Bonjour, » sans prénom
-  (noms parfois inversés ou adresses), montant, mode d'emploi (se connecter avec cette adresse, cocher « Utiliser ma cagnotte fidélité », jusqu'à la moitié du panier), pas de date.
+  (noms parfois inversés ou adresses), montant, mode d'emploi (se connecter avec cette adresse, cocher « Utiliser ma cagnotte fidélité », jusqu'à 50 % du panier), pas de date.
 - Dans un mail client : donner le prix de la fiche (`node tools/prix-fiche.mjs`) ; plus de phrase « la moins chère est offerte », sauf pour le carnet.
 
 ## 🔗 DEVIS QUI COMPLÈTE UNE COMMANDE = PLUS DE DEUXIÈME CARTE — 18/11/2026 (gérant : « pourquoi t'as mis deux fois la même commande ? », 0BXF7CYC → 0FUPET23 ; « OK fais tout ça et pousse »)
