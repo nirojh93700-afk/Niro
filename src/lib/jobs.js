@@ -352,7 +352,8 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "", noel = f
         kind: "gravure",  // au paiement : prix RÉEL de la 1re gravure du panier
         reusable: false,  // une seule utilisation
         email: c.email,   // réservé à cette adresse
-        days: noel ? 31 : jours + 1,  // +1 : le code vit toute la journée écrite dans l'e-mail
+        // Noël (gérant, 19/11 : « jusqu'au 10 janvier, après Noël et nouvel an ») : le code vit jusqu'au 10/01/2027 inclus.
+        days: noel ? Math.max(1, Math.ceil((Date.parse("2027-01-11T00:00:00+01:00") - Date.now()) / 86400000)) : jours + 1,
       });
       // Ses favoris (si elle s'est connectée un jour), sinon les idées.
       let pieces = [], favoris = false;
