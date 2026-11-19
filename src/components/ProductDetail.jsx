@@ -1299,9 +1299,6 @@ export default function ProductDetail({ product, realisations = [] }) {
       price: unitPrice,
       // Bijoux : valeur de la gravure offerte (une seule par commande, 16/11/2026) → panier et paiement.
       gravOfferte: gravOffBijou || undefined,
-      // Verres (18/11/2026) : valeur de la gravure offerte de CETTE ligne. Une seule par commande : si une
-      // autre ligne de verres l'a déjà, le panier et le paiement ajoutent ce montant (une fois par ligne).
-      gravOffVerre: gravVerres?.offert || undefined,
       // Vignette panier = le visuel composé ; sinon l'image/design choisi ; sinon photo produit.
       image: previewImage || photoSrc || artworkImage || images[0] || null,
       // Côté cliente : récap court (les détails techniques restent pour l'atelier).
@@ -1877,12 +1874,12 @@ export default function ProductDetail({ product, realisations = [] }) {
                         <button type="button" key={i} className={`pg-tab${activeGlass === i ? " on" : ""}`} onClick={() => switchGlass(i)}>Verre {i + 1}</button>
                       ))}
                     </div>
-                    {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Une seule gravure <strong>offerte</strong> par commande, la moins chère (sur le verre 1). Tout le reste se paie : chaque logo ou image <strong>+3 €</strong>, chaque texte <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde sa gravure.</p>}
+                    {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Verre 1 : logo, image ou un texte <strong>offert</strong>, chaque texte en plus +3 €. Chaque autre verre : <strong>+5 €</strong> logo et texte, <strong>+3 €</strong> logo seul ou texte seul. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde sa gravure.</p>}
                   </>
                 )}
               </div>
             )}
-            {RV && !perGlass && <p className="pg-hint">Une seule gravure <strong>offerte</strong> par commande, la moins chère : votre logo, votre image, votre modèle — ou un texte — sur le verre 1. Chaque texte en plus : <strong>+3 €</strong> ; sur les autres verres, chaque logo et chaque texte : <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p>}
+            {RV && !perGlass && <p className="pg-hint">Verre 1 : votre logo, votre image, votre modèle — ou un texte — est <strong>offert</strong>. Chaque texte en plus : <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p>}
             <ParcoursGuide
               product={product}
               fieldValues={fieldValues}
@@ -1901,7 +1898,7 @@ export default function ProductDetail({ product, realisations = [] }) {
                 </p>
               )}
               {MCC && <p className="pg-hint">La gravure la moins chère de votre création est <strong>offerte</strong> ; chaque autre gravure se paie au prix écrit à côté de sa case.</p>}
-              {RV && !perGlass && <p className="pg-hint">Une seule gravure <strong>offerte</strong> par commande, la moins chère : votre logo, votre image, votre modèle — ou un texte — sur le verre 1. Chaque texte en plus : <strong>+3 €</strong> ; sur les autres verres, chaque logo et chaque texte : <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p>}
+              {RV && !perGlass && <p className="pg-hint">Verre 1 : votre logo, votre image, votre modèle — ou un texte — est <strong>offert</strong>. Chaque texte en plus : <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p>}
               {/* Lot de N verres : chaque verre identique ou personnalisé différemment */}
               {supportsPerGlass && (
                 <div className="perglass">
@@ -1916,7 +1913,7 @@ export default function ProductDetail({ product, realisations = [] }) {
                           <button type="button" key={i} className={`pg-tab${activeGlass === i ? " on" : ""}`} onClick={() => switchGlass(i)}>Verre {i + 1}</button>
                         ))}
                       </div>
-                      {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Une seule gravure <strong>offerte</strong> par commande, la moins chère (sur le verre 1). Tout le reste se paie : chaque logo ou image <strong>+3 €</strong>, chaque texte <strong>+3 €</strong>. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde son motif, son prénom et sa date.</p>}
+                      {RV ? <p className="pg-hint">Vous gravez le <b>Verre {activeGlass + 1}</b>. Verre 1 : logo, image ou un texte <strong>offert</strong>, chaque texte en plus +3 €. Chaque autre verre : <strong>+5 €</strong> logo et texte, <strong>+3 €</strong> logo seul ou texte seul. <button type="button" className="pv-lien" onClick={ouvrirPrixVerres}>Voir les prix</button></p> : <p className="pg-hint">Vous configurez le <b>Verre {activeGlass + 1}</b> — passez d&apos;un verre à l&apos;autre avec les onglets. Chaque verre garde son motif, son prénom et sa date.</p>}
                     </>
                   )}
                 </div>

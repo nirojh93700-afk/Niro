@@ -97,15 +97,6 @@ export function CartProvider({ children }) {
     gravuresEnPlus += g * (offreUtilisee ? i.quantity : i.quantity - 1);
     offreUtilisee = true;
   }
-  // Verres (18/11/2026, gérant : « le moins cher offert ») : une seule gravure offerte par commande sur les verres aussi.
-  // La 1re ligne de verres gravée la garde ; chaque autre ligne paie sa gravure offerte (une fois par ligne).
-  let offreVerreUtilisee = false;
-  for (const i of items) {
-    const g = Number(i.gravOffVerre) || 0;
-    if (g <= 0) continue;
-    if (offreVerreUtilisee) gravuresEnPlus += g;
-    offreVerreUtilisee = true;
-  }
   gravuresEnPlus = Math.round(gravuresEnPlus * 100) / 100;
   const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0) + gravuresEnPlus;
 

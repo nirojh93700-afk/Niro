@@ -10,7 +10,7 @@ const P = (s) => products.find((p) => p.slug === s);
 
 const vin = P("verre-a-vin-grave"), lot4 = vin.variants.find((v) => v.id === "verre-vin-4");
 t("vin lot de 4 : image seule = 9 €", prixGravureVerres(vin, lot4, 1, { mode: "photo", photo: "/api/img/abcdef" }).total === 9);
-t("vin lot de 4 : image + date de l'image = 3 + 3 × (3 + 3) = 21 € (règle du 18/11/2026)", prixGravureVerres(vin, lot4, 1, { mode: "photo", photo: "/api/img/abcdef", dateImage: "oui" }).total === 21);
+t("vin lot de 4 : image + date de l'image = 18 € (comme Doriane)", prixGravureVerres(vin, lot4, 1, { mode: "photo", photo: "/api/img/abcdef", dateImage: "oui" }).total === 18);
 const unite = vin.variants.find((v) => v.id === "verre-vin-1");
 t("vin à l'unité : image + date de l'image = 3 €", prixGravureVerres(vin, unite, 1, { mode: "photo", photo: "/api/img/abcdef", dateImage: "oui" }).total === 3);
 for (const s of ["verre-a-whisky-grave", "verre-a-cocktail-grave", "flute-a-champagne-gravee", "carafe-a-whisky-gravee"]) {

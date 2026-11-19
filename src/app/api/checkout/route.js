@@ -178,8 +178,6 @@ export async function POST(req) {
   // Bijoux (16/11/2026, gérant : « une seule gravure offerte pour toute la commande ») : la gravure la moins chère n'est
   // offerte que sur UN bijou de la commande ; les autres bijoux (et les exemplaires en plus) paient toutes leurs gravures.
   let gravureBijouDejaOfferte = false;
-  // Verres (18/11/2026, gérant : « le moins cher offert ») : une seule gravure offerte sur toutes les lignes de verres.
-  let gravureVerreDejaOfferte = false;
   // Devis payé avec le panier (02/11/2026) : un seul par commande (le webhook le marque « payé »).
   let devisMeta = null;
 
@@ -342,11 +340,10 @@ export async function POST(req) {
     // Lot personnalisé PAR verre : on additionne les options (texte, deux faces…) de CHAQUE verre.
     let extra;
     // Verres (règle du 16/10/2026) : la gravure se compte pour TOUTE la ligne (verre 1, verres
-    // une seule gravure offerte par commande, le reste à l'élément) — même calcul que la fiche (src/lib/prixVerres.js).
+    // différents +5 €, frais des verres identiques) — même calcul que la fiche (src/lib/prixVerres.js).
     const gravV = estRegleVerres(product)
-      ? prixGravureVerres(product, variant, quantity, item.fields || {}, Array.isArray(item.perGlass) && item.perGlass.length ? item.perGlass.slice(0, 60) : null, { offre: !gravureVerreDejaOfferte })
+      ? prixGravureVerres(product, variant, quantity, item.fields || {}, Array.isArray(item.perGlass) && item.perGlass.length ? item.perGlass.slice(0, 60) : null)
       : null;
-    if (gravV && gravV.offert > 0) gravureVerreDejaOfferte = true;
     if (gravV) {
       extra = { amount: 0, weight: gravV.weight || 0, stockIds: gravV.stockIds || [] };
     } else if (Array.isArray(item.perGlass) && item.perGlass.length > 0) {

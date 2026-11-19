@@ -270,7 +270,7 @@ export default function CartPage() {
           <CadeauChoix value={cadeau} onChange={setCadeau} value2={cadeau2} onChange2={setCadeau2} />
           {gravuresEnPlus > 0 && (
             <div className="summary-row">
-              <span>Gravures des autres articles <small style={{ display: "block", color: "var(--ink-soft)", fontWeight: 400 }}>une seule gravure offerte par commande</small></span>
+              <span>Gravures des autres bijoux <small style={{ display: "block", color: "var(--ink-soft)", fontWeight: 400 }}>une seule gravure offerte par commande</small></span>
               <span>+{formatEuro(gravuresEnPlus)}</span>
             </div>
           )}

@@ -49,7 +49,7 @@ const v1 = vin.variants.find((v) => v.id === "verre-vin-1");
 chk(prixGravureVerres(vinN, v1, 1, { mode: "noel", noelModele: "7" }).total === 0, "Noël n° 7 seul : gravure offerte");
 chk(prixGravureVerres(vinN, v1, 1, fv).total === 6, "Noël n° 7 + prénom + date : +6 €");
 const v2 = vin.variants.find((v) => v.id === "verre-vin-2");
-chk(prixGravureVerres(vinN, v2, 1, { mode: "noel", noelModele: "7", prenom: "Léa" }).total === 9, "lot de 2 identiques, image + prénom : 3 + (3 + 3) = 9 €");
+chk(prixGravureVerres(vinN, v2, 1, { mode: "noel", noelModele: "7", prenom: "Léa" }).total === 8, "lot de 2 identiques, image + prénom : 3 + 5 = 8 €");
 
 // Atelier
 const item = { slug: "verre-a-vin-grave", variantTitle: "À l'unité", fields: fv };
