@@ -106,9 +106,17 @@ export function engravingExtra(product, fields = {}, variantId = null) {
 // Renvoie 0 si aucune gravure payante n'est présente dans les champs.
 // Utilisé au panier (affichage) ET au paiement (recalcul de confiance).
 // =============================================================================
+// 19/11/2026 (gérant) : le code « gravure offerte » ne marche PAS sur une création où la première gravure
+// est déjà offerte par le site (verres, marque-pages, carnet, support de téléphone, gobelet, Collier Quatre
+// Mots) : jamais deux gravures offertes sur la même pièce.
+export function gravureDejaOfferte(product) {
+  return Boolean(product && (product.regleVerres || product.marquePages || product.carnet || product.createur === "support"
+    || product.gobeletParcours || Number(product.engravingPricing?.textesOfferts) > 0));
+}
+
 export function prixPremiereGravure(product, fields = {}, variantId = null) {
   const cfg = product?.engravingPricing;
-  if (!cfg) return 0;
+  if (!cfg || gravureDejaOfferte(product)) return 0;
   const filled = (k) => k && (fields[k] || "").toString().trim();
 
   // 1) Zones de texte (recto/verso, cœur/plaques…) : une zone remplie = textExtra.

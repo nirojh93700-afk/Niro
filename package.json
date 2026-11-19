@@ -22,7 +22,6 @@
     "test-socles": "node --import ./tools/alias-register.mjs tools/tests/socles.test.mjs",
     "test-marque-pages": "node --import ./tools/alias-register.mjs tools/tests/marque-pages.test.mjs",
     "test-support": "node --import ./tools/alias-register.mjs tools/tests/support-createur.test.mjs",
-
     "test-devis-quantite": "node --import ./tools/alias-register.mjs tools/tests/devis-quantite.mjs",
     "test-devis-panier": "node --import ./tools/alias-register.mjs tools/tests/devis-panier.test.mjs",
     "test-stock-meta": "node tools/tests/stock-meta.mjs",
@@ -52,7 +51,8 @@
     "test-traduction": "node --import ./tools/alias-register.mjs tools/tests/traduction-gravure.mjs",
     "test-provenance": "node --import ./tools/alias-register.mjs tools/tests/provenance.mjs",
     "test-niv-admin": "node --import ./tools/alias-register.mjs tools/tests/niv-admin.test.mjs",
-    "test-taille-section": "node tools/tests/taille-section.test.mjs"
+    "test-taille-section": "node tools/tests/taille-section.test.mjs",
+    "test-gravure-offerte": "node --import ./tools/alias-register.mjs tools/tests/gravure-deja-offerte.test.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",

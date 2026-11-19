@@ -162,7 +162,7 @@ export default function CartPage() {
           }
         }
       }
-      else if (d.noEngraving) setPromoMsg("Ce code offre une gravure : ajoutez un texte à graver sur une pièce de votre panier pour en profiter.");
+      else if (d.noEngraving) setPromoMsg("Ce code offre une gravure sur un bijou, un cristal ou une autre création à graver. Sur les verres, les marque-pages, le carnet, le support de téléphone et le gobelet, la première gravure est déjà offerte : le code ne s’y ajoute pas.");
       else if (d.needEmail) setPromoMsg("Entrez votre e-mail pour utiliser ce code.");
       else if (d.wrongEmail) setPromoMsg("Ce code est réservé à l'adresse e-mail à laquelle il a été envoyé.");
       else if (d.used) setPromoMsg("Ce code a déjà été utilisé avec cette adresse e-mail.");

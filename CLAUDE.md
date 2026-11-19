@@ -6,6 +6,10 @@
   texte +3 €, **la 1re gravure offerte, une seule par ligne, coffret compris** (gérant, 19/11 : « marque-pages, le premier offert », `mpGravureOfferte`) · **support** le 1er élément gravé OFFERT puis +3 € chacun, motif ajouré toujours +5 € (gérant, 19/11 : « une gravure offerte, après facturer » ; prix des tailles du 15/11 GARDÉS) · **plaques de naissance / numéro de table** comme avant ·
   **carafe** chaque texte +3 €. **carnet** texte 3 €, dessin / photo 4 €, la 1re gravure offerte, une seule (gérant, 19/11 : « carnet, pareil, juste une gravure offerte », `cnElements`).
 - Les 14 bijoux Nihao du 16/11 : drapeau retiré, notes « Gravure +3 € ». Test `test-moins-cher` supprimé. Tous les tests au vert, build OK.
+- **Code « gravure offerte » (19/11, gérant : « il faut pas que le code fonctionne pour que le deuxième aussi soit offert, il y a qu'une gravure »)** : `gravureDejaOfferte(product)`
+  (engravingPrice.js) = verres `regleVerres`, marque-pages, carnet, support, gobelet, Collier Quatre Mots → `prixPremiereGravure` = 0, et le paiement ne prend plus
+  `mpPremiereGravure` / `cnPremiereGravure` / support : le code ne marche que sur les bijoux, le cristal et les autres créations sans gravure offerte. `npm run test-gravure-offerte`.
+- Mail de Noël aux inscrites sans commande (99, sans l'offre de septembre) : préparé, code personnel, SANS date de fin, sans le carnet, pas envoyé (`scratchpad/mailnoel2.mjs`).
 - Dans un mail client : donner le prix de la fiche (`node tools/prix-fiche.mjs`) ; plus de phrase « la moins chère est offerte », sauf pour le carnet.
 
 ## 🔗 DEVIS QUI COMPLÈTE UNE COMMANDE = PLUS DE DEUXIÈME CARTE — 18/11/2026 (gérant : « pourquoi t'as mis deux fois la même commande ? », 0BXF7CYC → 0FUPET23 ; « OK fais tout ça et pousse »)

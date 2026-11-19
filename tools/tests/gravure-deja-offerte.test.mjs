@@ -1,0 +1,21 @@
+// 19/11/2026 : le code « gravure offerte » ne s'applique jamais où la 1re gravure est déjà offerte.
+import { products } from "@/lib/products";
+import { prixPremiereGravure, gravureDejaOfferte } from "@/lib/engravingPrice";
+let ok = 0, ko = 0;
+const t = (n, c) => { if (c) ok++; else { ko++; console.log("✗", n); } };
+const P = (s) => products.find((p) => p.slug === s);
+const W = P("verre-a-whisky-grave");
+t("whisky : déjà offerte", gravureDejaOfferte(W));
+t("whisky texte + date : code = 0", prixPremiereGravure(W, { texte: "Papa", texte2: "2024" }, W.variants[0].id) === 0);
+t("flûte : code = 0", prixPremiereGravure(P("flute-a-champagne-gravee"), { mode: "texte", texte: "Léa", date: "2024" }) === 0);
+t("marque-page : déjà offerte", gravureDejaOfferte(P("marque-page-bois-pompon")));
+t("carnet : déjà offerte", gravureDejaOfferte(P("carnet-a5-grave")));
+t("support : déjà offerte", gravureDejaOfferte(P("support-telephone-bois-grave")));
+t("gobelet : déjà offerte", gravureDejaOfferte(P("gobelet-isotherme-40oz")));
+t("Collier Quatre Mots : déjà offerte", gravureDejaOfferte(P("collier-barre-verticale")));
+const C = P("collier-double-coeur");
+t("collier double cœur : code = 3", !gravureDejaOfferte(C) && prixPremiereGravure(C, { recto: "Léa" }, C.variants[0].id) === 3);
+const X = products.find((p) => p.crystal3d && p.engravingPricing?.flatExtras?.some((e) => e.key === "texte"));
+t("cristal + texte : code > 0", X && prixPremiereGravure(X, { texte: "Léa" }, X.variants[0].id) > 0);
+console.log(`${ok} vérifications au vert, ${ko} en échec`);
+if (ko) process.exit(1);

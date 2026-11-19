@@ -1,10 +1,10 @@
 import { gobeletSupplement } from "@/lib/gobeletParcours";
 import { decouperStock } from "@/lib/stockMeta";
 import { manqueLangue } from "@/lib/traductionGravure";
-import { cnNormaliser, cnPrixGravure, cnPremiereGravure, cnResume } from "@/lib/carnet";
-import { supNormaliser, supSupplement, supResume, supVariantId, SUP_PRIX } from "@/lib/supportCreateur";
+import { cnNormaliser, cnPrixGravure, cnResume } from "@/lib/carnet";
+import { supNormaliser, supSupplement, supResume, supVariantId } from "@/lib/supportCreateur";
 import { randomBytes } from "crypto";
-import { mpNormaliser, mpCalcul, mpResume, mpPremiereGravure } from "@/lib/marquePages";
+import { mpNormaliser, mpCalcul, mpResume } from "@/lib/marquePages";
 import Stripe from "stripe";
 import { getCatalog, stripBijouxPromos } from "@/lib/catalog";
 import { cumulPermis, remiseCumulee, remisePourPort } from "@/lib/cumulCodes";
@@ -258,7 +258,7 @@ export async function POST(req) {
         return Response.json({ error: "Un support de téléphone du panier n'est plus valable : retirez-le et composez-le à nouveau." }, { status: 400 });
       }
       const unit = Math.round((variant.price + supSupplement(sup)) * 100) / 100;
-      if (!gravureOfferte && sup.grave && sup.els.length) gravureOfferte = SUP_PRIX.element; // code « gravure offerte » : un élément
+      // code « gravure offerte » : pas sur le support, sa 1re gravure est déjà offerte (19/11/2026)
       boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
       ajouterLignePort(etatPort, { product, unitGrams: variant.weight || product.weight, unitPrice: unit, quantity });
       lineItems.push({
@@ -284,7 +284,7 @@ export async function POST(req) {
       const cn = cnNormaliser(product, item.fields?.cn);
       if (!cn) return Response.json({ error: "Un carnet du panier n'est plus valable : retirez-le et composez-le à nouveau." }, { status: 400 });
       const unit = variant.price + cnPrixGravure(cn.v);
-      if (!gravureOfferte && cnPremiereGravure(cn.v)) gravureOfferte = cnPremiereGravure(cn.v); // code « gravure offerte » : la gravure payante la moins chère
+      // code « gravure offerte » : pas sur le carnet, sa 1re gravure est déjà offerte (19/11/2026)
       boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
       ajouterLignePort(etatPort, { product, unitGrams: variant.weight || product.weight, unitPrice: unit, quantity });
       lineItems.push({
@@ -311,7 +311,7 @@ export async function POST(req) {
         return Response.json({ error: "Un marque-page du panier n'est plus valable : retirez-le et composez-le à nouveau." }, { status: 400 });
       }
       const c = mpCalcul(product, mp);
-      if (!gravureOfferte) gravureOfferte = mpPremiereGravure(mp);
+      // code « gravure offerte » : pas sur les marque-pages, leur 1re gravure est déjà offerte (19/11/2026)
       for (const [sid, n] of c.stock) boughtVariants.push({ variantId: sid, qty: n * quantity });
       ajouterLignePort(etatPort, { product, unitGrams: c.grams, unitPrice: c.total, quantity, pkgBoite: c.enBoite || c.pieces.some((p) => p.variant.colis) });
       lineItems.push({
