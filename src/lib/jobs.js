@@ -17,6 +17,7 @@ import { cashbackReminderEmail, emailLayout, BRAND } from "@/lib/email";
 import { offreActive, offreGravureEmail, joursDepuis, OFFRE_GRAVURE_JOURS } from "@/lib/offreGravure";
 import { cadeauColisActif } from "@/lib/vacation";
 import { mailNoelInscrites } from "@/lib/mailNoelInscrites";
+import { noterEnvoiGroupe, envoyerRecapGroupe } from "@/lib/recapEnvoi";
 
 const DAY = 86400000;
 
@@ -338,7 +339,7 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "", noel = f
   }
 
   let envoyes = 0, echecs = 0;
-  const faits = [], erreurs = [];
+  const faits = [], erreurs = [], lot = [];
   const noter = (email, msg) => { echecs++; if (erreurs.length < 5) erreurs.push(`${email} : ${String(msg || "envoi refusé").slice(0, 200)}`); };
   for (const c of cibles) {
     try {
@@ -375,7 +376,9 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "", noel = f
         const btn = await boutonRepondre({ email: c.email, name: "", subject: mail.subject, excerpt: `Offre gravure offerte — code ${code}` });
         if (btn) mail = fabrique({ ...args, bouton: btn });
       } catch { /* ignore */ }
-      const r = await sendClientMail({ to: c.email, subject: mail.subject, html: mail.html });
+      // Sans copie à l'atelier : UN seul récapitulatif à la fin (gérant, 19/11/2026).
+      const r = await sendClientMail({ to: c.email, subject: mail.subject, html: mail.html, bcc: "" });
+      if (!test) lot.push({ email: c.email, ok: Boolean(r?.ok), error: r?.error });
       if (r?.ok) {
         envoyes++; faits.push({ email: c.email, code });
         // Mémorisé TOUT DE SUITE : si le passage est coupé en route, les
@@ -386,7 +389,15 @@ export async function runOffreGravureJob({ dryRun = false, testTo = "", noel = f
   }
   // Compte rendu visible dans l'écran de l'offre (GET /api/admin/offre-gravure).
   try { await setJobNote(noel ? "mailNoel" : "offreGravure", { at: Date.now(), test, eligibles: cibles.length, envoyes, echecs, erreurs }); } catch { /* ignore */ }
-  return { actif: true, eligibles: cibles.length, envoyes, echecs, erreurs, attente, deja, purges, restantes: Math.max(0, (typeof totalCibles === "number" ? totalCibles : cibles.length) - envoyes - echecs) };
+  const restantes = Math.max(0, (typeof totalCibles === "number" ? totalCibles : cibles.length) - envoyes - echecs);
+  // Récapitulatif unique : chaque lot est noté, et le compte rendu part quand il ne reste plus personne.
+  let recap = null;
+  if (!test && lot.length) {
+    const cleRecap = noel ? "mailNoel" : "offreGravure";
+    await noterEnvoiGroupe(cleRecap, noel ? "Mail de Noël (gravure offerte)" : "Offre gravure offerte", lot);
+    if (restantes === 0) recap = await envoyerRecapGroupe(cleRecap);
+  }
+  return { actif: true, eligibles: cibles.length, envoyes, echecs, erreurs, attente, deja, purges, restantes, recap };
 }
 
 // --- 6) « Prévenez-moi si le prix baisse » (favoris) ------------------------

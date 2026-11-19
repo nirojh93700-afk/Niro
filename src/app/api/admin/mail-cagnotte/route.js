@@ -1,6 +1,7 @@
 import { isAdmin, getCagnotte, hasAutoSent, markAutoSent, logComm } from "@/lib/stock";
 import { sendClientMail, boutonRepondre } from "@/lib/clientMail";
 import { mailCagnotte } from "@/lib/mailCagnotte";
+import { noterEnvoiGroupe, envoyerRecapGroupe } from "@/lib/recapEnvoi";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -13,6 +14,8 @@ export async function POST(req) {
   if (!(await isAdmin(req))) return Response.json({ error: "Accès refusé." }, { status: 401 });
   let body;
   try { body = await req.json(); } catch { return Response.json({ error: "Requête invalide." }, { status: 400 }); }
+  // Fin d'un envoi groupé : { recap: true } envoie LE compte rendu unique à l'atelier (gérant, 19/11/2026).
+  if (body?.recap === true) return Response.json(await envoyerRecapGroupe(REGLE));
   const to = String(body?.to || "").trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) return Response.json({ error: "Adresse invalide." }, { status: 400 });
   const items = Array.isArray(body?.items) ? body.items.slice(0, 20).map((x) => String(x || "").slice(0, 200)) : [];
@@ -25,7 +28,9 @@ export async function POST(req) {
     const btn = await boutonRepondre({ email: to, subject: mail.subject, excerpt: `Cagnotte fidélité : ${solde.toFixed(2)} €` });
     if (btn) mail = mailCagnotte({ items, solde, bouton: btn });
   } catch { /* jamais bloquant */ }
-  const r = await sendClientMail({ to, subject: mail.subject, html: mail.html });
+  // Sans copie à l'atelier pour chaque cliente : un seul récapitulatif à la fin ({ recap: true }).
+  const r = await sendClientMail({ to, subject: mail.subject, html: mail.html, bcc: test ? undefined : "" });
+  if (!test) await noterEnvoiGroupe(REGLE, "Mail « Votre cagnotte vous attend pour Noël »", [{ email: to, ok: Boolean(r?.ok), error: r?.error }]);
   if (!r?.ok) return Response.json({ error: r?.error || "Échec de l'envoi." }, { status: 500 });
   if (!test) {
     try { await markAutoSent(REGLE, to); } catch { /* ignore */ }
