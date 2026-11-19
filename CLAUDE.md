@@ -9,7 +9,12 @@
 - **Code « gravure offerte » (19/11, gérant : « il faut pas que le code fonctionne pour que le deuxième aussi soit offert, il y a qu'une gravure »)** : `gravureDejaOfferte(product)`
   (engravingPrice.js) = verres `regleVerres`, marque-pages, carnet, support, gobelet, Collier Quatre Mots → `prixPremiereGravure` = 0, et le paiement ne prend plus
   `mpPremiereGravure` / `cnPremiereGravure` / support : le code ne marche que sur les bijoux, le cristal et les autres créations sans gravure offerte. `npm run test-gravure-offerte`.
-- Mail de Noël aux inscrites sans commande (99, sans l'offre de septembre) : préparé, code personnel, SANS date de fin, sans le carnet, pas envoyé (`scratchpad/mailnoel2.mjs`).
+- ✉️ **Mail de Noël aux inscrites sans commande** (99, sans l'offre de septembre) : ENREGISTRÉ le 19/11 (« enregistre ce mail »), pas envoyé.
+  Générateur `tools/mails/noel-inscrites.mjs <dossier>`, image `docs/maquettes/mail-noel-inscrites.jpg`. Code personnel, SANS date de fin (il ne veut ni date ni « c'est permanent »),
+  liste des créations déjà offertes (verres 1er verre, marque-pages, support ; carnet RETIRÉ), photos bijoux / cristal / verres / marque-pages.
+- ✉️ **Mail « Votre cagnotte vous attend » pour Noël** (85 clientes, 179,46 € en tout, AUCUNE n'a jamais utilisé sa cagnotte) : préparé le 19/11, pas envoyé.
+  `tools/mails/cagnotte-noel.mjs <dossier>` (lit `cag-cible.json` = /api/admin/cagnottes + commandes), image `docs/maquettes/mail-cagnotte-noel.jpg`. « Bonjour, » sans prénom
+  (noms parfois inversés ou adresses), montant, mode d'emploi (se connecter avec cette adresse, cocher « Utiliser ma cagnotte fidélité », jusqu'à la moitié du panier), pas de date.
 - Dans un mail client : donner le prix de la fiche (`node tools/prix-fiche.mjs`) ; plus de phrase « la moins chère est offerte », sauf pour le carnet.
 
 ## 🔗 DEVIS QUI COMPLÈTE UNE COMMANDE = PLUS DE DEUXIÈME CARTE — 18/11/2026 (gérant : « pourquoi t'as mis deux fois la même commande ? », 0BXF7CYC → 0FUPET23 ; « OK fais tout ça et pousse »)
