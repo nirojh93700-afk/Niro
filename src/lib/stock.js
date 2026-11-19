@@ -2845,8 +2845,10 @@ export async function getJobNote(key, fresh = false) {
 // --- Offre « gravure offerte » : mémoire des envois ------------------------
 // Section `offreGravure` = { "email": timestamp }. Sert à n'envoyer qu'UNE
 // SEULE fois l'offre à chaque inscrite, même si le site relance la tâche.
-export async function getOffreGravureSent() {
-  const data = await getCatalogRaw();
+// Lecture FRAÎCHE (19/11/2026) : l'envoi par lots relit cette liste entre deux appels rapprochés, sur des
+// instances différentes ; avec le cache de 60 s, des inscrites déjà servies étaient resélectionnées (doublons).
+export async function getOffreGravureSent(fresh = true) {
+  const data = await getCatalogRaw(fresh);
   return data.offreGravure || {};
 }
 
