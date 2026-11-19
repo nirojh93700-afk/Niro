@@ -64,9 +64,9 @@ export function mailCagnotte(c) {
       <li>Connectez-vous à votre espace client avec cette adresse e-mail.</li>
       <li>Dans votre panier, cochez « Utiliser ma cagnotte fidélité ».</li>
     </ol>
-    <p style="margin:0 0 16px;">Le montant est déduit au paiement, jusqu'à 50 % de votre panier.</p>
+    <p style="margin:0 0 16px;">Le montant est déduit au paiement, jusqu'à 50 % de votre panier. La cagnotte ne s'ajoute pas à un code promo : si vous en avez un, vous choisissez l'un ou l'autre.</p>
     ${cartes}
-    <p style="margin:0 0 16px;">Pour les bijoux, nos emballages de Noël sont là : sachet rouge, boîte à ruban « Merry Christmas », sac de Noël, et le Pack de Noël.</p>
+    <p style="margin:0 0 16px;">Pour les bijoux, nos emballages de Noël sont là : sachet rouge, boîte à ruban « Merry Christmas », sac de Noël et Pack de Noël.</p>
     <p style="margin:0 0 22px;text-align:center;">
       <a href="${BRAND.siteUrl}/espace" style="display:inline-block;background:${gold};color:#fff;text-decoration:none;padding:13px 28px;border-radius:9px;font-weight:bold;">Utiliser ma cagnotte</a>
     </p>

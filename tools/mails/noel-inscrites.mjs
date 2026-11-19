@@ -27,7 +27,7 @@ function mail(date) {
     <p style="margin:0 0 8px;">Un prénom sur un bracelet, une date au dos d'un collier, un petit mot dans le cristal : avec votre code, cette gravure est pour nous.</p>
     <p style="margin:0 0 16px;">Et sur certaines créations, la première gravure est <b>déjà offerte</b>, même sans code : sur les verres et flûtes gravés (le premier verre), sur les marque-pages en bois et sur le support de téléphone.</p>
     ${cartes}
-    <p style="margin:0 0 16px;">Pour les bijoux, nos emballages de Noël sont là : sachet rouge, boîte à ruban « Merry Christmas », sac de Noël, et le Pack de Noël.</p>
+    <p style="margin:0 0 16px;">Pour les bijoux, nos emballages de Noël sont là : sachet rouge, boîte à ruban « Merry Christmas », sac de Noël et Pack de Noël.</p>
     <p style="margin:0 0 6px;color:#7a7268;font-size:13px;">Votre code est personnel : il fonctionne avec l'adresse à laquelle nous vous écrivons, une seule fois. Entrez-le dans votre panier, la gravure est déduite au paiement.</p>
     <p style="margin:0 0 22px;text-align:center;">
       <a href="${BRAND.siteUrl}/offrir/noel" style="display:inline-block;background:${gold};color:#fff;text-decoration:none;padding:13px 28px;border-radius:9px;font-weight:bold;">Préparer mes cadeaux</a>
