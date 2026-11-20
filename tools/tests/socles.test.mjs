@@ -15,7 +15,7 @@ t("ancien à 0 = nouveau vendu", () => assert.equal(socleEnVente("socle-led-carr
 t("le petit bascule seul", () => {
   const st = { "socle-led-carre": 0, "socle-led-rectangle": 8 };
   assert.deepEqual(socle("cristal-photo-3d-vertical", "cristal-v-petit", st).stockIds, ["socle-led-carre-gris"]);
-  assert.deepEqual(socle("cristal-photo-3d-vertical", "cristal-v-grand", st).stockIds, ["socle-led-carre-gris"]);
+  assert.deepEqual(socle("cristal-photo-3d-vertical", "cristal-v-grand", st).stockIds, ["socle-led-rectangle"]);
   assert.deepEqual(socle("cristal-photo-3d-vertical", "cristal-v-xl", st).stockIds, ["socle-led-rectangle"]);
 });
 t("le grand bascule : horizontal Petit compris, prix inchangé", () => {
@@ -31,13 +31,15 @@ t("photo et texte de la fiche suivent le socle en vente", () => {
   const n = p.personalizationFields.find((f) => f.key === "note-socle");
   assert.equal(n.imageByVariant["cristal-v-petit"], "/produits/socle-led-carre-gris.jpg");
   assert.match(n.textByVariant["cristal-v-petit"], /piles AAA/);
-  assert.equal(n.imageByVariant["cristal-v-grand"], "/produits/socle-led-carre-gris.jpg");
+  assert.equal(n.imageByVariant["cristal-v-grand"], "/produits/socle-led-rectangle.jpg");
   assert.equal(n.imageByVariant["cristal-v-xl"], "/produits/socle-led-rectangle.jpg");
 });
-t("vertical : petit socle sauf XL", () => {
-  for (const v of ["cristal-v-petit","cristal-v-moyen","cristal-v-grand"]) { const r = socle("cristal-photo-3d-vertical", v, {}); assert.equal(r.amount, 14.9); assert.deepEqual(r.stockIds, ["socle-led-carre"]); }
+t("vertical : petit socle pour le Petit seulement (20/11/2026)", () => {
+  { const r = socle("cristal-photo-3d-vertical", "cristal-v-petit", {}); assert.equal(r.amount, 14.9); assert.deepEqual(r.stockIds, ["socle-led-carre"]); }
+  for (const v of ["cristal-v-moyen","cristal-v-grand"]) { const r = socle("cristal-photo-3d-vertical", v, {}); assert.equal(r.amount, 19.9); assert.deepEqual(r.stockIds, ["socle-led-rectangle"]); }
+  assert.equal(socle("cristal-deja-grave", "cristal-grave-v-moyen", {}).amount, 19.9);
   const x = socle("cristal-photo-3d-vertical", "cristal-v-xl", {}); assert.equal(x.amount, 19.9); assert.deepEqual(x.stockIds, ["socle-led-rectangle"]);
-  assert.equal(socle("cristal-deja-grave", "cristal-grave-v-grand", {}).amount, 14.9);
+  assert.equal(socle("cristal-deja-grave", "cristal-grave-v-grand", {}).amount, 19.9);
   assert.equal(socle("cristal-deja-grave", "cristal-grave-v-xl", {}).amount, 19.9);
   assert.equal(socle("cristal-photo-3d-horizontal", "cristal-h-moyen", {}).amount, 19.9);
 });

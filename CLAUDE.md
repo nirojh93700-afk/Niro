@@ -1,7 +1,11 @@
+## 📦 « ENVOIS À FAIRE » DANS GESTION + GRAND SOCLE POUR LE VERTICAL MOYEN / GRAND — 20/11/2026 (gérant : « une nouvelle catégorie comme les commandes, produit manquant par exemple » ; « 19,90 € pour le socle »)
+- Gestion → Commandes → **Envois à faire** (`/gestion/envois`, API `/api/admin/envois`, section `envois` : `getEnvois / ajouterEnvoi / majEnvoi / supprimerEnvoi` en fin de `stock.js`, pastille `envois` du menu). Produit manquant, remplacement, renvoi gratuit : adresse reprise de la commande, stock retiré à l'ajout (case « déjà retiré à la main »), « Expédier… » avec suivi, « Terminé », supprimer = stock rendu (gérant seulement, `droitsAssistant.js`). Aucun e-mail à la cliente.
+- Socle : vertical Petit = petit socle 14,90 € ; vertical Moyen, Grand, XL + tout l'horizontal = grand socle 19,90 € (products.js, cristauxGraves.js, CristauxGraves.jsx, `npm run test-socles`). Remplace la règle du 30/10.
+
 ## 🕊️ DESSINS ENREGISTRÉS POUR LES PROCHAINES COMMANDES — 20/11/2026 (gérant : « pour les prochaines commandes tu gardes, tu l'enregistres, tu me donneras cette image »)
 - `docs/dessins-enregistres/` (+ `LISEZ-MOI.md`) : `colombes-coeur.jpg` = deux colombes face à face, ailes ouvertes, cœur entre elles. Quand il la redemande : la renvoyer telle quelle (SendUserFile).
 
-## 🔐 DEUX MOTS DE PASSE DANS GESTION : GÉRANT / ASSISTANT — 19/11/2026 (gérant : « tu sépares en deux… toi un mot de passe pour envoyer les mails, faire des réglages ; moi tout ce qui est important, rembourser, il n'y a que moi ») — CONSTRUIT, PAS ENCORE EN LIGNE (attend son « pousse »)
+## 🔐 DEUX MOTS DE PASSE DANS GESTION : GÉRANT / ASSISTANT — 19/11/2026 (gérant : « tu sépares en deux… toi un mot de passe pour envoyer les mails, faire des réglages ; moi tout ce qui est important, rembourser, il n'y a que moi ») — ✅ EN LIGNE
 - Règles PURES dans `src/lib/droitsAssistant.js` (`decisionAssistant(chemin, méthode, corps)` → ok / gerant / valider). Ses choix du 19/11 : les PRIX → l'assistant peut ;
   ENVOIS À PLUSIEURS clientes et CODES PROMO → l'assistant prépare, il faut son FEU VERT. Réservé au gérant : rembourser, annuler une commande, créditer / déplacer une cagnotte,
   toute suppression, export, import, mots de passe, appareils Face ID, clés Boxtal / Instagram / Gmail / accès au site, régler l'accès de l'assistant.

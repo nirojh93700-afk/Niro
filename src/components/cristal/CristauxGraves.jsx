@@ -121,10 +121,10 @@ export default function CristauxGraves({ prix = {}, noel = null, socles = null }
   const dirLangue = enLangue && langueDe(tx.langue)?.dir === "rtl" ? "rtl" : undefined;
   const grave = (k) => String(tx[k] || "").trim(); // le texte gravé (en français : le texte tapé)
   const t = T[taille];
-  // Couché (horizontal) : grand socle pour toutes les tailles ; debout (vertical) : petit socle sauf XL (gérant, 30/10/2026).
+  // Couché (horizontal) : grand socle pour toutes les tailles ; debout (vertical) : petit socle pour le Petit seulement (gérant, 20/11/2026).
   const prixSocle = fmt === "h" ? (t.socleH || t.socle) : t.socle;
-  // Socle montré : le petit pour le vertical Petit / Moyen / Grand, le grand pour le reste (modèle en vente, voir socles.js).
-  const socleVu = (taille !== "xl" && fmt !== "h" ? socles?.carre : socles?.rect)
+  // Socle montré : le petit pour le vertical Petit, le grand pour le reste (modèle en vente, voir socles.js).
+  const socleVu = (taille === "petit" && fmt !== "h" ? socles?.carre : socles?.rect)
     || { image: "/produits/socle-led-rectangle.jpg", court: "LED multicolores" };
   const unit = t.prix + (socle ? prixSocle : 0) + (avecTxt ? (zod ? prixZod : CG_TEXTE_PRIX) : 0);
   const ok = i >= 0 && Boolean(fmt) && (!ouvert || avecTxt) && !langueManque;
@@ -215,7 +215,7 @@ export default function CristauxGraves({ prix = {}, noel = null, socles = null }
       socle ? "Socle lumineux LED" : "",
     ].filter(Boolean).join(" · ");
     const variantTitle = `${format} · ${t.nom} — ${fmt === "h" ? t.h : t.v}`;
-    const poids = ({ petit: 750, moyen: 1100, grand: 1800, xl: 2800 }[taille] || 900) + (socle ? (taille !== "xl" && fmt !== "h" ? 300 : 550) : 0);
+    const poids = ({ petit: 750, moyen: 1100, grand: 1800, xl: 2800 }[taille] || 900) + (socle ? (taille === "petit" && fmt !== "h" ? 300 : 550) : 0);
     addItem({
       productSlug: CG_SLUG,
       variantId,

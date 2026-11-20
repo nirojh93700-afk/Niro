@@ -407,3 +407,7 @@ Pour revenir en arrière : retirer `moinsCherCompris` des fiches (products.js), 
 ## Verres — gravure (changé le 18/11/2026)
 Avant : verre 1 image ou 1er texte offert, chaque texte +3 € ; chaque AUTRE verre : logo + texte +5 €, logo seul ou texte seul +3 € (règle du 19/10/2026).
 Après : une seule gravure offerte par commande (la moins chère), chaque logo / image / modèle +3 €, chaque texte +3 €, sur chaque verre.
+
+## 20/11/2026 — Socle LED des cristaux verticaux Moyen et Grand
+- Avant : petit socle carré à 14,90 € pour le vertical Petit, Moyen et Grand (règle du 30/10/2026).
+- Après : grand socle à **19,90 €** pour le vertical Moyen et Grand (gérant, réclamation 0RPVCMNW : le petit socle est trop petit pour le Moyen). Le Petit garde le petit socle à 14,90 €. Fiches « Cristal Photo 3D — Vertical » et « Cristaux déjà gravés ».
