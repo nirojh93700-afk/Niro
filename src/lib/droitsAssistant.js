@@ -45,6 +45,7 @@ export function decisionAssistant(chemin, methode, corps) {
   if (r === "catalog" && (action === "delete" || action === "resetProduct")) return gerant("supprimer ou remettre à zéro un produit");
   if (r === "quotes" && action === "delete") return gerant("supprimer un devis");
   if (r === "prospects" && action === "delete") return gerant("supprimer un établissement");
+  if (r === "envois" && action === "supprimer") return gerant("supprimer un envoi à faire");
   if (r === "programmations" && action === "supprimer") return gerant("supprimer une programmation");
   if (r === "restock-alerts" && action === "clear") return gerant("vider une liste d'alertes");
   if (r === "offre-gravure" && action === "purge") return gerant("supprimer des codes");

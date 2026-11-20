@@ -479,7 +479,8 @@ export async function getAdminCountsData() {
   let reviews = 0;
   for (const list of Object.values(data.reviews || {})) reviews += (list || []).filter((r) => !r.approved).length;
   const pros = Object.values(data.prospects || {}).filter((p) => p && p.nonLu).length;
-  return { replies, unread, reviews, pros };
+  const envois = (Array.isArray(data.envois) ? data.envois : []).filter((e) => e && e.statut === "a_envoyer").length;
+  return { replies, unread, reviews, pros, envois };
 }
 
 // Nettoyage + liste en UNE SEULE lecture (02/10/2026). `quand(it, data)` renvoie la raison
@@ -3683,4 +3684,98 @@ export async function getFactureFile(id) {
   } catch {
     return null;
   }
+}
+
+// =============================================================================
+// ENVOIS À FAIRE (20/11/2026, gérant : « une nouvelle catégorie, comme les commandes, produit manquant par exemple »).
+// Produit manquant, remplacement, renvoi gratuit : ce qui doit partir chez une cliente SANS nouvelle commande.
+// Section `envois` = [{ id, at, motif, orderId, ref, client, email, articles:[{nom, stockId, qty, retire}],
+//   adresse:{nom, line1, line2, cp, ville, pays}, note, statut:"a_envoyer"|"expedie"|"termine", tracking, expedieLe, termineLe }].
+// Lecture FRAÎCHE + écriture de cette seule section. Le stock baisse à l'ajout (rendu si l'envoi est supprimé).
+// =============================================================================
+const ENVOIS_MAX = 500;
+export const ENVOI_STATUTS = { a_envoyer: "À envoyer", expedie: "Expédié", termine: "Terminé" };
+export const ENVOI_MOTIFS = { manquant: "Produit manquant", remplacement: "Remplacement", renvoi: "Renvoi", autre: "Autre" };
+const txtE = (v, n) => String(v ?? "").replace(/\s+/g, " ").trim().slice(0, n);
+
+export async function getEnvois(fresh = false) {
+  const data = await getCatalogRaw(fresh);
+  return Array.isArray(data.envois) ? data.envois : [];
+}
+
+function adresseEnvoi(a) {
+  const x = a && typeof a === "object" ? a : {};
+  return { nom: txtE(x.nom, 120), societe: txtE(x.societe, 120), line1: txtE(x.line1, 160), line2: txtE(x.line2, 160), cp: txtE(x.cp, 20), ville: txtE(x.ville, 80), pays: txtE(x.pays, 2).toUpperCase() || "FR", tel: txtE(x.tel, 30) };
+}
+
+/** Ajoute un envoi. `dejaRetire` = le stock a déjà été baissé à la main : on ne le retire pas une 2e fois. */
+export async function ajouterEnvoi({ motif, orderId, ref, client, email, articles, adresse, note, dejaRetire }) {
+  const lignes = (Array.isArray(articles) ? articles : []).slice(0, 10).map((a) => ({
+    nom: txtE(a?.nom, 160), stockId: txtE(a?.stockId, 120), qty: Math.max(1, Math.min(99, parseInt(a?.qty, 10) || 1)), retire: 0,
+  })).filter((a) => a.nom);
+  if (!lignes.length) throw new Error("Écrivez ce qu'il faut envoyer.");
+  if (!dejaRetire) {
+    for (const l of lignes) {
+      if (!l.stockId) continue;
+      const { retour } = await modifierStock((map) => {
+        if (typeof map[l.stockId] !== "number") return false;
+        const av = map[l.stockId];
+        map[l.stockId] = Math.max(0, av - l.qty);
+        return av - map[l.stockId];
+      });
+      l.retire = typeof retour === "number" ? retour : 0;
+    }
+  }
+  const rec = {
+    id: "env_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    at: Date.now(), motif: ENVOI_MOTIFS[motif] ? motif : "manquant",
+    orderId: txtE(orderId, 80), ref: txtE(ref, 20), client: txtE(client, 120), email: txtE(email, 160).toLowerCase(),
+    articles: lignes, adresse: adresseEnvoi(adresse), note: String(note || "").slice(0, 600),
+    statut: "a_envoyer", tracking: "", dejaRetire: Boolean(dejaRetire),
+  };
+  const data = await getCatalogRaw(true);
+  const list = Array.isArray(data.envois) ? data.envois : [];
+  data.envois = [rec, ...list].slice(0, ENVOIS_MAX);
+  await persistCatalog(data, ["envois"]);
+  return rec;
+}
+
+/** Change le statut, le suivi, la note ou l'adresse d'un envoi (jamais le stock). */
+export async function majEnvoi(id, { statut, tracking, note, adresse } = {}) {
+  const data = await getCatalogRaw(true);
+  const list = Array.isArray(data.envois) ? data.envois : [];
+  const rec = list.find((e) => e.id === id);
+  if (!rec) return null;
+  if (statut !== undefined) {
+    if (!ENVOI_STATUTS[statut]) throw new Error("Statut inconnu.");
+    rec.statut = statut;
+    if (statut === "expedie" && !rec.expedieLe) rec.expedieLe = Date.now();
+    if (statut === "termine") rec.termineLe = Date.now();
+    if (statut === "a_envoyer") { rec.expedieLe = null; rec.termineLe = null; }
+  }
+  if (tracking !== undefined) rec.tracking = txtE(tracking, 200);
+  if (note !== undefined) rec.note = String(note || "").slice(0, 600);
+  if (adresse !== undefined) rec.adresse = adresseEnvoi(adresse);
+  rec.majLe = Date.now();
+  await persistCatalog(data, ["envois"]);
+  return rec;
+}
+
+/** Supprime un envoi et rend au stock ce qui en était sorti. */
+export async function supprimerEnvoi(id) {
+  const data = await getCatalogRaw(true);
+  const list = Array.isArray(data.envois) ? data.envois : [];
+  const rec = list.find((e) => e.id === id);
+  if (!rec) return null;
+  for (const l of rec.articles || []) {
+    if (!l.stockId || !(l.retire > 0)) continue;
+    await modifierStock((map) => {
+      if (typeof map[l.stockId] !== "number") return false;
+      map[l.stockId] += l.retire;
+      return true;
+    });
+  }
+  data.envois = list.filter((e) => e.id !== id);
+  await persistCatalog(data, ["envois"]);
+  return rec;
 }

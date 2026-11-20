@@ -68,6 +68,7 @@ const SECTIONS = [
     { id: "file", t: "File de production", href: "/gestion/commandes", badge: "prep" },
     { id: "commandes", t: "Fiches complètes", href: "/gestion/fiches", badge: "unread" },
     { id: "atelier", t: "Atelier · fichiers à graver", href: "/gestion/atelier" },
+    { id: "envois", t: "Envois à faire", href: "/gestion/envois", badge: "envois" },
     { id: "etiquettes", t: "Étiquettes d'adresse", href: "/gestion/etiquettes" },
     { id: "devis", t: "Devis & factures", href: "/gestion/devis" } ] },
   { id: "messagerie", t: "Messages", ic: "mail", badge: "messages", tabs: [
@@ -177,7 +178,7 @@ export default function AdminShell({ children }) {
   const [recents, setRecents] = useState([]);
   const [filtre, setFiltre] = useState(""); // recherche d'écran dans le menu (téléphone)
   const [recherche, setRecherche] = useState(false); // recherche universelle (Ctrl+K)
-  const [counts, setCounts] = useState({ prep: 0, unread: 0, replies: 0, reviews: 0, pros: 0, rachat: 0 });
+  const [counts, setCounts] = useState({ prep: 0, unread: 0, replies: 0, reviews: 0, pros: 0, rachat: 0, envois: 0 });
 
   useEffect(() => {
     const apply = () => setHash(typeof window !== "undefined" ? window.location.hash : "");
@@ -220,7 +221,7 @@ export default function AdminShell({ children }) {
       const r = await fetch("/api/admin/counts", H);
       if (!r.ok) return;
       const c = await r.json();
-      setCounts({ prep: c.prep || 0, unread: c.unread || 0, replies: c.replies || 0, reviews: c.reviews || 0, pros: c.pros || 0, rachat: c.rachat || 0 });
+      setCounts({ prep: c.prep || 0, unread: c.unread || 0, replies: c.replies || 0, reviews: c.reviews || 0, pros: c.pros || 0, rachat: c.rachat || 0, envois: c.envois || 0 });
       // Chiffre sur l'icône « Niv Admin » (15/11/2026) : commandes à préparer, ou messages, selon Réglages › Notifications.
       try {
         if (navigator.setAppBadge) {
@@ -242,7 +243,7 @@ export default function AdminShell({ children }) {
   const section = SECTIONS.find((s) => s.id === secId);
   const meta = ecran ? { text: ecran.t, group: ecran.group } : { text: "Gestion", group: "" };
   const cnt = { ...counts, messages: counts.unread + counts.replies };
-  const totalTodo = counts.prep + counts.unread + counts.replies + counts.reviews + (counts.pros || 0);
+  const totalTodo = counts.prep + counts.unread + counts.replies + counts.reviews + (counts.pros || 0) + (counts.envois || 0);
 
   // Écrans récents : l'écran ouvert passe en tête (hors accueil).
   useEffect(() => {
