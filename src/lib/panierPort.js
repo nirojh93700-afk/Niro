@@ -27,8 +27,8 @@ export function nouvelEtatPort() {
 }
 
 // Marque-pages en boîte cadeau (plus de 3 cm = colis) : prix minimum du colis à domicile, toutes tailles de boîte
-// (20/11/2026 : étiquette payée 6,87 € pour un marque-page en boîte). Jamais offert.
-export const PORT_MP_BOITE = 7.9;
+// (20/11/2026 : étiquette Colissimo payée 8,24 € TTC — 6,87 € HT — pour un marque-page en boîte). Jamais offert.
+export const PORT_MP_BOITE = 8.9;
 
 // Ajoute UNE ligne (produit × quantité). `pkgBoite` = emballage en boîte rigide (→ colis).
 export function ajouterLignePort(e, { product, unitGrams, unitPrice, quantity, pkgBoite = false }) {
