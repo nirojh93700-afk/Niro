@@ -26,6 +26,10 @@ export function nouvelEtatPort() {
   };
 }
 
+// Marque-pages en boîte cadeau (plus de 3 cm = colis) : prix minimum du colis à domicile, toutes tailles de boîte
+// (20/11/2026 : étiquette payée 6,87 € pour un marque-page en boîte). Jamais offert.
+export const PORT_MP_BOITE = 7.9;
+
 // Ajoute UNE ligne (produit × quantité). `pkgBoite` = emballage en boîte rigide (→ colis).
 export function ajouterLignePort(e, { product, unitGrams, unitPrice, quantity, pkgBoite = false }) {
   e.totalGrams += unitGrams * quantity;
@@ -60,9 +64,9 @@ export function optionsPort(e, { settings, deliveryMethod = "", relaisLabel = ""
     portDomicileMini: e.portDomicileMini || 0, // cristal : plancher du colis à domicile
     // Gratuité : produits toujours offerts, seuil des colis (verres…), ET la promesse bijoux
     // « offerte dès 45 € » — qui reste vraie même quand une boîte cadeau fait passer le bijou en petit colis.
-    freeShipping: e.allFreeShip
+    freeShipping: !e.jamaisOffert && (e.allFreeShip
       || (e.allColisThreshFree && e.parcelQty > 0 && paye >= e.colisThresh)
-      || (e.tousBijouxLettre && e.bijouEnBoite && paye >= resolveShippingConfig(settings?.shipping).bijouxFreeThreshold),
+      || (e.tousBijouxLettre && e.bijouEnBoite && paye >= resolveShippingConfig(settings?.shipping).bijouxFreeThreshold)),
     country,
     pickupEligible: e.allPickup && retraitOk,
     express,

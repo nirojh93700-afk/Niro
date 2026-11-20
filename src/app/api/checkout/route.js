@@ -20,7 +20,7 @@ import { engravingExtra, prixPremiereGravure } from "@/lib/engravingPrice";
 import { prixGravureVerres, estRegleVerres, detailEnTexte } from "@/lib/prixVerres";
 import { packagingExtra } from "@/lib/packaging";
 import { packagingNoelExtra } from "@/lib/fetes";
-import { nouvelEtatPort, ajouterLignePort, optionsPort } from "@/lib/panierPort";
+import { nouvelEtatPort, ajouterLignePort, optionsPort, PORT_MP_BOITE } from "@/lib/panierPort";
 import { getQuote } from "@/lib/firebase";
 import { devisEffectif } from "@/lib/devisEffectif";
 import { lignesDevisPanier, produitPrincipal, devisPanierPossible } from "@/lib/devisPanier";
@@ -313,7 +313,15 @@ export async function POST(req) {
       const c = mpCalcul(product, mp);
       // code « gravure offerte » : pas sur les marque-pages, leur 1re gravure est déjà offerte (19/11/2026)
       for (const [sid, n] of c.stock) boughtVariants.push({ variantId: sid, qty: n * quantity });
-      ajouterLignePort(etatPort, { product, unitGrams: c.grams, unitPrice: c.total, quantity, pkgBoite: c.enBoite || c.pieces.some((p) => p.variant.colis) });
+      const mpColis = c.enBoite || c.pieces.some((p) => p.variant.colis);
+      ajouterLignePort(etatPort, { product, unitGrams: c.grams, unitPrice: c.total, quantity, pkgBoite: mpColis });
+      // 20/11/2026 (gérant : « une marque-page et la boîte, je viens de payer 6,87 € ») : en boîte (plus de 3 cm),
+      // le colis à domicile coûte au moins PORT_MP_BOITE, quelle que soit la taille de la boîte, et n'est jamais offert.
+      if (mpColis) {
+        etatPort.portDomicileMini = Math.max(etatPort.portDomicileMini || 0, PORT_MP_BOITE);
+        etatPort.jamaisOffert = true;
+        etatPort.tousBijouxLettre = false; // même prix pour toutes les boîtes (pas la grille lettre au poids)
+      }
       lineItems.push({
         quantity,
         price_data: {
