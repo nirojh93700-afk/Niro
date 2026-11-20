@@ -89,7 +89,7 @@ export const MP_NUMS_OK = [...Array.from({ length: 74 }, (_, i) => i + 1), 88, 8
 const NUMS = new Set(MP_NUMS_OK);
 export const MP_POLICES = ["playfair", "cinzel", "cinzel-deco", "montserrat", "inter", "great-vibes", "allura", "pacifico"];
 
-const LIBELLE_EMP = {
+export const LIBELLE_EMP = {
   1: { "face|haut": "Face, en haut (sous le trou)", "face|bas": "Face, au milieu", "dos|haut": "Dos, en haut", "dos|bas": "Dos, au milieu" },
   2: { "face|haut": "Face, au-dessus de la fenêtre", "face|bas": "Face, à côté de la fenêtre", "dos|haut": "Dos, en haut", "dos|bas": "Dos, au milieu" },
 };

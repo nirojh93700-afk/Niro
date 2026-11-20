@@ -19,6 +19,8 @@ import { getFontClass } from "@/lib/fonts";
 import { texteAvecDecor } from "@/lib/decorTexte";
 import { aEmplacement, cotesDeLArticle, contenuCote, emplacementDe } from "@/lib/apercuCote";
 import { consignesGravure } from "@/lib/consignesGravure";
+import { CN_FACES, CN_ZONES } from "@/lib/carnet";
+import { MP_EMPLACEMENTS, LIBELLE_EMP } from "@/lib/marquePages";
 
 export const R = 20; // points par millimètre
 const MAX_PX = 14e6; // une image plus grande que ça ne passe pas sur un iPhone
@@ -69,7 +71,12 @@ export function fichiersPossibles(item) {
   if (!item) return [];
   const p = getProductBySlug(item.slug);
   const f = item.fields || {};
-  if (p?.gobeletParcours || p?.marquePages || p?.carnet) return []; // leurs compositions ont leur propre aperçu
+  // Carnet et marque-pages (20/11/2026, gérant : « j'arrive pas à télécharger les fichiers… pourquoi t'as fait
+  // différemment pour les carnets ») : un fichier par texte gravé (zone par zone), dans l'écriture choisie,
+  // comme les autres produits. Les dessins et logos restent dans « Images d'origine » / le tableau « À graver ».
+  if (p?.carnet) return fichiersTextesCarnet(f.cn);
+  if (p?.marquePages) return fichiersTextesMarquePages(f.mp, p.marquePages.modele);
+  if (p?.gobeletParcours) return []; // le gobelet a son propre aperçu
   const out = [];
   const tpl = item.modele && MODELES[item.modeleTemplate];
   if (tpl) {
@@ -101,6 +108,42 @@ export function fichiersPossibles(item) {
     if (!ls.length) return;
     out.push({ id: `textes-${i}`, titre: b.nom ? `${b.nom} — le texte` : "Le texte", sorte: "textes", side: "face", lignes: ls, police: f.police,
       note: `Taille de départ : lettres de ${TAILLE_TEXTE_SEUL_MM} mm. Le fichier est en tracés : agrandissez-le ou réduisez-le dans le logiciel du laser sans perte.` });
+  });
+  return out;
+}
+
+const NOTE_TEXTE = () => `Taille de départ : lettres de ${TAILLE_TEXTE_SEUL_MM} mm. Le fichier est en tracés : agrandissez-le ou réduisez-le dans le logiciel du laser sans perte.`;
+const ZONE_CARNET = Object.fromEntries(CN_ZONES.map(([z, lib]) => [z, lib]));
+// Un texte (et sa 2ᵉ ligne) d'un emplacement : texte libre, ou texte écrit dans un cadre (n° 75 et plus).
+function texteEmplacement(e) {
+  if (!e || typeof e !== "object") return [];
+  if (e.k === "texte" || (e.k === "dessin" && Number(e.n) >= 75)) return [e.t, e.t2].map((x) => String(x || "").trim()).filter(Boolean);
+  return [];
+}
+function fichiersTextesCarnet(cn) {
+  if (!cn || typeof cn !== "object") return [];
+  const out = [];
+  for (const [side, nom] of CN_FACES) for (const [z] of CN_ZONES) {
+    const e = cn.v?.[side]?.[z];
+    const ls = texteEmplacement(e);
+    if (!ls.length) continue;
+    out.push({ id: `carnet-${side}-${z}`, titre: `${nom} · ${ZONE_CARNET[z] || z}${e.k === "dessin" ? ` (dans le cadre n° ${e.n})` : ""} — le texte`, sorte: "textes", side: "face", lignes: ls, police: cn.police, note: NOTE_TEXTE() });
+  }
+  return out;
+}
+function fichiersTextesMarquePages(mp, modele) {
+  const L = LIBELLE_EMP[modele] || LIBELLE_EMP[1];
+  if (!mp || typeof mp !== "object" || !Array.isArray(mp.slots)) return [];
+  const out = [];
+  mp.slots.forEach((slot, i) => {
+    for (const [side, zone] of MP_EMPLACEMENTS) {
+      const key = `${side}|${zone}`;
+      const e = slot?.v?.[key];
+      const ls = texteEmplacement(e);
+      if (!ls.length) continue;
+      const vertical = zone === "bas" ? " (à la verticale)" : "";
+      out.push({ id: `mp-${i + 1}-${side}-${zone}`, titre: `Marque-page ${i + 1} · ${L[key] || key}${vertical}${e.k === "dessin" ? ` (dans le cadre n° ${e.n})` : ""} — le texte`, sorte: "textes", side: "face", lignes: ls, police: mp.police, note: NOTE_TEXTE() + (vertical ? " Ce texte se grave à la verticale : tournez-le de 90° dans le logiciel." : "") });
+    }
   });
   return out;
 }
