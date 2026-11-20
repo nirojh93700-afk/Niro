@@ -3,7 +3,7 @@
 // contredire). Ces fonctions sont l'ancien calcul de `/api/checkout`, sorti tel quel — toute règle de
 // port (seuils offerts, lettre / colis, verres, bijou en boîte) vit donc ICI, à un seul endroit.
 // Parité prouvée par `npm run test-port-parite` (milliers de paniers aléatoires : ancien code ≡ nouveau).
-import { buildShippingOptions, resolveShippingConfig } from "@/lib/shipping";
+import { buildShippingOptions, resolveShippingConfig, letterPriceByWeight } from "@/lib/shipping";
 
 export function nouvelEtatPort() {
   return {
@@ -61,7 +61,8 @@ export function optionsPort(e, { settings, deliveryMethod = "", relaisLabel = ""
   return buildShippingOptions({
     totalGrams: e.totalGrams, subtotal: paye, parcelQty: e.parcelQty, glassQty: e.glassQty, letterOnly: e.letterOnly,
     bijouxOnly: e.tousBijouxLettre, // bijou en boîte : jamais moins cher qu'en lettre
-    portDomicileMini: e.portDomicileMini || 0, // cristal : plancher du colis à domicile
+    // cristal : plancher du colis à domicile ; carnet (20/11/2026) : jamais sous le timbre La Poste au poids du colis
+    portDomicileMini: Math.max(e.portDomicileMini || 0, e.portLaPoste ? letterPriceByWeight(e.totalGrams) : 0),
     // Gratuité : produits toujours offerts, seuil des colis (verres…), ET la promesse bijoux
     // « offerte dès 45 € » — qui reste vraie même quand une boîte cadeau fait passer le bijou en petit colis.
     freeShipping: !e.jamaisOffert && (e.allFreeShip

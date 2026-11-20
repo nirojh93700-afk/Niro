@@ -287,6 +287,8 @@ export async function POST(req) {
       // code « gravure offerte » : pas sur le carnet, sa 1re gravure est déjà offerte (19/11/2026)
       boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
       ajouterLignePort(etatPort, { product, unitGrams: variant.weight || product.weight, unitPrice: unit, quantity });
+      // 20/11/2026 (gérant : « c'est plus de 300 g, c'est 7,71 € ») : à domicile, jamais moins que le timbre La Poste au poids.
+      etatPort.portLaPoste = true;
       lineItems.push({
         quantity,
         price_data: {
