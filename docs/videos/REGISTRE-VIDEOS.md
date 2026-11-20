@@ -1150,3 +1150,30 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #bijouxpersonnalises #emballagecadeau #cadeaupersonnalise #ideecadeau
+
+## Vidéo 70 — Toutes les créations gravées, style « guirlande » (20/11/2026)
+- Demande : « Fais-moi des vidéos ».
+- Style NEUF « guirlande » : des polaroïds accrochés par des pinces en bois sur un fil d'ampoules, qui se balancent ; la caméra
+  glisse d'une photo à l'autre, le nom et une phrase s'affichent dessous, légende manuscrite sur chaque polaroïd. Fond de nuit chaude.
+- 38,8 s, sans son, aucun prix, 1080 × 1920 et 720 × 1280. À supprimer le 22/11.
+- Script : `python3 tools/video/guirlande_70.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 70 — Nos créations gravées** (Cristal photo 3D, Verre à whisky, Collier 3 Cœurs, Gobelet isotherme, Carnet gravé, Plaque de naissance, Flûte à champagne, Marque-page en bois, Bracelet cordon à plaque, Décoration de Noël en cristal, Puzzle photo gravé, Cristal déjà gravé)
+> ✨ Une photo, un prénom, une date… et votre cadeau devient unique 💛
+> Cristal, verres, bijoux, bois : tout est gravé à la commande dans notre atelier 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gravure #ideecadeaunoel #ideecadeau
+
+## Vidéo 71 — Idées cadeaux de Noël, style « liste au Père Noël » (20/11/2026)
+- Style NEUF « liste au Père Noël » : sur une feuille crème bordée de rouge et d'or, chaque idée s'écrit à la plume et se coche d'un
+  trait doré ; la photo du produit GRAVÉ arrive en polaroïd et se pose sur la pile. Neige légère. Fin rouge et or « Commandez tôt pour Noël ».
+- 33,4 s, sans son, aucun prix, 1080 × 1920 et 720 × 1280. À supprimer le 22/11.
+- Script : `python3 tools/video/liste_noel_71.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 71 — Ma liste au Père Noël** (Verre tumbler, Collier cœur & plaques, Cristal photo 3D, Gobelet isotherme, Couverts enfant, Décoration de Noël en cristal, Médaillon cœur ouvrable, Marque-page en bois)
+> 🎅 Cette année, la liste au Père Noël est gravée à leurs prénoms ✨
+> Un verre pour les amoureux, un collier pour maman, des couverts pour le petit dernier 🎄💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaunoel #cadeaupersonnalise #noel2026 #ideecadeau
