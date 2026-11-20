@@ -1,3 +1,6 @@
+## 🕊️ DESSINS ENREGISTRÉS POUR LES PROCHAINES COMMANDES — 20/11/2026 (gérant : « pour les prochaines commandes tu gardes, tu l'enregistres, tu me donneras cette image »)
+- `docs/dessins-enregistres/` (+ `LISEZ-MOI.md`) : `colombes-coeur.jpg` = deux colombes face à face, ailes ouvertes, cœur entre elles. Quand il la redemande : la renvoyer telle quelle (SendUserFile).
+
 ## 🔐 DEUX MOTS DE PASSE DANS GESTION : GÉRANT / ASSISTANT — 19/11/2026 (gérant : « tu sépares en deux… toi un mot de passe pour envoyer les mails, faire des réglages ; moi tout ce qui est important, rembourser, il n'y a que moi ») — CONSTRUIT, PAS ENCORE EN LIGNE (attend son « pousse »)
 - Règles PURES dans `src/lib/droitsAssistant.js` (`decisionAssistant(chemin, méthode, corps)` → ok / gerant / valider). Ses choix du 19/11 : les PRIX → l'assistant peut ;
   ENVOIS À PLUSIEURS clientes et CODES PROMO → l'assistant prépare, il faut son FEU VERT. Réservé au gérant : rembourser, annuler une commande, créditer / déplacer une cagnotte,
