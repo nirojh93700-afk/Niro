@@ -70,6 +70,7 @@ const SECTIONS = [
     { id: "commandes", t: "Fiches complètes", href: "/gestion/fiches", badge: "unread" },
     { id: "atelier", t: "Atelier · fichiers à graver", href: "/gestion/atelier" },
     { id: "envois", t: "Envois à faire", href: "/gestion/envois", badge: "envois" },
+    { id: "fichiers-gravure", t: "SVG à valider", href: "/gestion/fichiers-gravure" },
     { id: "etiquettes", t: "Étiquettes d'adresse", href: "/gestion/etiquettes" },
     { id: "devis", t: "Devis & factures", href: "/gestion/devis" } ] },
   { id: "messagerie", t: "Messages", ic: "mail", badge: "messages", tabs: [

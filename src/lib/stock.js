@@ -3779,3 +3779,29 @@ export async function supprimerEnvoi(id) {
   await persistCatalog(data, ["envois"]);
   return rec;
 }
+
+// =============================================================================
+// FICHIERS À GRAVER PRÉPARÉS PAR L'AGENT (21/11/2026) — section `fichiersGravure` :
+// { [orderId]: { ref, items: { [imageId]: { statut: "valide"|"refuse", svgId, largeurMm, src, at } } } }
+// L'agent (page Gestion › Commandes › Fichiers à graver) propose un SVG pour chaque dessin de cliente ;
+// rien n'est rangé dans la commande avant le « C'est bon » du gérant.
+// =============================================================================
+export async function getFichiersGravure(fresh = false) {
+  const data = await getCatalogRaw(fresh);
+  return data.fichiersGravure && typeof data.fichiersGravure === "object" ? data.fichiersGravure : {};
+}
+
+export async function setFichierGravure(orderId, imageId, ref, rec) {
+  const oid = String(orderId || "").slice(0, 120), iid = String(imageId || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 60);
+  if (!oid || !iid) throw new Error("Commande ou image manquante.");
+  const data = await getCatalogRaw(true);
+  const tout = data.fichiersGravure && typeof data.fichiersGravure === "object" ? data.fichiersGravure : {};
+  const cmd = tout[oid] || { ref: String(ref || "").slice(0, 20), items: {} };
+  if (rec) cmd.items[iid] = { ...rec, at: Date.now() };
+  else delete cmd.items[iid];
+  if (ref) cmd.ref = String(ref).slice(0, 20);
+  if (Object.keys(cmd.items).length) tout[oid] = cmd; else delete tout[oid];
+  data.fichiersGravure = tout;
+  await persistCatalog(data, ["fichiersGravure"]);
+  return cmd;
+}

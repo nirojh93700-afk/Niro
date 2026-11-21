@@ -6519,3 +6519,25 @@ html.flot-cache:not(.flot-garde) .flot-btn{transform:translateY(140%);opacity:0;
 }
 .hb-direct{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#256b34;text-decoration:none;border:1px solid currentColor;border-radius:999px;padding:4px 10px}
 .hb-direct i{width:8px;height:8px;border-radius:50%;background:currentColor;animation:tdPulse 2s infinite}
+
+/* Gestion › SVG à valider (21/11/2026) */
+.fg-cmd{margin:18px 0 26px}
+.fg-cmd h2{font-size:1.02rem;margin:0 0 10px}
+.fg-cmd h2 small{display:block;font-weight:400;color:var(--ink-soft);font-size:.8rem;margin-top:2px}
+.fg-carte{display:grid;grid-template-columns:150px minmax(0,1fr) minmax(0,260px);gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px}
+.fg-carte.q{border-color:#e2c67e;box-shadow:0 0 0 2px #f6ecd3}
+.fg-carte.ok{border-color:#9fd3a8;background:#f6fbf6}
+.fg-carte.non{opacity:.7;grid-template-columns:150px minmax(0,1fr)}
+.fg-src{width:150px;height:150px;object-fit:contain;background:#f6f3ec;border-radius:8px}
+.fg-svg{width:100%;height:190px;object-fit:contain;background:#fff;border:1px dashed var(--line);border-radius:8px;box-sizing:border-box}
+.fg-att{display:flex;align-items:center;justify-content:center;text-align:center;color:var(--ink-soft);font-size:.86rem;padding:10px}
+.fg-act{display:flex;flex-direction:column;gap:8px;font-size:.88rem;min-width:0}
+.fg-act input{width:70px;padding:4px 6px;box-sizing:border-box}
+.fg-or{color:var(--ink-soft);font-size:.8rem}
+.fg-err{color:#b3261e}
+@media (max-width:760px){.fg-carte,.fg-carte.non{grid-template-columns:1fr}.fg-src{width:100%;height:160px}}
+.svgv{margin:10px 0;padding:10px 12px;border:1px solid #9fd3a8;background:#f6fbf6;border-radius:10px}
+.svgv-t{font-weight:700;font-size:.9rem;margin-bottom:8px}
+.svgv-l{display:flex;flex-wrap:wrap;gap:12px}
+.svgv-c{display:flex;flex-direction:column;gap:6px;align-items:flex-start;font-size:.82rem}
+.svgv-c img{width:160px;height:120px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px}

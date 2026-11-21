@@ -15,6 +15,7 @@ import { MOTIF_LIST } from "@/components/Motif";
 import ModeleArt from "@/components/ModeleArt";
 import PhotosEmail from "@/components/admin/PhotosEmail";
 import ImagesEchangees from "@/components/admin/ImagesEchangees";
+import SvgValides from "@/components/admin/SvgValides";
 import MessagesEmail from "@/components/admin/MessagesEmail";
 import { eclaterParVerre } from "@/lib/orderSpec";
 import { TableGravure, policeDeGravure } from "@/lib/engravingSheet";
@@ -300,6 +301,7 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
         {order.quoteEmballage ? <p style={{ margin: "0 0 8px", fontSize: "0.88rem" }}><strong>📦 Emballage du devis :</strong> {order.quoteEmballage}</p> : null}
         {/* Dernière image échangée (aperçu validé / image reçue par le site), en grand (08/11/2026). */}
         <ImagesEchangees order={order} print={print} />
+        <SvgValides order={order} adminKey={adminKey} print={print} />
         {/* Une carte par pièce du devis : quantité, texte, style, fichier à graver. */}
         <FicheDevis order={order} />
         <MessagesEmail email={order.customerEmail} depuis={order.createdAt} adminKey={adminKey} print={print} />
@@ -325,6 +327,7 @@ export default function FicheAtelier({ spec, order, adminKey, print = false }) {
       ) : null}
       {/* Une image échangée APRÈS la commande (autre version envoyée par « Répondre », aperçu validé) prime sur celle du site (08/11/2026). */}
       <ImagesEchangees order={order} print={print} compact />
+      <SvgValides order={order} adminKey={adminKey} print={print} />
       {items.map((it, i) => {
         // Combien d'options commandées pour ce réglage (une « Lot de 2 » × 2 = 4 verres).
         const ligne = order ? (order.items || [])[paires.indexOf(it)] : null;
