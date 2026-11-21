@@ -1,3 +1,7 @@
+## 🌐 AVANT D'AFFIRMER QUOI QUE CE SOIT SUR LE RENDU D'UNE GRAVURE : VÉRIFIER SUR INTERNET — 21/11/2026 (gérant, mail d'Harmonie Dubois, 2 verres à vin avec dessins détaillés : « avant de dire des conneries, il faut que tu vérifies toujours sur Internet pour dire la vérité »)
+- Toute phrase à une cliente sur ce que donnera une gravure (couleurs, détails, ombres, matière) se vérifie d'abord sur des sources (fabricants de lasers, guides techniques), jamais de tête.
+- Vérifié le 21/11 : sur verre = blanc givré seulement (micro-fissures), aucune couleur, le noir du dessin devient blanc ; détails fins nets ; ombres / dégradés rendus par une trame de points.
+
 ## 🔎 PHOTO D'UN CLIENT = COMPTER CHAQUE ÉLÉMENT AVANT TOUT PRIX — 21/11/2026 (gérant, verres de Jorge Costa : « je t'ai déjà dit, analyse la photo avant de proposer un prix… y a combien de noms, combien de titres ») — REMPLACE la correction du 26/10 (« le visuel = une image »)
 - Avant de donner un prix sur une photo / un visuel de client : la REGARDER et écrire la liste, verre par verre : images (gratuites, 1re gravure), titres, prénoms, phrases, dates. Chaque titre, chaque prénom, chaque phrase, chaque date = un texte payant au tarif de la fiche.
 - Les deux mains / un dessin fait de plusieurs morceaux = UNE image (gérant, 21/11).
