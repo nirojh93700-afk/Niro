@@ -71,6 +71,11 @@ export async function GET(req) {
     status: statusLabel(o),
     immediate: Boolean(o.immediateStart),
     when: dayKey(o.createdAt),
+    // Ajouts du 21/11/2026 pour le Tableau en direct (le widget les ignore).
+    id: o.id || "",
+    at: new Date(o.createdAt || 0).getTime() || 0,
+    resume: (o.items || []).map((it) => it.name || it.description || "").filter(Boolean).slice(0, 3).join(" · ").slice(0, 120),
+    express: /express|chrono/i.test(String(o.shippingMethod || "")),
   }));
 
   return Response.json({

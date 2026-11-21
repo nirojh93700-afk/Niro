@@ -63,7 +63,8 @@ export function Ico({ n, className = "ash-ico" }) {
 // `id` des sous-onglets = les identifiants d'avant (ongletsGestion.js, adresses /gestion/*).
 const SECTIONS = [
   { id: "accueil", t: "Aujourd'hui", ic: "home", tabs: [
-    { id: "accueil", t: "Aujourd'hui", href: "/gestion" } ] },
+    { id: "accueil", t: "Aujourd'hui", href: "/gestion" },
+    { id: "direct", t: "Tableau en direct", href: "/gestion/direct" } ] },
   { id: "commandes", t: "Commandes", ic: "orders", badge: "prep", tabs: [
     { id: "file", t: "File de production", href: "/gestion/commandes", badge: "prep" },
     { id: "commandes", t: "Fiches complètes", href: "/gestion/fiches", badge: "unread" },

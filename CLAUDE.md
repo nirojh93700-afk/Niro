@@ -1,3 +1,7 @@
+## ◉ TABLEAU EN DIRECT DANS GESTION — 21/11/2026 (gérant : le widget iPhone ne se met pas à jour assez souvent, « toutes les 30 secondes » → maquette https://claude.ai/artifact/NmsCXhyQMKq2ySSmRx4zQM → « applique »)
+- `/gestion/direct` (menu Aujourd'hui › « Tableau en direct » + pastille « En direct » sous « Bonjour » de l'accueil) : relit `/api/admin/widget` toutes les 30 s tant que la page est visible (pause écran caché, relecture au retour), bandeau doré + son (bouton, retenu `niv-direct-son`) à chaque nouvelle commande, « garder l'écran allumé », liens vers les fiches. Lecture seule. Le widget API a gagné `id`, `at`, `resume`, `express` dans `recent` (le widget Scriptable les ignore).
+- Un widget iPhone ne peut PAS se rafraîchir toutes les 30 s (iOS décide, 5 à 15 min). Script Scriptable corrigé envoyé le 21/11 (la ligne `ADMIN_KEY` était en commentaire).
+
 ## ⛔ VERRE À VIN : JAMAIS LE 47 cl DANS UN MAIL OU UN DEVIS SANS SA DEMANDE — 21/11/2026 (gérant, devis d'Harmonie Dubois : « la prochaine fois tu me mets pas 47 tant que je te demande pas »)
 - Une demande de verre à vin = la taille 36 cl seulement (prix, devis, mail). Le 47 cl n'apparaît que si le gérant ou la cliente le demande. Plus largement : ne rien ajouter qu'il n'a pas demandé.
 

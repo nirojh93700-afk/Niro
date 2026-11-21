@@ -277,7 +277,7 @@ export default function AccueilB({
   return (
     <div className="hb">
       <div className="hb-hero">
-        <div className="grow"><h1>Bonjour</h1><p>{dateFR}</p></div>
+        <div className="grow"><h1>Bonjour</h1><p>{dateFR}</p><a className="hb-direct" href="/gestion/direct"><i aria-hidden="true" />En direct</a></div>
         <div className="hb-nums" aria-label="En un coup d'œil">
           <a href="/gestion/commandes" className={express.length ? "bad" : ""}><i>{express.length}</i> Express</a>
           <a href="/gestion/commandes"><i>{actifs.length}</i> à traiter</a>
