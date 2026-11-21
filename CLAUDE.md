@@ -1,6 +1,10 @@
 ## 🔎 PHOTO D'UN CLIENT = COMPTER CHAQUE ÉLÉMENT AVANT TOUT PRIX — 21/11/2026 (gérant, verres de Jorge Costa : « je t'ai déjà dit, analyse la photo avant de proposer un prix… y a combien de noms, combien de titres ») — REMPLACE la correction du 26/10 (« le visuel = une image »)
 - Avant de donner un prix sur une photo / un visuel de client : la REGARDER et écrire la liste, verre par verre : images (gratuites, 1re gravure), titres, prénoms, phrases, dates. Chaque titre, chaque prénom, chaque phrase, chaque date = un texte payant au tarif de la fiche.
-- Jorge Costa (costa.cmj@outlook.fr, 21/11) : par verre 1 image (poings) + 1 titre + 2 prénoms + 1 phrase = 4 textes → lot de 2 whisky 30 cl 37,90 + 12 + 5 = 54,90 €.
+- Les deux mains / un dessin fait de plusieurs morceaux = UNE image (gérant, 21/11).
+- **VERRE SUIVANT TRÈS CHARGÉ = 8 € (gérant, 21/11 : « tous ces éléments, c'est huit euros au deuxième verre ; quand il y a trop d'éléments c'est plus cher »)** :
+  autres verres : 1 élément +3 €, 2 éléments +5 €, beaucoup d'éléments (ex. image + titre + 2 prénoms + phrase) **+8 €**. Seuil exact (à partir de combien) : à lui faire préciser.
+  Pour l'instant dans les DEVIS / mails seulement ; le calcul du site (`prixVerres.js`) n'est PAS changé tant qu'il ne le demande pas.
+- Jorge Costa (costa.cmj@outlook.fr, 21/11) : par verre 1 image (poings) + 1 titre + 2 prénoms + 1 phrase = 4 textes → lot de 2 whisky 30 cl 37,90 + 12 (verre 1) + 8 (verre 2) = **57,90 €**.
 
 ## 🔴 MAUVAIS MAIL ENVOYÉ À LÉONIE DAVID-CRUZ (0KZ5D4AO) — 20/11/2026, 16 h 01
 - À son « envoie », le message a été envoyé depuis un fichier `leonie.json` resté du 17/11 : la commande qui devait le réécrire avait été bloquée par le verrou d'envoi, et l'ancien fichier est parti tel quel (le texte du 17/11, Universal Pare-Brise). ⛔ **Avant tout envoi : un fichier de message NEUF (nom daté), écrit et RELU dans la même commande que l'envoi ; jamais un fichier qui existait déjà.**
