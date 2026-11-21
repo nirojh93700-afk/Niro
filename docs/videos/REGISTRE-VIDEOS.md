@@ -1177,3 +1177,33 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaunoel #cadeaupersonnalise #noel2026 #ideecadeau
+
+## Vidéo 72 — Calendrier de l'Avent (21/11/2026)
+- Demande : « Mets-moi des vidéos, mais pas la déco de maison et gourde » → ni gobelet, ni déco de maison.
+- Style NEUF « calendrier de l'Avent » : 24 portes numérotées sur fond vert sapin ; une porte avance au centre, s'ouvre comme un volet
+  et dévoile une pièce GRAVÉE (photo entière sur fond flou), nom + phrase dans un cartouche, puis elle retourne à sa place avec sa photo.
+  Fin crème et or « Gravé à leur prénom dans notre atelier · Commandez tôt pour Noël ». Neige légère.
+- 39,2 s, sans son, aucun prix, 1080 × 1920 et 720 × 1280. À supprimer le 23/11.
+- Script : `python3 tools/video/calendrier_avent_72.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 72 — Le calendrier de l'Avent de l'atelier** (Cristal photo 3D, Verre à vin, Collier cœur gravé, Carnet gravé, Couverts enfant, Cristal déjà gravé, Marque-page en bois, Puzzle photo gravé, Décoration de Noël en cristal, Verre à whisky)
+> 🎄 Chaque jour, une porte s'ouvre sur une idée gravée ✨
+> Un prénom, une photo, une date : des cadeaux uniques, faits dans notre atelier 💛
+> 👉 nivcreation.fr
+
+#nivcreation #calendrierdelavent #cadeaupersonnalise #cadeaunoel #ideecadeau
+
+## Vidéo 73 — Vitre givrée (21/11/2026)
+- Même demande (ni gobelet, ni déco de maison).
+- Style NEUF « vitre givrée » : une fenêtre d'hiver en bois avec guirlande d'ampoules ; un doigt essuie le givre en larges traits et
+  dévoile derrière la vitre une pièce GRAVÉE, puis le givre revient pour la suivante. Fin : « nivcreation.fr » et « Joyeux Noël »
+  écrits du doigt dans le givre, sur une nuit dorée.
+- 44,4 s, sans son, aucun prix, 1080 × 1920 et 720 × 1280. À supprimer le 23/11.
+- Script : `python3 tools/video/vitre_givree_73.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 73 — Derrière la vitre** (Cristal photo 3D, Verre tumbler, Médaillon cœur ouvrable, Flûte à champagne, Cristal déjà gravé, Carnet gravé, Puzzle en bois, Marque-page en bois, Bracelet gravé, Décoration de Noël en cristal, Porte-clés cristal lumineux)
+> ❄️ Derrière la vitre givrée, des cadeaux gravés à leur prénom ✨
+> Cristal, verres, bijoux, carnets : tout est fait à la commande dans notre atelier 🎁💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gravure #cadeaunoel #ideecadeau
