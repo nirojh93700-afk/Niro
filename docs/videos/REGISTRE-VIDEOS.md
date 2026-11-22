@@ -1207,3 +1207,23 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #gravure #cadeaunoel #ideecadeau
+
+## Vidéo 74 — Vos mots dans votre langue, style « passeport » (22/11/2026)
+- Demande : « Fais-moi une vidéo pour les produits avec les langues ».
+- Style NEUF « passeport » : une couverture de cuir encre et or s'ouvre ; sur chaque page de papier guilloché, le mot en français
+  s'écrit à la main, un tampon de la langue (nom français + nom dans la langue) s'abat sur la page, le mot GRAVÉ apparaît en or
+  dans sa langue et la photo du produit arrive en polaroïd scotché ; les pages tournent. Puis « Choisissez votre langue » avec
+  tous les tampons, et la fin « Vous écrivez en français, nous traduisons, vous relisez, nous gravons. » + nivcreation.fr + tampon
+  « Gravé en France ». Photos = aperçus du SITE (next start local, texte tapé dans la fiche, capture de .gallery-main) + plaque
+  tamoule de la vidéo 48. Pièces : vin أحبك (arabe), carafe Papà (italien), cocktail 新年快乐 (chinois), whisky Obrigado (portugais),
+  flûte מזל טוב (hébreu), tumbler Te quiero (espagnol), plaque acier அம்மா (tamoul), vin 47 cl My love (anglais), flûte Prost!
+  (allemand), whisky அப்பா (tamoul).
+- 43,8 s, sans son, aucun prix, aucun nombre, 1080 × 1920 et 720 × 1280. À supprimer le 24/11.
+- Script : `python3 tools/video/passeport_74.py <captures> <polices> <sortie> [--apercu]`.
+
+**Vidéo 74 — Vos mots dans votre langue** (Verre à vin, Carafe à whisky, Verre à cocktail, Verre à whisky, Flûte à champagne, Verre tumbler en cristal, Collier plaque acier)
+> ✨ Vous écrivez en français, nous gravons dans votre langue 💛
+> Arabe, tamoul, chinois, hébreu, espagnol, italien, portugais, allemand, anglais… sur un verre, une carafe ou un bijou 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gravure #multilingue #ideecadeau
