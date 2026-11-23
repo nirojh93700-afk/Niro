@@ -2994,6 +2994,8 @@ export async function getSettings(fresh = false) {
     notifications: { resumeMatin: false, heure: "07:30", joursOff: [], ...(s.notifications || {}) },
     // ⏰ Programmations (08/11/2026) : changements à une date (prix, fête, code, visibilité, bandeau). Liste.
     programmations: Array.isArray(s.programmations) ? s.programmations : [],
+    // 🏷️ Étiquettes (23/11/2026) : adresse de RETOUR de l'atelier (étiquette à glisser dans un colis).
+    etiquettes: { retour: typeof s.etiquettes?.retour === "string" ? s.etiquettes.retour : "" },
     // Point relais (Boxtal). La CLÉ SECRÈTE n'est JAMAIS renvoyée (seulement
     // hasSecret = true/false). Lecture serveur via getBoxtalCreds().
     boxtal: {
