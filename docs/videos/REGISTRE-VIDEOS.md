@@ -1220,8 +1220,10 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
   (allemand), whisky அப்பா (tamoul).
 - 43,8 s, sans son, aucun prix, aucun nombre, 1080 × 1920 et 720 × 1280. À supprimer le 24/11.
 - Script : `python3 tools/video/passeport_74.py <captures> <polices> <sortie> [--apercu]`.
+- **Refaite le 23/11/2026 (74b)** : gérant : « tu changes juste l'arabe, tu mets pas sur les verres d'alcool… pas verre de vin ni un verre de champagne ». ⛔ L'arabe n'est plus sur le verre à vin : أحبك gravé sur le GRAND TUMBLER 39 cl (verre haut, à eau), capture du site (`c-tumbler39-ar.png`). Le reste est identique. Fichiers `docs/videos/74b-langues-passeport-*.mp4`, 43,8 s. À supprimer le 25/11.
+  ⛔ Règle : dans une vidéo, l'arabe ne se grave jamais sur un verre à vin, une flûte ni un verre d'alcool.
 
-**Vidéo 74 — Vos mots dans votre langue** (Verre à vin, Carafe à whisky, Verre à cocktail, Verre à whisky, Flûte à champagne, Verre tumbler en cristal, Collier plaque acier)
+**Vidéo 74 — Vos mots dans votre langue** (Grand verre tumbler, Verre à vin, Carafe à whisky, Verre à cocktail, Verre à whisky, Flûte à champagne, Verre tumbler en cristal, Collier plaque acier)
 > ✨ Vous écrivez en français, nous gravons dans votre langue 💛
 > Arabe, tamoul, chinois, hébreu, espagnol, italien, portugais, allemand, anglais… sur un verre, une carafe ou un bijou 🎁
 > 👉 nivcreation.fr

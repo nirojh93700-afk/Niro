@@ -5,7 +5,7 @@
 # (aperçu du SITE, texte tapé dans la fiche) arrive en polaroïd. Puis les tampons de toutes les langues, et la fin.
 # ⛔ Aucun prix, aucun nombre de produits ni de langues. Sans son, 1080 × 1920.
 # Usage : python3 tools/video/passeport_74.py <dossier captures> <dossier polices> <sortie> [--apercu]
-#   captures : c-vin-ar.png, c-carafe-it.png, c-cocktail-zh.png, c-whisky-pt.png, c-flute-he.png, c-tumbler-es.png,
+#   captures : c-tumbler39-ar.png (arabe : jamais sur un verre à vin / flûte, gérant 23/11), c-carafe-it.png, c-cocktail-zh.png, c-whisky-pt.png, c-flute-he.png, c-tumbler-es.png,
 #              plaque-ta.jpg, c-vin47-en.png, c-flute-de.png, c-whisky-ta.png (captures .gallery-main de next start local)
 import os, sys, math, random, subprocess
 import numpy as np
@@ -46,7 +46,7 @@ LANGUES = {  # nom français, nom dans la langue, couleur d'encre du tampon
     "de": ("ALLEMAND", "Deutsch", (60, 60, 60)), "fr": ("FRANÇAIS", "Français", (30, 64, 150)),
 }
 PIECES = [  # capture, langue, ce que la cliente écrit, ce qui est gravé, produit
-    ("c-vin-ar.png", "ar", "Je t'aime", "أحبك", "Verre à vin gravé"),
+    ("c-tumbler39-ar.png", "ar", "Je t'aime", "أحبك", "Grand verre tumbler 39 cl"),
     ("c-carafe-it.png", "it", "Papa", "Papà", "Carafe à whisky gravée"),
     ("c-cocktail-zh.png", "zh", "Bonne année", "新年快乐", "Verre à cocktail gravé"),
     ("c-whisky-pt.png", "pt", "Merci", "Obrigado", "Verre à whisky gravé"),
