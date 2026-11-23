@@ -15,7 +15,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import PageHead from "@/components/admin/PageHead";
 import { chargerAvecCache } from "@/components/admin/adminCache";
-import { FEUILLE, NB_CASES, positions, modeEnvoi, adresseCollee, travaux, placer, contenuEtiquette, feuilleHtml, feuillePdf, EXPEDITEUR_DEFAUT, MODELES, modeleValide, cssModeles, resserrerEtiquettes } from "@/lib/etiquettes";
+import { FEUILLE, NB_CASES, positions, modeEnvoi, adresseCollee, travaux, etiquettesRetour, placer, contenuEtiquette, feuilleHtml, feuillePdf, EXPEDITEUR_DEFAUT, MODELES, modeleValide, cssModeles, resserrerEtiquettes } from "@/lib/etiquettes";
 import { nomAffiche } from "@/lib/nomLivraison";
 
 const CLE = "niv-etiquettes";
@@ -43,6 +43,12 @@ export default function EtiquettesPage() {
   const [expTxt, setExpTxt] = useState(EXPEDITEUR_DEFAUT);
   const [avecRef, setAvecRef] = useState(false); // n° de commande sur l'étiquette : seulement si demandé
   const [modele, setModele] = useState("actuel"); // style de l'étiquette (14/10/2026), retenu sur l'appareil
+  // Étiquette de RETOUR (23/11/2026) : l'adresse de retour de l'atelier en « Destinataire », à glisser
+  // dans le colis (avec un timbre) quand une cliente doit renvoyer un article. Gardée dans les réglages.
+  const [retourTxt, setRetourTxt] = useState("");
+  const [retourSauve, setRetourSauve] = useState("");
+  const [nbRetour, setNbRetour] = useState(0);
+  const [retourMsg, setRetourMsg] = useState("");
   const papier = useRef(null);
   const [attente, setAttente] = useState(null); // cases imprimées, en attente du « oui, c'est sorti »
   const [pret, setPret] = useState(false);
@@ -73,6 +79,7 @@ export default function EtiquettesPage() {
     const d = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(d.error || "Erreur");
     setManuelles(versListe(d.adresses));
+    if (typeof d.retour === "string") { setRetourTxt((t) => t || d.retour); setRetourSauve(d.retour); }
   }, []);
 
   const load = useCallback(async (k) => {
@@ -91,6 +98,7 @@ export default function EtiquettesPage() {
         if (plusieurs.length) { setCoches(plusieurs.map((x) => x.id)); if (plusieurs.some((x) => !A_EXPEDIER.includes(x.status || "a_preparer"))) setToutes(true); }
         const o = liste.find((x) => (id && x.id === id) || (ref && String(x.ref).toUpperCase() === ref.toUpperCase()));
         if (o) { setCoches([o.id]); if (!A_EXPEDIER.includes(o.status || "a_preparer")) setToutes(true); }
+        if (p.get("retour") === "1") setNbRetour(1);
       } catch { /* ignore */ }
       try {
         const p = new URLSearchParams(window.location.search), txt = p.get("adresse");
@@ -113,7 +121,7 @@ export default function EtiquettesPage() {
   }, [orders, toutes, coches]);
 
   const choisies = [...liste.filter((o) => coches.includes(o.id)), ...manuelles];
-  const jobs = useMemo(() => travaux(choisies, mode, avecRef), [choisies, mode, avecRef]);
+  const jobs = useMemo(() => [...travaux(choisies, mode, avecRef), ...etiquettesRetour(nbRetour, retourTxt)], [choisies, mode, avecRef, nbRetour, retourTxt]);
   const { places, manque, libresApres } = useMemo(() => placer(jobs, used), [jobs, used]);
   const parCase = useMemo(() => Object.fromEntries(places.map((p) => [p.case, p])), [places]);
   const pos = useMemo(() => positions(), []);
@@ -286,6 +294,31 @@ export default function EtiquettesPage() {
             <label className="etq-toggle" style={{ marginTop: 12 }}><input type="checkbox" checked={avecRef} onChange={(e) => setAvecRef(e.target.checked)} /> Ajouter le numéro de commande (en petit, en bas de l&apos;étiquette)</label>
             <label className="etq-f" htmlFor="etq-exp-txt">Adresse de l&apos;expéditeur (gardée pour la prochaine fois)</label>
             <textarea id="etq-exp-txt" value={expTxt} onChange={(e) => setExpTxt(e.target.value)} rows={4} />
+          </section>
+
+          <section className="etq-card" aria-labelledby="etq-tr">
+            <h2 id="etq-tr"><span className="n">↩</span>Étiquette de retour</h2>
+            <p className="sub">Quand un client doit vous renvoyer un article : une étiquette à votre adresse, à glisser dans le colis avec un timbre. Il n&apos;a plus qu&apos;à la coller sur son enveloppe.</p>
+            <label className="etq-f" htmlFor="etq-retour-txt">Adresse de retour (gardée dans Gestion, la même sur tous vos appareils)</label>
+            <textarea id="etq-retour-txt" value={retourTxt} onChange={(e) => { setRetourTxt(e.target.value); setRetourMsg(""); }} rows={4} placeholder={"Nom\nRue\nCode postal VILLE"} />
+            <div className="etq-retour-l">
+              <button type="button" className="btn btn-outline" disabled={!retourTxt.trim() || retourTxt.trim() === retourSauve.trim()}
+                onClick={async () => {
+                  try {
+                    const r = await fetch("/api/admin/etiquettes-adresses", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": key }, body: JSON.stringify({ action: "retour", texte: retourTxt }) });
+                    const d = await r.json().catch(() => ({}));
+                    if (!r.ok) throw new Error(d.error || "Erreur");
+                    setRetourSauve(d.retour || ""); setRetourTxt(d.retour || ""); setRetourMsg("Adresse enregistrée ✓");
+                  } catch { setRetourMsg("L'adresse n'a pas pu être enregistrée. Réessayez."); }
+                }}>Enregistrer l&apos;adresse</button>
+              {retourMsg ? <span className="sub" role="status">{retourMsg}</span> : null}
+            </div>
+            <div className="etq-retour-l">
+              <span>Étiquettes de retour à imprimer :</span>
+              <button type="button" className="btn btn-outline" aria-label="Une de moins" disabled={!nbRetour} onClick={() => setNbRetour((n) => Math.max(0, n - 1))}>−</button>
+              <b aria-live="polite">{nbRetour}</b>
+              <button type="button" className="btn btn-outline" aria-label="Une de plus" disabled={!retourTxt.trim() || nbRetour >= NB_CASES} onClick={() => setNbRetour((n) => Math.min(NB_CASES, n + 1))}>+</button>
+            </div>
           </section>
 
           <section className="etq-card" aria-labelledby="etq-tm">

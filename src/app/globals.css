@@ -6541,3 +6541,7 @@ html.flot-cache:not(.flot-garde) .flot-btn{transform:translateY(140%);opacity:0;
 .svgv-l{display:flex;flex-wrap:wrap;gap:12px}
 .svgv-c{display:flex;flex-direction:column;gap:6px;align-items:flex-start;font-size:.82rem}
 .svgv-c img{width:160px;height:120px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:8px}
+
+/* Étiquettes d'adresse : bloc « Étiquette de retour » (23/11/2026) */
+.etq-retour-l{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:10px}
+.etq-retour-l b{min-width:1.5em;text-align:center;font-variant-numeric:tabular-nums}

@@ -88,6 +88,15 @@ export function travaux(orders, mode, avecRef = false) {
   return out;
 }
 
+// Étiquette de RETOUR (23/11/2026, gérant : bracelet envoyé par erreur, renvoyé avec un timbre) :
+// l'adresse de retour de l'atelier écrite en « Destinataire », à glisser dans le colis pour que le
+// client la colle sur son enveloppe. L'adresse est gardée dans les réglages de Gestion, jamais dans le code.
+export function etiquettesRetour(n, txt) {
+  const nb = Math.max(0, Math.min(NB_CASES, Math.floor(Number(n) || 0)));
+  if (!nb || !lignesExpediteur(txt).length) return [];
+  return Array.from({ length: nb }, () => ({ type: "exp", titre: "Destinataire", txt, ref: false, retour: true }));
+}
+
 // Cases où chaque étiquette tombera : les premières cases LIBRES, dans l'ordre.
 export function placer(jobs, used) {
   const libres = [];
@@ -121,8 +130,8 @@ function pied(p, expTxt, logo) {
 export function contenuEtiquette(p, expTxt, logo, modele = "actuel") {
   if (modeleValide(modele) !== "actuel") return contenuStyle(p, expTxt, logo, modele);
   if (p.type === "exp") {
-    const l = lignesExpediteur(expTxt);
-    return `<div class="to">Expéditeur</div>${l.map((x, i) => `<div class="${i ? "l" : "nm"}">${esc(x)}</div>`).join("")}${pied(p, expTxt, logo)}`;
+    const l = lignesExpediteur(p.txt ?? expTxt);
+    return `<div class="to">${esc(p.titre || "Expéditeur")}</div>${l.map((x, i) => `<div class="${i ? "l" : "nm"}">${esc(x)}</div>`).join("")}${pied(p, expTxt, logo)}`;
   }
   const a = p.ad;
   return `<div class="to">Destinataire</div><div class="nm">${esc(a.nom)}</div>${a.lignes.map((x) => `<div class="l">${esc(x)}</div>`).join("")}`
@@ -183,8 +192,8 @@ const SERIF = `var(--font-display, Georgia), Georgia, "Times New Roman", serif`;
 
 function contenuStyle(p, expTxt, logo, m) {
   const isExp = p.type === "exp";
-  const to = isExp ? "Expéditeur" : "Destinataire";
-  const expL = lignesExpediteur(expTxt);
+  const to = isExp ? (p.titre || "Expéditeur") : "Destinataire";
+  const expL = lignesExpediteur(isExp ? (p.txt ?? expTxt) : expTxt);
   const adr = isExp
     ? expL.map((x, i) => `<div class="${!i ? "nm" : i === expL.length - 1 ? "cp" : "l"}">${esc(x)}</div>`).join("")
     : `<div class="nm">${esc(p.ad.nom)}</div>${p.ad.lignes.map((x) => `<div class="l">${esc(x)}</div>`).join("")}`
@@ -318,11 +327,11 @@ export function feuillePdf(JsPDF, places, expTxt, logo, modele = "actuel") {
   for (const p of places) {
     const { x, y } = pos[p.case];
     if (m !== "actuel") { dessinerStyle(doc, p, x, y, expTxt, logo, m); continue; }
-    const exp = lignesExpediteur(expTxt).map(textePdf);
+    const exp = lignesExpediteur(p.type === "exp" ? (p.txt ?? expTxt) : expTxt).map(textePdf);
     // Blocs du haut (ce qui se lit) et du bas (expéditeur ou n° de commande), en points.
     const haut = [], bas = [];
     if (p.type === "exp") {
-      haut.push({ t: "EXPÉDITEUR", s: 6, g: 85, fixe: true });
+      haut.push({ t: textePdf((p.titre || "Expéditeur").toUpperCase()), s: 6, g: 85, fixe: true });
       exp.forEach((l, i) => haut.push({ t: l, s: (i ? 9 : 10) * AGRANDI, b: !i }));
     } else {
       const a = p.ad;
@@ -387,7 +396,7 @@ function texteEspace(doc, t, x, y, esp, droite) {
 
 function dessinerStyle(doc, p, x, y, expTxt, logo, m) {
   const W = FEUILLE.w, isExp = p.type === "exp";
-  const expL = lignesExpediteur(expTxt).map(textePdf);
+  const expL = lignesExpediteur(isExp ? (p.txt ?? expTxt) : expTxt).map(textePdf);
   const P = m === "ecrin" ? { t: 3.1, s: 3.4, b: 2.4 } : m === "bandeau" ? { t: 3, s: 3.2, b: 1.4 } : { t: 3.2, s: 3.2, b: 2.4 };
   const x0 = x + P.s, L = W - 2 * P.s;
   // Ce qui se lit : nom (serif gras), lignes, CP + VILLE (gras).
@@ -438,7 +447,7 @@ function dessinerStyle(doc, p, x, y, expTxt, logo, m) {
   let cy = y + P.t + 4.6 * PT;
   const tx = m === "sobre" ? x0 + 3 : x0;
   doc.setFont("helvetica", "bold"); doc.setFontSize(4.6); doc.setTextColor(...RGB.or);
-  const tw = texteEspace(doc, isExp ? "EXPÉDITEUR" : "DESTINATAIRE", tx, cy, 0.26);
+  const tw = texteEspace(doc, isExp ? textePdf((p.titre || "Expéditeur").toUpperCase()) : "DESTINATAIRE", tx, cy, 0.26);
   if (m === "ecrin") { doc.setDrawColor(...RGB.clair); doc.setLineWidth(0.12); doc.line(tx + tw + 1, cy - 0.55, x0 + L, cy - 0.55); }
   cy += 4.6 * PT * 0.3 + (m === "bandeau" ? 0.8 : 0.9);
 
