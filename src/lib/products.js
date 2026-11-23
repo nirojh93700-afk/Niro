@@ -3075,6 +3075,12 @@ export const products = [
       { key: "face2", label: "Face 2", placeholder: "Ex. 14.02.2026", maxLength: 15, optional: true },
       { key: "face3", label: "Face 3", placeholder: "Ex. Toujours", maxLength: 15, optional: true },
       { key: "face4", label: "Face 4", placeholder: "Ex. Paul", maxLength: 15, optional: true },
+      // Sens des lettres (23/11/2026, Christiane Cornu : sans ce choix, l'aperçu 3D écrivait toujours du bas vers le haut ;
+      // gérant : « ils peuvent choisir de haut en bas ou du bas en haut »). Choisi d'office : de haut en bas.
+      { key: "sens", type: "select", label: "Sens des lettres", optional: true, default: "down", options: [
+        { value: "down", label: "Du haut vers le bas" },
+        { value: "up", label: "Du bas vers le haut" },
+      ] },
       { key: "police", type: "font", label: "Police de gravure", optional: true },
     ],
     images: [
