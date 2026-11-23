@@ -2408,6 +2408,10 @@
   texte au fond : face + fond et texte oubliés, −7 €), DEV-1519 (Julien, prénom + phrase + date : un texte oublié, −3 €), Nicky (−2 €) ;
   DEV-1526 (Kim, flûtes) juste ; DEV-1506 (Ludovic, 47 cl sur mesure) fait avant que le 47 cl soit en boutique.
 
+## ❓ CRISTAL : FOND (ARRIÈRE-PLAN) GRAVÉ OU NON = LE DEMANDER AU GÉRANT AVANT D'ÉCRIRE À LA CLIENTE (23/11/2026, Lucas Rual : « la prochaine fois tu me demandes si on peut graver le fond ou pas l'arrière-plan »)
+- Avant tout mail ou devis qui parle du fond d'une photo de cristal, DEMANDER au gérant (fond retiré ou fond gravé). Ne jamais trancher seul avec la règle du 07/11 ci-dessous.
+- Par défaut le fond est retiré, mais il peut se graver si la cliente y tient, avec un aperçu envoyé avant la gravure (gérant, 23/11).
+
 ## 💎 CRISTAL PHOTO 3D : SEULES LES PERSONNES SONT GRAVÉES, LE FOND EST TOUJOURS SUPPRIMÉ (gérant, 07/11/2026, rappel ferme : « je t'ai déjà dit… dans le cristal c'est juste les personnes, y a pas de fond, on supprime le fond »)
 - Dans un cristal photo, le fond est supprimé AUTOMATIQUEMENT (ce n'est pas l'atelier qui le retire : ne jamais écrire « nous supprimons le fond ») ;
   seules les personnes (ou l'animal / le sujet) sont gravées, le décor n'est pas gravé. Un fond chargé (sapin, guirlandes,
