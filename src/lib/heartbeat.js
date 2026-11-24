@@ -13,6 +13,7 @@ import { runRangementMails, heureDuRangement } from "@/lib/rangementMails";
 import { runEnvoisApresLivraison } from "@/lib/envoisApresLivraison";
 import { runProgrammations } from "@/lib/programmations";
 import { runResumeMatin } from "@/lib/resumeMatin";
+import { runIndexNow } from "@/lib/indexNow";
 import { runGardien } from "@/lib/gardien";
 
 const MIN = 60000;
@@ -106,5 +107,9 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("gardien", 15 * MIN)) { const r = await runGardien(); out.gardien = r.checks.filter((x) => x.etat !== "ok").map((x) => x.id); }
   } catch (e) { out.gardienError = e.message; }
+  // IndexNow (24/11/2026) : signale à Bing les pages nouvelles, modifiées ou retirées, une fois par heure.
+  try {
+    if (await claimJob("indexNow", 60 * MIN)) out.indexNow = await runIndexNow();
+  } catch (e) { out.indexNowError = e.message; }
   return out;
 }

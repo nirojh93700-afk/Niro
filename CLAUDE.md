@@ -1,3 +1,7 @@
+## 📡 BING WEBMASTER TOOLS + INDEXNOW — 24/11/2026 (gérant : « branche IndexNow »)
+- Search Console : contact.nivcreation@gmail.com ajouté PROPRIÉTAIRE (le site était sur le compte perso). Bing Webmaster Tools : site importé depuis Search Console avec le compte du site, plan du site soumis (167 adresses, 0 erreur).
+- IndexNow : `src/lib/indexNow.js` (clé publique `7f8fc88e140177843ad7d2b9734ec706`, fichier `public/<clé>.txt`), lancé par le battement toutes les heures (`claimJob("indexNow", 60 min)`) : compare le plan du site + l'empreinte de chaque fiche (nom, prix, photo, badge) au passage précédent (`jobNotes.indexNow`) et envoie à api.indexnow.org les adresses nouvelles / modifiées / retirées ; le 1er passage envoie tout. L'état n'avance que si l'envoi est accepté (200 / 202). Seulement sur https://nivcreation.fr.
+
 ## 🏛️ PAGE À PROPOS ENRICHIE — ✅ EN LIGNE LE 24/11/2026 (« applique », maquette https://claude.ai/artifact/Nr46B2aRXE5QYHvXTSUNHk)
 - `src/app/a-propos/page.jsx` (CSS `.ap2` fin de globals.css, générateur de la maquette `tools/maquettes/a-propos.py`) : héros + 3 points, six familles (liens), 4 étapes, matières, garanties (note des avis LUE EN DIRECT comme /avis, seuil de livraison et délai lus dans les réglages), 5 questions (FAQPage), identité (SIRET, contact) + données AboutPage / Organization avec les 2 politiques de retour. ⛔ Aucun nom de personne, atelier « en France ». Le texte « À propos » de Gestion (`settings.apropos`), s'il existe, s'affiche sous le héros. Photos de l'atelier : à fournir par le gérant (pas encore sur la page).
 
