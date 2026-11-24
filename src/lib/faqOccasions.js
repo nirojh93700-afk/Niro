@@ -547,6 +547,56 @@ const FAQ = {
       ],
     },
   ],
+  "saint-nicolas": [
+    {
+      q: "Quand tombe la Saint-Nicolas ?",
+      statique: true,
+      a: ["La Saint-Nicolas tombe chaque année le 6 décembre : la prochaine est le ", { fete: "saint-nicolas" }, ". Elle est surtout fêtée dans le Nord et l'Est de la France, en Belgique et au Luxembourg. Chaque pièce est gravée à la commande : pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Quel cadeau personnalisé offrir à un enfant pour la Saint-Nicolas ?",
+      a: [
+        { liste: [
+          { s: "puzzle-foret", l: "le puzzle en bois au prénom de l'enfant" },
+          { s: "couverts-enfants-personnalises", l: "les couverts enfant au prénom" },
+          { s: "plaque-de-porte-enfant", l: "la plaque de porte au prénom" },
+          { s: "veilleuse-arbre-de-vie-prenom", l: "la veilleuse arbre de vie au prénom" },
+        ] },
+        " se gravent au prénom de l'enfant.",
+      ],
+    },
+    {
+      q: "Livrez-vous en Belgique et au Luxembourg ?",
+      statique: true,
+      a: ["Oui. Choisissez votre pays dans le panier : le prix de la livraison s'affiche avant le paiement."],
+    },
+  ],
+  "nouvel-an": [
+    {
+      q: "Quel cadeau personnalisé offrir pour le Nouvel An ?",
+      a: [
+        { liste: [
+          { s: "flute-a-champagne-gravee", l: "les flûtes à champagne gravées" },
+          { s: "verre-a-cocktail-grave", l: "les verres à cocktail gravés" },
+          { s: "carafe-a-whisky-gravee", l: "la carafe à whisky gravée" },
+          { s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D" },
+        ] },
+        " se gravent de vos prénoms, de la nouvelle année ou d'une photo souvenir.",
+      ],
+    },
+    {
+      q: "Que faire graver pour le Nouvel An ?",
+      statique: true,
+      a: ["« Bonne année » et l'année qui commence, vos prénoms, la date du réveillon ou un vœu. Le prochain jour de l'An tombe le ", { fete: "nouvel-an" }, " : chaque pièce est gravée à la commande, pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Un souvenir de l'année écoulée ?",
+      a: [
+        { liste: [{ s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D" }], apres: " garde votre plus belle photo de l'année, gravée en relief." },
+        { liste: [{ s: "puzzle-photo-grave", l: "le puzzle photo en bois" }], avant: " ", apres: " en fait un jeu à reconstituer en famille." },
+      ],
+    },
+  ],
   "fete-des-peres": [
     {
       q: "Quand tombe la Fête des pères ?",
@@ -597,9 +647,11 @@ const premierDimanche = (an, mois) => { const d = new Date(Date.UTC(an, mois, 1)
 function prochaineDate(k) {
   const auj = new Date(); auj.setUTCHours(0, 0, 0, 0);
   if (DATES_FIXES[k]) return DATES_FIXES[k].map((x) => new Date(`${x}T00:00:00Z`)).find((d) => d >= auj) || null;
-  if (k === "halloween") { // 31 octobre
-    let d = new Date(Date.UTC(auj.getUTCFullYear(), 9, 31));
-    if (d < auj) d = new Date(Date.UTC(auj.getUTCFullYear() + 1, 9, 31));
+  const FIXES = { halloween: [9, 31], "saint-nicolas": [11, 6], "nouvel-an": [0, 1] }; // [mois 0-11, jour]
+  if (FIXES[k]) {
+    const [m, j] = FIXES[k];
+    let d = new Date(Date.UTC(auj.getUTCFullYear(), m, j));
+    if (d < auj) d = new Date(Date.UTC(auj.getUTCFullYear() + 1, m, j));
     return d;
   }
   if (k === "grands-meres" || k === "grands-peres") {
@@ -613,7 +665,7 @@ function prochaineDate(k) {
 /** « dimanche 30 mai 2027 » : prochaine date de la fête, calculée ou tirée de la table vérifiée. null si inconnue. */
 function dateFete(k) {
   const d = prochaineDate(k);
-  return d ? `${JOURS_L[d.getUTCDay()]} ${d.getUTCDate()} ${MOIS_L[d.getUTCMonth()]} ${d.getUTCFullYear()}` : null;
+  return d ? `${JOURS_L[d.getUTCDay()]} ${d.getUTCDate() === 1 ? "1er" : d.getUTCDate()} ${MOIS_L[d.getUTCMonth()]} ${d.getUTCFullYear()}` : null;
 }
 
 function prixTexte(p) {
@@ -719,5 +771,7 @@ const TITRES = {
   "fetes-tamoules": "Vos questions pour Pongal et le Nouvel An tamoul",
   "grands-parents": "Vos questions pour les fêtes des grands-parents",
   halloween: "Vos questions pour Halloween",
+  "saint-nicolas": "Vos questions pour la Saint-Nicolas",
+  "nouvel-an": "Vos questions pour le Nouvel An",
 };
 export const titreFaq = (slug, label) => TITRES[slug] || `Vos questions : ${label}`;

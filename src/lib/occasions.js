@@ -181,6 +181,19 @@ OCCASIONS.push(
     "/produits/verre_a_whisky_exemple_face.jpg",
     ["verre-a-cocktail-grave", "gobelet-isotherme-40oz", "verre-a-whisky-grave", "verre-tumbler-cristal-grave", "carafe-a-whisky-gravee",
      "puzzle-foret", "puzzle-dinosaures", "plaque-de-porte-enfant"]),
+  // 24/11/2026 (gérant : « fais aussi pour la Saint-Nicolas et le Nouvel An »).
+  listeFermee("saint-nicolas", "Saint-Nicolas", "Cadeaux de Saint-Nicolas personnalisés, au prénom de l'enfant",
+    "Puzzles en bois, couverts, plaque de porte et veilleuse au prénom de l'enfant : des cadeaux de Saint-Nicolas personnalisés, gravés en France.",
+    "Le prénom de l'enfant gravé sur un cadeau qu'il gardera.",
+    "/produits/couverts_enfants_ex_prenom.jpg",
+    ["puzzle-foret", "puzzle-savane", "puzzle-dinosaures", "puzzle-vehicules-secours", "couverts-enfants-personnalises",
+     "plaque-de-porte-enfant", "veilleuse-arbre-de-vie-prenom", "puzzle-photo-grave", "marque-page-bois-pompon"]),
+  listeFermee("nouvel-an", "Nouvel An", "Cadeaux du Nouvel An personnalisés, gravés dans notre atelier",
+    "Flûtes à champagne, verres à cocktail, carafe et cristal photo 3D gravés de vos prénoms ou de la nouvelle année : des cadeaux du Nouvel An, gravés en France.",
+    "« Bonne année », vos prénoms, la date du réveillon : de quoi trinquer avec des verres qui vous ressemblent.",
+    "/produits/flute_set.jpg",
+    ["flute-a-champagne-gravee", "verre-a-cocktail-grave", "verre-a-vin-grave", "carafe-a-whisky-gravee", "verre-tumbler-cristal-grave",
+     "cristal-photo-3d-horizontal", "puzzle-photo-grave", "carnet-a5-grave"]),
 );
 
 export function getOccasion(slug) {
