@@ -168,6 +168,19 @@ OCCASIONS.push(
     "/produits/cristal-h-famille.jpg",
     ["collier-coeur-grave", "collier-3coeurs", "bracelet-femme-coeur", "bracelet-homme-identite-gourmette", "cristal-photo-3d-horizontal",
      "bougeoir-fleur-de-lotus", "verre-a-cocktail-grave", "couverts-enfants-personnalises"]),
+  // 24/11/2026 (gérant : « fais aussi pour la Fête des grands-parents et Halloween »).
+  listeFermee("grands-parents", "Grands-parents", "Cadeaux pour les grands-parents personnalisés, gravés dans notre atelier",
+    "Cristal photo 3D, puzzle photo, colliers aux prénoms des petits-enfants, verres gravés : des cadeaux pour les grands-parents, gravés à la commande en France.",
+    "Une photo de famille, les prénoms des petits-enfants : le cadeau qu'ils garderont.",
+    "/produits/cristal-h-famille.jpg",
+    ["cristal-photo-3d-horizontal", "cristal-photo-3d-vertical", "puzzle-photo-grave", "collier-3coeurs", "collier-medaillon-coeur-ouvrable",
+     "verre-a-whisky-grave", "carafe-a-whisky-gravee", "verre-a-vin-grave", "porte-cles-cuir-a-graver", "cle-usb-bois-coffret"]),
+  listeFermee("halloween", "Halloween", "Cadeaux d'Halloween personnalisés, gravés dans notre atelier",
+    "Verres à cocktail, gobelet isotherme et verres gravés d'un prénom ou de votre dessin d'Halloween : des cadeaux personnalisés, gravés en France.",
+    "Un prénom ou votre dessin d'Halloween, gravé pour la soirée.",
+    "/produits/verre_a_whisky_exemple_face.jpg",
+    ["verre-a-cocktail-grave", "gobelet-isotherme-40oz", "verre-a-whisky-grave", "verre-tumbler-cristal-grave", "carafe-a-whisky-gravee",
+     "puzzle-foret", "puzzle-dinosaures", "plaque-de-porte-enfant"]),
 );
 
 export function getOccasion(slug) {

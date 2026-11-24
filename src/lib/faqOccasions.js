@@ -488,6 +488,65 @@ const FAQ = {
       ],
     },
   ],
+  "grands-parents": [
+    {
+      q: "Quand ont lieu les fêtes des grands-parents ?",
+      statique: true,
+      a: ["En France, la Fête des grands-mères tombe le premier dimanche de mars (la prochaine : le ", { fete: "grands-meres" }, ") et la Fête des grands-pères le premier dimanche d'octobre (la prochaine : le ", { fete: "grands-peres" }, "). Voir nos idées pour la ", { lien: "/offrir/fete-des-grands-meres", l: "Fête des grands-mères" }, " et pour la ", { lien: "/offrir/fete-des-grands-peres", l: "Fête des grands-pères" }, "."],
+    },
+    {
+      q: "Quel cadeau offrir à ses deux grands-parents ?",
+      a: [
+        { liste: [
+          { s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D" },
+          { s: "puzzle-photo-grave", l: "le puzzle photo en bois" },
+          { s: "cle-usb-bois-coffret", l: "la clé USB en bois dans son coffret" },
+          { s: "verre-a-vin-grave", l: "les verres à vin gravés" },
+        ] },
+        " se gravent d'une photo de famille, des prénoms des petits-enfants ou d'une date.",
+      ],
+    },
+    {
+      q: "Comment graver les prénoms de tous les petits-enfants ?",
+      a: [
+        { liste: [{ s: "collier-3coeurs", l: "le collier 3 cœurs entrelacés" }], apres: " porte un prénom dans chaque cœur." },
+        { liste: [{ s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D horizontal" }], avant: " ", apres: " garde la photo de tous les petits-enfants réunis." },
+      ],
+    },
+  ],
+  halloween: [
+    {
+      q: "Quand tombe Halloween ?",
+      statique: true,
+      a: ["Halloween tombe chaque année le 31 octobre : le prochain est le ", { fete: "halloween" }, ". Chaque pièce est gravée à la commande : pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Quel cadeau personnalisé pour une soirée d'Halloween ?",
+      a: [
+        { liste: [
+          { s: "verre-a-cocktail-grave", l: "les verres à cocktail gravés" },
+          { s: "gobelet-isotherme-40oz", l: "le gobelet isotherme gravé" },
+          { s: "verre-a-whisky-grave", l: "le verre à whisky gravé" },
+        ] },
+        " se gravent d'un prénom, d'un dessin ou de votre image.",
+      ],
+    },
+    {
+      q: "Peut-on faire graver un dessin d'Halloween ?",
+      statique: true,
+      a: ["Oui. Sur les verres, la carafe, le gobelet et le cristal, envoyez votre dessin avec le bouton « Choisir une photo » sur la fiche du produit, ou décrivez votre idée avec « Faire une demande particulière »."],
+    },
+    {
+      q: "Un cadeau d'Halloween pour un enfant ?",
+      a: [
+        { liste: [
+          { s: "puzzle-foret", l: "le puzzle en bois au prénom de l'enfant" },
+          { s: "plaque-de-porte-enfant", l: "la plaque de porte au prénom" },
+        ] },
+        " se gravent au prénom de l'enfant.",
+      ],
+    },
+  ],
   "fete-des-peres": [
     {
       q: "Quand tombe la Fête des pères ?",
@@ -538,6 +597,11 @@ const premierDimanche = (an, mois) => { const d = new Date(Date.UTC(an, mois, 1)
 function prochaineDate(k) {
   const auj = new Date(); auj.setUTCHours(0, 0, 0, 0);
   if (DATES_FIXES[k]) return DATES_FIXES[k].map((x) => new Date(`${x}T00:00:00Z`)).find((d) => d >= auj) || null;
+  if (k === "halloween") { // 31 octobre
+    let d = new Date(Date.UTC(auj.getUTCFullYear(), 9, 31));
+    if (d < auj) d = new Date(Date.UTC(auj.getUTCFullYear() + 1, 9, 31));
+    return d;
+  }
   if (k === "grands-meres" || k === "grands-peres") {
     const mois = k === "grands-meres" ? 2 : 9; // 1er dimanche de mars / d'octobre
     let d = premierDimanche(auj.getUTCFullYear(), mois);
@@ -653,5 +717,7 @@ const TITRES = {
   hanoukka: "Vos questions pour Hanoukka",
   deepavali: "Vos questions pour Deepavali",
   "fetes-tamoules": "Vos questions pour Pongal et le Nouvel An tamoul",
+  "grands-parents": "Vos questions pour les fêtes des grands-parents",
+  halloween: "Vos questions pour Halloween",
 };
 export const titreFaq = (slug, label) => TITRES[slug] || `Vos questions : ${label}`;
