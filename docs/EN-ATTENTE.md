@@ -13,6 +13,10 @@
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
 
+## 📧 GOOGLE CLOUD : NIVEAUX D'ACCÈS GMAIL (mail du 24/11/2026, projet niv-creation) — À REVOIR EN JANVIER 2027
+- Niveau Standard gratuit (le site est très loin des limites) ; sans action, bascule automatique le 01/04/2027 sans frais. Ne JAMAIS choisir le niveau « Scaled » (payant).
+- 01/02/2027 : les « agents d'IA » doivent passer par les serveurs MCP de Workspace au lieu de l'API REST. Le site lit Gmail par son propre code (inbox.js, gmail.js) puis donne le texte à Claude : a priori usage classique, à revérifier en janvier 2027 (règles « is_agentic » sur le client OAuth, workspaceupdates.googleblog.com 2026/11) et adapter avant le 01/02 si besoin.
+
 ## 📱 APPLICATION « NIV ADMIN » + PHOTOS DU COLIS + FACTURES + PAGE COMPTABILITÉ — ✅ CONSTRUIT ET MIS EN LIGNE LE 15/11/2026 (« Applique », détail dans CLAUDE.md) — RESTE CÔTÉ GÉRANT : (✅ litiges cochés dans Stripe le 15/11 au soir, 6 événements) · activer Face ID sur l'iPhone (Réglages › Appareils connectés) · essayer sur le vrai téléphone ; ci-dessous la préparation d'origine (gérant : « tout ça… une page vraiment comptabilité comme les vrais… tu fais rien encore, tu fais quand je te dirai »)
 - Il a déjà l'icône « Niv Admin » sur son iPhone (plein écran, OK). Défaut : mot de passe redemandé à chaque ouverture (clé en sessionStorage).
 - À construire, SUR SON MOT, dans cet ordre conseillé :
