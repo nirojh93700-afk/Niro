@@ -1229,3 +1229,33 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #gravure #multilingue #ideecadeau
+
+## Vidéo 75 — Boule à neige (24/11/2026)
+- Demande : « Fais-moi 2 vidéos » (sans thème : produits variés, style neuf, Noël allumé).
+- Style NEUF « boule à neige » : sur une table en bois devant un feu de cheminée flou, une boule à neige se secoue ; la neige
+  tourbillonne, retombe et dévoile à l'intérieur une pièce GRAVÉE (photo entière sur fond flou d'elle-même) ; le nom s'écrit sur
+  le socle doré, la phrase en écriture anglaise dorée dessous. Fin : « Joyeux Noël · nivcreation.fr » dans la boule.
+- Sans son, aucun prix, aucun nombre, 1080 × 1920 et 720 × 1280. À supprimer le 26/11.
+- Script : `python3 tools/video/boule_neige_75.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 75 — Secouez la boule** (Cristal photo 3D, Verre à whisky, Collier 3 Cœurs, Couverts enfant, Plaque de naissance, Décoration de Noël en cristal, Puzzle photo gravé, Verre à vin, Carnet gravé)
+> ❄️ Secouez la boule… et découvrez nos cadeaux gravés à leur prénom ✨
+> Cristal, bijoux, verres, bois : chaque pièce est gravée à la commande dans notre atelier en France 🎁💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #gravure #cadeaunoel #ideecadeau
+
+## Vidéo 76 — Étiquettes cadeaux « Pour qui ? » (24/11/2026)
+- Même demande.
+- Style NEUF « étiquettes cadeaux » : papier kraft et ficelle ; une étiquette kraft descend, se balance et dit pour qui (Pour Maman,
+  Pour Papa, Pour bébé, Pour les mariés, Pour lui, Pour elle, Pour les enfants, Pour une lectrice, Pour toute la famille, Pour les
+  amoureux des animaux) ; la photo de la pièce GRAVÉE monte dessous, tenue par une pince en bois. Fin : étiquette « Pour vous ».
+- Sans son, aucun prix, aucun nombre, 1080 × 1920 et 720 × 1280. À supprimer le 26/11.
+- Script : `python3 tools/video/etiquettes_76.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 76 — Un cadeau pour chacun** (Collier cœur & plaques, Verre à whisky, Plaque de naissance, Numéro de table, Bracelet cordon à plaque, Gobelet isotherme, Couverts enfant, Marque-page en bois, Décoration de Noël en cristal, Porte-clés en cristal)
+> 🎁 Pour Maman, pour Papa, pour bébé, pour les mariés… un cadeau gravé pour chacun ✨
+> Bijoux, cristal, verres, bois : gravés à leur prénom dans notre atelier en France 💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #ideecadeaunoel #gravure #ideecadeau
