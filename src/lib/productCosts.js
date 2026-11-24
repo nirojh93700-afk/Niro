@@ -17,6 +17,7 @@ export const VARIANT_COSTS = {
   "plaque-noir": 2.44,
   "plaque-acier-noir": 2.44, // = « Argent Noir » chez Nihao (moitié argent, moitié noir)
   "plaque-dore": 2.55,
+  "plaque-argente-noir": 2.19, // modèle 33,5 × 19,7 bordure argent (NH10972119) 1,68 + chaîne argent 0,34, × 1,083
   "env-recto-argent": 1.71,
   "env-recto-dore": 1.96,
   "env-recto-rose": 1.96,
@@ -31,6 +32,12 @@ export const VARIANT_COSTS = {
   "bracelet-coeur-dore": 1.43,
   "bracelet-coeur-or-rose": 1.65,
   "collier-medaillon-pivotant-orrose": 2.93,
+  "collier-medaillon-pivotant-dore": 2.93,
+  "collier-medaillon-pivotant-argente": 2.15,
+  "collier-double-coeur-argente": 2.26,
+  "collier-coeur-grave-argente": 1.01,
+  // Collier Quatre Mots : bon NHFR610192403834 (1,29 €), livraison de ce bon inconnue → + 8 % comme les autres bons.
+  "collier-barre-verticale-argente": 1.39,
   // Commande xTool (livrée le 18/07/2026) : gobelet 40 oz 22,00 € pièce, carafe 740 ml 25,20 € pièce
   // (crème et bleu marine = même gobelet, même prix que le blanc et le rose de la facture).
   "gobelet-40oz-creme": 22.00,
