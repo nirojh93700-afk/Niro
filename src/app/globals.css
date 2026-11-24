@@ -6591,3 +6591,53 @@ html.flot-cache:not(.flot-garde) .flot-btn{transform:translateY(140%);opacity:0;
   .rt-ligne{grid-template-columns:minmax(0,1fr) auto}
   .rt-ligne .rt-qui,.rt-ligne .rt-motif{grid-column:1 / -1}
 }
+
+/* ===== Page À propos enrichie (24/11/2026, maquette Nr46B2aRXE5QYHvXTSUNHk) ===== */
+.ap2{--ap-gold:#c9a24b;--ap-goldt:#7c6120;--ap-ink:#1a1206;--ap-soft:#5d5142;--ap-sand:#f3e8d3;--ap-line:#e7dcc6;background:#fbf7ee;color:var(--ap-ink)}
+.ap2 .w{max-width:1120px;margin:0 auto;padding:0 20px}
+.ap2 section{padding:56px 0}
+.ap2 .ey{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ap-goldt);font-weight:600;margin:0 0 10px}
+.ap2 h1,.ap2 h2{font-family:var(--font-display),Georgia,serif;font-weight:600;line-height:1.15;margin:0 0 14px;text-wrap:balance}
+.ap2 h1{font-size:clamp(32px,5vw,52px)} .ap2 h2{font-size:clamp(26px,3.4vw,36px)}
+.ap2 h1 em,.ap2 h2 em{color:var(--ap-goldt)}
+.ap2 p{line-height:1.65;margin:0 0 14px} .ap2 .lead{font-size:18px;color:var(--ap-soft);max-width:62ch}
+.ap2 .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.ap2 .mos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ap2 .mos img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:16px;display:block}
+.ap2 .mos img:first-child{grid-row:span 2;aspect-ratio:auto;height:100%}
+.ap2 .faits{display:flex;flex-wrap:wrap;gap:8px 18px;margin:18px 0 22px;padding:0;list-style:none;font-size:14px;color:var(--ap-soft)}
+.ap2 .faits li::before{content:"✦ ";color:var(--ap-gold)}
+.ap2 .btn2{display:inline-block;background:linear-gradient(135deg,#d8b45e,#a98935);color:#1a1206;font-weight:600;padding:13px 22px;border-radius:999px;text-decoration:none}
+.ap2 .sand{background:var(--ap-sand)}
+.ap2 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.ap2 .uni{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 2px 14px rgba(26,18,6,.06)}
+.ap2 .uni img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.ap2 .uni .t{padding:14px 16px 16px} .ap2 .uni .t h3{font-size:17px;margin:0 0 6px} .ap2 .uni .t p{font-size:14px;color:var(--ap-soft);margin:0}
+.ap2 .uni .t span{display:inline-block;margin-top:10px;color:var(--ap-goldt);font-size:14px;font-weight:600}
+.ap2 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:s;margin-top:22px}
+.ap2 .step{border-top:2px solid var(--ap-gold);padding-top:14px}
+.ap2 .step b{display:block;font-family:var(--font-display),Georgia,serif;font-size:19px;margin-bottom:6px}
+.ap2 .step b::before{counter-increment:s;content:counter(s) ". ";color:var(--ap-goldt)}
+.ap2 .step p{font-size:15px;color:var(--ap-soft)}
+.ap2 .two{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.ap2 .mat{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
+.ap2 .mat li{background:#fff;border:1px solid var(--ap-line);border-radius:14px;padding:12px 16px;font-size:15px}
+.ap2 .conf{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px}
+.ap2 .conf div{background:#fff;border-radius:16px;padding:16px;font-size:14px;color:var(--ap-soft)}
+.ap2 .conf b{display:block;color:var(--ap-ink);font-size:16px;margin-bottom:4px}
+.ap2 .faq{max-width:780px;display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.ap2 details{background:#fff;border:1px solid var(--ap-line);border-radius:14px;padding:0 18px}
+.ap2 summary{cursor:pointer;list-style:none;padding:16px 28px 16px 0;font-weight:600;position:relative}
+.ap2 summary::-webkit-details-marker{display:none}
+.ap2 summary::after{content:"+";position:absolute;right:0;top:12px;font-size:22px;color:var(--ap-goldt)}
+.ap2 details[open] summary::after{content:"–"} .ap2 details p{margin:0 0 16px}
+.ap2 .ident{font-size:14px;color:var(--ap-soft);border-top:1px solid var(--ap-line);padding-top:18px;margin-top:28px}
+.ap2 .ident a{color:var(--ap-goldt)}
+@media (max-width:900px){.ap2 .hero,.ap2 .two{grid-template-columns:1fr}.ap2 .grid3{grid-template-columns:1fr 1fr}.ap2 .steps,.ap2 .conf{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.ap2 .grid3,.ap2 .steps,.ap2 .conf{grid-template-columns:1fr}.ap2 section{padding:40px 0}}
+.ap2 .uni{text-decoration:none;color:inherit;display:block}
+.ap2 .stars{color:#d8a93a;letter-spacing:1px}
+.ap2 .ident a,.ap2 .conf a{color:var(--ap-goldt)}
+
+.ap2 .mat4{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px}
+@media (max-width:640px){.ap2 .mat4{grid-template-columns:1fr}}
