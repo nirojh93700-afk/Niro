@@ -8,7 +8,7 @@
 export const VARIANT_COSTS = {
   // Bon Nihao NHFR604292155222 (relevé le 24/11/2026, prix × 1,083 = livraison 36,51 € répartie sur 439,07 €).
   // Seulement les prix d'achat qui manquaient (gérant : « tu prends que les trucs qui te manquaient »). Stock non touché.
-  "chaine-acier-argente": 2.45,
+  "chaine-acier-argente": 3.04, // moyenne de 3 bons : 3 × 2,45 · 5 × 2,74 (NHFR610192403834) · 10 × 3,36 (NHFR611102439947)
   "gourm-sans": 0.76,
   "empreinte-bebe-dore": 0.62,
   // Collier Plaque Acier = pendentif (NHFR604292155222) + sa chaîne (argent 60 cm même bon ; noire / dorée 55 cm,
