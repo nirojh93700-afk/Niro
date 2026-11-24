@@ -36,8 +36,10 @@ export const VARIANT_COSTS = {
   "collier-medaillon-pivotant-argente": 2.15,
   "collier-double-coeur-argente": 2.26,
   "collier-coeur-grave-argente": 1.01,
-  // Collier Quatre Mots : bon NHFR610192403834 (1,29 €), livraison de ce bon inconnue → + 8 % comme les autres bons.
-  "collier-barre-verticale-argente": 1.39,
+  // Bon Nihao NHFR610192403834 (prix × 1,163 : livraison 11,30 € sur 69,25 €).
+  "collier-barre-verticale-argente": 1.50,
+  "bracelet-coeur-argente": 1.24,
+  "bracelet-coeur-multicolore": 1.84,
   // Commande xTool (livrée le 18/07/2026) : gobelet 40 oz 22,00 € pièce, carafe 740 ml 25,20 € pièce
   // (crème et bleu marine = même gobelet, même prix que le blanc et le rose de la facture).
   "gobelet-40oz-creme": 22.00,
@@ -53,6 +55,7 @@ export const VARIANT_COSTS = {
   "geo-noir": 1.39,
   "geo-or-rose": 1.41,
   "geo-arc-en-ciel": 1.39,
+  "geo-dore": 1.41,
   "empreinte-bebe-argente": 0.50,
   // Bon Nihao NHFR610292420591 (15/11/2026) : prix × 1,12 (port net réparti), voir docs/commande-fournisseur-NHFR610292420591.md.
   "collier-papillon-bleu": 0.95,
