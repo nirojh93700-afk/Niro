@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import { getCatalog } from "@/lib/catalog";
-import { getRatingSummaries } from "@/lib/stock";
+import { getRatingSummaries, getSettings } from "@/lib/stock";
+import { faqOccasion, texteReponse } from "@/lib/faqOccasions";
 import { OCCASIONS, getOccasion, produitsPourOccasion } from "@/lib/occasions";
 
 export const dynamic = "force-dynamic";
@@ -29,6 +30,14 @@ export default async function OccasionPage({ params }) {
   const catalog = (await getCatalog()).map((p) => (ratings[p.slug] ? { ...p, rating: ratings[p.slug] } : p));
   const produits = produitsPourOccasion(catalog, o);
   const autres = OCCASIONS.filter((x) => x.slug !== o.slug);
+  // Questions-réponses de l'occasion (24/11/2026) : produits et prix relus dans le catalogue en direct.
+  const settings = await getSettings().catch(() => ({}));
+  const faq = faqOccasion(o.slug, catalog, settings);
+  const faqLd = faq.length ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: texteReponse(f.parts) } })),
+  } : null;
 
   return (
     <section className="section">
@@ -52,6 +61,26 @@ export default async function OccasionPage({ params }) {
           <div style={{ textAlign: "center", padding: "20px 0" }}>
             <p style={{ color: "var(--ink-soft)" }}>Nos créations pour cette occasion arrivent bientôt.</p>
             <Link href="/boutique" className="btn btn-outline">Voir toute la boutique</Link>
+          </div>
+        )}
+
+        {faq.length > 0 && (
+          <div style={{ maxWidth: 760, margin: "44px auto 0" }}>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+            <h2 style={{ textAlign: "center" }}>Vos questions pour {o.label}</h2>
+            <p style={{ textAlign: "center", color: "var(--ink-soft)" }}>Les réponses aux questions qu'on nous pose le plus avant les fêtes.</p>
+            <div style={{ marginTop: 18, display: "grid", gap: 10 }}>
+              {faq.map((f, i) => (
+                <details key={i} open={i === 0} style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: 12, padding: "14px 18px" }}>
+                  <summary style={{ cursor: "pointer", fontWeight: 600 }}>{f.q}</summary>
+                  <p style={{ margin: "10px 0 2px", color: "var(--ink-soft)", lineHeight: 1.6 }}>
+                    {f.parts.map((x, j) => (typeof x === "string" ? x : (
+                      <span key={j}><Link href={x.href} className="link-underline">{x.label}</Link> ({x.prix})</span>
+                    )))}
+                  </p>
+                </details>
+              ))}
+            </div>
           </div>
         )}
 
