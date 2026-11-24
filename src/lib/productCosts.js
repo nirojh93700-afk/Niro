@@ -6,6 +6,19 @@
 // N'affecte PAS la boutique : sert seulement au calcul du bénéfice.
 // =============================================================================
 export const VARIANT_COSTS = {
+  // Bon Nihao NHFR604292155222 (relevé le 24/11/2026, prix × 1,083 = livraison 36,51 € répartie sur 439,07 €).
+  // Seulement les prix d'achat qui manquaient (gérant : « tu prends que les trucs qui te manquaient »). Stock non touché.
+  "chaine-acier-argente": 2.45,
+  "gourm-sans": 0.76,
+  "empreinte-bebe-dore": 0.62,
+  "plaque-argente": 1.43,
+  "plaque-noir": 1.82,
+  "plaque-argente-noir": 1.82,
+  "env-recto-argent": 1.71,
+  "env-recto-dore": 1.96,
+  "geo-argente": 1.01,
+  "geo-noir": 1.39,
+  "geo-or-rose": 1.41,
   // Bon Nihao NHFR610292420591 (15/11/2026) : prix × 1,12 (port net réparti), voir docs/commande-fournisseur-NHFR610292420591.md.
   "collier-papillon-bleu": 0.95,
   "collier-papillon-rose": 0.97,
