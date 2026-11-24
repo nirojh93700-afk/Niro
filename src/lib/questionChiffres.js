@@ -6,6 +6,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
 import { modeDe } from "@/lib/fileCommandes";
 import { CATEGORIES } from "@/lib/products";
+import { retoursPourAgregats } from "@/lib/retours";
 
 const MODEL = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
 const NB_MOIS = 12;
@@ -158,6 +159,8 @@ export function agregats(orders, catalog, maintenant = Date.now()) {
     parMode: modes,
     topClientes,
     parProduit: produits,
+    // Demandes de retour (24/11/2026) : sur TOUTES les commandes hors tests (annulées et remboursées comprises).
+    retours: retoursPourAgregats(orders),
   };
 
   // Garde-fou de taille : on retire d'abord le détail mensuel des produits les moins vendus, puis des produits.
@@ -173,7 +176,7 @@ export function agregats(orders, catalog, maintenant = Date.now()) {
 }
 
 const CONSIGNE = `Tu es l'assistant de Gestion de la boutique Niv Création (gravure personnalisée). Le gérant te pose une question sur ses ventes.
-Tu réponds UNIQUEMENT à partir des agrégats fournis (JSON). Si la donnée n'y est pas, dis-le simplement et propose où la trouver dans Gestion (Bénéfices, Ventes, Clientes, Commandes, Produits & stock…). Jamais un chiffre inventé, jamais une estimation présentée comme un chiffre.
+Tu réponds UNIQUEMENT à partir des agrégats fournis (JSON). Les demandes de retour sont dans « retours » (nombre, taux par rapport aux commandes, étapes, motifs, produits). Si la donnée n'y est pas, dis-le simplement et propose où la trouver dans Gestion (Bénéfices, Ventes, Clientes, Commandes, Produits & stock…). Jamais un chiffre inventé, jamais une estimation présentée comme un chiffre.
 Règles d'écriture : français, vouvoiement, 2 à 3 phrases courtes, chiffres en euros à la française (« 341,20 € »), mois en toutes lettres (« octobre 2026 »). « Colliers », « bracelets », « verres »… se repèrent dans le nom des produits. « Ce mois-ci » = le mois courant des agrégats ; « sur 30 jours » = la fenêtre glissante j30.
 Barres : seulement si une comparaison aide (par mois, par produit, par pays…), 0 à 8 barres, libellés courts, valeurs lues dans les agrégats. Source : une courte phrase qui dit d'où vient le chiffre (nombre de commandes lues, période, hors annulées et tests).
 Réponds avec l'outil "reponse" seulement.`;

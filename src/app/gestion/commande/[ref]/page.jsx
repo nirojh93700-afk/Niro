@@ -33,6 +33,7 @@ import { FormExpedition, Pill, LiensSuivi } from "@/components/admin/CarteComman
 import { RefaireDevis, CrediterCagnotte } from "@/components/admin/ActionsCommande";
 import PhotosColis, { PastillePhotosColis } from "@/components/admin/PhotosColis";
 import DossierPreuve from "@/components/admin/DossierPreuve";
+import BlocRetour from "@/components/admin/BlocRetour";
 import EcranAllume from "@/components/admin/EcranAllume";
 import { chargerAvecCache } from "@/components/admin/adminCache";
 import { useAdminBack } from "@/components/admin/adminBack";
@@ -500,6 +501,9 @@ export default function FicheCommandePage() {
               {usage?.coutsManquants?.length ? <div className="fc-sub" style={{ color: "#b32b2b", fontWeight: 700 }}>⚠️ Prix d&apos;achat inconnu, compté 0 € : {usage.coutsManquants.join(" · ")}. Le vrai gain est plus bas.</div> : null}
               <div className={`fc-sub fc-pay`} style={{ color: remb.tone === "bad" ? "var(--ash-bad)" : remb.tone === "ok" ? "var(--ash-ok)" : remb.tone === "warn" ? "var(--ash-warn)" : undefined, fontWeight: 600 }}>{remb.txt} · dans « Plus d&apos;actions ».</div>
             </div>
+          </Carte>
+          <Carte id="fc-retour" ic="alert" titre="Demande de retour" h3 droite={<Link className="fc-lnk" href="/gestion/retours">tous les retours →</Link>}>
+            <BlocRetour order={o} adminKey={key} montrer={montrer} onChange={(retour) => setOrders((os) => os.map((x) => (x.id === o.id ? { ...x, retour } : x)))} />
           </Carte>
           <Carte id="fc-provenance" ic="pin" titre="Provenance de la cliente" h3>
             <ProvenanceCommande order={o} />

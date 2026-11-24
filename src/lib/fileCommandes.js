@@ -10,6 +10,7 @@ import { nomManquant } from "@/lib/nomLivraison";
 import { languesDeLaCommande, nomsLangues } from "@/lib/traductionGravure";
 import { sourceDe, provenanceDe, detailVisite, couleurSource, nomSource, ORDRE_SOURCES } from "@/lib/provenance";
 
+import { pastilleRetour, aUnRetour } from "@/lib/retours";
 export const FLAGS = [
   { id: "urgent", label: "Urgente", tone: "bad" },
   { id: "attend", label: "Accepte d'attendre", tone: "grey" },
@@ -118,6 +119,9 @@ export function chipsDe(o, unread = false) {
     const av = o.litige.avantLe ? new Date(o.litige.avantLe).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", timeZone: "Europe/Paris" }) : "";
     c.unshift({ k: "litige", tone: "bad", lib: `⚠️ Litige ouvert (${o.litige.motif || "motif ?"})${av ? ` · répondre avant le ${av}` : ""} · Plus d'actions → Dossier de preuve` });
   }
+  // Demande de retour (24/11/2026).
+  const pr = pastilleRetour(o);
+  if (pr) c.unshift(pr);
   if (o.test) c.push({ k: "test", tone: "grey", lib: "Commande test (non comptée)" });
   return c;
 }
@@ -158,6 +162,7 @@ export const FILTRES = [
   { id: "etranger", lib: "Hors France", ic: "flag" },
   { id: "alerte", lib: "Alerte", ic: "alert" },
   { id: "langue", lib: "Autre langue", ic: "flag" },
+  { id: "retour", lib: "Retour", ic: "alert" },
 ];
 export function passeFiltre(o, f, unread) {
   switch (f) {
@@ -168,6 +173,7 @@ export function passeFiltre(o, f, unread) {
     case "etranger": return paysDeLaCommande(o).etranger;
     case "langue": return languesDeLaCommande(o).length > 0;
     case "alerte": return Boolean(o.alerteInterne) || (Array.isArray(o.alerteImage) && o.alerteImage.length > 0) || (o.flags || []).includes("urgent") || Boolean(o.alerteEmail || o.emailCorrigeDe) || (estActive(o) && nomManquant(o).manquant);
+    case "retour": return aUnRetour(o);
     case "late": return etatDelai(o).k === "late";
     default: return true;
   }

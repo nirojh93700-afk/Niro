@@ -6545,3 +6545,49 @@ html.flot-cache:not(.flot-garde) .flot-btn{transform:translateY(140%);opacity:0;
 /* Étiquettes d'adresse : bloc « Étiquette de retour » (23/11/2026) */
 .etq-retour-l{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:10px}
 .etq-retour-l b{min-width:1.5em;text-align:center;font-variant-numeric:tabular-nums}
+
+/* Demandes de retour (24/11/2026) : bloc de la fiche commande + page Gestion → Commandes → Retours */
+.rt-bloc label.rt-l{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--ash-muted);margin-top:10px}
+.rt-bloc select,.rt-bloc input{box-sizing:border-box;min-width:0;width:100%;border:1px solid var(--ash-line-2);border-radius:8px;padding:8px 10px;font-size:14px;background:#fff;color:var(--ash-ink)}
+.rt-etat{display:flex;flex-direction:column;gap:2px;border-radius:10px;padding:8px 10px;margin-bottom:6px}
+.rt-etat span{font-size:12px;font-weight:500}
+.rt-warn{background:var(--ash-warn-bg);color:var(--ash-warn)}
+.rt-info{background:var(--ash-info-bg);color:var(--ash-info)}
+.rt-ok{background:var(--ash-ok-bg);color:var(--ash-ok)}
+.rt-grey{background:var(--ash-sunk);color:var(--ash-muted)}
+.rt-bad{background:var(--ash-bad-bg);color:var(--ash-bad)}
+.rt-etapes{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rt-etapes button{border:1px solid var(--ash-line-2);background:#fff;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:600;color:var(--ash-muted);min-height:32px}
+.rt-etapes button.on{background:var(--ash-ink);border-color:var(--ash-ink);color:#fff}
+.rt-conf{font-size:13px;color:var(--ash-bad);font-weight:600}
+.rt-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;margin:4px 0 14px}
+.rt-bar label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ash-muted)}
+.rt-bar select{border:1px solid var(--ash-line-2);border-radius:8px;padding:7px 10px;background:#fff}
+.rt-declarer{flex:1 1 280px;min-width:0;position:relative}
+.rt-declarer input{box-sizing:border-box;width:100%;min-width:0;border:1px solid var(--ash-line-2);border-radius:10px;padding:9px 12px;font-size:14px;background:#fff}
+.rt-declarer ul{list-style:none;margin:6px 0 0;padding:4px;border:1px solid var(--ash-line-2);border-radius:10px;background:#fff}
+.rt-declarer li a{display:block;padding:8px 10px;border-radius:8px;font-size:13px;color:var(--ash-ink);text-decoration:none}
+.rt-declarer li a:hover{background:var(--ash-sunk)}
+.rt-onglets{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px}
+.rt-onglets button{flex:0 0 auto;border:1px solid var(--ash-line-2);background:#fff;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;color:var(--ash-muted)}
+.rt-onglets button.on{background:var(--ash-ink);border-color:var(--ash-ink);color:#fff}
+.rt-liste{display:flex;flex-direction:column;gap:8px}
+.rt-ligne{display:grid;grid-template-columns:minmax(90px,auto) minmax(0,1.4fr) minmax(0,1.2fr) auto;gap:12px;align-items:center;background:#fff;border:1px solid var(--ash-line);border-radius:12px;padding:10px 14px;color:var(--ash-ink);text-decoration:none}
+.rt-ligne:hover{border-color:var(--ash-gold)}
+.rt-ligne span{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:13px}
+.rt-ligne small{color:var(--ash-muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rt-pill{border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+.rt-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:18px}
+.rt-carte{background:#fff;border:1px solid var(--ash-line);border-radius:12px;padding:14px 16px;min-width:0}
+.rt-carte h3{margin:0 0 10px;font-size:15px}
+.rt-kv{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:4px 0}
+.rt-kv span{min-width:0}
+.rt-kv b{font-variant-numeric:tabular-nums}
+.rt-prod{margin-bottom:8px}
+.rt-prod small{color:var(--ash-muted);font-size:11px}
+.rt-jauge{height:6px;border-radius:99px;background:var(--ash-sunk);overflow:hidden}
+.rt-jauge i{display:block;height:100%;background:var(--ash-gold)}
+@media (max-width:720px){
+  .rt-ligne{grid-template-columns:minmax(0,1fr) auto}
+  .rt-ligne .rt-qui,.rt-ligne .rt-motif{grid-column:1 / -1}
+}

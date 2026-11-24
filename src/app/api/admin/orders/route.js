@@ -8,6 +8,7 @@ import { shippedEmail, cancelledEmail, reviewRequestEmail, BRAND } from "@/lib/e
 import { sendClientMail } from "@/lib/clientMail";
 import { sansAncienHebergeur } from "@/lib/photosLocales";
 import { joindreSuivis } from "@/lib/suiviColis";
+import { normaliserRetour, RETOUR_ETAT } from "@/lib/retours";
 import { journaliser } from "@/lib/journal";
 import { regrouperComplements } from "@/lib/commandeLiee";
 import { rattacherCommande, detacherCommande, suivreCommandeOrigine } from "@/lib/commandeLieeServeur";
@@ -95,6 +96,23 @@ export async function POST(req) {
     if (!Object.keys(patch).length) return Response.json({ error: "Rien à enregistrer." }, { status: 400 });
     const ok = await updateSiteOrder(id, patch);
     return Response.json({ ok, patch });
+  }
+
+  // ↩ Demande de retour (24/11/2026) : déclarer, faire avancer (accepté, reçu, remboursé, échangé, refusé) ou retirer.
+  // Rangée sur la commande (champ `retour`). Aucun e-mail, aucun remboursement : le remboursement reste le bouton
+  // « Rembourser » de « Plus d'actions ».
+  if (id && body?.action === "retour") {
+    const order = await getSiteOrder(id);
+    if (!order) return Response.json({ ok: false, error: "Commande introuvable." }, { status: 404 });
+    if (body.retirer) {
+      const ok = await updateSiteOrder(id, { retour: null });
+      journaliser({ type: "commande", cible: id, label: `Demande de retour retirée · #${order.ref || id}`, avant: order.retour?.etat || null, apres: null }).catch(() => {});
+      return Response.json({ ok, retour: null });
+    }
+    const retour = normaliserRetour(body.retour || {}, order.retour || null);
+    const ok = await updateSiteOrder(id, { retour });
+    journaliser({ type: "commande", cible: id, label: `Retour #${order.ref || id} : ${RETOUR_ETAT[retour.etat].lib}`, avant: order.retour?.etat || null, apres: retour.etat }).catch(() => {});
+    return Response.json({ ok, retour });
   }
 
   // 📷 Photos du colis (15/11/2026, maquette Niv Admin) : contenu · boîte fermée · étiquette (+ autres).
