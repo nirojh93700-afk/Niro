@@ -1259,3 +1259,19 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #ideecadeaunoel #gravure #ideecadeau
+
+## Vidéo 77 — Film « Un Noël gravé » (24/11/2026)
+- Demande : « fais-moi une histoire avec mes produits comme un film » (skills vidéo installés le 24/11, montage gratuit, 0 crédit).
+- Style NEUF « film » : générique « NIV CRÉATION présente · Un Noël gravé · Une histoire de famille », Léa prépare les cadeaux de
+  toute sa famille ; image cinéma entre deux bandes noires, chapitres (Pour Papi et Mamie, Pour Papa, Pour Maman, Pour Lucas,
+  Pour Ethan, Pour les petits cousins, Pour Sarah et Tom, Pour Julie), sous-titres de film, grain, lueur de pellicule, fondus au
+  noir, épilogue « Le soir de Noël », carte « Fin », générique qui défile (« dans les rôles principaux »), fin nivcreation.fr.
+- 59,4 s, sans son, aucun prix, aucun nombre, 1080 × 1920 (15,8 Mo) et 720 × 1280 (3,4 Mo). À supprimer le 26/11.
+- Script : `python3 tools/video/film_noel_77.py <polices> <sortie> [--apercu]`. Prénoms de l'histoire inventés (Lucas et Ethan = ceux gravés sur les photos d'exemple).
+
+**Vidéo 77 — Un Noël gravé** (Cristal photo 3D, Verre à whisky, Bracelet cœur à graver, Décoration de Noël en cristal, Veilleuse au prénom, Puzzle en bois, Flûtes à champagne, Médaillon cœur ouvrable)
+> 🎬 Cette année, Léa a voulu des cadeaux qu'on garde toute une vie… Une histoire de Noël en huit chapitres ✨
+> Cristal, bijoux, verres, bois : chaque cadeau gravé à leur prénom dans notre atelier en France 🎄💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #cadeaunoel #gravure #ideecadeau
