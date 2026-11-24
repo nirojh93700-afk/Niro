@@ -4,6 +4,7 @@ import { getCatalogAdmin } from "@/lib/catalog";
 import { coutLigne } from "@/lib/coutLignes";
 import { etiquetteEstimee, perteRate } from "@/lib/etiquetteEnvoi";
 import { coutCommande, coutHoraire, reglageActif } from "@/lib/coutGravure";
+import { aUnRetour } from "@/lib/retours";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -56,8 +57,17 @@ export async function GET(req) {
 
   const real = (orders || []).filter((o) => !o.test && !["annulee", "remboursee"].includes(o.status));
 
-  // Agrégats période + par produit + série mensuelle (12 derniers mois).
+  // Retours (24/11/2026, gérant : « là dans [Bénéfices] tu mets les retours ») : nombre de demandes de retour
+  // par rapport aux commandes de la période (mois de la commande), y compris les commandes ensuite remboursées.
   const per = { month: blank(), year: blank(), all: blank() };
+  for (const o of orders || []) {
+    if (o.test || o.rattacheA) continue;
+    const mk = monthKey(o.createdAt);
+    const bs = [per.all, ...(mk.startsWith(curYear) ? [per.year] : []), ...(mk === curMonth ? [per.month] : [])];
+    for (const b of bs) { b.commandes += 1; if (aUnRetour(o)) b.retoursN += 1; }
+  }
+
+  // Agrégats période + par produit + série mensuelle (12 derniers mois).
   const byProduct = {};
   const monthly = {}; // "YYYY-MM" -> {revenue,cost,profit,shipping,orders}
   let missing = new Set();
@@ -84,6 +94,10 @@ export async function GET(req) {
     if (mat) { per.all.materiel += mat; if (inYear) per.year.materiel += mat; if (inMonth) per.month.materiel += mat; monthly[mk].materiel = (monthly[mk].materiel || 0) + mat; }
     // Remboursement partiel (10/11/2026) : l'argent rendu est déduit comme une perte de la commande.
     const perte = (Number(perteParCommande[o.id]) || 0) + (Number(o.rembourse) || 0);
+    // Argent rendu sur une demande de retour (montant noté dans le bloc « Demande de retour ») : déduit, sans
+    // compter deux fois ce qui est déjà passé par « Rembourser » (o.rembourse).
+    const rendu = aUnRetour(o) ? Math.max(0, (Number(o.retour.montant) || 0) - (Number(o.rembourse) || 0)) : 0;
+    if (rendu) { per.all.retours += rendu; if (inYear) per.year.retours += rendu; if (inMonth) per.month.retours += rendu; monthly[mk].rates = (monthly[mk].rates || 0) + rendu; }
     if (perte) { per.all.rates += perte; if (inYear) per.year.rates += perte; if (inMonth) per.month.rates += perte; monthly[mk].rates = (monthly[mk].rates || 0) + perte; }
     const grav = coutCommande(coutG, o);
     if (grav) { per.all.gravure += grav; if (inYear) per.year.gravure += grav; if (inMonth) per.month.gravure += grav; monthly[mk].gravure = (monthly[mk].gravure || 0) + grav; }
@@ -115,7 +129,7 @@ export async function GET(req) {
     }
   }
 
-  const finish = (b) => { b.profit = round(b.revenue + b.shipping - b.etiquettes - b.cost - b.materiel - b.rates - (b.gravure || 0)); b.etiquettes = round(b.etiquettes); b.livraisonNette = round(b.shipping - b.etiquettes); b.materiel = round(b.materiel); b.rates = round(b.rates); b.gravure = round(b.gravure || 0); b.revenue = round(b.revenue); b.cost = round(b.cost); b.shipping = round(b.shipping); b.margin = b.revenue > 0 ? Math.round((b.profit / b.revenue) * 100) : 0; return b; };
+  const finish = (b) => { b.profit = round(b.revenue + b.shipping - b.etiquettes - b.cost - b.materiel - b.rates - (b.retours || 0) - (b.gravure || 0)); b.retours = round(b.retours || 0); b.tauxRetour = b.commandes ? Math.round((b.retoursN / b.commandes) * 1000) / 10 : 0; b.etiquettes = round(b.etiquettes); b.livraisonNette = round(b.shipping - b.etiquettes); b.materiel = round(b.materiel); b.rates = round(b.rates); b.gravure = round(b.gravure || 0); b.revenue = round(b.revenue); b.cost = round(b.cost); b.shipping = round(b.shipping); b.margin = b.revenue > 0 ? Math.round((b.profit / b.revenue) * 100) : 0; return b; };
   finish(per.month); finish(per.year); finish(per.all);
 
   // Série des 12 derniers mois (ordre chronologique).
@@ -173,5 +187,5 @@ export async function POST(req) {
   return Response.json({ ok: true, declared });
 }
 
-function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0, shipping: 0, etiquettes: 0, materiel: 0, rates: 0, gravure: 0 }; }
+function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0, shipping: 0, etiquettes: 0, materiel: 0, rates: 0, gravure: 0, retours: 0, retoursN: 0, commandes: 0 }; }
 function round(n) { return Math.round((Number(n) || 0) * 100) / 100; }

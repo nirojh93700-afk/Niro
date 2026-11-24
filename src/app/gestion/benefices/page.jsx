@@ -230,6 +230,9 @@ export default function BeneficesPage() {
           sub={data.coutGravure?.regle
             ? "usure laser + électricité + temps"
             : <>non réglé — <a href="/gestion/tailles-conseillees" style={{ color: "var(--gold-dark)" }}>Catalogue › Tailles &amp; coûts</a></>} />
+        {/* Retours (24/11/2026) : argent rendu sur les demandes de retour (bloc « Demande de retour » de la fiche commande). */}
+        <Tile label="Retours" value={euro(p.retours || 0)}
+          sub={<>{p.retoursN || 0} demande{(p.retoursN || 0) > 1 ? "s" : ""} sur {p.commandes || 0} commande{(p.commandes || 0) > 1 ? "s" : ""} ({String(p.tauxRetour || 0).replace(".", ",")} %) · <a href="/gestion/retours" style={{ color: "var(--gold-dark)" }}>détail</a></>} />
         <Tile label="Étiquettes d'envoi" value={euro(p.etiquettes || 0)} sub="Payées au transporteur" />
         <Tile label="Marge" value={p.margin + " %"} sub="Bénéfice / CA" accent="#a98935" />
       </div>
@@ -489,7 +492,7 @@ export default function BeneficesPage() {
       </div>
 
       <p style={{ color: "var(--ink-soft)", fontSize: "0.8rem" }}>
-        Calculé sur les commandes payées (hors tests, annulées et remboursées). Le coût est le prix d&apos;achat que tu renseignes sur chaque produit. Le <strong>bénéfice</strong> compte produits vendus − coût d&apos;achat − matériel − pièces ratées − coût de gravure (réglé dans <a href="/gestion/tailles-conseillees">Catalogue › Tailles &amp; coûts</a> ; 0 tant que rien n&apos;est réglé) ; le <strong>bénéfice net</strong> déduit en plus tes <strong>dépenses &amp; charges</strong> saisies ci-dessus (fournitures, expédition…). La livraison encaissée reste à part (neutre).
+        Calculé sur les commandes payées (hors tests, annulées et remboursées). Le coût est le prix d&apos;achat que tu renseignes sur chaque produit. Le <strong>bénéfice</strong> compte produits vendus − coût d&apos;achat − matériel − pièces ratées − argent rendu sur les retours − coût de gravure (réglé dans <a href="/gestion/tailles-conseillees">Catalogue › Tailles &amp; coûts</a> ; 0 tant que rien n&apos;est réglé) ; le <strong>bénéfice net</strong> déduit en plus tes <strong>dépenses &amp; charges</strong> saisies ci-dessus (fournitures, expédition…). La livraison encaissée reste à part (neutre).
       </p>
     </div>
   );
