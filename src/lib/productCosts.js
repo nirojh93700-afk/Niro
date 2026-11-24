@@ -45,6 +45,8 @@ export const VARIANT_COSTS = {
   "geo-argente": 1.01,
   "geo-noir": 1.39,
   "geo-or-rose": 1.41,
+  "geo-arc-en-ciel": 1.39,
+  "empreinte-bebe-argente": 0.50,
   // Bon Nihao NHFR610292420591 (15/11/2026) : prix × 1,12 (port net réparti), voir docs/commande-fournisseur-NHFR610292420591.md.
   "collier-papillon-bleu": 0.95,
   "collier-papillon-rose": 0.97,
