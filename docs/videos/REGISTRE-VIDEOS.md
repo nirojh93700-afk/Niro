@@ -1270,7 +1270,7 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 - Script : `python3 tools/video/film_noel_77.py <polices> <sortie> [--apercu]`. Prénoms de l'histoire inventés (Lucas et Ethan = ceux gravés sur les photos d'exemple).
 
 **Vidéo 77 — Un Noël gravé** (Cristal photo 3D, Verre à whisky, Bracelet cœur à graver, Décoration de Noël en cristal, Veilleuse au prénom, Puzzle en bois, Flûtes à champagne, Médaillon cœur ouvrable)
-> 🎬 Cette année, Léa a voulu des cadeaux qu'on garde toute une vie… Une histoire de Noël, gravée à leur prénom ✨
+> 🎬 Cette année, Léa a voulu des cadeaux qu'on garde toute une vie… Une histoire de Noël, comme au cinéma ✨
 > Cristal, bijoux, verres, bois : chaque cadeau gravé à leur prénom dans notre atelier en France 🎄💛
 > 👉 nivcreation.fr
 
