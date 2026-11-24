@@ -15,7 +15,7 @@ export const VARIANT_COSTS = {
   // bon NHFR606272237502, prix × 1,066).
   "plaque-argente": 1.80,
   "plaque-noir": 2.44,
-  "plaque-argente-noir": 2.44,
+  "plaque-acier-noir": 2.44, // = « Argent Noir » chez Nihao (moitié argent, moitié noir)
   "plaque-dore": 2.55,
   "env-recto-argent": 1.71,
   "env-recto-dore": 1.96,
