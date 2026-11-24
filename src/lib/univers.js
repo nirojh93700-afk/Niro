@@ -113,7 +113,7 @@ const QUI_UNIVERS = { papeterie: ["elle", "lui", "parents"], verres: ["lui"], ma
 
 // Occasions d'un produit (règles d'occasions.js) ; sans occasion → anniversaire + Noël.
 export function occasionsDe(p) {
-  const o = OCCASIONS.filter((x) => { try { return x.match(p); } catch { return false; } }).map((x) => x.slug);
+  const o = OCCASIONS.filter((x) => { if (x.pageSeule) return false; try { return x.match(p); } catch { return false; } }).map((x) => x.slug);
   if (!o.length) return ["anniversaire", "noel"];
   if (!o.every((x) => x === "mariage" || x === "naissance")) o.push("anniversaire");
   return o;

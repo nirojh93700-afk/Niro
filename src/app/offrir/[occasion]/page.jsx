@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import { getCatalog } from "@/lib/catalog";
 import { getRatingSummaries, getSettings } from "@/lib/stock";
-import { faqOccasion, texteReponse } from "@/lib/faqOccasions";
+import { faqOccasion, texteReponse, titreFaq } from "@/lib/faqOccasions";
 import { OCCASIONS, getOccasion, produitsPourOccasion } from "@/lib/occasions";
 
 export const dynamic = "force-dynamic";
@@ -67,15 +67,15 @@ export default async function OccasionPage({ params }) {
         {faq.length > 0 && (
           <div style={{ maxWidth: 760, margin: "44px auto 0" }}>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-            <h2 style={{ textAlign: "center" }}>Vos questions pour {o.label}</h2>
-            <p style={{ textAlign: "center", color: "var(--ink-soft)" }}>Les réponses aux questions qu'on nous pose le plus avant les fêtes.</p>
+            <h2 style={{ textAlign: "center" }}>{titreFaq(o.slug, o.label)}</h2>
+            <p style={{ textAlign: "center", color: "var(--ink-soft)" }}>Les réponses aux questions qu'on nous pose le plus souvent.</p>
             <div style={{ marginTop: 18, display: "grid", gap: 10 }}>
               {faq.map((f, i) => (
                 <details key={i} open={i === 0} style={{ background: "#fff", border: "1px solid var(--line)", borderRadius: 12, padding: "14px 18px" }}>
                   <summary style={{ cursor: "pointer", fontWeight: 600 }}>{f.q}</summary>
                   <p style={{ margin: "10px 0 2px", color: "var(--ink-soft)", lineHeight: 1.6 }}>
                     {f.parts.map((x, j) => (typeof x === "string" ? x : (
-                      <span key={j}><Link href={x.href} className="link-underline">{x.label}</Link> ({x.prix})</span>
+                      <span key={j}><Link href={x.href} className="link-underline">{x.label}</Link>{x.prix ? ` (${x.prix})` : ""}</span>
                     )))}
                   </p>
                 </details>

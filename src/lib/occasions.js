@@ -91,6 +91,36 @@ OCCASIONS.push({
   match: (p) => NOEL_SLUGS.includes(p.slug),
 });
 
+// 💐 Pages de fête (24/11/2026, gérant : « fais pour toutes les fêtes » → « applique ») : listes FERMÉES,
+// lues dans le catalogue en direct. `pageSeule` : elles ont leur page /offrir/<slug> mais ne changent PAS
+// les occasions des cartes du parcours « Trouver un cadeau » (qui a ses propres fêtes, Finder.jsx).
+const listeFermee = (slug, label, titre, description, intro, image, slugs) => ({
+  slug, label, titre, description, intro, image, max: slugs.length, ordre: slugs, pageSeule: true,
+  match: (p) => slugs.includes(p.slug),
+});
+OCCASIONS.push(
+  listeFermee("saint-valentin", "Saint-Valentin", "Cadeaux de Saint-Valentin personnalisés, gravés dans notre atelier",
+    "Colliers de couple, bijoux cœur gravés, cristal photo 3D et verres gravés : des cadeaux de Saint-Valentin personnalisés, gravés à la commande en France.",
+    "Vos prénoms, votre date, votre photo : un cadeau de Saint-Valentin qui ne ressemble qu'à vous deux.",
+    "/produits/collier-double-coeur-6.jpg",
+    ["collier-couple-coeur-lot2", "collier-couple-puzzle", "collier-coeur-grave", "collier-3coeurs", "collier-medaillon-coeur-ouvrable",
+     "bracelet-femme-coeur", "bracelet-homme-plaque-cuir", "bracelet-gourmette-plaque", "cristal-photo-3d-horizontal",
+     "flute-a-champagne-gravee", "verre-a-vin-grave", "porte-cles-cristal-led-coeur"]),
+  listeFermee("fete-des-meres", "Fête des mères", "Cadeaux de Fête des mères personnalisés, gravés dans notre atelier",
+    "Colliers gravés aux prénoms des enfants, médaillon cœur, cristal photo 3D : des cadeaux de Fête des mères personnalisés, gravés à la commande en France.",
+    "Les prénoms de ses enfants, une date, une photo : le cadeau qu'elle gardera.",
+    "/produits/collier-coeur-grave-2.jpg",
+    ["collier-coeur-grave", "collier-3coeurs", "collier-medaillon-coeur-ouvrable", "collier-barre-verticale", "bracelet-femme-coeur",
+     "bracelet-empreinte-pied-bebe", "cristal-photo-3d-vertical", "verre-a-vin-grave", "carnet-a5-grave", "marque-page-bois-pompon"]),
+  listeFermee("fete-des-peres", "Fête des pères", "Cadeaux de Fête des pères personnalisés, gravés dans notre atelier",
+    "Verre à whisky gravé, carafe, gourmettes et porte-clés à graver : des cadeaux de Fête des pères personnalisés, gravés à la commande en France.",
+    "Son prénom, un message, le prénom de ses enfants : un cadeau gravé qui lui ressemble.",
+    "/produits/verre_a_whisky_exemple_face.jpg",
+    ["verre-a-whisky-fete-des-peres", "verre-a-whisky-grave", "verre-tumbler-cristal-grave", "carafe-a-whisky-gravee",
+     "bracelet-homme-identite-gourmette", "bracelet-gourmette-plaque", "bracelet-homme-cuir-tresse-acier", "porte-cles-cuir-a-graver",
+     "cle-usb-bois-coffret", "support-telephone-bois-grave"]),
+);
+
 export function getOccasion(slug) {
   return OCCASIONS.find((o) => o.slug === slug) || null;
 }
