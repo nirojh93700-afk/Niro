@@ -292,6 +292,202 @@ const FAQ = {
       ],
     },
   ],
+  paques: [
+    {
+      q: "Quand tombe Pâques ?",
+      statique: true,
+      a: ["Le prochain dimanche de Pâques tombe le ", { fete: "paques" }, ". Chaque pièce est gravée à la commande : pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Quel cadeau personnalisé offrir à un enfant pour Pâques ?",
+      a: [
+        { liste: [
+          { s: "puzzle-foret", l: "le puzzle en bois au prénom de l'enfant" },
+          { s: "couverts-enfants-personnalises", l: "les couverts enfant au prénom" },
+          { s: "plaque-de-porte-enfant", l: "la plaque de porte au prénom" },
+          { s: "marque-page-bois-pompon", l: "le marque-page en bois gravé" },
+        ] },
+        " se gravent au prénom de l'enfant et se gardent bien après Pâques.",
+      ],
+    },
+    {
+      q: "Un cadeau de Pâques pour un adulte ?",
+      a: [
+        { liste: [
+          { s: "collier-coeur-grave", l: "le collier cœur à graver" },
+          { s: "cristal-photo-3d-vertical", l: "le cristal photo 3D" },
+          { s: "verre-a-vin-grave", l: "le verre à vin gravé" },
+        ] },
+        " se gravent d'un prénom, d'une date ou d'une photo.",
+      ],
+    },
+  ],
+  "fete-des-grands-meres": [
+    {
+      q: "Quand tombe la Fête des grands-mères ?",
+      statique: true,
+      a: ["En France, la Fête des grands-mères tombe le premier dimanche de mars : la prochaine est le ", { fete: "grands-meres" }, ". Chaque pièce est gravée à la commande : pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Quel cadeau personnalisé offrir à une grand-mère ?",
+      a: [
+        { liste: [
+          { s: "collier-3coeurs", l: "le collier 3 cœurs entrelacés" },
+          { s: "collier-medaillon-coeur-ouvrable", l: "le médaillon cœur ouvrable" },
+          { s: "cristal-photo-3d-vertical", l: "le cristal photo 3D" },
+          { s: "marque-page-bois-pompon", l: "le marque-page en bois gravé" },
+        ] },
+        " se gravent des prénoms de ses petits-enfants, d'une date ou d'une photo de famille.",
+      ],
+    },
+    {
+      q: "Comment graver les prénoms de tous les petits-enfants ?",
+      a: [
+        { liste: [{ s: "collier-3coeurs", l: "le collier 3 cœurs entrelacés" }], apres: " porte un prénom dans chaque cœur." },
+        { liste: [{ s: "collier-barre-verticale", l: "le collier Quatre Mots" }], avant: " ", apres: " se grave sur ses quatre faces." },
+        { liste: [{ s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D horizontal" }], avant: " Pour une grande famille, ", apres: " garde la photo de tous les petits-enfants." },
+      ],
+    },
+  ],
+  "fete-des-grands-peres": [
+    {
+      q: "Quand tombe la Fête des grands-pères ?",
+      statique: true,
+      a: ["En France, la Fête des grands-pères tombe le premier dimanche d'octobre : la prochaine est le ", { fete: "grands-peres" }, ". Chaque pièce est gravée à la commande : pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Quel cadeau personnalisé offrir à un grand-père ?",
+      a: [
+        { liste: [
+          { s: "verre-a-whisky-grave", l: "le verre à whisky gravé" },
+          { s: "carafe-a-whisky-gravee", l: "la carafe à whisky gravée" },
+          { s: "porte-cles-cuir-a-graver", l: "le porte-clés aspect cuir à graver" },
+          { s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D" },
+        ] },
+        " se gravent de son prénom, des prénoms de ses petits-enfants ou d'une photo de famille.",
+      ],
+    },
+  ],
+  "nouvel-an-chinois": [
+    {
+      q: "Quand tombe le Nouvel An chinois ?",
+      statique: true,
+      a: ["Le prochain Nouvel An chinois tombe le ", { fete: "nouvel-an-chinois" }, ". Sa date change chaque année, car elle suit le calendrier lunaire. Chaque pièce est gravée à la commande : pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Peut-on faire graver un texte en chinois ?",
+      statique: true,
+      a: ["Oui. Sous le champ du texte, choisissez « Chinois » dans « Langue de la gravure » : votre texte est traduit, ou vous écrivez directement en chinois, puis vous le relisez avant de commander. Il est gravé exactement comme il s'affiche."],
+    },
+    {
+      q: "Quel cadeau personnalisé offrir pour le Nouvel An chinois ?",
+      a: [
+        { liste: [
+          { s: "collier-coeur-grave", l: "le collier cœur à graver" },
+          { s: "bracelet-femme-coeur", l: "le bracelet femme cœur" },
+          { s: "verre-a-vin-grave", l: "le verre à vin gravé" },
+          { s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D" },
+        ] },
+        " se gravent d'un vœu, d'un prénom ou d'une photo.",
+      ],
+    },
+  ],
+  "aid-el-fitr": [
+    {
+      q: "Quand tombe l'Aïd el-Fitr ?",
+      statique: true,
+      a: ["Le prochain Aïd el-Fitr est attendu le ", { fete: "aid" }, ", à un jour près selon l'observation de la lune. Chaque pièce est gravée à la commande : pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Peut-on faire graver un texte en arabe ?",
+      statique: true,
+      a: ["Oui. Sous le champ du texte, choisissez « Arabe » dans « Langue de la gravure » : votre texte est traduit, ou vous écrivez directement en arabe, puis vous le relisez avant de commander. Il est gravé exactement comme il s'affiche."],
+    },
+    {
+      q: "Quel cadeau personnalisé offrir pour l'Aïd ?",
+      a: [
+        { liste: [
+          { s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D" },
+          { s: "collier-coeur-grave", l: "le collier cœur à graver" },
+          { s: "bracelet-femme-coeur", l: "le bracelet femme cœur" },
+          { s: "couverts-enfants-personnalises", l: "les couverts enfant au prénom" },
+        ] },
+        " se gravent d'un prénom, d'un vœu ou d'une photo de famille.",
+      ],
+    },
+  ],
+  hanoukka: [
+    {
+      q: "Quand tombe Hanoukka ?",
+      statique: true,
+      a: ["La prochaine fête de Hanoukka commence le soir du ", { fete: "hanoukka" }, " et dure huit jours. Chaque pièce est gravée à la commande : pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Peut-on faire graver un texte en hébreu ?",
+      statique: true,
+      a: ["Oui. Sous le champ du texte, choisissez « Hébreu » dans « Langue de la gravure » : votre texte est traduit, ou vous écrivez directement en hébreu, puis vous le relisez avant de commander. Il est gravé exactement comme il s'affiche."],
+    },
+    {
+      q: "Quel cadeau personnalisé offrir pour Hanoukka ?",
+      a: [
+        { liste: [
+          { s: "verre-a-vin-grave", l: "le verre à vin gravé" },
+          { s: "carafe-a-whisky-gravee", l: "la carafe gravée" },
+          { s: "collier-coeur-grave", l: "le collier cœur à graver" },
+          { s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D" },
+        ] },
+        " se gravent d'un prénom, d'un vœu ou d'une photo.",
+      ],
+    },
+  ],
+  deepavali: [
+    {
+      q: "Quand tombe Deepavali (Diwali) ?",
+      statique: true,
+      a: ["Le prochain Deepavali tombe le ", { fete: "deepavali" }, ". Sa date change chaque année. Chaque pièce est gravée à la commande : pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Peut-on faire graver un texte en tamoul ?",
+      statique: true,
+      a: ["Oui. Sous le champ du texte, choisissez « Tamoul » dans « Langue de la gravure » : votre texte est traduit, ou vous écrivez directement en tamoul, puis vous le relisez avant de commander. Il est gravé exactement comme il s'affiche."],
+    },
+    {
+      q: "Quel cadeau personnalisé offrir pour Deepavali ?",
+      a: [
+        { liste: [
+          { s: "bougeoir-fleur-de-lotus", l: "le bougeoir fleur de lotus" },
+          { s: "collier-coeur-grave", l: "le collier cœur à graver" },
+          { s: "bracelet-femme-coeur", l: "le bracelet femme cœur" },
+          { s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D" },
+        ] },
+        " se gravent d'un prénom, d'un vœu ou d'une photo de famille.",
+      ],
+    },
+  ],
+  "fetes-tamoules": [
+    {
+      q: "Quand tombent Thai Pongal et le Nouvel An tamoul ?",
+      statique: true,
+      a: ["Le prochain Thai Pongal tombe le ", { fete: "pongal" }, ", et le prochain Nouvel An tamoul (Puthandu) le ", { fete: "puthandu" }, ". Chaque pièce est gravée à la commande : pensez à commander quelques jours à l'avance."],
+    },
+    {
+      q: "Peut-on faire graver un texte en tamoul ?",
+      statique: true,
+      a: ["Oui. Sous le champ du texte, choisissez « Tamoul » dans « Langue de la gravure » : votre texte est traduit, ou vous écrivez directement en tamoul, puis vous le relisez avant de commander. Il est gravé exactement comme il s'affiche."],
+    },
+    {
+      q: "Quel cadeau personnalisé offrir pour Pongal ou le Nouvel An tamoul ?",
+      a: [
+        { liste: [
+          { s: "collier-coeur-grave", l: "le collier cœur à graver" },
+          { s: "bracelet-homme-identite-gourmette", l: "la gourmette d'identité" },
+          { s: "cristal-photo-3d-horizontal", l: "le cristal photo 3D" },
+          { s: "bougeoir-fleur-de-lotus", l: "le bougeoir fleur de lotus" },
+        ] },
+        " se gravent d'un prénom, d'un vœu ou d'une photo de famille.",
+      ],
+    },
+  ],
   "fete-des-peres": [
     {
       q: "Quand tombe la Fête des pères ?",
@@ -326,10 +522,34 @@ const FAQ = {
 
 const JOURS_L = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
 const MOIS_L = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-/** « dimanche 30 mai 2027 » : prochaine date de la fête, calculée (jamais écrite à la main). */
+// Fêtes au calendrier lunaire ou solaire (dates qui bougent) : dates VÉRIFIÉES le 24/11/2026 sur plusieurs
+// sources (Chabad.org pour Hanoukka, calendrier Umm al-Qura pour l'Aïd, drikpanchang / publicholidays.in pour
+// les fêtes tamoules, travelchinaguide / CUNY pour le Nouvel An chinois et Deepavali). Quand la dernière date
+// est passée, la question « quand tombe… » disparaît toute seule : ajouter alors l'année suivante, vérifiée.
+const DATES_FIXES = {
+  "nouvel-an-chinois": ["2027-02-06", "2028-01-26"],
+  aid: ["2027-03-09", "2028-02-26"],
+  hanoukka: ["2026-12-04", "2027-12-24", "2028-12-12"],
+  deepavali: ["2027-10-28"],
+  pongal: ["2027-01-15"],
+  puthandu: ["2027-04-14"],
+};
+const premierDimanche = (an, mois) => { const d = new Date(Date.UTC(an, mois, 1)); d.setUTCDate(1 + ((7 - d.getUTCDay()) % 7)); return d; };
+function prochaineDate(k) {
+  const auj = new Date(); auj.setUTCHours(0, 0, 0, 0);
+  if (DATES_FIXES[k]) return DATES_FIXES[k].map((x) => new Date(`${x}T00:00:00Z`)).find((d) => d >= auj) || null;
+  if (k === "grands-meres" || k === "grands-peres") {
+    const mois = k === "grands-meres" ? 2 : 9; // 1er dimanche de mars / d'octobre
+    let d = premierDimanche(auj.getUTCFullYear(), mois);
+    if (d < auj) d = premierDimanche(auj.getUTCFullYear() + 1, mois);
+    return d;
+  }
+  return prochaineFete(k).date;
+}
+/** « dimanche 30 mai 2027 » : prochaine date de la fête, calculée ou tirée de la table vérifiée. null si inconnue. */
 function dateFete(k) {
-  const d = prochaineFete(k).date;
-  return `${JOURS_L[d.getUTCDay()]} ${d.getUTCDate()} ${MOIS_L[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+  const d = prochaineDate(k);
+  return d ? `${JOURS_L[d.getUTCDay()]} ${d.getUTCDate()} ${MOIS_L[d.getUTCMonth()]} ${d.getUTCFullYear()}` : null;
 }
 
 function prixTexte(p) {
@@ -355,7 +575,7 @@ function construire(segments, parSlug, statique = false) {
   for (const seg of segments) {
     if (typeof seg === "string") { out.push(seg); continue; }
     if (seg.lien) { out.push({ href: seg.lien, label: seg.l, prix: null }); continue; }
-    if (seg.fete) { out.push(dateFete(seg.fete)); continue; }
+    if (seg.fete) { const t = dateFete(seg.fete); if (!t) return null; out.push(t); continue; }
     const items = [];
     for (const it of seg.liste) {
       const p = parSlug.get(it.s);
@@ -425,5 +645,13 @@ const TITRES = {
   "saint-valentin": "Vos questions pour la Saint-Valentin",
   "fete-des-meres": "Vos questions pour la Fête des mères",
   "fete-des-peres": "Vos questions pour la Fête des pères",
+  paques: "Vos questions pour Pâques",
+  "fete-des-grands-meres": "Vos questions pour la Fête des grands-mères",
+  "fete-des-grands-peres": "Vos questions pour la Fête des grands-pères",
+  "nouvel-an-chinois": "Vos questions pour le Nouvel An chinois",
+  "aid-el-fitr": "Vos questions pour l'Aïd el-Fitr",
+  hanoukka: "Vos questions pour Hanoukka",
+  deepavali: "Vos questions pour Deepavali",
+  "fetes-tamoules": "Vos questions pour Pongal et le Nouvel An tamoul",
 };
 export const titreFaq = (slug, label) => TITRES[slug] || `Vos questions : ${label}`;
