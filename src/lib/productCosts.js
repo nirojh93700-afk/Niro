@@ -31,6 +31,13 @@ export const VARIANT_COSTS = {
   "bracelet-coeur-dore": 1.43,
   "bracelet-coeur-or-rose": 1.65,
   "collier-medaillon-pivotant-orrose": 2.93,
+  // Commande xTool (livrée le 18/07/2026) : gobelet 40 oz 22,00 € pièce, carafe 740 ml 25,20 € pièce
+  // (crème et bleu marine = même gobelet, même prix que le blanc et le rose de la facture).
+  "gobelet-40oz-creme": 22.00,
+  "gobelet-40oz-blanc": 22.00,
+  "gobelet-40oz-marine": 22.00,
+  "gobelet-40oz-rose": 22.00,
+  "carafe-whisky-gravee": 25.20,
   // Bon Nihao NHFR606272237502 (prix × 1,066 : livraison 10,06 € − bon 4,50 € sur 84,68 €).
   "med-argent-texte": 3.43,
   "med-dore-texte": 4.71,
