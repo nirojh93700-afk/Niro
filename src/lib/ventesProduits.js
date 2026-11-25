@@ -70,7 +70,7 @@ export function ventesDesCommandes(orders, bySlug, { du, au } = {}) {
   const t1 = au ? Date.parse(au) : Infinity;
   const out = [];
   for (const o of orders || []) {
-    if (o?.test || STATUTS_EXCLUS.has(o?.status) || o?.rattacheA) continue;
+    if (o?.test || STATUTS_EXCLUS.has(o?.status)) continue; // un complément payé (rattacheA) est une vraie vente : compté
     const t = Date.parse(o?.createdAt || "");
     if (Number.isFinite(t) && (t < t0 || t > t1)) continue;
     for (const it of o?.items || []) {
