@@ -1,6 +1,6 @@
 # Règles Instagram de Niv Création (à lire par chaque skill « insta-* »)
 
-Compte : @nivcreation · site : https://nivcreation.fr · signature : « Niv Création » (jamais un nom de personne).
+Compte : @nivcreation.fr (https://www.instagram.com/nivcreation.fr) · site : https://nivcreation.fr · signature : « Niv Création » (jamais un nom de personne).
 
 ## Ce qu'on montre
 - UNIQUEMENT des pièces GRAVÉES. Jamais un produit vierge. Le nom de fichier ment parfois

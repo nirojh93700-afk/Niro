@@ -1,5 +1,7 @@
 # Le kit Instagram de Niv Création (7 commandes)
 
+Compte : **@nivcreation.fr** (https://www.instagram.com/nivcreation.fr).
+
 Créé le 25/11/2026 à la demande du gérant (inspiré d'une vidéo TikTok « 7 skills Claude pour Instagram » ; le kit
 d'Internet n'a PAS été installé : celui-ci est fait pour la boutique, avec ses règles).
 
