@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Maquette « Plaque et porte-clés musique à scanner » (26/11/2026) — RIEN en ligne.
 
+⚠️ Préfixe des classes = « mzq- » : « mq- » existe déjà dans le CSS du site (marque-pages, .mq-step a width:52px → étapes écrasées sur téléphone).
+
 Gérant : lien du générateur Atomm « Spotify Music QR & Keychain » puis « fais la maquette ».
 Repris d'Atomm (analysé le 26/11 dans le navigateur) : la cliente colle le lien de sa chanson, un QR code ordinaire est
 calculé par la page et gravé sur du bois ; modèles « plaque simple » (Minimal), « carte musique » (Music card) et
@@ -59,7 +61,7 @@ def bloc(debut, fin):
 trust = bloc('<div class="trust-cards">', '<div class="pd-perso">')
 confiance = src[src.find('<section class="confiance">'):]
 confiance = confiance[:confiance.find("</section>") + 10] if '<section class="confiance">' in src else ""
-confiance = coquille(confiance)
+confiance = coquille(confiance).replace(' loading="lazy"', '')
 QR = open(qrpath, encoding="utf-8").read().replace("</script", "<\\/script")
 JSQR = open(jsqrpath, encoding="utf-8").read().replace("</script", "<\\/script")
 
@@ -86,63 +88,63 @@ DONNEES = {
 CSS_MAQ = r"""
 :root{color-scheme:light}
 body{background:var(--cream);color:var(--ink);font-family:'Inter',system-ui,sans-serif}
-.mq-bandeau{background:#2b2620;color:#f3ece0;font-size:.8rem;line-height:1.45;padding:9px 16px;text-align:center}
-.mq-bandeau b{color:#e2c67e}
-.mq-left{position:sticky;top:calc(var(--mq-top,0px) + 12px);min-width:0;z-index:1;align-self:start}
-.mq-stage{position:relative;border-radius:var(--radius);border:1px solid var(--line);overflow:hidden;perspective:900px;
+.mzq-bandeau{background:#2b2620;color:#f3ece0;font-size:.8rem;line-height:1.45;padding:9px 16px;text-align:center}
+.mzq-bandeau b{color:#e2c67e}
+.mzq-left{position:sticky;top:calc(var(--mzq-top,0px) + 12px);min-width:0;z-index:1;align-self:start}
+.mzq-stage{position:relative;border-radius:var(--radius);border:1px solid var(--line);overflow:hidden;perspective:900px;
 background:radial-gradient(120% 90% at 50% 20%,#f6f1e8 0%,#ece3d4 70%,#e2d6c2 100%);aspect-ratio:1/1;display:grid;place-items:center}
-.mq-stage svg{display:block;width:84%;height:84%;transition:transform .6s cubic-bezier(.2,.8,.2,1),filter .6s}
-.mq-stage[data-vue=relief] svg{transform:rotateX(18deg) rotateY(-24deg) rotateZ(2deg);filter:drop-shadow(10px 14px 8px rgba(60,40,15,.35))}
-.mq-tag{position:absolute;left:10px;top:10px;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+.mzq-stage svg{display:block;width:84%;height:84%;transition:transform .6s cubic-bezier(.2,.8,.2,1),filter .6s}
+.mzq-stage[data-vue=relief] svg{transform:rotateX(18deg) rotateY(-24deg) rotateZ(2deg);filter:drop-shadow(10px 14px 8px rgba(60,40,15,.35))}
+.mzq-tag{position:absolute;left:10px;top:10px;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
 background:rgba(255,255,255,.86);border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:#7c6120}
-.mq-ex{position:absolute;left:10px;bottom:10px;font-size:.72rem;font-weight:700;background:#b3261e;color:#fff;border-radius:999px;padding:4px 10px}
-.mq-tools{position:absolute;right:10px;top:10px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.mq-tools button{font:inherit;font-size:.78rem;font-weight:600;border:1px solid var(--line);background:rgba(255,255,255,.92);border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--ink)}
-.mq-tools button[aria-pressed=true]{background:#2b2620;color:#fff;border-color:#2b2620}
-.mq-scan{margin-top:10px;font-size:.8rem;color:var(--ink-soft);background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 12px;line-height:1.45}
-.mq-step{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px 14px 16px;margin:0 0 12px}
-.mq-step h3{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:1rem;font-family:var(--font-display),Georgia,serif}
-.mq-n{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#c9a24b;color:#fff;display:grid;place-items:center;font:700 .85rem Inter,sans-serif}
-.mq-sub{font-size:.84rem;color:var(--ink-soft);margin:8px 0 0;line-height:1.5}
-.mq-lien{display:flex;gap:8px}
-.mq-lien input{flex:1;min-width:0;font:inherit;font-size:.9rem;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)}
-.mq-lien input:focus{outline:2px solid rgba(201,162,75,.5);border-color:#c9a24b}
-.mq-lien button{font:inherit;font-size:.84rem;font-weight:600;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:0 14px;cursor:pointer}
-.mq-ok{margin-top:8px;font-size:.82rem;font-weight:600}
-.mq-ok.bon{color:#2e7d32}.mq-ok.mauvais{color:#b3261e}
-.mq-plats{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.mq-plats span{font-size:.72rem;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--ink-soft);background:#faf7f0}
-.mq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
-.mq-opt{font:inherit;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 6px 8px;cursor:pointer;display:flex;
+.mzq-ex{position:absolute;left:10px;bottom:10px;font-size:.72rem;font-weight:700;background:#b3261e;color:#fff;border-radius:999px;padding:4px 10px}
+.mzq-tools{position:absolute;right:10px;top:10px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.mzq-tools button{font:inherit;font-size:.78rem;font-weight:600;border:1px solid var(--line);background:rgba(255,255,255,.92);border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+.mzq-tools button[aria-pressed=true]{background:#2b2620;color:#fff;border-color:#2b2620}
+.mzq-scan{margin-top:10px;font-size:.8rem;color:var(--ink-soft);background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 12px;line-height:1.45}
+.mzq-step{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px 14px 16px;margin:0 0 12px}
+.mzq-step h3{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:1rem;font-family:var(--font-display),Georgia,serif}
+.mzq-n{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#c9a24b;color:#fff;display:grid;place-items:center;font:700 .85rem Inter,sans-serif}
+.mzq-sub{font-size:.84rem;color:var(--ink-soft);margin:8px 0 0;line-height:1.5}
+.mzq-lien{display:flex;gap:8px}
+.mzq-lien input{flex:1;min-width:0;font:inherit;font-size:.9rem;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)}
+.mzq-lien input:focus{outline:2px solid rgba(201,162,75,.5);border-color:#c9a24b}
+.mzq-lien button{font:inherit;font-size:.84rem;font-weight:600;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:0 14px;cursor:pointer}
+.mzq-ok{margin-top:8px;font-size:.82rem;font-weight:600}
+.mzq-ok.bon{color:#2e7d32}.mzq-ok.mauvais{color:#b3261e}
+.mzq-plats{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.mzq-plats span{font-size:.72rem;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--ink-soft);background:#faf7f0}
+.mzq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.mzq-opt{font:inherit;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 6px 8px;cursor:pointer;display:flex;
 flex-direction:column;align-items:center;gap:6px;font-size:.82rem;font-weight:600;color:var(--ink);text-align:center;min-width:0}
-.mq-opt svg{width:52px;height:44px}
-.mq-opt small{font-weight:500;color:var(--ink-soft);font-size:.72rem;line-height:1.3}
-.mq-opt[aria-pressed=true]{border-color:#c9a24b;background:#fbf6ea;box-shadow:0 0 0 2px rgba(201,162,75,.25)}
-.mq-champ{margin-top:10px}
-.mq-champ label{display:flex;justify-content:space-between;font-size:.82rem;font-weight:600;margin-bottom:4px}
-.mq-champ label small{font-weight:500;color:var(--ink-soft)}
-.mq-champ input,.mq-champ select{width:100%;box-sizing:border-box;font:inherit;font-size:.9rem;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;color:var(--ink)}
-.mq-sum{font-size:.86rem;line-height:1.7;margin:0;padding:0;list-style:none}
-.mq-sum li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line)}
-.mq-sum li span:last-child{font-weight:600;text-align:right;min-width:0;overflow-wrap:anywhere}
-.mq-tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;font-weight:700}
-.mq-tot b{font-size:1.35rem;color:#a98935}
-.mq-manque{font-size:.8rem;color:#b3261e;margin:8px 0 0}
-.mq-cart{width:100%;margin-top:10px}
-.mq-cart[disabled]{opacity:.45;cursor:not-allowed}
-.mq-atelier{margin:34px auto 0;padding:18px clamp(16px,4vw,40px) 26px;border-top:3px solid #2b2620;background:#faf7f0}
-.mq-atelier h2{font-size:1.15rem;margin:0 0 4px}
-.mq-atelier p{font-size:.86rem;color:var(--ink-soft);margin:0 0 10px;max-width:70ch}
-.mq-fichier{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;overflow-x:auto}
-.mq-fichier svg{display:block;width:100%;max-width:520px;height:auto;margin:0 auto}
-.mq-faits{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.mq-faits span{font-size:.78rem;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;overflow-wrap:anywhere;max-width:100%}
-.mq-faits span.vert{border-color:#9ccc9f;background:#eef8ee;color:#1f5f22;font-weight:600}
-.mq-faits span.rouge{border-color:#f0b3ae;background:#fdeeed;color:#8a1c14;font-weight:600}
-.mq-valider{margin-top:14px;font-size:.84rem;background:#fffbe9;border:1px solid #ecd99a;border-radius:12px;padding:10px 14px}
-.mq-valider li{margin:3px 0}
-@media (max-width:900px){main>.container.product-layout,.mq-atelier{padding-left:16px;padding-right:16px;box-sizing:border-box}
-.mq-left{position:static}.mq-stage{max-height:62vh;aspect-ratio:auto;height:min(92vw,62vh)}}
+.mzq-opt svg{width:52px;height:44px}
+.mzq-opt small{font-weight:500;color:var(--ink-soft);font-size:.72rem;line-height:1.3}
+.mzq-opt[aria-pressed=true]{border-color:#c9a24b;background:#fbf6ea;box-shadow:0 0 0 2px rgba(201,162,75,.25)}
+.mzq-champ{margin-top:10px}
+.mzq-champ label{display:flex;justify-content:space-between;font-size:.82rem;font-weight:600;margin-bottom:4px}
+.mzq-champ label small{font-weight:500;color:var(--ink-soft)}
+.mzq-champ input,.mzq-champ select{width:100%;box-sizing:border-box;font:inherit;font-size:.9rem;border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;background:#fff;color:var(--ink)}
+.mzq-sum{font-size:.86rem;line-height:1.7;margin:0;padding:0;list-style:none}
+.mzq-sum li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line)}
+.mzq-sum li span:last-child{font-weight:600;text-align:right;min-width:0;overflow-wrap:anywhere}
+.mzq-tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;font-weight:700}
+.mzq-tot b{font-size:1.35rem;color:#a98935}
+.mzq-manque{font-size:.8rem;color:#b3261e;margin:8px 0 0}
+.mzq-cart{width:100%;margin-top:10px}
+.mzq-cart[disabled]{opacity:.45;cursor:not-allowed}
+.mzq-atelier{margin:34px auto 0;padding:18px clamp(16px,4vw,40px) 26px;border-top:3px solid #2b2620;background:#faf7f0}
+.mzq-atelier h2{font-size:1.15rem;margin:0 0 4px}
+.mzq-atelier p{font-size:.86rem;color:var(--ink-soft);margin:0 0 10px;max-width:70ch}
+.mzq-fichier{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;overflow-x:auto}
+.mzq-fichier svg{display:block;width:100%;max-width:520px;height:auto;margin:0 auto}
+.mzq-faits{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.mzq-faits span{font-size:.78rem;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px;overflow-wrap:anywhere;max-width:100%}
+.mzq-faits span.vert{border-color:#9ccc9f;background:#eef8ee;color:#1f5f22;font-weight:600}
+.mzq-faits span.rouge{border-color:#f0b3ae;background:#fdeeed;color:#8a1c14;font-weight:600}
+.mzq-valider{margin-top:14px;font-size:.84rem;background:#fffbe9;border:1px solid #ecd99a;border-radius:12px;padding:10px 14px}
+.mzq-valider li{margin:3px 0}
+@media (max-width:900px){main>.container.product-layout,.mzq-atelier{padding-left:16px;padding-right:16px;box-sizing:border-box}
+.mzq-left{position:static}.mzq-stage{max-height:62vh;aspect-ratio:auto;height:min(92vw,62vh)}}
 """
 
 DESC = """<div class="product-desc"><p><strong>Votre chanson gravée sur du bois : on la scanne avec le téléphone, et elle se lance.</strong></p>
@@ -172,65 +174,65 @@ FONTS = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&fam
 HTML = f"""<title>Musique à scanner</title>
 <link rel="stylesheet" href="{FONTS}">
 <style>{css}</style><style>{CSS_MAQ}</style>
-<div class="mq-bandeau"><b>Maquette — rien n'est en ligne.</b> Plaque et porte-clés « musique à scanner », sur le modèle du générateur d'Atomm (sans le code Spotify, interdit à la vente).</div>
+<div class="mzq-bandeau"><b>Maquette — rien n'est en ligne.</b> Plaque et porte-clés « musique à scanner », sur le modèle du générateur d'Atomm (sans le code Spotify, interdit à la vente).</div>
 {header}
 <main>
 <nav class="container" style="padding-top:14px;font-size:.84rem;color:var(--ink-soft)"><a href="#">Boutique</a> / <a href="#">Petits cadeaux</a></nav>
 <div class="container product-layout">
-  <div class="mq-left">
-    <div class="mq-stage" id="stage" data-vue="face">
-      <span class="mq-tag">Votre création</span>
-      <div class="mq-tools"><button type="button" id="bFace" aria-pressed="true">De face</button><button type="button" id="bRelief" aria-pressed="false">En relief</button></div>
+  <div class="mzq-left">
+    <div class="mzq-stage" id="stage" data-vue="face">
+      <span class="mzq-tag">Votre création</span>
+      <div class="mzq-tools"><button type="button" id="bFace" aria-pressed="true">De face</button><button type="button" id="bRelief" aria-pressed="false">En relief</button></div>
       <svg id="svg" aria-label="Aperçu de votre création"></svg>
-      <span class="mq-ex" id="exTag">Exemple : collez votre lien</span>
+      <span class="mzq-ex" id="exTag">Exemple : collez votre lien</span>
     </div>
-    <div class="mq-scan">📱 <b>Testez-le :</b> scannez l'aperçu avec l'appareil photo de votre téléphone, la chanson doit s'ouvrir. C'est ce QR code qui sera gravé.</div>
+    <div class="mzq-scan">📱 <b>Testez-le :</b> scannez l'aperçu avec l'appareil photo de votre téléphone, la chanson doit s'ouvrir. C'est ce QR code qui sera gravé.</div>
   </div>
   <div class="product-info">
     <h1>Plaque et porte-clés musique à scanner, gravés sur bois</h1>
     <p style="color:var(--ink-soft);margin-top:0">Votre chanson préférée, à scanner avec le téléphone : un QR code gravé sur bois, avec votre dédicace.</p>
     <div class="price-lead" id="prixLead"></div>
 
-    <section class="mq-step"><h3><span class="mq-n">1</span>Votre chanson</h3>
-      <div class="mq-lien"><input type="url" id="lien" inputmode="url" autocomplete="off" placeholder="Collez ici le lien de votre chanson"><button type="button" id="coller">Coller</button></div>
-      <div class="mq-ok" id="ok"></div>
-      <div class="mq-plats"><span>Spotify</span><span>Deezer</span><span>Apple Music</span><span>YouTube</span><span>SoundCloud</span></div>
-      <p class="mq-sub">Dans votre appli de musique : « Partager » puis « Copier le lien ». Une chanson, un album ou une playlist (publique).</p>
+    <section class="mzq-step"><h3><span class="mzq-n">1</span>Votre chanson</h3>
+      <div class="mzq-lien"><input type="url" id="lien" inputmode="url" autocomplete="off" placeholder="Collez ici le lien de votre chanson"><button type="button" id="coller">Coller</button></div>
+      <div class="mzq-ok" id="ok"></div>
+      <div class="mzq-plats"><span>Spotify</span><span>Deezer</span><span>Apple Music</span><span>YouTube</span><span>SoundCloud</span></div>
+      <p class="mzq-sub">Dans votre appli de musique : « Partager » puis « Copier le lien ». Une chanson, un album ou une playlist (publique).</p>
     </section>
 
-    <section class="mq-step"><h3><span class="mq-n">2</span>Le modèle</h3>
-      <div class="mq-grid" id="modeles"></div>
+    <section class="mzq-step"><h3><span class="mzq-n">2</span>Le modèle</h3>
+      <div class="mzq-grid" id="modeles"></div>
     </section>
 
-    <section class="mq-step"><h3><span class="mq-n">3</span>La taille</h3>
-      <div class="mq-grid" id="tailles"></div>
-      <p class="mq-sub" id="tailleP"></p>
+    <section class="mzq-step"><h3><span class="mzq-n">3</span>La taille</h3>
+      <div class="mzq-grid" id="tailles"></div>
+      <p class="mzq-sub" id="tailleP"></p>
     </section>
 
-    <section class="mq-step" id="etTextes"><h3><span class="mq-n">4</span>Vos textes <small style="font:500 .78rem Inter,sans-serif;color:var(--ink-soft)">(facultatif, compris)</small></h3>
-      <div class="mq-champ"><label for="titre">Titre <small id="cTitre">0 / 28</small></label><input id="titre" maxlength="28" placeholder="Ex. Notre chanson"></div>
-      <div class="mq-champ"><label for="dedi">Dédicace <small id="cDedi">0 / 36</small></label><input id="dedi" maxlength="36" placeholder="Ex. Léa &amp; Tom · 14.06.2025"></div>
-      <div class="mq-champ"><label for="police">Écriture</label><select id="police"></select></div>
-      <div class="mq-champ"><label><span><input type="checkbox" id="scanTxt" checked style="width:auto;margin:0 6px 0 0;vertical-align:-2px">Graver « Scannez pour écouter »</span></label></div>
+    <section class="mzq-step" id="etTextes"><h3><span class="mzq-n">4</span>Vos textes <small style="font:500 .78rem Inter,sans-serif;color:var(--ink-soft)">(facultatif, compris)</small></h3>
+      <div class="mzq-champ"><label for="titre">Titre <small id="cTitre">0 / 28</small></label><input id="titre" maxlength="28" placeholder="Ex. Notre chanson"></div>
+      <div class="mzq-champ"><label for="dedi">Dédicace <small id="cDedi">0 / 36</small></label><input id="dedi" maxlength="36" placeholder="Ex. Léa &amp; Tom · 14.06.2025"></div>
+      <div class="mzq-champ"><label for="police">Écriture</label><select id="police"></select></div>
+      <div class="mzq-champ"><label><span><input type="checkbox" id="scanTxt" checked style="width:auto;margin:0 6px 0 0;vertical-align:-2px">Graver « Scannez pour écouter »</span></label></div>
     </section>
 
-    <section class="mq-step"><h3><span class="mq-n" id="nRes">5</span>Votre création</h3>
-      <ul class="mq-sum" id="resume"></ul>
-      <div class="mq-tot"><span>Total</span><b id="total"></b></div>
-      <div class="qty-row" style="margin-top:10px"><button type="button" class="btn btn-gold mq-cart" id="panier">Ajouter au panier</button></div>
-      <p class="mq-manque" id="manque"></p>
+    <section class="mzq-step"><h3><span class="mzq-n" id="nRes">5</span>Votre création</h3>
+      <ul class="mzq-sum" id="resume"></ul>
+      <div class="mzq-tot"><span>Total</span><b id="total"></b></div>
+      <div class="qty-row" style="margin-top:10px"><button type="button" class="btn btn-gold mzq-cart" id="panier">Ajouter au panier</button></div>
+      <p class="mzq-manque" id="manque"></p>
     </section>
     {trust}
     <div class="pd-perso"><b>✦ Pièce personnalisée</b><p>🕒 Gravée à la commande dans notre atelier, puis expédiée en lettre suivie.</p></div>
     {DESC}
   </div>
 </div>
-<section class="mq-atelier">
+<section class="mzq-atelier">
   <h2>De votre côté : le fichier que l'atelier reçoit</h2>
   <p>Fichier à la taille réelle, en millimètres, contreplaqué 3 mm. Rouge = découpe (contour et trou de l'anneau), noir = gravure (QR code et textes). Le lien est écrit en clair et le QR est relu par la page : scannez quand même le fichier avant de graver.</p>
-  <div class="mq-fichier" id="fichier"></div>
-  <div class="mq-faits" id="faits"></div>
-  <div class="mq-valider"><b>À valider par vous :</b><ul>
+  <div class="mzq-fichier" id="fichier"></div>
+  <div class="mzq-faits" id="faits"></div>
+  <div class="mzq-valider"><b>À valider par vous :</b><ul>
     <li>les prix proposés : plaque 17,90 / 22,90 / 27,90 € (petite, moyenne, grande) ; porte-clés 12,90 / 13,90 / 14,90 € ;</li>
     <li>les tailles : plaque 8, 11 ou 15 cm de large ; porte-clés 5, 6 ou 7 cm (pas plus petit, sinon le QR devient difficile à lire) ;</li>
     <li>le nom du produit (sans le mot « Spotify », qui est une marque) et le rayon « Petits cadeaux » ;</li>
@@ -366,7 +368,7 @@ function iconeModele(id){{
   return `<svg viewBox="0 0 52 44"><rect x="12" y="2" width="28" height="40" rx="3" fill="#ecd3a8" stroke="#9c6b3f" stroke-width="1.6"/>${{carte?`<path transform="translate(15 5) scale(6)" d="${{NOTE}}" fill="#3a2614"/><rect x="22" y="7" width="13" height="2" fill="#3a2614"/>`:`<rect x="16" y="6" width="20" height="1.4" fill="#3a2614"/>`}}<rect x="17" y="${{carte?14:11}}" width="18" height="18" fill="#3a2614" opacity=".75"/>${{carte?"":`<rect x="18" y="34" width="16" height="2" fill="#3a2614"/>`}}</svg>`;
 }}
 function boutons(id,items,cle,fn){{
-  $(id).innerHTML=items.map(o=>`<button type="button" class="mq-opt" data-v="${{o.v}}" aria-pressed="${{S[cle]===o.v}}">${{o.icon||""}}<span>${{o.t}}</span>${{o.s?`<small>${{o.s}}</small>`:""}}</button>`).join("");
+  $(id).innerHTML=items.map(o=>`<button type="button" class="mzq-opt" data-v="${{o.v}}" aria-pressed="${{S[cle]===o.v}}">${{o.icon||""}}<span>${{o.t}}</span>${{o.s?`<small>${{o.s}}</small>`:""}}</button>`).join("");
   $(id).querySelectorAll("button").forEach(b=>b.onclick=()=>{{S[cle]=b.dataset.v;$(id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));if(fn)fn();dessiner();}});
 }}
 function rendreTailles(){{
@@ -387,13 +389,13 @@ function resume(){{
 }}
 function majLien(){{
   S.lien=$("lien").value; const l=lireLien(S.lien), o=$("ok");
-  if(!l){{o.className="mq-ok";o.textContent="";}}
-  else if(l.ok){{o.className="mq-ok bon";o.textContent=`✓ Lien ${{l.plat}} reconnu : le QR code est sur l'aperçu.`;}}
-  else{{o.className="mq-ok mauvais";o.textContent="Ce lien n'est pas un lien de musique (Spotify, Deezer, Apple Music, YouTube, SoundCloud). Vérifiez-le.";}}
+  if(!l){{o.className="mzq-ok";o.textContent="";}}
+  else if(l.ok){{o.className="mzq-ok bon";o.textContent=`✓ Lien ${{l.plat}} reconnu : le QR code est sur l'aperçu.`;}}
+  else{{o.className="mzq-ok mauvais";o.textContent="Ce lien n'est pas un lien de musique (Spotify, Deezer, Apple Music, YouTube, SoundCloud). Vérifiez-le.";}}
   dessiner();
 }}
 $("lien").oninput=majLien;
-$("coller").onclick=async()=>{{try{{const t=await navigator.clipboard.readText();$("lien").value=t;majLien();}}catch(e){{$("lien").focus();$("ok").className="mq-ok";$("ok").textContent="Appuyez longuement dans la case, puis « Coller ».";}}}};
+$("coller").onclick=async()=>{{try{{const t=await navigator.clipboard.readText();$("lien").value=t;majLien();}}catch(e){{$("lien").focus();$("ok").className="mzq-ok";$("ok").textContent="Appuyez longuement dans la case, puis « Coller ».";}}}};
 for(const [id,c,cle] of [["titre","cTitre","titre"],["dedi","cDedi","dedi"]]) $(id).oninput=e=>{{S[cle]=e.target.value;$(c).textContent=`${{S[cle].length}} / ${{e.target.maxLength}}`;dessiner();}};
 $("police").innerHTML=D.polices.map(p=>`<option value="${{p[0]}}" style="font-family:${{esc(p[2])}}">${{p[1]}}</option>`).join("");
 $("police").onchange=e=>{{S.police=e.target.value;dessiner();}};
@@ -402,7 +404,7 @@ $("bFace").onclick=()=>{{S.vue="face";$("stage").dataset.vue="face";$("bFace").s
 $("bRelief").onclick=()=>{{S.vue="relief";$("stage").dataset.vue="relief";$("bRelief").setAttribute("aria-pressed",true);$("bFace").setAttribute("aria-pressed",false);}};
 boutons("modeles",D.modeles.map(m=>({{v:m.id,t:m.nom,s:m.s,icon:iconeModele(m.id)}})),"modele",()=>{{rendreTailles();}});
 rendreTailles();
-function sousEntete(){{const h=document.querySelector('header');let t=0;if(h&&/sticky|fixed/.test(getComputedStyle(h).position))t=h.offsetHeight;document.documentElement.style.setProperty('--mq-top',t+'px');}}
+function sousEntete(){{const h=document.querySelector('header');let t=0;if(h&&/sticky|fixed/.test(getComputedStyle(h).position))t=h.offsetHeight;document.documentElement.style.setProperty('--mzq-top',t+'px');}}
 sousEntete();window.addEventListener('resize',sousEntete);
 dessiner(); if(document.fonts) document.fonts.ready.then(dessiner);
 }})();
