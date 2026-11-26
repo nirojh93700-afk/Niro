@@ -243,7 +243,7 @@ HTML = f"""<title>Puzzle photo créateur</title>
   <div class="pz-fichier" id="fichier"></div>
   <div class="pz-faits" id="faits"></div>
   <div class="pz-valider"><b>À valider par vous :</b><ul>
-    <li>les prix proposés : taille Moyen +3 €, Grand +6 € ; forme carré ou coins arrondis +3 €, cœur +2 €, rond et ovale au prix de base ;</li>
+    <li>les prix proposés : taille Moyen +3 €, Grand +6 € ; forme : cœur +2 €, carré, coins arrondis, rond et ovale au prix de base ;</li>
     <li>les tailles : Petit 12 × 12, Moyen 15 × 15, Grand 17,6 × 17,6 cm ;</li>
     <li>les pièces irrégulières et les 3 styles d'attaches, pour vos essais de découpe ;</li>
     <li>le réglage « Réglages fins » laissé à la cliente, ou gardé pour l'atelier seulement.</li>
@@ -264,8 +264,8 @@ function hash(s){{let h=2166136261;for(const c of s){{h^=c.charCodeAt(0);h=Math.
 
 // ---------- formes (unités = mm, plateau 176 × 176 = zone machine 180 moins 2 mm de marge) ----------
 const FORMES=[
- {{id:"rect",nom:"Carré",sup:3,box:[0,0,176,176],aire:1}},
- {{id:"arrondi",nom:"Coins arrondis",sup:3,box:[0,0,176,176],aire:.99}},
+ {{id:"rect",nom:"Carré",sup:0,box:[0,0,176,176],aire:1}},
+ {{id:"arrondi",nom:"Coins arrondis",sup:0,box:[0,0,176,176],aire:.99}},
  {{id:"cercle",nom:"Rond",sup:0,box:[0,0,176,176],aire:.785}},
  {{id:"ellipse",nom:"Ovale",sup:0,box:[0,22,176,154],aire:.785}},
  {{id:"coeur",nom:"Cœur",sup:2,box:[0,10.5,176,165.5],aire:.72}},
