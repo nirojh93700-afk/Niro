@@ -91,6 +91,8 @@ DONNEES = {
                 ["great-vibes", "Great Vibes", "'Great Vibes',cursive"], ["allura", "Allura", "Allura,cursive"],
                 ["pacifico", "Pacifico", "Pacifico,cursive"], ["cinzel-deco", "Cinzel Decorative", "'Cinzel Decorative',serif"]],
     "mousquetons": MOUSQUETONS,
+    "prixPhoto": 4,
+    "photoEx": raw_uri(os.path.join(ROOT, "docs/maquettes/assets/marque-pages/exemples/portraits/couple.jpg")),
     "exemple": "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC",
 }
 
@@ -110,6 +112,12 @@ background:rgba(255,255,255,.86);border:1px solid var(--line);border-radius:999p
 .mzq-tools{position:absolute;right:10px;top:10px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .mzq-tools button{font:inherit;font-size:.78rem;font-weight:600;border:1px solid var(--line);background:rgba(255,255,255,.92);border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--ink)}
 .mzq-tools button[aria-pressed=true]{background:#2b2620;color:#fff;border-color:#2b2620}
+.mzq-tools button[hidden],#photoUp[hidden]{display:none}
+.mzq-photo{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.mzq-sous2{font-weight:700;font-size:.9rem;margin:0 0 8px}.mzq-sous2 small{font-weight:500;color:var(--ink-soft)}
+.mzq-up{position:relative;display:inline-flex;align-items:center;gap:8px;margin-top:10px;font-weight:600;font-size:.88rem;border:1.5px dashed #c9a24b;border-radius:12px;padding:10px 14px;cursor:pointer;background:#fffaf0}
+.mzq-up input{position:absolute;opacity:0;width:1px;height:1px}
+.mzq-grid .mzq-opt:disabled{cursor:not-allowed}
 .mzq-scan{margin-top:10px;font-size:.8rem;color:var(--ink-soft);background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 12px;line-height:1.45}
 .mzq-step{border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px 14px 16px;margin:0 0 12px}
 .mzq-step h3{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:1rem;font-family:var(--font-display),Georgia,serif}
@@ -196,7 +204,7 @@ HTML = f"""<title>Musique à scanner</title>
   <div class="mzq-left">
     <div class="mzq-stage" id="stage" data-vue="face">
       <span class="mzq-tag">Votre création</span>
-      <div class="mzq-tools"><button type="button" id="bFace" aria-pressed="true">De face</button><button type="button" id="bRelief" aria-pressed="false">En relief</button></div>
+      <div class="mzq-tools"><button type="button" id="bFace" aria-pressed="true">De face</button><button type="button" id="bRelief" aria-pressed="false">En relief</button><button type="button" id="bDos" aria-pressed="false" hidden>Le dos</button></div>
       <svg id="svg" aria-label="Aperçu de votre création"></svg>
       <span class="mzq-ex" id="exTag">Exemple : collez votre lien</span>
     </div>
@@ -216,6 +224,8 @@ HTML = f"""<title>Musique à scanner</title>
 
     <section class="mzq-step"><h3><span class="mzq-n">2</span>Le modèle</h3>
       <div class="mzq-grid" id="modeles"></div>
+      <div class="mzq-photo"><p class="mzq-sous2">Votre photo <small>(facultatif)</small></p><div class="mzq-grid" id="photoOpt"></div>
+        <div id="photoUp" hidden><label class="mzq-up"><input type="file" accept="image/*" id="photoFile"><span>📷 Choisir ma photo</span></label> <span class="mzq-sub" id="photoNom"></span><p class="mzq-sub" id="photoNote"></p></div></div>
     </section>
 
     <section class="mzq-step"><h3><span class="mzq-n">3</span>La taille</h3>
@@ -263,7 +273,7 @@ HTML = f"""<title>Musique à scanner</title>
 <script>
 (function(){{
 const D=window.MQ, NS="http://www.w3.org/2000/svg", $=id=>document.getElementById(id);
-const S={{lien:"", modele:"plaque", tl:"m", titre:"", dedi:"", police:"playfair", scan:true, vue:"face", mq:"argente"}};
+const S={{lien:"", modele:"plaque", tl:"m", titre:"", dedi:"", police:"playfair", scan:true, vue:"face", mq:"argente", ph:"non", cote:"avant", photo:null}};
 const eur=v=>v.toFixed(2).replace(".",",")+"\\u00a0€";
 const cm=v=>(Math.round(v)/10).toFixed(1).replace(".0","").replace(".",",");
 const esc=t=>t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -304,7 +314,18 @@ function geo(){{
     const B=W*.833, tab=W-B, th=B*.36, hole=W*.08, r=B*.08;
     const contour=`M${{r}} 0H${{B-r}}A${{r}} ${{r}} 0 0 1 ${{B}} ${{r}}V${{(B-th)/2}}H${{B+tab-th/2}}A${{th/2}} ${{th/2}} 0 0 1 ${{B+tab-th/2}} ${{(B+th)/2}}H${{B}}V${{B-r}}A${{r}} ${{r}} 0 0 1 ${{B-r}} ${{B}}H${{r}}A${{r}} ${{r}} 0 0 1 0 ${{B-r}}V${{r}}A${{r}} ${{r}} 0 0 1 ${{r}} 0Z`;
     const q=B*.78;
+    if(photoOn()&&S.cote==="dos") return {{w:W,h:B,contour,trou:{{cx:B+tab-th/2,cy:B/2,r:hole/2}},miroir:true,qr:null,photo:{{x:W-B+(B-q)/2,y:(B-q)/2,t:q}},textes:[]}};
     return {{w:W,h:B,contour,trou:{{cx:B+tab-th/2,cy:B/2,r:hole/2}},qr:{{x:(B-q)/2,y:(B-q)/2,t:q}},textes:[]}};
+  }}
+  if(photoOn()){{
+    // photo à gauche, QR code à droite, côte à côte (plaque et carte, tailles Moyenne et Grande)
+    const H=W*.78, r=W*.06, contour=`M${{r}} 0H${{W-r}}A${{r}} ${{r}} 0 0 1 ${{W}} ${{r}}V${{H-r}}A${{r}} ${{r}} 0 0 1 ${{W-r}} ${{H}}H${{r}}A${{r}} ${{r}} 0 0 1 0 ${{H-r}}V${{r}}A${{r}} ${{r}} 0 0 1 ${{r}} 0Z`;
+    const T=[], f=police()[2], scan=S.scan?"SCANNEZ POUR ÉCOUTER":"", mg=W*.07, s=(W-3*mg)/2, y0=W*.17;
+    if(S.modele==="plaque"){{T.push({{ligne:[W*.1,W*.06,W*.9,W*.06]}});if(scan)T.push({{t:scan,x:W/2,y:W*.125,s:W*.038,f:"Inter,sans-serif",w:700,ls:W*.003}});}}
+    else{{T.push({{note:true,x:W*.07,y:W*.035,s:W*.1}});if(scan)T.push({{t:scan,x:W*.62,y:W*.11,s:W*.034,f:"Inter,sans-serif",w:700,ls:W*.003}});}}
+    if(S.titre)T.push({{t:S.titre,x:W/2,y:y0+s+W*.085,s:W*.06,f,w:600}});
+    if(S.dedi)T.push({{t:S.dedi,x:W/2,y:y0+s+W*.14,s:W*.036,f:"Inter,sans-serif",w:500}});
+    return {{w:W,h:H,contour,qr:{{x:mg*2+s,y:y0,t:s}},photo:{{x:mg,y:y0,t:s}},textes:T}};
   }}
   const H=W*1.121, r=W*.06, contour=`M${{r}} 0H${{W-r}}A${{r}} ${{r}} 0 0 1 ${{W}} ${{r}}V${{H-r}}A${{r}} ${{r}} 0 0 1 ${{W-r}} ${{H}}H${{r}}A${{r}} ${{r}} 0 0 1 0 ${{H-r}}V${{r}}A${{r}} ${{r}} 0 0 1 ${{r}} 0Z`;
   const T=[], f=police()[2], scan=S.scan?"SCANNEZ POUR ÉCOUTER":"";
@@ -341,32 +362,59 @@ function mqExtra(g){{return Math.max(0,mqAx(g)+MQL-g.w);}}
 function mousqSvg(g){{const m=mqChoix(),d=mqDim();return `<g transform="translate(${{mqAx(g)}} ${{g.trou.cy}}) rotate(90)"><image href="${{m.img}}" x="${{-d.W/2}}" y="${{-d.L}}" width="${{d.W}}" height="${{d.L}}" preserveAspectRatio="none"/></g>`;}}
 function rendreMq(){{$("mqBloc").hidden=S.modele!=="porte";$("mousq").innerHTML=D.mousquetons.map(m=>`<button type="button" data-v="${{m.id}}" aria-pressed="${{S.mq===m.id}}"><img src="${{m.img}}" alt=""><span>${{m.nom}}</span></button>`).join("");$("mousq").querySelectorAll("button").forEach(b=>b.onclick=()=>{{S.mq=b.dataset.v;rendreMq();dessiner();}});}}
 
+// ---------- photo de la cliente (gravée sur le bois, en nuances de brun) ----------
+const photoOn=()=>S.ph==="oui";
+function geoCote(c){{const o=S.cote;S.cote=c;const g=geo();S.cote=o;return g;}}
+let EX=null;
+const photoG=()=>((S.photo||EX||{{}}).g||"");
+const photoN=()=>((S.photo||EX||{{}}).n||"");
+function photoSvg(p,src,id){{const r=p.t*.05;return `<clipPath id="${{id}}"><rect x="${{p.x}}" y="${{p.y}}" width="${{p.t}}" height="${{p.t}}" rx="${{r}}"/></clipPath><image href="${{src}}" x="${{p.x}}" y="${{p.y}}" width="${{p.t}}" height="${{p.t}}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${{id}})"/>`;}}
+function traiter(src){{return new Promise(ok=>{{const im=new Image();im.onload=()=>{{const N=520,c=document.createElement("canvas");c.width=c.height=N;const x=c.getContext("2d");const s=Math.min(im.width,im.height);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,N,N);
+  const p=x.getImageData(0,0,N,N).data, g=x.createImageData(N,N), n=x.createImageData(N,N);let mn=255,mx=0;
+  for(let i=0;i<p.length;i+=4){{const L=.299*p[i]+.587*p[i+1]+.114*p[i+2];if(L<mn)mn=L;if(L>mx)mx=L;}}
+  for(let i=0;i<p.length;i+=4){{const L=(.299*p[i]+.587*p[i+1]+.114*p[i+2]-mn)/Math.max(1,mx-mn), a=Math.pow(1-L,.85);
+    g.data[i]=58;g.data[i+1]=38;g.data[i+2]=20;g.data[i+3]=Math.round(a*235);const v=Math.round(255*(1-a));n.data[i]=n.data[i+1]=n.data[i+2]=v;n.data[i+3]=255;}}
+  x.putImageData(g,0,0);const G=c.toDataURL("image/png");x.putImageData(n,0,0);ok({{g:G,n:c.toDataURL("image/jpeg",.86)}});}};im.onerror=()=>ok(null);im.src=src;}});}}
+function rendrePhoto(){{
+  const porte=S.modele==="porte", on=photoOn();
+  $("photoUp").hidden=!on;
+  $("photoNote").textContent=on?(porte?"Votre photo est gravée au dos du porte-clés. Touchez « Le dos » sur l'aperçu pour la voir.":"Votre photo est gravée sur le bois à côté du QR code, en nuances de brun (sans couleur). Tailles Moyenne et Grande seulement."):"";
+  if(!on||!porte){{S.cote="avant";majVues();}}
+}}
+function majVues(){{$("stage").dataset.vue=S.vue;$("bFace").setAttribute("aria-pressed",S.vue==="face"&&S.cote==="avant");$("bRelief").setAttribute("aria-pressed",S.vue==="relief");$("bDos").setAttribute("aria-pressed",S.cote==="dos");}}
+
 // ---------- aperçu ----------
 function dessiner(){{
   const g=geo(), m=matrice(urlQR()), pad=Math.max(g.w,g.h)*.04;
-  const svg=$("svg"); svg.setAttribute("viewBox",`${{-pad}} ${{-pad}} ${{g.w+2*pad+0}} ${{g.h+2*pad}}`);
-  const clr="#3a2614", maxW=g.w*.86;
+  const svg=$("svg"); svg.setAttribute("viewBox",`${{-pad}} ${{-pad}} ${{g.w+2*pad}} ${{g.h+2*pad}}`);
+  const clr="#3a2614", maxW=g.w*.86, mir=g.miroir?` transform="translate(${{g.w}} 0) scale(-1 1)"`:"";
   svg.innerHTML=`<defs><linearGradient id="bois" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ecd3a8"/><stop offset=".5" stop-color="#e2c393"/><stop offset="1" stop-color="#d9b682"/></linearGradient>
    <pattern id="fil" width="${{g.w}}" height="${{g.h/7}}" patternUnits="userSpaceOnUse"><path d="M0 ${{g.h/14}} C ${{g.w*.3}} ${{g.h/20}}, ${{g.w*.6}} ${{g.h/10}}, ${{g.w}} ${{g.h/14}}" stroke="#b98d55" stroke-opacity=".18" stroke-width="${{g.w*.004}}" fill="none"/></pattern>
    <filter id="omb" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="${{g.w*.012}}" stdDeviation="${{g.w*.012}}" flood-color="#4b3214" flood-opacity=".35"/></filter></defs>
-   <g filter="url(#omb)"><path d="${{g.contour}}" fill="url(#bois)"/></g><path d="${{g.contour}}" fill="url(#fil)"/>
-   ${{g.trou?`<circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r}}" fill="#e7dccb" stroke="#9c6b3f" stroke-width="${{g.w*.006}}"/><circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r*1.9}}" fill="none" stroke="#b9b9b9" stroke-width="${{g.w*.02}}"/>`:""}}
-   <path d="${{qrPath(m,g.qr.x,g.qr.y,g.qr.t)}}" fill="${{clr}}" fill-opacity=".92"/>
+   <g${{mir}}><g filter="url(#omb)"><path d="${{g.contour}}" fill="url(#bois)"/></g><path d="${{g.contour}}" fill="url(#fil)"/>
+   ${{g.trou?`<circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r}}" fill="#e7dccb" stroke="#9c6b3f" stroke-width="${{g.w*.006}}"/><circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r*1.9}}" fill="none" stroke="#b9b9b9" stroke-width="${{g.w*.02}}"/>`:""}}</g>
+   ${{g.photo?photoSvg(g.photo,photoG(),"cpA"):""}}
+   ${{g.qr?`<path d="${{qrPath(m,g.qr.x,g.qr.y,g.qr.t)}}" fill="${{clr}}" fill-opacity=".92"/>`:""}}
    ${{g.textes.map(t=>texteSvg(t,clr,maxW)).join("")}}
-   <path d="${{g.contour}}" fill="none" stroke="#9c6b3f" stroke-width="${{g.w*.005}}"/>`;
+   <g${{mir}}><path d="${{g.contour}}" fill="none" stroke="#9c6b3f" stroke-width="${{g.w*.005}}"/></g>`;
   ajuster(svg,maxW);
-  $("exTag").hidden=!!lienActif();
-  fichier(g,m); resume();
+  const ex=[]; if(!lienActif())ex.push("collez votre lien"); if(photoOn()&&!S.photo)ex.push("choisissez votre photo");
+  $("exTag").hidden=!ex.length; $("exTag").textContent="Exemple : "+ex.join(" et ");
+  $("bDos").hidden=!(S.modele==="porte"&&photoOn());
+  fichier(geoCote("avant"),m); resume();
 }}
 
 // ---------- fichier de l'atelier ----------
 function fichier(g,m){{
-  const M=4, W=g.w+2*M, H=g.h+2*M+8;
+  const M=4, dos=S.modele==="porte"&&photoOn(), gd=dos?geoCote("dos"):null, dx=g.w+10;
+  const W=g.w+2*M+(dos?dx:0), H=g.h+2*M+8, fs=Math.min(3,g.w*.034);
+  const piece=(gg,off,id)=>`<g transform="translate(${{off}} 0)">`+(gg.photo?photoSvg(gg.photo,photoN(),id):"")+(gg.qr?`<path d="${{qrPath(m,gg.qr.x,gg.qr.y,gg.qr.t)}}" fill="#000"/>`:"")
+     +gg.textes.map(t=>texteSvg(t,"#000",gg.w*.86)).join("")
+     +`<g${{gg.miroir?` transform="translate(${{gg.w}} 0) scale(-1 1)"`:""}}><path d="${{gg.contour}}" fill="none" stroke="#ff0000" stroke-width=".2"/>`
+     +(gg.trou?`<circle cx="${{gg.trou.cx}}" cy="${{gg.trou.cy}}" r="${{gg.trou.r}}" fill="none" stroke="#ff0000" stroke-width=".2"/>`:"")+`</g></g>`;
   let s=`<svg xmlns="${{NS}}" viewBox="${{-M}} ${{-M}} ${{W}} ${{H}}" width="${{W}}mm" height="${{H}}mm"><rect x="${{-M}}" y="${{-M}}" width="${{W}}" height="${{H}}" fill="#fff"/>`
-   +`<path d="${{qrPath(m,g.qr.x,g.qr.y,g.qr.t)}}" fill="#000"/>`+g.textes.map(t=>texteSvg(t,"#000",g.w*.86)).join("")
-   +`<path d="${{g.contour}}" fill="none" stroke="#ff0000" stroke-width=".2"/>`
-   +(g.trou?`<circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r}}" fill="none" stroke="#ff0000" stroke-width=".2"/>`:"")
-   +`<text x="0" y="${{g.h+6}}" font-size="${{Math.min(3,g.w*.034)}}" fill="#777" font-family="Inter,sans-serif">${{g.w}} × ${{g.h.toFixed(1).replace(".",",")}} mm · rouge = découpe · noir = gravure</text></svg>`;
+   +piece(g,0,"cpF")+(dos?piece(gd,dx,"cpD")+`<text x="${{dx}}" y="${{g.h+6}}" font-size="${{fs}}" fill="#777" font-family="Inter,sans-serif">dos : retourner la pièce</text>`:"")
+   +`<text x="0" y="${{g.h+6}}" font-size="${{fs}}" fill="#777" font-family="Inter,sans-serif">${{g.w}} × ${{g.h.toFixed(1).replace(".",",")}} mm · rouge = découpe · noir = gravure</text></svg>`;
   $("fichier").innerHTML=s;
   ajuster($("fichier").querySelector("svg"),g.w*.86);
   const l=lienActif(), mod=D.modeles.find(x=>x.id===S.modele);
@@ -374,6 +422,7 @@ function fichier(g,m){{
     l?`Lien (${{l.plat}}) : ${{l.url}}`:"Lien : exemple, la cliente n'a pas encore collé le sien"];
   if(S.modele!=="porte"){{if(S.titre)faits.push(`Titre : « ${{S.titre}} »`);if(S.dedi)faits.push(`Dédicace : « ${{S.dedi}} »`);if(S.titre||S.dedi)faits.push(`Écriture : ${{police()[1]}}`);}}
   if(S.modele==="porte")faits.push(`Mousqueton : ${{mqChoix().nom}}`);
+  if(photoOn()){{const p=(dos?gd:g).photo;faits.push(`Photo : ${{dos?"au dos":"à gauche du QR code"}}, ${{cm(p.t)}} × ${{cm(p.t)}} cm`+(S.photo?" (fichier d'origine de la cliente gardé avec la commande)":" (exemple : la cliente n'a pas encore choisi la sienne)"));}}
   $("faits").innerHTML=faits.map(t=>`<span>${{esc(t)}}</span>`).join("")+`<span id="verif">Vérification du QR…</span>`;
   verifier(m,l);
 }}
@@ -398,18 +447,22 @@ function boutons(id,items,cle,fn){{
 }}
 function rendreTailles(){{
   const porte=S.modele==="porte";rendreMq();
-  boutons("tailles",tailles().map(t=>{{const h=porte?t.w*.833:t.w*1.121;return {{v:t.id,t:t.nom,s:`${{cm(t.w)}} × ${{cm(h)}} cm · ${{eur(t.prix)}}`,
+  boutons("tailles",tailles().map(t=>{{const h=porte?t.w*.833:(photoOn()?t.w*.78:t.w*1.121);return {{v:t.id,t:t.nom,s:`${{cm(t.w)}} × ${{cm(h)}} cm · ${{eur(t.prix)}}`,
     icon:`<svg viewBox="0 0 52 44"><rect x="${{26-11*t.w/(porte?70:150)}}" y="${{22-11*t.w/(porte?70:150)}}" width="${{22*t.w/(porte?70:150)}}" height="${{22*t.w/(porte?70:150)}}" rx="2" fill="#ecd3a8" stroke="#9c6b3f" stroke-width="1.6"/></svg>`}};}}),"tl");
+  if(photoOn()&&!porte){{if(S.tl==="p"){{S.tl="m";$("tailles").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v==="m"));}}const b=$("tailles").querySelector('button[data-v="p"]');if(b){{b.disabled=true;b.title="Trop petite pour la photo et le QR code côte à côte";b.style.opacity=".45";}}}}
+  rendrePhoto();
 }}
 function resume(){{
-  const t=taille(), g=geo(), l=lienActif(), mod=D.modeles.find(x=>x.id===S.modele), m=matrice(urlQR());
-  $("prixLead").textContent=eur(t.prix);
-  $("tailleP").textContent=`QR code de ${{cm(g.qr.t)}} cm de côté.`+(S.modele==="porte"?" Le mousqueton est fourni, dans la couleur choisie ci-dessous.":"");
+  const t=taille(), g=geoCote("avant"), l=lienActif(), mod=D.modeles.find(x=>x.id===S.modele), ph=photoOn(), px=t.prix+(ph?D.prixPhoto:0);
+  $("prixLead").textContent=eur(px);
+  $("tailleP").textContent=`QR code de ${{cm(g.qr.t)}} cm de côté.`+(S.modele==="porte"?" Le mousqueton est fourni, dans la couleur choisie ci-dessous.":"")+(ph&&S.modele!=="porte"?" Avec votre photo : taille Moyenne ou Grande.":"");
   const L=[["Chanson",l?`lien ${{l.plat}}`:"à coller"],["Modèle",mod.nom],["Taille",`${{t.nom}} · ${{cm(g.w)}} × ${{cm(g.h)}} cm`],["Bois","contreplaqué, 3 mm"]];if(S.modele==="porte")L.push(["Mousqueton",mqChoix().nom]);
+  if(ph)L.push(["Photo",(S.modele==="porte"?"au dos":"à côté du QR code")+(S.photo?"":", à choisir")+` (+${{eur(D.prixPhoto)}})`]);
   if(S.modele!=="porte"){{L.push(["Titre",S.titre||"aucun"]);L.push(["Dédicace",S.dedi||"aucune"]);if(S.titre||S.dedi)L.push(["Écriture",police()[1]]);}}
   $("resume").innerHTML=L.map(([a,b])=>`<li><span>${{a}}</span><span>${{esc(b)}}</span></li>`).join("");
-  $("total").textContent=eur(t.prix);
-  $("panier").disabled=!l; $("manque").textContent=l?"":"Il manque le lien de votre chanson : collez-le à l'étape 1.";
+  $("total").textContent=eur(px);
+  const manque=[];if(!l)manque.push("le lien de votre chanson (étape 1)");if(ph&&!S.photo)manque.push("votre photo (étape 2)");
+  $("panier").disabled=manque.length>0; $("manque").textContent=manque.length?"Il manque "+manque.join(" et ")+".":"";
   $("etTextes").hidden=S.modele==="porte"; $("nRes").textContent=S.modele==="porte"?"4":"5";
 }}
 function majLien(){{
@@ -425,9 +478,13 @@ for(const [id,c,cle] of [["titre","cTitre","titre"],["dedi","cDedi","dedi"]]) $(
 $("police").innerHTML=D.polices.map(p=>`<option value="${{p[0]}}" style="font-family:${{esc(p[2])}}">${{p[1]}}</option>`).join("");
 $("police").onchange=e=>{{S.police=e.target.value;dessiner();}};
 $("scanTxt").onchange=e=>{{S.scan=e.target.checked;dessiner();}};
-$("bFace").onclick=()=>{{S.vue="face";$("stage").dataset.vue="face";$("bFace").setAttribute("aria-pressed",true);$("bRelief").setAttribute("aria-pressed",false);}};
-$("bRelief").onclick=()=>{{S.vue="relief";$("stage").dataset.vue="relief";$("bRelief").setAttribute("aria-pressed",true);$("bFace").setAttribute("aria-pressed",false);}};
+$("bFace").onclick=()=>{{S.vue="face";S.cote="avant";majVues();dessiner();}};
+$("bRelief").onclick=()=>{{S.vue="relief";majVues();}};
+$("bDos").onclick=()=>{{S.cote="dos";S.vue="face";majVues();dessiner();}};
+$("photoFile").onchange=e=>{{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{{const t=await traiter(r.result);if(t){{S.photo=t;$("photoNom").textContent="✓ "+f.name;dessiner();}}}};r.readAsDataURL(f);}};
+traiter(D.photoEx).then(t=>{{EX=t;dessiner();}});
 boutons("modeles",D.modeles.map(m=>({{v:m.id,t:m.nom,s:m.s,icon:iconeModele(m.id)}})),"modele",()=>{{rendreTailles();}});
+boutons("photoOpt",[{{v:"non",t:"QR code seul",s:"compris"}},{{v:"oui",t:"QR code + ma photo",s:"+"+eur(D.prixPhoto)}}],"ph",()=>{{rendreTailles();}});
 rendreTailles();
 function sousEntete(){{const h=document.querySelector('header');let t=0;if(h&&/sticky|fixed/.test(getComputedStyle(h).position))t=h.offsetHeight;document.documentElement.style.setProperty('--mzq-top',t+'px');}}
 sousEntete();window.addEventListener('resize',sousEntete);
