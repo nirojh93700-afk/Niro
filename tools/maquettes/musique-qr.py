@@ -81,17 +81,17 @@ DONNEES = {
         {"id": "porte", "nom": "Porte-clés", "s": "QR carré, anneau sur le côté"},
     ],
     "tailles": {
-        "plaque": [{"id": "p", "nom": "Petite", "w": 80, "prix": 17.9}, {"id": "m", "nom": "Moyenne", "w": 110, "prix": 22.9},
-                   {"id": "g", "nom": "Grande", "w": 150, "prix": 27.9}],
-        "porte": [{"id": "p", "nom": "Petit", "w": 50, "prix": 16.9}, {"id": "m", "nom": "Moyen", "w": 60, "prix": 17.9},
-                  {"id": "g", "nom": "Grand", "w": 70, "prix": 18.9}],
+        "plaque": [{"id": "p", "nom": "Petite", "w": 80, "prix": 15.9}, {"id": "m", "nom": "Moyenne", "w": 110, "prix": 19.9},
+                   {"id": "g", "nom": "Grande", "w": 150, "prix": 24.9}],
+        "porte": [{"id": "p", "nom": "Petit", "w": 50, "prix": 14.9}, {"id": "m", "nom": "Moyen", "w": 60, "prix": 15.9},
+                  {"id": "g", "nom": "Grand", "w": 70, "prix": 16.9}],
     },
     "polices": [["playfair", "Playfair Display", "'Playfair Display',Georgia,serif"], ["cinzel", "Cinzel", "Cinzel,serif"],
                 ["montserrat", "Montserrat", "Montserrat,sans-serif"], ["inter", "Inter", "Inter,sans-serif"],
                 ["great-vibes", "Great Vibes", "'Great Vibes',cursive"], ["allura", "Allura", "Allura,cursive"],
                 ["pacifico", "Pacifico", "Pacifico,cursive"], ["cinzel-deco", "Cinzel Decorative", "'Cinzel Decorative',serif"]],
     "mousquetons": MOUSQUETONS,
-    "prixPhoto": 4,
+    "prixPhoto": 3,
     "photoEx": raw_uri(os.path.join(ROOT, "docs/maquettes/assets/marque-pages/exemples/portraits/couple.jpg")),
     "exemple": "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC",
 }
@@ -258,7 +258,7 @@ HTML = f"""<title>Musique à scanner</title>
   <div class="mzq-fichier" id="fichier"></div>
   <div class="mzq-faits" id="faits"></div>
   <div class="mzq-valider"><b>À valider par vous :</b><ul>
-    <li>les prix proposés : plaque 17,90 / 22,90 / 27,90 € (petite, moyenne, grande) ; porte-clés 16,90 / 17,90 / 18,90 € (relevés au niveau des ateliers français, demande du gérant du 26/11) ;</li>
+    <li>les prix proposés : plaque 15,90 / 19,90 / 24,90 € (petite, moyenne, grande) ; porte-clés 14,90 / 15,90 / 16,90 € ; photo +3 € (baissés le 26/11 soir à la demande du gérant) ;</li>
     <li>les tailles : plaque 8, 11 ou 15 cm de large ; porte-clés 5, 6 ou 7 cm (pas plus petit, sinon le QR devient difficile à lire) ;</li>
     <li>le nom du produit (sans le mot « Spotify », qui est une marque) et le rayon « Petits cadeaux » ;</li>
     <li>le porte-clés « vague de son » d'Atomm n'est pas repris : les codes Spotify officiels sont interdits sur des produits vendus.</li>
