@@ -1,4 +1,4 @@
-# Vidéo 78 (26/11/2026) — « Le Noël de Thomas », même style que la 77 (le gérant l'aime), autre histoire, AUCUN produit
+# Vidéo 78 (26/11/2026) — « Un cadeau pour chacun » (titre générique, gérant : « pas Le Noël de Thomas, un truc générique »), même style que la 77 (le gérant l'aime), autre histoire, AUCUN produit
 # pour enfant (gérant : « pas les trucs des enfants »), AUCUN produit / coloris en rupture (vérifier /api/stock). Histoire racontée comme un film : générique d'ouverture, chapitres
 # (« Pour Papi et Mamie », « Pour Papa »…), image cinéma entre deux bandes noires, sous-titres de film, grain, fondus au
 # noir, puis « Fin » et un générique qui défile (« dans le rôle du cadeau de… »). Uniquement des photos de pièces GRAVÉES,
@@ -19,25 +19,25 @@ random.seed(78); np.random.seed(78)
 
 # (chapitre, titre, sous-titre 1, sous-titre 2, photo, badge EXEMPLE à effacer, nom du produit, rôle au générique)
 SCENES = [
-  ("Chapitre I", "Pour Claire, sa femme", "Des prénoms qui comptent,", "gravés tout près de son cœur.",
-   "public/produits/collier-coeur-plaques-1.jpg", False, "Collier cœur & plaques gravées", "Le cadeau de Claire"),
-  ("Chapitre II", "Pour son père", "Il le savait déjà.", "Maintenant, c'est gravé.",
+  ("Chapitre I", "Pour sa femme", "Des prénoms qui comptent,", "gravés tout près de son cœur.",
+   "public/produits/collier-coeur-plaques-1.jpg", False, "Collier cœur & plaques gravées", "Le cadeau de sa femme"),
+  ("Chapitre II", "Pour Papa", "Il le savait déjà.", "Maintenant, c'est gravé.",
    "public/produits/verre_whisky_papa_monde_banniere.jpg", False, "Verre à whisky gravé", "Le verre de Papa"),
-  ("Chapitre III", "Pour sa mère", "Son plus beau portrait,", "pris dans le cristal.",
+  ("Chapitre III", "Pour Maman", "Son plus beau portrait,", "pris dans le cristal.",
    "public/produits/cristal-v-femme.jpg", False, "Cristal photo 3D", "Le portrait de Maman"),
-  ("Chapitre IV", "Pour Inès, sa sœur", "Elle dévore les livres.", "Elle ne perdra plus sa page.",
-   "public/marque-pages/m1/exemple-ex4.jpg", False, "Marque-page en bois gravé", "Le marque-page d'Inès"),
+  ("Chapitre IV", "Pour sa sœur", "Elle dévore les livres.", "Elle ne perdra plus sa page.",
+   "public/marque-pages/m1/exemple-ex4.jpg", False, "Marque-page en bois gravé", "Le marque-page de sa sœur"),
   ("Chapitre V", "Pour la bande", "Vingt ans d'amitié,", "et toujours les mêmes fous rires.",
    "public/produits/cristal-h-amis.jpg", False, "Cristal photo 3D", "La photo de la bande"),
-  ("Chapitre VI", "Pour Camille, sa collègue", "Elle adore Monet.", "Un tableau à glisser dans son livre.",
-   "public/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg", False, "Marque-page en métal", "Le marque-page de Camille"),
-  ("Chapitre VII", "Pour Léa et Paul", "Fiancés depuis l'été,", "deux verres pour trinquer.",
+  ("Chapitre VI", "Pour sa collègue", "Elle adore Monet.", "Un tableau à glisser dans son livre.",
+   "public/marque-pages/metal/14-nympheas-monet-pompon-dore.jpg", False, "Marque-page en métal", "Le marque-page de la collègue"),
+  ("Chapitre VII", "Pour les fiancés", "Fiancés depuis l'été,", "deux verres pour trinquer.",
    "public/produits/verre_a_cocktail_ex_colombes.jpg", True, "Verre à cocktail gravé", "Les verres des fiancés"),
-  ("Chapitre VIII", "Pour sa marraine", "Trois cœurs,", "et son prénom tout contre eux.",
+  ("Chapitre VIII", "Pour Marraine", "Trois cœurs,", "et son prénom tout contre eux.",
    "public/produits/collier-3coeurs-3.jpg", False, "Collier 3 Cœurs gravé", "Les cœurs de la marraine"),
 ]
-FINAL = ("Épilogue", "Et pour Thomas ?", "Claire aussi avait un secret.", "Leur photo, gravée dans le cristal.",
-         "public/produits/cristal-v-couple.jpg", False, "Cristal photo 3D", "Le cadeau de Thomas")
+FINAL = ("Épilogue", "Et pour lui ?", "Elle aussi avait un secret.", "Leur photo, gravée dans le cristal.",
+         "public/produits/cristal-v-couple.jpg", False, "Cristal photo 3D", "Le cadeau de son mari")
 
 NON_GRAVE = {"Marque-page en métal"}   # le métal ne se grave pas : jamais « gravé » sous ce produit
 T_GEN = 6.0; DS = 4.2; T_EPI = 5.0; T_FIN = 2.6; T_CRED = 9.0; T_DER = 3.2
@@ -132,11 +132,11 @@ def generique_ouverture(t):
     texte_c(im, "NIV CRÉATION", INTER(40, 700), 820, OR + (int(255 * a1),), ombre=False)
     texte_c(im, "présente", PLAY(46, 400), 885, CREME + (int(220 * a1),), ombre=False)
     a2 = ease((t - 2.7) / .9) * (1 - ease((t - T_GEN + .5) / .5))
-    texte_c(im, "Le Noël", PLAY(120, 700), 700, CREME + (int(255 * a2),), ombre=False)
-    texte_c(im, "de Thomas", SCRIPT(170), 830, OR_CLAIR + (int(255 * a2),), ombre=False)
-    texte_c(im, "Une comédie de Noël", INTER(34, 500), 1110, (200, 185, 160, int(220 * a2)), ombre=False)
-    texte_c(im, "Thomas n'a jamais su choisir un cadeau.", PLAY(40, 400), 1250, (230, 220, 200, int(200 * a2)), ombre=False)
-    texte_c(im, "Cette année, il a tout fait graver.", PLAY(40, 400), 1305, (230, 220, 200, int(200 * a2)), ombre=False)
+    texte_c(im, "Un cadeau", PLAY(120, 700), 700, CREME + (int(255 * a2),), ombre=False)
+    texte_c(im, "pour chacun", SCRIPT(150), 830, OR_CLAIR + (int(255 * a2),), ombre=False)
+    texte_c(im, "Une histoire de Noël", INTER(34, 500), 1110, (200, 185, 160, int(220 * a2)), ombre=False)
+    texte_c(im, "Cette année, pas de cadeau au hasard.", PLAY(40, 400), 1250, (230, 220, 200, int(200 * a2)), ombre=False)
+    texte_c(im, "Chacun aura le sien, gravé pour lui.", PLAY(40, 400), 1305, (230, 220, 200, int(200 * a2)), ombre=False)
     return im.convert("RGB")
 
 def carte_fin(t):
@@ -188,4 +188,4 @@ if APERCU:
         image(tt).save(os.path.join(OUT, f"apercu78-{k}.jpg"), quality=85)
     print(TOTAL)
 else:
-    print(encoder(image, TOTAL, OUT, "78-le-noel-de-thomas"), TOTAL)
+    print(encoder(image, TOTAL, OUT, "78-un-cadeau-pour-chacun"), TOTAL)
