@@ -171,7 +171,7 @@ export default async function HomePage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <LienPhoto c={collierPlaques}><img className="fan-2" src="/produits/collier-coeur-plaques-1.jpg" alt="Collier cœur et plaques gravés" loading="lazy" /></LienPhoto>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              {decoNoel ? <LienPhoto c={decoNoel}><img className="fan-d" src="/produits/deco-noel-cristal-ex-1.jpg" alt="Décoration de Noël en cristal gravée" loading="lazy" /></LienPhoto> : null}
+              {decoNoel ? <LienPhoto c={decoNoel}><img className="fan-d" src="/produits/deco-noel-cristal-noel-accueil.jpg" alt="Décoration de Noël en cristal gravée" loading="lazy" /></LienPhoto> : null}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <LienPhoto c={whisky}><img className="fan-3" src="/produits/verre_a_whisky_exemple_face.jpg" alt="Verre à whisky gravé" loading="lazy" /></LienPhoto>
             </div>
