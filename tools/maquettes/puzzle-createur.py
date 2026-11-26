@@ -81,8 +81,8 @@ acc = main[main.find('<div class="info-accordion">'):]
 acc = acc[:acc.find("</details></div>") + len("</details></div>")] if "</details></div>" in acc else ""
 blocs_bas += re.sub(r'href="/[^"]*"', 'href="#"', acc)
 # gérant, 26/11 : la maquette suit la taille de la machine (zone 180 mm, 2 mm de marge) → plateau carré 17,6 × 17,6 cm
-blocs_bas = (blocs_bas.replace("21 × 15 cm, un peu plus grand que nos puzzles à encastrer", "17,6 × 17,6 cm")
-             .replace("21 × 15 cm", "17,6 × 17,6 cm"))
+blocs_bas = (blocs_bas.replace("21 × 15 cm, un peu plus grand que nos puzzles à encastrer", "au choix 12 × 12, 15 × 15 ou 17,6 × 17,6 cm")
+             .replace("21 × 15 cm", "12 × 12, 15 × 15 ou 17,6 × 17,6 cm (au choix)"))
 
 PHOTOS = []
 for u in re.findall(r'<div class="gallery-thumbs">(.*?)</div>', main, re.S)[0].split("<button")[1:]:
@@ -204,12 +204,17 @@ HTML = f"""<title>Puzzle photo créateur</title>
       <div class="pz-grid" id="formes"></div>
     </section>
 
-    <section class="pz-step"><h3><span class="pz-n">3</span>Le nombre de pièces</h3>
+    <section class="pz-step"><h3><span class="pz-n">3</span>La taille</h3>
+      <div class="pz-grid" id="tailles"></div>
+      <p class="pz-sub" style="margin:10px 0 0">Plus le puzzle est grand, plus les pièces sont grandes et faciles à prendre.</p>
+    </section>
+
+    <section class="pz-step"><h3><span class="pz-n">4</span>Le nombre de pièces</h3>
       <div class="variant-swatches" id="pieces"></div>
       <p class="pz-sub" id="tailleP" style="margin:10px 0 0"></p>
     </section>
 
-    <section class="pz-step"><h3><span class="pz-n">4</span>Le style des pièces</h3>
+    <section class="pz-step"><h3><span class="pz-n">5</span>Le style des pièces</h3>
       <div class="pz-lab">Les pièces</div>
       <div class="pz-grid" id="types"></div>
       <div class="pz-lab">Les attaches</div>
@@ -222,7 +227,7 @@ HTML = f"""<title>Puzzle photo créateur</title>
       </details>
     </section>
 
-    <section class="pz-step"><h3><span class="pz-n">5</span>Votre puzzle</h3>
+    <section class="pz-step"><h3><span class="pz-n">6</span>Votre puzzle</h3>
       <ul class="pz-sum" id="resume"></ul>
       <div class="pz-tot"><span>Total</span><b id="total"></b></div>
       <div class="qty-row" style="margin-top:10px"><button type="button" class="btn btn-gold pz-cart" id="panier">Ajouter au panier</button></div>
@@ -238,7 +243,8 @@ HTML = f"""<title>Puzzle photo créateur</title>
   <div class="pz-fichier" id="fichier"></div>
   <div class="pz-faits" id="faits"></div>
   <div class="pz-valider"><b>À valider par vous :</b><ul>
-    <li>les formes proposées et leur prix (le même que le carré dans la maquette) ;</li>
+    <li>les prix proposés : taille Moyen +3 €, Grand +6 € ; forme carré ou coins arrondis +3 €, cœur +2 €, rond et ovale au prix de base ;</li>
+    <li>les tailles : Petit 12 × 12, Moyen 15 × 15, Grand 17,6 × 17,6 cm ;</li>
     <li>les pièces irrégulières et les 3 styles d'attaches, pour vos essais de découpe ;</li>
     <li>le réglage « Réglages fins » laissé à la cliente, ou gardé pour l'atelier seulement.</li>
   </ul></div>
@@ -249,8 +255,8 @@ HTML = f"""<title>Puzzle photo créateur</title>
 <script>window.PZ={DONNEES};</script>
 <script>
 (function(){{
-const D=window.PZ, W=176, H=176, K=1, SVGNS="http://www.w3.org/2000/svg";
-const S={{photo:D.exemple, exemple:true, iw:700, ih:460, forme:"rect", vi:1, type:"grille", att:"classique", taille:26, arrondi:60, freq:100, seed:7, zoom:1, ox:0, oy:0, eclate:false, vue:"creation"}};
+const D=window.PZ, W=176, H=176, SVGNS="http://www.w3.org/2000/svg";
+const S={{photo:D.exemple, exemple:true, iw:700, ih:460, forme:"rect", vi:1, tl:"moyen", type:"grille", att:"classique", taille:26, arrondi:60, freq:100, seed:7, zoom:1, ox:0, oy:0, eclate:false, vue:"creation"}};
 const $=id=>document.getElementById(id);
 const eur=v=>v.toFixed(2).replace(".",",")+"\\u00a0€";
 function rng(seed){{let a=seed>>>0;return()=>{{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}};}}
@@ -258,13 +264,21 @@ function hash(s){{let h=2166136261;for(const c of s){{h^=c.charCodeAt(0);h=Math.
 
 // ---------- formes (unités = mm, plateau 176 × 176 = zone machine 180 moins 2 mm de marge) ----------
 const FORMES=[
- {{id:"rect",nom:"Carré",dim:"17,6 × 17,6 cm",box:[0,0,176,176],aire:1}},
- {{id:"arrondi",nom:"Coins arrondis",dim:"17,6 × 17,6 cm",box:[0,0,176,176],aire:.99}},
- {{id:"cercle",nom:"Rond",dim:"Ø 17,6 cm",box:[0,0,176,176],aire:.785}},
- {{id:"ellipse",nom:"Ovale",dim:"17,6 × 13,2 cm",box:[0,22,176,154],aire:.785}},
- {{id:"coeur",nom:"Cœur",dim:"17,6 × 15,5 cm",box:[0,10.5,176,165.5],aire:.72}},
+ {{id:"rect",nom:"Carré",sup:3,box:[0,0,176,176],aire:1}},
+ {{id:"arrondi",nom:"Coins arrondis",sup:3,box:[0,0,176,176],aire:.99}},
+ {{id:"cercle",nom:"Rond",sup:0,box:[0,0,176,176],aire:.785}},
+ {{id:"ellipse",nom:"Ovale",sup:0,box:[0,22,176,154],aire:.785}},
+ {{id:"coeur",nom:"Cœur",sup:2,box:[0,10.5,176,165.5],aire:.72}},
 ];
 const forme=()=>FORMES.find(f=>f.id===S.forme);
+// tailles (gérant, 26/11 : « plus grand, plus cher ») : côté du plateau en mm, 176 = zone machine 180 moins 2 mm de marge
+const TAILLES=[{{id:"petit",nom:"Petit",cote:120,sup:0}},{{id:"moyen",nom:"Moyen",cote:150,sup:3}},{{id:"grand",nom:"Grand",cote:176,sup:6}}];
+const taille=()=>TAILLES.find(t=>t.id===S.tl);
+const kk=(t)=>(t||taille()).cote/176;
+const cm=v=>(Math.round(v)/10).toFixed(1).replace(".0","").replace(".",",");
+function dimF(f,t){{const k=kk(t), w=(f.box[2]-f.box[0])*k, h=(f.box[3]-f.box[1])*k;return f.id==="cercle"?`Ø ${{cm(w)}} cm`:`${{cm(w)}} × ${{cm(h)}} cm`;}}
+const plus=v=>v?`+${{v}}\u00a0€`:"prix de base";
+const prixTotal=()=>D.variantes[S.vi].p+taille().sup+forme().sup;
 function cheminForme(id){{
   if(id==="rect") return "M0 0H176V176H0Z";
   if(id==="arrondi") return "M14 0H162A14 14 0 0 1 176 14V162A14 14 0 0 1 162 176H14A14 14 0 0 1 0 162V14A14 14 0 0 1 14 0Z";
@@ -389,13 +403,13 @@ function dessiner(){{
 // ---------- fichier de l'atelier ----------
 function fichier(){{
   const sh=cheminForme(S.forme);
-  $("fichier").innerHTML=`<svg viewBox="-5 -5 186 196" width="186mm" height="196mm" xmlns="${{SVGNS}}"><rect x="-5" y="-5" width="186" height="196" fill="#fff"/>`+
+  $("fichier").innerHTML=`<svg viewBox="-5 -5 186 196" width="${{(186*kk()).toFixed(1)}}mm" height="${{(196*kk()).toFixed(1)}}mm" xmlns="${{SVGNS}}"><rect x="-5" y="-5" width="186" height="196" fill="#fff"/>`+
    `<defs><clipPath id="cf2"><path d="${{sh}}"/></clipPath></defs>`+
    `<g clip-path="url(#cf2)"><path d="${{PC.map(p=>p.d).join("")}}" fill="none" stroke="#ff0000" stroke-width=".3"/></g>`+
    `<path d="${{sh}}" fill="none" stroke="#ff0000" stroke-width=".3"/>`+
-   `<text x="0" y="186" font-size="4" fill="#777" font-family="Inter,sans-serif">176 × 176 mm (zone de la machine 180 × 180, 2 mm de marge) — rouge = découpe</text></svg>`;
+   `<text x="0" y="186" font-size="4" fill="#777" font-family="Inter,sans-serif">${{taille().cote}} × ${{taille().cote}} mm (taille ${{taille().nom}}) — rouge = découpe</text></svg>`;
   const f=forme(), dans=PC.filter(p=>dedans(p.cx,p.cy)).length;
-  $("faits").innerHTML=[`Forme : ${{f.nom}} (${{f.dim}})`,`Pièces dans le fichier : ${{dans}}`,`Pièces : ${{S.type==="grille"?"en grille":"irrégulières"}}`,`Attaches : ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`,`Photo : ${{S.exemple?"exemple":"envoyée par la cliente"}}`].map(t=>`<span>${{t}}</span>`).join("");
+  $("faits").innerHTML=[`Taille : ${{taille().nom}} ${{taille().cote}} × ${{taille().cote}} mm`,`Forme : ${{f.nom}} (${{dimF(f)}})`,`Pièces dans le fichier : ${{dans}}`,`Pièces : ${{S.type==="grille"?"en grille":"irrégulières"}}`,`Attaches : ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`,`Photo : ${{S.exemple?"exemple":"envoyée par la cliente"}}`].map(t=>`<span>${{t}}</span>`).join("");
 }}
 
 // ---------- panneau ----------
@@ -410,16 +424,16 @@ function boutons(id,items,cle,fn){{
 }}
 function resume(){{
   const v=D.variantes[S.vi], f=forme();
-  $("prixLead").textContent=eur(v.p);
-  const cw=(f.box[2]-f.box[0]), ch=(f.box[3]-f.box[1]), aire=cw*ch*f.aire/v.n, cote=Math.sqrt(aire)*K/10;
-  $("tailleP").textContent=`Pièces d'environ ${{cote.toFixed(1).replace(".",",")}} cm de côté. Plus il y a de pièces, plus elles sont petites et le puzzle difficile.`;
-  $("resume").innerHTML=[["Photo",S.exemple?"à choisir":"votre photo"],["Forme",`${{f.nom}} · ${{f.dim}}`],["Pièces",v.t],["Style",`${{S.type==="grille"?"en grille":"irrégulières"}}, attaches ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`],["Gravure","photo en noir et blanc, au laser"]]
+  $("prixLead").textContent=eur(prixTotal());
+  const cw=(f.box[2]-f.box[0]), ch=(f.box[3]-f.box[1]), aire=cw*ch*f.aire/v.n, cote=Math.sqrt(aire)*kk()/10;
+  $("tailleP").textContent=`Pièces d'environ ${{cote.toFixed(1).replace(".",",")}} cm de côté. Plus il y a de pièces, plus elles sont petites et le puzzle difficile.`+(cote<1.4?" Pièces très petites : prenez plutôt une taille plus grande.":"");
+  $("resume").innerHTML=[["Photo",S.exemple?"à choisir":"votre photo"],["Taille",`${{taille().nom}}${{taille().sup?" (+"+taille().sup+"\u00a0€)":""}}`],["Forme",`${{f.nom}} · ${{dimF(f)}}${{f.sup?" (+"+f.sup+"\u00a0€)":""}}`],["Pièces",`${{v.t}} (${{eur(v.p)}})`],["Style",`${{S.type==="grille"?"en grille":"irrégulières"}}, attaches ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`],["Gravure","photo en noir et blanc, au laser"]]
     .map(([a,b])=>`<li><span>${{a}}</span><span>${{b}}</span></li>`).join("");
-  $("total").textContent=eur(v.p);
+  $("total").textContent=eur(prixTotal());
   $("panier").disabled=S.exemple; $("manque").textContent=S.exemple?"Il manque votre photo : choisissez-la à l'étape 1.":"";
 }}
 function pieceSw(){{
-  $("pieces").innerHTML=D.variantes.map((v,i)=>`<button type="button" class="variant-swatch${{i===S.vi?" active":""}}" aria-pressed="${{i===S.vi}}" data-i="${{i}}"><span class="vs-title">${{v.t}}</span><span class="vs-price"><span class="vs-now">${{eur(v.p)}}</span></span></button>`).join("");
+  $("pieces").innerHTML=D.variantes.map((v,i)=>`<button type="button" class="variant-swatch${{i===S.vi?" active":""}}" aria-pressed="${{i===S.vi}}" data-i="${{i}}"><span class="vs-title">${{v.t}}</span><span class="vs-price"><span class="vs-now">${{eur(v.p+taille().sup+forme().sup)}}</span></span></button>`).join("");
   $("pieces").querySelectorAll("button").forEach(b=>b.onclick=()=>{{S.vi=+b.dataset.i;pieceSw();vueCreation();dessiner();}});
 }}
 // galerie : la création + les vraies photos de la fiche
@@ -445,7 +459,11 @@ $("bEclate").onclick=()=>{{S.eclate=!S.eclate;$("bEclate").setAttribute("aria-pr
 for(const [id,o,cle,fmt] of [["rTaille","oTaille","taille",v=>v],["rArrondi","oArrondi","arrondi",v=>v+" %"],["rFreq","oFreq","freq",v=>v+" %"]]){{
   $(o).textContent=fmt(S[cle]);$(id).oninput=e=>{{S[cle]=+e.target.value;$(o).textContent=fmt(S[cle]);dessiner();}};
 }}
-boutons("formes",FORMES.map(f=>({{v:f.id,t:f.nom,s:f.dim,icon:icone(f.id)}})),"forme",()=>{{S.ox=0;S.oy=0;}});
+function rendreChoix(){{
+  boutons("tailles",TAILLES.map(t=>({{v:t.id,t:t.nom,s:`${{cm(t.cote)}} × ${{cm(t.cote)}} cm · ${{plus(t.sup)}}`,icon:`<svg viewBox="0 0 44 34"><rect x="${{22-15*t.cote/176}}" y="${{17-15*t.cote/176}}" width="${{30*t.cote/176}}" height="${{30*t.cote/176}}" rx="2" fill="#ecd3a8" stroke="#9c6b3f" stroke-width="1.6"/></svg>`}})),"tl",()=>{{S.ox=0;S.oy=0;rendreChoix();pieceSw();}});
+  boutons("formes",FORMES.map(f=>({{v:f.id,t:f.nom,s:`${{dimF(f)}} · ${{plus(f.sup)}}`,icon:icone(f.id)}})),"forme",()=>{{S.ox=0;S.oy=0;pieceSw();}});
+}}
+rendreChoix();
 boutons("types",[{{v:"grille",t:"Classiques",s:"en grille",icon:iconeType("grille")}},{{v:"libre",t:"Irrégulières",s:"formes libres",icon:iconeType("libre")}}],"type");
 boutons("attaches",[{{v:"classique",t:"Classiques",icon:iconeAtt("classique")}},{{v:"ronde",t:"Rondes",icon:iconeAtt("ronde")}},{{v:"triangle",t:"Pointues",icon:iconeAtt("triangle")}}],"att");
 function sousEntete(){{const h=document.querySelector('header');let t=0;if(h&&/sticky|fixed/.test(getComputedStyle(h).position))t=h.offsetHeight;document.documentElement.style.setProperty('--pz-top',t+'px');}}
