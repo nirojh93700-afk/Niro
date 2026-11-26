@@ -17,7 +17,7 @@
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
 
-- v2 du 26/11 soir (« il y a les puzzles aussi, non ? ») : le puzzle photo est ajouté en 3ᵉ carte. En attente de son avis ; rien en ligne.
+- v2 du 26/11 soir (« il y a les puzzles aussi, non ? ») : le puzzle photo est ajouté en 3ᵉ carte. ✅ Version 2 ENREGISTRÉE TELLE QUELLE le 27/11/2026 (« Enregistre la maquette ») : c'est celle à reproduire au « applique » ; rien en ligne.
 
 ## 📧 GOOGLE CLOUD : NIVEAUX D'ACCÈS GMAIL (mail du 24/11/2026, projet niv-creation) — À REVOIR EN JANVIER 2027
 - Niveau Standard gratuit (le site est très loin des limites) ; sans action, bascule automatique le 01/04/2027 sans frais. Ne JAMAIS choisir le niveau « Scaled » (payant).
