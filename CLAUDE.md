@@ -124,6 +124,7 @@
 - Chaque fois qu'on envoie un aperçu / visuel à valider à une cliente (cristal, verre, bijou…), ajouter une phrase du type :
   « Il s'agit d'un aperçu à l'écran : une fois gravé, le rendu réel est plus fin et plus lumineux. »
 - Ne jamais présenter l'aperçu comme le résultat exact.
+- ⛔ **Cette phrase SEULEMENT quand l'image est DANS le mail (gérant, 26/11/2026, mail d'Hussein : « on n'envoie pas d'image, alors t'as pas besoin d'écrire ça »)**. Un mail qui PROMET un aperçu pour plus tard dit seulement « nous vous enverrons un aperçu avant la gravure », sans la phrase « aperçu à l'écran… ».
 
 ## ⛔ PRIX DE GRAVURE DANS UN MAIL CLIENT : « LA MOINS CHÈRE EST OFFERTE », JAMAIS « COMPRIS » — 16/11/2026 (⚠️ ANNULÉE le 19/11 : retour aux prix d'avant le 15/11, voir en tête ; seul le carnet garde « le moins cher offert » ; le mot « compris » reste interdit dans les mails) (gérant, mail d'Alicia, collier plaque + photo : « recommence plus, note quelque part ces règles »)
 - Règle du site (`moinsCherCompris`) : parmi les gravures choisies, la MOINS CHÈRE est OFFERTE, les autres se paient. Photo seule = photo offerte ; photo + texte = le TEXTE (3 €) est offert et la PHOTO se paie (8 €).
