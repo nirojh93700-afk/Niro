@@ -7,7 +7,7 @@
 
 // Grand socle noir : câble USB fourni, mais pas encore d'adaptateur de prise. Le jour où le gérant a les
 // adaptateurs : passer à true (le texte de la fiche le dira tout seul).
-export const ADAPTATEUR_NOIR_FOURNI = false;
+export const ADAPTATEUR_NOIR_FOURNI = true;
 
 export const SOCLES = {
   // Anciens modèles (Alibaba, avr. 2026).
@@ -38,10 +38,10 @@ export const SOCLES = {
     titre: "Socle LED — grand noir (piles ou câble)",
     image: "/produits/socle-led-rectangle-noir.jpg",
     phrase: ADAPTATEUR_NOIR_FOURNI
-      ? "Grand socle rectangle noir : LED multicolores. Il fonctionne avec des piles AAA ou sur une prise secteur, câble USB et adaptateur de prise fournis."
+      ? "Grand socle rectangle noir : LED multicolores. Il fonctionne avec des piles ou sur une prise secteur, câble USB et adaptateur de prise fournis."
       : "Grand socle rectangle noir : LED multicolores. Il fonctionne avec des piles AAA ou avec le câble USB fourni, à brancher sur un ordinateur ou un adaptateur USB (adaptateur de prise non fourni).",
     court: ADAPTATEUR_NOIR_FOURNI
-      ? "LED multicolores, piles AAA ou prise secteur"
+      ? "LED multicolores, piles ou prise secteur"
       : "LED multicolores, piles AAA ou câble USB",
   },
 };

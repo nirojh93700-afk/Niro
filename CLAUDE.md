@@ -6462,7 +6462,7 @@ manquant, produit sans photo, fiche détaillée manquante, produits masqués) ·
   de 1 cm de chaque côté, accepté) ; petit socle carré = vertical Petit seulement (dessous 5 × 5). Prix 14,90 / 19,90 € inchangés.
 - **Nouveaux socles** (Alibaba n° 33855788501043880, 20 de chaque) : petit gris argenté (dessus 5,2 × 5,2, piles AAA SEULEMENT) et
   grand noir (13,5 × 7,3 × 2,5, piles AAA OU câble USB, adaptateur de prise PAS fourni pour l'instant), tous deux multicolores.
-  Coût rendu 1,56 / 5,58 €. Photos `public/produits/socle-led-carre-gris.jpg` / `socle-led-rectangle-noir.jpg` (celles SANS cotes).
+  Coût rendu 1,56 / 5,58 €. ✅ **26/11/2026 : adaptateur de prise FOURNI avec le grand socle noir** (gérant) → `ADAPTATEUR_NOIR_FOURNI = true` ; le grand socle se dit « piles ou prise secteur », SANS le type de pile (gérant : « pas la taille de pile pour le grand »). Photos `public/produits/socle-led-carre-gris.jpg` / `socle-led-rectangle-noir.jpg` (celles SANS cotes).
 - `src/lib/socles.js` : dès qu'un ancien socle est à 0 en stock, le site vend le suivant (stock `socle-led-carre-gris` /
   `socle-led-rectangle-noir`, photo, texte), petit et grand chacun de son côté ; appliqué dans `getCatalog` (fiches + paiement),
   page `/cristaux-graves`, lignes de stock dans Gestion. Le jour où le gérant a les adaptateurs : `ADAPTATEUR_NOIR_FOURNI = true`.
