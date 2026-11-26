@@ -27,7 +27,7 @@ const UNIVERS = [
   { nom: "Verres, carafe & gobelets", d: "Verres à vin, flûtes, verres à whisky et carafe gravés de vos prénoms, d'un logo ou d'un dessin.", img: "/produits/verre_whisky_papa_monde_banniere.jpg", href: "/boutique/verres" },
   { nom: "Mariage", d: "Numéros de table, menus et décoration en bois, dessinés et découpés dans notre atelier.", img: "/produits/numero_table_arche_geometrique_relief_bois.jpeg", href: "/boutique/mariage" },
   { nom: "Bébé & Enfant", d: "Couverts, puzzles en bois, plaque de porte et veilleuse au prénom de l'enfant.", img: "/produits/couverts_enfants_ex_prenom.jpg", href: "/boutique/enfants" },
-  { nom: "Papeterie & petits cadeaux", d: "Marque-pages, carnets, porte-clés et petites attentions à graver.", img: "/marque-pages/m1/ambiance.jpg", href: "/boutique/papeterie" },
+  { nom: "Papeterie & petits cadeaux", d: "Marque-pages, carnets, porte-clés, plaques musique à scanner et petites attentions à graver.", img: "/marque-pages/m1/ambiance.jpg", href: "/boutique/papeterie" },
 ];
 
 const MATIERES = [
