@@ -83,8 +83,8 @@ DONNEES = {
     "tailles": {
         "plaque": [{"id": "p", "nom": "Petite", "w": 80, "prix": 17.9}, {"id": "m", "nom": "Moyenne", "w": 110, "prix": 22.9},
                    {"id": "g", "nom": "Grande", "w": 150, "prix": 27.9}],
-        "porte": [{"id": "p", "nom": "Petit", "w": 50, "prix": 12.9}, {"id": "m", "nom": "Moyen", "w": 60, "prix": 13.9},
-                  {"id": "g", "nom": "Grand", "w": 70, "prix": 14.9}],
+        "porte": [{"id": "p", "nom": "Petit", "w": 50, "prix": 16.9}, {"id": "m", "nom": "Moyen", "w": 60, "prix": 17.9},
+                  {"id": "g", "nom": "Grand", "w": 70, "prix": 18.9}],
     },
     "polices": [["playfair", "Playfair Display", "'Playfair Display',Georgia,serif"], ["cinzel", "Cinzel", "Cinzel,serif"],
                 ["montserrat", "Montserrat", "Montserrat,sans-serif"], ["inter", "Inter", "Inter,sans-serif"],
@@ -248,7 +248,7 @@ HTML = f"""<title>Musique à scanner</title>
   <div class="mzq-fichier" id="fichier"></div>
   <div class="mzq-faits" id="faits"></div>
   <div class="mzq-valider"><b>À valider par vous :</b><ul>
-    <li>les prix proposés : plaque 17,90 / 22,90 / 27,90 € (petite, moyenne, grande) ; porte-clés 12,90 / 13,90 / 14,90 € ;</li>
+    <li>les prix proposés : plaque 17,90 / 22,90 / 27,90 € (petite, moyenne, grande) ; porte-clés 16,90 / 17,90 / 18,90 € (relevés au niveau des ateliers français, demande du gérant du 26/11) ;</li>
     <li>les tailles : plaque 8, 11 ou 15 cm de large ; porte-clés 5, 6 ou 7 cm (pas plus petit, sinon le QR devient difficile à lire) ;</li>
     <li>le nom du produit (sans le mot « Spotify », qui est une marque) et le rayon « Petits cadeaux » ;</li>
     <li>le porte-clés « vague de son » d'Atomm n'est pas repris : les codes Spotify officiels sont interdits sur des produits vendus.</li>
