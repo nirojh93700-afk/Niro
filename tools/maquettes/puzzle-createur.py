@@ -80,9 +80,9 @@ for d, f in (('<div class="trust-cards">', '<div class="pd-perso">'), ('<div cla
 acc = main[main.find('<div class="info-accordion">'):]
 acc = acc[:acc.find("</details></div>") + len("</details></div>")] if "</details></div>" in acc else ""
 blocs_bas += re.sub(r'href="/[^"]*"', 'href="#"', acc)
-# gérant, 26/11 : la maquette suit la taille de la machine (zone 180 mm) → plateau 17,5 × 12,5 cm
-blocs_bas = (blocs_bas.replace("21 × 15 cm, un peu plus grand que nos puzzles à encastrer", "17,5 × 12,5 cm")
-             .replace("21 × 15 cm", "17,5 × 12,5 cm"))
+# gérant, 26/11 : la maquette suit la taille de la machine (zone 180 mm, 2 mm de marge) → plateau carré 17,6 × 17,6 cm
+blocs_bas = (blocs_bas.replace("21 × 15 cm, un peu plus grand que nos puzzles à encastrer", "17,6 × 17,6 cm")
+             .replace("21 × 15 cm", "17,6 × 17,6 cm"))
 
 PHOTOS = []
 for u in re.findall(r'<div class="gallery-thumbs">(.*?)</div>', main, re.S)[0].split("<button")[1:]:
@@ -166,7 +166,7 @@ details.pz-fin summary{cursor:pointer;font-size:.84rem;font-weight:600;color:#7c
 .pz-faits span{font-size:.78rem;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px}
 .pz-valider{margin-top:14px;font-size:.84rem;background:#fffbe9;border:1px solid #ecd99a;border-radius:12px;padding:10px 14px}
 .pz-valider li{margin:3px 0}
-@media (max-width:900px){.pz-left{position:static}}
+@media (max-width:900px){.pz-left{position:static}.pz-stage svg{max-height:62vh}}
 """
 
 HTML = f"""<title>Puzzle photo créateur</title>
@@ -180,7 +180,7 @@ HTML = f"""<title>Puzzle photo créateur</title>
   <div class="pz-left">
     <div class="pz-stage" id="stage" data-vue="creation">
       <img class="pz-photo-g" id="photoG" alt="">
-      <svg id="svg" viewBox="-10 -10 230 170" aria-label="Aperçu de votre puzzle"></svg>
+      <svg id="svg" viewBox="-10 -10 196 196" aria-label="Aperçu de votre puzzle"></svg>
       <span class="pz-tag" id="tag">Votre puzzle</span>
       <div class="pz-tools"><button type="button" id="bEclate" aria-pressed="false">Voir les pièces</button></div>
       <div class="pz-hint" id="hint">Glissez la photo pour la placer</div>
@@ -238,7 +238,7 @@ HTML = f"""<title>Puzzle photo créateur</title>
   <div class="pz-fichier" id="fichier"></div>
   <div class="pz-faits" id="faits"></div>
   <div class="pz-valider"><b>À valider par vous :</b><ul>
-    <li>les formes proposées et leur prix (le même que le rectangle dans la maquette) ;</li>
+    <li>les formes proposées et leur prix (le même que le carré dans la maquette) ;</li>
     <li>les pièces irrégulières et les 3 styles d'attaches, pour vos essais de découpe ;</li>
     <li>le réglage « Réglages fins » laissé à la cliente, ou gardé pour l'atelier seulement.</li>
   </ul></div>
@@ -249,28 +249,28 @@ HTML = f"""<title>Puzzle photo créateur</title>
 <script>window.PZ={DONNEES};</script>
 <script>
 (function(){{
-const D=window.PZ, W=210, H=150, K=175/210, SVGNS="http://www.w3.org/2000/svg";
+const D=window.PZ, W=176, H=176, K=1, SVGNS="http://www.w3.org/2000/svg";
 const S={{photo:D.exemple, exemple:true, iw:700, ih:460, forme:"rect", vi:1, type:"grille", att:"classique", taille:26, arrondi:60, freq:100, seed:7, zoom:1, ox:0, oy:0, eclate:false, vue:"creation"}};
 const $=id=>document.getElementById(id);
 const eur=v=>v.toFixed(2).replace(".",",")+"\\u00a0€";
 function rng(seed){{let a=seed>>>0;return()=>{{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}};}}
 function hash(s){{let h=2166136261;for(const c of s){{h^=c.charCodeAt(0);h=Math.imul(h,16777619);}}return h>>>0;}}
 
-// ---------- formes (unités = mm, plateau 210 × 150) ----------
+// ---------- formes (unités = mm, plateau 176 × 176 = zone machine 180 moins 2 mm de marge) ----------
 const FORMES=[
- {{id:"rect",nom:"Rectangle",dim:"17,5 × 12,5 cm",box:[0,0,210,150],aire:1}},
- {{id:"arrondi",nom:"Coins arrondis",dim:"17,5 × 12,5 cm",box:[0,0,210,150],aire:.99}},
- {{id:"cercle",nom:"Rond",dim:"Ø 12,5 cm",box:[30,0,180,150],aire:.785}},
- {{id:"ellipse",nom:"Ovale",dim:"17,5 × 12,5 cm",box:[0,0,210,150],aire:.785}},
- {{id:"coeur",nom:"Cœur",dim:"14 × 12,5 cm",box:[20,0,190,150],aire:.72}},
+ {{id:"rect",nom:"Carré",dim:"17,6 × 17,6 cm",box:[0,0,176,176],aire:1}},
+ {{id:"arrondi",nom:"Coins arrondis",dim:"17,6 × 17,6 cm",box:[0,0,176,176],aire:.99}},
+ {{id:"cercle",nom:"Rond",dim:"Ø 17,6 cm",box:[0,0,176,176],aire:.785}},
+ {{id:"ellipse",nom:"Ovale",dim:"17,6 × 13,2 cm",box:[0,22,176,154],aire:.785}},
+ {{id:"coeur",nom:"Cœur",dim:"17,6 × 15,5 cm",box:[0,10.5,176,165.5],aire:.72}},
 ];
 const forme=()=>FORMES.find(f=>f.id===S.forme);
 function cheminForme(id){{
-  if(id==="rect") return "M0 0H210V150H0Z";
-  if(id==="arrondi") return "M14 0H196A14 14 0 0 1 210 14V136A14 14 0 0 1 196 150H14A14 14 0 0 1 0 136V14A14 14 0 0 1 14 0Z";
-  if(id==="cercle") return "M105 0A75 75 0 1 1 104.99 0Z";
-  if(id==="ellipse") return "M105 0A105 75 0 1 1 104.99 0Z";
-  const x0=20,w=170,y0=0,h=150, P=(x,y)=>(x0+x*w).toFixed(2)+" "+(y0+y*h).toFixed(2);
+  if(id==="rect") return "M0 0H176V176H0Z";
+  if(id==="arrondi") return "M14 0H162A14 14 0 0 1 176 14V162A14 14 0 0 1 162 176H14A14 14 0 0 1 0 162V14A14 14 0 0 1 14 0Z";
+  if(id==="cercle") return "M88 0A88 88 0 1 1 87.99 0Z";
+  if(id==="ellipse") return "M88 22A88 66 0 1 1 87.99 22Z";
+  const x0=0,w=176,y0=10.5,h=155, P=(x,y)=>(x0+x*w).toFixed(2)+" "+(y0+y*h).toFixed(2);
   return "M"+P(.5,.24)+"C"+P(.5,.08)+" "+P(.36,0)+" "+P(.23,0)+"C"+P(.07,0)+" "+P(0,.15)+" "+P(0,.31)+"C"+P(0,.56)+" "+P(.24,.76)+" "+P(.5,1)
    +"C"+P(.76,.76)+" "+P(1,.56)+" "+P(1,.31)+"C"+P(1,.15)+" "+P(.93,0)+" "+P(.77,0)+"C"+P(.64,0)+" "+P(.5,.08)+" "+P(.5,.24)+"Z";
 }}
@@ -389,17 +389,17 @@ function dessiner(){{
 // ---------- fichier de l'atelier ----------
 function fichier(){{
   const sh=cheminForme(S.forme);
-  $("fichier").innerHTML=`<svg viewBox="-5 -5 220 160" width="${{(220*K).toFixed(1)}}mm" height="${{(160*K).toFixed(1)}}mm" xmlns="${{SVGNS}}"><rect x="-5" y="-5" width="220" height="160" fill="#fff"/>`+
+  $("fichier").innerHTML=`<svg viewBox="-5 -5 186 196" width="186mm" height="196mm" xmlns="${{SVGNS}}"><rect x="-5" y="-5" width="186" height="196" fill="#fff"/>`+
    `<defs><clipPath id="cf2"><path d="${{sh}}"/></clipPath></defs>`+
    `<g clip-path="url(#cf2)"><path d="${{PC.map(p=>p.d).join("")}}" fill="none" stroke="#ff0000" stroke-width=".3"/></g>`+
    `<path d="${{sh}}" fill="none" stroke="#ff0000" stroke-width=".3"/>`+
-   `<text x="0" y="157" font-size="4" fill="#777" font-family="Inter,sans-serif">175 × 125 mm (taille de la machine) — rouge = découpe</text></svg>`;
+   `<text x="0" y="186" font-size="4" fill="#777" font-family="Inter,sans-serif">176 × 176 mm (zone de la machine 180 × 180, 2 mm de marge) — rouge = découpe</text></svg>`;
   const f=forme(), dans=PC.filter(p=>dedans(p.cx,p.cy)).length;
   $("faits").innerHTML=[`Forme : ${{f.nom}} (${{f.dim}})`,`Pièces dans le fichier : ${{dans}}`,`Pièces : ${{S.type==="grille"?"en grille":"irrégulières"}}`,`Attaches : ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`,`Photo : ${{S.exemple?"exemple":"envoyée par la cliente"}}`].map(t=>`<span>${{t}}</span>`).join("");
 }}
 
 // ---------- panneau ----------
-function icone(id){{const vb=id==="cercle"?"25 -5 160 160":id==="coeur"?"15 -5 180 160":"-5 -5 220 160";return `<svg viewBox="${{vb}}"><path d="${{cheminForme(id)}}" fill="#ecd3a8" stroke="#9c6b3f" stroke-width="6"/></svg>`;}}
+function icone(id){{const vb="-5 -5 186 186";return `<svg viewBox="${{vb}}"><path d="${{cheminForme(id)}}" fill="#ecd3a8" stroke="#9c6b3f" stroke-width="6"/></svg>`;}}
 function iconeType(t){{return t==="grille"?`<svg viewBox="0 0 44 34"><rect x="2" y="2" width="40" height="30" rx="2" fill="#ecd3a8" stroke="#9c6b3f" stroke-width="1.6"/><path d="M15.3 2V32M28.6 2V32M2 17H42" stroke="#9c6b3f" stroke-width="1.3"/></svg>`
   :`<svg viewBox="0 0 44 34"><rect x="2" y="2" width="40" height="30" rx="2" fill="#ecd3a8" stroke="#9c6b3f" stroke-width="1.6"/><path d="M13 2L17 14L8 22L2 20M17 14L29 11L33 2M29 11L35 21L42 22M35 21L26 32M17 14L22 24L26 32M8 22L13 32M22 24L13 32" fill="none" stroke="#9c6b3f" stroke-width="1.3"/></svg>`;}}
 function iconeAtt(a){{const d=a==="classique"?"M2 20H15C17 20 18 18 17 16C15 13 17 9 22 9C27 9 29 13 27 16C26 18 27 20 29 20H42":a==="ronde"?"M2 20H15C14 9 30 9 29 20H42":"M2 20H15L22 9L29 20H42";
