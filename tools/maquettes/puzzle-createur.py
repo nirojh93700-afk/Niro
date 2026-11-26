@@ -80,6 +80,9 @@ for d, f in (('<div class="trust-cards">', '<div class="pd-perso">'), ('<div cla
 acc = main[main.find('<div class="info-accordion">'):]
 acc = acc[:acc.find("</details></div>") + len("</details></div>")] if "</details></div>" in acc else ""
 blocs_bas += re.sub(r'href="/[^"]*"', 'href="#"', acc)
+# gérant, 26/11 : la maquette suit la taille de la machine (zone 180 mm) → plateau 17,5 × 12,5 cm
+blocs_bas = (blocs_bas.replace("21 × 15 cm, un peu plus grand que nos puzzles à encastrer", "17,5 × 12,5 cm")
+             .replace("21 × 15 cm", "17,5 × 12,5 cm"))
 
 PHOTOS = []
 for u in re.findall(r'<div class="gallery-thumbs">(.*?)</div>', main, re.S)[0].split("<button")[1:]:
@@ -246,7 +249,7 @@ HTML = f"""<title>Puzzle photo créateur</title>
 <script>window.PZ={DONNEES};</script>
 <script>
 (function(){{
-const D=window.PZ, W=210, H=150, SVGNS="http://www.w3.org/2000/svg";
+const D=window.PZ, W=210, H=150, K=175/210, SVGNS="http://www.w3.org/2000/svg";
 const S={{photo:D.exemple, exemple:true, iw:700, ih:460, forme:"rect", vi:1, type:"grille", att:"classique", taille:26, arrondi:60, freq:100, seed:7, zoom:1, ox:0, oy:0, eclate:false, vue:"creation"}};
 const $=id=>document.getElementById(id);
 const eur=v=>v.toFixed(2).replace(".",",")+"\\u00a0€";
@@ -255,11 +258,11 @@ function hash(s){{let h=2166136261;for(const c of s){{h^=c.charCodeAt(0);h=Math.
 
 // ---------- formes (unités = mm, plateau 210 × 150) ----------
 const FORMES=[
- {{id:"rect",nom:"Rectangle",dim:"21 × 15 cm",box:[0,0,210,150],aire:1}},
- {{id:"arrondi",nom:"Coins arrondis",dim:"21 × 15 cm",box:[0,0,210,150],aire:.99}},
- {{id:"cercle",nom:"Rond",dim:"Ø 15 cm",box:[30,0,180,150],aire:.785}},
- {{id:"ellipse",nom:"Ovale",dim:"21 × 15 cm",box:[0,0,210,150],aire:.785}},
- {{id:"coeur",nom:"Cœur",dim:"17 × 15 cm",box:[20,0,190,150],aire:.72}},
+ {{id:"rect",nom:"Rectangle",dim:"17,5 × 12,5 cm",box:[0,0,210,150],aire:1}},
+ {{id:"arrondi",nom:"Coins arrondis",dim:"17,5 × 12,5 cm",box:[0,0,210,150],aire:.99}},
+ {{id:"cercle",nom:"Rond",dim:"Ø 12,5 cm",box:[30,0,180,150],aire:.785}},
+ {{id:"ellipse",nom:"Ovale",dim:"17,5 × 12,5 cm",box:[0,0,210,150],aire:.785}},
+ {{id:"coeur",nom:"Cœur",dim:"14 × 12,5 cm",box:[20,0,190,150],aire:.72}},
 ];
 const forme=()=>FORMES.find(f=>f.id===S.forme);
 function cheminForme(id){{
@@ -386,11 +389,11 @@ function dessiner(){{
 // ---------- fichier de l'atelier ----------
 function fichier(){{
   const sh=cheminForme(S.forme);
-  $("fichier").innerHTML=`<svg viewBox="-5 -5 220 160" xmlns="${{SVGNS}}"><rect x="-5" y="-5" width="220" height="160" fill="#fff"/>`+
+  $("fichier").innerHTML=`<svg viewBox="-5 -5 220 160" width="${{(220*K).toFixed(1)}}mm" height="${{(160*K).toFixed(1)}}mm" xmlns="${{SVGNS}}"><rect x="-5" y="-5" width="220" height="160" fill="#fff"/>`+
    `<defs><clipPath id="cf2"><path d="${{sh}}"/></clipPath></defs>`+
    `<g clip-path="url(#cf2)"><path d="${{PC.map(p=>p.d).join("")}}" fill="none" stroke="#ff0000" stroke-width=".3"/></g>`+
    `<path d="${{sh}}" fill="none" stroke="#ff0000" stroke-width=".3"/>`+
-   `<text x="0" y="157" font-size="4" fill="#777" font-family="Inter,sans-serif">210 × 150 mm — rouge = découpe</text></svg>`;
+   `<text x="0" y="157" font-size="4" fill="#777" font-family="Inter,sans-serif">175 × 125 mm (taille de la machine) — rouge = découpe</text></svg>`;
   const f=forme(), dans=PC.filter(p=>dedans(p.cx,p.cy)).length;
   $("faits").innerHTML=[`Forme : ${{f.nom}} (${{f.dim}})`,`Pièces dans le fichier : ${{dans}}`,`Pièces : ${{S.type==="grille"?"en grille":"irrégulières"}}`,`Attaches : ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`,`Photo : ${{S.exemple?"exemple":"envoyée par la cliente"}}`].map(t=>`<span>${{t}}</span>`).join("");
 }}
@@ -408,7 +411,7 @@ function boutons(id,items,cle,fn){{
 function resume(){{
   const v=D.variantes[S.vi], f=forme();
   $("prixLead").textContent=eur(v.p);
-  const cw=(f.box[2]-f.box[0]), ch=(f.box[3]-f.box[1]), aire=cw*ch*f.aire/v.n, cote=Math.sqrt(aire)/10;
+  const cw=(f.box[2]-f.box[0]), ch=(f.box[3]-f.box[1]), aire=cw*ch*f.aire/v.n, cote=Math.sqrt(aire)*K/10;
   $("tailleP").textContent=`Pièces d'environ ${{cote.toFixed(1).replace(".",",")}} cm de côté. Plus il y a de pièces, plus elles sont petites et le puzzle difficile.`;
   $("resume").innerHTML=[["Photo",S.exemple?"à choisir":"votre photo"],["Forme",`${{f.nom}} · ${{f.dim}}`],["Pièces",v.t],["Style",`${{S.type==="grille"?"en grille":"irrégulières"}}, attaches ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`],["Gravure","photo en noir et blanc, au laser"]]
     .map(([a,b])=>`<li><span>${{a}}</span><span>${{b}}</span></li>`).join("");
