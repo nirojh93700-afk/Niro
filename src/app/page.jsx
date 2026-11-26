@@ -74,7 +74,8 @@ export default async function HomePage() {
   const gobelet = C("gobelet-isotherme-40oz");
   const puzzle = C("puzzle-savane");
   const BIJOUX_PHOTOS = [["collier-3coeurs-1.jpg", "Collier 3 Cœurs, porté", "collier-3coeurs"], ["bracelet-femme-acier-porte.jpg", "Bracelet gravé", "bracelet-femme-acier"], ["bracelet-cordon-plaque-4.jpg", "Bracelets homme gravés", "bracelet-cordon-plaque"]];
-  const tete = [whisky, gobelet, puzzle].filter(Boolean);
+  const musique = C("plaque-musique-a-scanner");
+  const tete = [musique, whisky, gobelet, puzzle].filter(Boolean);
   const nouveaux = [...tete,
     ...dernieresSorties(R.cartes.filter((c) => !tete.some((t) => t.slug === c.slug) && (c.slug === "puzzle-photo-grave" || !String(c.slug).startsWith("puzzle-"))), 10 - tete.length)];
   const moitie = Math.ceil(nouveaux.length / 2);
