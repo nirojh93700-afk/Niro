@@ -597,7 +597,7 @@ En attente de SA décision :
   Téléphone : même ordre, « Offrir » affiche ses 3 liens directement (pas de menu à ouvrir).
 - Captures refaites par `node tools/maquettes/menu-une-ligne.mjs` (remplace seulement le menu sur le site en ligne).
   Au « applique » : `src/components/Header.jsx` (+ CSS `.mn-*`), logo / icônes / adresses inchangés.
-- Ses autres décisions de l'audit du 04/11 encore ouvertes : médiateur de la consommation (adhésion), bandeau cookies
+- Ses autres décisions de l'audit du 04/11 encore ouvertes : bandeau cookies (médiateur : FAIT, CM2C le 10/11)
   pour Google Analytics (sa décision), nom + accroche du Bracelet Homme Tressé dans Gestion (« Cuir tressé » → « Tressé
   aspect cuir », proposé, pas fait), fenêtres trop nombreuses sur téléphone (maquette à faire), 42 vieilles promos à supprimer.
 
@@ -800,7 +800,7 @@ En attente de SA décision :
 - ⛔ Le mail long (texte dans `chloe.json` du scratchpad de la session du 03/11, et ci-dessus) ne repart QUE quand le gérant le redemande.
 
 ## 🔍 AUDIT COMPLET DU 05/11/2026 — À TRANCHER PAR LE GÉRANT (rien corrigé, rapport `docs/audits/audit-2026-11-05.md`)
-- ❌ Médiateur de la consommation à nommer dans les CGV (adhésion à faire, obligatoire L612-1).
+- ✅ Médiateur de la consommation : CM2C, adhésion du 10/11/2026, nommé dans CGV / mentions / Retours.
 - ❌ Tuile « Maison & Déco » (accueil + /boutique/maison) : photo de la Veilleuse Arbre de Vie Ronde, MASQUÉE (`src/lib/univers.js`, `img`).
 - ⚠️ Prix barré permanent des 38 bijoux (−10 %) : risque Omnibus L112-1-1 (le prix barré doit avoir été pratiqué dans les 30 jours).
 - ⚠️ « Acier inoxydable 316L hypoallergénique » sur le bandeau de toutes les fiches (TrustSection) alors que plusieurs bijoux sont en 304 ;

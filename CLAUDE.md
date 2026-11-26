@@ -1,3 +1,7 @@
+## ⚖️ MÉDIATEUR DE LA CONSOMMATION = CM2C, ADHÉSION DU 10/11/2026 (valable jusqu'au 10/11/2029) — ⛔ NE PLUS JAMAIS DIRE QU'IL N'Y A PAS DE MÉDIATEUR (gérant, 26/11/2026 : « vérifie avant de dire des conneries… j'ai pris un abonnement »)
+- CM2C, 49 rue de Ponthieu 75008 Paris, 01 89 47 00 14, litiges@cm2c.net. Texte unique `src/lib/mediateur.js` (CGV, mentions légales, Retours), en ligne depuis le 10/11 (423d6e8e).
+- Avant d'affirmer quoi que ce soit sur le légal du site : lire le CODE (`src/lib/mediateur.js`, pages CGV / mentions), pas une vieille ligne de mémoire.
+
 ## 🎵 MAQUETTE « PLAQUE ET PORTE-CLÉS MUSIQUE À SCANNER » (générateur « Spotify Music QR & Keychain » d'Atomm) — 26/11/2026 (gérant : lien puis « fais la maquette ») — ✅ ENREGISTRÉE TELLE QUELLE LE 26/11/2026 (« Enregistre ») = VERSION 2 de l'artifact, CELLE à reproduire au « applique », ne plus la modifier sans sa demande. RIEN en ligne
 - https://claude.ai/artifact/YEY36tGKxeCeYo1kn56NnP (v2 : classes « mzq- », car « mq- » du site écrasait les étapes à 52 px sur iPhone) · `python3 tools/maquettes/musique-qr.py <capture d'une fiche (en-tête / pied)> <dossier css> <qrcode.js> <jsQR.js> <sortie>` (`npm pack qrcode-generator@1.4.4` MIT, `npm pack jsqr@1.4.0` Apache-2.0, écrits DANS la page). Hôte `spotify-music-qr-keychain-generator.generator.atommapps.com` ajouté au réseau.
 - Atomm (analysé le 26/11) : 4 modèles Minimal / Music card / Music strip keychain / QR keychain, lien Spotify → QR ordinaire, QR inversé, largeur 80–150 mm (plaque 110 × 123,3), porte-clés 30–100 mm (70 × 58,3), contreplaqué 3 mm conseillé. ⛔ Le « Music strip keychain » (code Spotify officiel, barres) est INTERDIT à la vente (règles de Spotify, écrit par Atomm) : NON repris. Le QR ordinaire et le lien sont autorisés ; jamais le mot « Spotify » dans le nom du produit.
@@ -1451,7 +1455,7 @@
 - **Textes légaux** (6b1d56e5) : hébergeur = Google Ireland / Firebase (plus Netlify) ; Confidentialité déclare Google Analytics (§5, §7) ; CGV :
   carte / PayPal / Klarna selon disponibilité, paragraphe frais de livraison (45 € bijoux, 60 € verres), lien RLL ec.europa.eu RETIRÉ (plateforme
   fermée le 20/07/2025) ; Retours : garantie légale 2 ans sans délai de signalement, « photo sous 24 h / 14 jours » → « dès réception »,
-  frais d'annulation = 10 € partout, « validation de l'aperçu » → « lancement de la fabrication ». Médiateur toujours « communiqué prochainement ».
+  frais d'annulation = 10 € partout, « validation de l'aperçu » → « lancement de la fabrication ». Médiateur : FAIT le 10/11 (CM2C, voir en tête).
 - **« Sans nickel »** (e64fad75) : retiré des 2 fiches (Collier Enveloppe, Médaillon Cœur ouvrable) et de la FAQ (le 316L contient du nickel) ;
   la FAQ renvoie à la matière de chaque fiche (316L ou 304). 1er déploiement Firebase en échec (2 min 22), relancé par ce commit.
 - **Reste de l'audit, à faire sur son mot** : accueil 22 Mo (87 images du mur préchargées : `MurUnivers` sans `loading="lazy"` ; le PNG
