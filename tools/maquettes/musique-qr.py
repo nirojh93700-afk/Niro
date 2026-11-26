@@ -344,13 +344,13 @@ function rendreMq(){{$("mqBloc").hidden=S.modele!=="porte";$("mousq").innerHTML=
 // ---------- aperçu ----------
 function dessiner(){{
   const g=geo(), m=matrice(urlQR()), pad=Math.max(g.w,g.h)*.04;
-  const svg=$("svg"); svg.setAttribute("viewBox",`${{-pad}} ${{-pad}} ${{g.w+2*pad+(g.trou?mqExtra(g):0)}} ${{g.h+2*pad}}`);
+  const svg=$("svg"); svg.setAttribute("viewBox",`${{-pad}} ${{-pad}} ${{g.w+2*pad+0}} ${{g.h+2*pad}}`);
   const clr="#3a2614", maxW=g.w*.86;
   svg.innerHTML=`<defs><linearGradient id="bois" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ecd3a8"/><stop offset=".5" stop-color="#e2c393"/><stop offset="1" stop-color="#d9b682"/></linearGradient>
    <pattern id="fil" width="${{g.w}}" height="${{g.h/7}}" patternUnits="userSpaceOnUse"><path d="M0 ${{g.h/14}} C ${{g.w*.3}} ${{g.h/20}}, ${{g.w*.6}} ${{g.h/10}}, ${{g.w}} ${{g.h/14}}" stroke="#b98d55" stroke-opacity=".18" stroke-width="${{g.w*.004}}" fill="none"/></pattern>
    <filter id="omb" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="${{g.w*.012}}" stdDeviation="${{g.w*.012}}" flood-color="#4b3214" flood-opacity=".35"/></filter></defs>
    <g filter="url(#omb)"><path d="${{g.contour}}" fill="url(#bois)"/></g><path d="${{g.contour}}" fill="url(#fil)"/>
-   ${{g.trou?`<circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r}}" fill="#e7dccb" stroke="#9c6b3f" stroke-width="${{g.w*.006}}"/>${{mousqSvg(g)}}`:""}}
+   ${{g.trou?`<circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r}}" fill="#e7dccb" stroke="#9c6b3f" stroke-width="${{g.w*.006}}"/><circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r*1.9}}" fill="none" stroke="#b9b9b9" stroke-width="${{g.w*.02}}"/>`:""}}
    <path d="${{qrPath(m,g.qr.x,g.qr.y,g.qr.t)}}" fill="${{clr}}" fill-opacity=".92"/>
    ${{g.textes.map(t=>texteSvg(t,clr,maxW)).join("")}}
    <path d="${{g.contour}}" fill="none" stroke="#9c6b3f" stroke-width="${{g.w*.005}}"/>`;
