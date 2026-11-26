@@ -213,3 +213,11 @@ n'a pas d'équivalent (personne ne vend le carnet vierge). Point de vigilance : 
 17,99 € (14,39 € en promo) · Treizkot carnet de voyage cuir PU gravé + stylo 34,99 € · Manegane cuir véritable A5 110 € · objets pub simili
 cuir A5 5,88 à 9,87 € HT (logo, en quantité) · Amazon marketplace carnet A5 simili cuir rechargeable non gravé 12,99 €. Grand public : 14 à 40 €
 pour un carnet gravé, simili cuir ≈ 14–20 €.
+
+
+## Porte-clés musique à scanner (QR code gravé) — relevé du 26/11/2026
+- Bibam Bois (atelier en France, bois, QR vers n'importe quel lien) : 16,90 €.
+- HappyBulle (gravé en France, bois 55 × 35 mm, code Spotify à barres) : 22,00 € avec la personnalisation.
+- Etsy France (vendeurs « chanson / QR code ») : surtout 15 à 21 € (ex. 15,60 € ; 16,79 € soldé sur 20,99 €).
+- Bas de gamme (Chine, Etsy, Shein, Boxland) : 3,80 à 8,50 €. Soufeel : 12,95 € « soldé » (prix barré 40 €).
+- Notre maquette (prix PROPOSÉS, non validés) : 12,90 / 13,90 / 14,90 € (Petit / Moyen / Grand), mousqueton 7 couleurs compris.
