@@ -81,8 +81,8 @@ acc = main[main.find('<div class="info-accordion">'):]
 acc = acc[:acc.find("</details></div>") + len("</details></div>")] if "</details></div>" in acc else ""
 blocs_bas += re.sub(r'href="/[^"]*"', 'href="#"', acc)
 # gérant, 26/11 : la maquette suit la taille de la machine (zone 180 mm, 2 mm de marge) → plateau carré 17,6 × 17,6 cm
-blocs_bas = (blocs_bas.replace("21 × 15 cm, un peu plus grand que nos puzzles à encastrer", "au choix 12 × 12, 15 × 15 ou 17,6 × 17,6 cm, épaisseur 3 mm")
-             .replace("21 × 15 cm", "12 × 12, 15 × 15 ou 17,6 × 17,6 cm (au choix), épaisseur 3 mm"))
+blocs_bas = (blocs_bas.replace("21 × 15 cm, un peu plus grand que nos puzzles à encastrer", "au choix 12 × 12, 15 × 15 ou 17,6 × 17,6 cm, en contreplaqué de 3 mm d'épaisseur")
+             .replace("21 × 15 cm", "12 × 12, 15 × 15 ou 17,6 × 17,6 cm (au choix), contreplaqué de 3 mm d'épaisseur"))
 
 PHOTOS = []
 for u in re.findall(r'<div class="gallery-thumbs">(.*?)</div>', main, re.S)[0].split("<button")[1:]:
@@ -166,7 +166,7 @@ details.pz-fin summary{cursor:pointer;font-size:.84rem;font-weight:600;color:#7c
 .pz-faits span{font-size:.78rem;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 10px}
 .pz-valider{margin-top:14px;font-size:.84rem;background:#fffbe9;border:1px solid #ecd99a;border-radius:12px;padding:10px 14px}
 .pz-valider li{margin:3px 0}
-@media (max-width:900px){.pz-left{position:static}.pz-stage svg{max-height:62vh}}
+@media (max-width:900px){main>.container.product-layout,.pz-atelier{padding-left:16px;padding-right:16px;box-sizing:border-box}.pz-left{position:static}.pz-stage svg{max-height:62vh}}
 """
 
 HTML = f"""<title>Puzzle photo créateur</title>
@@ -206,7 +206,7 @@ HTML = f"""<title>Puzzle photo créateur</title>
 
     <section class="pz-step"><h3><span class="pz-n">3</span>La taille</h3>
       <div class="pz-grid" id="tailles"></div>
-      <p class="pz-sub" style="margin:10px 0 0">Plus le puzzle est grand, plus les pièces sont grandes et faciles à prendre. Toutes les tailles sont en bois de 3 mm d'épaisseur.</p>
+      <p class="pz-sub" style="margin:10px 0 0">Plus le puzzle est grand, plus les pièces sont grandes et faciles à prendre. Toutes les tailles sont en contreplaqué de 3 mm d'épaisseur.</p>
     </section>
 
     <section class="pz-step"><h3><span class="pz-n">4</span>Le nombre de pièces</h3>
@@ -409,7 +409,7 @@ function fichier(){{
    `<path d="${{sh}}" fill="none" stroke="#ff0000" stroke-width=".3"/>`+
    `<text x="0" y="186" font-size="4" fill="#777" font-family="Inter,sans-serif">${{taille().cote}} × ${{taille().cote}} mm (taille ${{taille().nom}}) — rouge = découpe</text></svg>`;
   const f=forme(), dans=PC.filter(p=>dedans(p.cx,p.cy)).length;
-  $("faits").innerHTML=[`Taille : ${{taille().nom}} ${{taille().cote}} × ${{taille().cote}} mm`,`Épaisseur : 3 mm`,`Forme : ${{f.nom}} (${{dimF(f)}})`,`Pièces dans le fichier : ${{dans}}`,`Pièces : ${{S.type==="grille"?"en grille":"irrégulières"}}`,`Attaches : ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`,`Photo : ${{S.exemple?"exemple":"envoyée par la cliente"}}`].map(t=>`<span>${{t}}</span>`).join("");
+  $("faits").innerHTML=[`Taille : ${{taille().nom}} ${{taille().cote}} × ${{taille().cote}} mm`,`Bois : contreplaqué 3 mm`,`Forme : ${{f.nom}} (${{dimF(f)}})`,`Pièces dans le fichier : ${{dans}}`,`Pièces : ${{S.type==="grille"?"en grille":"irrégulières"}}`,`Attaches : ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`,`Photo : ${{S.exemple?"exemple":"envoyée par la cliente"}}`].map(t=>`<span>${{t}}</span>`).join("");
 }}
 
 // ---------- panneau ----------
@@ -427,7 +427,7 @@ function resume(){{
   $("prixLead").textContent=eur(prixTotal());
   const cw=(f.box[2]-f.box[0]), ch=(f.box[3]-f.box[1]), aire=cw*ch*f.aire/v.n, cote=Math.sqrt(aire)*kk()/10;
   $("tailleP").textContent=`Pièces d'environ ${{cote.toFixed(1).replace(".",",")}} cm de côté. Plus il y a de pièces, plus elles sont petites et le puzzle difficile.`+(cote<1.4?" Pièces très petites : prenez plutôt une taille plus grande.":"");
-  $("resume").innerHTML=[["Photo",S.exemple?"à choisir":"votre photo"],["Taille",`${{taille().nom}}${{taille().sup?" (+"+taille().sup+"\u00a0€)":""}}`],["Forme",`${{f.nom}} · ${{dimF(f)}}${{f.sup?" (+"+f.sup+"\u00a0€)":""}}`],["Pièces",`${{v.t}} (${{eur(v.p)}})`],["Style",`${{S.type==="grille"?"en grille":"irrégulières"}}, attaches ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`],["Épaisseur","3 mm"],["Gravure","photo en noir et blanc, au laser"]]
+  $("resume").innerHTML=[["Photo",S.exemple?"à choisir":"votre photo"],["Taille",`${{taille().nom}}${{taille().sup?" (+"+taille().sup+"\u00a0€)":""}}`],["Forme",`${{f.nom}} · ${{dimF(f)}}${{f.sup?" (+"+f.sup+"\u00a0€)":""}}`],["Pièces",`${{v.t}} (${{eur(v.p)}})`],["Style",`${{S.type==="grille"?"en grille":"irrégulières"}}, attaches ${{({{classique:"classiques",ronde:"rondes",triangle:"pointues"}})[S.att]}}`],["Bois","contreplaqué, 3 mm d'épaisseur"],["Gravure","photo en noir et blanc, au laser"]]
     .map(([a,b])=>`<li><span>${{a}}</span><span>${{b}}</span></li>`).join("");
   $("total").textContent=eur(prixTotal());
   $("panier").disabled=S.exemple; $("manque").textContent=S.exemple?"Il manque votre photo : choisissez-la à l'étape 1.":"";
