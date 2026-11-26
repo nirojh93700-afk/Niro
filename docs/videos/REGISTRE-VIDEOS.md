@@ -1283,7 +1283,7 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
   Chacun aura le sien, gravé pour lui. » Chapitres : Pour sa femme · Pour Papa · Pour Maman · Pour sa sœur · Pour la bande · Pour sa collègue
   (marque-page MÉTAL, jamais dit « gravé ») · Pour les fiancés · Pour Marraine ; épilogue « Et pour lui ? » (cristal du couple).
   Écartés : collier Enveloppe et carafe (photos avec texte anglais), bracelet cordon noir (rupture).
-- 59,4 s, sans son, aucun prix, aucun nombre, 1080 × 1920 (16,7 Mo) et 720 × 1280 (3,5 Mo). À supprimer le 28/11.
+- 59,4 s, sans son, aucun prix, aucun nombre, 1080 × 1920 et 720 × 1280. À supprimer le 28/11.
 - Script : `python3 tools/video/film_noel_78.py <polices> <sortie> [--apercu]`.
 
 **Vidéo 78 — Un cadeau pour chacun** (Collier cœur & plaques, Verre à whisky, Cristal photo 3D, Marque-page en bois, Marque-page en métal, Verre à cocktail, Collier 3 Cœurs)
