@@ -820,6 +820,7 @@ export const products = [
   {
     slug: "puzzle-photo-grave",
     name: "Puzzle photo gravé",
+    dimension: "21 × 15 cm", // écrite dans la commande à côté du nombre de pièces (gérant, 26/11/2026 : « tout doit être en détail »)
     badge: "Nouveau",
     noEngravePreview: true,
     weight: 95,
@@ -851,6 +852,7 @@ export const products = [
   },
   {
     slug: "puzzle-foret",
+    dimension: "18,5 × 13,5 cm",
     name: "Puzzle en bois, Forêt",
     badge: "Nouveau",
     weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
@@ -878,6 +880,7 @@ export const products = [
   },
   {
     slug: "puzzle-savane",
+    dimension: "18,5 × 13,5 cm",
     name: "Puzzle en bois, Savane",
     badge: "Nouveau",
     weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
@@ -905,6 +908,7 @@ export const products = [
   },
   {
     slug: "puzzle-australie",
+    dimension: "18,5 × 13,5 cm",
     name: "Puzzle en bois, Australie",
     badge: "Nouveau",
     weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
@@ -932,6 +936,7 @@ export const products = [
   },
   {
     slug: "puzzle-animaux-amerique",
+    dimension: "18,5 × 13,5 cm",
     name: "Puzzle en bois, Grand Nord",
     badge: "Nouveau",
     weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
@@ -959,6 +964,7 @@ export const products = [
   },
   {
     slug: "puzzle-dinosaures",
+    dimension: "18,5 × 13,5 cm",
     name: "Puzzle en bois, Dinosaures",
     badge: "Nouveau",
     weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
@@ -986,6 +992,7 @@ export const products = [
   },
   {
     slug: "puzzle-vehicules-secours",
+    dimension: "18,5 × 13,5 cm",
     name: "Puzzle en bois, Véhicules de secours",
     badge: "Nouveau",
     weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
@@ -1013,6 +1020,7 @@ export const products = [
   },
   {
     slug: "puzzle-camping",
+    dimension: "18,5 × 13,5 cm",
     name: "Puzzle en bois, Camping",
     badge: "Nouveau",
     weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
@@ -1040,6 +1048,7 @@ export const products = [
   },
   {
     slug: "puzzle-jardin-enchante",
+    dimension: "18,5 × 13,5 cm",
     name: "Puzzle en bois, Jardin enchanté",
     badge: "Nouveau",
     weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie
@@ -1067,6 +1076,7 @@ export const products = [
   },
   {
     slug: "puzzle-fruits-legumes",
+    dimension: "18,5 × 13,5 cm",
     name: "Puzzle en bois, Fruits & légumes",
     badge: "Nouveau",
     weight: 75, // gérant 09/10/2026 : 75 g → lettre suivie

@@ -8,6 +8,7 @@
 // =============================================================================
 import { getProductBySlug } from "@/lib/products";
 import { emplacementDe, aEmplacement } from "@/lib/apercuCote";
+import { getProductInfo } from "@/lib/productInfo";
 
 const WHISKY = { nom: "Verre à whisky 30 cl", ref: "Tumbler Lario 30 cl (Metro)", mesures: "Ø 7,9 × H 9,3 cm, fond épais, paroi lisse" };
 
@@ -29,6 +30,15 @@ const PIECES = {
     : { nom: "Tumbler 37 cl", ref: "Montese Tumbler 37 cl, cristal (Metro)", mesures: "Ø 8,5 × H 10 cm, évasé" }),
   "carafe-a-whisky-gravee": () => ({ nom: "Carafe à whisky", ref: "Carafe en verre taillé, bouchon à facettes, base étoilée", mesures: "" }),
 };
+
+/** « Taille & Matériaux » de la fiche produit, sur une ligne (sans le titre ni les tirets). */
+export function tailleMateriaux(slug) {
+  const m = String(getProductInfo(slug)?.material || "");
+  const lignes = m.split("\n").map((l) => l.replace(/^\s*[-•]\s*/, "").trim())
+    .filter((l) => l && !/^taille\s*&\s*mat/i.test(l));
+  const t = lignes.join(" · ");
+  return t.length > 420 ? `${t.slice(0, 417)}…` : t;
+}
 
 /** Nombre de pièces dans une option « Lot de N » (1 sinon). */
 export function piecesParOption(titre) {
@@ -61,7 +71,8 @@ export function pieceAUtiliser(item, quantite = 1) {
     option: item.variantDetail || titre,
     nom: piece?.nom || "",
     ref: piece?.ref || "",
-    mesures: piece?.mesures || "",
+    // Pas de pièce décrite ici (bijou, puzzle, bois…) : les lignes « Taille & Matériaux » de la fiche (26/11/2026).
+    mesures: piece?.mesures || tailleMateriaux(item.slug),
     couleur,
     nb,
     endroit,

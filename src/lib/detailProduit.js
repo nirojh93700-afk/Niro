@@ -45,7 +45,10 @@ export function detailVariante(order, slug, opts = {}) {
   const titre = String(opts.variantTitle || "").trim();
   if (variant) {
     const t = tailleDe(product, variant);
-    return { texte: [t, variant.title].filter(Boolean).join(" · "), variantId: variant.id, incertain: false };
+    // Dimension de la pièce (puzzles…) écrite à côté de l'option (gérant, 26/11/2026 : « tout doit être en détail »).
+    const dim = variant.dimension || product?.dimension || "";
+    const base = [t, variant.title].filter(Boolean).join(" · ");
+    return { texte: [base, dim && !base.includes(dim) ? dim : ""].filter(Boolean).join(" · "), variantId: variant.id, incertain: false };
   }
   const tailles = [...new Set((cands || []).map((v) => tailleDe(product, v)).filter(Boolean))];
   if (tailles.length > 1) {
