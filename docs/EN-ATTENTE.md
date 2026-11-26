@@ -17,6 +17,8 @@
   26 images pour les réseaux livrées le 06/11 (galerie https://claude.ai/artifact/QKxYQCFqHFS3YArL6gFMMp, zip dans docs/maquettes/assets/tamoul-reseaux/) : il choisit lesquelles publier.
 
 
+- v2 du 26/11 soir (« il y a les puzzles aussi, non ? ») : le puzzle photo est ajouté en 3ᵉ carte. En attente de son avis ; rien en ligne.
+
 ## 📧 GOOGLE CLOUD : NIVEAUX D'ACCÈS GMAIL (mail du 24/11/2026, projet niv-creation) — À REVOIR EN JANVIER 2027
 - Niveau Standard gratuit (le site est très loin des limites) ; sans action, bascule automatique le 01/04/2027 sans frais. Ne JAMAIS choisir le niveau « Scaled » (payant).
 - 01/02/2027 : les « agents d'IA » doivent passer par les serveurs MCP de Workspace au lieu de l'API REST. Le site lit Gmail par son propre code (inbox.js, gmail.js) puis donne le texte à Claude : a priori usage classique, à revérifier en janvier 2027 (règles « is_agentic » sur le client OAuth, workspaceupdates.googleblog.com 2026/11) et adapter avant le 01/02 si besoin.

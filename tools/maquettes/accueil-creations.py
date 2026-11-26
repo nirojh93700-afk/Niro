@@ -61,6 +61,7 @@ def prix(slug, defaut):
     return m.group(1).strip() if m else defaut
 # prix lus dans la page ; à défaut ceux de la fiche en ligne le 26/11/2026 (node tools/prix-fiche.mjs)
 P_SUP = prix("support-telephone-bois-grave", "15,90 €"); P_MUS = prix("plaque-musique-a-scanner", "14,90 €")
+P_PUZ = prix("puzzle-photo-grave", "29,90 €")
 
 def photo(chemin, w=760, q=80):
     """Photo mise au format 4 / 3 sans rien couper : une image carrée est élargie avec son propre fond (bords étirés)."""
@@ -92,14 +93,20 @@ CREATIONS = [
          vues=[("Avec photo", "public/produits/musique/exemple-photo.jpg", "Plaque en bois gravée d'une photo de couple, d'un QR code et de « Notre chanson »"),
                ("Plaque", "public/produits/musique/exemple-plaque.jpg", "Plaque en bois gravée d'un QR code, « Scannez pour écouter »"),
                ("Carte", "public/produits/musique/exemple-carte.jpg", "Carte musique en bois gravée d'un QR code et d'une note de musique"),
-               ("Porte-clés", "public/produits/musique/exemple-porte-cles.jpg", "Porte-clés en bois gravé d'un QR code")]),
+               ("Porte-clés", "public/produits/musique/exemple-porte-cles.jpg", "Porte-clés en bois gravé d'un QR code")]),    # 26/11 soir (gérant : « il y a les puzzles aussi, non ? ») : le puzzle photo, en vente, la cliente y met SA photo
+    dict(slug="puzzle-photo-grave", nom="Puzzle photo gravé sur bois", prix=P_PUZ, bouton="Créer le mien",
+         texte="Envoyez votre photo et choisissez le nombre de pièces : nous la gravons sur un puzzle en bois.",
+         vues=[("Enfants", "public/produits/puzzle-photo-enfants.jpg", "Puzzle en bois gravé d'une photo d'enfants"),
+               ("Famille", "public/produits/puzzle-photo-famille.jpg", "Puzzle en bois gravé d'une photo de famille"),
+               ("Amis", "public/produits/puzzle-photo-amis.jpg", "Puzzle en bois gravé d'une photo d'amis")]),
 ]
-# Seulement pour le bouton « Voir avec d'autres créations » de la barre : deux créateurs enregistrés, PAS en ligne.
+# Seulement pour le bouton « Voir avec d'autres créations » de la barre : trois créateurs enregistrés, PAS en ligne.
 PLUS_TARD = [
     dict(nom="Arbre de vie à prénoms", texte="Exemple pour plus tard : un outil enregistré, pas encore en vente.",
          vues=[("", "docs/maquettes/assets/creez-le-votre/arbre.webp", "Arbre de vie en bois découpé, un prénom dans chaque cœur")]),
     dict(nom="Maisonnette en bois", texte="Exemple pour plus tard : un outil enregistré, pas encore en vente.",
-         vues=[("", "docs/maquettes/assets/creez-le-votre/maison.webp", "Maisonnette en bois découpé")]),
+         vues=[("", "docs/maquettes/assets/creez-le-votre/maison.webp", "Maisonnette en bois découpé")]),    dict(nom="Décoration à suspendre", texte="Exemple pour plus tard : un outil enregistré, pas encore en vente.",
+         vues=[("", "docs/maquettes/assets/creez-le-votre/deco-1.webp", "Décoration en bois à suspendre, avec un prénom")]),
 ]
 
 def carte(c, exemple=False):
@@ -165,8 +172,7 @@ CSS = r'''
 .mx .crz-pas li::after{content:"";position:absolute;left:40px;right:-2px;top:16px;border-top:1px dashed rgba(124,97,32,.55)}
 .mx .crz-pas li:last-child::after{display:none}
 .mx .crz-pas b{display:block;color:#1a1206;font-size:.92rem}
-.mx .crz-liste{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,2.4vw,28px)}
-.mx .crz-liste.crz-4{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.mx .crz-liste{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2vw,24px)}
 .mx .crz-carte{display:flex;flex-direction:column;min-width:0;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 14px 34px rgba(60,40,10,.13);border:1px solid rgba(26,18,6,.07)}
 .mx .crz-scene{position:relative;display:block;aspect-ratio:4/3;background:#f1e6cf;overflow:hidden}
 .mx .crz-scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s ease,transform 6s ease-out;transform:scale(1.04)}
@@ -181,11 +187,15 @@ CSS = r'''
 .mx .crz-pied{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 14px;margin-top:auto;padding-top:8px}
 .mx .crz-corps .crz-prix{display:flex;align-items:baseline;gap:7px;margin:0}.mx .crz-prix span{font-size:.82rem;color:#6b5a3a}.mx .crz-prix b{font-size:1.4rem;color:#7c6120;font-variant-numeric:tabular-nums}
 .mx .crz-ex{font-weight:700;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;color:#b3261e;border:1px dashed #b3261e;border-radius:999px;padding:6px 10px}
-.mx .crz-4 .crz-corps{padding:16px 16px 18px}.mx .crz-4 .crz-corps h3{font-size:1.12rem}.mx .crz-4 .crz-pied .mxbtn{width:100%;justify-content:center}
+.mx .crz-corps h3{font-size:1.18rem}
 @media (prefers-reduced-motion:reduce){.mx .crz-scene img{transition:none;transform:none}}
-@media (max-width:1040px){.mx .crz-liste.crz-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:860px){.mx .crz-tete{grid-template-columns:1fr;align-items:start}}
 /* téléphone : les cartes se font glisser du doigt, la suivante dépasse à droite */
+@media (max-width:980px){
+  .mx .crz-liste,.mx .crz-liste.crz-4{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(-1*var(--pad));padding:4px var(--pad) 14px;scroll-padding-left:var(--pad);-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .mx .crz-liste::-webkit-scrollbar{display:none}
+  .mx .crz-carte{flex:0 0 min(86%,330px);scroll-snap-align:start}
+}
 @media (max-width:700px){
   .mx .crz{margin:22px 16px;border-radius:20px}
   .mx .crz-in{--pad:18px;padding-top:28px;padding-bottom:26px}
