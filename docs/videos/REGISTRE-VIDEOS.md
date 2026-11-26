@@ -1292,3 +1292,22 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #cadeaunoel #ideecadeauhomme #ideecadeau
+
+## Vidéo 79 — « Votre chanson, gravée sur du bois » (26/11/2026)
+- Demande : « mets en ligne et après tu me fais une vidéo… que sur ça… comme une histoire… pour TikTok, Insta ». Un seul produit : la plaque
+  et le porte-clés musique à scanner (mis en ligne le même soir).
+- Style NEUF « histoire en six temps », fond brun chaud : un vinyle tourne (« Vous avez une chanson. ») → le lien collé dans un champ
+  (« Et si elle devenait un cadeau ? ») → le laser grave la plaque de haut en bas → un téléphone la scanne, « Lecture en cours », les barres de
+  son du bas (muettes jusque-là) se mettent à danser → le porte-clés, les mousquetons, la plaque avec photo → fin crème (logo d'origine,
+  nivcreation.fr, Gravé en France). Dessins de la plaque = le même calcul que la fiche. ⚠️ Rendus de l'aperçu, pas de vraies photos gravées.
+- 25 s, AVEC une petite musique synthétisée par le script (boîte à musique, puis la mélodie démarre au scan), aucun prix, aucun nombre,
+  1080 × 1920 (4,8 Mo) et 720 × 1280 (1,6 Mo). À supprimer le 28/11.
+- Script : `python3 tools/video/musique_scanner_79.py <dossier de travail> [--apercu]` (HTML animé `tools/video/musique_79/film.html`, rendu
+  image par image avec Playwright, puis ffmpeg).
+
+**Vidéo 79 — Votre chanson, gravée sur du bois** (Plaque et porte-clés musique à scanner)
+> 🎶 Vous avez UNE chanson. Celle du mariage, de la rencontre, d'un été… Et si elle devenait un cadeau ? ✨
+> On la grave sur du bois : on scanne, et elle se lance 📱💛 En plaque ou en porte-clés, avec vos mots et même votre photo 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #cadeaucouple #musique #ideecadeau
