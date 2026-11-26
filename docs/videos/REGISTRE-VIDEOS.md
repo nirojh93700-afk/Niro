@@ -1311,3 +1311,22 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #cadeaucouple #musique #ideecadeau
+
+## Vidéo 80 — « Votre chanson, gravée sur du bois », version 2 (26/11/2026) — REMPLACE la 79
+- Demande : « la vidéo, refais-le, il faut que tu montres plus ce qu'ils peuvent graver, aussi des photos ». La 79 est supprimée.
+- Même histoire (vinyle → lien collé → laser → le téléphone scanne, la chanson se lance), puis TROIS parties neuves :
+  « Vous choisissez quoi graver » = trois plaques qui défilent (« Notre chanson · Léa & Tom · 14.06.2025 », carte musique « Pour Papa ·
+  Bonne fête, on t'aime » en Pacifico, « Nos 20 ans · Sophie & Marc · 2006 – 2026 » en Cinzel) · « Et même votre photo » = le laser grave
+  une photo de couple, puis une plaque avec un enfant et son chien, puis un portrait (« Pour Maman ») · « En porte-clés, la photo est au dos »
+  = le porte-clés se retourne (QR code devant, photo au dos) + les mousquetons. Légendes en pastilles sous chaque pièce. Fin crème, logo d'origine.
+- Dessins = le même calcul que la fiche (`musApercu`). Photos d'exemple = les portraits des exemples de marque-pages
+  (`docs/maquettes/assets/marque-pages/exemples/portraits/`), passés en nuances de brun comme sur la fiche. Prénoms d'exemple. ⚠️ Rendus, pas de vraies photos gravées.
+- 30 s, petite musique synthétisée (démarre au scan), aucun prix, aucun nombre, 1080 × 1920 (6,8 Mo) et 720 × 1280 (2,4 Mo). À supprimer le 28/11.
+- Script : `python3 tools/video/musique_scanner_80.py <dossier de travail> [--apercu]` (`tools/video/musique_80/assets.mjs` + `film.html`, rendu `tools/video/musique_79/rendu.cjs`).
+
+**Vidéo 80 — Votre chanson, gravée sur du bois** (Plaque et porte-clés musique à scanner)
+> 🎶 Vous avez UNE chanson. Et si elle devenait un cadeau ? On la grave sur du bois : on scanne, et elle se lance 📱✨
+> Vous choisissez quoi graver : un titre, un prénom, une date… et même votre photo 📸💛 En plaque ou en porte-clés 🎁
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #cadeaucouple #musique #ideecadeau

@@ -1,0 +1,204 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:'Playfair Display';src:url(__POLICES__/playfair-display-ef05b3.woff2) format('woff2');font-weight:500 700}
+@font-face{font-family:'Inter';src:url(__POLICES__/inter-260c81.woff2) format('woff2');font-weight:400 700}
+@font-face{font-family:'Montserrat';src:url(__POLICES__/montserrat-311d35.woff2) format('woff2');font-weight:400 600}
+@font-face{font-family:'Great Vibes';src:url(__POLICES__/great-vibes-51c0e8.woff2) format('woff2');font-weight:400}
+@font-face{font-family:'Cinzel';src:url(__POLICES__/cinzel-e7ed1a.woff2) format('woff2');font-weight:400 600}
+@font-face{font-family:'Pacifico';src:url(__POLICES__/pacifico-d150e6.woff2) format('woff2');font-weight:400}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#1a1206}
+#scene{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Inter,sans-serif;color:#f6eedd;
+ background:radial-gradient(90% 60% at 50% 38%,#4a3320 0%,#2a1c10 55%,#150e06 100%)}
+.abs{position:absolute;left:0;top:0;will-change:transform,opacity}
+.c{position:absolute;left:0;width:1080px;text-align:center}
+.serif{font-family:'Playfair Display',Georgia,serif;font-weight:600;letter-spacing:-.5px}
+.or{color:#e2c67e}
+.tt{top:120px;font-size:88px;line-height:1.14}
+.tt span{font-style:italic;color:#e2c67e}
+#barres{position:absolute;left:60px;right:60px;bottom:70px;height:240px;display:flex;align-items:flex-end;gap:10px}
+#barres i{flex:1;border-radius:8px 8px 0 0;background:linear-gradient(#f0d58d,#b48a36);display:block}
+#vinyle{width:560px;height:560px;border-radius:50%;background:
+ radial-gradient(circle,#e2c67e 0 17%,#1b130b 17.4% 19%,transparent 19.4%),
+ repeating-radial-gradient(circle,#0e0a06 0 5px,#221a12 5px 7px);box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 0 0 6px #0b0805}
+#vinyle:after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 20deg,transparent 0 8%,rgba(255,255,255,.16) 12%,transparent 18% 50%,rgba(255,255,255,.12) 58%,transparent 66%)}
+#vinyle b{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px;border-radius:50%;background:#150e06}
+#champ{width:900px;height:132px;border-radius:66px;background:#fbf7ee;color:#2b2620;display:flex;align-items:center;gap:22px;padding:0 40px;font-size:42px;font-weight:500;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+#champ svg{flex:none;width:52px;height:52px}
+#champ span{white-space:nowrap;overflow:hidden}
+#curseur{width:4px;height:56px;background:#a98935;flex:none;margin-left:-14px}
+#okl{font-size:44px;font-weight:700;color:#8fd694}
+.plats{font-size:34px;color:rgba(246,238,221,.72);letter-spacing:.5px}
+.piece svg{position:absolute;left:0;top:0;width:100%;height:100%;display:block}
+.piece .pv,.piece .pp{position:absolute;inset:0}
+.laser{height:8px;border-radius:4px;background:#fff;box-shadow:0 0 18px 6px #ffe9a8,0 0 60px 22px rgba(255,170,60,.75)}
+.etinc{width:10px;height:10px;border-radius:50%;background:#fff4c9;box-shadow:0 0 14px 5px rgba(255,190,80,.9)}
+#tel{width:720px;height:1360px;border-radius:92px;border:16px solid #0b0b0d;box-shadow:0 0 0 3px #3a3a40,0 50px 120px rgba(0,0,0,.6),inset 0 0 0 2px rgba(255,255,255,.08)}
+#tel:before{content:"";position:absolute;left:50%;top:22px;width:190px;height:44px;margin-left:-95px;border-radius:22px;background:#0b0b0d}
+.coin{width:74px;height:74px;border:9px solid #fff;border-radius:6px}
+#flash{width:1080px;height:1920px;background:#fff}
+#lecture{width:620px;height:150px;border-radius:38px;background:rgba(20,20,24,.92);border:1.5px solid rgba(255,255,255,.14);display:flex;align-items:center;gap:26px;padding:0 30px;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+#lecture .pl{width:86px;height:86px;border-radius:22px;background:linear-gradient(135deg,#e2c67e,#a98935);display:grid;place-items:center;flex:none}
+#lecture .pl:after{content:"";border-left:30px solid #1a1206;border-top:19px solid transparent;border-bottom:19px solid transparent;margin-left:8px}
+#lecture b{display:block;font-size:40px;color:#fff;font-weight:700}
+#lecture small{display:block;font-size:28px;color:#b9b9c2;margin-top:4px}
+#lecture .eq{margin-left:auto;display:flex;align-items:flex-end;gap:7px;height:64px}
+#lecture .eq i{width:10px;border-radius:5px;background:#e2c67e;display:block}
+.note{width:70px;height:70px}
+.puce{display:inline-block;font-size:42px;font-weight:600;color:#1a1206;background:#f6eedd;padding:20px 44px;border-radius:999px;box-shadow:0 14px 36px rgba(0,0,0,.4)}
+.puce b{color:#8a6a1d}
+.mq img{display:block;height:150px;width:auto;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45))}
+.leg{font-size:38px;font-weight:600;color:#f6eedd}
+#fin{width:1080px;height:1920px;background:radial-gradient(100% 70% at 50% 30%,#fffaf0 0%,#f6eedd 60%,#ead9b8 100%);color:#1a1206}
+#logo{width:600px;border-radius:16px;box-shadow:0 18px 50px rgba(90,60,20,.25);display:block}
+#site{display:inline-block;font-size:56px;font-weight:700;color:#fff;background:linear-gradient(135deg,#c9a24b,#a98935);padding:30px 70px;border-radius:999px;box-shadow:0 18px 40px rgba(169,137,53,.45)}
+</style></head><body><div id="scene">
+<div id="barres"></div>
+
+<!-- 1 · la chanson -->
+<div class="abs" id="vinyle"><b></b></div>
+<div class="c serif" id="a1" style="top:1010px;font-size:100px">Vous avez</div>
+<div class="c serif or" id="a2" style="top:1128px;font-size:132px;font-style:italic">une chanson.</div>
+<div class="c" id="a3" style="top:1350px;font-size:46px;line-height:1.5;color:rgba(246,238,221,.85)">Celle du mariage. De la rencontre.<br>D'un été qu'on n'oublie pas.</div>
+
+<!-- 2 · le lien -->
+<div class="c serif" id="b1" style="top:800px;font-size:86px">Et si elle devenait</div>
+<div class="c serif or" id="b2" style="top:905px;font-size:112px;font-style:italic">un cadeau ?</div>
+<div class="abs" id="champ"><svg viewBox="0 0 24 24" fill="none" stroke="#a98935" stroke-width="2.4" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.2 1.2"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2"/></svg><span id="saisie"></span><i id="curseur"></i></div>
+<div class="c" id="okl" style="top:1330px">✓ Lien reconnu : le QR code est prêt</div>
+<div class="c plats" id="plats" style="top:1440px">Spotify · Deezer · Apple Music · YouTube · SoundCloud</div>
+
+<!-- les titres du haut -->
+<div class="c serif tt" id="c1">Nous la gravons<br><span>sur du bois.</span></div>
+<div class="c serif tt" id="d1" style="top:96px">On la scanne…</div>
+<div class="c serif tt" id="d2" style="top:96px"><span>…et elle se lance.</span></div>
+<div class="c serif tt" id="g1">Vous choisissez<br><span>quoi graver.</span></div>
+<div class="c serif tt" id="g2">Et même<br><span>votre photo.</span></div>
+<div class="c serif tt" id="g3">En porte-clés,<br><span>la photo est au dos.</span></div>
+
+<!-- les pièces -->
+<div id="pieces"></div>
+<div class="abs laser" id="laser"></div>
+<div id="etincs"></div>
+
+<!-- 4 · le scan -->
+<div class="abs" id="tel"></div>
+<div class="abs coin" id="k1" style="border-right:0;border-bottom:0"></div><div class="abs coin" id="k2" style="border-left:0;border-bottom:0"></div>
+<div class="abs coin" id="k3" style="border-right:0;border-top:0"></div><div class="abs coin" id="k4" style="border-left:0;border-top:0"></div>
+<div class="abs" id="flash"></div>
+<div class="abs" id="lecture"><span class="pl"></span><span><b>Notre chanson</b><small>Lecture en cours</small></span><span class="eq"><i></i><i></i><i></i><i></i><i></i></span></div>
+<div id="notes"></div>
+
+<!-- les légendes -->
+<div class="c" id="l0" style="top:1385px"><span class="puce">Votre <b>titre</b>, votre <b>dédicace</b></span></div>
+<div class="c" id="l1" style="top:1385px"><span class="puce">Un <b>prénom</b>, un <b>petit mot</b></span></div>
+<div class="c" id="l2" style="top:1385px"><span class="puce">Une <b>date</b>, l'<b>écriture</b> de votre choix</span></div>
+<div class="c" id="l3" style="top:1385px"><span class="puce">Votre photo <b>de couple</b></span></div>
+<div class="c" id="l4" style="top:1385px"><span class="puce">Vos <b>enfants</b>, votre <b>animal</b></span></div>
+<div class="c" id="l5" style="top:1385px"><span class="puce">Un <b>portrait</b>, pour une maman</span></div>
+<div class="c" id="l6" style="top:1205px"><span class="puce">Devant : le <b>QR code</b></span></div>
+<div class="c" id="l7" style="top:1205px"><span class="puce">Au dos : <b>votre photo</b></span></div>
+<div id="mqs"></div>
+<div class="c leg" id="l8" style="top:1500px">Mousqueton de la couleur de votre choix</div>
+
+<!-- fin -->
+<div class="abs" id="fin">
+ <div class="c" id="f0" style="top:300px"><img id="logo" src="__LOGO__" style="margin:0 auto"></div>
+ <div class="c serif" id="f1" style="top:800px;font-size:104px">Votre chanson,</div>
+ <div class="c serif" id="f2" style="top:925px;font-size:104px;font-style:italic;color:#a98935">gravée sur du bois.</div>
+ <div class="c" id="f3" style="top:1120px;font-size:44px;font-weight:600;color:#4a3b22">Plaque et porte-clés musique à scanner</div>
+ <div class="c" id="f4" style="top:1300px"><span id="site">nivcreation.fr</span></div>
+ <div class="c" id="f5" style="top:1520px;font-size:34px;letter-spacing:6px;font-weight:700;color:#7c6120">GRAVÉ EN FRANCE</div>
+</div>
+</div>
+<script>
+const D=__D__, MQ=__MQ__;
+const $=id=>document.getElementById(id), cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)), seg=(t,a,b)=>cl((t-a)/(b-a));
+const eo=x=>1-Math.pow(1-x,3), eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2, back=x=>{const c=1.70158;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const vis=(t,a,b,f=.3)=>Math.min(seg(t,a,a+f),1-seg(t,b-f,b));
+const lerp=(a,b,x)=>a+(b-a)*x;
+function pose(el,cx,cy,w,h,o,sc=1,rot=0,sx=1){el.style.opacity=o;el.style.transform=`translate(${cx-w/2}px,${cy-h/2}px) rotate(${rot}deg) scale(${sc*sx},${sc})`;}
+function txt(el,o,dy=0){el.style.opacity=o;el.style.transform=`translateY(${dy}px)`;}
+const NB=34; $("barres").innerHTML="<i></i>".repeat(NB); const B=[...$("barres").children];
+const NOTE="M0.05 0.888A0.17 0.12 -20 1 1 0.37 0.772A0.17 0.12 -20 1 1 0.05 0.888ZM0.335 0.80V0.27H0.375V0.80ZM0.875 0.69V0.15H0.915V0.69ZM0.335 0.36V0.25L0.915 0.12V0.23ZM0.59 0.768A0.17 0.12 -20 1 1 0.91 0.652A0.17 0.12 -20 1 1 0.59 0.768Z";
+$("notes").innerHTML=Array.from({length:9},()=>`<svg class="abs note" viewBox="0 0 1 1"><path d="${NOTE}" fill="#e2c67e"/></svg>`).join(""); const N=[...$("notes").children];
+$("etincs").innerHTML='<i class="abs etinc"></i>'.repeat(7); const E=[...$("etincs").children];
+$("mqs").innerHTML=MQ.map(m=>`<div class="abs mq"><img src="${m}"></div>`).join(""); const M=[...$("mqs").children];
+const LIEN="https://…/track/notre-chanson", EQ=[...document.querySelectorAll("#lecture .eq i")];
+// les pièces : largeur à l'écran, hauteur d'après le dessin
+const LARG={p0:760,p1:760,p2:760,f0:960,f1:960,f2:960,k0:800,k1:800}, P={};
+for(const k in D){const d=D[k], w=LARG[k], h=w*d.vb[3]/d.vb[2], e=document.createElement("div");e.className="abs piece";e.style.width=w+"px";e.style.height=h+"px";
+  e.innerHTML=(k==="p0"||k==="f0"?`<div class="pv">${d.vide}</div>`:"")+`<div class="pp">${d.plein}</div>`;$("pieces").appendChild(e);P[k]={e,w,h,d,pp:e.querySelector(".pp")};e.style.opacity=0;
+}
+// un texte trop long est resserré, comme sur la fiche (une fois les écritures chargées, sinon la mesure est fausse)
+Promise.all(["600 40px 'Playfair Display'","500 40px Inter","700 40px Inter","600 40px Montserrat","40px 'Great Vibes'","40px Pacifico","600 40px Cinzel"].map(f=>document.fonts.load(f))).then(()=>{
+  document.querySelectorAll(".piece text[data-max]").forEach(x=>{const l=x.getComputedTextLength(), m=+x.dataset.max*(x.getAttribute("text-anchor")==="start"?.7:1);if(l>m&&l>0){x.setAttribute("textLength",m);x.setAttribute("lengthAdjust","spacingAndGlyphs");}});window.PRET=1;});
+const ORDRE=["p0","p1","p2","f0","f1","f2"];
+// les temps
+const T={lien:2.6,grave:5.4,L0:6.3,L1:8.7,scan:9.4,bip:10.9,joue:11.2,choix:12.8,photo:16.9,F0:17.7,F1:19.0,cle:21.9,tourne:23.3,fin:25.8};
+const PAS=[[14.1,1],[15.5,2],[T.photo,3],[19.6,4],[20.8,5]];
+function position(t){let p=0;for(const [d,n] of PAS)p=lerp(p,n,eio(seg(t,d,d+.6)));return p;}
+function laser(t,a,b,cx,cy,w,h){const g=seg(t,a,b), on=(g>0&&g<1)?1:0, yl=cy-h/2+g*h;
+  if(on){$("laser").style.opacity=1;$("laser").style.width=(w*.92)+"px";$("laser").style.transform=`translate(${cx-w*.46}px,${yl-4}px)`;
+    E.forEach((e,i)=>{const k=(t*7+i*1.37)%1;e.style.opacity=1-k;e.style.transform=`translate(${cx+Math.sin(i*2.4+Math.floor(t*7+i*1.37))*w*.4}px,${yl-k*60-5}px) scale(${1-k*.6})`;});}
+  return {g,on};}
+function render(t){
+  const vie=seg(t,T.joue,T.joue+.5), fin=seg(t,T.fin,T.fin+.6);
+  B.forEach((b,i)=>{const h=10+vie*(40+180*Math.abs(Math.sin(t*4.2+i*.63))*(.35+.65*Math.abs(Math.sin(t*1.7+i*.31))))+(1-vie)*6*Math.abs(Math.sin(t*1.2+i*.5));b.style.height=h+"px";});
+  $("barres").style.opacity=lerp(.22,.5,vie)*(1-.45*fin);
+  // 1 · la chanson
+  const v1=seg(t,.1,.7), vq=1-seg(t,5.0,5.4), vm=eio(seg(t,2.5,3.1));
+  pose($("vinyle"),540,lerp(600,430,vm),560,560,Math.min(v1,vq),lerp(.6,1,back(v1))*lerp(1,.62,vm),t*150);
+  txt($("a1"),vis(t,.4,2.6),lerp(40,0,eo(seg(t,.4,.9)))); txt($("a2"),vis(t,.8,2.6),lerp(40,0,eo(seg(t,.8,1.3)))); txt($("a3"),vis(t,1.4,2.6),lerp(30,0,eo(seg(t,1.4,1.9))));
+  // 2 · le lien
+  txt($("b1"),vis(t,T.lien+.1,5.3),lerp(40,0,eo(seg(t,2.7,3.2)))); txt($("b2"),vis(t,T.lien+.4,5.3),lerp(40,0,eo(seg(t,3.0,3.5))));
+  const vc=vis(t,3.3,5.3); pose($("champ"),540,1190,900,132,vc,lerp(.9,1,back(seg(t,3.3,3.8))));
+  const n=Math.round(seg(t,3.7,4.5)*LIEN.length); $("saisie").textContent=n?LIEN.slice(0,n):"Collez le lien de votre chanson"; $("saisie").style.color=n?"#2b2620":"#a39a8a";
+  $("curseur").style.opacity=(t>3.5&&t<4.7&&Math.floor(t*3)%2===0)?1:0; $("curseur").style.display=n?"block":"none";
+  txt($("okl"),vis(t,4.6,5.3,.22),lerp(20,0,eo(seg(t,4.6,4.9)))); txt($("plats"),vis(t,3.5,5.3),0);
+  // les titres
+  txt($("c1"),vis(t,T.grave+.1,T.scan),lerp(30,0,eo(seg(t,5.5,6.0))));
+  txt($("d1"),vis(t,T.scan+.3,T.bip+.3,.25),0); txt($("d2"),vis(t,T.bip+.35,T.choix,.25),lerp(30,0,eo(seg(t,T.bip+.35,T.bip+.8))));
+  txt($("g1"),vis(t,T.choix+.2,T.photo),lerp(30,0,eo(seg(t,13.0,13.5)))); txt($("g2"),vis(t,T.photo+.1,T.cle),lerp(30,0,eo(seg(t,17.0,17.5))));
+  txt($("g3"),vis(t,T.cle+.1,T.fin),lerp(30,0,eo(seg(t,22.0,22.5))));
+  // les pièces : la première se grave, puis toutes défilent
+  $("laser").style.opacity=0; E.forEach(e=>e.style.opacity=0);
+  const pos=position(t), part=1-seg(t,T.cle-.3,T.cle);
+  const pe=seg(t,5.5,6.2), ps=eio(seg(t,T.scan-.1,T.scan+.6)), pr=eio(seg(t,T.choix-.2,T.choix+.4));
+  const sc0=lerp(.7,1,back(pe))*lerp(1,.74,ps)*lerp(1,.92/.74,pr), cy0=lerp(lerp(1020,960,ps),940,pr);
+  ORDRE.forEach((k,i)=>{const p=P[k], d=Math.abs(i-pos), x=540+(i-pos)*1010, base=i===0?sc0:(i<3?.92:1), cy=i===0?cy0:940;
+    let o=d>1.4?0:(1-.6*cl(d))*part; if(i===0)o=Math.min(o,pe*1.6); else if(t<T.choix)o=0;
+    pose(p.e,x,cy,p.w,p.h,o,base*lerp(1,.8,cl(d)));});
+  const g0=laser(t,T.L0,T.L1,540,cy0,P.p0.w*sc0,P.p0.h*sc0); P.p0.pp.style.clipPath=`inset(0 0 ${(1-g0.g)*100}% 0)`;
+  const xf=540+(3-pos)*1010, gf=laser(t,T.F0,T.F1,xf,940,P.f0.w,P.f0.h); P.f0.pp.style.clipPath=`inset(0 0 ${(1-gf.g)*100}% 0)`;
+  // 4 · le téléphone
+  const tq=1-seg(t,T.choix-.4,T.choix-.05);
+  const vt=Math.min(eo(seg(t,T.scan,T.scan+.6)),tq); pose($("tel"),540,960,720,1360,vt,lerp(1.12,1,eo(seg(t,T.scan,T.scan+.6))));
+  const W0=P.p0.w*sc0, H0=P.p0.h*sc0, q=P.p0.d.qr, vb=P.p0.d.vb, u=W0/vb[2];
+  const qx=540-W0/2+(q.x-vb[0])*u, qy=cy0-H0/2+(q.y-vb[1])*u, qw=q.t*u, lu=t>=T.bip;
+  const pu=1+.05*Math.sin(t*9)*(lu?0:1), m=18, vk=Math.min(seg(t,T.scan+.5,T.scan+.8),1-seg(t,T.joue+.6,T.joue+1.0));
+  [["k1",qx-m,qy-m],["k2",qx+qw+m-74,qy-m],["k3",qx-m,qy+qw+m-74],["k4",qx+qw+m-74,qy+qw+m-74]].forEach(([id,x,y])=>{const e=$(id);e.style.opacity=vk;e.style.borderColor=lu?"#7be08a":"#fff";e.style.transform=`translate(${x}px,${y}px) scale(${pu})`;});
+  $("flash").style.opacity=.55*(1-seg(t,T.bip,T.bip+.35))*(t>=T.bip?1:0);
+  const vl=Math.min(seg(t,T.bip+.3,T.bip+.6),tq), dl=back(seg(t,T.bip+.3,T.bip+.9)); pose($("lecture"),540,lerp(250,440,dl),620,150,vl);
+  EQ.forEach((e,i)=>e.style.height=(14+50*Math.abs(Math.sin(t*9+i*1.3)))+"px");
+  N.forEach((e,i)=>{const d=T.joue+.2+i*.2, k=seg(t,d,d+1.8);e.style.opacity=(k>0&&k<1)?Math.min(k*5,1-k)*1.2:0;
+    e.style.transform=`translate(${540-35+Math.sin(i*1.9)*250+Math.sin(k*5+i)*40}px,${lerp(520,60,eo(k))+(i%3)*260}px) rotate(${Math.sin(k*4+i)*18}deg) scale(${.7+(i%3)*.35})`;});
+  // les légendes des pièces
+  const LEG=[[T.choix+.5,14.1],[14.5,15.5],[15.9,T.photo],[T.F1+.1,19.6],[20.0,20.8],[21.2,T.cle-.2]];
+  LEG.forEach(([a,b],i)=>{const e=$("l"+i), k=seg(t,a,a+.3);e.style.opacity=Math.min(k,1-seg(t,b-.2,b));e.style.transform=`translateY(${lerp(24,0,eo(k))}px) scale(${lerp(.9,1,back(k))})`;});
+  // 5 · le porte-clés : devant, puis il se retourne
+  const ke=seg(t,T.cle,T.cle+.6), ks=1-seg(t,T.fin-.1,T.fin+.3), a=eio(seg(t,T.tourne,T.tourne+.8))*Math.PI, c=Math.cos(a), cyk=lerp(1250,800,eo(ke)), sk=lerp(.7,1,back(ke))*(1+.06*Math.sin(a));
+  pose(P.k0.e,540,cyk,P.k0.w,P.k0.h,c>=0?Math.min(ke*1.5,ks):0,sk,lerp(-3,0,ke),Math.max(.02,Math.abs(c)));
+  pose(P.k1.e,540,cyk,P.k1.w,P.k1.h,c<0?ks:0,sk,0,Math.max(.02,Math.abs(c)));
+  [[6,T.cle+.6,T.tourne+.1],[7,T.tourne+.7,T.fin]].forEach(([i,a2,b])=>{const e=$("l"+i), k=seg(t,a2,a2+.3);e.style.opacity=Math.min(k,1-seg(t,b-.2,b));e.style.transform=`translateY(${lerp(24,0,eo(k))}px) scale(${lerp(.9,1,back(k))})`;});
+  M.forEach((e,i)=>{const d=24.3+i*.1, k=seg(t,d,d+.35), w=e.offsetWidth||60;e.style.opacity=Math.min(k*2,1-seg(t,T.fin-.2,T.fin));e.style.transform=`translate(${174+i*122-w/2}px,${1330-lerp(40,0,back(k))}px) scale(${lerp(.4,1,back(k))})`;});
+  txt($("l8"),vis(t,24.8,T.fin),0);
+  // fin
+  const f=eio(seg(t,T.fin,T.fin+.8)); $("fin").style.clipPath=`circle(${f*1400}px at 540px 1100px)`; $("fin").style.opacity=f>0?1:0;
+  txt($("f0"),seg(t,26.3,26.8),lerp(-30,0,eo(seg(t,26.3,26.8))));
+  txt($("f1"),seg(t,26.7,27.2),lerp(40,0,eo(seg(t,26.7,27.2)))); txt($("f2"),seg(t,27.1,27.6),lerp(40,0,eo(seg(t,27.1,27.6))));
+  txt($("f3"),seg(t,27.6,28.1),0); const fs=seg(t,28.0,28.5); $("f4").style.opacity=fs; $("f4").style.transform=`scale(${lerp(.8,1,back(fs))*(1+.03*Math.sin(t*5))})`;
+  txt($("f5"),seg(t,28.5,29.0),0);
+}
+window.render=render; window.DUREE=30; render(0);
+</script></body></html>
