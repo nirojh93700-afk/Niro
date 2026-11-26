@@ -3,6 +3,7 @@ import { decouperStock } from "@/lib/stockMeta";
 import { manqueLangue } from "@/lib/traductionGravure";
 import { cnNormaliser, cnPrixGravure, cnResume } from "@/lib/carnet";
 import { supNormaliser, supSupplement, supResume, supVariantId } from "@/lib/supportCreateur";
+import { musNormaliser, musSupplement, musResume, musVariantId } from "@/lib/musiqueCreateur";
 import { randomBytes } from "crypto";
 import { mpNormaliser, mpCalcul, mpResume } from "@/lib/marquePages";
 import Stripe from "stripe";
@@ -172,6 +173,7 @@ export async function POST(req) {
   const etatPort = nouvelEtatPort();
   const boughtVariants = []; // pour décrémenter le stock après paiement
   const creations = []; // supports de téléphone créés : { item, sup } (création gardée à part après la session)
+  const musiques = []; // plaques / porte-clés « musique à scanner » : { item, mus } (création vérifiée, rangée dans les réglages)
   // Offre « gravure offerte » : prix de la PREMIÈRE gravure payante trouvée dans
   // le panier (ordre du panier). 0 = aucune gravure payante → le code ne déduit rien.
   let gravureOfferte = 0;
@@ -275,6 +277,33 @@ export async function POST(req) {
         },
       });
       creations.push({ item, sup });
+      continue;
+    }
+
+    // Plaque / porte-clés « musique à scanner » (26/11/2026) : lien de musique vérifié, taille = l'option payée, photo gravée + 5 €.
+    // Recalcul de confiance avec la même fonction que la fiche (src/lib/musiqueCreateur.js).
+    if (product.createur === "musique") {
+      const mus = musNormaliser(item.fields?.mus);
+      if (!mus || musVariantId(mus.modele, mus.tl) !== variant.id) {
+        return Response.json({ error: "Une création « musique à scanner » du panier n'est plus valable : retirez-la et composez-la à nouveau." }, { status: 400 });
+      }
+      const unit = Math.round((variant.price + musSupplement(mus)) * 100) / 100;
+      boughtVariants.push({ variantId: variant.stockId || variant.id, qty: quantity });
+      ajouterLignePort(etatPort, { product, unitGrams: variant.weight || product.weight, unitPrice: unit, quantity });
+      lineItems.push({
+        quantity,
+        price_data: {
+          currency: "eur",
+          unit_amount: toCents(unit),
+          product_data: {
+            name: product.name,
+            description: musResume(mus).slice(0, 900),
+            images: [absoluteImage(product.images[0])].filter(Boolean),
+            metadata: { slug: product.slug },
+          },
+        },
+      });
+      musiques.push({ item, mus });
       continue;
     }
 
@@ -718,8 +747,12 @@ export async function POST(req) {
       }
       const specs = items.map((it) => {
         const c = creations.find((x) => x.item === it);
-        const s = sanitizeSpec(it.spec) || (c ? { slug: "support-telephone-bois-grave", personalization: supResume(c.sup) } : null);
+        const mu = musiques.find((x) => x.item === it);
+        const s = sanitizeSpec(it.spec) || (c ? { slug: "support-telephone-bois-grave", personalization: supResume(c.sup) } : null)
+          || (mu ? { slug: "plaque-musique-a-scanner", personalization: musResume(mu.mus) } : null);
         if (!s) return null;
+        // Musique à scanner : la création VÉRIFIÉE par le serveur (lien nettoyé, textes, photo) remplace ce que le navigateur a envoyé.
+        if (mu) { s.fields = { mus: mu.mus }; s.personalization = musResume(mu.mus).slice(0, 400); }
         if (c) { s.fields = { sup: c.sup }; if (refCreation.has(it)) s.creation = { outil: "support", id: refCreation.get(it) }; }
         return { ...s, variantId: String(it.variantId || "").slice(0, 120) || undefined };
       }).filter(Boolean);

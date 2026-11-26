@@ -13,6 +13,7 @@
 // =============================================================================
 import { texteAvecDecor } from "@/lib/decorTexte";
 import { supPhotos } from "@/lib/supportCreateur";
+import { musPhotos } from "@/lib/musiqueCreateur";
 import { langueActive } from "@/lib/traductionGravure";
 import { getProductBySlug } from "@/lib/products";
 
@@ -86,6 +87,10 @@ export function photosEnvoyees(item, product = getProductBySlug(item?.slug)) {
   const out = [];
   const ajoute = (src, titre) => { if (estUrl(src) && !out.some((p) => p.src === src)) out.push({ src, titre }); };
   // Support de téléphone créé par la cliente : chaque photo posée sur le support.
+  if (product?.createur === "musique" && item?.fields?.mus) {
+    musPhotos(item.fields.mus).forEach((src) => ajoute(src, "Photo envoyée"));
+    return out;
+  }
   if (product?.createur === "support" && item?.fields?.sup) {
     supPhotos(item.fields.sup).forEach((src, i, L) => ajoute(src, L.length > 1 ? `Photo envoyée ${i + 1}` : "Photo envoyée"));
     return out;

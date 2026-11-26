@@ -3417,6 +3417,46 @@ export const products = [
   },
 
   // ===== Pièces métal =====
+  // Plaque et porte-clés « musique à scanner » (26/11/2026, gérant : « mets en ligne », maquette enregistrée v11).
+  // La fiche est un créateur (src/components/createurs/MusiqueFiche.jsx) ; géométrie, QR code et vérifications :
+  // src/lib/musiqueCreateur.js. Les options = la taille (les prix se changent ici ou dans Gestion) ; photo gravée + 5 €.
+  // ⛔ Jamais le mot « Spotify » dans le nom du produit, jamais le code Spotify officiel (barres) : QR code ordinaire seulement.
+  {
+    slug: "plaque-musique-a-scanner",
+    name: "Plaque et porte-clés musique à scanner",
+    badge: "Nouveau",
+    createur: "musique",
+    noEngravePreview: true,
+    weight: 55,
+    pickup: false,
+    letter: true,
+    title: "Plaque et porte-clés musique à scanner, gravés sur bois",
+    subcategory: "porte-cles",
+    category: "cadeaux",
+    type: "Cadeau musique personnalisé",
+    tagline: "Votre chanson préférée, à scanner avec le téléphone : un QR code gravé sur bois, avec votre dédicace.",
+    personalizable: true,
+    personalizationLabel: "Le lien de votre chanson, un titre, une dédicace, votre photo",
+    personalizationFields: [],
+    images: ["/produits/musique/exemple-plaque.jpg", "/produits/musique/exemple-carte.jpg", "/produits/musique/exemple-porte-cles.jpg", "/produits/musique/exemple-photo.jpg", "/produits/musique/exemple-porte-cles-dos.jpg"],
+    variants: [
+      { id: "musique-porte-p", title: "Porte-clés · Petit 5 cm", price: 14.9, weight: 40 },
+      { id: "musique-porte-m", title: "Porte-clés · Moyen 6 cm", price: 15.9, weight: 40 },
+      { id: "musique-porte-g", title: "Porte-clés · Grand 7 cm", price: 16.9, weight: 45 },
+      { id: "musique-plaque-p", title: "Plaque · Petite 8 cm", price: 15.9, weight: 40 },
+      { id: "musique-plaque-m", title: "Plaque · Moyenne 11 cm", price: 19.9, weight: 55 },
+      { id: "musique-plaque-g", title: "Plaque · Grande 15 cm", price: 24.9, weight: 85 },
+    ],
+    descriptionHtml: `<p><strong>Votre chanson gravée sur du bois : on la scanne avec le téléphone, et elle se lance.</strong></p>
+<p>La chanson de votre mariage, la musique de votre rencontre, la playlist d'un voyage : collez son lien, nous gravons un QR code sur une plaque ou un porte-clés en bois, avec un titre et une dédicace si vous le souhaitez. Un cadeau qui se garde et qui s'écoute.</p>
+<h3>Comment ça marche</h3>
+<ul><li>Dans votre appli de musique, touchez « Partager » puis « Copier le lien », et collez-le ici.</li>
+<li>Le QR code apparaît sur l'aperçu : scannez-le avec votre téléphone pour vérifier que c'est la bonne chanson.</li>
+<li>Fonctionne avec Spotify, Deezer, Apple Music, YouTube et SoundCloud : il suffit d'avoir le lien.</li></ul>
+<h3>Dimensions</h3>
+<ul><li>Plaque : 8 × 9 cm, 11 × 12,3 cm ou 15 × 16,8 cm.</li><li>Porte-clés : 5, 6 ou 7 cm de large, avec son mousqueton.</li>
+<li>Contreplaqué de 3 mm d'épaisseur.</li></ul>`,
+  },
   {
     slug: "piece-ronde-laiton",
     name: "Pièce ronde laiton à graver",

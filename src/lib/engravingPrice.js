@@ -110,7 +110,7 @@ export function engravingExtra(product, fields = {}, variantId = null) {
 // est déjà offerte par le site (verres, marque-pages, carnet, support de téléphone, gobelet, Collier Quatre
 // Mots) : jamais deux gravures offertes sur la même pièce.
 export function gravureDejaOfferte(product) {
-  return Boolean(product && (product.regleVerres || product.marquePages || product.carnet || product.createur === "support"
+  return Boolean(product && (product.regleVerres || product.marquePages || product.carnet || product.createur === "support" || product.createur === "musique"
     || product.gobeletParcours || Number(product.engravingPricing?.textesOfferts) > 0));
 }
 

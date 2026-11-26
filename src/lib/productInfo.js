@@ -1013,6 +1013,21 @@ Un souci à la réception ?
 - Un souci à la réception (colis abîmé, erreur de notre part) ? Écrivez-nous vite avec une photo, on trouvera toujours une solution ensemble.`,
   },
 
+  "plaque-musique-a-scanner": {
+    material: `Taille & Matériaux
+- Plaque : 8 × 9 cm, 11 × 12,3 cm ou 15 × 16,8 cm. Avec votre photo à côté du QR code : 11 × 8,6 cm ou 15 × 11,7 cm.
+- Porte-clés : 5 × 4,2 cm, 6 × 5 cm ou 7 × 5,8 cm, mousqueton fourni dans la couleur de votre choix.
+- Contreplaqué de 3 mm, QR code et textes gravés au laser dans notre atelier en France.`,
+    usage: `Personnalisation & Entretien
+- Collez le lien de votre chanson, album ou playlist. Votre QR code est vérifié par notre atelier avant la gravure.
+- Si la playlist devient privée ou est supprimée, le QR code ne mène plus à la musique : gardez-la publique.
+- Votre photo, si vous en ajoutez une, est gravée sur le bois en nuances de brun (sans couleur).
+- Entretien : un coup de chiffon sec suffit.`,
+    returns: `Expédition & Retour
+- Expédié en lettre suivie, bien protégé.
+- Produit personnalisé : non remboursable une fois la gravure lancée (droit de rétractation exclu, article L221-28).
+- Un souci à la réception ? Écrivez-nous avec une photo, nous trouverons une solution ensemble.`,
+  },
   "porte-cles-cuir-a-graver": {
     material: `Taille & Matériaux
 - Porte-clés aspect cuir, gravé au laser.

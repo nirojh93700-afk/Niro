@@ -5,6 +5,7 @@
 // La gravure seule, en noir, à la taille réelle : SVG (tracés), PNG (taille écrite dedans), PDF.
 import { useEffect, useState } from "react";
 import { fichiersPossibles, fabriquerFichier } from "@/lib/fichierAtelier";
+import FichierMusique from "@/components/admin/FichierMusique";
 
 const mm = (v) => (Math.round(v * 10) / 10).toString().replace(".", ",");
 const propre = (t) => String(t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase();
@@ -65,6 +66,8 @@ function UnFichier({ item, f, base }) {
 }
 
 export default function FichierAGraver({ item, refCommande }) {
+  // Musique à scanner : son propre fichier (découpe + QR code vérifié + textes + photo).
+  if (item?.fields?.mus?.lien) return <FichierMusique item={item} refCommande={refCommande} />;
   const liste = fichiersPossibles(item);
   if (!liste.length) return null;
   const base = `gravure-${propre(refCommande || "commande")}${item.verre ? `-verre${item.verre}` : ""}`;

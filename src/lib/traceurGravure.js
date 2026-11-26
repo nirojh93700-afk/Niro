@@ -124,6 +124,16 @@ export function tracer(G, W, H) {
   return { paths, cadre: { w: r1(x1 - x0), h: r1(y1 - y0) } };
 }
 
+/**
+ * Comme tracer, mais les tracés gardent leur PLACE dans l'image (pas de recadrage sur l'encre) et sortent dans l'unité
+ * voulue (ex. des millimètres : unite = 1 / points par mm). Sert aux textes d'un fichier d'atelier déjà mis en page.
+ */
+export function tracerEnPlace(G, W, H, unite = 1, aireMin = 6) {
+  const r3 = (v) => Math.round(v * unite * 1000) / 1000;
+  return contours(G, W, H).filter((b) => aire(b) > aireMin).map((b) => alleger(b, 0.35))
+    .map((b) => b.map(([x, y], i) => (i ? "L" : "M") + r3(x) + " " + r3(y)).join("") + "Z").join("");
+}
+
 export const D_VALIDE = /^[MLZ0-9. -]+$/;
 
 /** Tracés + cadre (pixels) → SVG à la taille réelle (largeur en mm, hauteur au prorata). */

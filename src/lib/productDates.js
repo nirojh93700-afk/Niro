@@ -42,6 +42,7 @@ export const PRODUCT_DATES = {
   "pyramide-cristal-gravure-3d": "2026-06-02",
   "bracelet-homme-cuir-tresse-acier": "2026-06-02",
   "porte-cles-cuir-a-graver": "2026-06-02",
+  "plaque-musique-a-scanner": "2026-11-26",
   "trophee-cristal-vierge-3d": "2026-06-02",
   "cristal-photo-3d-vertical": "2026-07-04",
   "cristal-photo-3d-horizontal": "2026-07-04",

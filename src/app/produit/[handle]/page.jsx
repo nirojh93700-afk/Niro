@@ -5,6 +5,7 @@ import ProductDetail from "@/components/ProductDetail";
 import MarquePagesFiche from "@/components/marquePages/MarquePagesFiche";
 import CarnetFiche from "@/components/carnet/CarnetFiche";
 import SupportFiche from "@/components/createurs/SupportFiche";
+import MusiqueFiche from "@/components/createurs/MusiqueFiche";
 import { realisationsVisibles } from "@/components/TrustSection";
 import { guidePourProduit } from "@/lib/guides";
 import ProductReviews from "@/components/ProductReviews";
@@ -212,6 +213,8 @@ export default async function ProductPage({ params, searchParams }) {
       )}
       {product.createur === "support"
         ? <SupportFiche product={product} realisations={realisations} />
+        : product.createur === "musique"
+        ? <MusiqueFiche product={product} realisations={realisations} />
         : product.carnet
         ? <CarnetFiche product={product} realisations={realisations} />
         : product.marquePages

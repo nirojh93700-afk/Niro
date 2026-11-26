@@ -19,6 +19,7 @@ import { texteAvecDecor } from "@/lib/decorTexte";
 import { mpFormat, MP_BOITES } from "@/lib/marquePages";
 import { CN_FACES, CN_ZONES, cnElements, cnLignes } from "@/lib/carnet";
 import { SUP_PRIX, supNomElement, supMotifTexte, supOffert } from "@/lib/supportCreateur";
+import { MUS_PRIX, musMousqueton } from "@/lib/musiqueCreateur";
 import { getProductBySlug } from "@/lib/products";
 import { apparierSpec } from "@/lib/orderSpec";
 
@@ -75,6 +76,13 @@ export function optionsArticle(item) {
       const quoi = x.kind === "texte" ? (x.cle.endsWith(".cadre") ? "texte dans le cadre" : "texte") : "dessin / logo";
       out.push({ libelle: `Gravure ${quoi}${x.offert ? " (offerte)" : ""}`, detail: `${noms[x.side]} · ${zones[x.zone]}`, montant: x.offert ? 0 : x.prix, physique: false });
     }
+    return out;
+  }
+  // Musique à scanner (26/11/2026) : la photo gravée (+ 5 €) et le mousqueton du porte-clés, à ne pas oublier dans le colis.
+  if (produit?.createur === "musique" && champs.mus && typeof champs.mus === "object") {
+    const mus = champs.mus;
+    if (mus.photo) out.push({ libelle: "Photo gravée", detail: mus.modele === "porte" ? "au dos du porte-clés" : "à côté du QR code", montant: MUS_PRIX.photo, physique: false });
+    if (mus.modele === "porte") out.push({ libelle: "Mousqueton", detail: `couleur ${musMousqueton(mus.mq).nom.toLowerCase()} — à monter sur le porte-clés`, montant: 0, physique: true });
     return out;
   }
   // Support de téléphone créé par la cliente (14/11/2026) : chaque élément gravé + 3 €, le motif ajouré + 5 €.

@@ -29,6 +29,7 @@ function resumeGravure(p) {
     return "verre 1 : une image / un logo / un modèle offert, CHAQUE texte +3 € ; chaque autre verre (identique ou non) : compté en éléments (image / logo / modèle = 1, chaque texte ou date = 1) : 1 élément +3 €, 2 éléments ou plus +5 € ; face + fond +7 € par verre";
   }
   if (p.carnet) return "chaque texte gravé +3 €, chaque dessin, logo ou photo +4 € ; la PREMIÈRE gravure du carnet est offerte (une seule)";
+  if (p.createur === "musique") return "prix selon le modèle et la taille (options) ; titre, dédicace et « Scannez pour écouter » compris ; photo gravée +5 € ; la cliente colle le lien de sa chanson (Spotify, Deezer, Apple Music, YouTube, SoundCloud) sur la fiche, un QR code ordinaire est gravé ; mousqueton du porte-clés au choix, même prix";
   if (p.createur === "support") return "taille selon l'option ; chaque élément gravé +3 €, le 1er élément gravé est OFFERT ; motif ajouré +5 € (jamais offert)";
   if (p.marquePages?.gravure) return "texte +3 €, dessin / cadre / photo +4 € ; la PREMIÈRE gravure est offerte, une seule par ligne (coffret compris)";
   const g = p.engravingPricing;

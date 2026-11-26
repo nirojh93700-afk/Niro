@@ -84,9 +84,9 @@ export const UNIVERS = [
              { nom: "Bureau", slugs: ["support-telephone-bois-grave", "support-telephone-bois-ajoure", "porte-stylo-coq-coupe-du-monde",
                                      "porte-stylo-portugal-coupe-du-monde", "porte-stylo-argentine-coupe-du-monde", "porte-stylo-espagne-coupe-du-monde"] }] },
   { id: "cadeaux", nom: "Petits cadeaux", short: "Petits cadeaux", pourqui: true, img: "/produits/cle_usb_en_bois_4gb_avec_boite_en_bois.jpg",
-    accroche: "Clés USB, porte-clés et pièce à graver, personnalisés ou prêts à offrir.",
+    accroche: "Clés USB, porte-clés, musique à scanner et pièce à graver, personnalisés ou prêts à offrir.",
     rayons: [{ nom: "Clés USB", slugs: ["cle-usb-personnalisee", "cle-usb-bois-coffret", "cle-usb-cristal-3d"] },
-             { nom: "Porte-clés & pièce à graver", slugs: ["porte-cles-cuir-a-graver", "piece-ronde-laiton", "porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle"] }] },
+             { nom: "Porte-clés & pièce à graver", slugs: ["plaque-musique-a-scanner", "porte-cles-cuir-a-graver", "piece-ronde-laiton", "porte-cles-cristal-led-coeur", "porte-cles-cristal-led-rectangle"] }] },
 ];
 export const UNIVERS_IDS = UNIVERS.map((u) => u.id);
 export const getUnivers = (id) => UNIVERS.find((u) => u.id === id) || null;
@@ -106,7 +106,7 @@ const QUI_EXTRA = {
   "bougeoir-mandala-bois": ["elle", "parents"], "bougeoir-fleur-de-lotus": ["elle", "parents"], "photophore-fee-bois": ["elle", "parents"],
   "verre-a-vin-grave": ["couple", "elle"], "flute-a-champagne-gravee": ["couple", "elle"],
   "cle-usb-personnalisee": ["lui"], "cle-usb-bois-coffret": ["lui"], "cle-usb-cristal-3d": ["lui"],
-  "porte-cles-cuir-a-graver": ["lui"], "piece-ronde-laiton": ["lui"],
+  "porte-cles-cuir-a-graver": ["lui"], "piece-ronde-laiton": ["lui"], "plaque-musique-a-scanner": ["elle", "lui", "couple"],
   "marque-page-bois-pompon": ["elle", "lui", "parents"], "marque-page-bois-oiseau": ["elle", "parents"], "marque-page-metal-peinture": ["elle", "parents"],
 };
 const QUI_UNIVERS = { papeterie: ["elle", "lui", "parents"], verres: ["lui"], maison: ["elle", "parents"], cristal: ["parents", "couple"], mariage: ["maries"], bijoux: ["elle"], enfants: ["enfant"], cadeaux: ["lui", "elle"] };

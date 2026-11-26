@@ -26,6 +26,7 @@ import { MODELES, layoutLabel, imageDesign } from "@/lib/modeles";
 import { mpFormat, mpBoitesTexte, mpLignes, mpLibelleCle } from "@/lib/marquePages";
 import { CN_FACES, cnLignes, cnLibelleCle, cnPrixZone } from "@/lib/carnet";
 import { supConsignes } from "@/lib/supportCreateur";
+import { musConsignes } from "@/lib/musiqueCreateur";
 import { NOEL_IMAGES } from "@/lib/fetes";
 import { gobeletElements, gobeletSupplement, prixElement, quoiElement, plancheDuNumero, gobeletLibelleCle, GOB_COTES, GOB_PLACES, GOB_ATELIER_APERCU } from "@/lib/gobeletParcours";
 
@@ -225,6 +226,7 @@ export function consignesGravure(item) {
   if (produit?.gobeletParcours && champs.mode) return consignesGobelet(produit, champs);
   if (produit?.carnet && champs.cn && typeof champs.cn === "object") return consignesCarnet(produit, champs.cn, item);
   // Support de téléphone créé par la cliente (14/11/2026) : forme, taille, réglages, puis chaque élément gravé.
+  if (produit?.createur === "musique" && champs.mus && typeof champs.mus === "object" && champs.mus.lien) return { ...musConsignes(champs.mus), autres: [], placement: [] };
   if (produit?.createur === "support" && champs.sup && typeof champs.sup === "object" && Array.isArray(champs.sup.els)) return { ...supConsignes(champs.sup), autres: [], placement: [] };
   const vus = (produit?.personalizationFields || []).filter((f) => champVisible(f, champs, item?.variantTitle));
   const general = [];
