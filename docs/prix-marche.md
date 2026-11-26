@@ -220,4 +220,4 @@ pour un carnet gravé, simili cuir ≈ 14–20 €.
 - HappyBulle (gravé en France, bois 55 × 35 mm, code Spotify à barres) : 22,00 € avec la personnalisation.
 - Etsy France (vendeurs « chanson / QR code ») : surtout 15 à 21 € (ex. 15,60 € ; 16,79 € soldé sur 20,99 €).
 - Bas de gamme (Chine, Etsy, Shein, Boxland) : 3,80 à 8,50 €. Soufeel : 12,95 € « soldé » (prix barré 40 €).
-- Notre maquette : 14,90 / 15,90 / 16,90 € (Petit / Moyen / Grand), mousqueton 7 couleurs compris, photo au dos +3 € (26/11 soir : monté à 16,90 / 17,90 / 18,90 puis baissé à la demande du gérant ; au départ 12,90 / 13,90 / 14,90 €). Plaque : 15,90 / 19,90 / 24,90 €, photo +3 €.
+- Notre maquette : 14,90 / 15,90 / 16,90 € (Petit / Moyen / Grand), mousqueton 7 couleurs compris, photo au dos +5 € (26/11 soir : monté à 16,90 / 17,90 / 18,90 puis baissé à la demande du gérant ; au départ 12,90 / 13,90 / 14,90 €). Plaque : 15,90 / 19,90 / 24,90 €, photo +5 €.

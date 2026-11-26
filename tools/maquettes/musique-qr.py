@@ -91,7 +91,7 @@ DONNEES = {
                 ["great-vibes", "Great Vibes", "'Great Vibes',cursive"], ["allura", "Allura", "Allura,cursive"],
                 ["pacifico", "Pacifico", "Pacifico,cursive"], ["cinzel-deco", "Cinzel Decorative", "'Cinzel Decorative',serif"]],
     "mousquetons": MOUSQUETONS,
-    "prixPhoto": 3,
+    "prixPhoto": 5,
     "photoEx": raw_uri(os.path.join(ROOT, "docs/maquettes/assets/marque-pages/exemples/portraits/couple.jpg")),
     "exemple": "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC",
 }
@@ -377,6 +377,7 @@ function traiter(src){{return new Promise(ok=>{{const im=new Image();im.onload=(
   x.putImageData(g,0,0);const G=c.toDataURL("image/png");x.putImageData(n,0,0);ok({{g:G,n:c.toDataURL("image/jpeg",.86)}});}};im.onerror=()=>ok(null);im.src=src;}});}}
 function rendrePhoto(){{
   const porte=S.modele==="porte", on=photoOn();
+  optPhoto();
   $("photoUp").hidden=!on;
   $("photoNote").textContent=on?(porte?"Votre photo est gravée au dos du porte-clés. Touchez « Le dos » sur l'aperçu pour la voir.":"Votre photo est gravée sur le bois à côté du QR code, en nuances de brun (sans couleur). Tailles Moyenne et Grande seulement."):"";
   if(!on||!porte){{S.cote="avant";majVues();}}
@@ -484,7 +485,8 @@ $("bDos").onclick=()=>{{S.cote="dos";S.vue="face";majVues();dessiner();}};
 $("photoFile").onchange=e=>{{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{{const t=await traiter(r.result);if(t){{S.photo=t;$("photoNom").textContent="✓ "+f.name;dessiner();}}}};r.readAsDataURL(f);}};
 traiter(D.photoEx).then(t=>{{EX=t;dessiner();}});
 boutons("modeles",D.modeles.map(m=>({{v:m.id,t:m.nom,s:m.s,icon:iconeModele(m.id)}})),"modele",()=>{{rendreTailles();}});
-boutons("photoOpt",[{{v:"non",t:"QR code seul",s:"compris"}},{{v:"oui",t:"QR code + ma photo",s:"+"+eur(D.prixPhoto)}}],"ph",()=>{{rendreTailles();}});
+function optPhoto(){{const porte=S.modele==="porte";boutons("photoOpt",[{{v:"non",t:"QR code seul",s:"compris"}},{{v:"oui",t:porte?"Recto-verso : QR devant, photo au dos":"QR code + ma photo",s:"+"+eur(D.prixPhoto)+" la gravure"}}],"ph",()=>{{rendreTailles();}});}}
+optPhoto();
 rendreTailles();
 function sousEntete(){{const h=document.querySelector('header');let t=0;if(h&&/sticky|fixed/.test(getComputedStyle(h).position))t=h.offsetHeight;document.documentElement.style.setProperty('--mzq-top',t+'px');}}
 sousEntete();window.addEventListener('resize',sousEntete);
