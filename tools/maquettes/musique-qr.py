@@ -65,6 +65,14 @@ confiance = coquille(confiance).replace(' loading="lazy"', '')
 QR = open(qrpath, encoding="utf-8").read().replace("</script", "<\\/script")
 JSQR = open(jsqrpath, encoding="utf-8").read().replace("</script", "<\\/script")
 
+# Mousquetons du porte-clés : photo du gérant du 26/11 découpée en 7 (docs/maquettes/assets/musique-qr/mousquetons/), même prix.
+MOUSQ_DIR = os.path.join(ROOT, "docs/maquettes/assets/musique-qr/mousquetons")
+MOUSQUETONS = []
+for _id, _nom in [("or-rose", "Or rose"), ("anthracite", "Gris anthracite"), ("dore", "Doré"), ("argente", "Argenté"), ("noir", "Noir"), ("bronze", "Bronze"), ("champagne", "Champagne")]:
+    _p = os.path.join(MOUSQ_DIR, _id + ".png")
+    _wh = __import__("struct").unpack(">II", open(_p, "rb").read()[16:24])
+    MOUSQUETONS.append({"id": _id, "nom": _nom, "r": round(_wh[0] / _wh[1], 3), "img": raw_uri(_p)})
+
 # Prix PROPOSÉS (à valider par le gérant) : plus grand = plus cher.
 DONNEES = {
     "modeles": [
@@ -82,6 +90,7 @@ DONNEES = {
                 ["montserrat", "Montserrat", "Montserrat,sans-serif"], ["inter", "Inter", "Inter,sans-serif"],
                 ["great-vibes", "Great Vibes", "'Great Vibes',cursive"], ["allura", "Allura", "Allura,cursive"],
                 ["pacifico", "Pacifico", "Pacifico,cursive"], ["cinzel-deco", "Cinzel Decorative", "'Cinzel Decorative',serif"]],
+    "mousquetons": MOUSQUETONS,
     "exemple": "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC",
 }
 
@@ -106,6 +115,10 @@ background:rgba(255,255,255,.86);border:1px solid var(--line);border-radius:999p
 .mzq-step h3{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:1rem;font-family:var(--font-display),Georgia,serif}
 .mzq-n{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#c9a24b;color:#fff;display:grid;place-items:center;font:700 .85rem Inter,sans-serif}
 .mzq-sub{font-size:.84rem;color:var(--ink-soft);margin:8px 0 0;line-height:1.5}
+.mzq-mq{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin-top:8px}
+.mzq-mq button{font:inherit;font-size:.74rem;border:1.5px solid var(--line);background:#faf7f0;border-radius:12px;padding:8px 4px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink)}
+.mzq-mq button[aria-pressed=true]{border-color:#c9a24b;background:#fff8e6;box-shadow:0 0 0 2px rgba(201,162,75,.35)}
+.mzq-mq img{height:56px;width:auto}
 .mzq-lien{display:flex;gap:8px}
 .mzq-lien input{flex:1;min-width:0;font:inherit;font-size:.9rem;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)}
 .mzq-lien input:focus{outline:2px solid rgba(201,162,75,.5);border-color:#c9a24b}
@@ -208,6 +221,7 @@ HTML = f"""<title>Musique à scanner</title>
     <section class="mzq-step"><h3><span class="mzq-n">3</span>La taille</h3>
       <div class="mzq-grid" id="tailles"></div>
       <p class="mzq-sub" id="tailleP"></p>
+      <div id="mqBloc" hidden><p class="mzq-sub" style="font-weight:700;color:var(--ink)">Couleur du mousqueton <small style="font-weight:500;color:var(--ink-soft)">· même prix</small></p><div class="mzq-mq" id="mousq"></div></div>
     </section>
 
     <section class="mzq-step" id="etTextes"><h3><span class="mzq-n">4</span>Vos textes <small style="font:500 .78rem Inter,sans-serif;color:var(--ink-soft)">(facultatif, compris)</small></h3>
@@ -249,7 +263,7 @@ HTML = f"""<title>Musique à scanner</title>
 <script>
 (function(){{
 const D=window.MQ, NS="http://www.w3.org/2000/svg", $=id=>document.getElementById(id);
-const S={{lien:"", modele:"plaque", tl:"m", titre:"", dedi:"", police:"playfair", scan:true, vue:"face"}};
+const S={{lien:"", modele:"plaque", tl:"m", titre:"", dedi:"", police:"playfair", scan:true, vue:"face", mq:"argente"}};
 const eur=v=>v.toFixed(2).replace(".",",")+"\\u00a0€";
 const cm=v=>(Math.round(v)/10).toFixed(1).replace(".0","").replace(".",",");
 const esc=t=>t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -318,16 +332,25 @@ function texteSvg(t,clr,maxW){{
 }}
 function ajuster(svg,maxW){{svg.querySelectorAll("text[data-max]").forEach(e=>{{const w=e.getComputedTextLength?e.getComputedTextLength():0, m=+e.dataset.max*(e.getAttribute("text-anchor")==="start"?.7:1);if(w>m&&w>0){{e.setAttribute("textLength",m);e.setAttribute("lengthAdjust","spacingAndGlyphs");}}}});}}
 
+// ---------- mousqueton du porte-clés (photo du gérant, 7 couleurs, même prix) ----------
+const mqChoix=()=>D.mousquetons.find(m=>m.id===S.mq)||D.mousquetons[0];
+const MQL=38;
+function mqDim(){{const m=mqChoix();return {{L:MQL,W:MQL*m.r}};}}
+function mqAx(g){{return g.trou.cx-mqDim().W*0.05;}}
+function mqExtra(g){{return Math.max(0,mqAx(g)+MQL-g.w);}}
+function mousqSvg(g){{const m=mqChoix(),d=mqDim();return `<g transform="translate(${{mqAx(g)}} ${{g.trou.cy}}) rotate(90)"><image href="${{m.img}}" x="${{-d.W/2}}" y="${{-d.L}}" width="${{d.W}}" height="${{d.L}}" preserveAspectRatio="none"/></g>`;}}
+function rendreMq(){{$("mqBloc").hidden=S.modele!=="porte";$("mousq").innerHTML=D.mousquetons.map(m=>`<button type="button" data-v="${{m.id}}" aria-pressed="${{S.mq===m.id}}"><img src="${{m.img}}" alt=""><span>${{m.nom}}</span></button>`).join("");$("mousq").querySelectorAll("button").forEach(b=>b.onclick=()=>{{S.mq=b.dataset.v;rendreMq();dessiner();}});}}
+
 // ---------- aperçu ----------
 function dessiner(){{
   const g=geo(), m=matrice(urlQR()), pad=Math.max(g.w,g.h)*.04;
-  const svg=$("svg"); svg.setAttribute("viewBox",`${{-pad}} ${{-pad}} ${{g.w+2*pad+(S.modele==="porte"?0:0)}} ${{g.h+2*pad}}`);
+  const svg=$("svg"); svg.setAttribute("viewBox",`${{-pad}} ${{-pad}} ${{g.w+2*pad+(g.trou?mqExtra(g):0)}} ${{g.h+2*pad}}`);
   const clr="#3a2614", maxW=g.w*.86;
   svg.innerHTML=`<defs><linearGradient id="bois" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ecd3a8"/><stop offset=".5" stop-color="#e2c393"/><stop offset="1" stop-color="#d9b682"/></linearGradient>
    <pattern id="fil" width="${{g.w}}" height="${{g.h/7}}" patternUnits="userSpaceOnUse"><path d="M0 ${{g.h/14}} C ${{g.w*.3}} ${{g.h/20}}, ${{g.w*.6}} ${{g.h/10}}, ${{g.w}} ${{g.h/14}}" stroke="#b98d55" stroke-opacity=".18" stroke-width="${{g.w*.004}}" fill="none"/></pattern>
    <filter id="omb" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="${{g.w*.012}}" stdDeviation="${{g.w*.012}}" flood-color="#4b3214" flood-opacity=".35"/></filter></defs>
    <g filter="url(#omb)"><path d="${{g.contour}}" fill="url(#bois)"/></g><path d="${{g.contour}}" fill="url(#fil)"/>
-   ${{g.trou?`<circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r}}" fill="#e7dccb" stroke="#9c6b3f" stroke-width="${{g.w*.006}}"/><circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r*1.9}}" fill="none" stroke="#b9b9b9" stroke-width="${{g.w*.02}}"/>`:""}}
+   ${{g.trou?`<circle cx="${{g.trou.cx}}" cy="${{g.trou.cy}}" r="${{g.trou.r}}" fill="#e7dccb" stroke="#9c6b3f" stroke-width="${{g.w*.006}}"/>${{mousqSvg(g)}}`:""}}
    <path d="${{qrPath(m,g.qr.x,g.qr.y,g.qr.t)}}" fill="${{clr}}" fill-opacity=".92"/>
    ${{g.textes.map(t=>texteSvg(t,clr,maxW)).join("")}}
    <path d="${{g.contour}}" fill="none" stroke="#9c6b3f" stroke-width="${{g.w*.005}}"/>`;
@@ -350,6 +373,7 @@ function fichier(g,m){{
   const faits=[`Modèle : ${{mod.nom}}`,`Taille : ${{taille().nom}} ${{g.w}} × ${{g.h.toFixed(1).replace(".",",")}} mm`,`Bois : contreplaqué 3 mm`,`QR : ${{m.length}} × ${{m.length}} carrés de ${{(g.qr.t/m.length).toFixed(2).replace(".",",")}} mm`,
     l?`Lien (${{l.plat}}) : ${{l.url}}`:"Lien : exemple, la cliente n'a pas encore collé le sien"];
   if(S.modele!=="porte"){{if(S.titre)faits.push(`Titre : « ${{S.titre}} »`);if(S.dedi)faits.push(`Dédicace : « ${{S.dedi}} »`);if(S.titre||S.dedi)faits.push(`Écriture : ${{police()[1]}}`);}}
+  if(S.modele==="porte")faits.push(`Mousqueton : ${{mqChoix().nom}}`);
   $("faits").innerHTML=faits.map(t=>`<span>${{esc(t)}}</span>`).join("")+`<span id="verif">Vérification du QR…</span>`;
   verifier(m,l);
 }}
@@ -373,15 +397,15 @@ function boutons(id,items,cle,fn){{
   $(id).querySelectorAll("button").forEach(b=>b.onclick=()=>{{S[cle]=b.dataset.v;$(id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));if(fn)fn();dessiner();}});
 }}
 function rendreTailles(){{
-  const porte=S.modele==="porte";
+  const porte=S.modele==="porte";rendreMq();
   boutons("tailles",tailles().map(t=>{{const h=porte?t.w*.833:t.w*1.121;return {{v:t.id,t:t.nom,s:`${{cm(t.w)}} × ${{cm(h)}} cm · ${{eur(t.prix)}}`,
     icon:`<svg viewBox="0 0 52 44"><rect x="${{26-11*t.w/(porte?70:150)}}" y="${{22-11*t.w/(porte?70:150)}}" width="${{22*t.w/(porte?70:150)}}" height="${{22*t.w/(porte?70:150)}}" rx="2" fill="#ecd3a8" stroke="#9c6b3f" stroke-width="1.6"/></svg>`}};}}),"tl");
 }}
 function resume(){{
   const t=taille(), g=geo(), l=lienActif(), mod=D.modeles.find(x=>x.id===S.modele), m=matrice(urlQR());
   $("prixLead").textContent=eur(t.prix);
-  $("tailleP").textContent=`QR code de ${{cm(g.qr.t)}} cm de côté.`+(S.modele==="porte"?" L'anneau est fourni.":"");
-  const L=[["Chanson",l?`lien ${{l.plat}}`:"à coller"],["Modèle",mod.nom],["Taille",`${{t.nom}} · ${{cm(g.w)}} × ${{cm(g.h)}} cm`],["Bois","contreplaqué, 3 mm"]];
+  $("tailleP").textContent=`QR code de ${{cm(g.qr.t)}} cm de côté.`+(S.modele==="porte"?" Le mousqueton est fourni, dans la couleur choisie ci-dessous.":"");
+  const L=[["Chanson",l?`lien ${{l.plat}}`:"à coller"],["Modèle",mod.nom],["Taille",`${{t.nom}} · ${{cm(g.w)}} × ${{cm(g.h)}} cm`],["Bois","contreplaqué, 3 mm"]];if(S.modele==="porte")L.push(["Mousqueton",mqChoix().nom]);
   if(S.modele!=="porte"){{L.push(["Titre",S.titre||"aucun"]);L.push(["Dédicace",S.dedi||"aucune"]);if(S.titre||S.dedi)L.push(["Écriture",police()[1]]);}}
   $("resume").innerHTML=L.map(([a,b])=>`<li><span>${{a}}</span><span>${{esc(b)}}</span></li>`).join("");
   $("total").textContent=eur(t.prix);
