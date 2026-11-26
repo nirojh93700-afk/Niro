@@ -145,7 +145,7 @@ flex-direction:column;align-items:center;gap:6px;font-size:.82rem;font-weight:60
 .mzq-valider{margin-top:14px;font-size:.84rem;background:#fffbe9;border:1px solid #ecd99a;border-radius:12px;padding:10px 14px}
 .mzq-valider li{margin:3px 0}
 @media (max-width:900px){main>.container.product-layout,.mzq-atelier{padding-left:16px;padding-right:16px;box-sizing:border-box}
-.mzq-left{position:static}.mzq-stage{max-height:62vh;aspect-ratio:auto;height:min(92vw,62vh)}}
+.mzq-left{display:contents}.mzq-stage{position:sticky;top:var(--mzq-top,0px);z-index:20;aspect-ratio:auto;height:36vh;margin:0 -16px;border-radius:0 0 var(--radius) var(--radius);border-left:0;border-right:0;box-shadow:0 8px 18px rgba(43,38,32,.12)}.mzq-scan{margin:10px 0 14px}}
 """
 
 DESC = """<div class="product-desc"><p><strong>Votre chanson gravée sur du bois : on la scanne avec le téléphone, et elle se lance.</strong></p>
@@ -217,7 +217,7 @@ HTML = f"""<title>Musique à scanner</title>
       <div class="mzq-champ"><label><span><input type="checkbox" id="scanTxt" checked style="width:auto;margin:0 6px 0 0;vertical-align:-2px">Graver « Scannez pour écouter »</span></label></div>
     </section>
 
-    <section class="mzq-step"><h3><span class="mzq-n" id="nRes">5</span>Votre création</h3>
+    <section class="mzq-step" id="etRes"><h3><span class="mzq-n" id="nRes">5</span>Votre création</h3>
       <ul class="mzq-sum" id="resume"></ul>
       <div class="mzq-tot"><span>Total</span><b id="total"></b></div>
       <div class="qty-row" style="margin-top:10px"><button type="button" class="btn btn-gold mzq-cart" id="panier">Ajouter au panier</button></div>
@@ -309,7 +309,7 @@ function geo(){{
   if(scan) T.push({{t:scan,x:W/2,y:W*1.055,s:W*.048,f:"Inter,sans-serif",w:700,ls:W*.004}});
   return {{w:W,h:H,contour,qr:{{x:(W-q)/2,y:W*.28,t:q}},textes:T}};
 }}
-const NOTE="M0.52 0.05v0.62a0.17 0.13 0 1 1 -0.08 -0.11v-0.42l0.36 -0.08v0.48a0.17 0.13 0 1 1 -0.08 -0.11v-0.3z";
+const NOTE="M0.05 0.888A0.17 0.12 -20 1 1 0.37 0.772A0.17 0.12 -20 1 1 0.05 0.888ZM0.335 0.80V0.27H0.375V0.80ZM0.875 0.69V0.15H0.915V0.69ZM0.335 0.36V0.25L0.915 0.12V0.23ZM0.59 0.768A0.17 0.12 -20 1 1 0.91 0.652A0.17 0.12 -20 1 1 0.59 0.768Z";
 function noteD(x,y,s){{return `<path transform="translate(${{x}} ${{y}}) scale(${{s}})" d="${{NOTE}}" fill="CLR"/>`;}}
 function texteSvg(t,clr,maxW){{
   if(t.ligne) return `<line x1="${{t.ligne[0]}}" y1="${{t.ligne[1]}}" x2="${{t.ligne[2]}}" y2="${{t.ligne[3]}}" stroke="${{clr}}" stroke-width="${{taille().w*.008}}"/>`;
@@ -407,6 +407,9 @@ boutons("modeles",D.modeles.map(m=>({{v:m.id,t:m.nom,s:m.s,icon:iconeModele(m.id
 rendreTailles();
 function sousEntete(){{const h=document.querySelector('header');let t=0;if(h&&/sticky|fixed/.test(getComputedStyle(h).position))t=h.offsetHeight;document.documentElement.style.setProperty('--mzq-top',t+'px');}}
 sousEntete();window.addEventListener('resize',sousEntete);
+// sur téléphone : l'aperçu reste collé sous l'en-tête pendant les étapes, puis se décolle au résumé (comme le support de téléphone)
+var attente=false;function decoller(){{attente=false;var st=$("stage"),e=$("etRes"),d=0;if(matchMedia("(max-width:900px)").matches){{var top=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--mzq-top"))||0;d=Math.min(0,e.getBoundingClientRect().top-(top+st.offsetHeight+8));d=Math.max(d,-(top+st.offsetHeight+30));}}st.style.transform=d?"translateY("+Math.round(d)+"px)":"";st.style.visibility=d<=-st.offsetHeight?"hidden":"";}}
+window.addEventListener("scroll",function(){{if(!attente){{attente=true;requestAnimationFrame(decoller)}}}},{{passive:true}});window.addEventListener("resize",decoller);
 dessiner(); if(document.fonts) document.fonts.ready.then(dessiner);
 }})();
 </script>
