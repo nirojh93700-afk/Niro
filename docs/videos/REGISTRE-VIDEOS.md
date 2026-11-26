@@ -1275,3 +1275,20 @@ _29/10/2026 : le gérant aime les EFFETS de cette vidéo (« j'aime bien ce mont
 > 👉 nivcreation.fr
 
 #nivcreation #cadeaupersonnalise #cadeaunoel #gravure #ideecadeau
+
+## Vidéo 78 — Film « Le Noël de Thomas » (26/11/2026)
+- Demande : « j'aime bien la vidéo 77, refais-en une, pas les trucs des enfants, différemment, dans le même style » ; puis « ne reprends pas
+  le noir, c'est en rupture, prends par exemple les marque-pages en métal ». Aucun produit enfant, aucun coloris épuisé (stock lu le 26/11).
+- Même style « film » que la 77 : « Le Noël de Thomas · Une comédie de Noël » ; Thomas n'a jamais su choisir un cadeau, cette année il fait
+  tout graver. Chapitres : Pour Claire, sa femme · Pour son père · Pour sa mère · Pour Inès, sa sœur · Pour la bande · Pour Camille, sa collègue
+  (marque-page MÉTAL, jamais dit « gravé ») · Pour Léa et Paul · Pour sa marraine ; épilogue « Et pour Thomas ? » (cristal du couple).
+  Écartés : collier Enveloppe et carafe (photos avec texte anglais), bracelet cordon noir (rupture).
+- 59,4 s, sans son, aucun prix, aucun nombre, 1080 × 1920 (16,7 Mo) et 720 × 1280 (3,5 Mo). À supprimer le 28/11.
+- Script : `python3 tools/video/film_noel_78.py <polices> <sortie> [--apercu]`.
+
+**Vidéo 78 — Le Noël de Thomas** (Collier cœur & plaques, Verre à whisky, Cristal photo 3D, Marque-page en bois, Marque-page en métal, Verre à cocktail, Collier 3 Cœurs)
+> 🎬 Thomas n'a jamais su choisir un cadeau… Cette année, il a tout fait graver ✨
+> Un cadeau pour chacun : bijoux, cristal et verres gravés à leur prénom dans notre atelier en France 🎄💛
+> 👉 nivcreation.fr
+
+#nivcreation #cadeaupersonnalise #cadeaunoel #ideecadeauhomme #ideecadeau
