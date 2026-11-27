@@ -135,6 +135,11 @@
   (noms parfois inversés ou adresses), montant, mode d'emploi (se connecter avec cette adresse, cocher « Utiliser ma cagnotte fidélité », jusqu'à 50 % du panier), pas de date.
 - Dans un mail client : donner le prix de la fiche (`node tools/prix-fiche.mjs`) ; plus de phrase « la moins chère est offerte », sauf pour le carnet.
 
+## 📦 DANS UNE BOÎTE, TOUT EST COUCHÉ : VERRES ET CARAFE — RÈGLE DU GÉRANT, 27/11/2026 (« je vais pas mettre debout… tout est couché, enregistre »)
+- Pour calculer si des pièces rentrent dans une boîte ou un carton : verres ET carafe sont TOUJOURS couchés, jamais debout. Ne plus proposer de rangement debout.
+- Mesures données par lui : **carafe à whisky = 29 cm de haut, 9 cm de large** (couchée : 29 × 9 au sol, 9 de haut). Verre à whisky 30 cl couché : 9,3 × 7,9 au sol, 7,9 de haut.
+- Carafe + 4 verres à whisky couchés (verres en 2 × 2 : 18,6 × 15,8 cm) = environ 29 × 25 cm au sol, 9 cm de haut → rentre dans la boîte en bois Amazon 40 × 30 × 14 cm (cotes intérieures à lire sur la fiche) ; la 30 × 20 × 14 est trop petite.
+
 ## 📌 POINT DU 27/11/2026, 18 h 30 (surveillance horaire)
 - **Frédéric Floret a payé le rajout DEV-1565** (commande **07PSF3ZD**, 24,50 €, 27/11 à 18 h 04), rangée sous 1XIZ5BKM (complément). À graver : verre whisky 30 cl husky + « Martin », fichier `docs/commandes/1XIZ5BKM/2e-verre-husky/gravure-husky-Martin-whisky-33.0mm.svg`. UN seul colis Mondial Relay (Locker Bellafleur, Longuenesse) avec le verre castor.
 - **David Sjoberg a répondu OUI** (27/11, 17 h 54 et 17 h 59) : coffret en bois gravé avec la même image + l'inscription « Corinne 1969 ». Le gérant regarde des boîtes Amazon (30 × 20 × 14 · 40 × 30 × 14 · 40 × 30 × 24 cm) ; mesures de la carafe inconnues (à lui demander). Attendre son prix de boîte gravée avant le devis.
