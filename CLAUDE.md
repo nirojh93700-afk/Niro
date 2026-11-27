@@ -71,6 +71,11 @@
 ## ⛔ VERRE À VIN : JAMAIS LE 47 cl DANS UN MAIL OU UN DEVIS SANS SA DEMANDE — 21/11/2026 (gérant, devis d'Harmonie Dubois : « la prochaine fois tu me mets pas 47 tant que je te demande pas »)
 - Une demande de verre à vin = la taille 36 cl seulement (prix, devis, mail). Le 47 cl n'apparaît que si le gérant ou la cliente le demande. Plus largement : ne rien ajouter qu'il n'a pas demandé.
 
+## ⛔⛔ AVANT D'ÉCRIRE À UN CLIENT : TOUT VÉRIFIER, NE RIEN INVENTER — RAPPEL TRÈS FERME DU 27/11/2026 (gérant, mail du verre au husky de Frédéric Floret, phrase « plus lumineux » écrite pour un verre : « tu dois toujours vérifier avant d'écrire pour un client, tu dois être sûr, tu peux pas inventer des trucs, enregistre quelque part »)
+- Chaque phrase d'un mail client (rendu, matière, couleur, taille, prix, délai, fonctionnement d'un produit) se vérifie AVANT de montrer le brouillon : à la source (fiche en ligne, commande, échanges) ou sur Internet (fabricants, graveurs, guides). Si je ne suis pas sûr d'une phrase : je la retire, ou je pose la question au gérant. Jamais une phrase « de tête », jamais une formule recopiée d'un autre produit sans vérifier qu'elle est vraie pour CELUI-CI.
+- Une phrase type d'un produit ne se recopie pas sur un autre : « plus lumineux » vaut pour le CRISTAL, pas pour un verre (verre = « blanc mat », « dépoli », « aspect givré », vérifié le 27/11).
+- Quand je montre un brouillon, je dis ce que j'ai vérifié et où.
+
 ## 🌐 AVANT D'AFFIRMER QUOI QUE CE SOIT SUR LE RENDU D'UNE GRAVURE : VÉRIFIER SUR INTERNET — 21/11/2026 (gérant, mail d'Harmonie Dubois, 2 verres à vin avec dessins détaillés : « avant de dire des conneries, il faut que tu vérifies toujours sur Internet pour dire la vérité »)
 - Toute phrase à une cliente sur ce que donnera une gravure (couleurs, détails, ombres, matière) se vérifie d'abord sur des sources (fabricants de lasers, guides techniques), jamais de tête.
 - Vérifié le 21/11 : sur verre = blanc givré seulement (micro-fissures), aucune couleur, le noir du dessin devient blanc ; détails fins nets ; ombres / dégradés rendus par une trame de points.
