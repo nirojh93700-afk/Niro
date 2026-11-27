@@ -16,7 +16,7 @@ import { controleDatesCommande, lignesAlerteImage } from "@/lib/lectureImage";
 import { getProductBySlug } from "@/lib/products";
 import { verifierEmailCommande } from "@/lib/emailTypoServeur";
 import { lignesGravure, policeDeGravure } from "@/lib/engravingSheet";
-import { detailVariante } from "@/lib/detailProduit";
+import { detailVariante, photoCommandee } from "@/lib/detailProduit";
 import { envoyerAlerteAdmin } from "@/lib/pushAdmin";
 import { LOGO_URL } from "@/lib/photosLocales";
 import { paysDeLaCommande } from "@/lib/paysLivraison";
@@ -416,15 +416,20 @@ export async function POST(req) {
         const premier = details.split(" — ")[0].trim();
         const couleur = premier && !premier.startsWith("Personnalisation") && !premier.startsWith("Emballage") ? premier : "";
         const reste = couleur && details.startsWith(couleur) ? details.slice(couleur.length).replace(/^\s*—\s*/, "") : details;
-        const photoHtml = photo
+        // Bijou à plusieurs couleurs sans photo pour celle commandée : pas de photo trompeuse, un avertissement rouge (27/11/2026).
+        let autreCouleur = false;
+        try { autreCouleur = Boolean(couleur && photoCommandee(null, li.price?.product?.metadata?.slug, couleur).autreCouleur); } catch {}
+        const photoHtml = photo && !autreCouleur
           ? `<img src="${escapeHtml(photo)}" alt="" width="54" height="54" style="width:54px;height:54px;object-fit:cover;border-radius:8px;border:1px solid #e7d3a1;display:block;">`
           : "";
+        // Entre deux repères : gardé dans l'e-mail de l'atelier, retiré de la confirmation de la cliente.
+        const alerteCouleur = autreCouleur ? `<!--atelier--><br><span style="color:#b32b2b;font-size:12px;font-weight:bold;">⚠️ Pas de photo pour cette couleur : prendre « ${escapeHtml(couleur)} ».</span><!--/atelier-->` : "";
         // La cellule photo est TOUJOURS présente (vide si pas de photo), sinon
         // les colonnes du tableau se décalent par rapport à l'en-tête.
         return `<tr>
           <td style="padding:8px 0 8px 8px;border-bottom:1px solid #eee;width:62px;">${photoHtml}</td>
           <td style="padding:8px;border-bottom:1px solid #eee;">
-            <strong>${escapeHtml(name)}</strong>${couleur ? ` <span style="display:inline-block;padding:1px 9px;border-radius:999px;background:#f7ecd4;border:1px solid #e0c88a;color:#8a6d1f;font-size:12px;font-weight:bold;">${escapeHtml(couleur)}</span>` : ""}<br>
+            <strong>${escapeHtml(name)}</strong>${couleur ? ` <span style="display:inline-block;padding:1px 9px;border-radius:999px;background:#f7ecd4;border:1px solid #e0c88a;color:#8a6d1f;font-size:12px;font-weight:bold;">${escapeHtml(couleur)}</span>` : ""}${alerteCouleur}<br>
             <span style="color:#666;font-size:13px;">${escapeHtml(reste)}</span>
           </td>
           <td style="padding:8px;border-bottom:1px solid #eee;text-align:center;">${Number(li.price?.product?.metadata?.qte) || li.quantity}</td>
@@ -754,7 +759,7 @@ ${escapeHtml(formatAddress(shipping) || formatAddress(customer))}</p>
 
           ${clientSection("Votre commande")}
           <table style="width:100%;border-collapse:collapse;">
-            <tbody>${lines}</tbody>
+            <tbody>${lines.replace(/<!--atelier-->[\s\S]*?<!--\/atelier-->/g, "")}</tbody>
           </table>
           <p style="text-align:right;font-size:15px;margin-top:12px;">
             Livraison : ${escapeHtml(shippingRateName)} (${euro(shippingAmount, currency)})<br>

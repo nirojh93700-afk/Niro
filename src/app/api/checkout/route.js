@@ -476,7 +476,8 @@ export async function POST(req) {
         product_data: {
           name: ligneUnique ? `${product.name} × ${quantity}` : product.name,
           description: descriptionParts.join(" — "),
-          images: (product.images.map(absoluteImage).filter(Boolean)).slice(0, 1),
+          // photo de l'option (couleur) payée : c'est elle que Gestion et l'e-mail de commande affichent (27/11/2026)
+          images: [absoluteImage(variant.image || product.images[0])].filter(Boolean),
           // slug : e-mail « laisser un avis » + appariement des réglages ; qte : vraie quantité d'une ligne unique
           metadata: ligneUnique ? { slug: product.slug, qte: String(quantity) } : { slug: product.slug },
         },

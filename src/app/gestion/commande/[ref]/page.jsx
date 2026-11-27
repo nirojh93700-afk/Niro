@@ -403,11 +403,18 @@ export default function FicheCommandePage() {
               return (
                 <div className="fc-art" key={i}>
                   <div className="co-art-photo">
-                    {photo ? <img src={photo} alt="" /> : <span className="fc-face empty" style={{ width: 96, height: 96, display: "flex", alignItems: "center", justifyContent: "center" }}>🎁</span>}
+                    {photo ? (
+                      <span style={{ position: "relative", display: "block" }}>
+                        <img src={photo} alt="" style={it.photoAutreCouleur ? { opacity: 0.45, filter: "grayscale(1)" } : undefined} />
+                        {/* Aucune photo pour la couleur commandée : on le dit en rouge, la photo peut montrer une autre couleur (27/11/2026). */}
+                        {it.photoAutreCouleur ? <span style={{ position: "absolute", left: 0, right: 0, bottom: 0, background: "#b32b2b", color: "#fff", fontSize: "0.62rem", fontWeight: 700, lineHeight: 1.2, padding: "3px 4px", textAlign: "center", borderRadius: "0 0 8px 8px" }}>Photo d&apos;une autre couleur</span> : null}
+                      </span>
+                    ) : <span className="fc-face empty" style={{ width: 96, height: 96, display: "flex", alignItems: "center", justifyContent: "center" }}>🎁</span>}
                     {apercu ? <img src={apercu} alt="Aperçu de la gravure" title="Ce que la cliente a demandé" style={{ border: "2px solid var(--ash-gold-2)" }} /> : null}
                   </div>
                   <div>
                     <div className="nm"><span className="q">{it.quantity}×</span>{it.name}{(s?.variantDetail || it.variantDetail) ? <VarBadge texte={s?.variantDetail || it.variantDetail} /> : null}</div>
+                    {it.photoAutreCouleur ? <div style={{ margin: "4px 0", padding: "5px 9px", borderRadius: 8, background: "#fdecec", border: "1px solid #e3a1a1", color: "#8f1f1f", fontSize: "0.82rem", fontWeight: 700 }}>⚠️ La photo ne montre pas la couleur commandée. Couleur à prendre : {typeof it.photoAutreCouleur === "string" ? it.photoAutreCouleur : (s?.variantDetail || it.variantDetail || "voir l'option")}</div> : null}
                     {it.details ? <div className="fc-sub">{it.details}</div> : null}
                     {it.personalization && !s ? <div className="fc-sub"><Ic n="pen" /> {it.personalization}</div> : null}
                     {/* Tout ce qu'il faut graver, face par face, avec les images à télécharger (16/11/2026, carnet 1IQXA36I :

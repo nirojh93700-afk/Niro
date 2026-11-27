@@ -57,6 +57,33 @@ export function detailVariante(order, slug, opts = {}) {
   return { texte: titre, variantId: null, incertain: false };
 }
 
+// Photo à montrer pour une ligne de commande : celle de l'option (couleur) commandée.
+// `autreCouleur` = le bijou a plusieurs couleurs mais AUCUNE photo pour celle commandée : la photo du
+// produit peut montrer une autre couleur, il faut le dire en rouge à côté (gérant, 27/11/2026 : « je veux
+// plus cette erreur dans aucune des commandes, j'ai perdu un bracelet »).
+export function photoCommandee(order, slug, titreOption) {
+  const trouve = varianteCommandee(order, slug, { variantTitle: titreOption });
+  const product = trouve.product;
+  if (!product) return { image: "", autreCouleur: false, couleur: "" };
+  const cle = (t) => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  const vs = product.variants || [];
+  let variant = trouve.variant;
+  // Fiches à part (carnet…) : le détail écrit « Couleur Marron · Couverture », pas le titre seul de l'option.
+  if (!variant) {
+    const texte = ` ${cle(titreOption)} `;
+    const dans = vs.filter((v) => v.title && texte.includes(` ${cle(v.title)} `));
+    if (dans.length === 1) variant = dans[0];
+  }
+  if (variant?.image) return { image: variant.image, autreCouleur: false, couleur: variant.title || "" };
+  const couleur = variant?.title || String(titreOption || "").trim();
+  // La première photo du produit porte parfois le nom de la couleur (« …_dore.jpg ») : alors elle est juste.
+  const mot = cle(couleur).split(" ")[0] || "";
+  const fichier = cle(String(product.images?.[0] || "").split("/").pop());
+  const memeCouleur = mot.length >= 4 && fichier.split(" ").includes(mot);
+  const aCouleurs = vs.length > 1 && (product.category === "bijoux" || vs.some((v) => v.image));
+  return { image: "", autreCouleur: aCouleurs && !memeCouleur, couleur };
+}
+
 // Ajoute `variantDetail` (+ `variantId` quand il manque) aux réglages ET aux lignes d'une commande,
 // pour que tous les écrans de Gestion affichent le produit exact sans recalculer.
 export function detaillerCommande(order) {
@@ -72,8 +99,9 @@ export function detaillerCommande(order) {
     const d = detailVariante(order, it.slug, { variantTitle: premier });
     // Photo de la COULEUR commandée (27/11/2026, 0KCDY9UA : bracelet « Argenté · cœur » montré avec la photo
     // dorée ; la ligne enregistrée au paiement porte la première photo du produit, pas celle de l'option).
-    const photo = varianteCommandee(order, it.slug, { variantTitle: premier }).variant?.image || "";
-    const suite = photo && photo !== it.image ? { ...it, image: photo, imageProduit: it.image } : it;
+    const ph = photoCommandee(order, it.slug, premier);
+    let suite = ph.image && ph.image !== it.image ? { ...it, image: ph.image, imageProduit: it.image } : it;
+    if (ph.autreCouleur) suite = { ...suite, photoAutreCouleur: ph.couleur || premier || true };
     return d.texte && d.texte !== premier ? { ...suite, variantDetail: d.texte } : suite;
   }) : order.items;
   return { ...order, spec, items };

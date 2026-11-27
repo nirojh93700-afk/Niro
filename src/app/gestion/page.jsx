@@ -1117,7 +1117,7 @@ export default function GestionPage({ onglet = "" } = {}) {
                       <li key={i} className="co-art" style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "6px 0", borderBottom: i < (o.items.length - 1) ? "1px solid #f2ece0" : "none" }}>
                         {photo ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={photo} alt="" style={{ width: 54, height: 54, objectFit: "cover", borderRadius: 8, border: "1px solid #e7d3a1", flexShrink: 0 }} />
+                          <img src={photo} alt="" style={{ width: 54, height: 54, objectFit: "cover", borderRadius: 8, border: it.photoAutreCouleur ? "2px solid #b32b2b" : "1px solid #e7d3a1", flexShrink: 0, ...(it.photoAutreCouleur ? { opacity: 0.45, filter: "grayscale(1)" } : {}) }} />
                         ) : (
                           <span style={{ width: 54, height: 54, borderRadius: 8, background: "#f3ece0", border: "1px solid #e7d3a1", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🎁</span>
                         )}
@@ -1128,6 +1128,8 @@ export default function GestionPage({ onglet = "" } = {}) {
                         <div className="co-art-body">
                           <strong>{it.quantity}× {it.name}</strong>
                           <VarBadge texte={couleur} />
+                          {/* Aucune photo pour la couleur commandée (27/11/2026) : dit en rouge, la photo peut montrer une autre couleur. */}
+                          {it.photoAutreCouleur ? <span style={{ display: "block", margin: "4px 0", padding: "4px 8px", borderRadius: 8, background: "#fdecec", border: "1px solid #e3a1a1", color: "#8f1f1f", fontSize: "0.8rem", fontWeight: 700 }}>⚠️ La photo ne montre pas la couleur commandée. Couleur à prendre : {typeof it.photoAutreCouleur === "string" ? it.photoAutreCouleur : couleur}</span> : null}
                           {reste ? <span style={{ display: "block", color: "var(--ink-soft)", fontSize: "0.85rem" }}>{reste}</span> : null}
                           {/* Encadré « Gravure » lisible : chaque choix sur sa ligne
                               (n° du dessin avec sa vignette, texte, police, photo). */}
