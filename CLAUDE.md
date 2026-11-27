@@ -135,6 +135,11 @@
   (noms parfois inversés ou adresses), montant, mode d'emploi (se connecter avec cette adresse, cocher « Utiliser ma cagnotte fidélité », jusqu'à 50 % du panier), pas de date.
 - Dans un mail client : donner le prix de la fiche (`node tools/prix-fiche.mjs`) ; plus de phrase « la moins chère est offerte », sauf pour le carnet.
 
+## 🥃 DAVID SJOBERG : CARAFE + 4 VERRES « DEPECHE MODE » + BOÎTE EN BOIS — 27/11/2026 (demande par le formulaire, david.sjoberg02@gmail.com)
+- Deux messages (17 h 19 et 17 h 37) + une image (capture Pinterest, dessin des trois membres + « DEPECHE MODE », `/api/img/MVS1f1p3QSIeemn5FB7l`). Le gérant accepte de graver ce visuel.
+- Mail parti par le site le 27/11 à 17 h 46 : carafe 54,90 € + 4 verres assortis 71,60 € = 126,50 € ; question posée : veut-il une boîte en bois avec le logo gravé sur le couvercle et son texte ? (gérant : « pas d'aller sur le site… pas la taille de la boîte, on verra après »).
+- ⛔ Aucun prix ni taille de boîte en bois annoncés : s'il dit oui, demander au gérant le prix et la boîte (ses boîtes 20 × 10 × 5 cm sont trop petites pour une carafe), puis devis.
+
 ## ∞ MOTIF « INFINI » : DEUX RONDS NOIRS DANS LE LOGICIEL DU LASER — 27/11/2026 (commande 1GHIGERG, médaillon livre ; gérant : « quand je télécharge cette image, c'est deux ronds noirs ») — ✅ EN LIGNE LE 27/11/2026 (« Pousse », 38606560, fichier vérifié sur le site)
 - Cause : `public/motifs/infini.svg` était dessiné en TRAIT ÉPAIS (`fill="none"` + `stroke-width`). Le navigateur l'affiche bien, mais le logiciel du laser ignore l'épaisseur du trait et remplit les deux boucles.
 - Corrigé : le même dessin retracé en FORME PLEINE avec ses deux trous (rendu Chromium 3000 px puis potrace, même cadre 100 × 60) ; comparé à l'ancien à 1000 px : identique (130 pixels de bord sur 600 000). Copie donnée au gérant : `docs/commandes/1GHIGERG/motif-infini-page3.svg`.
