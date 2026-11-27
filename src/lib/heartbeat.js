@@ -15,6 +15,7 @@ import { runProgrammations } from "@/lib/programmations";
 import { runResumeMatin } from "@/lib/resumeMatin";
 import { runIndexNow } from "@/lib/indexNow";
 import { runGardien } from "@/lib/gardien";
+import { syncRemboursementsStripe } from "@/lib/remboursementsStripe";
 
 const MIN = 60000;
 
@@ -111,5 +112,10 @@ export async function maybeRunJobs() {
   try {
     if (await claimJob("indexNow", 60 * MIN)) out.indexNow = await runIndexNow();
   } catch (e) { out.indexNowError = e.message; }
+  // Remboursements faits directement dans Stripe (27/11/2026) : recopiés dans Gestion une fois par heure,
+  // pour que les Bénéfices et le montant à déclarer ne comptent plus ce qui a été rendu. Aucun e-mail.
+  try {
+    if (await claimJob("remboursementsStripe", 60 * MIN)) out.remboursementsStripe = (await syncRemboursementsStripe()).corrigees;
+  } catch (e) { out.remboursementsStripeError = e.message; }
   return out;
 }

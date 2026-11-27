@@ -20,6 +20,7 @@
     "test-etiquettes": "node --import ./tools/alias-register.mjs tools/tests/etiquettes.test.mjs",
     "test-urssaf": "node --import ./tools/alias-register.mjs tools/tests/urssaf.test.mjs",
     "test-socles": "node --import ./tools/alias-register.mjs tools/tests/socles.test.mjs",
+    "test-remboursements": "node --import ./tools/alias-register.mjs tools/tests/remboursements.test.mjs",
     "test-marque-pages": "node --import ./tools/alias-register.mjs tools/tests/marque-pages.test.mjs",
     "test-support": "node --import ./tools/alias-register.mjs tools/tests/support-createur.test.mjs",
     "test-musique": "node --import ./tools/alias-register.mjs tools/tests/musique-createur.test.mjs",
