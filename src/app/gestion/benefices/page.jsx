@@ -233,6 +233,11 @@ export default function BeneficesPage() {
         {/* Retours (24/11/2026) : argent rendu sur les demandes de retour (bloc « Demande de retour » de la fiche commande). */}
         <Tile label="Retours" value={euro(p.retours || 0)}
           sub={<>{p.retoursN || 0} demande{(p.retoursN || 0) > 1 ? "s" : ""} sur {p.commandes || 0} commande{(p.commandes || 0) > 1 ? "s" : ""} ({String(p.tauxRetour || 0).replace(".", ",")} %) · <a href="/gestion/retours" style={{ color: "var(--gold-dark)" }}>détail</a></>} />
+        {/* Commandes remboursées (27/11/2026) : l'argent rendu sort du chiffre, ce que la commande a coûté reste compté. */}
+        {(p.rembN || 0) > 0 && (
+          <Tile label="Remboursées" value={euro(p.rembMontant || 0)}
+            sub={`${p.rembN} commande${p.rembN > 1 ? "s" : ""} retirée${p.rembN > 1 ? "s" : ""} du chiffre · pertes gardées : ${euro(p.rembPertes || 0)}`} />
+        )}
         <Tile label="Étiquettes d'envoi" value={euro(p.etiquettes || 0)} sub="Payées au transporteur" />
         <Tile label="Marge" value={p.margin + " %"} sub="Bénéfice / CA" accent="#a98935" />
       </div>
@@ -492,7 +497,7 @@ export default function BeneficesPage() {
       </div>
 
       <p style={{ color: "var(--ink-soft)", fontSize: "0.8rem" }}>
-        Calculé sur les commandes payées (hors tests, annulées et remboursées). Le coût est le prix d&apos;achat que tu renseignes sur chaque produit. Le <strong>bénéfice</strong> compte produits vendus − coût d&apos;achat − matériel − pièces ratées − argent rendu sur les retours − coût de gravure (réglé dans <a href="/gestion/tailles-conseillees">Catalogue › Tailles &amp; coûts</a> ; 0 tant que rien n&apos;est réglé) ; le <strong>bénéfice net</strong> déduit en plus tes <strong>dépenses &amp; charges</strong> saisies ci-dessus (fournitures, expédition…). La livraison encaissée reste à part (neutre).
+        Calculé sur les commandes payées (hors tests, annulées et remboursées). Une commande remboursée ne compte plus dans le chiffre, mais ses pièces ratées, son matériel et, si le colis était parti, son étiquette et le coût d&apos;achat des pièces envoyées restent comptés comme des pertes. Un remboursement fait directement dans Stripe est repris tout seul, une fois par heure. Le coût est le prix d&apos;achat que tu renseignes sur chaque produit. Le <strong>bénéfice</strong> compte produits vendus − coût d&apos;achat − matériel − pièces ratées − argent rendu sur les retours − coût de gravure (réglé dans <a href="/gestion/tailles-conseillees">Catalogue › Tailles &amp; coûts</a> ; 0 tant que rien n&apos;est réglé) ; le <strong>bénéfice net</strong> déduit en plus tes <strong>dépenses &amp; charges</strong> saisies ci-dessus (fournitures, expédition…). La livraison encaissée reste à part (neutre).
       </p>
     </div>
   );

@@ -129,7 +129,38 @@ export async function GET(req) {
     }
   }
 
-  const finish = (b) => { b.profit = round(b.revenue + b.shipping - b.etiquettes - b.cost - b.materiel - b.rates - (b.retours || 0) - (b.gravure || 0)); b.retours = round(b.retours || 0); b.tauxRetour = b.commandes ? Math.round((b.retoursN / b.commandes) * 1000) / 10 : 0; b.etiquettes = round(b.etiquettes); b.livraisonNette = round(b.shipping - b.etiquettes); b.materiel = round(b.materiel); b.rates = round(b.rates); b.gravure = round(b.gravure || 0); b.revenue = round(b.revenue); b.cost = round(b.cost); b.shipping = round(b.shipping); b.margin = b.revenue > 0 ? Math.round((b.profit / b.revenue) * 100) : 0; return b; };
+  // Commandes REMBOURSÉES en entier ou annulées (27/11/2026, gérant : « retire ce que j'ai remboursé… par rapport
+  // au raté aussi, fais attention ») : l'argent rendu sort du chiffre (ni CA ni livraison), mais ce que la
+  // commande a COÛTÉ reste une perte : pièces ratées et matériel déjà saisis, et, si le colis était parti,
+  // l'étiquette payée et le coût d'achat des pièces envoyées (gravées, donc perdues).
+  for (const o of orders || []) {
+    if (o.test || !["annulee", "remboursee"].includes(o.status)) continue;
+    const mk = monthKey(o.createdAt);
+    const bs = [per.all, ...(mk.startsWith(curYear) ? [per.year] : []), ...(mk === curMonth ? [per.month] : [])];
+    monthly[mk] = monthly[mk] || { revenue: 0, cost: 0, shipping: 0, etiquettes: 0, orders: 0, materiel: 0, rates: 0, gravure: 0 };
+    const parti = Boolean(o.shippedAt || o.tracking);
+    const perte = Number(perteParCommande[o.id]) || 0;
+    const mat = Number(matUsage[o.id]?.matCost) || 0;
+    const u = matUsage[o.id];
+    const etiq = !parti ? 0 : o.etiquetteReelle != null && o.etiquetteReelle !== "" ? Number(o.etiquetteReelle) || 0 : u && u.etiquette !== undefined && u.etiquette !== null && u.etiquette !== "" ? Number(u.etiquette) || 0 : etiquetteEstimee(o, (slug) => bySlug[slug]);
+    let achat = 0;
+    if (parti) for (const it of o.items || []) { const c = coutLigne(it, bySlug[it.slug || ""], o.stock); if (c != null) achat += c * (Number(it.quantity) || 1); }
+    const rendu = o.status === "remboursee" ? Number(o.total) || 0 : 0;
+    for (const b of bs) { b.rates += perte; b.materiel += mat; b.etiquettes += etiq; b.cost += achat; b.rembN += 1; b.rembMontant += rendu; b.rembPertes += perte + mat + etiq + achat; }
+    monthly[mk].rates = (monthly[mk].rates || 0) + perte; monthly[mk].materiel = (monthly[mk].materiel || 0) + mat; monthly[mk].etiquettes = (monthly[mk].etiquettes || 0) + etiq; monthly[mk].cost += achat;
+  }
+  // Remboursements PARTIELS : retirés de ce qui a été encaissé, le mois où l'argent a été rendu (montant à déclarer).
+  for (const o of real) {
+    const liste = Array.isArray(o.remboursements) && o.remboursements.length ? o.remboursements : Number(o.rembourse) > 0 ? [{ montant: o.rembourse, at: o.createdAt }] : [];
+    for (const rb of liste) {
+      const m = Number(rb?.montant) || 0; if (!(m > 0)) continue;
+      const mk = monthKey(rb.at || o.createdAt);
+      monthly[mk] = monthly[mk] || { revenue: 0, cost: 0, shipping: 0, etiquettes: 0, orders: 0, materiel: 0, rates: 0, gravure: 0 };
+      monthly[mk].remb = (monthly[mk].remb || 0) + m;
+    }
+  }
+
+  const finish = (b) => { b.rembMontant = round(b.rembMontant || 0); b.rembPertes = round(b.rembPertes || 0); b.profit = round(b.revenue + b.shipping - b.etiquettes - b.cost - b.materiel - b.rates - (b.retours || 0) - (b.gravure || 0)); b.retours = round(b.retours || 0); b.tauxRetour = b.commandes ? Math.round((b.retoursN / b.commandes) * 1000) / 10 : 0; b.etiquettes = round(b.etiquettes); b.livraisonNette = round(b.shipping - b.etiquettes); b.materiel = round(b.materiel); b.rates = round(b.rates); b.gravure = round(b.gravure || 0); b.revenue = round(b.revenue); b.cost = round(b.cost); b.shipping = round(b.shipping); b.margin = b.revenue > 0 ? Math.round((b.profit / b.revenue) * 100) : 0; return b; };
   finish(per.month); finish(per.year); finish(per.all);
 
   // Série des 12 derniers mois (ordre chronologique).
@@ -148,7 +179,8 @@ export async function GET(req) {
       month: k,
       revenue: round(v.revenue),
       shipping: round(v.shipping),
-      ca: round(v.revenue + v.shipping),
+      ca: round(v.revenue + v.shipping - (v.remb || 0)),
+      remb: round(v.remb || 0),
       cost: round(v.cost),
       materiel: round(v.materiel),
       rates: round(v.rates || 0),
@@ -187,5 +219,5 @@ export async function POST(req) {
   return Response.json({ ok: true, declared });
 }
 
-function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0, shipping: 0, etiquettes: 0, materiel: 0, rates: 0, gravure: 0, retours: 0, retoursN: 0, commandes: 0 }; }
+function blank() { return { revenue: 0, cost: 0, units: 0, profit: 0, margin: 0, shipping: 0, etiquettes: 0, materiel: 0, rates: 0, gravure: 0, retours: 0, retoursN: 0, commandes: 0, rembN: 0, rembMontant: 0, rembPertes: 0 }; }
 function round(n) { return Math.round((Number(n) || 0) * 100) / 100; }
