@@ -148,7 +148,8 @@
 ## 🥃 DAVID SJOBERG : CARAFE + 4 VERRES « DEPECHE MODE » + BOÎTE EN BOIS — 27/11/2026 (demande par le formulaire, david.sjoberg02@gmail.com)
 - Deux messages (17 h 19 et 17 h 37) + une image (capture Pinterest, dessin des trois membres + « DEPECHE MODE », `/api/img/MVS1f1p3QSIeemn5FB7l`). Le gérant accepte de graver ce visuel.
 - Mail parti par le site le 27/11 à 17 h 46 : carafe 54,90 € + 4 verres assortis 71,60 € = 126,50 € ; question posée : veut-il une boîte en bois avec le logo gravé sur le couvercle et son texte ? (gérant : « pas d'aller sur le site… pas la taille de la boîte, on verra après »).
-- ⛔ Aucun prix ni taille de boîte en bois annoncés : s'il dit oui, demander au gérant le prix et la boîte (ses boîtes 20 × 10 × 5 cm sont trop petites pour une carafe), puis devis.
+- Il a dit OUI trois fois (17 h 54, 17 h 59, 18 h 22) : coffret en bois avec le même logo + l'inscription « Corinne 1969 ». Gérant (27/11 soir) : boîte en bois **40 €** (boîte Amazon 40 × 30 × 14 cm, 36,95 €), gravure de la boîte **10 €** (logo sur le couvercle 7 € + inscription 3 €, mon conseil, il a dit « prépare le mail »).
+- **DEV-1566 créé le 27/11, PAS ENVOYÉ** (https://nivcreation.fr/document/ISQfKkfjPiHujRhdBYYD) : carafe 54,90 + 4 verres 71,60 + boîte 40 + gravure boîte 10 = **176,50 €**. Poids de la boîte mis à 2 kg (ESTIMATION, vrai poids à lui demander) → colis 5,5 kg : domicile 22,90 €, relais dès 9,90 €. Mail montré au gérant, en attente de son « envoie ».
 
 ## ∞ MOTIF « INFINI » : DEUX RONDS NOIRS DANS LE LOGICIEL DU LASER — 27/11/2026 (commande 1GHIGERG, médaillon livre ; gérant : « quand je télécharge cette image, c'est deux ronds noirs ») — ✅ EN LIGNE LE 27/11/2026 (« Pousse », 38606560, fichier vérifié sur le site)
 - Cause : `public/motifs/infini.svg` était dessiné en TRAIT ÉPAIS (`fill="none"` + `stroke-width`). Le navigateur l'affiche bien, mais le logiciel du laser ignore l'épaisseur du trait et remplit les deux boucles.
