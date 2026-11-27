@@ -50,6 +50,7 @@ export function lignesDevisPanier(items, index) {
 // Le devis peut-il passer par le panier ? (devis, pas payé, pas désactivé dans Gestion, lignes calculables)
 export function devisPanierPossible(q, index) {
   if (!q || q.type === "facture" || q.status === "paye" || q.status === "annule" || q.panierOff === true) return false;
+  if (q.rajout === true) return false; // devis de rajout : seulement les articles ajoutés et le paiement
   return lignesDevisPanier(q.items, index) !== null && Number(q.total) > 0;
 }
 

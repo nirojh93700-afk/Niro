@@ -1,6 +1,7 @@
 import { getQuote } from "@/lib/firebase";
 import { verifierCodeDevis } from "@/lib/promoDevis";
 import { devisEffectif } from "@/lib/devisEffectif";
+import { estRajout } from "@/lib/devisRajout";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,7 @@ export async function POST(req) {
   try { body = await req.json(); } catch { return Response.json({ valid: false }); }
   const q0 = body?.id ? await getQuote(body.id) : null;
   if (!q0 || q0.type === "facture" || q0.status === "paye") return Response.json({ valid: false });
+  if (estRajout(q0)) return Response.json({ valid: false }); // devis de rajout : pas de code promo
   const { q } = await devisEffectif(q0, body?.n, body?.options);
   const email = String(body?.email || q.client?.email || "");
   const r = await verifierCodeDevis(body?.code, email, q.items);

@@ -1,8 +1,9 @@
 import { isAdmin } from "@/lib/stock";
-import { createQuote, listQuotes, updateQuoteStatus, getQuote, deleteQuote, setQuoteCounter, updateQuoteQuantite, updateQuotePanier, updateQuoteLien } from "@/lib/firebase";
+import { createQuote, listQuotes, updateQuoteStatus, getQuote, deleteQuote, setQuoteCounter, updateQuoteQuantite, updateQuotePanier, updateQuoteLien, updateQuoteRajout } from "@/lib/firebase";
 import { quoteEmail } from "@/lib/email";
 import { sendClientMail } from "@/lib/clientMail";
 import { nettoyerRef } from "@/lib/commandeLiee";
+import { LIGNE_FRAIS_RAJOUT, fraisRajout } from "@/lib/devisRajout";
 
 export const dynamic = "force-dynamic";
 
@@ -72,6 +73,15 @@ export async function POST(req) {
     return Response.json({ ok, commandeLiee: nettoyerRef(body.commandeLiee) });
   }
 
+  // Devis de rajout (27/11/2026) : sans choix de livraison ni code promo. Il lui faut la commande complétée.
+  if (body.action === "rajout") {
+    const q = await getQuote(body.id);
+    if (!q) return Response.json({ error: "Document introuvable." }, { status: 404 });
+    if (body.on === true && !nettoyerRef(q.commandeLiee)) return Response.json({ error: "Indique d'abord la commande que ce devis complète." }, { status: 400 });
+    const ok = await updateQuoteRajout(body.id, body.on === true);
+    return Response.json({ ok, rajout: body.on === true });
+  }
+
   if (body.action === "delete") {
     if (!body.id) return Response.json({ error: "Identifiant manquant." }, { status: 400 });
     const ok = await deleteQuote(body.id);
@@ -109,6 +119,10 @@ export async function POST(req) {
       ...(it.suit === true ? { suit: true, ...(prixOuNull(it.prixSuivant) != null ? { prixSuivant: prixOuNull(it.prixSuivant) } : {}) } : {}),
     }))
     .filter((it) => it.desc);
+  // Devis de rajout : la ligne « Frais de livraison en plus » est ajoutée ici, au montant tapé.
+  const rajout = type === "devis" && body.rajout === true;
+  if (rajout && !nettoyerRef(body.commandeLiee)) return Response.json({ error: "Un devis de rajout a besoin du numéro de la commande qu'il complète." }, { status: 400 });
+  if (rajout && items.length && fraisRajout(body.fraisLivraison) > 0) items.push({ desc: LIGNE_FRAIS_RAJOUT, qty: 1, price: fraisRajout(body.fraisLivraison) });
   if (!items.length) return Response.json({ error: "Ajoute au moins une ligne." }, { status: 400 });
   const total = Math.round(items.reduce((s, it) => s + it.qty * it.price, 0) * 100) / 100;
 
@@ -124,7 +138,8 @@ export async function POST(req) {
     note: String(body.note || "").slice(0, 500),
     // « Complète la commande n° … » (18/11/2026) : une fois payé, ce devis se range sous cette commande.
     ...(nettoyerRef(body.commandeLiee) ? { commandeLiee: nettoyerRef(body.commandeLiee) } : {}),
-    ...(nettoyerQte(body.qte) && items.some((it) => it.suit) ? { qte: nettoyerQte(body.qte) } : {}),
+    ...(rajout ? { rajout: true } : {}),
+    ...(!rajout && nettoyerQte(body.qte) && items.some((it) => it.suit) ? { qte: nettoyerQte(body.qte) } : {}),
   };
   const created = await createQuote(data);
   if (!created) return Response.json({ error: "Connexion à la base requise (Firebase)." }, { status: 500 });

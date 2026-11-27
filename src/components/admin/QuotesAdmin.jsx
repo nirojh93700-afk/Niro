@@ -63,6 +63,9 @@ export default function QuotesAdmin({ adminKey }) {
   const [note, setNote] = useState("");
   const [commandeLiee, setCommandeLiee] = useState(""); // « Complète la commande n° … » (18/11/2026)
   const [qte, setQte] = useState({ modifiable: false, min: 1, max: 12 });
+  // Devis de rajout (27/11/2026) : articles ajoutés à une commande déjà passée + frais de livraison en plus.
+  const [rajout, setRajout] = useState(false);
+  const [frais, setFrais] = useState("");
   const [edQte, setEdQte] = useState(null); // { id, qte, lignes } : réglage d'un devis existant
 
   async function load() {
@@ -107,7 +110,18 @@ export default function QuotesAdmin({ adminKey }) {
     if (d.ok) { setMsg(`${q.number} supprimé ✓`); load(); } else setMsg(d.error || "Échec de la suppression.");
   }
 
-  const total = items.reduce((s, it) => s + (parseInt(it.qty, 10) || 0) * (parseFloat(it.price) || 0), 0);
+  const estRajoutForm = type === "devis" && rajout;
+  const fraisNum = estRajoutForm ? Math.max(0, parseFloat(String(frais).replace(",", ".")) || 0) : 0;
+  const total = items.reduce((s, it) => s + (parseInt(it.qty, 10) || 0) * (parseFloat(it.price) || 0), 0) + fraisNum;
+
+  async function basculerRajout(q, on) {
+    try {
+      const res = await fetch("/api/admin/quotes", { method: "POST", headers: { "Content-Type": "application/json", "x-admin-key": adminKey }, body: JSON.stringify({ action: "rajout", id: q.id, on }) });
+      const d = await res.json().catch(() => ({}));
+      if (d.ok) setQuotes((prev) => prev.map((x) => (x.id === q.id ? { ...x, rajout: on } : x)));
+      else setMsg(d.error || "Échec.");
+    } catch { /* rien changé */ }
+  }
 
   // « Complète la commande n° … » sur un devis existant (18/11/2026). Saisie en ligne, pas de fenêtre système.
   const [lienEd, setLienEd] = useState(null); // { id, ref }
@@ -124,7 +138,7 @@ export default function QuotesAdmin({ adminKey }) {
     const res = await fetch("/api/admin/quotes", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-admin-key": adminKey },
-      body: JSON.stringify({ type, client, items, note, qte, commandeLiee }),
+      body: JSON.stringify({ type, client, items, note, qte, commandeLiee, ...(estRajoutForm ? { rajout: true, fraisLivraison: fraisNum } : {}) }),
     });
     const d = await res.json();
     if (d.ok) {
@@ -133,6 +147,7 @@ export default function QuotesAdmin({ adminKey }) {
       setItems([{ desc: "", qty: 1, price: "" }]);
       setNote("");
       setCommandeLiee("");
+      setRajout(false); setFrais("");
       setQte({ modifiable: false, min: 1, max: 12 });
       setShowForm(false);
       load();
@@ -174,6 +189,29 @@ export default function QuotesAdmin({ adminKey }) {
           <label className="admin-field">Adresse (facultatif)
             <input value={client.address} onChange={(e) => setClient({ ...client, address: e.target.value })} />
           </label>
+
+          {type === "devis" && (
+            <div style={{ border: "1px dashed var(--gold)", borderRadius: 10, padding: 12, display: "grid", gap: 8 }}>
+              <label style={{ display: "flex", gap: 8, alignItems: "flex-start", fontSize: "0.9rem" }}>
+                <input type="checkbox" checked={rajout} onChange={(e) => setRajout(e.target.checked)} style={{ marginTop: 3 }} />
+                <span><strong>Rajout à une commande déjà passée</strong><br />
+                  <small style={{ color: "var(--ink-soft)" }}>Le client ajoute un article à sa commande : il voit les articles, les frais de livraison en plus, le total et le bouton Payer. Pas de choix de livraison, pas de code promo, pas d&apos;emballage. Une fois payé, le rajout se range sous la commande.</small></span>
+              </label>
+              {rajout && (
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", fontSize: "0.88rem" }}>
+                  <label style={{ display: "flex", gap: 6, alignItems: "center" }}>Commande n°
+                    <input value={commandeLiee} onChange={(e) => setCommandeLiee(e.target.value.toUpperCase())} placeholder="1XIZ5BKM" maxLength={14}
+                      style={{ width: 130, padding: 6, border: "1px solid var(--line)", borderRadius: 8 }} />
+                  </label>
+                  <label style={{ display: "flex", gap: 6, alignItems: "center" }}>Frais de livraison en plus (€)
+                    <input type="number" min="0" step="0.01" inputMode="decimal" value={frais} onChange={(e) => setFrais(e.target.value)} placeholder="0"
+                      style={{ width: 90, padding: 6, border: "1px solid var(--line)", borderRadius: 8 }} />
+                  </label>
+                  {!commandeLiee.trim() ? <small style={{ color: "#b4452f" }}>Indique le numéro de la commande.</small> : null}
+                </div>
+              )}
+            </div>
+          )}
 
           <span className="admin-field" style={{ marginBottom: -4 }}>Lignes</span>
           {items.map((it, i) => (
@@ -218,7 +256,7 @@ export default function QuotesAdmin({ adminKey }) {
           <button className="btn btn-outline" style={{ justifySelf: "start", padding: "4px 12px" }}
             onClick={() => setItems([...items, { desc: "", qty: 1, price: "" }])}>+ Ligne</button>
 
-          {type === "devis" && (
+          {type === "devis" && !rajout && (
             <BlocQuantite qte={qte} setQte={setQte} lignes={items}
               setLigne={(i, patch) => setItems(items.map((x, j) => (j === i ? { ...x, ...patch } : x)))} />
           )}
@@ -227,7 +265,7 @@ export default function QuotesAdmin({ adminKey }) {
             <textarea value={note} onChange={(e) => setNote(e.target.value)} style={{ minHeight: 70 }} placeholder="Ex. : gravure logo + date, sur les 2 faces, livraison avant le 12… (s'affichera automatiquement dans la commande une fois payée)" />
           </label>
 
-          {type !== "facture" && (
+          {type !== "facture" && !rajout && (
             <label className="admin-field">Complète la commande n° (facultatif)
               <input value={commandeLiee} onChange={(e) => setCommandeLiee(e.target.value.toUpperCase())} placeholder="Ex. : 0FUPET23 (nouvel envoi, supplément…)" maxLength={14} />
               <span style={{ fontSize: "0.8rem", color: "var(--ink-soft)" }}>Une fois payé, ce devis se range sous cette commande : pas de deuxième carte dans la file, il part avec elle.</span>
@@ -281,6 +319,13 @@ export default function QuotesAdmin({ adminKey }) {
                 🔗 {q.commandeLiee ? `Complète #${q.commandeLiee}` : "Complète une commande…"}
               </button>
             )}
+            {q.type !== "facture" && q.status !== "paye" && q.commandeLiee ? (
+              <label style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "0.85rem", padding: "4px 6px" }}
+                title="Devis de rajout : pas de choix de livraison, pas de code promo, pas d'emballage sur la page du devis">
+                <input type="checkbox" checked={q.rajout === true} onChange={(e) => basculerRajout(q, e.target.checked)} />
+                Rajout (sans livraison ni code promo)
+              </label>
+            ) : null}
             <button className="btn btn-outline" onClick={() => removeQuote(q)}
               style={{ padding: "4px 12px", fontSize: "0.85rem", color: "#b4452f" }}>
               Supprimer

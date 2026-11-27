@@ -10,6 +10,7 @@ import DevisPanier from "@/components/DevisPanier";
 import { getCatalog } from "@/lib/catalog";
 import { donneesPanier } from "@/lib/devisPanier";
 import { optionsDisponibles } from "@/lib/devisOptions";
+import { estRajout } from "@/lib/devisRajout";
 import DevisOptions, { DevisLignesOptions, DevisTotalOptions } from "@/components/DevisOptions";
 
 export const dynamic = "force-dynamic";
@@ -32,13 +33,15 @@ export default async function DocumentPage({ params }) {
   const titre = isFacture ? "Facture" : "Devis";
   // Devis dont chaque ligne a un poids : le client choisit sa livraison sur cette page.
   const index = await indexVariantes();
-  const avecChoix = !isFacture && q.status !== "paye" && livraisonActive(q.items, index);
+  // Devis de rajout (27/11/2026) : ni choix de livraison, ni code promo, ni emballage, ni options.
+  const rajout = estRajout(q);
+  const avecChoix = !rajout && !isFacture && q.status !== "paye" && livraisonActive(q.items, index);
   // Devis dont la cliente choisit le nombre de pièces (01/11/2026) : page interactive.
-  const cfg = !isFacture && q.status !== "paye" ? configQuantite(q, index) : null;
-  const panier = donneesPanier(q, index, await getCatalog().catch(() => []));
+  const cfg = !rajout && !isFacture && q.status !== "paye" ? configQuantite(q, index) : null;
+  const panier = rajout ? null : donneesPanier(q, index, await getCatalog().catch(() => []));
   // Options à cocher (socle, texte) sur un devis de cristal à nombre fixe (06/11/2026).
-  const opts = cfg ? null : optionsDisponibles(q, index);
-  const actions = <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={q.total} livraison={avecChoix} options={Boolean(opts)} />;
+  const opts = cfg || rajout ? null : optionsDisponibles(q, index);
+  const actions = <DocumentActions id={q.id} type={q.type} status={q.status} clientEmail={q.client?.email || ""} totalArticles={q.total} livraison={avecChoix} options={Boolean(opts)} rajout={rajout} />;
 
   return (
     <section className="section">
@@ -147,6 +150,12 @@ export default async function DocumentPage({ params }) {
           <div style={{ textAlign: "right", fontSize: "0.78rem", color: "var(--ink-soft)" }}>
             TVA non applicable, art. 293 B du CGI
           </div>
+
+          {rajout ? (
+            <p style={{ marginTop: 20, fontSize: "0.9rem", background: "#fbf4e6", border: "1px solid #e7d3a1", padding: "10px 12px", borderRadius: 8 }}>
+              Ce devis complète votre commande n° <strong>{q.commandeLiee}</strong> : ces articles partent dans le même colis.
+            </p>
+          ) : null}
 
           {q.note ? (
             <p style={{ marginTop: 20, fontSize: "0.88rem", color: "var(--ink-soft)", whiteSpace: "pre-line", background: "var(--cream)", padding: 12, borderRadius: 8 }}>{q.note}</p>

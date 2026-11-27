@@ -656,6 +656,21 @@ export async function updateQuotePanier(id, off) {
   }
 }
 
+// Devis de rajout (27/11/2026) : sans choix de livraison ni code promo.
+export async function updateQuoteRajout(id, on) {
+  const a = getApp();
+  if (!a || !id) return false;
+  try {
+    const r = admin.firestore().collection("siteQuotes").doc(id);
+    if (!(await r.get()).exists) return false;
+    await r.update({ rajout: on === true });
+    return true;
+  } catch (e) {
+    console.error("updateQuoteRajout:", e.message);
+    return false;
+  }
+}
+
 // « Complète la commande n° … » d'un devis (18/11/2026). Vide = retiré.
 export async function updateQuoteLien(id, ref) {
   const a = getApp();

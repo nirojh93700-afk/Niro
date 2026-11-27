@@ -8,7 +8,7 @@ import { useDevisChoix, choixPourServeur } from "@/lib/devisChoixStore";
 const euro = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(n || 0);
 const prixPort = (n) => (n === 0 ? "Offerte" : euro(n));
 
-export default function DocumentActions({ id, type, status, clientEmail = "", totalArticles: totalBase = 0, livraison = false, n = null, options = false }) {
+export default function DocumentActions({ id, type, status, clientEmail = "", totalArticles: totalBase = 0, livraison = false, n = null, options = false, rajout = false }) {
   // `n` : nombre de pièces choisi par la cliente (devis à quantité modifiable, 01/11/2026) — envoyé
   // à chaque calcul (port, code promo, paiement) ; le serveur recalcule tout dessus.
   // Options cochées sur la page (socle, texte : 06/11/2026) : envoyées à chaque calcul, comme `n`.
@@ -27,7 +27,7 @@ export default function DocumentActions({ id, type, status, clientEmail = "", to
   const [verif, setVerif] = useState(false);
   const [promo, setPromo] = useState(null); // { code, remise, label, total, email }
   const [promoMsg, setPromoMsg] = useState("");
-  const peutCode = type !== "facture" && status !== "paye";
+  const peutCode = !rajout && type !== "facture" && status !== "paye"; // devis de rajout : pas de code promo
   // Livraison choisie par le client (devis dont chaque ligne a un poids) — maquette validée 03/10/2026.
   const peutLivrer = livraison && type !== "facture" && status !== "paye";
   const [method, setMethod] = useState("domicile");

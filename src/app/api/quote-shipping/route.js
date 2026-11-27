@@ -2,6 +2,7 @@ import { getQuote } from "@/lib/firebase";
 import { getSettings } from "@/lib/stock";
 import { livraisonActive, poidsDevis, portDevis } from "@/lib/portDevis";
 import { devisEffectif } from "@/lib/devisEffectif";
+import { estRajout } from "@/lib/devisRajout";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +13,7 @@ export async function POST(req) {
   try { body = await req.json(); } catch { return Response.json({ actif: false }); }
   const q0 = body?.id ? await getQuote(body.id) : null;
   if (!q0 || q0.type === "facture" || q0.status === "paye") return Response.json({ actif: false });
+  if (estRajout(q0)) return Response.json({ actif: false }); // rajout : il part dans le colis de la commande d'origine
   // Nombre de pièces choisi par la cliente (devis à quantité modifiable) : port calculé dessus.
   const { q, index } = await devisEffectif(q0, body?.n, body?.options);
   if (!livraisonActive(q.items, index)) return Response.json({ actif: false });

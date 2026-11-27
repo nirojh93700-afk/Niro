@@ -7,6 +7,7 @@ import { getSettings } from "@/lib/stock";
 import { livraisonActive, portDevis } from "@/lib/portDevis";
 import { devisEffectif } from "@/lib/devisEffectif";
 import { nettoyerProvenance, compacterProvenance } from "@/lib/provenance";
+import { estRajout } from "@/lib/devisRajout";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,9 @@ export async function POST(req) {
   if (q0.status === "paye") return Response.json({ error: "Ce document est déjà payé." }, { status: 400 });
   // Devis à quantité modifiable (01/11/2026) : lignes et total RECALCULÉS ici pour le nombre choisi
   // (prix des lots de la fiche, gravure pièce par pièce) — jamais un prix venu du navigateur.
-  const { q, index, app } = await devisEffectif(q0, body?.n, body?.options);
+  // Devis de rajout (27/11/2026) : payé tel quel, sans nombre modifiable, option, livraison ni code promo.
+  const rajout = estRajout(q0);
+  const { q, index, app } = rajout ? await devisEffectif({ ...q0, qte: null }) : await devisEffectif(q0, body?.n, body?.options);
   if (!(q.total > 0)) return Response.json({ error: "Montant invalide." }, { status: 400 });
 
   function resolveSiteUrl() {
@@ -46,7 +49,7 @@ export async function POST(req) {
   // Livraison choisie par le client sur le lien du devis (03/10/2026) : prix recalculé ICI,
   // côté serveur, d'après le poids des lignes. Devis sans poids = comportement d'avant.
   let shippingOpts, relaisMeta = {}, countries = SHIPPING_COUNTRIES;
-  if (livraisonActive(q.items, index)) {
+  if (!rajout && livraisonActive(q.items, index)) {
     const method = body?.deliveryMethod === "relais" ? "relais" : "domicile";
     const r = portDevis(q, await getSettings(), index, method, body?.relaisPoint);
     if (!r.ok) return Response.json({ error: r.error || "Livraison indisponible." }, { status: 400 });
@@ -58,6 +61,7 @@ export async function POST(req) {
   }
   let discounts, promoMeta = {};
   const promoCode = String(body?.promoCode || "").trim().toUpperCase();
+  if (promoCode && rajout) return Response.json({ error: "Ce code promo n'est pas valable pour ce devis." }, { status: 400 });
   if (promoCode && q.type !== "facture") {
     const promoEmail = String(body?.promoEmail || q.client?.email || "").trim().toLowerCase();
     const r = await verifierCodeDevis(promoCode, promoEmail, q.items);
@@ -80,8 +84,8 @@ export async function POST(req) {
       customer_email: q.client?.email || undefined,
       // Commande sur mesure : on récupère l'adresse + le téléphone du client pour
       // que la commande créée soit directement expédiable.
-      phone_number_collection: { enabled: true },
-      shipping_address_collection: { allowed_countries: countries },
+      // Rajout : rien à retaper, il part dans le colis de la commande d'origine.
+      ...(rajout ? {} : { phone_number_collection: { enabled: true }, shipping_address_collection: { allowed_countries: countries } }),
       ...(shippingOpts ? { shipping_options: shippingOpts } : {}),
       ...(discounts ? { discounts } : {}),
       line_items: q.items.map((it) => ({
