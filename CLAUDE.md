@@ -135,6 +135,10 @@
   (noms parfois inversés ou adresses), montant, mode d'emploi (se connecter avec cette adresse, cocher « Utiliser ma cagnotte fidélité », jusqu'à 50 % du panier), pas de date.
 - Dans un mail client : donner le prix de la fiche (`node tools/prix-fiche.mjs`) ; plus de phrase « la moins chère est offerte », sauf pour le carnet.
 
+## 🎨 PHOTO DE LA COULEUR COMMANDÉE DANS GESTION — 27/11/2026, PRÉPARÉ, À POUSSER SUR SON « POUSSE » (0KCDY9UA, gérant : « pourquoi tu m'as mis une photo dorée pour un bracelet argenté »)
+- La ligne d'une commande garde la PREMIÈRE photo du produit (souvent la dorée). `detaillerCommande` (`src/lib/detailProduit.js`) la remplace par la photo de l'option commandée (`variant.image`) pour tous les écrans de Gestion ; l'ancienne reste dans `imageProduit`.
+- ⚠️ Sans photo par couleur dans le catalogue (rien à afficher d'autre que la première photo) : Bracelet Femme Cœur, Collier Enveloppe, Médaillon Cœur ouvrable, Bracelet Homme Acier & Silicone. La pastille de couleur à côté du nom fait foi.
+
 ## ➕ DEVIS DE RAJOUT — ✅ EN LIGNE LE 27/11/2026 (gérant, 2e verre de Frédéric Floret : « tu mets juste frais de livraison en plus, il n'a pas à choisir de livraison… même le code promo tu peux l'enlever » → « un autre devis pour des rajouts quand d'autres commandes voudront rajouter » → « OK, vas-y »)
 - Gestion → Devis → nouveau devis → case **« Rajout à une commande déjà passée »** : n° de la commande + « Frais de livraison en plus (€) » (la ligne `LIGNE_FRAIS_RAJOUT` est ajoutée par le serveur). Sur un devis existant qui complète une commande : case « Rajout (sans livraison ni code promo) » (action `rajout`).
 - Champ `rajout: true` + `commandeLiee` (`src/lib/devisRajout.js`, `estRajout`). Page `/document/<id>` : articles, frais, total, Payer, phrase « Ce devis complète votre commande n° … : ces articles partent dans le même colis ». Ni choix de livraison, ni code promo (refusé aussi par `/api/quote-promo` et `/api/quote-pay`), ni emballage, ni options, ni nombre modifiable ; au paiement, ni adresse ni téléphone à retaper. Payé = rangé sous la commande d'origine (mécanisme du 18/11).

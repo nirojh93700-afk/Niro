@@ -70,7 +70,11 @@ export function detaillerCommande(order) {
     if (!it?.slug) return it;
     const premier = String(it.details || "").split(" — ")[0].trim();
     const d = detailVariante(order, it.slug, { variantTitle: premier });
-    return d.texte && d.texte !== premier ? { ...it, variantDetail: d.texte } : it;
+    // Photo de la COULEUR commandée (27/11/2026, 0KCDY9UA : bracelet « Argenté · cœur » montré avec la photo
+    // dorée ; la ligne enregistrée au paiement porte la première photo du produit, pas celle de l'option).
+    const photo = varianteCommandee(order, it.slug, { variantTitle: premier }).variant?.image || "";
+    const suite = photo && photo !== it.image ? { ...it, image: photo, imageProduit: it.image } : it;
+    return d.texte && d.texte !== premier ? { ...suite, variantDetail: d.texte } : suite;
   }) : order.items;
   return { ...order, spec, items };
 }
