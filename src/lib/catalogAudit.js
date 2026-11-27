@@ -18,6 +18,7 @@ import { defaultPackagingFor } from "./packaging";
 import { guidePourProduit } from "./guides";
 import { controleTextesPrix, controlePrixEcrits } from "./textesPrix";
 import { controleProduitAtelier } from "./controleAtelier";
+import { couleursSansPhoto } from "@/lib/detailProduit";
 
 const RANK = { haute: 0, moyenne: 1, basse: 2 };
 
@@ -72,6 +73,13 @@ export async function auditCatalog() {
       const info = productInfo[p.slug] || {};
       for (const a of controlePrixEcrits(p, { "fiche détaillée": [info.material, info.usage].filter(Boolean).join("\n") })) add(p, "prix-ecrit", "haute", a.message);
     } catch { /* un produit mal formé ne bloque pas la surveillance */ }
+
+    // 8. Une photo par couleur (gérant, 27/11/2026, 0KCDY9UA : bracelet argenté montré avec la photo dorée,
+    // un bracelet perdu) : une couleur sans sa photo = Gestion ne peut montrer que la photo d'une autre couleur.
+    try {
+      const sans = couleursSansPhoto(p);
+      if (sans.length) add(p, "photo-couleur", "moyenne", `Pas de photo pour la couleur : ${sans.join(", ")} (Gestion affiche un avertissement rouge sur ces commandes)`);
+    } catch { /* idem */ }
 
     // 7. Atelier complet (gérant, 16/10/2026, commande 10OPUHMO) : chaque champ que la cliente peut
     // remplir doit apparaître dans l'atelier (tableau « À graver », photos, « Vendu en plus »).

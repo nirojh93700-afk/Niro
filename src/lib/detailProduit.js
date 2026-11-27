@@ -84,6 +84,13 @@ export function photoCommandee(order, slug, titreOption) {
   return { image: "", autreCouleur: aCouleurs && !memeCouleur, couleur };
 }
 
+// Options (couleurs) d'un produit pour lesquelles Gestion n'a AUCUNE photo juste à montrer.
+// Sert à la surveillance du catalogue et au test `npm run test-photo-couleur`.
+export function couleursSansPhoto(product) {
+  if (!product?.slug) return [];
+  return (product.variants || []).filter((v) => v?.title && photoCommandee(null, product.slug, v.title).autreCouleur).map((v) => v.title);
+}
+
 // Ajoute `variantDetail` (+ `variantId` quand il manque) aux réglages ET aux lignes d'une commande,
 // pour que tous les écrans de Gestion affichent le produit exact sans recalculer.
 export function detaillerCommande(order) {
