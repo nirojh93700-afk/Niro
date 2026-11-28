@@ -86,6 +86,7 @@
 - **VERRE SUIVANT TRÈS CHARGÉ = 8 € (gérant, 21/11 : « tous ces éléments, c'est huit euros au deuxième verre ; quand il y a trop d'éléments c'est plus cher »)** :
   autres verres : 1 élément +3 €, 2 éléments +5 €, beaucoup d'éléments (ex. image + titre + 2 prénoms + phrase) **+8 €**. Seuil exact (à partir de combien) : à lui faire préciser.
   Pour l'instant dans les DEVIS / mails seulement ; le calcul du site (`prixVerres.js`) n'est PAS changé tant qu'il ne le demande pas.
+  ✅ **Seuil précisé le 28/11/2026 (gérant, verres de Domitille Mironneau : balance + initiales + année)** : TROIS éléments sur un verre suivant = **+8 €** (« Huit euros »).
 - Jorge Costa (costa.cmj@outlook.fr, 21/11) : par verre 1 image (poings) + 1 titre + 2 prénoms + 1 phrase = 4 textes → lot de 2 whisky 30 cl 37,90 + 12 (verre 1) + 8 (verre 2) = **57,90 €**.
 
 ## 🔴 MAUVAIS MAIL ENVOYÉ À LÉONIE DAVID-CRUZ (0KZ5D4AO) — 20/11/2026, 16 h 01
