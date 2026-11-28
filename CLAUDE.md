@@ -2512,6 +2512,11 @@
   texte au fond : face + fond et texte oubliés, −7 €), DEV-1519 (Julien, prénom + phrase + date : un texte oublié, −3 €), Nicky (−2 €) ;
   DEV-1526 (Kim, flûtes) juste ; DEV-1506 (Ludovic, 47 cl sur mesure) fait avant que le 47 cl soit en boutique.
 
+## 💬 MAIL CLIENT : NI TROP COURT NI TROP DÉTAILLÉ — 28/11/2026 (gérant, mail à Sébastien Berger, cristal photo femme + chat : « dis pas autant de trucs… tu dis que vous enverrez un aperçu » puis « il faut pas que les messages soient courts comme ça sinon les gens ils font pas confiance » puis « parle pas de net et détaillé »)
+- Un mail client a un ton chaleureux et rassurant, avec plusieurs phrases (remerciement, ce qu'on fera, la suite, « n'hésitez pas à nous répondre »). Jamais trois lignes sèches.
+- Mais il n'entre pas dans les détails techniques : sur une photo de cristal, ne pas juger la photo (« nette », « détaillée ») ni expliquer le fond. On dit qu'on enverra un aperçu avant la gravure.
+- ⚠️ Exception à « pas d'aperçu » décidée par le gérant le 28/11 : Sébastien Berger (sebastien.berger@gmx.fr, cristal photo 3D) : aperçu promis avant la gravure.
+
 ## ❓ CRISTAL : FOND (ARRIÈRE-PLAN) GRAVÉ OU NON = LE DEMANDER AU GÉRANT AVANT D'ÉCRIRE À LA CLIENTE (23/11/2026, Lucas Rual : « la prochaine fois tu me demandes si on peut graver le fond ou pas l'arrière-plan »)
 - Avant tout mail ou devis qui parle du fond d'une photo de cristal, DEMANDER au gérant (fond retiré ou fond gravé). Ne jamais trancher seul avec la règle du 07/11 ci-dessous.
 - Par défaut le fond est retiré, mais il peut se graver si la cliente y tient, avec un aperçu envoyé avant la gravure (gérant, 23/11).
